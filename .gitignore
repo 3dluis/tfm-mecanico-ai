@@ -32,3 +32,5 @@ experiments/**/tmp/
 .idea/
 .vscode/
 errores.log
+.env
+ai-models/models/

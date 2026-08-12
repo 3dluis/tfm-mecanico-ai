@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "ScenarioSpec": {
+      "additionalProperties": false,
+      "description": "Especificación declarativa de un escenario del laboratorio.",
+      "properties": {
+        "schema_version": {
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "scenario_id": {
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "driving_profile": {
+          "description": "p. ej. 'idle', 'urban', 'highway', 'cold_start'",
+          "title": "Driving Profile",
+          "type": "string"
+        },
+        "fault": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modelo de fallo inyectado; None = normal",
+          "title": "Fault"
+        },
+        "fault_params": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Fault Params",
+          "type": "object"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "sample_rate_hz": {
+          "default": 1.0,
+          "exclusiveMinimum": 0,
+          "title": "Sample Rate Hz",
+          "type": "number"
+        },
+        "seed": {
+          "description": "Semilla de reproducibilidad (obligatoria)",
+          "title": "Seed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "description",
+        "driving_profile",
+        "duration_s",
+        "seed"
+      ],
+      "title": "ScenarioSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Cabecera de una sesión grabada (JSONL de OBDReading + esta cabecera).\n\nFormato común para sesiones sintéticas (obd-lab) y datasets reales\nreproducidos — los consumidores no distinguen la fuente (docs/09 §9.3.1).",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "origin": {
+      "description": "'synthetic' | 'replay:<dataset>' | 'vehicle'",
+      "title": "Origin",
+      "type": "string"
+    },
+    "scenario": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ScenarioSpec"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Solo si origin=synthetic"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "device_id": {
+      "title": "Device Id",
+      "type": "string"
+    },
+    "n_readings": {
+      "minimum": 0,
+      "title": "N Readings",
+      "type": "integer"
+    },
+    "pids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "session_id",
+    "created_at",
+    "origin",
+    "vehicle_id",
+    "device_id",
+    "n_readings",
+    "pids"
+  ],
+  "title": "RecordedSession",
+  "type": "object"
+}

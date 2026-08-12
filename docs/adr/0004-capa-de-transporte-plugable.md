@@ -25,3 +25,12 @@ La selección es configuración (`MECANICO_TRANSPORT`, pydantic-settings), nunca
 
 - El paso a hardware real es un cambio de configuración, no de código (verificable solo hasta `serial`; la ruta BT completa queda declarada como limitación L3 en la memoria).
 - Los tests parametrizan el transporte; la evaluación E6 (ADR-0003) demuestra el caso `tcp` extremo a extremo.
+
+## Nota de implementación (Fase 2, verificado empíricamente)
+
+Sobre `tcp`, python-OBD se conecta con la URL pyserial `socket://host:puerto`, pero su
+auto-detección de baudrate falla contra el emulador (el probe `0x7F 0x7F` no obtiene la
+respuesta esperada). **La capa `tcp` debe pasar `baudrate=38400` explícito** para omitir la
+auto-detección; verificado el 2026-08-12: conexión ISO 15765-4 y lecturas de RPM/COOLANT/STFT1
+correctas en el escenario `car`. El baudrate es semánticamente irrelevante en TCP (no hay UART),
+solo desactiva el probe.

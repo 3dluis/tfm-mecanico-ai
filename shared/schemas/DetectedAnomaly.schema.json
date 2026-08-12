@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "DetectorKind": {
+      "description": "Familia del detector matemático de anomalías (separación ML/LLM).",
+      "enum": [
+        "zscore",
+        "isolation_forest",
+        "autoencoder"
+      ],
+      "title": "DetectorKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Anomalía emitida por un detector matemático sobre una ventana.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "anomaly_id": {
+      "title": "Anomaly Id",
+      "type": "string"
+    },
+    "window_id": {
+      "title": "Window Id",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "detected_at": {
+      "format": "date-time",
+      "title": "Detected At",
+      "type": "string"
+    },
+    "detector": {
+      "$ref": "#/$defs/DetectorKind"
+    },
+    "model_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "None para baselines sin modelo",
+      "title": "Model Name"
+    },
+    "model_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Version"
+    },
+    "score": {
+      "description": "Score del detector; mayor = más anómalo",
+      "title": "Score",
+      "type": "number"
+    },
+    "threshold": {
+      "title": "Threshold",
+      "type": "number"
+    },
+    "involved_pids": {
+      "description": "PIDs que más contribuyen a la desviación",
+      "items": {
+        "type": "string"
+      },
+      "title": "Involved Pids",
+      "type": "array"
+    },
+    "features": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "Valores de features en la ventana anómala",
+      "title": "Features",
+      "type": "object"
+    }
+  },
+  "required": [
+    "anomaly_id",
+    "window_id",
+    "vehicle_id",
+    "detected_at",
+    "detector",
+    "score",
+    "threshold",
+    "involved_pids"
+  ],
+  "title": "DetectedAnomaly",
+  "type": "object"
+}

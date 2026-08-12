@@ -1,0 +1,91 @@
+{
+  "$defs": {
+    "AgentNode": {
+      "description": "Nodos del grafo del agente de diagnóstico (docs/05 §5.2 C6).",
+      "enum": [
+        "triage",
+        "recall",
+        "retrieve",
+        "hypothesize",
+        "verify",
+        "report",
+        "memorize"
+      ],
+      "title": "AgentNode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Traza de ejecución de un nodo del grafo (explicabilidad + evaluación).",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "diagnostic_id": {
+      "title": "Diagnostic Id",
+      "type": "string"
+    },
+    "node": {
+      "$ref": "#/$defs/AgentNode"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "ended_at": {
+      "format": "date-time",
+      "title": "Ended At",
+      "type": "string"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "tokens_in": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tokens In"
+    },
+    "tokens_out": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tokens Out"
+    }
+  },
+  "required": [
+    "event_id",
+    "diagnostic_id",
+    "node",
+    "started_at",
+    "ended_at",
+    "summary"
+  ],
+  "title": "AgentEvent",
+  "type": "object"
+}

@@ -1,0 +1,50 @@
+{
+  "additionalProperties": false,
+  "description": "Código de diagnóstico de fallo (modo 03) leído del vehículo.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "code": {
+      "description": "p. ej. 'P0171'",
+      "pattern": "^[PCBU][0-9A-F]{4}$",
+      "title": "Code",
+      "type": "string"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    },
+    "is_pending": {
+      "default": false,
+      "title": "Is Pending",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "timestamp",
+    "vehicle_id",
+    "code"
+  ],
+  "title": "DTCRecord",
+  "type": "object"
+}

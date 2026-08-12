@@ -1,0 +1,61 @@
+{
+  "additionalProperties": false,
+  "description": "Causa candidata generada por el agente para una anomalía o DTC.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "hypothesis_id": {
+      "title": "Hypothesis Id",
+      "type": "string"
+    },
+    "cause": {
+      "description": "Causa raíz propuesta, p. ej. 'fuga de vacío en admisión'",
+      "title": "Cause",
+      "type": "string"
+    },
+    "mechanism": {
+      "description": "Cómo la causa produce los síntomas observados",
+      "title": "Mechanism",
+      "type": "string"
+    },
+    "supporting_evidence": {
+      "description": "Evidencia a favor: PIDs, DTCs, fragmentos RAG (por referencia)",
+      "items": {
+        "type": "string"
+      },
+      "title": "Supporting Evidence",
+      "type": "array"
+    },
+    "contradicting_evidence": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Contradicting Evidence",
+      "type": "array"
+    },
+    "verified_against_telemetry": {
+      "description": "True si el nodo 'verify' contrastó la hipótesis con los datos",
+      "title": "Verified Against Telemetry",
+      "type": "boolean"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    }
+  },
+  "required": [
+    "hypothesis_id",
+    "cause",
+    "mechanism",
+    "supporting_evidence",
+    "verified_against_telemetry",
+    "confidence"
+  ],
+  "title": "DiagnosticHypothesis",
+  "type": "object"
+}

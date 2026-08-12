@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cloud-platform"
+version = "0.1.0"
+description = "Plataforma cloud complementaria: auth, registro, telemetría histórica, sincronización, model registry (deliberadamente simple; ADR-0006)"
+requires-python = ">=3.11"
+dependencies = [
+    "mecanico-contracts",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.2",
+    "fastapi>=0.111",
+    "uvicorn>=0.29",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "httpx>=0.27"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cloud_platform"]

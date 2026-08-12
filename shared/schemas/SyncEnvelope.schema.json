@@ -1,0 +1,56 @@
+{
+  "$defs": {
+    "SyncEntity": {
+      "description": "Entidades sincronizables edge→cloud (patrón outbox).",
+      "enum": [
+        "telemetry_window",
+        "anomaly",
+        "diagnostic",
+        "case"
+      ],
+      "title": "SyncEntity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Sobre idempotente para el push por lotes del outbox del edge.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "envelope_id": {
+      "description": "Idempotency key",
+      "title": "Envelope Id",
+      "type": "string"
+    },
+    "device_id": {
+      "title": "Device Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "entity": {
+      "$ref": "#/$defs/SyncEntity"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "description": "Mensaje serializado de la entidad",
+      "title": "Payload",
+      "type": "object"
+    }
+  },
+  "required": [
+    "envelope_id",
+    "device_id",
+    "created_at",
+    "entity",
+    "payload"
+  ],
+  "title": "SyncEnvelope",
+  "type": "object"
+}

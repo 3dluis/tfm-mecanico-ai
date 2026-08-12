@@ -1,0 +1,65 @@
+{
+  "$defs": {
+    "TransportKind": {
+      "description": "Transporte físico/virtual hacia el adaptador OBD-II (ADR-0004).",
+      "enum": [
+        "serial",
+        "tcp",
+        "bluetooth-rfcomm"
+      ],
+      "title": "TransportKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Lectura puntual de un PID OBD-II.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "pid": {
+      "description": "Nombre python-OBD del comando, p. ej. 'RPM'",
+      "title": "Pid",
+      "type": "string"
+    },
+    "value": {
+      "title": "Value",
+      "type": "number"
+    },
+    "unit": {
+      "description": "Unidad canónica, p. ej. 'rpm', 'degC', '%'",
+      "title": "Unit",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "device_id": {
+      "title": "Device Id",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/TransportKind",
+      "description": "Transporte por el que se capturó"
+    }
+  },
+  "required": [
+    "timestamp",
+    "pid",
+    "value",
+    "unit",
+    "vehicle_id",
+    "device_id",
+    "source"
+  ],
+  "title": "OBDReading",
+  "type": "object"
+}

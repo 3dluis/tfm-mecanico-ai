@@ -1,26 +1,60 @@
-.PHONY: install lint type test check dev arm64-build eval-emulator
+# Mecánico IA — comandos canónicos del monorepo.
+COMPOSE := docker compose
 
-install:
+.PHONY: install schemas lint type test check \
+        dev research cloud edge full down \
+        arm64-build eval-emulator
+
+# ------------------------------------------------------------- entorno local
+install:  ## instala todos los proyectos en editable + tooling (venv activo)
 	pip install --upgrade pip "setuptools<81" wheel
-	pip install -e ".[sim,anomaly,dev]" --no-build-isolation
+	pip install -e ./shared
+	pip install --no-build-isolation "ELM327-emulator>=3.0.5"
+	pip install -e "./obd-lab[dev]"
+	pip install -e "./ai-models[dev]"
+	pip install -e "./diagnostic-agent[detection,dev]"
+	pip install -e "./cloud-platform[dev]"
+	pip install ruff mypy pytest pytest-cov pre-commit
 	pre-commit install
 
+schemas:  ## regenera los JSON Schema desde los contratos (ADR-0007)
+	python -m mecanico_contracts.export_schemas shared/schemas
+
 lint:
-	ruff check src tests && ruff format --check src tests
+	ruff check shared obd-lab ai-models diagnostic-agent cloud-platform tools
+	ruff format --check shared obd-lab ai-models diagnostic-agent cloud-platform tools
 
 type:
 	mypy
 
 test:
-	pytest --cov
+	pytest
 
-check: lint type test
+check: lint type test schemas
+	git diff --quiet shared/schemas || (echo "ERROR: esquemas desactualizados; commitea shared/schemas" && exit 1)
 
-dev:
-	docker compose -f docker/compose.yml --profile dev up --build
+# ------------------------------------------------------------ perfiles docker
+dev:  ## núcleo edge: emulador + agente + ollama
+	$(COMPOSE) --profile dev up --build
 
-arm64-build:
-	docker buildx build --platform linux/arm64 -f docker/edge.Dockerfile -t mecanico-ia:arm64 .
+research:  ## jupyter para ai-models
+	$(COMPOSE) --profile research up --build
 
-eval-emulator:
+cloud:  ## api cloud + postgres
+	$(COMPOSE) --profile cloud up --build
+
+edge:  ## agente con límites de recursos RPi 5 (ADR-0002)
+	$(COMPOSE) --profile edge up --build
+
+full:  ## todo (integración extremo a extremo)
+	$(COMPOSE) --profile full up --build
+
+down:
+	$(COMPOSE) --profile full down
+
+# ------------------------------------------------------------------- utilidades
+arm64-build:  ## valida compatibilidad ARM64 de la imagen edge (ADR-0002)
+	docker buildx build --platform linux/arm64 -f diagnostic-agent/Dockerfile -t mecanico-agent:arm64 .
+
+eval-emulator:  ## evaluación práctica del emulador (Fase 1)
 	python tools/eval_emulator.py

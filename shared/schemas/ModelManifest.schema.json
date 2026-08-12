@@ -1,0 +1,106 @@
+{
+  "$defs": {
+    "DetectorKind": {
+      "description": "Familia del detector matemático de anomalías (separación ML/LLM).",
+      "enum": [
+        "zscore",
+        "isolation_forest",
+        "autoencoder"
+      ],
+      "title": "DetectorKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Manifiesto que acompaña a todo artefacto ONNX distribuido al edge.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "version": {
+      "description": "semver",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "detector": {
+      "$ref": "#/$defs/DetectorKind"
+    },
+    "artifact_filename": {
+      "title": "Artifact Filename",
+      "type": "string"
+    },
+    "artifact_sha256": {
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "expected_features": {
+      "description": "Orden exacto de entrada del modelo",
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Features",
+      "type": "array"
+    },
+    "window_size": {
+      "description": "Muestras por ventana",
+      "exclusiveMinimum": 0,
+      "title": "Window Size",
+      "type": "integer"
+    },
+    "decision_threshold": {
+      "title": "Decision Threshold",
+      "type": "number"
+    },
+    "validation_metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Validation Metrics",
+      "type": "object"
+    },
+    "training_seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Training Seed"
+    },
+    "trained_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Trained At"
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "detector",
+    "artifact_filename",
+    "artifact_sha256",
+    "expected_features",
+    "window_size",
+    "decision_threshold"
+  ],
+  "title": "ModelManifest",
+  "type": "object"
+}

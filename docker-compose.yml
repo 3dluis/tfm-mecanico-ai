@@ -1,0 +1,134 @@
+# Mecánico IA — entorno reproducible del monorepo (ADR-0008).
+#
+# Perfiles por actividad:
+#   dev      -> obd-emulator + agent + ollama         (desarrollo del núcleo edge)
+#   research -> jupyter (ai-models)                   (experimentación/entrenamiento)
+#   cloud    -> cloud-api + postgres                  (desarrollo de la nube)
+#   edge     -> agent-edge (límites RPi 5) + ollama   (validación de recursos, ADR-0002)
+#   full     -> todo                                  (integración extremo a extremo)
+#
+# Uso:   docker compose --profile dev up --build      (o `make dev`)
+# ARM64: docker buildx build --platform linux/arm64 -f diagnostic-agent/Dockerfile .
+
+name: mecanico-ia
+
+services:
+  # ------------------------------------------------------------------ obd-lab
+  obd-emulator:
+    profiles: [dev, full]
+    build:
+      context: .
+      dockerfile: obd-lab/Dockerfile
+    ports:
+      - "35000:35000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import socket;socket.create_connection(('127.0.0.1',35000),2)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --------------------------------------------------------- diagnostic-agent
+  agent:
+    profiles: [dev, full]
+    build:
+      context: .
+      dockerfile: diagnostic-agent/Dockerfile
+    environment:
+      MECANICO_TRANSPORT: tcp
+      MECANICO_EMULATOR_HOST: obd-emulator
+      MECANICO_EMULATOR_PORT: "35000"
+      MECANICO_OLLAMA_HOST: http://ollama:11434
+      MECANICO_DEVICE_ID: ${MECANICO_DEVICE_ID:-dev-local}
+      MECANICO_VEHICLE_ID: ${MECANICO_VEHICLE_ID:-veh-local}
+    ports:
+      - "8000:8000"
+    volumes:
+      - agent-data:/app/data
+      - models-artifacts:/app/models:ro
+    depends_on:
+      obd-emulator:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import httpx;assert httpx.get('http://127.0.0.1:8000/health',timeout=2).status_code==200\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Validación edge: misma imagen con el perfil de recursos RPi 5 (ADR-0002).
+  agent-edge:
+    profiles: [edge]
+    build:
+      context: .
+      dockerfile: diagnostic-agent/Dockerfile
+    environment:
+      MECANICO_TRANSPORT: tcp
+      MECANICO_EMULATOR_HOST: obd-emulator
+      MECANICO_OLLAMA_HOST: http://ollama:11434
+    cpus: 4
+    mem_limit: 8g
+    ports:
+      - "8001:8000"
+    volumes:
+      - agent-data:/app/data
+      - models-artifacts:/app/models:ro
+
+  ollama:
+    profiles: [dev, edge, full]
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-models:/root/.ollama
+    # En la RPi real el LLM comparte presupuesto con el agente; aquí se limita
+    # aparte y se declara en las mediciones (ADR-0002).
+    cpus: 4
+    mem_limit: 6g
+
+  # ---------------------------------------------------------------- ai-models
+  jupyter:
+    profiles: [research, full]
+    build:
+      context: .
+      dockerfile: ai-models/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./ai-models/notebooks:/work/ai-models/notebooks
+      - ./ai-models/experiments:/work/ai-models/experiments
+      - lab-sessions:/work/data/sessions
+      - models-artifacts:/work/models
+
+  # ------------------------------------------------------------ cloud-platform
+  cloud-api:
+    profiles: [cloud, full]
+    build:
+      context: .
+      dockerfile: cloud-platform/Dockerfile
+    environment:
+      MECANICO_CLOUD_DATABASE_URL: postgresql+psycopg://mecanico:${POSTGRES_PASSWORD:-mecanico}@postgres:5432/mecanico
+      MECANICO_CLOUD_API_KEY: ${MECANICO_CLOUD_API_KEY:-dev-key-change-me}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    profiles: [cloud, full]
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mecanico
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mecanico}
+      POSTGRES_DB: mecanico
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mecanico -d mecanico"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  agent-data:        # SQLite + estado del edge
+  ollama-models:     # pesos LLM descargados
+  models-artifacts:  # paquetes model-<nombre>-<semver> (ADR-0009)
+  lab-sessions:      # sesiones JSONL generadas por obd-lab
+  pg-data:           # PostgreSQL

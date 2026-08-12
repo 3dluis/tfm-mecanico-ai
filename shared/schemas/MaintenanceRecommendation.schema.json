@@ -1,0 +1,55 @@
+{
+  "$defs": {
+    "Severity": {
+      "description": "Severidad de una anomalía, diagnóstico o recomendación.",
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Acción recomendada al usuario.",
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "action": {
+      "title": "Action",
+      "type": "string"
+    },
+    "urgency": {
+      "$ref": "#/$defs/Severity"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    },
+    "estimated_risk_if_ignored": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Estimated Risk If Ignored"
+    }
+  },
+  "required": [
+    "action",
+    "urgency",
+    "rationale"
+  ],
+  "title": "MaintenanceRecommendation",
+  "type": "object"
+}
