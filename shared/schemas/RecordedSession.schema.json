@@ -17,6 +17,12 @@
           "title": "Description",
           "type": "string"
         },
+        "category": {
+          "default": "normal",
+          "description": "'normal' | 'known_fault' | 'held_out' (docs/adr/0010)",
+          "title": "Category",
+          "type": "string"
+        },
         "driving_profile": {
           "description": "p. ej. 'idle', 'urban', 'highway', 'cold_start'",
           "title": "Driving Profile",
@@ -41,6 +47,38 @@
           },
           "title": "Fault Params",
           "type": "object"
+        },
+        "fault_start_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Inicio del fallo (ground truth)",
+          "title": "Fault Start S"
+        },
+        "fault_end_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Fin del fallo (ground truth)",
+          "title": "Fault End S"
+        },
+        "ambient_temp_c": {
+          "default": 22.0,
+          "description": "Temperatura ambiente simulada",
+          "title": "Ambient Temp C",
+          "type": "number"
         },
         "duration_s": {
           "exclusiveMinimum": 0,

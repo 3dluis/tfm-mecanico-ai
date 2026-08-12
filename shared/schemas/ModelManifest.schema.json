@@ -5,6 +5,8 @@
       "enum": [
         "zscore",
         "isolation_forest",
+        "lof",
+        "ocsvm",
         "autoencoder"
       ],
       "title": "DetectorKind",
@@ -12,12 +14,17 @@
     }
   },
   "additionalProperties": false,
-  "description": "Manifiesto que acompaña a todo artefacto ONNX distribuido al edge.",
+  "description": "Manifiesto que acompaña a todo artefacto de modelo distribuido al edge (ADR-0009).",
   "properties": {
     "schema_version": {
       "default": 1,
       "title": "Schema Version",
       "type": "integer"
+    },
+    "model_id": {
+      "description": "Identificador único del paquete de modelo",
+      "title": "Model Id",
+      "type": "string"
     },
     "name": {
       "title": "Name",
@@ -32,12 +39,29 @@
     "detector": {
       "$ref": "#/$defs/DetectorKind"
     },
+    "algorithm": {
+      "description": "Descripción del algoritmo, p. ej. 'IsolationForest(n=200)'",
+      "title": "Algorithm",
+      "type": "string"
+    },
     "artifact_filename": {
       "title": "Artifact Filename",
       "type": "string"
     },
+    "artifact_format": {
+      "default": "onnx",
+      "description": "'onnx' | 'json-params'",
+      "title": "Artifact Format",
+      "type": "string"
+    },
     "artifact_sha256": {
       "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "runtime": {
+      "default": "onnxruntime>=1.17",
+      "description": "Compatibilidad de runtime requerida en el edge",
+      "title": "Runtime",
       "type": "string"
     },
     "expected_features": {
@@ -54,9 +78,28 @@
       "title": "Window Size",
       "type": "integer"
     },
+    "window_stride": {
+      "default": 30,
+      "description": "Paso entre ventanas (muestras)",
+      "exclusiveMinimum": 0,
+      "title": "Window Stride",
+      "type": "integer"
+    },
+    "preprocessing": {
+      "default": "embedded",
+      "description": "'embedded' (scaler dentro del artefacto) | 'none' | descripción",
+      "title": "Preprocessing",
+      "type": "string"
+    },
     "decision_threshold": {
       "title": "Decision Threshold",
       "type": "number"
+    },
+    "score_direction": {
+      "default": "higher_is_anomalous",
+      "description": "Semántica del score frente al umbral",
+      "title": "Score Direction",
+      "type": "string"
     },
     "validation_metrics": {
       "additionalProperties": {
@@ -92,9 +135,11 @@
     }
   },
   "required": [
+    "model_id",
     "name",
     "version",
     "detector",
+    "algorithm",
     "artifact_filename",
     "artifact_sha256",
     "expected_features",

@@ -5,6 +5,8 @@
       "enum": [
         "zscore",
         "isolation_forest",
+        "lof",
+        "ocsvm",
         "autoencoder"
       ],
       "title": "DetectorKind",

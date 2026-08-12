@@ -1,168 +1,200 @@
-2026-08-12 13:39:52,889  root       run             INFO     
-
-ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000.
-
-2026-08-12 13:39:52,893  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
-2026-08-12 13:39:52,986  root       terminate       DEBUG    Start termination procedure.
-2026-08-12 13:39:54,087  root       terminate       DEBUG    Terminated.
-2026-08-12 13:40:30,535  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
-2026-08-12 13:40:30,536  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
-2026-08-12 13:40:37,488  root       accept_connection DEBUG    Connected by ('127.0.0.1', 35354)
-2026-08-12 13:40:37,488  root       read_from_device DEBUG    TCP/IP communication terminated by the client.
-2026-08-12 13:40:37,488  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
-2026-08-12 13:40:37,489  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
-2026-08-12 13:40:38,093  root       accept_connection DEBUG    Connected by ('127.0.0.1', 35360)
-2026-08-12 13:40:38,093  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:40:38,094  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:40:39,095  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:40:39,095  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:40:40,096  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:40:40,096  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:40:41,097  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:40:41,097  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:40:42,098  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:40:42,098  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:40:43,100  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:40:43,100  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:40:44,136  root       terminate       DEBUG    Start termination procedure.
-2026-08-12 13:40:44,237  root       terminate       DEBUG    Terminated.
-2026-08-12 13:41:01,870  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
-2026-08-12 13:41:01,871  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
-2026-08-12 13:41:04,810  root       accept_connection DEBUG    Connected by ('127.0.0.1', 59654)
-2026-08-12 13:41:04,811  root       run             DEBUG    Received 'ATZ'
-2026-08-12 13:41:04,811  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
-2026-08-12 13:41:04,811  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
-2026-08-12 13:41:04,814  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
-2026-08-12 13:41:04,814  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
-2026-08-12 13:41:05,315  root       <module>        DEBUG    Reset and sleep 0.5 seconds
-2026-08-12 13:41:05,315  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
-2026-08-12 13:41:05,316  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
-2026-08-12 13:41:05,611  root       run             DEBUG    Received 'ATE0'
-2026-08-12 13:41:05,611  root       handle_request  DEBUG    Handling: 'ATE0', header '7E0', ECU '7E0'
-2026-08-12 13:41:05,611  root       handle_request  DEBUG    Description: AT ECHO, PID AT_ECHO (ATE0)
-2026-08-12 13:41:05,611  root       <module>        DEBUG    set ECHO ON/OFF : False
-2026-08-12 13:41:05,611  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
-2026-08-12 13:41:05,611  root       handle_response DEBUG    Write: 'OK\r\r>'
-2026-08-12 13:41:06,011  root       run             DEBUG    Received '0100'
-2026-08-12 13:41:06,011  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
-2026-08-12 13:41:06,011  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
-2026-08-12 13:41:06,011  root       handle_response DEBUG    Processing: '<string>SEARCHING...</string><exec>time.sleep(1.5)</exec><writeln></writeln><header>7E8</header><size>06</size><data>41 00 BE 3F A8 13</data>'
-2026-08-12 13:41:06,011  root       handle_response DEBUG    Write: 'SEARCHING...'
-2026-08-12 13:41:07,512  root       handle_response DEBUG    Evaluated command: time.sleep(1.5) -> None
-2026-08-12 13:41:07,512  root       handle_response DEBUG    Write: '\r41 00 BE 3F A8 13 \r\r>'
-2026-08-12 13:41:07,512  root       read_from_device DEBUG    TCP/IP communication terminated by the client.
-2026-08-12 13:41:07,512  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
-2026-08-12 13:41:07,513  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
-2026-08-12 13:41:07,513  root       accept_connection DEBUG    Connected by ('127.0.0.1', 59662)
-2026-08-12 13:41:07,513  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:41:07,513  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:41:09,938  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:41:09,938  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:41:12,939  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:41:12,939  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:41:15,942  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:41:15,942  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:41:18,946  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:41:18,946  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:41:21,949  root       run             DEBUG    Received '\x7f\x7f'
-2026-08-12 13:41:21,949  root       run             WARNING  Invalid request: '\x7f\x7f'
-2026-08-12 13:41:24,976  root       terminate       DEBUG    Start termination procedure.
-2026-08-12 13:41:25,076  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
-2026-08-12 13:41:25,076  root       terminate       DEBUG    Terminated.
-2026-08-12 13:41:37,070  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
-2026-08-12 13:41:37,072  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
-2026-08-12 13:41:40,353  root       accept_connection DEBUG    Connected by ('127.0.0.1', 50238)
-2026-08-12 13:41:40,354  root       run             DEBUG    Received 'ATZ'
-2026-08-12 13:41:40,354  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
-2026-08-12 13:41:40,354  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
-2026-08-12 13:41:40,362  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
-2026-08-12 13:41:40,362  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
-2026-08-12 13:41:40,863  root       <module>        DEBUG    Reset and sleep 0.5 seconds
-2026-08-12 13:41:40,863  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
-2026-08-12 13:41:40,863  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
-2026-08-12 13:41:41,354  root       run             DEBUG    Received 'ATE0'
-2026-08-12 13:41:41,354  root       handle_request  DEBUG    Handling: 'ATE0', header '7E0', ECU '7E0'
-2026-08-12 13:41:41,355  root       handle_request  DEBUG    Description: AT ECHO, PID AT_ECHO (ATE0)
-2026-08-12 13:41:41,355  root       <module>        DEBUG    set ECHO ON/OFF : False
-2026-08-12 13:41:41,355  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
-2026-08-12 13:41:41,355  root       handle_response DEBUG    Write: 'OK\r\r>'
-2026-08-12 13:41:41,355  root       run             DEBUG    Received 'ATH1'
-2026-08-12 13:41:41,356  root       handle_request  DEBUG    Handling: 'ATH1', header '7E0', ECU '7E0'
-2026-08-12 13:41:41,356  root       handle_request  DEBUG    Description: AT HEADERS, PID AT_USE_HEADERS (ATH1)
-2026-08-12 13:41:41,356  root       <module>        DEBUG    set HEADERS ON/OFF : True
-2026-08-12 13:41:41,356  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
-2026-08-12 13:41:41,356  root       handle_response DEBUG    Write: 'OK\r\r>'
-2026-08-12 13:41:41,356  root       run             DEBUG    Received 'ATL0'
-2026-08-12 13:41:41,356  root       handle_request  DEBUG    Handling: 'ATL0', header '7E0', ECU '7E0'
-2026-08-12 13:41:41,357  root       handle_request  DEBUG    Description: AT LINEFEEDS, PID AT_LINEFEEDS (ATL0)
-2026-08-12 13:41:41,357  root       <module>        DEBUG    set LINEFEEDS ON/OFF : False
-2026-08-12 13:41:41,357  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
-2026-08-12 13:41:41,357  root       handle_response DEBUG    Write: 'OK\r\r>'
-2026-08-12 13:41:41,357  root       run             DEBUG    Received 'AT RV'
-2026-08-12 13:41:41,357  root       handle_request  DEBUG    Handling: 'ATRV', header '7E0', ECU '7E0'
-2026-08-12 13:41:41,357  root       handle_request  DEBUG    Description: AT read volt, PID AT_R_VOLT (ATRV)
-2026-08-12 13:41:41,357  root       <module>        DEBUG    Volt = 13.1
-2026-08-12 13:41:41,357  root       handle_response DEBUG    Processing: '<string>13.1</string><writeln>V</writeln>'
-2026-08-12 13:41:41,358  root       handle_response DEBUG    Write: '13.1V\r\r>'
-2026-08-12 13:41:41,358  root       run             DEBUG    Received 'ATSP0'
-2026-08-12 13:41:41,358  root       handle_request  DEBUG    Handling: 'ATSP0', header '7E0', ECU '7E0'
-2026-08-12 13:41:41,358  root       handle_request  DEBUG    Description: AT PROTO, PID AT_PROTO (ATSP0)
-2026-08-12 13:41:41,358  root       <module>        DEBUG    set PROTO 0
-2026-08-12 13:41:41,358  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
-2026-08-12 13:41:41,358  root       handle_response DEBUG    Write: 'OK\r\r>'
-2026-08-12 13:41:42,358  root       run             DEBUG    Received '0100'
-2026-08-12 13:41:42,359  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
-2026-08-12 13:41:42,359  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
-2026-08-12 13:41:42,359  root       handle_response DEBUG    Processing: '<string>SEARCHING...</string><exec>time.sleep(1.5)</exec><writeln></writeln><header>7E8</header><size>06</size><data>41 00 BE 3F A8 13</data>'
-2026-08-12 13:41:42,359  root       handle_response DEBUG    Write: 'SEARCHING...'
-2026-08-12 13:41:43,859  root       handle_response DEBUG    Evaluated command: time.sleep(1.5) -> None
-2026-08-12 13:41:43,860  root       handle_response DEBUG    Write: '\r7E8 06 41 00 BE 3F A8 13 \r\r>'
-2026-08-12 13:41:43,860  root       run             DEBUG    Received 'ATDPN'
-2026-08-12 13:41:43,861  root       handle_request  DEBUG    Handling: 'ATDPN', header '7E0', ECU '7E0'
-2026-08-12 13:41:43,861  root       handle_request  DEBUG    Description: AT Display Protocol Number, PID AT_DESCRIBE_PROTO_N (ATDPN)
-2026-08-12 13:41:44,361  root       handle_response DEBUG    Processing: '<writeln>A6</writeln>'
-2026-08-12 13:41:44,361  root       handle_response DEBUG    Write: 'A6\r\r>'
-2026-08-12 13:41:44,362  root       run             DEBUG    Received '0100'
-2026-08-12 13:41:44,362  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,362  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
-2026-08-12 13:41:44,362  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 00 BE 3F A8 13</data>'
-2026-08-12 13:41:44,362  root       handle_response DEBUG    Write: '7E8 06 41 00 BE 3F A8 13 \r\r>'
-2026-08-12 13:41:44,363  root       run             DEBUG    Received '0120'
-2026-08-12 13:41:44,363  root       handle_request  DEBUG    Handling: '0120', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,363  root       handle_request  DEBUG    Description: Supported PIDS_B [21-40], PID ELM_PIDS_B (0120)
-2026-08-12 13:41:44,363  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 20 90 15 B0 15</data>'
-2026-08-12 13:41:44,363  root       handle_response DEBUG    Write: '7E8 06 41 20 90 15 B0 15 \r\r>'
-2026-08-12 13:41:44,364  root       run             DEBUG    Received '0140'
-2026-08-12 13:41:44,364  root       handle_request  DEBUG    Handling: '0140', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,364  root       handle_request  DEBUG    Description: Supported PIDS_C [41-60], PID ELM_PIDS_C (0140)
-2026-08-12 13:41:44,364  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 40 7A 1C 80 20</data>'
-2026-08-12 13:41:44,364  root       handle_response DEBUG    Write: '7E8 06 41 40 7A 1C 80 20 \r\r>'
-2026-08-12 13:41:44,365  root       run             DEBUG    Received '0600'
-2026-08-12 13:41:44,365  root       handle_request  DEBUG    Handling: '0600', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,365  root       handle_request  DEBUG    Description: MIDS_A, PID ELM_MIDS_A (0600)
-2026-08-12 13:41:44,365  root       handle_response DEBUG    Processing: '<pos_answer>C0 00 00 01</pos_answer>'
-2026-08-12 13:41:44,365  root       handle_response DEBUG    Write: '7E8 05 46 C0 00 00 01 \r\r>'
-2026-08-12 13:41:44,365  root       run             DEBUG    Received '0900'
-2026-08-12 13:41:44,365  root       handle_request  DEBUG    Handling: '0900', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,373  root       handle_request  INFO     Unknown request: '0900', header=7E0
-2026-08-12 13:41:44,373  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
-2026-08-12 13:41:44,373  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
-2026-08-12 13:41:44,373  root       run             DEBUG    Received '010C'
-2026-08-12 13:41:44,373  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,373  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
-2026-08-12 13:41:44,374  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 14 5F</data>'
-2026-08-12 13:41:44,374  root       handle_response DEBUG    Write: '7E8 04 41 0C 14 5F \r\r>'
-2026-08-12 13:41:44,374  root       run             DEBUG    Received '0105'
-2026-08-12 13:41:44,374  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,374  root       handle_request  DEBUG    Description: Engine Coolant Temperature, PID COOLANT_TEMP (0105)
-2026-08-12 13:41:44,374  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 05 5F</data>'
-2026-08-12 13:41:44,375  root       handle_response DEBUG    Write: '7E8 03 41 05 5F \r\r>'
-2026-08-12 13:41:44,375  root       run             DEBUG    Received '0106'
-2026-08-12 13:41:44,375  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,375  root       handle_request  DEBUG    Description: Short Term Fuel Trim - Bank 1, PID SHORT_FUEL_TRIM_1 (0106)
-2026-08-12 13:41:44,375  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 06 80</data>'
-2026-08-12 13:41:44,375  root       handle_response DEBUG    Write: '7E8 03 41 06 80 \r\r>'
-2026-08-12 13:41:44,376  root       run             DEBUG    Received 'ATZ'
-2026-08-12 13:41:44,376  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
-2026-08-12 13:41:44,376  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
-2026-08-12 13:41:44,376  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 15:57:03,535  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 15:57:03,536  root       handle_request  DEBUG    Description: Mecanico IA TIMING_ADVANCE, PID MEC_TIMING_ADVANCE (010E)
+2026-08-12 15:57:03,536  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0E 9B</data>'
+2026-08-12 15:57:03,536  root       handle_response DEBUG    Write: '7E8 03 41 0E 9B \r\r>'
+2026-08-12 15:57:03,537  root       run             DEBUG    Received '010B'
+2026-08-12 15:57:03,537  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 15:57:03,537  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_PRESSURE, PID MEC_INTAKE_PRESSURE (010B)
+2026-08-12 15:57:03,537  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0B 21</data>'
+2026-08-12 15:57:03,537  root       handle_response DEBUG    Write: '7E8 03 41 0B 21 \r\r>'
+2026-08-12 15:57:04,526  root       run             DEBUG    Received '010C'
+2026-08-12 15:57:04,527  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,527  root       handle_request  DEBUG    Description: Mecanico IA RPM, PID MEC_RPM (010C)
+2026-08-12 15:57:04,527  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 0A 99</data>'
+2026-08-12 15:57:04,527  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A 99 \r\r>'
+2026-08-12 15:57:04,528  root       run             DEBUG    Received '010D'
+2026-08-12 15:57:04,528  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,528  root       handle_request  DEBUG    Description: Mecanico IA SPEED, PID MEC_SPEED (010D)
+2026-08-12 15:57:04,528  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0D 03</data>'
+2026-08-12 15:57:04,528  root       handle_response DEBUG    Write: '7E8 03 41 0D 03 \r\r>'
+2026-08-12 15:57:04,529  root       run             DEBUG    Received '0104'
+2026-08-12 15:57:04,529  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,529  root       handle_request  DEBUG    Description: Mecanico IA ENGINE_LOAD, PID MEC_ENGINE_LOAD (0104)
+2026-08-12 15:57:04,529  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 04 10</data>'
+2026-08-12 15:57:04,529  root       handle_response DEBUG    Write: '7E8 03 41 04 10 \r\r>'
+2026-08-12 15:57:04,530  root       run             DEBUG    Received '0105'
+2026-08-12 15:57:04,530  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,530  root       handle_request  DEBUG    Description: Mecanico IA COOLANT_TEMP, PID MEC_COOLANT_TEMP (0105)
+2026-08-12 15:57:04,530  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 05 7F</data>'
+2026-08-12 15:57:04,530  root       handle_response DEBUG    Write: '7E8 03 41 05 7F \r\r>'
+2026-08-12 15:57:04,531  root       run             DEBUG    Received '010F'
+2026-08-12 15:57:04,531  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,531  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_TEMP, PID MEC_INTAKE_TEMP (010F)
+2026-08-12 15:57:04,531  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0F 47</data>'
+2026-08-12 15:57:04,531  root       handle_response DEBUG    Write: '7E8 03 41 0F 47 \r\r>'
+2026-08-12 15:57:04,531  root       run             DEBUG    Received '0110'
+2026-08-12 15:57:04,531  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,531  root       handle_request  DEBUG    Description: Mecanico IA MAF, PID MEC_MAF (0110)
+2026-08-12 15:57:04,531  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 10 00 D2</data>'
+2026-08-12 15:57:04,532  root       handle_response DEBUG    Write: '7E8 04 41 10 00 D2 \r\r>'
+2026-08-12 15:57:04,532  root       run             DEBUG    Received '0111'
+2026-08-12 15:57:04,532  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,532  root       handle_request  DEBUG    Description: Mecanico IA THROTTLE_POS, PID MEC_THROTTLE_POS (0111)
+2026-08-12 15:57:04,532  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 11 35</data>'
+2026-08-12 15:57:04,532  root       handle_response DEBUG    Write: '7E8 03 41 11 35 \r\r>'
+2026-08-12 15:57:04,533  root       run             DEBUG    Received '0106'
+2026-08-12 15:57:04,533  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,533  root       handle_request  DEBUG    Description: Mecanico IA SHORT_FUEL_TRIM_1, PID MEC_SHORT_FUEL_TRIM_1 (0106)
+2026-08-12 15:57:04,533  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 06 8E</data>'
+2026-08-12 15:57:04,533  root       handle_response DEBUG    Write: '7E8 03 41 06 8E \r\r>'
+2026-08-12 15:57:04,534  root       run             DEBUG    Received '0107'
+2026-08-12 15:57:04,534  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,534  root       handle_request  DEBUG    Description: Mecanico IA LONG_FUEL_TRIM_1, PID MEC_LONG_FUEL_TRIM_1 (0107)
+2026-08-12 15:57:04,534  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 07 8A</data>'
+2026-08-12 15:57:04,534  root       handle_response DEBUG    Write: '7E8 03 41 07 8A \r\r>'
+2026-08-12 15:57:04,535  root       run             DEBUG    Received '0114'
+2026-08-12 15:57:04,535  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,535  root       handle_request  DEBUG    Description: Mecanico IA O2_B1S1, PID MEC_O2_B1S1 (0114)
+2026-08-12 15:57:04,535  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 14 30 FF</data>'
+2026-08-12 15:57:04,535  root       handle_response DEBUG    Write: '7E8 04 41 14 30 FF \r\r>'
+2026-08-12 15:57:04,535  root       run             DEBUG    Received '010E'
+2026-08-12 15:57:04,535  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,535  root       handle_request  DEBUG    Description: Mecanico IA TIMING_ADVANCE, PID MEC_TIMING_ADVANCE (010E)
+2026-08-12 15:57:04,535  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0E 9B</data>'
+2026-08-12 15:57:04,536  root       handle_response DEBUG    Write: '7E8 03 41 0E 9B \r\r>'
+2026-08-12 15:57:04,536  root       run             DEBUG    Received '010B'
+2026-08-12 15:57:04,536  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 15:57:04,536  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_PRESSURE, PID MEC_INTAKE_PRESSURE (010B)
+2026-08-12 15:57:04,536  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0B 1F</data>'
+2026-08-12 15:57:04,536  root       handle_response DEBUG    Write: '7E8 03 41 0B 1F \r\r>'
+2026-08-12 15:57:05,527  root       run             DEBUG    Received '010C'
+2026-08-12 15:57:05,527  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,527  root       handle_request  DEBUG    Description: Mecanico IA RPM, PID MEC_RPM (010C)
+2026-08-12 15:57:05,527  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 09 FE</data>'
+2026-08-12 15:57:05,527  root       handle_response DEBUG    Write: '7E8 04 41 0C 09 FE \r\r>'
+2026-08-12 15:57:05,528  root       run             DEBUG    Received '010D'
+2026-08-12 15:57:05,528  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,528  root       handle_request  DEBUG    Description: Mecanico IA SPEED, PID MEC_SPEED (010D)
+2026-08-12 15:57:05,528  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0D 02</data>'
+2026-08-12 15:57:05,528  root       handle_response DEBUG    Write: '7E8 03 41 0D 02 \r\r>'
+2026-08-12 15:57:05,529  root       run             DEBUG    Received '0104'
+2026-08-12 15:57:05,529  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,529  root       handle_request  DEBUG    Description: Mecanico IA ENGINE_LOAD, PID MEC_ENGINE_LOAD (0104)
+2026-08-12 15:57:05,529  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 04 18</data>'
+2026-08-12 15:57:05,529  root       handle_response DEBUG    Write: '7E8 03 41 04 18 \r\r>'
+2026-08-12 15:57:05,530  root       run             DEBUG    Received '0105'
+2026-08-12 15:57:05,530  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,530  root       handle_request  DEBUG    Description: Mecanico IA COOLANT_TEMP, PID MEC_COOLANT_TEMP (0105)
+2026-08-12 15:57:05,530  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 05 80</data>'
+2026-08-12 15:57:05,530  root       handle_response DEBUG    Write: '7E8 03 41 05 80 \r\r>'
+2026-08-12 15:57:05,530  root       run             DEBUG    Received '010F'
+2026-08-12 15:57:05,530  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,531  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_TEMP, PID MEC_INTAKE_TEMP (010F)
+2026-08-12 15:57:05,531  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0F 47</data>'
+2026-08-12 15:57:05,531  root       handle_response DEBUG    Write: '7E8 03 41 0F 47 \r\r>'
+2026-08-12 15:57:05,531  root       run             DEBUG    Received '0110'
+2026-08-12 15:57:05,531  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,531  root       handle_request  DEBUG    Description: Mecanico IA MAF, PID MEC_MAF (0110)
+2026-08-12 15:57:05,531  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 10 01 1E</data>'
+2026-08-12 15:57:05,531  root       handle_response DEBUG    Write: '7E8 04 41 10 01 1E \r\r>'
+2026-08-12 15:57:05,532  root       run             DEBUG    Received '0111'
+2026-08-12 15:57:05,532  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,532  root       handle_request  DEBUG    Description: Mecanico IA THROTTLE_POS, PID MEC_THROTTLE_POS (0111)
+2026-08-12 15:57:05,532  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 11 33</data>'
+2026-08-12 15:57:05,532  root       handle_response DEBUG    Write: '7E8 03 41 11 33 \r\r>'
+2026-08-12 15:57:05,532  root       run             DEBUG    Received '0106'
+2026-08-12 15:57:05,532  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,533  root       handle_request  DEBUG    Description: Mecanico IA SHORT_FUEL_TRIM_1, PID MEC_SHORT_FUEL_TRIM_1 (0106)
+2026-08-12 15:57:05,533  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 06 8D</data>'
+2026-08-12 15:57:05,533  root       handle_response DEBUG    Write: '7E8 03 41 06 8D \r\r>'
+2026-08-12 15:57:05,533  root       run             DEBUG    Received '0107'
+2026-08-12 15:57:05,533  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,533  root       handle_request  DEBUG    Description: Mecanico IA LONG_FUEL_TRIM_1, PID MEC_LONG_FUEL_TRIM_1 (0107)
+2026-08-12 15:57:05,533  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 07 8A</data>'
+2026-08-12 15:57:05,533  root       handle_response DEBUG    Write: '7E8 03 41 07 8A \r\r>'
+2026-08-12 15:57:05,534  root       run             DEBUG    Received '0114'
+2026-08-12 15:57:05,534  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,534  root       handle_request  DEBUG    Description: Mecanico IA O2_B1S1, PID MEC_O2_B1S1 (0114)
+2026-08-12 15:57:05,534  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 14 6F FF</data>'
+2026-08-12 15:57:05,534  root       handle_response DEBUG    Write: '7E8 04 41 14 6F FF \r\r>'
+2026-08-12 15:57:05,535  root       run             DEBUG    Received '010E'
+2026-08-12 15:57:05,535  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,535  root       handle_request  DEBUG    Description: Mecanico IA TIMING_ADVANCE, PID MEC_TIMING_ADVANCE (010E)
+2026-08-12 15:57:05,535  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0E 9C</data>'
+2026-08-12 15:57:05,535  root       handle_response DEBUG    Write: '7E8 03 41 0E 9C \r\r>'
+2026-08-12 15:57:05,536  root       run             DEBUG    Received '010B'
+2026-08-12 15:57:05,536  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 15:57:05,536  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_PRESSURE, PID MEC_INTAKE_PRESSURE (010B)
+2026-08-12 15:57:05,536  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0B 23</data>'
+2026-08-12 15:57:05,536  root       handle_response DEBUG    Write: '7E8 03 41 0B 23 \r\r>'
+2026-08-12 15:57:06,527  root       run             DEBUG    Received '010C'
+2026-08-12 15:57:06,527  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,527  root       handle_request  DEBUG    Description: Mecanico IA RPM, PID MEC_RPM (010C)
+2026-08-12 15:57:06,527  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 0A C3</data>'
+2026-08-12 15:57:06,527  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A C3 \r\r>'
+2026-08-12 15:57:06,528  root       run             DEBUG    Received '010D'
+2026-08-12 15:57:06,528  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,528  root       handle_request  DEBUG    Description: Mecanico IA SPEED, PID MEC_SPEED (010D)
+2026-08-12 15:57:06,528  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0D 02</data>'
+2026-08-12 15:57:06,528  root       handle_response DEBUG    Write: '7E8 03 41 0D 02 \r\r>'
+2026-08-12 15:57:06,529  root       run             DEBUG    Received '0104'
+2026-08-12 15:57:06,529  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,529  root       handle_request  DEBUG    Description: Mecanico IA ENGINE_LOAD, PID MEC_ENGINE_LOAD (0104)
+2026-08-12 15:57:06,529  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 04 0C</data>'
+2026-08-12 15:57:06,529  root       handle_response DEBUG    Write: '7E8 03 41 04 0C \r\r>'
+2026-08-12 15:57:06,530  root       run             DEBUG    Received '0105'
+2026-08-12 15:57:06,530  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,530  root       handle_request  DEBUG    Description: Mecanico IA COOLANT_TEMP, PID MEC_COOLANT_TEMP (0105)
+2026-08-12 15:57:06,530  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 05 7F</data>'
+2026-08-12 15:57:06,530  root       handle_response DEBUG    Write: '7E8 03 41 05 7F \r\r>'
+2026-08-12 15:57:06,530  root       run             DEBUG    Received '010F'
+2026-08-12 15:57:06,531  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,531  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_TEMP, PID MEC_INTAKE_TEMP (010F)
+2026-08-12 15:57:06,531  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0F 47</data>'
+2026-08-12 15:57:06,531  root       handle_response DEBUG    Write: '7E8 03 41 0F 47 \r\r>'
+2026-08-12 15:57:06,531  root       run             DEBUG    Received '0110'
+2026-08-12 15:57:06,531  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,532  root       handle_request  DEBUG    Description: Mecanico IA MAF, PID MEC_MAF (0110)
+2026-08-12 15:57:06,532  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 10 00 96</data>'
+2026-08-12 15:57:06,532  root       handle_response DEBUG    Write: '7E8 04 41 10 00 96 \r\r>'
+2026-08-12 15:57:06,532  root       run             DEBUG    Received '0111'
+2026-08-12 15:57:06,533  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,533  root       handle_request  DEBUG    Description: Mecanico IA THROTTLE_POS, PID MEC_THROTTLE_POS (0111)
+2026-08-12 15:57:06,533  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 11 2E</data>'
+2026-08-12 15:57:06,533  root       handle_response DEBUG    Write: '7E8 03 41 11 2E \r\r>'
+2026-08-12 15:57:06,534  root       run             DEBUG    Received '0106'
+2026-08-12 15:57:06,534  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,534  root       handle_request  DEBUG    Description: Mecanico IA SHORT_FUEL_TRIM_1, PID MEC_SHORT_FUEL_TRIM_1 (0106)
+2026-08-12 15:57:06,534  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 06 8C</data>'
+2026-08-12 15:57:06,534  root       handle_response DEBUG    Write: '7E8 03 41 06 8C \r\r>'
+2026-08-12 15:57:06,534  root       run             DEBUG    Received '0107'
+2026-08-12 15:57:06,535  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,535  root       handle_request  DEBUG    Description: Mecanico IA LONG_FUEL_TRIM_1, PID MEC_LONG_FUEL_TRIM_1 (0107)
+2026-08-12 15:57:06,535  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 07 8A</data>'
+2026-08-12 15:57:06,535  root       handle_response DEBUG    Write: '7E8 03 41 07 8A \r\r>'
+2026-08-12 15:57:06,536  root       run             DEBUG    Received '0114'
+2026-08-12 15:57:06,536  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,536  root       handle_request  DEBUG    Description: Mecanico IA O2_B1S1, PID MEC_O2_B1S1 (0114)
+2026-08-12 15:57:06,536  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 14 57 FF</data>'
+2026-08-12 15:57:06,536  root       handle_response DEBUG    Write: '7E8 04 41 14 57 FF \r\r>'
+2026-08-12 15:57:06,537  root       run             DEBUG    Received '010E'
+2026-08-12 15:57:06,537  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,537  root       handle_request  DEBUG    Description: Mecanico IA TIMING_ADVANCE, PID MEC_TIMING_ADVANCE (010E)
+2026-08-12 15:57:06,537  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0E 9F</data>'
+2026-08-12 15:57:06,537  root       handle_response DEBUG    Write: '7E8 03 41 0E 9F \r\r>'
+2026-08-12 15:57:06,538  root       run             DEBUG    Received '010B'
+2026-08-12 15:57:06,538  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 15:57:06,538  root       handle_request  DEBUG    Description: Mecanico IA INTAKE_PRESSURE, PID MEC_INTAKE_PRESSURE (010B)
+2026-08-12 15:57:06,538  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 0B 1D</data>'
+2026-08-12 15:57:06,538  root       handle_response DEBUG    Write: '7E8 03 41 0B 1D \r\r>'
+2026-08-12 15:57:06,547  diagnostic_agent.pipeline run_pipeline    INFO     ANOMALÍA t=300s score=12.2800 (thr=0.1632) PIDs=['RPM', 'COOLANT', 'INTAKE', 'SPEED', 'THROTTLE']
+2026-08-12 15:57:07,528  root       run             DEBUG    Received 'ATZ'
+2026-08-12 15:57:07,529  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 15:57:07,531  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 15:57:07,534  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 15:57:07,576  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 15:57:08,041  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 15:57:08,041  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 15:57:08,041  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 15:57:08,683  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 15:57:08,683  root       terminate       DEBUG    Terminated.

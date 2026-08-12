@@ -26,6 +26,8 @@ class DetectorKind(StrEnum):
 
     ZSCORE = "zscore"
     ISOLATION_FOREST = "isolation_forest"
+    LOF = "lof"
+    OCSVM = "ocsvm"
     AUTOENCODER = "autoencoder"
 
 

@@ -179,16 +179,30 @@ class CaseRecord(ContractBase):
 
 
 class ModelManifest(ContractBase):
-    """Manifiesto que acompaña a todo artefacto ONNX distribuido al edge."""
+    """Manifiesto que acompaña a todo artefacto de modelo distribuido al edge (ADR-0009)."""
 
+    model_id: str = Field(description="Identificador único del paquete de modelo")
     name: str
     version: str = Field(pattern=r"^\d+\.\d+\.\d+$", description="semver")
     detector: DetectorKind
+    algorithm: str = Field(description="Descripción del algoritmo, p. ej. 'IsolationForest(n=200)'")
     artifact_filename: str
+    artifact_format: str = Field(default="onnx", description="'onnx' | 'json-params'")
     artifact_sha256: str
+    runtime: str = Field(
+        default="onnxruntime>=1.17", description="Compatibilidad de runtime requerida en el edge"
+    )
     expected_features: list[str] = Field(description="Orden exacto de entrada del modelo")
     window_size: int = Field(gt=0, description="Muestras por ventana")
+    window_stride: int = Field(gt=0, default=30, description="Paso entre ventanas (muestras)")
+    preprocessing: str = Field(
+        default="embedded",
+        description="'embedded' (scaler dentro del artefacto) | 'none' | descripción",
+    )
     decision_threshold: float
+    score_direction: str = Field(
+        default="higher_is_anomalous", description="Semántica del score frente al umbral"
+    )
     validation_metrics: dict[str, float] = Field(default_factory=dict)
     training_seed: int | None = None
     trained_at: datetime | None = None
@@ -204,9 +218,16 @@ class ScenarioSpec(ContractBase):
 
     scenario_id: str
     description: str
+    category: str = Field(
+        default="normal",
+        description="'normal' | 'known_fault' | 'held_out' (docs/adr/0010)",
+    )
     driving_profile: str = Field(description="p. ej. 'idle', 'urban', 'highway', 'cold_start'")
     fault: str | None = Field(default=None, description="Modelo de fallo inyectado; None = normal")
     fault_params: dict[str, float] = Field(default_factory=dict)
+    fault_start_s: float | None = Field(default=None, description="Inicio del fallo (ground truth)")
+    fault_end_s: float | None = Field(default=None, description="Fin del fallo (ground truth)")
+    ambient_temp_c: float = Field(default=22.0, description="Temperatura ambiente simulada")
     duration_s: float = Field(gt=0)
     sample_rate_hz: float = Field(gt=0, default=1.0)
     seed: int = Field(description="Semilla de reproducibilidad (obligatoria)")

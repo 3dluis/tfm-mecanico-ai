@@ -58,3 +58,13 @@ arm64-build:  ## valida compatibilidad ARM64 de la imagen edge (ADR-0002)
 
 eval-emulator:  ## evaluación práctica del emulador (Fase 1)
 	python tools/eval_emulator.py
+
+# ------------------------------------------------------------------ laboratorio
+generate-suite:  ## genera las sesiones de la suite v1 en data/sessions
+	python -m obd_lab.cli generate --suite obd-lab/scenarios/suite_v1.yaml --out data/sessions
+
+experiments: generate-suite  ## reproduce el experimento E1 de baselines
+	python ai-models/experiments/e1_baselines.py --sessions data/sessions
+
+llm-smoke:  ## smoke comparativo de SLMs (requiere Ollama con los modelos descargados)
+	python tools/llm_smoke.py
