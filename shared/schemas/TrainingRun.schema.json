@@ -1,0 +1,214 @@
+{
+  "$defs": {
+    "ModelType": {
+      "description": "Las tres categorías de la taxonomía (docs/models/01).",
+      "enum": [
+        "ml",
+        "llm",
+        "embedding"
+      ],
+      "title": "ModelType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Un entrenamiento/ajuste concreto: reproducible por sí solo (docs/models/05).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "training_run_id": {
+      "title": "Training Run Id",
+      "type": "string"
+    },
+    "experiment_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "ModelExperiment al que aporta",
+      "title": "Experiment Id"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "model_version": {
+      "title": "Model Version",
+      "type": "string"
+    },
+    "model_type": {
+      "$ref": "#/$defs/ModelType",
+      "default": "ml"
+    },
+    "dataset_id": {
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "dataset_version": {
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "dataset_checksum": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dataset Checksum"
+    },
+    "split_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión del split train/val/test (linaje, docs/models/06)",
+      "title": "Split Version"
+    },
+    "feature_schema_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Feature Schema Version"
+    },
+    "preprocessing_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Preprocessing Version"
+    },
+    "hyperparameters": {
+      "additionalProperties": true,
+      "title": "Hyperparameters",
+      "type": "object"
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Seed"
+    },
+    "git_commit": {
+      "title": "Git Commit",
+      "type": "string"
+    },
+    "python_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Python Version"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completed At"
+    },
+    "hardware": {
+      "description": "Dónde se entrenó: 'sandbox-x86', 'mac-arm64', 'rpi5'…",
+      "title": "Hardware",
+      "type": "string"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "artifact_uri": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Artifact Uri"
+    },
+    "artifact_checksum": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Artifact Checksum"
+    },
+    "status": {
+      "default": "ok",
+      "description": "'ok' | 'failed' | 'running'",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "training_run_id",
+    "model_id",
+    "model_version",
+    "dataset_id",
+    "dataset_version",
+    "git_commit",
+    "started_at",
+    "hardware"
+  ],
+  "title": "TrainingRun",
+  "type": "object"
+}

@@ -1,5 +1,19 @@
 # CHANGELOG — mecanico_contracts
 
+## v0.4.0 · SCHEMA_VERSION 2 (2026-08-12) — Gobernanza de modelos (F7)
+
+Cambios ADITIVOS (retro-compatibles):
+
+- Nuevo módulo `models_registry.py` (ADR-0022): `TrainingRun`, `ModelExperiment`,
+  `ModelEvaluation`, `ModelRegistryEntry`, `ModelDeployment`, `HardwareValidation`,
+  enums `ModelType`/`ModelStatus`/`ModelCapability`/`HardwareValidationStatus`,
+  `ALLOWED_STATUS_TRANSITIONS` + `validate_status_transition` (ciclo de vida
+  EXPERIMENTAL→CANDIDATE→VALIDATED→EDGE_APPROVED→DEPLOYED, + REJECTED/SUPERSEDED/RETIRED).
+- `ModelManifest`: campos opcionales nuevos `model_type` (default "ml"),
+  `preprocessing_version`, `runtime_version`, `minimum_hardware`, `training_run_id` y
+  (solo LLM) `quantization`, `context_window`, `tokenizer`, `prompt_compatibility`,
+  `tool_schema_version`. Ningún campo existente cambia.
+
 ## v0.3.0 · SCHEMA_VERSION 2 (2026-08-12) — Event Intelligence (F6)
 
 Cambios ADITIVOS (retro-compatibles dentro de SCHEMA_VERSION 2, política de

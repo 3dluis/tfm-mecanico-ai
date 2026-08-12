@@ -67,6 +67,9 @@ eval-emulator:  ## evaluación práctica del emulador (Fase 1)
 generate-suite:  ## genera las sesiones de la suite v1 en data/sessions
 	python -m obd_lab.cli generate --suite obd-lab/scenarios/suite_v1.yaml --out data/sessions
 
+registry:  ## reconstruye el Model Registry desde los resultados F3 (determinista)
+	cd ai-models && python experiments/register_f3.py
+
 experiments: generate-suite  ## reproduce el experimento E1 de baselines
 	python ai-models/experiments/e1_baselines.py --sessions data/sessions
 

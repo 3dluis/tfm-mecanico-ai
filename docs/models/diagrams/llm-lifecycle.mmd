@@ -1,0 +1,12 @@
+%% Ciclo de vida de un LLM (F7, ADR-0023) — NUNCA foundation training desde cero
+flowchart TD
+    FM[Foundation Model preentrenado<br/>candidatos: docs/models/03 §3] --> EV1[Evaluación inicial<br/>llm-smoke + benchmark interno]
+    EV1 --> Q[Quantization<br/>GGUF Q4_K_M referencia]
+    Q --> PE[Prompt / Context Engineering<br/>prompt_version versionada]
+    PE --> RAG[RAG + Tool use<br/>structured output validado]
+    RAG --> AD{¿Evidencia de que<br/>prompting+RAG+memoria<br/>NO bastan?}
+    AD -->|no| BENCH
+    AD -->|sí, documentada| LORA[LoRA / QLoRA<br/>fine-tuning solo con evidencia]
+    LORA --> BENCH[Edge Benchmark<br/>calidad · grounding · agente · safety · recursos]
+    BENCH --> SEL[Selected Runtime Model<br/>registro + card + manifest LLM]
+    SEL -.->|rechazados| REJ[REJECTED documentado<br/>con motivo]

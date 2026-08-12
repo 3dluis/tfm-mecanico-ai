@@ -1,0 +1,71 @@
+{
+  "$defs": {
+    "HardwareValidationStatus": {
+      "description": "Estado de un modelo en un objetivo hardware de la matriz (docs/models/10).",
+      "enum": [
+        "compatible",
+        "not_tested",
+        "failed",
+        "approved"
+      ],
+      "title": "HardwareValidationStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Celda de la matriz de compatibilidad hardware (docs/models/10 §matriz).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "target": {
+      "description": "'mac-dev' | 'arm64-container' | 'rpi5'",
+      "title": "Target",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/HardwareValidationStatus",
+      "default": "not_tested"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "RAM MB, latencia ms, tokens/s, temperatura…",
+      "title": "Metrics",
+      "type": "object"
+    },
+    "validated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validated At"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "target"
+  ],
+  "title": "HardwareValidation",
+  "type": "object"
+}

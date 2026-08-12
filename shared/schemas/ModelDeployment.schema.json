@@ -1,0 +1,97 @@
+{
+  "additionalProperties": false,
+  "description": "Estado de despliegue en UN dispositivo edge, con rollback (docs/models/10 §rollback).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "deployment_id": {
+      "title": "Deployment Id",
+      "type": "string"
+    },
+    "device_id": {
+      "title": "Device Id",
+      "type": "string"
+    },
+    "active_model_id": {
+      "title": "Active Model Id",
+      "type": "string"
+    },
+    "active_model_version": {
+      "title": "Active Model Version",
+      "type": "string"
+    },
+    "previous_model_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión a la que volver si la activa falla",
+      "title": "Previous Model Id"
+    },
+    "previous_model_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Previous Model Version"
+    },
+    "activated_at": {
+      "format": "date-time",
+      "title": "Activated At",
+      "type": "string"
+    },
+    "activated_by": {
+      "default": "manual",
+      "description": "'manual' en el TFM (ADR-0022)",
+      "title": "Activated By",
+      "type": "string"
+    },
+    "rollback_of": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "deployment_id que este despliegue revierte",
+      "title": "Rollback Of"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "deployment_id",
+    "device_id",
+    "active_model_id",
+    "active_model_version",
+    "activated_at"
+  ],
+  "title": "ModelDeployment",
+  "type": "object"
+}

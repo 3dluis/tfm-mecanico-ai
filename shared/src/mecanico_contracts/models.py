@@ -247,6 +247,32 @@ class ModelManifest(ContractBase):
     validation_metrics: dict[str, float] = Field(default_factory=dict)
     training_seed: int | None = None
     trained_at: datetime | None = None
+    # --- F7 (ADR-0022): campos aditivos de gobernanza; los existentes no cambian.
+    model_type: str = Field(
+        default="ml", description="'ml' | 'llm' | 'embedding' (taxonomía docs/models/01)"
+    )
+    preprocessing_version: str | None = Field(
+        default=None, description="Versión del preprocesado (complementa 'preprocessing')"
+    )
+    runtime_version: str | None = Field(
+        default=None, description="Versión concreta del runtime validada, p. ej. '1.17.3'"
+    )
+    minimum_hardware: str | None = Field(
+        default=None, description="Requisito mínimo, p. ej. 'arm64, 512MB RAM'"
+    )
+    training_run_id: str | None = Field(
+        default=None, description="TrainingRun que produjo el artefacto (provenance)"
+    )
+    # Solo LLM (None para ML/embeddings):
+    quantization: str | None = Field(default=None, description="p. ej. 'Q4_K_M'")
+    context_window: int | None = Field(default=None, gt=0)
+    tokenizer: str | None = None
+    prompt_compatibility: str | None = Field(
+        default=None, description="Versión de plantillas de prompt validadas con el modelo"
+    )
+    tool_schema_version: str | None = Field(
+        default=None, description="Versión del esquema de herramientas soportado"
+    )
 
 
 # ---------------------------------------------------------------------------

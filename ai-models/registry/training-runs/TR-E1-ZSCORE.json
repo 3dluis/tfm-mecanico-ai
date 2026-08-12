@@ -1,0 +1,42 @@
+{
+  "artifact_checksum": null,
+  "artifact_uri": null,
+  "completed_at": "2026-08-12T00:00:00Z",
+  "dataset_checksum": null,
+  "dataset_id": "obd-lab-suite-v1",
+  "dataset_version": "1",
+  "experiment_id": "EXP-ANOM-001",
+  "feature_schema_version": "fs1",
+  "git_commit": "69a1e4d",
+  "hardware": "sandbox-x86 (límites 4 CPU / 8 GB, perfil RPi emulado; ADR-0002)",
+  "hyperparameters": {
+    "aggregation": "max|z|",
+    "method": "median/MAD"
+  },
+  "metrics": {
+    "episodes_detected": 2.0,
+    "episodes_total": 6.0,
+    "fit_s": 0.005,
+    "infer_ms_per_window": 0.0,
+    "mean_delay_s": 75.0,
+    "peak_rss_mb": 164.6,
+    "test_f1": 0.4425,
+    "test_fpr": 0.1034,
+    "test_recall_heldout": 0.0,
+    "test_recall_known": 0.9375,
+    "threshold": 316.683652,
+    "val_f1": 0.5253,
+    "val_fpr": 0.0515
+  },
+  "model_id": "anom-zscore",
+  "model_type": "ml",
+  "model_version": "0.1.0",
+  "preprocessing_version": "embedded-standard-scaler",
+  "python_version": null,
+  "schema_version": 2,
+  "seed": 42,
+  "split_version": "suite-v1-split-1",
+  "started_at": "2026-08-12T00:00:00Z",
+  "status": "ok",
+  "training_run_id": "TR-E1-ZSCORE"
+}

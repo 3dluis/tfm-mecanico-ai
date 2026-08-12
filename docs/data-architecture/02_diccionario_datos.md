@@ -209,6 +209,16 @@ Manifiesto que acompaña a todo artefacto de modelo distribuido al edge (ADR-000
 | `validation_metrics` | dict | opc. | — | — |
 | `training_seed` | integer \| null | opc. | — | — |
 | `trained_at` | string \| null | opc. | — | — |
+| `model_type` | string | opc. | 'ml' \| 'llm' \| 'embedding' (taxonomía docs/models/01) | — |
+| `preprocessing_version` | string \| null | opc. | Versión del preprocesado (complementa 'preprocessing') | — |
+| `runtime_version` | string \| null | opc. | Versión concreta del runtime validada, p. ej. '1.17.3' | — |
+| `minimum_hardware` | string \| null | opc. | Requisito mínimo, p. ej. 'arm64, 512MB RAM' | — |
+| `training_run_id` | string \| null | opc. | TrainingRun que produjo el artefacto (provenance) | — |
+| `quantization` | string \| null | opc. | p. ej. 'Q4_K_M' | — |
+| `context_window` | integer \| null | opc. | — | — |
+| `tokenizer` | string \| null | opc. | — | — |
+| `prompt_compatibility` | string \| null | opc. | Versión de plantillas de prompt validadas con el modelo | — |
+| `tool_schema_version` | string \| null | opc. | Versión del esquema de herramientas soportado | — |
 
 ### ScenarioSpec
 
@@ -726,6 +736,153 @@ Normalidad acumulada de UN vehículo para UN contexto de evento (INFERRED).
 | `version` | integer | opc. | — | minimum=1 |
 | `confidence` | number | opc. | — | minimum=0.0; maximum=1.0 |
 
+### TrainingRun
+
+Un entrenamiento/ajuste concreto: reproducible por sí solo (docs/models/05).
+
+**Clasificación:** metadatos de experimentación · **Produce:** ai-models (entrenamiento) · **Consume:** registry, provenance, memoria del TFM · **Vive en:** ai-models (JSON) → cloud futuro
+**Papel en la investigación:** Un entrenamiento reproducible: datos+config+seed+commit+métricas (F7)
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `training_run_id` | string | ✔ | — | — |
+| `experiment_id` | string \| null | opc. | ModelExperiment al que aporta | — |
+| `model_id` | string | ✔ | — | — |
+| `model_version` | string | ✔ | — | — |
+| `model_type` | ModelType | opc. | — | — |
+| `dataset_id` | string | ✔ | — | — |
+| `dataset_version` | string | ✔ | — | — |
+| `dataset_checksum` | string \| null | opc. | — | — |
+| `split_version` | string \| null | opc. | Versión del split train/val/test (linaje, docs/models/06) | — |
+| `feature_schema_version` | string \| null | opc. | — | — |
+| `preprocessing_version` | string \| null | opc. | — | — |
+| `hyperparameters` | dict | opc. | — | — |
+| `seed` | integer \| null | opc. | — | — |
+| `git_commit` | string | ✔ | — | — |
+| `python_version` | string \| null | opc. | — | — |
+| `started_at` | string | ✔ | — | — |
+| `completed_at` | string \| null | opc. | — | — |
+| `hardware` | string | ✔ | Dónde se entrenó: 'sandbox-x86', 'mac-arm64', 'rpi5'… | — |
+| `metrics` | dict | opc. | — | — |
+| `artifact_uri` | string \| null | opc. | — | — |
+| `artifact_checksum` | string \| null | opc. | — | — |
+| `status` | string | opc. | 'ok' \| 'failed' \| 'running' | — |
+
+### ModelExperiment
+
+Comparación científicamente válida: varios TrainingRuns con dataset/split/features/
+
+**Clasificación:** metadatos de experimentación · **Produce:** ai-models (experimentos) · **Consume:** informes de comparación, selección de modelos · **Vive en:** ai-models (JSON+YAML) → cloud futuro
+**Papel en la investigación:** Comparación válida: mismos datos/split/features/protocolo (F7)
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `experiment_id` | string | ✔ | p. ej. 'EXP-ANOM-001' | — |
+| `title` | string | ✔ | — | — |
+| `objective` | string | ✔ | Pregunta experimental que responde | — |
+| `dataset_id` | string | ✔ | — | — |
+| `dataset_version` | string | ✔ | — | — |
+| `split_version` | string \| null | opc. | — | — |
+| `feature_schema_version` | string \| null | opc. | — | — |
+| `evaluation_protocol` | string | ✔ | Referencia al protocolo pre-registrado, p. ej. 'ADR-0011' | — |
+| `config_uri` | string \| null | opc. | Config declarativa del experimento (YAML) | — |
+| `training_run_ids` | list[string] | opc. | — | — |
+| `conclusion` | string \| null | opc. | Interpretación y decisión | — |
+| `selected_model_id` | string \| null | opc. | — | — |
+| `report_uri` | string \| null | opc. | Informe de comparación (docs/models/comparisons/) | — |
+| `created_at` | string | ✔ | — | — |
+
+### ModelEvaluation
+
+Evaluación de una versión concreta bajo un protocolo (offline o edge).
+
+**Clasificación:** metadatos de experimentación · **Produce:** ai-models / validación edge · **Consume:** registry, model cards, matriz hardware · **Vive en:** ai-models (JSON)
+**Papel en la investigación:** Evaluación bajo protocolo con hardware explícito (interpreta latencias)
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `evaluation_id` | string | ✔ | — | — |
+| `model_id` | string | ✔ | — | — |
+| `model_version` | string | ✔ | — | — |
+| `dataset_id` | string | ✔ | — | — |
+| `dataset_version` | string | ✔ | — | — |
+| `protocol` | string | ✔ | — | — |
+| `metrics` | dict | opc. | — | — |
+| `per_scenario_metrics` | dict | opc. | — | — |
+| `hardware` | string | ✔ | Dónde se evaluó (interpreta latencias) | — |
+| `evaluated_at` | string | ✔ | — | — |
+| `notes` | string \| null | opc. | — | — |
+
+### ModelRegistryEntry
+
+Entrada del catálogo lógico común ML/LLM/EMBEDDING (docs/models/08).
+
+**Clasificación:** catálogo · **Produce:** ai-models:registry · **Consume:** diagnostic-agent (ModelRouter), despliegue · **Vive en:** ai-models/registry/ (filesystem+JSON) → cloud futuro
+**Papel en la investigación:** Catálogo común ML/LLM/embedding con ciclo de vida y capacidades (F7)
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `model_id` | string | ✔ | — | — |
+| `name` | string | ✔ | — | — |
+| `model_family` | string | ✔ | p. ej. 'lof', 'qwen2.5', 'all-MiniLM' | — |
+| `model_type` | ModelType | ✔ | — | — |
+| `version` | string | ✔ | Versión del ARTEFACTO entrenado (≠ algoritmo/features) | — |
+| `algorithm_version` | string \| null | opc. | Versión de la implementación del algoritmo | — |
+| `capabilities` | list[ModelCapability] | opc. | — | — |
+| `status` | ModelStatus | opc. | — | — |
+| `artifact_format` | string \| null | opc. | 'onnx' \| 'gguf' \| … | — |
+| `artifact_uri` | string \| null | opc. | — | — |
+| `checksum` | string \| null | opc. | — | — |
+| `manifest_uri` | string \| null | opc. | ModelManifest portable asociado | — |
+| `model_card_uri` | string \| null | opc. | docs/models/model-cards/… | — |
+| `training_run_id` | string \| null | opc. | — | — |
+| `created_at` | string | ✔ | — | — |
+| `validated_at` | string \| null | opc. | — | — |
+| `edge_compatible` | boolean \| null | opc. | None = no probado aún (nunca se asume) | — |
+| `hardware_validation` | list[HardwareValidation] | opc. | — | — |
+| `notes` | string \| null | opc. | — | — |
+
+### ModelDeployment
+
+Estado de despliegue en UN dispositivo edge, con rollback (docs/models/10 §rollback).
+
+**Clasificación:** estado de despliegue · **Produce:** despliegue manual (TFM) · **Consume:** edge runtime, rollback · **Vive en:** edge (activo) + registro
+**Papel en la investigación:** active/previous por dispositivo: rollback posible aunque sea manual
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `deployment_id` | string | ✔ | — | — |
+| `device_id` | string | ✔ | — | — |
+| `active_model_id` | string | ✔ | — | — |
+| `active_model_version` | string | ✔ | — | — |
+| `previous_model_id` | string \| null | opc. | Versión a la que volver si la activa falla | — |
+| `previous_model_version` | string \| null | opc. | — | — |
+| `activated_at` | string | ✔ | — | — |
+| `activated_by` | string | opc. | 'manual' en el TFM (ADR-0022) | — |
+| `rollback_of` | string \| null | opc. | deployment_id que este despliegue revierte | — |
+| `notes` | string \| null | opc. | — | — |
+
+### HardwareValidation
+
+Celda de la matriz de compatibilidad hardware (docs/models/10 §matriz).
+
+**Clasificación:** metadatos de validación · **Produce:** validación por objetivo hardware · **Consume:** registry, decisión EDGE_APPROVED · **Vive en:** registry (embebido)
+**Papel en la investigación:** Matriz mac/arm64/RPi: EDGE_APPROVED nunca solo por métricas offline
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `target` | string | ✔ | 'mac-dev' \| 'arm64-container' \| 'rpi5' | — |
+| `status` | HardwareValidationStatus | opc. | — | — |
+| `metrics` | dict | opc. | RAM MB, latencia ms, tokens/s, temperatura… | — |
+| `validated_at` | string \| null | opc. | — | — |
+| `notes` | string \| null | opc. | — | — |
+
 ## Enumeraciones
 
 - **SessionSource**: `real_vehicle`, `obd_simulator`, `dataset_replay`, `synthetic_generator`, `bench_test`
@@ -743,6 +900,10 @@ Normalidad acumulada de UN vehículo para UN contexto de evento (INFERRED).
 - **FeedbackVerdict**: `correct`, `partially_correct`, `incorrect`, `unknown`
 - **MemoryMode**: `none`, `episodic`, `episodic_semantic`
 - **StepStatus**: `ok`, `error`, `skipped`
+- **ModelType**: `ml`, `llm`, `embedding`
+- **ModelStatus**: `experimental`, `candidate`, `validated`, `edge_approved`, `deployed`, `rejected`, `superseded`, `retired`
+- **ModelCapability**: `triage`, `hypothesis_generation`, `critique`, `reporting`, `tool_selection`, `embeddings`, `anomaly_detection`, `event_detection`
+- **HardwareValidationStatus**: `compatible`, `not_tested`, `failed`, `approved`
 - **Severity**: `info`, `low`, `medium`, `high`, `critical`
 - **DetectorKind**: `zscore`, `isolation_forest`, `lof`, `ocsvm`, `autoencoder`
 - **TransportKind**: `serial`, `tcp`, `bluetooth-rfcomm`

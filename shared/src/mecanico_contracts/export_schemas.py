@@ -47,6 +47,12 @@ EXPORTABLE: list[type[BaseModel]] = [
     mc.VehicleEvent,
     mc.EventFeatureVector,
     mc.EventBaseline,
+    mc.TrainingRun,
+    mc.ModelExperiment,
+    mc.ModelEvaluation,
+    mc.ModelRegistryEntry,
+    mc.ModelDeployment,
+    mc.HardwareValidation,
 ]
 
 

@@ -1,0 +1,22 @@
+{
+  "conclusion": "LOF k=10 seleccionado (F1 test 0.64, FPR 0.035, 0.975 recall conocidos, 0.25 held-out, 4/6 episodios); OC-SVM segundo paquete (6/6 episodios, FPR 0.086). Máx-|z| univariante e IForest fracasan ante normalidad multimodal (hallazgo citable, coherente con Schmidl et al. VLDB 2022).",
+  "config_uri": "ai-models/configs/exp-anom-001.yaml",
+  "created_at": "2026-08-12T00:00:00Z",
+  "dataset_id": "obd-lab-suite-v1",
+  "dataset_version": "1",
+  "evaluation_protocol": "ADR-0011 (umbral 1% FPR solo-train; sin point-adjustment; métricas por episodio; held-out jamás usado para ajustar)",
+  "experiment_id": "EXP-ANOM-001",
+  "feature_schema_version": "fs1",
+  "objective": "¿Qué modelo no supervisado ofrece mejor equilibrio entre detección de anomalías desconocidas (held-out) y falsas alarmas?",
+  "report_uri": "docs/models/comparisons/anomaly_detectors_v1.md",
+  "schema_version": 2,
+  "selected_model_id": "anom-lof",
+  "split_version": "suite-v1-split-1",
+  "title": "Baselines no supervisados de detección de anomalías (E1, F3)",
+  "training_run_ids": [
+    "TR-E1-ZSCORE",
+    "TR-E1-IFOREST",
+    "TR-E1-LOF",
+    "TR-E1-OCSVM"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "algorithm_version": "baselines-e1",
+  "artifact_format": "onnx",
+  "artifact_uri": "make export → models/model-lof-0.2.0/ (reproducible, seed 42)",
+  "capabilities": [
+    "anomaly_detection"
+  ],
+  "checksum": null,
+  "created_at": "2026-08-12T00:00:00Z",
+  "edge_compatible": null,
+  "hardware_validation": [
+    {
+      "metrics": {
+        "infer_ms_per_window": 0.007
+      },
+      "notes": "Pipeline vivo emulador→ONNX validado (F3/F4); paridad exacta.",
+      "schema_version": 2,
+      "status": "approved",
+      "target": "sandbox-x86",
+      "validated_at": "2026-08-12T00:00:00Z"
+    },
+    {
+      "metrics": {},
+      "notes": "pendiente (acción A2/A3)",
+      "schema_version": 2,
+      "status": "not_tested",
+      "target": "arm64-container",
+      "validated_at": null
+    },
+    {
+      "metrics": {},
+      "notes": "sin hardware físico en el TFM (L2)",
+      "schema_version": 2,
+      "status": "not_tested",
+      "target": "rpi5",
+      "validated_at": null
+    }
+  ],
+  "manifest_uri": null,
+  "model_card_uri": "docs/models/model-cards/ml/anom-lof.md",
+  "model_family": "lof",
+  "model_id": "anom-lof",
+  "model_type": "ml",
+  "name": "lof",
+  "notes": "Modelo por defecto del edge (informe F3). Umbral 0.163197 (1% FPR train).",
+  "schema_version": 2,
+  "status": "validated",
+  "training_run_id": "TR-E1-LOF",
+  "validated_at": "2026-08-12T00:00:00Z",
+  "version": "0.2.0"
+}

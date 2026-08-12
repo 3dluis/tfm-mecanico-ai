@@ -31,6 +31,7 @@ diverge, el build falla.
 | [09 Retención y sincronización](09_retencion_sincronizacion.md) | Política de retención por clase de dato; outbox priorizado idempotente |
 | [10 Modelo vectorial y RAG](10_modelo_vectorial_rag.md) | KnowledgeDocument/Chunk/RetrievalEvent; grounding medible; plan de embeddings |
 | [Event Intelligence](../event-intelligence/README.md) | (F6, ADR-0019/0021) VehicleEvent/EventFeatureVector/EventBaseline como unidad formal de análisis; los eventos REFERENCIAN telemetría por `seq`, nunca la duplican ni la sustituyen |
+| [Modelos de IA](../models/README.md) | (F7, ADR-0022) TrainingRun/ModelExperiment/ModelEvaluation/ModelRegistryEntry/ModelDeployment: provenance completo Dataset→Experimento→Modelo→Manifest→Inferencia; entidades en el diccionario autogenerado |
 
 Diagramas: [ER](diagrams/er-model.mmd) · [flujo de telemetría](diagrams/telemetry-flow.mmd) ·
 [diagnóstico y memoria](diagrams/diagnostic-memory-flow.mmd) ·

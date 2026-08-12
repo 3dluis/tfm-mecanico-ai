@@ -12,6 +12,12 @@
 > El experimento ventana-vs-evento entra en T8 como dimensión `anomaly_mode`
 > (event-intelligence/11). Detalle: [informe F6](fase6/informe_event_intelligence.md).
 
+> **Actualización F7:** estrategia formal de **gobernanza de modelos**
+> ([docs/models/](models/README.md), ADR-0022…0024): registry + model cards + ciclo de
+> vida + benchmark LLM interno + reproducibilidad. Los resultados F3 quedan importados
+> al registro sin recalcular; T2/T6/T8 heredan el protocolo de evaluación y el
+> versionado en 4 ejes. Detalle: [informe F7](fase7/informe_estrategia_modelos.md).
+
 Secuencia de construcción con dependencias, criterios de "hecho" y orden pensado para que **siempre exista un sistema demostrable de extremo a extremo**, que se enriquece en cada paso (enfoque de esqueleto andante).
 
 ## 8.1 Estructura de repositorio propuesta

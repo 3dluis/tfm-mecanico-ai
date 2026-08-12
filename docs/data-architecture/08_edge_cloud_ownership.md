@@ -19,6 +19,8 @@ El sistema es 100 % funcional offline; la nube solo añade (ADR-0006).
 | Feedback / mantenimiento | ✅ | ✅ | quien lo capture |
 | Outbox | ✅ (solo edge) | — | edge |
 | Métricas agregadas / experimentos / datasets (licencia mediante) | — | ✅ | cloud |
+| Model Registry (entradas/experimentos/TrainingRuns, F7) | manifest del modelo ACTIVO + previous (rollback) | ✅ catálogo maestro (ai-models hoy; cloud futuro) | ai-models/cloud |
+| ModelDeployment (activo/anterior por dispositivo) | ✅ | copia informativa | edge |
 
 Reglas: (1) la nube nunca escribe en el edge salvo distribución de modelos y subset de
 patrones — ambos pull verificado por el edge; (2) conflicto = last-write-wins por timestamp

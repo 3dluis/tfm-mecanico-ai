@@ -24,6 +24,16 @@
       "val_fpr": 0.01
     },
     "training_seed": 42,
-    "trained_at": "2026-08-12T10:00:00Z"
+    "trained_at": "2026-08-12T10:00:00Z",
+    "model_type": "ml",
+    "preprocessing_version": null,
+    "runtime_version": null,
+    "minimum_hardware": null,
+    "training_run_id": null,
+    "quantization": null,
+    "context_window": null,
+    "tokenizer": null,
+    "prompt_compatibility": null,
+    "tool_schema_version": null
   }
 }

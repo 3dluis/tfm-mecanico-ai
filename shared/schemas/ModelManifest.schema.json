@@ -132,6 +132,128 @@
       ],
       "default": null,
       "title": "Trained At"
+    },
+    "model_type": {
+      "default": "ml",
+      "description": "'ml' | 'llm' | 'embedding' (taxonomía docs/models/01)",
+      "title": "Model Type",
+      "type": "string"
+    },
+    "preprocessing_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión del preprocesado (complementa 'preprocessing')",
+      "title": "Preprocessing Version"
+    },
+    "runtime_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión concreta del runtime validada, p. ej. '1.17.3'",
+      "title": "Runtime Version"
+    },
+    "minimum_hardware": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Requisito mínimo, p. ej. 'arm64, 512MB RAM'",
+      "title": "Minimum Hardware"
+    },
+    "training_run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "TrainingRun que produjo el artefacto (provenance)",
+      "title": "Training Run Id"
+    },
+    "quantization": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "p. ej. 'Q4_K_M'",
+      "title": "Quantization"
+    },
+    "context_window": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Context Window"
+    },
+    "tokenizer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tokenizer"
+    },
+    "prompt_compatibility": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión de plantillas de prompt validadas con el modelo",
+      "title": "Prompt Compatibility"
+    },
+    "tool_schema_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión del esquema de herramientas soportado",
+      "title": "Tool Schema Version"
     }
   },
   "required": [

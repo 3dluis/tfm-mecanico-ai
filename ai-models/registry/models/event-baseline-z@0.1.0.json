@@ -1,0 +1,24 @@
+{
+  "algorithm_version": null,
+  "artifact_format": "json-params",
+  "artifact_uri": null,
+  "capabilities": [
+    "anomaly_detection"
+  ],
+  "checksum": null,
+  "created_at": "2026-08-12T00:00:00Z",
+  "edge_compatible": true,
+  "hardware_validation": [],
+  "manifest_uri": null,
+  "model_card_uri": "docs/models/model-cards/ml/event-baseline-z.md",
+  "model_family": "zscore_contextual",
+  "model_id": "event-baseline-z",
+  "model_type": "ml",
+  "name": "contextual event baseline (robust z)",
+  "notes": "Slice F6: 0/5 FP held-out normal; 5/6 aceleraciones maf_drift señaladas. Pendiente experimento ventana-vs-evento (E1/R1).",
+  "schema_version": 2,
+  "status": "candidate",
+  "training_run_id": null,
+  "validated_at": "2026-08-12T00:00:00Z",
+  "version": "0.1.0"
+}

@@ -1,0 +1,24 @@
+{
+  "algorithm_version": "baselines-e1",
+  "artifact_format": "onnx",
+  "artifact_uri": null,
+  "capabilities": [
+    "anomaly_detection"
+  ],
+  "checksum": null,
+  "created_at": "2026-08-12T00:00:00Z",
+  "edge_compatible": null,
+  "hardware_validation": [],
+  "manifest_uri": null,
+  "model_card_uri": "docs/models/model-cards/ml/anom-ocsvm.md",
+  "model_family": "ocsvm",
+  "model_id": "anom-ocsvm",
+  "model_type": "ml",
+  "name": "ocsvm",
+  "notes": "Métricas importadas de e1_results.csv (informe F3 §4, ADR-0011).",
+  "schema_version": 2,
+  "status": "candidate",
+  "training_run_id": "TR-E1-OCSVM",
+  "validated_at": "2026-08-12T00:00:00Z",
+  "version": "0.1.0"
+}

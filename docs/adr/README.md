@@ -23,3 +23,6 @@
 | [0019](0019-event-intelligence-layer.md) | Capa Vehicle Event Intelligence | 6 | Aceptada |
 | [0020](0020-incorporacion-imu.md) | Incorporación de IMU (ICM-20948 ref.; simulada primero) | 6 | Aceptada (SHOULD) |
 | [0021](0021-deteccion-anomalias-contextual.md) | Anomalías contextuales y EventBaseline | 6 | Aceptada |
+| [0022](0022-gobernanza-de-modelos.md) | Gobernanza de modelos: registry, cards, manifest, ciclo de vida | 7 | Aceptada |
+| [0023](0023-estrategia-llm-local.md) | Estrategia LLM: local cuantizado, escalera de adaptación, benchmark propio | 7 | Aceptada |
+| [0024](0024-embeddings-y-experimentos.md) | Embeddings evaluados aparte; configs declarativas; selección multicriterio | 7 | Aceptada |

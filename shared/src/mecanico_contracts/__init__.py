@@ -73,6 +73,21 @@ from mecanico_contracts.models import (
     SyncEnvelope,
     VehicleTelemetry,
 )
+from mecanico_contracts.models_registry import (
+    ALLOWED_STATUS_TRANSITIONS,
+    MODEL_GOVERNANCE_VERSION,
+    HardwareValidation,
+    HardwareValidationStatus,
+    ModelCapability,
+    ModelDeployment,
+    ModelEvaluation,
+    ModelExperiment,
+    ModelRegistryEntry,
+    ModelStatus,
+    ModelType,
+    TrainingRun,
+    validate_status_transition,
+)
 
 #: Alias semántico: la observación cruda de la cadena de telemetría ES OBDReading.
 OBDObservation = OBDReading
@@ -80,8 +95,10 @@ OBDObservation = OBDReading
 __version__ = "0.2.0"
 
 __all__ = [
+    "ALLOWED_STATUS_TRANSITIONS",
     "ALL_EVENT_TYPES",
     "EVENT_TAXONOMY",
+    "MODEL_GOVERNANCE_VERSION",
     "SCHEMA_VERSION",
     "TAXONOMY_VERSION",
     "AgentEvent",
@@ -110,6 +127,8 @@ __all__ = [
     "FeatureVector",
     "FeedbackKind",
     "FeedbackVerdict",
+    "HardwareValidation",
+    "HardwareValidationStatus",
     "HypothesisStatus",
     "KnowledgeChunk",
     "KnowledgeDocument",
@@ -117,8 +136,15 @@ __all__ = [
     "MaintenanceEvent",
     "MaintenanceRecommendation",
     "MemoryMode",
+    "ModelCapability",
+    "ModelDeployment",
+    "ModelEvaluation",
+    "ModelExperiment",
     "ModelInference",
     "ModelManifest",
+    "ModelRegistryEntry",
+    "ModelStatus",
+    "ModelType",
     "OBDObservation",
     "OBDReading",
     "PatternRelation",
@@ -136,7 +162,9 @@ __all__ = [
     "TelemetryPoint",
     "TelemetrySession",
     "TelemetryWindow",
+    "TrainingRun",
     "TransportKind",
     "VehicleEvent",
     "VehicleTelemetry",
+    "validate_status_transition",
 ]
