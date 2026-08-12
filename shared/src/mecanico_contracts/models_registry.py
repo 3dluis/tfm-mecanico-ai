@@ -44,9 +44,16 @@ class ModelStatus(StrEnum):
 
 
 #: Transiciones permitidas del ciclo de vida (cualquier otra es un error de gobernanza).
+#: Ajuste F9: EXPERIMENTAL/CANDIDATE también pueden pasar a SUPERSEDED — una versión
+#: puede quedar sucedida por otra ANTES de validarse (caso real: event-baseline-z 0.1.0
+#: → 0.2.0 tras EXP-ANOM-003). No afecta a ninguna transición previamente registrada.
 ALLOWED_STATUS_TRANSITIONS: dict[ModelStatus, frozenset[ModelStatus]] = {
-    ModelStatus.EXPERIMENTAL: frozenset({ModelStatus.CANDIDATE, ModelStatus.REJECTED}),
-    ModelStatus.CANDIDATE: frozenset({ModelStatus.VALIDATED, ModelStatus.REJECTED}),
+    ModelStatus.EXPERIMENTAL: frozenset(
+        {ModelStatus.CANDIDATE, ModelStatus.REJECTED, ModelStatus.SUPERSEDED}
+    ),
+    ModelStatus.CANDIDATE: frozenset(
+        {ModelStatus.VALIDATED, ModelStatus.REJECTED, ModelStatus.SUPERSEDED}
+    ),
     ModelStatus.VALIDATED: frozenset(
         {ModelStatus.EDGE_APPROVED, ModelStatus.REJECTED, ModelStatus.SUPERSEDED}
     ),

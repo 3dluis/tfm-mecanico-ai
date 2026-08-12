@@ -55,9 +55,12 @@ permanece **NOT_TESTED** — sin excepciones.
 Con Ollama instalado en el Mac:
 
 ```bash
-ollama pull qwen2.5:3b-instruct-q4_K_M
-make llm-smoke            # valida carga, JSON estructurado, tokens/s, TTFT, RAM
+ollama pull qwen2.5:3b-instruct-q4_K_M   # tag VERIFICADO en ollama.com: instruct, Q4_K_M, 1.9 GB, ctx 32K
+make llm-smoke-deep       # checklist R2 completa: carga, TTFT, tokens/s, RAM, JSON, español, estabilidad, contexto
+# si el smoke pasa:
+make llm-bench            # los 6 casos pre-registrados (INMUTABLES) con contexto estructurado cb:1
 ```
 
-El candidato único propuesto para el primer smoke es **Qwen2.5-3B-Instruct Q4_K_M**
-(justificación en el informe F8 §propuesta LLM). Guarda la salida completa del smoke.
+Entregables: `ai-models/experiments/llm_smoke_deep.jsonl` y
+`bench_agent_diagnostics.jsonl` — pásamelos y creo la Model Card EXPERIMENTAL de Qwen y
+el informe `llm_qwen25_3b_pilot_v1.md` SOLO con esos datos reales.

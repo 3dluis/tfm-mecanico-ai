@@ -23,3 +23,22 @@ anomalía ni las hipótesis; (2) los datos numéricos entran RESUMIDOS (features
 no series crudas); (3) todo chunk/caso incluido en contexto queda registrado como
 RetrievalEvent — el contexto es reconstruible ex post; (4) el ensamblado es una función
 pura del estado → testeable y reproducible.
+
+
+## Decisión F8/F9 — entrada del razonamiento (formal)
+
+```
+Window anomaly detector  →  señal PRIMARIA
+Event Intelligence       →  contexto / evidencia complementaria
+Agent Runtime            →  razona sobre AMBOS
+```
+
+El agente NUNCA recibe únicamente `anomaly_score = X`. El contexto diagnóstico
+estructurado (context builder, versionado; v1 = `cb:1` en tools/llm_smoke_deep.py)
+incluye como mínimo: `vehicle_context · current_event (tipo/contexto del evento
+vigente) · anomaly_summary (detector, score, umbral, scope) · relevant_features (PIDs
+implicados con dirección) · event_comparison (desviación frente a eventos comparables,
+p. ej. 'la relación MAF/RPM se desvía del baseline de aceleraciones equivalentes') ·
+historical_baseline (madurez/confianza del EventBaseline) · DTC · historical_context ·
+retrieved_evidence`. Nunca telemetría cruda (cientos de muestras) — resúmenes
+destilados (§presupuestos de este documento).

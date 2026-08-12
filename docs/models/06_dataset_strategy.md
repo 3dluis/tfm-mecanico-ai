@@ -12,7 +12,9 @@ split_version · train_ids · validation_ids · test_ids
 En la práctica: las sesiones sintéticas llevan `scenario_id + seed` (regenerables byte a
 byte), las suites se versionan (`obd-lab-suite-v1`), y el split es un artefacto con
 nombre (`suite-v1-split-1`: escenarios `normal` → train/val; `known_fault` + `held_out`
-→ solo test). `TrainingRun.dataset_*` y `ModelExperiment.dataset_*` registran el linaje;
+→ solo test). **Versión 1.1 (F9):** +16 sesiones normales SOLO de train
+(`suite_v1_train_ext.yaml`, con justificación de diversidad); validation/test/held-out
+idénticos a v1 — un cambio de train es un cambio de versión de dataset, nunca silencioso. `TrainingRun.dataset_*` y `ModelExperiment.dataset_*` registran el linaje;
 los IDs por split viven junto a la suite (YAML) para no duplicarlos por modelo.
 
 ## 2. Conjuntos separados (sin fugas)

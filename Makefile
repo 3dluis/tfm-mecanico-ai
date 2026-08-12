@@ -67,11 +67,17 @@ eval-emulator:  ## evaluación práctica del emulador (Fase 1)
 generate-suite:  ## genera las sesiones de la suite v1 en data/sessions
 	python -m obd_lab.cli generate --suite obd-lab/scenarios/suite_v1.yaml --out data/sessions
 
-registry:  ## reconstruye el Model Registry desde los resultados F3+F8 (determinista)
-	cd ai-models && python experiments/register_f3.py && python experiments/register_e2.py
+registry:  ## reconstruye el Model Registry desde F3+F8+F9 (determinista)
+	cd ai-models && python experiments/register_f3.py && python experiments/register_e2.py && python experiments/register_e3.py
 
 experiments: generate-suite  ## reproduce el experimento E1 de baselines
 	python ai-models/experiments/e1_baselines.py --sessions data/sessions
+
+llm-smoke-deep:  ## smoke PROFUNDO del candidato R2 (Qwen2.5-3B-Instruct Q4_K_M; requiere Ollama)
+	python tools/llm_smoke_deep.py
+
+llm-bench:  ## benchmark agent-diagnostics v1 (tras superar el smoke; requiere Ollama)
+	python tools/bench_agent_diagnostics.py --model qwen2.5:3b-instruct-q4_K_M
 
 llm-smoke:  ## smoke comparativo de SLMs (requiere Ollama con los modelos descargados)
 	python tools/llm_smoke.py

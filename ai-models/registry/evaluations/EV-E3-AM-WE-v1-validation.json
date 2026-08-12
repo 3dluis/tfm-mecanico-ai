@@ -1,0 +1,22 @@
+{
+  "dataset_id": "obd-lab-suite-v1",
+  "dataset_version": "1.1",
+  "evaluated_at": "2026-08-13T00:00:00Z",
+  "evaluation_id": "EV-E3-AM-WE-v1-validation",
+  "hardware": "sandbox-x86 (límites 4 CPU / 8 GB, perfil RPi emulado; ADR-0002)",
+  "metrics": {
+    "episode_recall": 1.0,
+    "f1": 0.7105,
+    "false_events_per_normal_session": 1.5,
+    "fpr": 0.2567,
+    "mean_delay_s": 84.0,
+    "precision": 0.7372,
+    "recall": 0.6857
+  },
+  "model_id": "anom-combined-we",
+  "model_version": "0.1.0",
+  "notes": "EXP-ANOM-003 brazo AM-WE-v1 · combinación original (EXP-ANOM-002) · episodios 5/5 · held-out 0/0",
+  "per_scenario_metrics": {},
+  "protocol": "ADR-0011 por tick + métricas event-level (config exp-anom-003.yaml; umbrales solo train v1/v1.1 según brazo; validation/test/held-out congelados e idénticos a v1)",
+  "schema_version": 2
+}

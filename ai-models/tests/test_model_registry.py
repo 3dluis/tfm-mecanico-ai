@@ -68,20 +68,27 @@ def test_registro_del_repo_es_integro_y_reconstruible(tmp_path: Path) -> None:
     # Reconstrucción determinista byte a byte (F3 + F8).
     import importlib.util
 
-    for script_name in ("register_f3.py", "register_e2.py"):
+    for script_name in ("register_f3.py", "register_e2.py", "register_e3.py"):
         script = REPO_REGISTRY.parent / "experiments" / script_name
         spec = importlib.util.spec_from_file_location(script.stem, script)
         assert spec and spec.loader
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         rebuilt = mod.build(tmp_path)
-    for rel in ("models/anom-lof@0.2.0.json", "evaluations/EV-E2-AM-E-test.json"):
+    for rel in (
+        "models/anom-lof@0.2.0.json",
+        "evaluations/EV-E2-AM-E-test.json",
+        "models/event-baseline-z@0.2.0.json",
+        "evaluations/EV-E3-AM-WE-d-test.json",
+    ):
         assert (tmp_path / rel).read_text() == (REPO_REGISTRY / rel).read_text()
     assert rebuilt.check() == []
+    # Ciclo de vida F9: 0.1.0 sucedidas por 0.2.0 sin reetiquetar evaluaciones E2.
+    assert reg.get("event-baseline-z", "0.1.0").status == ModelStatus.SUPERSEDED
+    assert reg.get("event-baseline-z", "0.2.0").status == ModelStatus.CANDIDATE
     # EXP-ANOM-002: la conclusión mantiene LOF como seleccionado (sin supersession).
     e2 = reg.get_experiment("EXP-ANOM-002")
     assert e2.selected_model_id == "anom-lof"
-    assert {e.evaluation_id for e in reg.evaluations("anom-combined-we")} == {
-        "EV-E2-AM-WE-validation",
-        "EV-E2-AM-WE-test",
-    }
+    combined_evals = {e.evaluation_id for e in reg.evaluations("anom-combined-we")}
+    assert {"EV-E2-AM-WE-validation", "EV-E2-AM-WE-test"} <= combined_evals  # E2 intactas
+    assert "EV-E3-AM-WE-d-test" in combined_evals  # E3 añade sin reetiquetar

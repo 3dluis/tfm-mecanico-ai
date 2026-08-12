@@ -79,13 +79,33 @@ def build_baseline(
 
 
 def score_against_baseline(efv: EventFeatureVector, baseline: EventBaseline) -> dict[str, float]:
-    """Z-score robusto por feature (suelo de σ para evitar explosiones con σ≈0)."""
+    """Z-score por feature vía media/σ (v1; suelo de σ para evitar explosiones con σ≈0)."""
     scores: dict[str, float] = {}
     for name, d in baseline.feature_distribution.items():
         if name not in efv.values:
             continue
         floor = max(d["std"], 0.05 * abs(d["mean"]), 1e-3)
         scores[name] = round((efv.values[name] - d["mean"]) / floor, 3)
+    return scores
+
+
+def score_against_baseline_robust(
+    efv: EventFeatureVector, baseline: EventBaseline
+) -> dict[str, float]:
+    """Z-score ROBUSTO por feature: mediana (p50) + σ robusta de percentiles (F9).
+
+    σ_robusta = (p95 − p05) / 3.29 (rango que cubriría ±1.645σ en una normal). Mismos
+    suelos que la versión media/σ. Usa SOLO campos ya presentes en ``EventBaseline``
+    (p05/p50/p95): sin cambio de contrato ni de baselines persistidos — las dos
+    puntuaciones son comparables sobre los mismos artefactos (ADR de EXP-ANOM-003).
+    """
+    scores: dict[str, float] = {}
+    for name, d in baseline.feature_distribution.items():
+        if name not in efv.values:
+            continue
+        sigma_r = (d["p95"] - d["p05"]) / 3.29
+        floor = max(sigma_r, 0.05 * abs(d["p50"]), 1e-3)
+        scores[name] = round((efv.values[name] - d["p50"]) / floor, 3)
     return scores
 
 

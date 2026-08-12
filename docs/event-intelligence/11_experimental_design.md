@@ -30,6 +30,15 @@ RuntimeConfig: `anomaly_mode ∈ {window, event, both}`).
 > confirma la aportación del contexto. Informe completo:
 > [docs/models/comparisons/anomaly_window_vs_event_v1.md](../models/comparisons/anomaly_window_vs_event_v1.md).
 
+> **Resultado v2 (EXP-ANOM-003, F9):** el FPR del brazo de eventos era INSUFICIENCIA DE
+> NORMALIDAD, no defecto conceptual: con 22 sesiones de train (dataset v1.1; val/test
+> congelados) el umbral LOSO se vuelve honesto y el FPR cae a 0.008 (event precision
+> 0.98), conservando la detección relacional urbana atenuada (R 0.41). La causa raíz es
+> la deriva entre-sesiones del LTFT en autovía (ratio varianza entre/intra = 1.56). La
+> combinación recomendada AM-WE-d logra FPR 0.071 ≈ ventana sola con recall superior.
+> Scoring robusto p50/percentiles rechazado. Informe:
+> [event_fpr_refinement_v1.md](../models/comparisons/event_fpr_refinement_v1.md).
+
 ## Subpregunta académica (análisis del requisito 42)
 
 Cabe como **subpregunta PI.5 / hipótesis H6** sin cambiar la pregunta principal — la

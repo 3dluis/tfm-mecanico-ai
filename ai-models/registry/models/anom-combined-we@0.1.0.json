@@ -17,7 +17,7 @@
   "name": "combinación window+event (OR por tick)",
   "notes": "OR de anom-lof@0.1.0 y event-baseline-z@0.1.0 (EXP-ANOM-002). Mejora recall y retardo a costa de FPR; sin umbral propio.",
   "schema_version": 2,
-  "status": "experimental",
+  "status": "superseded",
   "training_run_id": null,
   "validated_at": null,
   "version": "0.1.0"

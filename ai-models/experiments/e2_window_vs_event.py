@@ -39,7 +39,11 @@ from ai_models.evaluation.event_metrics import event_detection_report
 from ai_models.evaluation.protocol import threshold_from_normal
 from ai_models.tracking import git_sha, peak_rss_mb, record_run
 from diagnostic_agent.events import build_baseline, detect_events, event_feature_vector
-from diagnostic_agent.events.baseline import MIN_SAMPLES, score_against_baseline
+from diagnostic_agent.events.baseline import (
+    MIN_SAMPLES,
+    score_against_baseline,
+    score_against_baseline_robust,
+)
 from mecanico_contracts import ScenarioSpec, VehicleEvent
 from mecanico_contracts.events_model import EventBaseline, EventFeatureVector
 from mecanico_contracts.features import FEATURE_NAMES, extract_features
@@ -148,6 +152,7 @@ def _event_efv_pairs(
 @dataclass
 class EventArm:
     use_context: bool = True
+    robust: bool = False  # scoring mediana/percentiles (F9) en lugar de media/σ
     threshold: float = 0.0
     baselines: dict[str, EventBaseline] = field(default_factory=dict)
     model_size_bytes: int = 0
@@ -180,7 +185,8 @@ class EventArm:
         bl = baselines.get(v.context_signature)
         if bl is None:
             return None
-        zs = score_against_baseline(v, bl)
+        scorer = score_against_baseline_robust if self.robust else score_against_baseline
+        zs = scorer(v, bl)
         return max(abs(z) for z in zs.values())
 
     def fit(self, train: list[Session], target_fpr: float) -> None:
@@ -202,19 +208,29 @@ class EventArm:
             len(b.model_dump_json().encode()) for b in self.baselines.values()
         )
 
-    def flag_ticks(self, s: Session) -> np.ndarray:
-        out = np.zeros(len(s.ticks), dtype=bool)
+    def score_session(self, s: Session) -> list[tuple[VehicleEvent, float | None, bool]]:
+        """(evento, score|None, flag) por evento — base de las métricas event-level (F9)."""
+        out = []
         t0 = time.perf_counter()
         for ev, v in self._session_pairs(s):
             score = self._score(v, self.baselines)
             if score is None:
                 self.unscored_events += 1
+                out.append((ev, None, False))
                 continue
             self.scored_events += 1
-            if score >= self.threshold and ev.seq_start is not None and ev.seq_end is not None:
-                out[ev.seq_start : ev.seq_end + 1] = True
+            flagged = score >= self.threshold
+            if flagged:
                 self.flagged_by_type[v.event_type] = self.flagged_by_type.get(v.event_type, 0) + 1
+            out.append((ev, score, flagged))
         self.t_scoring_s += time.perf_counter() - t0
+        return out
+
+    def flag_ticks(self, s: Session) -> np.ndarray:
+        out = np.zeros(len(s.ticks), dtype=bool)
+        for ev, _score, flagged in self.score_session(s):
+            if flagged and ev.seq_start is not None and ev.seq_end is not None:
+                out[ev.seq_start : ev.seq_end + 1] = True
         return out
 
 

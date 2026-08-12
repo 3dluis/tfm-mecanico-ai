@@ -1,5 +1,11 @@
 # CHANGELOG — mecanico_contracts
 
+## v0.4.1 · SCHEMA_VERSION 2 (2026-08-13) — ajuste de ciclo de vida (F9)
+
+- `ALLOWED_STATUS_TRANSITIONS`: EXPERIMENTAL y CANDIDATE pueden pasar a SUPERSEDED
+  (una versión puede quedar sucedida antes de validarse; caso real: event-baseline-z
+  0.1.0→0.2.0 tras EXP-ANOM-003). Ninguna transición previamente registrada cambia.
+
 ## v0.4.0 · SCHEMA_VERSION 2 (2026-08-12) — Gobernanza de modelos (F7)
 
 Cambios ADITIVOS (retro-compatibles):

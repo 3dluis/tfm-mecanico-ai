@@ -27,7 +27,7 @@ EXPERIMENTAL → CANDIDATE → VALIDATED → EDGE_APPROVED → DEPLOYED
 | VALIDATED→EDGE_APPROVED | **validación en hardware**: latencia, RAM, compatibilidad ARM64, estabilidad sostenida, formato/runtime verificados (matriz [10 §3](10_edge_deployment.md)). *Nunca solo métricas offline.* |
 | EDGE_APPROVED→DEPLOYED | instalado en un dispositivo con `ModelDeployment` (active/previous para rollback) |
 | →REJECTED | resultado negativo documentado (¡con card!: los negativos son hallazgos) |
-| →SUPERSEDED | existe versión posterior VALIDATED+ que lo sustituye |
+| →SUPERSEDED | existe versión posterior que lo sustituye (desde F9 también aplicable a EXPERIMENTAL/CANDIDATE: una versión puede quedar sucedida antes de validarse) |
 | →RETIRED | fuera de uso; se conserva el registro para reproducibilidad histórica |
 
 Las transiciones ilegales las rechaza `validate_status_transition` (testeado).

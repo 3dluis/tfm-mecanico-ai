@@ -3,7 +3,8 @@
 **Fuente:** informe F6 §3 · tests-integration/test_event_slice.py · ADR-0021.
 
 ## Identificación
-- **model_id:** `event-baseline-z` · **version:** 0.1.0 · **status: CANDIDATE**
+- **model_id:** `event-baseline-z` · **versiones:** 0.1.0 (train v1, SUPERSEDED) ·
+  **0.2.0 (train v1.1, CANDIDATE — configuración vigente tras EXP-ANOM-003)**
 - **model_type:** ml (familia zscore_contextual) · **purpose:** detectar eventos
   anómalos PARA UN VEHÍCULO EN UN CONTEXTO comparando su EventFeatureVector contra el
   EventBaseline del mismo `context_signature` (anomaly_scope=EVENT)
@@ -32,6 +33,18 @@
 - Cobertura: 87.7 % de eventos con baseline aplicable (111/902 sin puntuar, honesto)
 - Detalle: [comparación v1](../../comparisons/anomaly_window_vs_event_v1.md)
 
+## Métricas v0.2.0 (EXP-ANOM-003, train v1.1 = 22 sesiones normales; test congelado)
+- **FPR 0.008 (objetivo 1 % alcanzado)** · event precision **0.98** · FE/sesión normal
+  5.5→**2.0** · cobertura de scoring 97.6 % (32 baselines, mediana 11 muestras)
+- Conserva la detección relacional urbana ATENUADA: t-corrbreak-u R 0.41/38 s (v1:
+  0.73/17 s) — trade-off aceptado bajo el criterio conjunto porque la COMBINACIÓN
+  AM-WE-d mantiene held-out 2/4 con FPR 0.071 ≈ ventana sola
+- Causa raíz del FPR de v0.1.0 confirmada: deriva ENTRE sesiones del LTFT en autovía
+  (ratio varianza entre/intra 1.56) — insuficiencia de normalidad, no defecto conceptual
+- **Scoring robusto p50/percentiles: evaluado y RECHAZADO** (held-out 0/4; el σ robusto
+  de percentiles infraestima colas pesadas) — sigue media/σ
+- Detalle: [event_fpr_refinement_v1](../../comparisons/event_fpr_refinement_v1.md)
+
 ## Limitaciones y modos de fallo (✍)
 - Evaluado formalmente en EXP-ANOM-002 (arriba); pierde thermostat_stuck (contextos fríos
   sin baseline) y misfire (firma de alta frecuencia diluida por medias por evento).
@@ -42,4 +55,9 @@
   detector multivariable POR CONTEXTO (candidato futuro).
 - Riesgo de contaminación del baseline si acumula eventos anómalos no filtrados
   (política de actualización pendiente de diseño fino).
+- v0.2.0 pierde sensibilidad frente a v0.1.0 (recall de eventos 0.36): fallos débiles o
+  de firma difusa (o2_lag, corrbreak en autovía) pueden no flaggearse — el detector
+  primario de ventanas los cubre en la configuración combinada.
+- Mejora candidata identificada (NO ejecutada): feature de deriva LTFT relativa a la
+  propia sesión, en lugar de umbral más alto.
 - **Unsupported:** diagnóstico del fallo (señala desviación contextual, no causa).
