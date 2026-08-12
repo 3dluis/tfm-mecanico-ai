@@ -10,3 +10,11 @@ Decisiones: ADR-0003 (emulador + escenario propio), ADR-0004 (transporte). Evalu
 del emulador: `docs/fase1/evidencia_emulador.json`.
 
 Estado: scaffolding. Próxima fase: generador de escenarios calibrado con HCRL Driving Dataset.
+
+## Estado (F3/F4)
+
+Funcional: generador parametrizable (perfiles×fallos×escenarios YAML con semilla),
+3 categorías (normal / known_fault / held-out multivariable), cuantización J1979,
+emulación en vivo (Priority:1 + answer dict), suite_v1 (21 sesiones). El ground truth de
+los escenarios alimenta `DiagnosticFeedback` (ver
+[data-architecture/05](../docs/data-architecture/05_diagnosticos_evidencias.md)).

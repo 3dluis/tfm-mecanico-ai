@@ -1,0 +1,124 @@
+{
+  "$defs": {
+    "MemoryMode": {
+      "description": "Modo de memoria del agente (variable del experimento de memoria evolutiva).",
+      "enum": [
+        "none",
+        "episodic",
+        "episodic_semantic"
+      ],
+      "title": "MemoryMode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Ejecución completa del grafo sobre un caso. SIN chain-of-thought: solo E/S estructuradas.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "graph_version": {
+      "title": "Graph Version",
+      "type": "string"
+    },
+    "llm_model": {
+      "description": "Tag del LLM o 'heuristic' si generador determinista",
+      "title": "Llm Model",
+      "type": "string"
+    },
+    "prompt_version": {
+      "title": "Prompt Version",
+      "type": "string"
+    },
+    "memory_mode": {
+      "$ref": "#/$defs/MemoryMode",
+      "description": "Variable del experimento de memoria"
+    },
+    "config": {
+      "additionalProperties": true,
+      "title": "Config",
+      "type": "object"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "ended_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ended At"
+    },
+    "latency_ms": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Latency Ms"
+    },
+    "tokens_in": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tokens In"
+    },
+    "tokens_out": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tokens Out"
+    },
+    "result_status": {
+      "default": "ok",
+      "description": "'ok' | 'error' | 'no_hypothesis'",
+      "title": "Result Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "case_id",
+    "graph_version",
+    "llm_model",
+    "prompt_version",
+    "memory_mode",
+    "started_at"
+  ],
+  "title": "AgentRun",
+  "type": "object"
+}

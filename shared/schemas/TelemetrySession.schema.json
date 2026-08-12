@@ -1,0 +1,142 @@
+{
+  "$defs": {
+    "SessionSource": {
+      "description": "Origen de una sesión de telemetría. Determina el peso epistemológico aguas abajo.",
+      "enum": [
+        "real_vehicle",
+        "obd_simulator",
+        "dataset_replay",
+        "synthetic_generator",
+        "bench_test"
+      ],
+      "title": "SessionSource",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Entidad central de captura: TODO dato de telemetría pertenece a una sesión.\n\nRegistra el origen y las condiciones exactas para reproducir el experimento.\nClasificación: contexto (agrupa datos RAW).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/SessionSource"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "device_id": {
+      "title": "Device Id",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "ended_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ended At"
+    },
+    "sample_rate_hz": {
+      "exclusiveMinimum": 0,
+      "title": "Sample Rate Hz",
+      "type": "number"
+    },
+    "scenario_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Si proviene de obd-lab",
+      "title": "Scenario Id"
+    },
+    "dataset_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Si es replay de dataset público",
+      "title": "Dataset Id"
+    },
+    "generator_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Versión de obd-lab",
+      "title": "Generator Version"
+    },
+    "random_seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Random Seed"
+    },
+    "software_version": {
+      "description": "Versión del software que capturó (git sha o semver)",
+      "title": "Software Version",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "session_id",
+    "source",
+    "vehicle_id",
+    "device_id",
+    "started_at",
+    "sample_rate_hz",
+    "software_version"
+  ],
+  "title": "TelemetrySession",
+  "type": "object"
+}

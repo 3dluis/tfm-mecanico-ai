@@ -1,0 +1,58 @@
+{
+  "additionalProperties": false,
+  "description": "Documento del corpus técnico (con licencia registrada en el manifiesto del corpus).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "document_id": {
+      "title": "Document Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "source": {
+      "title": "Source",
+      "type": "string"
+    },
+    "license": {
+      "title": "License",
+      "type": "string"
+    },
+    "version": {
+      "default": "1",
+      "title": "Version",
+      "type": "string"
+    },
+    "checksum": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Checksum"
+    },
+    "ingested_at": {
+      "format": "date-time",
+      "title": "Ingested At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "document_id",
+    "title",
+    "source",
+    "license",
+    "ingested_at"
+  ],
+  "title": "KnowledgeDocument",
+  "type": "object"
+}

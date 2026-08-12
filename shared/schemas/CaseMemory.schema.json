@@ -1,0 +1,151 @@
+{
+  "$defs": {
+    "EpistemicLevel": {
+      "description": "Nivel epistemológico de un caso de memoria: lo simulado JAMÁS pesa como lo real.",
+      "enum": [
+        "simulated",
+        "synthetic",
+        "public_dataset",
+        "real_unvalidated",
+        "human_validated"
+      ],
+      "title": "EpistemicLevel",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Memoria EPISÓDICA: experiencia diagnóstica recuperable por similitud.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "case_memory_id": {
+      "title": "Case Memory Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "vehicle_profile": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Rasgos del vehículo (combustible, cilindros…)",
+      "title": "Vehicle Profile",
+      "type": "object"
+    },
+    "symptom_text": {
+      "description": "Síntomas en texto (base del embedding)",
+      "title": "Symptom Text",
+      "type": "string"
+    },
+    "symptom_signature": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "Firma numérica (features clave)",
+      "title": "Symptom Signature",
+      "type": "object"
+    },
+    "temporal_signature": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Descripción compacta de la dinámica (p. ej. 'deriva 5 min')",
+      "title": "Temporal Signature"
+    },
+    "related_dtcs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Related Dtcs",
+      "type": "array"
+    },
+    "anomaly_detector": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Anomaly Detector"
+    },
+    "diagnosis": {
+      "title": "Diagnosis",
+      "type": "string"
+    },
+    "outcome": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Outcome"
+    },
+    "epistemic_level": {
+      "$ref": "#/$defs/EpistemicLevel"
+    },
+    "embedding_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Referencia al vector en el índice (no el vector en sí)",
+      "title": "Embedding Ref"
+    },
+    "reinforcement_count": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Reinforcement Count",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_memory_id",
+    "case_id",
+    "vehicle_id",
+    "symptom_text",
+    "symptom_signature",
+    "diagnosis",
+    "epistemic_level",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "CaseMemory",
+  "type": "object"
+}

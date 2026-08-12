@@ -1,0 +1,14 @@
+flowchart TB
+    A[DetectedAnomaly] --> T[triage]
+    T --> RC[recall<br/>episódica × peso epistemológico<br/>+ semántica si memory_mode]
+    RC --> RT[retrieve<br/>corpus técnico · RetrievalEvent]
+    RT --> H[hypothesize<br/>LLM plugable · JSON validado]
+    H --> V[verify · DETERMINISTA<br/>reglas vs features reales<br/>→ DiagnosticEvidence ±]
+    V --> RP[report<br/>explicación desde evidencia]
+    RP --> M[memorize]
+    M --> CM[(CaseMemory<br/>EpistemicLevel)]
+    M -->|episodio no cubierto| LP[(LearnedPattern<br/>CANDIDATE — nunca<br/>VALIDATED automático)]
+    CM -.->|análisis de similitud<br/>proceso de consolidación<br/>DISEÑADO, no automático| LP
+    FB[DiagnosticFeedback<br/>ground truth / humano] --> CM
+    FB -.-> LP
+    ME[MaintenanceEvent] -.->|evidencia fuerte| V

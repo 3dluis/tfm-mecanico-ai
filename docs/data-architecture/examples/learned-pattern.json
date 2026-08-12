@@ -1,0 +1,37 @@
+{
+  "LearnedPattern": {
+    "schema_version": 2,
+    "pattern_id": "pat-0001",
+    "version": 1,
+    "title": "Patrón candidato: desacoplo RPM↔MAF con univariantes normales",
+    "description": "Firma multivariable sin correspondencia con modos de fallo documentados; cada PID permanece en rango individual.",
+    "telemetry_signature": {
+      "corr_RPM_MAF": 0.21,
+      "corr_ENGINE_LOAD_MAF": 0.18,
+      "MAF_mean": 21.0
+    },
+    "temporal_signature": "colapso de correlación sostenido >5 min",
+    "affected_metrics": [
+      "RPM",
+      "MAF",
+      "ENGINE_LOAD"
+    ],
+    "related_dtc": [],
+    "suspected_failure_modes": [
+      "unknown_relational"
+    ],
+    "supporting_cases": [
+      "cmem-0009"
+    ],
+    "contradicting_cases": [],
+    "n_independent_sessions": 1,
+    "n_distinct_vehicles": 1,
+    "confidence": 0.2,
+    "novelty_score": 0.8,
+    "validation_level": "simulated",
+    "status": "candidate",
+    "first_seen": "2026-08-12T10:00:00Z",
+    "last_seen": "2026-08-12T10:00:00Z",
+    "provenance_id": "prov-0009"
+  }
+}

@@ -1,9 +1,45 @@
 """mecanico_contracts — contratos compartidos del sistema Mecánico IA.
 
-Única fuente de verdad de los mensajes que cruzan dominios (ADR-0007).
+Única fuente de verdad de los mensajes que cruzan dominios (ADR-0007) y del modelo de
+datos v2 (ADR-0012/0013). Documentación navegable: docs/data-architecture/.
 Regla: los proyectos dependen de este paquete y NUNCA entre sí.
 """
 
+from mecanico_contracts.data_enums import (
+    CaseStatus,
+    DataClass,
+    EpistemicLevel,
+    EvidenceKind,
+    EvidenceRole,
+    FeedbackKind,
+    FeedbackVerdict,
+    HypothesisStatus,
+    MemoryMode,
+    PatternRelationKind,
+    PatternStatus,
+    SessionSource,
+    StepStatus,
+)
+from mecanico_contracts.data_model import (
+    AgentRun,
+    AgentStep,
+    CaseMemory,
+    DiagnosticCase,
+    DiagnosticEvidence,
+    DiagnosticFeedback,
+    FeatureVector,
+    KnowledgeChunk,
+    KnowledgeDocument,
+    LearnedPattern,
+    MaintenanceEvent,
+    ModelInference,
+    PatternRelation,
+    ProvenanceRecord,
+    RetrievalEvent,
+    TelemetryPoint,
+    TelemetrySession,
+    TelemetryWindow,
+)
 from mecanico_contracts.enums import (
     AgentNode,
     DetectorKind,
@@ -28,26 +64,61 @@ from mecanico_contracts.models import (
     VehicleTelemetry,
 )
 
-__version__ = "0.1.0"
+#: Alias semántico: la observación cruda de la cadena de telemetría ES OBDReading.
+OBDObservation = OBDReading
+
+__version__ = "0.2.0"
 
 __all__ = [
     "SCHEMA_VERSION",
     "AgentEvent",
     "AgentNode",
+    "AgentRun",
+    "AgentStep",
+    "CaseMemory",
     "CaseRecord",
+    "CaseStatus",
     "DTCRecord",
+    "DataClass",
     "DetectedAnomaly",
     "DetectorKind",
+    "DiagnosticCase",
+    "DiagnosticEvidence",
+    "DiagnosticFeedback",
     "DiagnosticHypothesis",
     "DiagnosticResult",
+    "EpistemicLevel",
+    "EvidenceKind",
+    "EvidenceRole",
+    "FeatureVector",
+    "FeedbackKind",
+    "FeedbackVerdict",
+    "HypothesisStatus",
+    "KnowledgeChunk",
+    "KnowledgeDocument",
+    "LearnedPattern",
+    "MaintenanceEvent",
     "MaintenanceRecommendation",
+    "MemoryMode",
+    "ModelInference",
     "ModelManifest",
+    "OBDObservation",
     "OBDReading",
+    "PatternRelation",
+    "PatternRelationKind",
+    "PatternStatus",
+    "ProvenanceRecord",
     "RecordedSession",
+    "RetrievalEvent",
     "ScenarioSpec",
+    "SessionSource",
     "Severity",
+    "StepStatus",
     "SyncEntity",
     "SyncEnvelope",
+    "TelemetryPoint",
+    "TelemetrySession",
+    "TelemetryWindow",
     "TransportKind",
     "VehicleTelemetry",
 ]

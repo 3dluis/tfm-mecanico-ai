@@ -1,0 +1,44 @@
+{
+  "additionalProperties": false,
+  "description": "Vector DERIVED de features canónicas de una ventana (contrato train↔inferencia).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "fv_id": {
+      "title": "Fv Id",
+      "type": "string"
+    },
+    "window_id": {
+      "title": "Window Id",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "feature_set_version": {
+      "description": "Versión de la definición canónica de features",
+      "title": "Feature Set Version",
+      "type": "string"
+    },
+    "values": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Values",
+      "type": "object"
+    }
+  },
+  "required": [
+    "fv_id",
+    "window_id",
+    "session_id",
+    "feature_set_version",
+    "values"
+  ],
+  "title": "FeatureVector",
+  "type": "object"
+}

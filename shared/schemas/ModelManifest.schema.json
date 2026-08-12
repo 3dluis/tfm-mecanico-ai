@@ -17,7 +17,7 @@
   "description": "Manifiesto que acompaña a todo artefacto de modelo distribuido al edge (ADR-0009).",
   "properties": {
     "schema_version": {
-      "default": 1,
+      "default": 2,
       "title": "Schema Version",
       "type": "integer"
     },

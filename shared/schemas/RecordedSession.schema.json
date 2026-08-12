@@ -5,7 +5,7 @@
       "description": "Especificación declarativa de un escenario del laboratorio.",
       "properties": {
         "schema_version": {
-          "default": 1,
+          "default": 2,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -112,7 +112,7 @@
   "description": "Cabecera de una sesión grabada (JSONL de OBDReading + esta cabecera).\n\nFormato común para sesiones sintéticas (obd-lab) y datasets reales\nreproducidos — los consumidores no distinguen la fuente (docs/09 §9.3.1).",
   "properties": {
     "schema_version": {
-      "default": 1,
+      "default": 2,
       "title": "Schema Version",
       "type": "integer"
     },

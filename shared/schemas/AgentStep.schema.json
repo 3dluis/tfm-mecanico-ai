@@ -1,0 +1,119 @@
+{
+  "$defs": {
+    "AgentNode": {
+      "description": "Nodos del grafo del agente de diagnóstico (docs/05 §5.2 C6).",
+      "enum": [
+        "triage",
+        "recall",
+        "retrieve",
+        "hypothesize",
+        "verify",
+        "report",
+        "memorize"
+      ],
+      "title": "AgentNode",
+      "type": "string"
+    },
+    "StepStatus": {
+      "enum": [
+        "ok",
+        "error",
+        "skipped"
+      ],
+      "title": "StepStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Auditoría de un nodo del grafo: entradas/salidas estructuradas, nunca razonamiento libre.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "step_id": {
+      "title": "Step Id",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "node": {
+      "$ref": "#/$defs/AgentNode"
+    },
+    "seq": {
+      "minimum": 0,
+      "title": "Seq",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/StepStatus",
+      "default": "ok"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "ended_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ended At"
+    },
+    "inputs": {
+      "additionalProperties": true,
+      "title": "Inputs",
+      "type": "object"
+    },
+    "outputs": {
+      "additionalProperties": true,
+      "title": "Outputs",
+      "type": "object"
+    },
+    "tools_used": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tools Used",
+      "type": "array"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Metrics",
+      "type": "object"
+    }
+  },
+  "required": [
+    "step_id",
+    "run_id",
+    "node",
+    "seq",
+    "started_at"
+  ],
+  "title": "AgentStep",
+  "type": "object"
+}

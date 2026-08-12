@@ -1,0 +1,67 @@
+{
+  "$defs": {
+    "PatternRelationKind": {
+      "enum": [
+        "similar_to",
+        "contradicts",
+        "supersedes",
+        "specialization_of",
+        "generalization_of",
+        "co_occurs_with",
+        "precedes"
+      ],
+      "title": "PatternRelationKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Relación tipada entre patrones (grafo ligero sobre SQL; sin graph-DB por ahora).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "relation_id": {
+      "title": "Relation Id",
+      "type": "string"
+    },
+    "from_pattern_id": {
+      "title": "From Pattern Id",
+      "type": "string"
+    },
+    "to_pattern_id": {
+      "title": "To Pattern Id",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/PatternRelationKind"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Note"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "relation_id",
+    "from_pattern_id",
+    "to_pattern_id",
+    "kind",
+    "created_at"
+  ],
+  "title": "PatternRelation",
+  "type": "object"
+}

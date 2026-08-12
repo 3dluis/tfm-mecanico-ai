@@ -20,6 +20,10 @@ install:  ## instala todos los proyectos en editable + tooling (venv activo)
 schemas:  ## regenera los JSON Schema desde los contratos (ADR-0007)
 	python -m mecanico_contracts.export_schemas shared/schemas
 
+data-docs: schemas  ## regenera diccionario de datos + ejemplos desde los contratos (ADR-0012)
+	python -m mecanico_contracts.gen_data_dictionary docs/data-architecture/02_diccionario_datos.md
+	python tools/gen_data_examples.py
+
 lint:
 	ruff check shared obd-lab ai-models diagnostic-agent cloud-platform tools
 	ruff format --check shared obd-lab ai-models diagnostic-agent cloud-platform tools
@@ -30,8 +34,8 @@ type:
 test:
 	pytest
 
-check: lint type test schemas
-	git diff --quiet shared/schemas || (echo "ERROR: esquemas desactualizados; commitea shared/schemas" && exit 1)
+check: lint type test data-docs
+	git diff --quiet shared/schemas docs/data-architecture || (echo "ERROR: schemas/diccionario desactualizados; commitea los regenerados" && exit 1)
 
 # ------------------------------------------------------------ perfiles docker
 dev:  ## núcleo edge: emulador + agente + ollama

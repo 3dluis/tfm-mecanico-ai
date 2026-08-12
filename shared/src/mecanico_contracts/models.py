@@ -19,7 +19,7 @@ from mecanico_contracts.enums import (
     TransportKind,
 )
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 class ContractBase(BaseModel):
@@ -79,6 +79,10 @@ class DetectedAnomaly(ContractBase):
 
     anomaly_id: str
     window_id: str
+    session_id: str | None = Field(default=None, description="Sesión de origen (trazabilidad)")
+    inference_id: str | None = Field(
+        default=None, description="ModelInference que la produjo (trazabilidad, ADR-0012)"
+    )
     vehicle_id: str
     detected_at: datetime
     detector: DetectorKind
@@ -98,17 +102,29 @@ class DetectedAnomaly(ContractBase):
 
 
 class DiagnosticHypothesis(ContractBase):
-    """Causa candidata generada por el agente para una anomalía o DTC."""
+    """Causa candidata generada por el agente (v2: estructurada, con estado y ranking).
+
+    Las evidencias NO viven aquí: son entidades ``DiagnosticEvidence`` (data_model) que
+    referencian a la hipótesis, con rol supports/contradicts (ADR-0012).
+    """
 
     hypothesis_id: str
-    cause: str = Field(description="Causa raíz propuesta, p. ej. 'fuga de vacío en admisión'")
-    mechanism: str = Field(description="Cómo la causa produce los síntomas observados")
-    supporting_evidence: list[str] = Field(
-        description="Evidencia a favor: PIDs, DTCs, fragmentos RAG (por referencia)"
+    case_id: str | None = Field(default=None, description="Caso al que pertenece")
+    rank: int = Field(ge=1, default=1, description="1 = hipótesis ganadora")
+    suspected_component: str = Field(
+        description="Componente sospechoso, p. ej. 'colector admisión'"
     )
-    contradicting_evidence: list[str] = Field(default_factory=list)
+    failure_mode: str = Field(description="Modo de fallo, p. ej. 'vacuum_leak'")
+    cause: str = Field(description="Resumen legible, p. ej. 'fuga de vacío en admisión'")
+    mechanism: str = Field(description="Cómo la causa produce los síntomas observados")
+    status: str = Field(
+        default="proposed",
+        description=(
+            "HypothesisStatus: proposed|supported|contradicted|confirmed|rejected|inconclusive"
+        ),
+    )
     verified_against_telemetry: bool = Field(
-        description="True si el nodo 'verify' contrastó la hipótesis con los datos"
+        default=False, description="True si el nodo 'verify' contrastó la hipótesis con los datos"
     )
     confidence: float = Field(ge=0.0, le=1.0)
 

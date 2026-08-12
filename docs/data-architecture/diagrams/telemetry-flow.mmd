@@ -1,0 +1,8 @@
+flowchart LR
+    S[TelemetrySession<br/>source · seed · versiones] --> R[OBDObservation<br/>RAW]
+    R -->|validación rangos<br/>unidades canónicas| N[TelemetryPoint<br/>NORMALIZED]
+    N -->|ventana 60 / stride 30<br/>según ModelManifest| W[TelemetryWindow<br/>DERIVED]
+    W -->|42 features canónicas<br/>feature_set_version| F[FeatureVector<br/>DERIVED]
+    F -->|ONNX Runtime| I[ModelInference<br/>INFERRED · SIEMPRE persistida]
+    I -->|score > umbral<br/>+ gating calentamiento| A[DetectedAnomaly<br/>INFERRED]
+    A -.->|trazabilidad inversa por FK<br/>verificada en tests| R

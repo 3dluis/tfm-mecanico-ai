@@ -1,0 +1,50 @@
+{
+  "additionalProperties": false,
+  "description": "Tick NORMALIZED: valores validados en unidades canónicas, alineados por segundo.\n\nSe construye desde las observaciones RAW (OBDReading) tras validación de rangos;\nconserva qué PIDs se descartaron para no confundir pérdida con normalidad.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "seq": {
+      "description": "Índice de tick dentro de la sesión",
+      "minimum": 0,
+      "title": "Seq",
+      "type": "integer"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "values": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "PID → valor en unidad canónica",
+      "title": "Values",
+      "type": "object"
+    },
+    "discarded_pids": {
+      "description": "Fuera de rango físico",
+      "items": {
+        "type": "string"
+      },
+      "title": "Discarded Pids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "session_id",
+    "seq",
+    "timestamp",
+    "values"
+  ],
+  "title": "TelemetryPoint",
+  "type": "object"
+}

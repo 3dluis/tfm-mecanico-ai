@@ -3,7 +3,7 @@
   "description": "Código de diagnóstico de fallo (modo 03) leído del vehículo.",
   "properties": {
     "schema_version": {
-      "default": 1,
+      "default": 2,
       "title": "Schema Version",
       "type": "integer"
     },

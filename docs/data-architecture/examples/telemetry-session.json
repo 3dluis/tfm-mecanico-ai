@@ -1,0 +1,75 @@
+{
+  "TelemetrySession": {
+    "schema_version": 2,
+    "session_id": "sess-0001",
+    "source": "obd_simulator",
+    "vehicle_id": "veh-demo",
+    "device_id": "rpi5-01",
+    "started_at": "2026-08-12T10:00:00Z",
+    "ended_at": null,
+    "sample_rate_hz": 1.0,
+    "scenario_id": "v-vacuum",
+    "dataset_id": null,
+    "generator_version": "0.1.0",
+    "random_seed": 211,
+    "software_version": "23c2ca5",
+    "notes": null
+  },
+  "TelemetryPoint (uno de 1800)": {
+    "schema_version": 2,
+    "session_id": "sess-0001",
+    "seq": 901,
+    "timestamp": "2026-08-12T10:00:00Z",
+    "values": {
+      "RPM": 843.25,
+      "SPEED": 0.0,
+      "ENGINE_LOAD": 12.9,
+      "COOLANT_TEMP": 88.0,
+      "SHORT_FUEL_TRIM_1": 10.9,
+      "LONG_FUEL_TRIM_1": 7.8,
+      "INTAKE_PRESSURE": 46.0,
+      "MAF": 4.9,
+      "THROTTLE_POS": 15.7,
+      "O2_B1S1": 0.44,
+      "TIMING_ADVANCE": 14.0,
+      "INTAKE_TEMP": 31.0
+    },
+    "discarded_pids": []
+  },
+  "TelemetryWindow": {
+    "schema_version": 2,
+    "window_id": "win-0042",
+    "session_id": "sess-0001",
+    "seq_start": 870,
+    "seq_end": 929,
+    "start": "2026-08-12T10:00:00Z",
+    "end": "2026-08-12T10:00:00Z",
+    "size": 60,
+    "stride": 30
+  },
+  "DetectedAnomaly": {
+    "schema_version": 2,
+    "anomaly_id": "ano-0007",
+    "window_id": "win-0042",
+    "session_id": "sess-0001",
+    "inference_id": "inf-0042",
+    "vehicle_id": "veh-demo",
+    "detected_at": "2026-08-12T10:00:00Z",
+    "detector": "lof",
+    "model_name": "lof",
+    "model_version": "0.2.0",
+    "score": 12.78,
+    "threshold": 0.163,
+    "involved_pids": [
+      "SHORT_FUEL_TRIM_1",
+      "LONG_FUEL_TRIM_1",
+      "INTAKE_PRESSURE",
+      "RPM"
+    ],
+    "features": {
+      "total_trim_mean": 9.4,
+      "INTAKE_PRESSURE_mean": 46.0,
+      "RPM_std": 55.2
+    }
+  }
+}

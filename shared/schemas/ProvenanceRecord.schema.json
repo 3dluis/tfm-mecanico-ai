@@ -1,0 +1,132 @@
+{
+  "additionalProperties": false,
+  "description": "Procedencia completa de un artefacto INFERRED (obligatoria para diagnósticos).\n\nModelo explícito (decisión ADR-0012): concentra los enlaces en un objeto en lugar\nde dispersarlos, de modo que la pregunta «¿de dónde salió esto?» tenga una sola\nrespuesta navegable.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "provenance_id": {
+      "title": "Provenance Id",
+      "type": "string"
+    },
+    "subject_kind": {
+      "description": "'diagnostic_case' | 'learned_pattern' | …",
+      "title": "Subject Kind",
+      "type": "string"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Vehicle Id"
+    },
+    "session_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Session Ids",
+      "type": "array"
+    },
+    "window_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Window Ids",
+      "type": "array"
+    },
+    "fv_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Fv Ids",
+      "type": "array"
+    },
+    "inference_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Inference Ids",
+      "type": "array"
+    },
+    "anomaly_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Anomaly Ids",
+      "type": "array"
+    },
+    "model_refs": {
+      "description": "'nombre@versión'",
+      "items": {
+        "type": "string"
+      },
+      "title": "Model Refs",
+      "type": "array"
+    },
+    "document_chunk_ids": {
+      "description": "RAG utilizados",
+      "items": {
+        "type": "string"
+      },
+      "title": "Document Chunk Ids",
+      "type": "array"
+    },
+    "case_memory_ids": {
+      "description": "Memoria recuperada",
+      "items": {
+        "type": "string"
+      },
+      "title": "Case Memory Ids",
+      "type": "array"
+    },
+    "agent_run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agent Run Id"
+    },
+    "prompt_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Prompt Version"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provenance_id",
+    "subject_kind",
+    "subject_id",
+    "created_at"
+  ],
+  "title": "ProvenanceRecord",
+  "type": "object"
+}

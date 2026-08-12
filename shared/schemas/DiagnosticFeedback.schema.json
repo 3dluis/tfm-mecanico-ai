@@ -1,0 +1,93 @@
+{
+  "$defs": {
+    "FeedbackKind": {
+      "enum": [
+        "simulator_ground_truth",
+        "dataset_ground_truth",
+        "human_validation",
+        "mechanic_validation",
+        "repair_outcome"
+      ],
+      "title": "FeedbackKind",
+      "type": "string"
+    },
+    "FeedbackVerdict": {
+      "enum": [
+        "correct",
+        "partially_correct",
+        "incorrect",
+        "unknown"
+      ],
+      "title": "FeedbackVerdict",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Cierre del lazo: verdad externa sobre un diagnóstico (mide si la memoria mejora).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "feedback_id": {
+      "title": "Feedback Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/FeedbackKind"
+    },
+    "verdict": {
+      "$ref": "#/$defs/FeedbackVerdict"
+    },
+    "true_cause": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Causa real si se conoce",
+      "title": "True Cause"
+    },
+    "detail": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Detail"
+    },
+    "provided_by": {
+      "description": "'obd-lab' | 'dataset' | persona identificada",
+      "title": "Provided By",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "feedback_id",
+    "case_id",
+    "kind",
+    "verdict",
+    "provided_by",
+    "created_at"
+  ],
+  "title": "DiagnosticFeedback",
+  "type": "object"
+}

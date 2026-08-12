@@ -11,16 +11,17 @@ mediante OBD-II. Trabajo Fin de Máster (UAX) — Luis Daniel Díaz, 2026.
 
 | Proyecto | Rol | Estado |
 |---|---|---|
-| [`shared/`](shared/) | Contratos compartidos (Pydantic → JSON Schema) — única dependencia común | ✅ v1 |
-| [`obd-lab/`](obd-lab/) | Laboratorio OBD-II: emulación ELM327, escenarios, fallos, replay | scaffolding |
-| [`ai-models/`](ai-models/) | Investigación/entrenamiento/exportación de modelos ML (nunca en edge) | scaffolding |
-| [`diagnostic-agent/`](diagnostic-agent/) | Núcleo edge: adquisición, detección ML, agente LangGraph+RAG+memoria | scaffolding |
+| [`shared/`](shared/) | Contratos compartidos + modelo de datos v2 (Pydantic → JSON Schema → diccionario autogenerado) | ✅ v2 |
+| [`obd-lab/`](obd-lab/) | Laboratorio OBD-II: generador 3 categorías, emulación en vivo, suites | ✅ funcional |
+| [`ai-models/`](ai-models/) | Baselines evaluados (LOF elegido), export ONNX+manifest, tracking | ✅ funcional |
+| [`diagnostic-agent/`](diagnostic-agent/) | Pipeline edge validado en vivo + agente LangGraph v1 + esquema de datos v2 | ✅ funcional (v1) |
 | [`cloud-platform/`](cloud-platform/) | Nube complementaria: auth, registro, sync, model registry (simple) | scaffolding |
 | [`mobile-app/`](mobile-app/) | App Flutter offline-first (edge directo + cloud complementaria) | pospuesta (OS1) |
 
 Arquitectura completa: [`docs/09_arquitectura_monorepo.md`](docs/09_arquitectura_monorepo.md) ·
+**Arquitectura de datos: [`docs/data-architecture/`](docs/data-architecture/README.md)** ·
 Diagrama: [`docs/diagrams/arquitectura.mermaid`](docs/diagrams/arquitectura.mermaid) ·
-Decisiones: [`docs/adr/`](docs/adr/)
+Decisiones: [`docs/adr/`](docs/adr/README.md)
 
 **Separación estricta ML/LLM:** la detección de anomalías es siempre matemática
 (IForest/autoencoder vía ONNX); el LLM razona, explica y recomienda sobre anomalías ya

@@ -5,7 +5,7 @@
       "description": "Lectura puntual de un PID OBD-II.",
       "properties": {
         "schema_version": {
-          "default": 1,
+          "default": 2,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -68,7 +68,7 @@
   "description": "Ventana de telemetría normalizada (entrada de la detección).",
   "properties": {
     "schema_version": {
-      "default": 1,
+      "default": 2,
       "title": "Schema Version",
       "type": "integer"
     },

@@ -1,5 +1,9 @@
 # 9. Arquitectura del monorepo multi-dominio (v1)
 
+> **Actualización F4:** el modelo de información completo del sistema está en
+> [docs/data-architecture/](data-architecture/README.md) (ADR-0012/0013/0014); la matriz
+> edge/cloud de §9.6 se formaliza en [data-architecture/08](data-architecture/08_edge_cloud_ownership.md).
+
 **Fecha:** 2026-08-12 · **Sustituye parcialmente a:** docs/05 (que sigue vigente en lo conceptual)
 **Origen:** ajuste de plan solicitado por el autor: desarrollo y investigación en paralelo,
 Docker desde el inicio, cinco dominios + contratos compartidos.

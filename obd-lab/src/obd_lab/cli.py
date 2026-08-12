@@ -35,7 +35,7 @@ def _cmd_list_faults() -> int:
     return 0
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     """Punto de entrada de ``obd-lab``."""
     parser = argparse.ArgumentParser(prog="obd-lab", description=f"obd-lab {__version__}")
     sub = parser.add_subparsers(dest="cmd")
@@ -44,7 +44,7 @@ def main() -> int:
     gen.add_argument("--out", type=Path, required=True)
     sub.add_parser("list-faults", help="Muestra el catálogo de fallos")
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.cmd == "generate":
         return _cmd_generate(args.suite, args.out)
     if args.cmd == "list-faults":

@@ -55,10 +55,10 @@ def test_confianza_acotada() -> None:
     with pytest.raises(ValidationError):
         mc.DiagnosticHypothesis(
             hypothesis_id="h1",
+            suspected_component="colector de admisión",
+            failure_mode="vacuum_leak",
             cause="fuga de vacío",
             mechanism="aire no medido empobrece la mezcla",
-            supporting_evidence=["LTFT +18%"],
-            verified_against_telemetry=True,
             confidence=1.5,
         )
 

@@ -17,7 +17,7 @@
   "description": "Anomalía emitida por un detector matemático sobre una ventana.",
   "properties": {
     "schema_version": {
-      "default": 1,
+      "default": 2,
       "title": "Schema Version",
       "type": "integer"
     },
@@ -28,6 +28,32 @@
     "window_id": {
       "title": "Window Id",
       "type": "string"
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Sesión de origen (trazabilidad)",
+      "title": "Session Id"
+    },
+    "inference_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "ModelInference que la produjo (trazabilidad, ADR-0012)",
+      "title": "Inference Id"
     },
     "vehicle_id": {
       "title": "Vehicle Id",

@@ -1,0 +1,68 @@
+{
+  "additionalProperties": false,
+  "description": "Recuperación auditada (RAG o memoria): qué se pidió, qué volvió, qué se usó.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "retrieval_id": {
+      "title": "Retrieval Id",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "step_id": {
+      "title": "Step Id",
+      "type": "string"
+    },
+    "source": {
+      "description": "'rag' | 'episodic_memory' | 'semantic_memory'",
+      "title": "Source",
+      "type": "string"
+    },
+    "query": {
+      "title": "Query",
+      "type": "string"
+    },
+    "retrieved_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Retrieved Ids",
+      "type": "array"
+    },
+    "scores": {
+      "items": {
+        "type": "number"
+      },
+      "title": "Scores",
+      "type": "array"
+    },
+    "used_in_hypothesis_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Used In Hypothesis Ids",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "retrieval_id",
+    "run_id",
+    "step_id",
+    "source",
+    "query",
+    "created_at"
+  ],
+  "title": "RetrievalEvent",
+  "type": "object"
+}

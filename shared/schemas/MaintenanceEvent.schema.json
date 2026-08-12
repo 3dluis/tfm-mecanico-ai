@@ -1,0 +1,72 @@
+{
+  "additionalProperties": false,
+  "description": "Intervención de mantenimiento (permite estudiar anomalía→diagnóstico→reparación→efecto).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "performed_at": {
+      "format": "date-time",
+      "title": "Performed At",
+      "type": "string"
+    },
+    "action": {
+      "title": "Action",
+      "type": "string"
+    },
+    "component": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Component"
+    },
+    "related_case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Related Case Id"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "event_id",
+    "vehicle_id",
+    "performed_at",
+    "action"
+  ],
+  "title": "MaintenanceEvent",
+  "type": "object"
+}

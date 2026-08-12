@@ -1,0 +1,95 @@
+# Corpus técnico v1 de Mecánico IA (fichas de fallo).
+#
+# Obra propia del proyecto redactada a partir de conocimiento técnico general de
+# diagnóstico OBD-II; sin texto copiado de manuales propietarios (limitación L4).
+# Licencia: CC-BY-4.0 (proyecto Mecánico IA). Registrado en CORPUS_MANIFEST.md.
+# Las citas técnicas formales se añadirán al redactar la memoria (IN-8).
+
+documents:
+  - id: doc-vacuum-leak
+    title: "Fuga de vacío en el colector de admisión"
+    metadata: {failure_mode: vacuum_leak, component: "colector de admisión / manguitos de vacío"}
+    text: >
+      Una fuga de vacío introduce aire no medido por el sensor MAF aguas abajo del cuerpo
+      de mariposa. La ECU detecta mezcla pobre por la sonda lambda y compensa aumentando el
+      combustible inyectado: los ajustes de combustible (fuel trims) STFT y LTFT se vuelven
+      POSITIVOS, con mayor magnitud en ralentí (donde el aire no medido pesa más frente al
+      flujo total) que en carga alta. La presión absoluta del colector (MAP) en ralentí es
+      más alta de lo esperado y el régimen de ralentí puede volverse inestable. Síntomas en
+      PIDs: total_trim_mean elevado (>+8% sugiere fuga significativa), INTAKE_PRESSURE
+      elevada a baja velocidad, varianza de RPM en ralentí. Comprobaciones: inspección de
+      manguitos, prueba de humo, comparar trims en ralentí vs 2500 rpm (si se normalizan al
+      subir régimen, refuerza fuga de vacío frente a problema de combustible).
+
+  - id: doc-maf-drift
+    title: "Sensor MAF contaminado o con deriva"
+    metadata: {failure_mode: maf_drift, component: "sensor MAF"}
+    text: >
+      Un sensor de flujo másico contaminado subestima el aire admitido. La ECU inyecta poco
+      combustible y la lambda detecta mezcla pobre: trims positivos que crecen con el flujo
+      (a diferencia de la fuga de vacío, la desviación no se concentra en ralentí). Síntomas
+      en PIDs: MAF_mean inferior al esperado para el par RPM×carga, total_trim_mean positivo
+      también a velocidad de crucero, correlaciones RPM↔MAF conservadas pero con ganancia
+      reducida. Comprobaciones: comparar MAF real frente a valor teórico a régimen fijo,
+      limpieza del elemento sensor, descartar fugas de admisión antes de sustituir.
+
+  - id: doc-thermostat
+    title: "Termostato atascado abierto"
+    metadata: {failure_mode: thermostat_stuck, component: "termostato"}
+    text: >
+      Con el termostato bloqueado en apertura, el refrigerante circula siempre por el
+      radiador y el motor no alcanza su temperatura de régimen (~88 °C): COOLANT_TEMP se
+      estabiliza en una meseta baja (60–75 °C) pese a carga y tiempo de conducción, y el
+      calentamiento es anormalmente lento. Consecuencias: mezcla enriquecida prolongada,
+      mayor consumo, posible DTC P0128. Síntomas en PIDs: COOLANT_TEMP_mean bajo con
+      COOLANT_TEMP_std pequeña tras el calentamiento, sin correlación con ENGINE_LOAD.
+      Comprobaciones: tiempo hasta temperatura de régimen, salto térmico en manguitos del
+      radiador, sustitución del termostato.
+
+  - id: doc-o2-lag
+    title: "Sonda lambda pre-catalizador envejecida (respuesta lenta)"
+    metadata: {failure_mode: o2_lag, component: "sonda lambda B1S1"}
+    text: >
+      Las sondas de oxígeno pierden velocidad de respuesta con el envejecimiento. La señal
+      O2_B1S1, que en un sensor sano oscila varias veces por segundo entre ~0,1 y ~0,9 V,
+      se vuelve amortiguada y lenta; el control de mezcla en lazo cerrado se degrada y los
+      trims se vuelven más ruidosos. Síntomas en PIDs: O2_B1S1_std reducida (oscilación
+      plana), STFT con varianza elevada, consumo ligeramente superior. Comprobaciones:
+      frecuencia de cruce de la señal lambda en caliente, tiempo de respuesta ante
+      transitorio rico/pobre, kilometraje del sensor.
+
+  - id: doc-misfire
+    title: "Fallo de encendido intermitente (misfire)"
+    metadata: {failure_mode: misfire, component: "bujías / bobinas / inyectores"}
+    text: >
+      Un cilindro que no quema produce caídas bruscas y breves del régimen, sacudidas de
+      carga y oxígeno sin quemar en el escape (la lambda lee picos ricos falsos). Síntomas
+      en PIDs: RPM_std elevada en ralentí con caídas puntuales, ENGINE_LOAD con saltos,
+      O2_B1S1 con picos altos intermitentes, posible DTC P030X. Riesgo: daño del
+      catalizador si es persistente — severidad alta. Comprobaciones: contador de misfires
+      modo 06, intercambio de bobinas/bujías entre cilindros, compresión.
+
+  - id: doc-relational-anomalies
+    title: "Anomalías relacionales sin desviación univariante"
+    metadata: {failure_mode: unknown_relational, component: "indeterminado"}
+    text: >
+      Existen degradaciones donde cada parámetro permanece dentro de su rango normal pero
+      la RELACIÓN entre señales o su dinámica temporal se rompe: pérdida de correlación
+      entre RPM y MAF (sensor congelado o muestreo defectuoso), temperatura clavada sin
+      microvariación (sensor pegado), derivas conjuntas lentas físicamente incoherentes.
+      Estos patrones no disparan DTCs y no aparecen en umbrales univariantes. Ante una
+      anomalía multivariable sin correspondencia con modos de fallo documentados, lo
+      honesto es declararla patrón no cubierto, registrar el episodio para consolidación
+      futura y recomendar monitorización dirigida de los PIDs implicados.
+
+  - id: doc-fuel-trim-interpretation
+    title: "Interpretación de los ajustes de combustible (fuel trims)"
+    metadata: {failure_mode: reference, component: "sistema de combustible"}
+    text: >
+      STFT (corto plazo) reacciona en segundos; LTFT (largo plazo) consolida la corrección
+      aprendida. La suma STFT+LTFT aproxima la corrección total: valores sostenidos por
+      encima de +10% indican mezcla pobre real (fuga de vacío, MAF que subestima, presión
+      de combustible baja, inyectores sucios); por debajo de −10%, mezcla rica (inyector
+      goteando, presión alta, MAF que sobreestima, purga del cánister). La distribución
+      por regímenes discrimina causas: pobre solo en ralentí → aire falso; pobre en carga →
+      suministro de combustible o MAF.

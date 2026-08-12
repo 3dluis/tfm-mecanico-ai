@@ -36,6 +36,7 @@ testpaths = [
     "ai-models/tests",
     "diagnostic-agent/tests",
     "cloud-platform/tests",
+    "tests-integration",
 ]
 addopts = "-q --strict-markers"
 markers = [

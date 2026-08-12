@@ -1,0 +1,180 @@
+{
+  "$defs": {
+    "EpistemicLevel": {
+      "description": "Nivel epistemológico de un caso de memoria: lo simulado JAMÁS pesa como lo real.",
+      "enum": [
+        "simulated",
+        "synthetic",
+        "public_dataset",
+        "real_unvalidated",
+        "human_validated"
+      ],
+      "title": "EpistemicLevel",
+      "type": "string"
+    },
+    "PatternStatus": {
+      "enum": [
+        "candidate",
+        "emerging",
+        "validated",
+        "rejected",
+        "superseded",
+        "retired"
+      ],
+      "title": "PatternStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Memoria SEMÁNTICA/EVOLUTIVA: patrón consolidado emergente de múltiples casos.\n\nLa promoción a VALIDATED nunca es automática en esta fase (ADR-0013).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "pattern_id": {
+      "title": "Pattern Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "telemetry_signature": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "Rango/centroide de features que caracteriza el patrón",
+      "title": "Telemetry Signature",
+      "type": "object"
+    },
+    "temporal_signature": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temporal Signature"
+    },
+    "affected_metrics": {
+      "description": "PIDs/features implicados",
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Metrics",
+      "type": "array"
+    },
+    "related_dtc": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Related Dtc",
+      "type": "array"
+    },
+    "suspected_failure_modes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Suspected Failure Modes",
+      "type": "array"
+    },
+    "supporting_cases": {
+      "description": "case_memory_ids",
+      "items": {
+        "type": "string"
+      },
+      "title": "Supporting Cases",
+      "type": "array"
+    },
+    "contradicting_cases": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Contradicting Cases",
+      "type": "array"
+    },
+    "n_independent_sessions": {
+      "default": 0,
+      "minimum": 0,
+      "title": "N Independent Sessions",
+      "type": "integer"
+    },
+    "n_distinct_vehicles": {
+      "default": 0,
+      "minimum": 0,
+      "title": "N Distinct Vehicles",
+      "type": "integer"
+    },
+    "confidence": {
+      "default": 0.0,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "novelty_score": {
+      "default": 0.0,
+      "description": "Distancia a patrones/documentación existentes (clave para la PI)",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Novelty Score",
+      "type": "number"
+    },
+    "validation_level": {
+      "$ref": "#/$defs/EpistemicLevel",
+      "default": "synthetic"
+    },
+    "status": {
+      "$ref": "#/$defs/PatternStatus",
+      "default": "candidate"
+    },
+    "first_seen": {
+      "format": "date-time",
+      "title": "First Seen",
+      "type": "string"
+    },
+    "last_seen": {
+      "format": "date-time",
+      "title": "Last Seen",
+      "type": "string"
+    },
+    "provenance_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provenance Id"
+    }
+  },
+  "required": [
+    "pattern_id",
+    "version",
+    "title",
+    "description",
+    "telemetry_signature",
+    "affected_metrics",
+    "first_seen",
+    "last_seen"
+  ],
+  "title": "LearnedPattern",
+  "type": "object"
+}

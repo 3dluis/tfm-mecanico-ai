@@ -1,0 +1,76 @@
+{
+  "DiagnosticCase": {
+    "schema_version": 2,
+    "case_id": "case-0003",
+    "vehicle_id": "veh-demo",
+    "session_id": "sess-0001",
+    "status": "closed",
+    "severity": "medium",
+    "opened_at": "2026-08-12T10:00:00Z",
+    "closed_at": "2026-08-12T10:00:00Z",
+    "trigger_anomaly_ids": [
+      "ano-0007"
+    ],
+    "trigger_dtcs": [],
+    "explanation": "Diagnóstico más probable: fuga de vacío en admisión (confianza 0.86)…",
+    "provenance_id": "prov-0003"
+  },
+  "DiagnosticHypothesis (rank 1 de 3)": {
+    "schema_version": 2,
+    "hypothesis_id": "hyp-01",
+    "case_id": "case-0003",
+    "rank": 1,
+    "suspected_component": "colector de admisión / manguitos de vacío",
+    "failure_mode": "vacuum_leak",
+    "cause": "Fuga de vacío en el colector de admisión",
+    "mechanism": "Aire no medido tras el MAF empobrece la mezcla; la ECU compensa con trims positivos, más en ralentí.",
+    "status": "supported",
+    "verified_against_telemetry": true,
+    "confidence": 0.86
+  },
+  "DiagnosticEvidence (una de 5)": {
+    "schema_version": 2,
+    "evidence_id": "ev-01",
+    "case_id": "case-0003",
+    "hypothesis_id": "hyp-01",
+    "kind": "telemetry",
+    "role": "supports",
+    "reference_id": null,
+    "statement": "[trims_positivos] total_trim_mean=+9.4% (esperado >+4% con fuga de vacío)",
+    "strength": 0.9,
+    "produced_by": "verify",
+    "created_at": "2026-08-12T10:00:00Z"
+  },
+  "ProvenanceRecord": {
+    "schema_version": 2,
+    "provenance_id": "prov-0003",
+    "subject_kind": "diagnostic_case",
+    "subject_id": "case-0003",
+    "vehicle_id": "veh-demo",
+    "session_ids": [
+      "sess-0001"
+    ],
+    "window_ids": [
+      "win-0042"
+    ],
+    "fv_ids": [
+      "fv-0042"
+    ],
+    "inference_ids": [
+      "inf-0042"
+    ],
+    "anomaly_ids": [
+      "ano-0007"
+    ],
+    "model_refs": [
+      "lof@0.2.0"
+    ],
+    "document_chunk_ids": [
+      "doc-vacuum-leak#0"
+    ],
+    "case_memory_ids": [],
+    "agent_run_id": "run-0003",
+    "prompt_version": "p1",
+    "created_at": "2026-08-12T10:00:00Z"
+  }
+}

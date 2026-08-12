@@ -1,0 +1,108 @@
+{
+  "$defs": {
+    "EvidenceKind": {
+      "enum": [
+        "telemetry",
+        "dtc",
+        "document",
+        "case",
+        "pattern",
+        "feedback",
+        "maintenance"
+      ],
+      "title": "EvidenceKind",
+      "type": "string"
+    },
+    "EvidenceRole": {
+      "enum": [
+        "supports",
+        "contradicts",
+        "neutral"
+      ],
+      "title": "EvidenceRole",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Pieza de evidencia (a favor/en contra) asociada a una hipótesis o al caso.",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "evidence_id": {
+      "title": "Evidence Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "hypothesis_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "None = evidencia del caso",
+      "title": "Hypothesis Id"
+    },
+    "kind": {
+      "$ref": "#/$defs/EvidenceKind"
+    },
+    "role": {
+      "$ref": "#/$defs/EvidenceRole"
+    },
+    "reference_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Id del objeto referenciado (ventana, chunk, caso, DTC…)",
+      "title": "Reference Id"
+    },
+    "statement": {
+      "description": "Afirmación verificable, p. ej. 'total_trim_mean=+8.1%'",
+      "title": "Statement",
+      "type": "string"
+    },
+    "strength": {
+      "default": 0.5,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Strength",
+      "type": "number"
+    },
+    "produced_by": {
+      "description": "Nodo/proceso que la produjo, p. ej. 'verify'",
+      "title": "Produced By",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "evidence_id",
+    "case_id",
+    "kind",
+    "role",
+    "statement",
+    "produced_by",
+    "created_at"
+  ],
+  "title": "DiagnosticEvidence",
+  "type": "object"
+}
