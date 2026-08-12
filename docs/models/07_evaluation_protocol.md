@@ -59,7 +59,8 @@ rule baseline  vs  detector ML de eventos
 - **ML:** ¿qué modelo no supervisado equilibra mejor detección de anomalías desconocidas
   y falsas alarmas? *(E1 respondida provisionalmente: LOF k=10; ampliable)*
 - **Event-aware:** ¿mejora la segmentación por eventos la detección frente a ventanas
-  arbitrarias? *(PI.5/H6)*
+  arbitrarias? *(PI.5/H6 — primera respuesta en EXP-ANOM-002: como sustituto NO; como
+  señal complementaria SÍ en el held-out relacional urbano; [informe](comparisons/anomaly_window_vs_event_v1.md))*
 - **LLM:** ¿qué modelo local equilibra mejor calidad diagnóstica y recursos edge?
 - **Memoria:** ¿cómo cambia el rendimiento del agente con memoria episódica/evolutiva? *(H3/H5)*
 - **Agéntico:** ¿qué aporta el proceso iterativo frente a una ejecución única? *(A6 vs A3)*

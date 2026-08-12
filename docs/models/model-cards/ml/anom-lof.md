@@ -44,6 +44,14 @@
 | episodios held-out detectados | **4/6** · retardo medio 37.5 s |
 | inferencia | 0.007 ms/ventana (x86) · fit 0.075 s · RSS pico 171.5 MB |
 
+## Evaluaciones posteriores
+- **EXP-ANOM-002 (F8, marco por tick):** F1 test 0.67 · FPR 0.067 · 4/6 episodios ·
+  held-out 2/4 · retardo 15 s — sigue siendo el mejor detector individual; el umbral
+  train-only reprodujo exactamente el de E1 (0.1632). Punto débil confirmado: apenas
+  delimita el desacoplo RPM/MAF urbano (R=0.25), donde el brazo de eventos localiza
+  R=0.73 → complementariedad documentada en la
+  [comparación v1](../../comparisons/anomaly_window_vs_event_v1.md).
+
 ## Limitaciones y modos de fallo conocidos (✍)
 - El recall point-wise held-out (0.25) es bajo: detecta los EPISODIOS pero no todos sus
   puntos — por eso el protocolo prioriza métricas por episodio.

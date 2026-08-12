@@ -1,0 +1,20 @@
+{
+  "conclusion": "El brazo de eventos NO sustituye a LOF-ventana (F1 test 0.58 vs 0.67; FPR 0.15 vs 0.07): resultado direccional honesto con solo 6 sesiones normales de train (varianza entre sesiones domina los baselines, sobre todo en autovía). SÍ aporta señal complementaria: en el held-out relacional urbano localiza mucho mejor (R 0.73 vs 0.25; retardo 17 s vs 30 s) y la unión AM-WE sube recall (0.54→0.63) y baja el retardo medio (15→4.2 s) a costa de FPR (0.07→0.19). La ablación confirma que el context_signature aporta (F1 0.58 vs 0.52; held-out 2/4 vs 1/4). LOF k=10 SIGUE siendo el modelo por defecto (sin supersession).",
+  "config_uri": "ai-models/configs/exp-anom-002.yaml",
+  "created_at": "2026-08-12T00:00:00Z",
+  "dataset_id": "obd-lab-suite-v1",
+  "dataset_version": "1",
+  "evaluation_protocol": "ADR-0011 extendido a marco por tick (config exp-anom-002.yaml; umbrales: LOF cuantil train 1% FPR, eventos cuantil LOSO train-normal 1% FPR; held-out intocable)",
+  "experiment_id": "EXP-ANOM-002",
+  "feature_schema_version": null,
+  "objective": "¿La segmentación mediante eventos vehiculares mejora la detección de anomalías (especialmente multivariables/temporales) frente a ventanas temporales arbitrarias? (PI.5/H6)",
+  "report_uri": "docs/models/comparisons/anomaly_window_vs_event_v1.md",
+  "schema_version": 2,
+  "selected_model_id": "anom-lof",
+  "split_version": "suite-v1-split-1",
+  "title": "Window vs Event vs Both (R1+E1 fusionados, F8)",
+  "training_run_ids": [
+    "TR-E2-EVENT-CTX",
+    "TR-E2-EVENT-NOCTX"
+  ]
+}

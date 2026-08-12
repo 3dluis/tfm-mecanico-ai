@@ -21,6 +21,15 @@ Métricas: F1/FPR por ventana y por episodio, retardo, y cobertura de los held-o
 relacionales. Se integra como dimensión adicional del diseño A0–A6 (una columna más de la
 RuntimeConfig: `anomaly_mode ∈ {window, event, both}`).
 
+> **Resultado v1 (EXP-ANOM-002, F8):** ejecutado sobre la suite v1 SIN ampliar (fallos
+> estándar) y sin LLM. Como sustituto, el brazo de eventos NO supera a LOF-ventana
+> (F1 test 0.58 vs 0.67; FPR 0.15 vs 0.07 — concentrado en normales de autovía con solo
+> 2 sesiones de train por perfil); como señal COMPLEMENTARIA sí aporta: localiza el
+> held-out relacional urbano (R 0.73 vs 0.25, retardo 17 s) y la unión sube recall
+> 0.54→0.63 con retardo 15→4.2 s a costa de FPR. La ablación con/sin context_signature
+> confirma la aportación del contexto. Informe completo:
+> [docs/models/comparisons/anomaly_window_vs_event_v1.md](../models/comparisons/anomaly_window_vs_event_v1.md).
+
 ## Subpregunta académica (análisis del requisito 42)
 
 Cabe como **subpregunta PI.5 / hipótesis H6** sin cambiar la pregunta principal — la

@@ -1,0 +1,24 @@
+{
+  "algorithm_version": null,
+  "artifact_format": "composition",
+  "artifact_uri": null,
+  "capabilities": [
+    "anomaly_detection"
+  ],
+  "checksum": null,
+  "created_at": "2026-08-12T00:00:00Z",
+  "edge_compatible": null,
+  "hardware_validation": [],
+  "manifest_uri": null,
+  "model_card_uri": "docs/models/comparisons/anomaly_window_vs_event_v1.md",
+  "model_family": "ensemble_or",
+  "model_id": "anom-combined-we",
+  "model_type": "ml",
+  "name": "combinación window+event (OR por tick)",
+  "notes": "OR de anom-lof@0.1.0 y event-baseline-z@0.1.0 (EXP-ANOM-002). Mejora recall y retardo a costa de FPR; sin umbral propio.",
+  "schema_version": 2,
+  "status": "experimental",
+  "training_run_id": null,
+  "validated_at": null,
+  "version": "0.1.0"
+}

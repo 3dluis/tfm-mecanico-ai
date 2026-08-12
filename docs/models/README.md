@@ -54,6 +54,8 @@ debe poder reconstruirse **en ambos sentidos, siempre**.
 
 Diagramas: [ciclo ML](diagrams/ml-lifecycle.mmd) · [ciclo LLM](diagrams/llm-lifecycle.mmd) ·
 [provenance](diagrams/model-provenance.mmd) · [uso por agente](diagrams/agent-model-use.mmd)
+· Validación ARM64/RPi paso a paso: [edge-validation-a2a3](edge-validation-a2a3.md)
+· Índice de experimentos: [docs/experiments/](../experiments/README.md)
 
 ## Relación con el resto del sistema
 

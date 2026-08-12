@@ -23,9 +23,18 @@
 - Trip con maf_drift (drift 0.25): **5/6 aceleraciones señaladas**; firma correcta
   (ltft_mean, total_trim_mean, stft_mean); el fallo omitido cae en la rampa inicial
 
+## Métricas (EXP-ANOM-002, suite v1, marco por tick — evaluación formal)
+- Test: F1 0.58 · FPR 0.149 · episodios 4/6 · held-out 2/4 · retardo medio 177 s
+- NO sustituye a LOF-ventana (F1 0.67/FPR 0.067); SÍ aporta señal complementaria:
+  held-out relacional urbano R=0.73 (LOF 0.25) con retardo 17 s; la ablación confirma
+  la aportación del context_signature (F1 0.58 vs 0.52 sin contexto; held-out 2/4 vs 1/4)
+- FPR concentrado en normales de autovía (0.41–0.52): 2 sesiones train/perfil no bastan
+- Cobertura: 87.7 % de eventos con baseline aplicable (111/902 sin puntuar, honesto)
+- Detalle: [comparación v1](../../comparisons/anomaly_window_vs_event_v1.md)
+
 ## Limitaciones y modos de fallo (✍)
-- Evidencia de UN escenario de fallo (maf_drift) y UN contexto: NO generalizar hasta el
-  experimento ventana-vs-evento (E1/R1).
+- Evaluado formalmente en EXP-ANOM-002 (arriba); pierde thermostat_stuck (contextos fríos
+  sin baseline) y misfire (firma de alta frecuencia diluida por medias por evento).
 - Baselines inmaduros (n<5) no detectan: vehículo nuevo = periodo ciego por contexto.
 - Fragmentación de contextos si las bandas se afinan (mitigación: bandas anchas v1).
 - z univariante por feature: anomalías RELACIONALES dentro del evento (correlaciones

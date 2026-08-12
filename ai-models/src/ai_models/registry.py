@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 from mecanico_contracts import (
+    ModelEvaluation,
     ModelExperiment,
     ModelRegistryEntry,
     ModelStatus,
@@ -22,6 +23,7 @@ from mecanico_contracts import (
 _ENTRIES = "models"
 _EXPERIMENTS = "experiments"
 _RUNS = "training-runs"
+_EVALUATIONS = "evaluations"
 
 
 def sha256_of(path: Path) -> str:
@@ -38,7 +40,7 @@ class ModelRegistry:
 
     def __init__(self, root: Path) -> None:
         self.root = Path(root)
-        for sub in (_ENTRIES, _EXPERIMENTS, _RUNS):
+        for sub in (_ENTRIES, _EXPERIMENTS, _RUNS, _EVALUATIONS):
             (self.root / sub).mkdir(parents=True, exist_ok=True)
 
     # ------------------------------------------------------------ persistencia
@@ -47,7 +49,7 @@ class ModelRegistry:
         path.write_text(payload + "\n", encoding="utf-8")
 
     @staticmethod
-    def _dump(model: ModelRegistryEntry | ModelExperiment | TrainingRun) -> str:
+    def _dump(model: ModelRegistryEntry | ModelExperiment | TrainingRun | ModelEvaluation) -> str:
         return json.dumps(
             json.loads(model.model_dump_json()), indent=2, ensure_ascii=False, sort_keys=True
         )
@@ -105,6 +107,20 @@ class ModelRegistry:
         self._write(path, self._dump(run))
         return path
 
+    def save_evaluation(self, ev: ModelEvaluation) -> Path:
+        path = self.root / _EVALUATIONS / f"{ev.evaluation_id}.json"
+        self._write(path, self._dump(ev))
+        return path
+
+    def evaluations(self, model_id: str | None = None) -> list[ModelEvaluation]:
+        evs = [
+            ModelEvaluation.model_validate_json(p.read_text(encoding="utf-8"))
+            for p in (self.root / _EVALUATIONS).glob("*.json")
+        ]
+        if model_id is not None:
+            evs = [e for e in evs if e.model_id == model_id]
+        return sorted(evs, key=lambda e: e.evaluation_id)
+
     def training_runs(self, experiment_id: str | None = None) -> list[TrainingRun]:
         runs = [
             TrainingRun.model_validate_json(p.read_text(encoding="utf-8"))
@@ -132,5 +148,10 @@ class ModelRegistry:
             if (run.model_id, run.model_version) not in entries:
                 problems.append(
                     f"{run.training_run_id}: modelo {run.model_id}@{run.model_version} sin entrada"
+                )
+        for ev in self.evaluations():
+            if (ev.model_id, ev.model_version) not in entries:
+                problems.append(
+                    f"{ev.evaluation_id}: modelo {ev.model_id}@{ev.model_version} sin entrada"
                 )
         return problems

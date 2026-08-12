@@ -32,7 +32,8 @@ modelos ya materializados; este inventario cubre también lo no construido.)
 | **LOF k=10** | ML ventana | **SELECTED** | F1 0.64, FPR 0.035, 4/6 episodios held-out (E1) |
 | OC-SVM (ν=0.01, γ=0.005) | ML ventana | SELECTED (2º paquete) | F1 0.68, 6/6 episodios, FPR 0.086 (E1) |
 | Máquina de estados `ed:1` | ML eventos | **SELECTED** (baseline) | F1 0.77–1.00 por tipo (F6) |
-| `event-baseline-z` contextual | ML contextual | EXPERIMENTING | 0/5 FP, 5/6 recall (slice F6); falta experimento formal |
+| `event-baseline-z` contextual | ML contextual | EXPERIMENTING | EXP-ANOM-002: no sustituye a LOF (F1 0.58, FPR 0.15) pero localiza el held-out relacional urbano (R 0.73 vs 0.25); contexto aporta (ablación) |
+| `anom-combined-we` (OR window+event) | ML combinación | EXPERIMENTING | EXP-ANOM-002: recall 0.54→0.63 y retardo 15→4.2 s a costa de FPR 0.067→0.19 |
 | Clustering (perfiles de conducción) | ML | PLANNED | — |
 | Change-point detection (segmentación) | ML eventos | PLANNED | candidato a retar a `ed:1` |
 | HMM (estados vehiculares) | ML eventos | PLANNED | solo si supera a `ed:1`/CPD |

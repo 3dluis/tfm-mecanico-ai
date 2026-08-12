@@ -37,6 +37,7 @@ class TypeReport:
     ious: list[float] = field(default_factory=list)
     onset_errors: list[int] = field(default_factory=list)
     end_errors: list[int] = field(default_factory=list)
+    duration_errors: list[int] = field(default_factory=list)
 
     @property
     def precision(self) -> float:
@@ -58,6 +59,16 @@ class TypeReport:
     @property
     def mean_onset_error(self) -> float:
         return sum(self.onset_errors) / len(self.onset_errors) if self.onset_errors else 0.0
+
+    @property
+    def mean_end_error(self) -> float:
+        return sum(self.end_errors) / len(self.end_errors) if self.end_errors else 0.0
+
+    @property
+    def mean_duration_error(self) -> float:
+        return (
+            sum(self.duration_errors) / len(self.duration_errors) if self.duration_errors else 0.0
+        )
 
 
 def match_events(
@@ -121,6 +132,10 @@ def event_detection_report(
             r.onset_errors.append(abs(p.seq_start - g.seq_start))
         if p.seq_end is not None and g.seq_end is not None:
             r.end_errors.append(abs(p.seq_end - g.seq_end))
+        if None not in (p.seq_start, p.seq_end, g.seq_start, g.seq_end):
+            dur_p = p.seq_end - p.seq_start  # type: ignore[operator]
+            dur_g = g.seq_end - g.seq_start  # type: ignore[operator]
+            r.duration_errors.append(abs(dur_p - dur_g))
     for p in pred:
         if p.event_id not in matched_p:
             rep(p.event_type).fp += 1

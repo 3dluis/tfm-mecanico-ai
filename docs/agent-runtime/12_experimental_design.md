@@ -1,5 +1,12 @@
 # 12 — Diseño experimental de arquitecturas (A0–A6)
 
+> **Nota F8:** las etiquetas A0–A6 designan ARQUITECTURAS DE AGENTE (esta página). La
+> comparación de detección window/event/both (R1+E1) usa la dimensión `anomaly_mode`
+> (AM-W/AM-E/AM-WE) y se cerró SIN LLM antes de los experimentos de agentes — resultado
+> en [models/comparisons/anomaly_window_vs_event_v1.md](../models/comparisons/anomaly_window_vs_event_v1.md).
+> Decisión F8: la entrada por defecto del sistema agéntico sigue siendo LOF-ventana; los
+> eventos entran como evidencia complementaria (no como detector sustituto).
+
 [← Índice](README.md) · ADR: [0018](../adr/0018-diseno-experimental-arquitecturas.md)
 
 ## Arquitecturas comparadas (por FEATURE FLAGS, no productos distintos)
