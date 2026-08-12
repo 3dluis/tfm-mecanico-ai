@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mecanico-ia"
+version = "0.1.0"
+description = "Sistema inteligente híbrido edge-cloud para diagnóstico y mantenimiento predictivo vehicular mediante OBD-II (TFM UAX)"
+authors = [{ name = "Luis Daniel Díaz" }]
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "obd>=0.7.3",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.2",
+    "sqlalchemy>=2.0",
+    "fastapi>=0.111",
+    "uvicorn>=0.29",
+]
+
+[project.optional-dependencies]
+# Emulación del vehículo (solo entorno de desarrollo/experimentos)
+sim = ["ELM327-emulator>=3.0.5"]
+# Detección de anomalías
+anomaly = ["scikit-learn>=1.4", "numpy>=1.26", "pandas>=2.2", "onnxruntime>=1.17"]
+# Agente + RAG (pesado: se instala en la imagen edge, no en CI)
+agent = [
+    "langgraph>=0.2",
+    "langchain-core>=0.3",
+    "chromadb>=0.5",
+    "sentence-transformers>=3.0",
+    "ollama>=0.3",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mecanico_ia"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "PL", "RUF"]
+ignore = ["PLR0913"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["mecanico_ia"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "emulator: pruebas que requieren ELM327-emulator (lentas, solo POSIX)",
+]
+
+[tool.coverage.run]
+source = ["src/mecanico_ia"]

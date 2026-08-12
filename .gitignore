@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Datos y modelos (regenerables por script; ver README)
+data/
+!data/corpus/MANIFEST.md
+*.sqlite3
+*.db
+*.onnx
+*.gguf
+
+# Experimentos: solo se versionan resultados finales CSV/figuras seleccionadas
+experiments/**/tmp/
+
+# Entornos y secretos
+.env
+*.local
+
+# SO / editores
+.DS_Store
+.idea/
+.vscode/
+errores.log

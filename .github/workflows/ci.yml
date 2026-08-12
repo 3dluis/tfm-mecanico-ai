@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias
+        run: |
+          pip install --upgrade pip "setuptools<81" wheel
+          pip install -e ".[dev]"
+          pip install --no-build-isolation "ELM327-emulator>=3.0.5"
+          pip install -e ".[sim]"
+      - name: Lint (ruff)
+        run: ruff check src tests && ruff format --check src tests
+      - name: Tipos (mypy)
+        run: mypy
+      - name: Tests
+        run: pytest --cov --cov-report=term

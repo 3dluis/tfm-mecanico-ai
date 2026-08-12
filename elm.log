@@ -1,0 +1,774 @@
+2026-08-12 00:55:45,642  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
+2026-08-12 00:55:45,645  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 00:58:18,209  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started on pseudo-tty port "/dev/pts/0"._______________
+2026-08-12 00:58:19,999  pint.util  _helper_single_adder WARNING  Redefining 'percent' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 00:58:19,999  pint.util  _helper_single_adder WARNING  Redefining '%' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 00:58:20,000  pint.util  _helper_single_adder WARNING  Redefining 'ppm' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 00:58:20,005  root       run             DEBUG    Received 'ATZ'
+2026-08-12 00:58:20,005  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 00:58:20,005  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 00:58:20,009  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 00:58:20,009  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 00:58:20,510  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 00:58:20,510  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 00:58:20,512  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 00:58:21,005  root       run             DEBUG    Received 'ATE0'
+2026-08-12 00:58:21,006  root       handle_request  DEBUG    Handling: 'ATE0', header '7E0', ECU '7E0'
+2026-08-12 00:58:21,006  root       handle_request  DEBUG    Description: AT ECHO, PID AT_ECHO (ATE0)
+2026-08-12 00:58:21,006  root       <module>        DEBUG    set ECHO ON/OFF : False
+2026-08-12 00:58:21,006  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:58:21,007  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:58:21,007  root       run             DEBUG    Received 'ATH1'
+2026-08-12 00:58:21,007  root       handle_request  DEBUG    Handling: 'ATH1', header '7E0', ECU '7E0'
+2026-08-12 00:58:21,007  root       handle_request  DEBUG    Description: AT HEADERS, PID AT_USE_HEADERS (ATH1)
+2026-08-12 00:58:21,007  root       <module>        DEBUG    set HEADERS ON/OFF : True
+2026-08-12 00:58:21,007  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:58:21,008  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:58:21,008  root       run             DEBUG    Received 'ATL0'
+2026-08-12 00:58:21,008  root       handle_request  DEBUG    Handling: 'ATL0', header '7E0', ECU '7E0'
+2026-08-12 00:58:21,008  root       handle_request  DEBUG    Description: AT LINEFEEDS, PID AT_LINEFEEDS (ATL0)
+2026-08-12 00:58:21,008  root       <module>        DEBUG    set LINEFEEDS ON/OFF : False
+2026-08-12 00:58:21,008  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:58:21,009  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:58:21,009  root       run             DEBUG    Received 'AT RV'
+2026-08-12 00:58:21,009  root       handle_request  DEBUG    Handling: 'ATRV', header '7E0', ECU '7E0'
+2026-08-12 00:58:21,009  root       handle_request  DEBUG    Description: AT read volt, PID AT_R_VOLT (ATRV)
+2026-08-12 00:58:21,009  root       <module>        DEBUG    Volt = 13.1
+2026-08-12 00:58:21,009  root       handle_response DEBUG    Processing: '<string>13.1</string><writeln>V</writeln>'
+2026-08-12 00:58:21,009  root       handle_response DEBUG    Write: '13.1V\r\r>'
+2026-08-12 00:58:21,010  root       run             DEBUG    Received 'ATSP0'
+2026-08-12 00:58:21,010  root       handle_request  DEBUG    Handling: 'ATSP0', header '7E0', ECU '7E0'
+2026-08-12 00:58:21,010  root       handle_request  DEBUG    Description: AT PROTO, PID AT_PROTO (ATSP0)
+2026-08-12 00:58:21,010  root       <module>        DEBUG    set PROTO 0
+2026-08-12 00:58:21,010  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:58:21,010  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:58:22,010  root       run             DEBUG    Received '0100'
+2026-08-12 00:58:22,010  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 00:58:22,011  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 00:58:22,011  root       handle_response DEBUG    Processing: '<string>SEARCHING...</string><exec>time.sleep(1.5)</exec><writeln></writeln><header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 00:58:22,011  root       handle_response DEBUG    Write: 'SEARCHING...'
+2026-08-12 00:58:23,511  root       handle_response DEBUG    Evaluated command: time.sleep(1.5) -> None
+2026-08-12 00:58:23,512  root       handle_response DEBUG    Write: '\r7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 00:58:23,512  root       run             DEBUG    Received 'ATDPN'
+2026-08-12 00:58:23,512  root       handle_request  DEBUG    Handling: 'ATDPN', header '7E0', ECU '7E0'
+2026-08-12 00:58:23,513  root       handle_request  DEBUG    Description: AT Display Protocol Number, PID AT_DESCRIBE_PROTO_N (ATDPN)
+2026-08-12 00:58:24,013  root       handle_response DEBUG    Processing: '<writeln>A6</writeln>'
+2026-08-12 00:58:24,013  root       handle_response DEBUG    Write: 'A6\r\r>'
+2026-08-12 00:58:24,014  root       run             DEBUG    Received '0100'
+2026-08-12 00:58:24,014  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,015  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 00:58:24,015  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 00:58:24,015  root       handle_response DEBUG    Write: '7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 00:58:24,015  root       run             DEBUG    Received '0120'
+2026-08-12 00:58:24,015  root       handle_request  DEBUG    Handling: '0120', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,016  root       handle_request  DEBUG    Description: Supported PIDS_B [21-40], PID ELM_PIDS_B (0120)
+2026-08-12 00:58:24,016  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 20 A0 18 A0 11</data>'
+2026-08-12 00:58:24,016  root       handle_response DEBUG    Write: '7E8 06 41 20 A0 18 A0 11 \r\r>'
+2026-08-12 00:58:24,016  root       run             DEBUG    Received '0140'
+2026-08-12 00:58:24,016  root       handle_request  DEBUG    Handling: '0140', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,017  root       handle_request  DEBUG    Description: Supported PIDS_C [41-60], PID ELM_PIDS_C (0140)
+2026-08-12 00:58:24,017  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 40 44 DC 80 08</data>'
+2026-08-12 00:58:24,017  root       handle_response DEBUG    Write: '7E8 06 41 40 44 DC 80 08 \r\r>'
+2026-08-12 00:58:24,017  root       run             DEBUG    Received '0600'
+2026-08-12 00:58:24,017  root       handle_request  DEBUG    Handling: '0600', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,018  root       handle_request  DEBUG    Description: MIDS_A, PID ELM_MIDS_A (0600)
+2026-08-12 00:58:24,018  root       handle_response DEBUG    Processing: '<pos_answer>C0 00 00 01</pos_answer>'
+2026-08-12 00:58:24,018  root       handle_response DEBUG    Write: '7E8 05 46 C0 00 00 01 \r\r>'
+2026-08-12 00:58:24,018  root       run             DEBUG    Received '0900'
+2026-08-12 00:58:24,018  root       handle_request  DEBUG    Handling: '0900', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,020  root       handle_request  INFO     Unknown request: '0900', header=7E0
+2026-08-12 00:58:24,020  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,020  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,020  root       run             DEBUG    Received '010C'
+2026-08-12 00:58:24,021  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,021  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:58:24,021  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 00:58:24,021  root       handle_response DEBUG    Write: '7E8 04 41 0C 09 B0 \r7EA 04 41 0C 09 B0 \r\r>'
+2026-08-12 00:58:24,021  root       run             DEBUG    Received '010D'
+2026-08-12 00:58:24,022  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,022  root       handle_request  DEBUG    Description: Vehicle Speed, PID SPEED (010D)
+2026-08-12 00:58:24,022  root       handle_response DEBUG    Processing: '<pos_answer>04</pos_answer> <header>7EA</header><size>03</size><data>41 0D 04</data>'
+2026-08-12 00:58:24,022  root       handle_response DEBUG    Write: '7E8 03 41 0D 04 \r7EA 03 41 0D 04 \r\r>'
+2026-08-12 00:58:24,022  root       run             DEBUG    Received '0105'
+2026-08-12 00:58:24,022  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,022  root       handle_request  DEBUG    Description: Engine Coolant Temperature, PID COOLANT_TEMP (0105)
+2026-08-12 00:58:24,022  root       handle_response DEBUG    Processing: '<pos_answer>7B</pos_answer>'
+2026-08-12 00:58:24,023  root       handle_response DEBUG    Write: '7E8 03 41 05 7B \r\r>'
+2026-08-12 00:58:24,023  root       run             DEBUG    Received '0104'
+2026-08-12 00:58:24,023  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,023  root       handle_request  DEBUG    Description: Calculated Engine Load, PID ENGINE_LOAD (0104)
+2026-08-12 00:58:24,023  root       handle_response DEBUG    Processing: '<pos_answer>00</pos_answer>'
+2026-08-12 00:58:24,023  root       handle_response DEBUG    Write: '7E8 03 41 04 00 \r\r>'
+2026-08-12 00:58:24,024  root       run             DEBUG    Received '0110'
+2026-08-12 00:58:24,024  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,024  root       handle_request  DEBUG    Description: Air Flow Rate (MAF), PID MAF (0110)
+2026-08-12 00:58:24,024  root       handle_response DEBUG    Processing: '<pos_answer>05 1F</pos_answer>'
+2026-08-12 00:58:24,024  root       handle_response DEBUG    Write: '7E8 04 41 10 05 1F \r\r>'
+2026-08-12 00:58:24,025  root       run             DEBUG    Received '0106'
+2026-08-12 00:58:24,025  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,025  root       handle_request  INFO     Unknown request: '0106', header=7E0
+2026-08-12 00:58:24,025  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,025  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,026  root       run             DEBUG    Received '0107'
+2026-08-12 00:58:24,026  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,026  root       handle_request  INFO     Unknown request: '0107', header=7E0
+2026-08-12 00:58:24,026  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,026  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,026  root       run             DEBUG    Received '0114'
+2026-08-12 00:58:24,027  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,027  root       handle_request  INFO     Unknown request: '0114', header=7E0
+2026-08-12 00:58:24,027  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,027  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,027  root       run             DEBUG    Received '010E'
+2026-08-12 00:58:24,027  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,028  root       handle_request  INFO     Unknown request: '010E', header=7E0
+2026-08-12 00:58:24,028  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,028  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,028  root       run             DEBUG    Received '010F'
+2026-08-12 00:58:24,028  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,028  root       handle_request  DEBUG    Description: Intake Air Temp, PID INTAKE_TEMP (010F)
+2026-08-12 00:58:24,028  root       handle_response DEBUG    Processing: '<pos_answer>44</pos_answer>'
+2026-08-12 00:58:24,029  root       handle_response DEBUG    Write: '7E8 03 41 0F 44 \r\r>'
+2026-08-12 00:58:24,029  root       run             DEBUG    Received '0111'
+2026-08-12 00:58:24,029  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,029  root       handle_request  DEBUG    Description: Throttle Position, PID THROTTLE_POS (0111)
+2026-08-12 00:58:24,029  root       handle_response DEBUG    Processing: '<pos_answer>FF</pos_answer>'
+2026-08-12 00:58:24,029  root       handle_response DEBUG    Write: '7E8 03 41 11 FF \r\r>'
+2026-08-12 00:58:24,030  root       run             DEBUG    Received '010B'
+2026-08-12 00:58:24,030  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,030  root       handle_request  DEBUG    Description: Intake Manifold Pressure, PID INTAKE_PRESSURE (010B)
+2026-08-12 00:58:24,030  root       handle_response DEBUG    Processing: '<pos_answer>73</pos_answer>'
+2026-08-12 00:58:24,030  root       handle_response DEBUG    Write: '7E8 03 41 0B 73 \r\r>'
+2026-08-12 00:58:24,031  root       run             DEBUG    Received '0142'
+2026-08-12 00:58:24,031  root       handle_request  DEBUG    Handling: '0142', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,031  root       handle_request  DEBUG    Description: Control module voltage, PID CONTROL_MODULE_VOLTAGE (0142)
+2026-08-12 00:58:24,031  root       handle_response DEBUG    Processing: '<pos_answer>39 D6</pos_answer>'
+2026-08-12 00:58:24,031  root       handle_response DEBUG    Write: '7E8 04 41 42 39 D6 \r\r>'
+2026-08-12 00:58:24,032  root       run             DEBUG    Received '012F'
+2026-08-12 00:58:24,032  root       handle_request  DEBUG    Handling: '012F', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,032  root       handle_request  INFO     Unknown request: '012F', header=7E0
+2026-08-12 00:58:24,032  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,032  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,033  root       run             DEBUG    Received '010C'
+2026-08-12 00:58:24,033  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,033  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:58:24,033  root       handle_response DEBUG    Processing: '<pos_answer>0A 00</pos_answer> <header>7EA</header><size>04</size><data>41 0C 0A 00</data>'
+2026-08-12 00:58:24,033  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A 00 \r7EA 04 41 0C 0A 00 \r\r>'
+2026-08-12 00:58:24,234  root       run             DEBUG    Received '010C'
+2026-08-12 00:58:24,234  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,234  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:58:24,234  root       handle_response DEBUG    Processing: '<pos_answer>0A 50</pos_answer> <header>7EA</header><size>04</size><data>41 0C 0A 50</data>'
+2026-08-12 00:58:24,235  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A 50 \r7EA 04 41 0C 0A 50 \r\r>'
+2026-08-12 00:58:24,235  root       run             DEBUG    Received '03'
+2026-08-12 00:58:24,235  root       handle_request  DEBUG    Handling: '03', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,236  root       handle_request  INFO     Unknown request: '03', header=7E0
+2026-08-12 00:58:24,236  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:58:24,236  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:58:24,236  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 00:58:24,237  root       run             DEBUG    Received 'ATZ'
+2026-08-12 00:58:24,237  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 00:58:24,237  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 00:58:24,237  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 00:58:24,737  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 00:58:24,738  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 00:58:24,738  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 00:58:25,338  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 00:58:25,338  root       terminate       DEBUG    Terminated.
+2026-08-12 00:58:25,338  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
+2026-08-12 00:58:25,343  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
+2026-08-12 00:58:25,343  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 00:58:26,840  root       accept_connection DEBUG    Connected by ('127.0.0.1', 35026)
+2026-08-12 00:58:26,840  root       run             DEBUG    Received 'ATZ'
+2026-08-12 00:58:26,840  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 00:58:26,840  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 00:58:26,841  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 00:58:26,841  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 00:58:27,341  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 00:58:27,341  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 00:58:27,342  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 00:58:27,342  root       run             DEBUG    Received '010C'
+2026-08-12 00:58:27,342  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:58:27,342  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:58:27,342  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 00:58:27,342  root       handle_response DEBUG    Write: '41 0C 09 B0 \r41 0C 09 B0 \r\r>'
+2026-08-12 00:58:27,840  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 00:58:27,840  root       read_from_device DEBUG    TCP/IP communication terminated by the client.
+2026-08-12 00:58:27,841  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
+2026-08-12 00:58:27,841  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 00:58:28,941  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 00:58:28,941  root       terminate       DEBUG    Terminated.
+2026-08-12 00:59:11,014  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started on pseudo-tty port "/dev/pts/0"._______________
+2026-08-12 00:59:12,515  root       run             DEBUG    Received 'ATZ'
+2026-08-12 00:59:12,515  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 00:59:12,516  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 00:59:12,520  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 00:59:12,520  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 00:59:13,020  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 00:59:13,021  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 00:59:13,021  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 00:59:13,515  root       run             DEBUG    Received 'ATE0'
+2026-08-12 00:59:13,516  root       handle_request  DEBUG    Handling: 'ATE0', header '7E0', ECU '7E0'
+2026-08-12 00:59:13,516  root       handle_request  DEBUG    Description: AT ECHO, PID AT_ECHO (ATE0)
+2026-08-12 00:59:13,516  root       <module>        DEBUG    set ECHO ON/OFF : False
+2026-08-12 00:59:13,517  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:59:13,517  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:59:13,517  root       run             DEBUG    Received 'ATH1'
+2026-08-12 00:59:13,517  root       handle_request  DEBUG    Handling: 'ATH1', header '7E0', ECU '7E0'
+2026-08-12 00:59:13,517  root       handle_request  DEBUG    Description: AT HEADERS, PID AT_USE_HEADERS (ATH1)
+2026-08-12 00:59:13,517  root       <module>        DEBUG    set HEADERS ON/OFF : True
+2026-08-12 00:59:13,518  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:59:13,518  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:59:13,518  root       run             DEBUG    Received 'ATL0'
+2026-08-12 00:59:13,518  root       handle_request  DEBUG    Handling: 'ATL0', header '7E0', ECU '7E0'
+2026-08-12 00:59:13,518  root       handle_request  DEBUG    Description: AT LINEFEEDS, PID AT_LINEFEEDS (ATL0)
+2026-08-12 00:59:13,518  root       <module>        DEBUG    set LINEFEEDS ON/OFF : False
+2026-08-12 00:59:13,518  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:59:13,518  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:59:13,519  root       run             DEBUG    Received 'AT RV'
+2026-08-12 00:59:13,519  root       handle_request  DEBUG    Handling: 'ATRV', header '7E0', ECU '7E0'
+2026-08-12 00:59:13,519  root       handle_request  DEBUG    Description: AT read volt, PID AT_R_VOLT (ATRV)
+2026-08-12 00:59:13,519  root       <module>        DEBUG    Volt = 13.1
+2026-08-12 00:59:13,519  root       handle_response DEBUG    Processing: '<string>13.1</string><writeln>V</writeln>'
+2026-08-12 00:59:13,519  root       handle_response DEBUG    Write: '13.1V\r\r>'
+2026-08-12 00:59:13,520  root       run             DEBUG    Received 'ATSP0'
+2026-08-12 00:59:13,520  root       handle_request  DEBUG    Handling: 'ATSP0', header '7E0', ECU '7E0'
+2026-08-12 00:59:13,520  root       handle_request  DEBUG    Description: AT PROTO, PID AT_PROTO (ATSP0)
+2026-08-12 00:59:13,520  root       <module>        DEBUG    set PROTO 0
+2026-08-12 00:59:13,520  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 00:59:13,520  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 00:59:14,520  root       run             DEBUG    Received '0100'
+2026-08-12 00:59:14,520  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 00:59:14,521  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 00:59:14,521  root       handle_response DEBUG    Processing: '<string>SEARCHING...</string><exec>time.sleep(1.5)</exec><writeln></writeln><header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 00:59:14,521  root       handle_response DEBUG    Write: 'SEARCHING...'
+2026-08-12 00:59:16,021  root       handle_response DEBUG    Evaluated command: time.sleep(1.5) -> None
+2026-08-12 00:59:16,022  root       handle_response DEBUG    Write: '\r7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 00:59:16,022  root       run             DEBUG    Received 'ATDPN'
+2026-08-12 00:59:16,022  root       handle_request  DEBUG    Handling: 'ATDPN', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,023  root       handle_request  DEBUG    Description: AT Display Protocol Number, PID AT_DESCRIBE_PROTO_N (ATDPN)
+2026-08-12 00:59:16,523  root       handle_response DEBUG    Processing: '<writeln>A6</writeln>'
+2026-08-12 00:59:16,523  root       handle_response DEBUG    Write: 'A6\r\r>'
+2026-08-12 00:59:16,524  root       run             DEBUG    Received '0100'
+2026-08-12 00:59:16,525  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,525  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 00:59:16,525  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 00:59:16,525  root       handle_response DEBUG    Write: '7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 00:59:16,525  root       run             DEBUG    Received '0120'
+2026-08-12 00:59:16,525  root       handle_request  DEBUG    Handling: '0120', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,526  root       handle_request  DEBUG    Description: Supported PIDS_B [21-40], PID ELM_PIDS_B (0120)
+2026-08-12 00:59:16,526  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 20 A0 18 A0 11</data>'
+2026-08-12 00:59:16,526  root       handle_response DEBUG    Write: '7E8 06 41 20 A0 18 A0 11 \r\r>'
+2026-08-12 00:59:16,526  root       run             DEBUG    Received '0140'
+2026-08-12 00:59:16,526  root       handle_request  DEBUG    Handling: '0140', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,526  root       handle_request  DEBUG    Description: Supported PIDS_C [41-60], PID ELM_PIDS_C (0140)
+2026-08-12 00:59:16,526  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 40 44 DC 80 08</data>'
+2026-08-12 00:59:16,526  root       handle_response DEBUG    Write: '7E8 06 41 40 44 DC 80 08 \r\r>'
+2026-08-12 00:59:16,527  root       run             DEBUG    Received '0600'
+2026-08-12 00:59:16,527  root       handle_request  DEBUG    Handling: '0600', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,527  root       handle_request  DEBUG    Description: MIDS_A, PID ELM_MIDS_A (0600)
+2026-08-12 00:59:16,527  root       handle_response DEBUG    Processing: '<pos_answer>C0 00 00 01</pos_answer>'
+2026-08-12 00:59:16,527  root       handle_response DEBUG    Write: '7E8 05 46 C0 00 00 01 \r\r>'
+2026-08-12 00:59:16,528  root       run             DEBUG    Received '0900'
+2026-08-12 00:59:16,528  root       handle_request  DEBUG    Handling: '0900', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,529  root       handle_request  INFO     Unknown request: '0900', header=7E0
+2026-08-12 00:59:16,529  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:59:16,529  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:59:16,530  root       run             DEBUG    Received '010C'
+2026-08-12 00:59:16,530  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,530  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:59:16,530  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 00:59:16,530  root       handle_response DEBUG    Write: '7E8 04 41 0C 09 B0 \r7EA 04 41 0C 09 B0 \r\r>'
+2026-08-12 00:59:16,531  root       run             DEBUG    Received '010D'
+2026-08-12 00:59:16,531  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,531  root       handle_request  DEBUG    Description: Vehicle Speed, PID SPEED (010D)
+2026-08-12 00:59:16,531  root       handle_response DEBUG    Processing: '<pos_answer>04</pos_answer> <header>7EA</header><size>03</size><data>41 0D 04</data>'
+2026-08-12 00:59:16,531  root       handle_response DEBUG    Write: '7E8 03 41 0D 04 \r7EA 03 41 0D 04 \r\r>'
+2026-08-12 00:59:16,532  root       run             DEBUG    Received '0105'
+2026-08-12 00:59:16,532  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,532  root       handle_request  DEBUG    Description: Engine Coolant Temperature, PID COOLANT_TEMP (0105)
+2026-08-12 00:59:16,532  root       handle_response DEBUG    Processing: '<pos_answer>7B</pos_answer>'
+2026-08-12 00:59:16,532  root       handle_response DEBUG    Write: '7E8 03 41 05 7B \r\r>'
+2026-08-12 00:59:16,533  root       run             DEBUG    Received '0104'
+2026-08-12 00:59:16,533  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,533  root       handle_request  DEBUG    Description: Calculated Engine Load, PID ENGINE_LOAD (0104)
+2026-08-12 00:59:16,533  root       handle_response DEBUG    Processing: '<pos_answer>00</pos_answer>'
+2026-08-12 00:59:16,533  root       handle_response DEBUG    Write: '7E8 03 41 04 00 \r\r>'
+2026-08-12 00:59:16,533  root       run             DEBUG    Received '0110'
+2026-08-12 00:59:16,534  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,534  root       handle_request  DEBUG    Description: Air Flow Rate (MAF), PID MAF (0110)
+2026-08-12 00:59:16,534  root       handle_response DEBUG    Processing: '<pos_answer>05 1F</pos_answer>'
+2026-08-12 00:59:16,534  root       handle_response DEBUG    Write: '7E8 04 41 10 05 1F \r\r>'
+2026-08-12 00:59:16,534  root       run             DEBUG    Received '0106'
+2026-08-12 00:59:16,534  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,535  root       handle_request  INFO     Unknown request: '0106', header=7E0
+2026-08-12 00:59:16,535  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:59:16,535  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:59:16,535  root       run             DEBUG    Received '0107'
+2026-08-12 00:59:16,535  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,535  root       handle_request  INFO     Unknown request: '0107', header=7E0
+2026-08-12 00:59:16,536  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:59:16,536  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:59:16,536  root       run             DEBUG    Received '0114'
+2026-08-12 00:59:16,536  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,536  root       handle_request  INFO     Unknown request: '0114', header=7E0
+2026-08-12 00:59:16,536  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:59:16,536  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:59:16,537  root       run             DEBUG    Received '010E'
+2026-08-12 00:59:16,537  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,537  root       handle_request  INFO     Unknown request: '010E', header=7E0
+2026-08-12 00:59:16,537  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:59:16,537  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:59:16,538  root       run             DEBUG    Received '010F'
+2026-08-12 00:59:16,538  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,538  root       handle_request  DEBUG    Description: Intake Air Temp, PID INTAKE_TEMP (010F)
+2026-08-12 00:59:16,538  root       handle_response DEBUG    Processing: '<pos_answer>44</pos_answer>'
+2026-08-12 00:59:16,538  root       handle_response DEBUG    Write: '7E8 03 41 0F 44 \r\r>'
+2026-08-12 00:59:16,538  root       run             DEBUG    Received '0111'
+2026-08-12 00:59:16,539  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,539  root       handle_request  DEBUG    Description: Throttle Position, PID THROTTLE_POS (0111)
+2026-08-12 00:59:16,539  root       handle_response DEBUG    Processing: '<pos_answer>FF</pos_answer>'
+2026-08-12 00:59:16,539  root       handle_response DEBUG    Write: '7E8 03 41 11 FF \r\r>'
+2026-08-12 00:59:16,539  root       run             DEBUG    Received '010B'
+2026-08-12 00:59:16,539  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,540  root       handle_request  DEBUG    Description: Intake Manifold Pressure, PID INTAKE_PRESSURE (010B)
+2026-08-12 00:59:16,540  root       handle_response DEBUG    Processing: '<pos_answer>73</pos_answer>'
+2026-08-12 00:59:16,540  root       handle_response DEBUG    Write: '7E8 03 41 0B 73 \r\r>'
+2026-08-12 00:59:16,540  root       run             DEBUG    Received '0142'
+2026-08-12 00:59:16,540  root       handle_request  DEBUG    Handling: '0142', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,540  root       handle_request  DEBUG    Description: Control module voltage, PID CONTROL_MODULE_VOLTAGE (0142)
+2026-08-12 00:59:16,540  root       handle_response DEBUG    Processing: '<pos_answer>39 D6</pos_answer>'
+2026-08-12 00:59:16,540  root       handle_response DEBUG    Write: '7E8 04 41 42 39 D6 \r\r>'
+2026-08-12 00:59:16,541  root       run             DEBUG    Received '012F'
+2026-08-12 00:59:16,541  root       handle_request  DEBUG    Handling: '012F', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,541  root       handle_request  INFO     Unknown request: '012F', header=7E0
+2026-08-12 00:59:16,541  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 00:59:16,541  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 00:59:16,542  root       run             DEBUG    Received '010C'
+2026-08-12 00:59:16,542  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,542  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:59:16,542  root       handle_response DEBUG    Processing: '<pos_answer>0A 00</pos_answer> <header>7EA</header><size>04</size><data>41 0C 0A 00</data>'
+2026-08-12 00:59:16,542  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A 00 \r7EA 04 41 0C 0A 00 \r\r>'
+2026-08-12 00:59:16,843  root       run             DEBUG    Received '010C'
+2026-08-12 00:59:16,843  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,843  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:59:16,843  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 1F 40</data>'
+2026-08-12 00:59:16,843  root       handle_response DEBUG    Write: '7E8 04 41 0C 1F 40 \r\r>'
+2026-08-12 00:59:16,844  root       run             DEBUG    Received '010C'
+2026-08-12 00:59:16,844  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 00:59:16,844  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 00:59:16,844  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 1F 40</data>'
+2026-08-12 00:59:16,844  root       handle_response DEBUG    Write: '7E8 04 41 0C 1F 40 \r\r>'
+2026-08-12 00:59:17,146  root       run             DEBUG    Received '0105'
+2026-08-12 00:59:17,146  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 00:59:17,146  root       handle_request  DEBUG    Description: Coolant temp inyectada, PID COOLANT_TEMP (0105)
+2026-08-12 00:59:17,146  root       handle_response DEBUG    Processing: '<header>7E8</header><size>03</size><data>41 05 8C</data>'
+2026-08-12 00:59:17,146  root       handle_response DEBUG    Write: '7E8 03 41 05 8C \r\r>'
+2026-08-12 00:59:17,147  root       run             DEBUG    Received '03'
+2026-08-12 00:59:17,147  root       handle_request  DEBUG    Handling: '03', header '7E0', ECU '7E0'
+2026-08-12 00:59:17,150  root       handle_request  DEBUG    Description: Get DTCs (Diagnostic Trouble Codes), PID GET_DTC (03)
+2026-08-12 00:59:17,150  root       handle_response DEBUG    Processing: '<header>7E8</header><size>02</size><data>43 00</data>'
+2026-08-12 00:59:17,150  root       handle_response DEBUG    Write: '7E8 02 43 00 \r\r>'
+2026-08-12 00:59:17,151  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 00:59:17,151  root       run             DEBUG    Received 'ATZ'
+2026-08-12 00:59:17,151  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 00:59:17,151  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 00:59:17,151  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 00:59:17,652  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 00:59:17,652  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 00:59:17,652  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 00:59:18,252  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 00:59:18,252  root       terminate       DEBUG    Terminated.
+2026-08-12 01:08:01,821  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started on pseudo-tty port "/dev/pts/0"._______________
+2026-08-12 01:08:03,653  pint.util  _helper_single_adder WARNING  Redefining 'percent' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 01:08:03,654  pint.util  _helper_single_adder WARNING  Redefining '%' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 01:08:03,655  pint.util  _helper_single_adder WARNING  Redefining 'ppm' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 01:08:03,660  root       run             DEBUG    Received 'ATZ'
+2026-08-12 01:08:03,660  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 01:08:03,661  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 01:08:03,666  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 01:08:03,666  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 01:08:04,167  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 01:08:04,167  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 01:08:04,168  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 01:08:04,661  root       run             DEBUG    Received 'ATE0'
+2026-08-12 01:08:04,661  root       handle_request  DEBUG    Handling: 'ATE0', header '7E0', ECU '7E0'
+2026-08-12 01:08:04,661  root       handle_request  DEBUG    Description: AT ECHO, PID AT_ECHO (ATE0)
+2026-08-12 01:08:04,661  root       <module>        DEBUG    set ECHO ON/OFF : False
+2026-08-12 01:08:04,661  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:04,662  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:04,662  root       run             DEBUG    Received 'ATH1'
+2026-08-12 01:08:04,662  root       handle_request  DEBUG    Handling: 'ATH1', header '7E0', ECU '7E0'
+2026-08-12 01:08:04,662  root       handle_request  DEBUG    Description: AT HEADERS, PID AT_USE_HEADERS (ATH1)
+2026-08-12 01:08:04,662  root       <module>        DEBUG    set HEADERS ON/OFF : True
+2026-08-12 01:08:04,662  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:04,663  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:04,663  root       run             DEBUG    Received 'ATL0'
+2026-08-12 01:08:04,663  root       handle_request  DEBUG    Handling: 'ATL0', header '7E0', ECU '7E0'
+2026-08-12 01:08:04,663  root       handle_request  DEBUG    Description: AT LINEFEEDS, PID AT_LINEFEEDS (ATL0)
+2026-08-12 01:08:04,663  root       <module>        DEBUG    set LINEFEEDS ON/OFF : False
+2026-08-12 01:08:04,663  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:04,664  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:04,664  root       run             DEBUG    Received 'AT RV'
+2026-08-12 01:08:04,664  root       handle_request  DEBUG    Handling: 'ATRV', header '7E0', ECU '7E0'
+2026-08-12 01:08:04,664  root       handle_request  DEBUG    Description: AT read volt, PID AT_R_VOLT (ATRV)
+2026-08-12 01:08:04,664  root       <module>        DEBUG    Volt = 13.1
+2026-08-12 01:08:04,664  root       handle_response DEBUG    Processing: '<string>13.1</string><writeln>V</writeln>'
+2026-08-12 01:08:04,665  root       handle_response DEBUG    Write: '13.1V\r\r>'
+2026-08-12 01:08:04,665  root       run             DEBUG    Received 'ATSP0'
+2026-08-12 01:08:04,665  root       handle_request  DEBUG    Handling: 'ATSP0', header '7E0', ECU '7E0'
+2026-08-12 01:08:04,665  root       handle_request  DEBUG    Description: AT PROTO, PID AT_PROTO (ATSP0)
+2026-08-12 01:08:04,665  root       <module>        DEBUG    set PROTO 0
+2026-08-12 01:08:04,665  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:04,665  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:05,665  root       run             DEBUG    Received '0100'
+2026-08-12 01:08:05,666  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 01:08:05,666  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 01:08:05,666  root       handle_response DEBUG    Processing: '<string>SEARCHING...</string><exec>time.sleep(1.5)</exec><writeln></writeln><header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 01:08:05,666  root       handle_response DEBUG    Write: 'SEARCHING...'
+2026-08-12 01:08:07,167  root       handle_response DEBUG    Evaluated command: time.sleep(1.5) -> None
+2026-08-12 01:08:07,167  root       handle_response DEBUG    Write: '\r7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 01:08:07,168  root       run             DEBUG    Received 'ATDPN'
+2026-08-12 01:08:07,168  root       handle_request  DEBUG    Handling: 'ATDPN', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,168  root       handle_request  DEBUG    Description: AT Display Protocol Number, PID AT_DESCRIBE_PROTO_N (ATDPN)
+2026-08-12 01:08:07,669  root       handle_response DEBUG    Processing: '<writeln>A6</writeln>'
+2026-08-12 01:08:07,669  root       handle_response DEBUG    Write: 'A6\r\r>'
+2026-08-12 01:08:07,670  root       run             DEBUG    Received '0100'
+2026-08-12 01:08:07,670  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,670  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 01:08:07,670  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 01:08:07,670  root       handle_response DEBUG    Write: '7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 01:08:07,671  root       run             DEBUG    Received '0120'
+2026-08-12 01:08:07,671  root       handle_request  DEBUG    Handling: '0120', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,671  root       handle_request  DEBUG    Description: Supported PIDS_B [21-40], PID ELM_PIDS_B (0120)
+2026-08-12 01:08:07,671  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 20 A0 18 A0 11</data>'
+2026-08-12 01:08:07,672  root       handle_response DEBUG    Write: '7E8 06 41 20 A0 18 A0 11 \r\r>'
+2026-08-12 01:08:07,672  root       run             DEBUG    Received '0140'
+2026-08-12 01:08:07,672  root       handle_request  DEBUG    Handling: '0140', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,672  root       handle_request  DEBUG    Description: Supported PIDS_C [41-60], PID ELM_PIDS_C (0140)
+2026-08-12 01:08:07,672  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 40 44 DC 80 08</data>'
+2026-08-12 01:08:07,672  root       handle_response DEBUG    Write: '7E8 06 41 40 44 DC 80 08 \r\r>'
+2026-08-12 01:08:07,673  root       run             DEBUG    Received '0600'
+2026-08-12 01:08:07,673  root       handle_request  DEBUG    Handling: '0600', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,673  root       handle_request  DEBUG    Description: MIDS_A, PID ELM_MIDS_A (0600)
+2026-08-12 01:08:07,673  root       handle_response DEBUG    Processing: '<pos_answer>C0 00 00 01</pos_answer>'
+2026-08-12 01:08:07,673  root       handle_response DEBUG    Write: '7E8 05 46 C0 00 00 01 \r\r>'
+2026-08-12 01:08:07,674  root       run             DEBUG    Received '0900'
+2026-08-12 01:08:07,674  root       handle_request  DEBUG    Handling: '0900', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,675  root       handle_request  INFO     Unknown request: '0900', header=7E0
+2026-08-12 01:08:07,675  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,675  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,675  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:07,676  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,676  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:07,676  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 01:08:07,676  root       handle_response DEBUG    Write: '7E8 04 41 0C 09 B0 \r7EA 04 41 0C 09 B0 \r\r>'
+2026-08-12 01:08:07,677  root       run             DEBUG    Received '010D'
+2026-08-12 01:08:07,677  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,677  root       handle_request  DEBUG    Description: Vehicle Speed, PID SPEED (010D)
+2026-08-12 01:08:07,677  root       handle_response DEBUG    Processing: '<pos_answer>04</pos_answer> <header>7EA</header><size>03</size><data>41 0D 04</data>'
+2026-08-12 01:08:07,677  root       handle_response DEBUG    Write: '7E8 03 41 0D 04 \r7EA 03 41 0D 04 \r\r>'
+2026-08-12 01:08:07,678  root       run             DEBUG    Received '0105'
+2026-08-12 01:08:07,678  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,678  root       handle_request  DEBUG    Description: Engine Coolant Temperature, PID COOLANT_TEMP (0105)
+2026-08-12 01:08:07,678  root       handle_response DEBUG    Processing: '<pos_answer>7B</pos_answer>'
+2026-08-12 01:08:07,678  root       handle_response DEBUG    Write: '7E8 03 41 05 7B \r\r>'
+2026-08-12 01:08:07,678  root       run             DEBUG    Received '0104'
+2026-08-12 01:08:07,678  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,679  root       handle_request  DEBUG    Description: Calculated Engine Load, PID ENGINE_LOAD (0104)
+2026-08-12 01:08:07,679  root       handle_response DEBUG    Processing: '<pos_answer>00</pos_answer>'
+2026-08-12 01:08:07,679  root       handle_response DEBUG    Write: '7E8 03 41 04 00 \r\r>'
+2026-08-12 01:08:07,679  root       run             DEBUG    Received '0110'
+2026-08-12 01:08:07,679  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,679  root       handle_request  DEBUG    Description: Air Flow Rate (MAF), PID MAF (0110)
+2026-08-12 01:08:07,680  root       handle_response DEBUG    Processing: '<pos_answer>05 1F</pos_answer>'
+2026-08-12 01:08:07,680  root       handle_response DEBUG    Write: '7E8 04 41 10 05 1F \r\r>'
+2026-08-12 01:08:07,680  root       run             DEBUG    Received '0106'
+2026-08-12 01:08:07,680  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,681  root       handle_request  INFO     Unknown request: '0106', header=7E0
+2026-08-12 01:08:07,681  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,681  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,681  root       run             DEBUG    Received '0107'
+2026-08-12 01:08:07,681  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,681  root       handle_request  INFO     Unknown request: '0107', header=7E0
+2026-08-12 01:08:07,682  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,682  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,682  root       run             DEBUG    Received '0114'
+2026-08-12 01:08:07,682  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,682  root       handle_request  INFO     Unknown request: '0114', header=7E0
+2026-08-12 01:08:07,682  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,682  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,683  root       run             DEBUG    Received '010E'
+2026-08-12 01:08:07,683  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,683  root       handle_request  INFO     Unknown request: '010E', header=7E0
+2026-08-12 01:08:07,683  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,683  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,684  root       run             DEBUG    Received '010F'
+2026-08-12 01:08:07,684  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,684  root       handle_request  DEBUG    Description: Intake Air Temp, PID INTAKE_TEMP (010F)
+2026-08-12 01:08:07,684  root       handle_response DEBUG    Processing: '<pos_answer>44</pos_answer>'
+2026-08-12 01:08:07,684  root       handle_response DEBUG    Write: '7E8 03 41 0F 44 \r\r>'
+2026-08-12 01:08:07,685  root       run             DEBUG    Received '0111'
+2026-08-12 01:08:07,685  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,685  root       handle_request  DEBUG    Description: Throttle Position, PID THROTTLE_POS (0111)
+2026-08-12 01:08:07,685  root       handle_response DEBUG    Processing: '<pos_answer>FF</pos_answer>'
+2026-08-12 01:08:07,685  root       handle_response DEBUG    Write: '7E8 03 41 11 FF \r\r>'
+2026-08-12 01:08:07,685  root       run             DEBUG    Received '010B'
+2026-08-12 01:08:07,685  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,685  root       handle_request  DEBUG    Description: Intake Manifold Pressure, PID INTAKE_PRESSURE (010B)
+2026-08-12 01:08:07,686  root       handle_response DEBUG    Processing: '<pos_answer>73</pos_answer>'
+2026-08-12 01:08:07,686  root       handle_response DEBUG    Write: '7E8 03 41 0B 73 \r\r>'
+2026-08-12 01:08:07,686  root       run             DEBUG    Received '0142'
+2026-08-12 01:08:07,686  root       handle_request  DEBUG    Handling: '0142', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,686  root       handle_request  DEBUG    Description: Control module voltage, PID CONTROL_MODULE_VOLTAGE (0142)
+2026-08-12 01:08:07,686  root       handle_response DEBUG    Processing: '<pos_answer>39 D6</pos_answer>'
+2026-08-12 01:08:07,686  root       handle_response DEBUG    Write: '7E8 04 41 42 39 D6 \r\r>'
+2026-08-12 01:08:07,687  root       run             DEBUG    Received '012F'
+2026-08-12 01:08:07,687  root       handle_request  DEBUG    Handling: '012F', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,687  root       handle_request  INFO     Unknown request: '012F', header=7E0
+2026-08-12 01:08:07,687  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,687  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,688  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:07,688  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,688  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:07,688  root       handle_response DEBUG    Processing: '<pos_answer>0A 00</pos_answer> <header>7EA</header><size>04</size><data>41 0C 0A 00</data>'
+2026-08-12 01:08:07,688  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A 00 \r7EA 04 41 0C 0A 00 \r\r>'
+2026-08-12 01:08:07,989  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:07,989  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,989  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:07,989  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 1F 40</data>'
+2026-08-12 01:08:07,989  root       handle_response DEBUG    Write: '7E8 04 41 0C 1F 40 \r\r>'
+2026-08-12 01:08:07,990  root       run             DEBUG    Received '03'
+2026-08-12 01:08:07,990  root       handle_request  DEBUG    Handling: '03', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,991  root       handle_request  INFO     Unknown request: '03', header=7E0
+2026-08-12 01:08:07,991  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:07,991  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:07,991  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 01:08:07,992  root       run             DEBUG    Received 'ATZ'
+2026-08-12 01:08:07,992  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 01:08:07,992  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 01:08:07,992  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 01:08:08,492  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 01:08:08,493  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 01:08:08,493  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 01:08:09,093  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 01:08:09,093  root       terminate       DEBUG    Terminated.
+2026-08-12 01:08:09,093  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
+2026-08-12 01:08:09,100  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
+2026-08-12 01:08:09,100  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 01:08:10,595  root       accept_connection DEBUG    Connected by ('127.0.0.1', 58590)
+2026-08-12 01:08:10,596  root       run             DEBUG    Received 'ATZ'
+2026-08-12 01:08:10,596  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 01:08:10,596  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 01:08:10,596  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 01:08:10,596  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 01:08:11,097  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 01:08:11,097  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 01:08:11,097  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 01:08:11,396  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:11,396  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:11,396  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:11,396  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 01:08:11,396  root       handle_response DEBUG    Write: '41 0C 09 B0 \r41 0C 09 B0 \r\r>'
+2026-08-12 01:08:12,196  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 01:08:12,196  root       read_from_device DEBUG    TCP/IP communication terminated by the client.
+2026-08-12 01:08:12,196  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
+2026-08-12 01:08:12,197  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 01:08:13,297  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 01:08:13,297  root       terminate       DEBUG    Terminated.
+2026-08-12 01:08:29,750  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started on pseudo-tty port "/dev/pts/0"._______________
+2026-08-12 01:08:31,550  pint.util  _helper_single_adder WARNING  Redefining 'percent' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 01:08:31,550  pint.util  _helper_single_adder WARNING  Redefining '%' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 01:08:31,551  pint.util  _helper_single_adder WARNING  Redefining 'ppm' (<class 'pint.delegates.txt_defparser.plain.UnitDefinition'>)
+2026-08-12 01:08:31,557  root       run             DEBUG    Received 'ATZ'
+2026-08-12 01:08:31,557  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 01:08:31,557  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 01:08:31,562  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 01:08:31,562  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 01:08:32,062  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 01:08:32,063  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 01:08:32,063  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 01:08:32,557  root       run             DEBUG    Received 'ATE0'
+2026-08-12 01:08:32,558  root       handle_request  DEBUG    Handling: 'ATE0', header '7E0', ECU '7E0'
+2026-08-12 01:08:32,558  root       handle_request  DEBUG    Description: AT ECHO, PID AT_ECHO (ATE0)
+2026-08-12 01:08:32,558  root       <module>        DEBUG    set ECHO ON/OFF : False
+2026-08-12 01:08:32,559  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:32,559  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:32,559  root       run             DEBUG    Received 'ATH1'
+2026-08-12 01:08:32,559  root       handle_request  DEBUG    Handling: 'ATH1', header '7E0', ECU '7E0'
+2026-08-12 01:08:32,560  root       handle_request  DEBUG    Description: AT HEADERS, PID AT_USE_HEADERS (ATH1)
+2026-08-12 01:08:32,560  root       <module>        DEBUG    set HEADERS ON/OFF : True
+2026-08-12 01:08:32,560  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:32,560  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:32,561  root       run             DEBUG    Received 'ATL0'
+2026-08-12 01:08:32,561  root       handle_request  DEBUG    Handling: 'ATL0', header '7E0', ECU '7E0'
+2026-08-12 01:08:32,561  root       handle_request  DEBUG    Description: AT LINEFEEDS, PID AT_LINEFEEDS (ATL0)
+2026-08-12 01:08:32,561  root       <module>        DEBUG    set LINEFEEDS ON/OFF : False
+2026-08-12 01:08:32,561  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:32,561  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:32,562  root       run             DEBUG    Received 'AT RV'
+2026-08-12 01:08:32,562  root       handle_request  DEBUG    Handling: 'ATRV', header '7E0', ECU '7E0'
+2026-08-12 01:08:32,562  root       handle_request  DEBUG    Description: AT read volt, PID AT_R_VOLT (ATRV)
+2026-08-12 01:08:32,562  root       <module>        DEBUG    Volt = 13.1
+2026-08-12 01:08:32,562  root       handle_response DEBUG    Processing: '<string>13.1</string><writeln>V</writeln>'
+2026-08-12 01:08:32,562  root       handle_response DEBUG    Write: '13.1V\r\r>'
+2026-08-12 01:08:32,563  root       run             DEBUG    Received 'ATSP0'
+2026-08-12 01:08:32,563  root       handle_request  DEBUG    Handling: 'ATSP0', header '7E0', ECU '7E0'
+2026-08-12 01:08:32,563  root       handle_request  DEBUG    Description: AT PROTO, PID AT_PROTO (ATSP0)
+2026-08-12 01:08:32,563  root       <module>        DEBUG    set PROTO 0
+2026-08-12 01:08:32,563  root       handle_response DEBUG    Processing: '<writeln>OK</writeln>'
+2026-08-12 01:08:32,563  root       handle_response DEBUG    Write: 'OK\r\r>'
+2026-08-12 01:08:33,563  root       run             DEBUG    Received '0100'
+2026-08-12 01:08:33,563  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 01:08:33,564  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 01:08:33,564  root       handle_response DEBUG    Processing: '<string>SEARCHING...</string><exec>time.sleep(1.5)</exec><writeln></writeln><header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 01:08:33,564  root       handle_response DEBUG    Write: 'SEARCHING...'
+2026-08-12 01:08:35,064  root       handle_response DEBUG    Evaluated command: time.sleep(1.5) -> None
+2026-08-12 01:08:35,065  root       handle_response DEBUG    Write: '\r7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 01:08:35,065  root       run             DEBUG    Received 'ATDPN'
+2026-08-12 01:08:35,065  root       handle_request  DEBUG    Handling: 'ATDPN', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,065  root       handle_request  DEBUG    Description: AT Display Protocol Number, PID AT_DESCRIBE_PROTO_N (ATDPN)
+2026-08-12 01:08:35,566  root       handle_response DEBUG    Processing: '<writeln>A6</writeln>'
+2026-08-12 01:08:35,566  root       handle_response DEBUG    Write: 'A6\r\r>'
+2026-08-12 01:08:35,567  root       run             DEBUG    Received '0100'
+2026-08-12 01:08:35,567  root       handle_request  DEBUG    Handling: '0100', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,567  root       handle_request  DEBUG    Description: Supported PIDS_A [01-20], PID ELM_PIDS_A (0100)
+2026-08-12 01:08:35,567  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 00 38 3B 80 13</data>'
+2026-08-12 01:08:35,567  root       handle_response DEBUG    Write: '7E8 06 41 00 38 3B 80 13 \r\r>'
+2026-08-12 01:08:35,568  root       run             DEBUG    Received '0120'
+2026-08-12 01:08:35,568  root       handle_request  DEBUG    Handling: '0120', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,568  root       handle_request  DEBUG    Description: Supported PIDS_B [21-40], PID ELM_PIDS_B (0120)
+2026-08-12 01:08:35,568  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 20 A0 18 A0 11</data>'
+2026-08-12 01:08:35,568  root       handle_response DEBUG    Write: '7E8 06 41 20 A0 18 A0 11 \r\r>'
+2026-08-12 01:08:35,569  root       run             DEBUG    Received '0140'
+2026-08-12 01:08:35,569  root       handle_request  DEBUG    Handling: '0140', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,569  root       handle_request  DEBUG    Description: Supported PIDS_C [41-60], PID ELM_PIDS_C (0140)
+2026-08-12 01:08:35,569  root       handle_response DEBUG    Processing: '<header>7E8</header><size>06</size><data>41 40 44 DC 80 08</data>'
+2026-08-12 01:08:35,569  root       handle_response DEBUG    Write: '7E8 06 41 40 44 DC 80 08 \r\r>'
+2026-08-12 01:08:35,570  root       run             DEBUG    Received '0600'
+2026-08-12 01:08:35,570  root       handle_request  DEBUG    Handling: '0600', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,570  root       handle_request  DEBUG    Description: MIDS_A, PID ELM_MIDS_A (0600)
+2026-08-12 01:08:35,570  root       handle_response DEBUG    Processing: '<pos_answer>C0 00 00 01</pos_answer>'
+2026-08-12 01:08:35,570  root       handle_response DEBUG    Write: '7E8 05 46 C0 00 00 01 \r\r>'
+2026-08-12 01:08:35,570  root       run             DEBUG    Received '0900'
+2026-08-12 01:08:35,570  root       handle_request  DEBUG    Handling: '0900', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,571  root       handle_request  INFO     Unknown request: '0900', header=7E0
+2026-08-12 01:08:35,572  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,572  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,572  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:35,572  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,572  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:35,572  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 01:08:35,573  root       handle_response DEBUG    Write: '7E8 04 41 0C 09 B0 \r7EA 04 41 0C 09 B0 \r\r>'
+2026-08-12 01:08:35,573  root       run             DEBUG    Received '010D'
+2026-08-12 01:08:35,573  root       handle_request  DEBUG    Handling: '010D', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,573  root       handle_request  DEBUG    Description: Vehicle Speed, PID SPEED (010D)
+2026-08-12 01:08:35,573  root       handle_response DEBUG    Processing: '<pos_answer>04</pos_answer> <header>7EA</header><size>03</size><data>41 0D 04</data>'
+2026-08-12 01:08:35,573  root       handle_response DEBUG    Write: '7E8 03 41 0D 04 \r7EA 03 41 0D 04 \r\r>'
+2026-08-12 01:08:35,574  root       run             DEBUG    Received '0105'
+2026-08-12 01:08:35,574  root       handle_request  DEBUG    Handling: '0105', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,574  root       handle_request  DEBUG    Description: Engine Coolant Temperature, PID COOLANT_TEMP (0105)
+2026-08-12 01:08:35,574  root       handle_response DEBUG    Processing: '<pos_answer>7B</pos_answer>'
+2026-08-12 01:08:35,574  root       handle_response DEBUG    Write: '7E8 03 41 05 7B \r\r>'
+2026-08-12 01:08:35,575  root       run             DEBUG    Received '0104'
+2026-08-12 01:08:35,575  root       handle_request  DEBUG    Handling: '0104', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,575  root       handle_request  DEBUG    Description: Calculated Engine Load, PID ENGINE_LOAD (0104)
+2026-08-12 01:08:35,575  root       handle_response DEBUG    Processing: '<pos_answer>00</pos_answer>'
+2026-08-12 01:08:35,575  root       handle_response DEBUG    Write: '7E8 03 41 04 00 \r\r>'
+2026-08-12 01:08:35,575  root       run             DEBUG    Received '0110'
+2026-08-12 01:08:35,576  root       handle_request  DEBUG    Handling: '0110', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,576  root       handle_request  DEBUG    Description: Air Flow Rate (MAF), PID MAF (0110)
+2026-08-12 01:08:35,576  root       handle_response DEBUG    Processing: '<pos_answer>05 1F</pos_answer>'
+2026-08-12 01:08:35,576  root       handle_response DEBUG    Write: '7E8 04 41 10 05 1F \r\r>'
+2026-08-12 01:08:35,576  root       run             DEBUG    Received '0106'
+2026-08-12 01:08:35,576  root       handle_request  DEBUG    Handling: '0106', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,577  root       handle_request  INFO     Unknown request: '0106', header=7E0
+2026-08-12 01:08:35,577  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,577  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,577  root       run             DEBUG    Received '0107'
+2026-08-12 01:08:35,577  root       handle_request  DEBUG    Handling: '0107', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,577  root       handle_request  INFO     Unknown request: '0107', header=7E0
+2026-08-12 01:08:35,578  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,578  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,578  root       run             DEBUG    Received '0114'
+2026-08-12 01:08:35,578  root       handle_request  DEBUG    Handling: '0114', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,578  root       handle_request  INFO     Unknown request: '0114', header=7E0
+2026-08-12 01:08:35,578  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,578  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,579  root       run             DEBUG    Received '010E'
+2026-08-12 01:08:35,579  root       handle_request  DEBUG    Handling: '010E', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,579  root       handle_request  INFO     Unknown request: '010E', header=7E0
+2026-08-12 01:08:35,579  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,579  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,580  root       run             DEBUG    Received '010F'
+2026-08-12 01:08:35,580  root       handle_request  DEBUG    Handling: '010F', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,580  root       handle_request  DEBUG    Description: Intake Air Temp, PID INTAKE_TEMP (010F)
+2026-08-12 01:08:35,580  root       handle_response DEBUG    Processing: '<pos_answer>44</pos_answer>'
+2026-08-12 01:08:35,580  root       handle_response DEBUG    Write: '7E8 03 41 0F 44 \r\r>'
+2026-08-12 01:08:35,580  root       run             DEBUG    Received '0111'
+2026-08-12 01:08:35,580  root       handle_request  DEBUG    Handling: '0111', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,580  root       handle_request  DEBUG    Description: Throttle Position, PID THROTTLE_POS (0111)
+2026-08-12 01:08:35,580  root       handle_response DEBUG    Processing: '<pos_answer>FF</pos_answer>'
+2026-08-12 01:08:35,581  root       handle_response DEBUG    Write: '7E8 03 41 11 FF \r\r>'
+2026-08-12 01:08:35,581  root       run             DEBUG    Received '010B'
+2026-08-12 01:08:35,581  root       handle_request  DEBUG    Handling: '010B', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,581  root       handle_request  DEBUG    Description: Intake Manifold Pressure, PID INTAKE_PRESSURE (010B)
+2026-08-12 01:08:35,581  root       handle_response DEBUG    Processing: '<pos_answer>73</pos_answer>'
+2026-08-12 01:08:35,581  root       handle_response DEBUG    Write: '7E8 03 41 0B 73 \r\r>'
+2026-08-12 01:08:35,582  root       run             DEBUG    Received '0142'
+2026-08-12 01:08:35,582  root       handle_request  DEBUG    Handling: '0142', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,582  root       handle_request  DEBUG    Description: Control module voltage, PID CONTROL_MODULE_VOLTAGE (0142)
+2026-08-12 01:08:35,582  root       handle_response DEBUG    Processing: '<pos_answer>39 D6</pos_answer>'
+2026-08-12 01:08:35,582  root       handle_response DEBUG    Write: '7E8 04 41 42 39 D6 \r\r>'
+2026-08-12 01:08:35,582  root       run             DEBUG    Received '012F'
+2026-08-12 01:08:35,582  root       handle_request  DEBUG    Handling: '012F', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,583  root       handle_request  INFO     Unknown request: '012F', header=7E0
+2026-08-12 01:08:35,583  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,583  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,583  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:35,583  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,583  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:35,583  root       handle_response DEBUG    Processing: '<pos_answer>0A 00</pos_answer> <header>7EA</header><size>04</size><data>41 0C 0A 00</data>'
+2026-08-12 01:08:35,584  root       handle_response DEBUG    Write: '7E8 04 41 0C 0A 00 \r7EA 04 41 0C 0A 00 \r\r>'
+2026-08-12 01:08:35,884  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:35,884  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,885  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:35,885  root       handle_response DEBUG    Processing: '<header>7E8</header><size>04</size><data>41 0C 1F 40</data>'
+2026-08-12 01:08:35,885  root       handle_response DEBUG    Write: '7E8 04 41 0C 1F 40 \r\r>'
+2026-08-12 01:08:35,886  root       run             DEBUG    Received '03'
+2026-08-12 01:08:35,886  root       handle_request  DEBUG    Handling: '03', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,886  root       handle_request  INFO     Unknown request: '03', header=7E0
+2026-08-12 01:08:35,886  root       handle_response DEBUG    Processing: '<writeln>NO DATA</writeln>'
+2026-08-12 01:08:35,886  root       handle_response DEBUG    Write: 'NO DATA\r\r>'
+2026-08-12 01:08:35,887  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 01:08:35,887  root       run             DEBUG    Received 'ATZ'
+2026-08-12 01:08:35,887  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 01:08:35,887  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 01:08:35,887  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 01:08:36,388  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 01:08:36,388  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 01:08:36,388  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 01:08:36,988  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 01:08:36,988  root       terminate       DEBUG    Terminated.
+2026-08-12 01:08:36,988  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
+2026-08-12 01:08:36,994  root       run             DEBUG    ELM327 OBD-II adapter emulator v3.0.5 started at TCP/IP network port 35000._______________
+2026-08-12 01:08:36,994  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 01:08:38,490  root       accept_connection DEBUG    Connected by ('127.0.0.1', 48290)
+2026-08-12 01:08:38,491  root       run             DEBUG    Received 'ATZ'
+2026-08-12 01:08:38,491  root       handle_request  DEBUG    Handling: 'ATZ', header '7E0', ECU '7E0'
+2026-08-12 01:08:38,491  root       handle_request  DEBUG    Instantiating ECU task "Default ECU Task module" for ECU "7E0"
+2026-08-12 01:08:38,491  root       handle_request  DEBUG    Description: AT RESET, PID AT_RESET (ATZ)
+2026-08-12 01:08:38,491  root       reset           DEBUG    Resetting counters and sleeping for 0.5 seconds
+2026-08-12 01:08:38,992  root       <module>        DEBUG    Reset and sleep 0.5 seconds
+2026-08-12 01:08:38,992  root       handle_response DEBUG    Processing: '<writeln>\r\rELM327 v1.5</writeln>'
+2026-08-12 01:08:38,992  root       handle_response DEBUG    Write: '\r\rELM327 v1.5\r\r>'
+2026-08-12 01:08:39,290  root       run             DEBUG    Received '010C'
+2026-08-12 01:08:39,291  root       handle_request  DEBUG    Handling: '010C', header '7E0', ECU '7E0'
+2026-08-12 01:08:39,291  root       handle_request  DEBUG    Description: Engine RPM, PID RPM (010C)
+2026-08-12 01:08:39,291  root       handle_response DEBUG    Processing: '<pos_answer>09 B0</pos_answer> <header>7EA</header><size>04</size><data>41 0C 09 B0</data>'
+2026-08-12 01:08:39,291  root       handle_response DEBUG    Write: '41 0C 09 B0 \r41 0C 09 B0 \r\r>'
+2026-08-12 01:08:40,091  root       terminate       DEBUG    Start termination procedure.
+2026-08-12 01:08:40,091  root       read_from_device DEBUG    TCP/IP communication terminated by the client.
+2026-08-12 01:08:40,091  root       reset           DEBUG    Resetting counters and sleeping for 0 seconds
+2026-08-12 01:08:40,091  root       accept_connection DEBUG    Waiting for connection at TCP/IP network port 35000.
+2026-08-12 01:08:41,191  root       set_defaults    DEBUG    Stopping ECU task "Default ECU Task module", ECU="7E0", method=stop()
+2026-08-12 01:08:41,192  root       terminate       DEBUG    Terminated.
