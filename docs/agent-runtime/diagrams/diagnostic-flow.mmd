@@ -1,0 +1,10 @@
+flowchart LR
+    OBJ[Objetivo de diagnóstico] --> OBS[Observar telemetría]
+    OBS --> DET[Detectar anomalías<br/>NIVEL 2 ML]
+    DET --> INV[Investigar:<br/>memoria + documentación]
+    INV --> HYP[Generar hipótesis<br/>NIVEL 3 LLM]
+    HYP --> EVD[Obtener evidencia adicional<br/>NIVEL 1 herramientas]
+    EVD --> VER[Verificar<br/>NIVEL 1 determinista]
+    VER --> COR{¿Corregir?}
+    COR -->|sí| INV
+    COR -->|no| CON[Concluir:<br/>PROBABLE / INCONCLUSIVE / …]

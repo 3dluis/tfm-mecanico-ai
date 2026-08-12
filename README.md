@@ -14,12 +14,13 @@ mediante OBD-II. Trabajo Fin de Máster (UAX) — Luis Daniel Díaz, 2026.
 | [`shared/`](shared/) | Contratos compartidos + modelo de datos v2 (Pydantic → JSON Schema → diccionario autogenerado) | ✅ v2 |
 | [`obd-lab/`](obd-lab/) | Laboratorio OBD-II: generador 3 categorías, emulación en vivo, suites | ✅ funcional |
 | [`ai-models/`](ai-models/) | Baselines evaluados (LOF elegido), export ONNX+manifest, tracking | ✅ funcional |
-| [`diagnostic-agent/`](diagnostic-agent/) | Pipeline edge validado en vivo + agente LangGraph v1 + esquema de datos v2 | ✅ funcional (v1) |
+| [`diagnostic-agent/`](diagnostic-agent/) | **Edge Agent Runtime** (multiagente, ADR-0015) + pipeline validado + datos v2 | ✅ runtime v1 (slice) |
 | [`cloud-platform/`](cloud-platform/) | Nube complementaria: auth, registro, sync, model registry (simple) | scaffolding |
 | [`mobile-app/`](mobile-app/) | App Flutter offline-first (edge directo + cloud complementaria) | pospuesta (OS1) |
 
 Arquitectura completa: [`docs/09_arquitectura_monorepo.md`](docs/09_arquitectura_monorepo.md) ·
 **Arquitectura de datos: [`docs/data-architecture/`](docs/data-architecture/README.md)** ·
+**Agent Runtime: [`docs/agent-runtime/`](docs/agent-runtime/README.md)** ·
 Diagrama: [`docs/diagrams/arquitectura.mermaid`](docs/diagrams/arquitectura.mermaid) ·
 Decisiones: [`docs/adr/`](docs/adr/README.md)
 

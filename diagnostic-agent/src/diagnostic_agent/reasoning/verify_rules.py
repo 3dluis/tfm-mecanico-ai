@@ -31,13 +31,13 @@ _RULES: dict[str, list[Check]] = {
         ),
         (
             "map_elevado_baja_velocidad",
-            lambda f: f.get("INTAKE_PRESSURE_mean", 0) > 40 and f.get("SPEED_mean", 99) < 30,
+            lambda f: f.get("INTAKE_PRESSURE_mean", 0) > 30 and f.get("SPEED_mean", 99) < 30,
             "MAP medio={INTAKE_PRESSURE_mean:.0f} kPa con velocidad media {SPEED_mean:.0f} km/h",
             0.5,
         ),
         (
             "ralenti_inestable",
-            lambda f: f.get("RPM_std", 0) > 40 and f.get("SPEED_mean", 99) < 10,
+            lambda f: f.get("RPM_std", 0) > 35 and f.get("SPEED_mean", 99) < 10,
             "RPM_std={RPM_std:.0f} en ralentí (inestabilidad)",
             0.4,
         ),

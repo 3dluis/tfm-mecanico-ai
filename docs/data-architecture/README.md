@@ -42,6 +42,12 @@ Diagramas: [ER](diagrams/er-model.mmd) · [flujo de telemetría](diagrams/teleme
 *Un dato INFERRED jamás se presenta como observación real*: cada entidad declara su clase
 en el diccionario, y API/UI deben etiquetarla.
 
+## Relación con el Agent Runtime
+
+El [Edge Agent Runtime](../agent-runtime/README.md) (F5) CONSUME este modelo sin cambios de
+esquema: DiagnosticState es working memory efímera; su traza y toda la observabilidad del
+runtime se persisten en las entidades ya definidas (AgentRun/AgentStep/RetrievalEvent).
+
 ## Decisiones (ADRs)
 
 [ADR-0012](../adr/0012-arquitectura-de-datos.md) (modelo de datos, trazabilidad, provenance) ·

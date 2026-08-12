@@ -1,4 +1,9 @@
-# diagnostic-agent
+# diagnostic-agent — Mecánico IA Edge Agent Runtime
+
+> Desde F5 este dominio implementa el **Edge Agent Runtime multiagente**
+> ([docs/agent-runtime/](../docs/agent-runtime/README.md), ADR-0015): Supervisor LangGraph +
+> agentes lógicos con Tool Registry, loop engineering y feature flags A0–A6. El nombre
+> físico del directorio se conserva deliberadamente.
 
 Núcleo inteligente EDGE (objetivo: Raspberry Pi 5, 8 GB).
 

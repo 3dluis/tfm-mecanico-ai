@@ -1,0 +1,22 @@
+flowchart TB
+    RT["MECÁNICO IA EDGE RUNTIME<br/>(Raspberry Pi · local-first)"] --> SUP["Supervisor / Orchestrator<br/>LangGraph · DiagnosticState<br/>límites y stop conditions"]
+    SUP --> TA["Telemetry Agent<br/>(determinista)"]
+    SUP --> AA["Anomaly Agent<br/>(ML/estadística)"]
+    SUP --> DA["Diagnostic Agent<br/>(LLM)"]
+    SUP --> KA["Knowledge Agent"]
+    SUP --> RA["Recall Agent"]
+    SUP --> VA["Verification Agent<br/>(determinista)"]
+    SUP --> CA["Critic Agent<br/>(criterios estructurados)"]
+    SUP --> MA["Memory Agent"]
+    SUP --> RPA["Report Agent"]
+    TA --> TOOLS["OBD Tools · query_telemetry<br/>request_measurement"]
+    AA --> ML["LOF ONNX · reglas<br/>ModelManifest"]
+    KA --> RAG["RAG local<br/>KnowledgeChunk + RetrievalEvent"]
+    RA --> EM[("Memoria episódica<br/>× peso epistemológico")]
+    RA --> EV[("Memoria evolutiva<br/>LearnedPattern")]
+    VA --> CHK["Checks deterministas<br/>evidencia ±"]
+    MA --> EM
+    MA --> EV
+    LLM["LLM local compartido<br/>(ModelRouter)"] -.-> DA
+    LLM -.-> CA
+    LLM -.-> RPA

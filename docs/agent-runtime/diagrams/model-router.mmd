@@ -1,0 +1,6 @@
+flowchart TB
+    MR{{ModelRouter<br/>registrado en AgentRun.config}}
+    MR -->|triage / simple| P1["política determinista<br/>(futuro: SLM 1B)"]
+    MR -->|hipótesis · crítica · informe| P2["LLM local único<br/>(elegido con llm-smoke)"]
+    MR -->|RAG · memoria| P3["léxico v1<br/>(futuro: embeddings)"]
+    MR -->|anomalías| P4["LOF ONNX<br/>(ModelManifest)"]

@@ -15,4 +15,8 @@
 | [0011](0011-protocolo-baselines-deteccion.md) | Protocolo y resultados de baselines | 3 | Aceptada |
 | [0012](0012-arquitectura-de-datos.md) | Arquitectura de datos: clases, trazabilidad, provenance | 4 | Aceptada |
 | [0013](0013-memoria-tres-niveles.md) | Memoria en 3 niveles, pesos epistemológicos | 4 | Aceptada |
-| [0014](0014-agente-v1.md) | Agente v1 LangGraph, responsabilidades estrictas | 4 | Aceptada |
+| [0014](0014-agente-v1.md) | Agente v1 LangGraph, responsabilidades estrictas | 4 | Aceptada (= arquitectura A2) |
+| [0015](0015-edge-agent-runtime-multiagente.md) | Edge Agent Runtime multiagente, agentes lógicos, local-first | 5 | Aceptada |
+| [0016](0016-tool-registry-y-seguridad.md) | Tool Registry y read-only sobre vehículo | 5 | Aceptada |
+| [0017](0017-loop-y-context-engineering.md) | Loop engineering con límites + context engineering | 5 | Aceptada |
+| [0018](0018-diseno-experimental-arquitecturas.md) | Diseño experimental A0–A6 con feature flags | 5 | Aceptada |

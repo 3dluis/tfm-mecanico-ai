@@ -1,0 +1,71 @@
+# 8. Roadmap técnico del prototipo
+
+> **Actualización F5:** T5–T7 evolucionan al **Edge Agent Runtime multiagente**
+> ([docs/agent-runtime/](agent-runtime/README.md), ADR-0015…0018). Prioridades MUST/SHOULD/
+> COULD y plan incremental: [informe F5](fase5/informe_impacto_runtime.md). T8 adopta el
+> diseño experimental A0–A6 (agent-runtime/12). El resto (T0–T4, T9) permanece vigente.
+
+Secuencia de construcción con dependencias, criterios de "hecho" y orden pensado para que **siempre exista un sistema demostrable de extremo a extremo**, que se enriquece en cada paso (enfoque de esqueleto andante).
+
+## 8.1 Estructura de repositorio propuesta
+
+```
+mecanico-ia/
+├── docs/                      # esta planificación + ADRs + protocolo experimental
+│   └── adr/                   # Architecture Decision Records (D1, D2, ...)
+├── docker/
+│   ├── compose.yml            # perfiles: dev (x86 limitado) / arm64 / experiments
+│   └── edge.Dockerfile
+├── src/mecanico_ia/
+│   ├── vehicle_sim/           # C1: generador de escenarios + integración emulador ELM327
+│   ├── acquisition/           # C2: cliente OBD + TransportLayer (serial|tcp|bt)
+│   ├── storage/               # C3: modelos SQLAlchemy, repositorios, migraciones
+│   ├── anomaly/               # C4: features de ventana, detectores, evaluación
+│   ├── rag/                   # C5a: ingesta, chunking, índice, retriever
+│   ├── memory/                # C5b: memoria de casos episódica
+│   ├── agent/                 # C6: grafo LangGraph, nodos, herramientas, esquemas
+│   ├── api/                   # C7: FastAPI, routers, UI estática mínima
+│   └── config.py              # configuración tipada (pydantic-settings)
+├── experiments/               # scripts reproducibles por hipótesis (h1_*, h2_*, ...)
+├── data/                      # (gitignored) telemetría; corpus/ con manifiesto de licencias
+├── tests/
+└── pyproject.toml             # deps fijadas; ruff + mypy + pytest
+```
+
+## 8.2 Etapas técnicas
+
+**T0 — Andamiaje (Fase 1).** Repo, pyproject, calidad (ruff/mypy/pytest/pre-commit), CI, compose con perfiles. *Hecho cuando:* CI verde en commit inicial; `docker compose --profile dev up` arranca.
+
+**T1 — Vehículo emulado (Fase 1–2).** Evaluación del emulador ELM327 (¿expone los PIDs del subconjunto? ¿acepta valores dinámicos inyectados?). Generador de escenarios: modelo simple de dinámica de señales (perfiles de conducción por fases: ralentí/urbano/carretera, con ruido realista y correlaciones básicas entre PIDs) + capa de inyección de fallos que perturba señales según los modelos de fallo de IN-8. *Decisión R3 al final de la semana 1.* *Hecho cuando:* un script reproduce por semilla una sesión normal y una con fallo, visibles vía cliente OBD.
+
+**T2 — Adquisición + persistencia (Fase 2).** `TransportLayer` (serial pty / tcp), sondeo asíncrono configurable, validación de rangos, escritura por lotes a SQLite. *Hecho cuando:* sesión de 30 min emulada persistida con < 1 % de pérdidas y esquema documentado.
+
+**T3 — Detección (Fase 2).** Extracción de features por ventana deslizante (estadísticos por PID + derivadas + correlaciones seleccionadas); baseline z-score robusto; Isolation Forest; autoencoder (si sobrevive al recorte 4) exportado a ONNX. Entrenamiento solo con sesiones normales; evaluación sobre escenarios held-out. *Hecho cuando:* tabla comparativa F1/AUC/latencia/RAM generada por script.
+
+**T4 — RAG (Fase 2).** Ingesta del corpus con manifiesto de licencias, chunking, embeddings, ChromaDB persistente, retriever con filtrado por metadatos (tipo de documento, sistema del vehículo). Set de consultas de evaluación. *Hecho cuando:* hit-rate/MRR medidos y fragmentos inspeccionados.
+
+**T5 — Agente (Fase 3).** Esquemas Pydantic de estado y salida; nodos `triage → recall → retrieve → hypothesize → verify → report → memorize`; herramientas tipadas; trazas persistidas en SQLite; validación estructural con reintento acotado; configuración dual de LLM (Ollama local / API cloud) tras una misma interfaz. *Hecho cuando:* sobre el escenario "fuga de vacío", el agente produce diagnóstico estructurado citando la evidencia (PIDs y fragmentos RAG usados).
+
+**T6 — Memoria de casos (Fase 3).** Esquema de caso (firma de anomalía + embedding + diagnóstico + desenlace); escritura al cerrar diagnóstico; recuperación por similitud en `recall`; política simple de consolidación (contador de refuerzo). *Hecho cuando:* la segunda ejecución de un escenario repetido recupera el caso de la primera y la traza lo muestra.
+
+**T7 — API + UI (Fase 3).** Routers de telemetría/anomalías/diagnósticos/casos; SSE o polling para estado en vivo; página web mínima (estado del vehículo, alertas, diagnóstico legible con evidencia desplegable). *Hecho cuando:* demo de extremo a extremo navegable en el navegador.
+
+**T8 — Banco experimental (Fase 4).** Scripts `experiments/h{1..4}_*.py` que ejecutan cada hipótesis de principio a fin con semillas y vuelcan CSV + figuras. Perfilado de recursos (memoria pico, latencia por etapa) en el perfil RPi. *Hecho cuando:* `make experiments` regenera todos los resultados de la memoria.
+
+**T9 — Endurecimiento y reproducibilidad (Fase 5).** README de reproducción, imagen arm64 verificada, limpieza, demo grabada. *Hecho cuando:* una persona ajena puede levantar el sistema y reproducir un experimento siguiendo solo el README.
+
+## 8.3 Dependencias entre etapas
+
+```
+T0 ─▶ T1 ─▶ T2 ─▶ T3 ─────────────┐
+        │                          ├─▶ T5 ─▶ T6 ─▶ T7 ─▶ T8 ─▶ T9
+        └─────────▶ T4 ────────────┘
+```
+T4 (RAG) es paralelizable con T2–T3. T5 no arranca sin T3 y T4 mínimos, pero puede empezar con un detector provisional (baseline z-score) si T3 se retrasa — otra ventaja del esqueleto andante.
+
+## 8.4 Prácticas transversales
+
+- **ADRs:** cada decisión arquitectónica relevante (D1–D6 y las que surjan) se registra en `docs/adr/` con contexto, opciones y justificación; se vuelcan luego a la memoria.
+- **Reproducibilidad:** toda aleatoriedad con semilla; versiones fijadas; datos regenerables por script.
+- **Protocolo experimental publicado a priori** (E3) antes de ejecutar los experimentos de la Fase 4, para blindar RI1/RI4.
+- **Trazabilidad requisito→código→experimento→sección de la memoria:** tabla mantenida en `docs/` desde la Fase 2.
