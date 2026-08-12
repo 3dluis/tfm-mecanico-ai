@@ -76,7 +76,10 @@ Anomalía emitida por un detector matemático sobre una ventana.
 |---|---|---|---|---|
 | `schema_version` | integer | opc. | — | — |
 | `anomaly_id` | string | ✔ | — | — |
-| `window_id` | string | ✔ | — | — |
+| `window_id` | string \| null | opc. | Ventana origen; obligatoria si anomaly_scope=WINDOW (F3), opcional en F6 | — |
+| `event_id` | string \| null | opc. | VehicleEvent origen si anomaly_scope=EVENT (F6, ADR-0021) | — |
+| `baseline_id` | string \| null | opc. | EventBaseline contra la que se evaluó (anomalías contextuales) | — |
+| `anomaly_scope` | AnomalyScope | opc. | Ámbito: point\|window\|event\|session\|cross_event (default = F3) | — |
 | `session_id` | string \| null | opc. | Sesión de origen (trazabilidad) | — |
 | `inference_id` | string \| null | opc. | ModelInference que la produjo (trazabilidad, ADR-0012) | — |
 | `vehicle_id` | string | ✔ | — | — |
@@ -450,6 +453,7 @@ Memoria EPISÓDICA: experiencia diagnóstica recuperable por similitud.
 | `symptom_signature` | dict | ✔ | Firma numérica (features clave) | — |
 | `temporal_signature` | string \| null | opc. | Descripción compacta de la dinámica (p. ej. 'deriva 5 min') | — |
 | `related_dtcs` | list[string] | opc. | — | — |
+| `related_event_ids` | list[string] | opc. | VehicleEvents en los que se manifestó el problema (F6, ADR-0021) | — |
 | `anomaly_detector` | string \| null | opc. | — | — |
 | `diagnosis` | string | ✔ | — | — |
 | `outcome` | string \| null | opc. | — | — |
@@ -476,6 +480,7 @@ Memoria SEMÁNTICA/EVOLUTIVA: patrón consolidado emergente de múltiples casos.
 | `telemetry_signature` | dict | ✔ | Rango/centroide de features que caracteriza el patrón | — |
 | `temporal_signature` | string \| null | opc. | — | — |
 | `affected_metrics` | list[string] | ✔ | PIDs/features implicados | — |
+| `event_types` | list[string] | opc. | Tipos de evento donde el patrón se manifiesta (taxonomía F6, ADR-0021) | — |
 | `related_dtc` | list[string] | opc. | — | — |
 | `suspected_failure_modes` | list[string] | opc. | — | — |
 | `supporting_cases` | list[string] | opc. | case_memory_ids | — |
@@ -646,10 +651,87 @@ Fragmento indexable de un documento (unidad de recuperación y de cita).
 | `metadata` | dict | opc. | — | — |
 | `embedding_ref` | string \| null | opc. | — | — |
 
+### VehicleEvent
+
+Evento vehicular segmentado (unidad formal de análisis; jerárquico).
+
+**Clasificación:** INFERRED (event_class marca observed/inferred/estimated) · **Produce:** event detector (edge) / obd-lab (ground truth) · **Consume:** event features, baselines, agente, análisis · **Vive en:** edge → cloud (metadatos; la telemetría se referencia, no se duplica)
+**Papel en la investigación:** Unidad formal de análisis contextual (F6): segmenta sin perder el RAW
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `event_id` | string | ✔ | — | — |
+| `vehicle_id` | string | ✔ | — | — |
+| `session_id` | string | ✔ | — | — |
+| `event_type` | string | ✔ | Tipo de la taxonomía v1 (EVENT_TAXONOMY) | — |
+| `event_subtype` | string \| null | opc. | — | — |
+| `event_class` | EventClass | ✔ | observed \| inferred \| estimated | — |
+| `taxonomy_version` | integer | opc. | — | — |
+| `parent_event_id` | string \| null | opc. | Jerarquía (TRIP→evento→micro) | — |
+| `start_time` | string | ✔ | — | — |
+| `end_time` | string \| null | opc. | None = evento puntual/abierto | — |
+| `duration_ms` | integer \| null | opc. | — | — |
+| `seq_start` | integer \| null | opc. | Ref. a TelemetryPoint.seq inicial | — |
+| `seq_end` | integer \| null | opc. | — | — |
+| `confidence` | number | opc. | — | minimum=0.0; maximum=1.0 |
+| `detection_method` | string | ✔ | 'rule:v1' \| 'state_machine:v1' \| 'hmm:…' | — |
+| `detector_version` | string | ✔ | — | — |
+| `source_sensors` | list[string] | opc. | obd\|imu\|gps | — |
+| `evidence` | list[string] | opc. | Afirmaciones verificables que sustentan el evento | — |
+| `metadata` | dict | opc. | — | — |
+| `created_at` | string | ✔ | — | — |
+
+### EventFeatureVector
+
+Features DERIVED de un evento completo (comparable dentro de su contexto).
+
+**Clasificación:** DERIVED · **Produce:** event features (edge) · **Consume:** baselines, detección contextual, comparación de eventos · **Vive en:** edge → cloud
+**Papel en la investigación:** Hace comparables eventos equivalentes (misma context_signature)
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `efv_id` | string | ✔ | — | — |
+| `event_id` | string | ✔ | — | — |
+| `session_id` | string | ✔ | — | — |
+| `vehicle_id` | string | ✔ | — | — |
+| `event_type` | string | ✔ | — | — |
+| `context_signature` | string | ✔ | Firma canónica de comparabilidad, p. ej. 'ACCELERATION\|40-80\|warm\|d4-8s' | — |
+| `feature_schema_version` | string | ✔ | — | — |
+| `preprocessing_version` | string | ✔ | — | — |
+| `detector_version` | string | ✔ | — | — |
+| `values` | dict | ✔ | — | — |
+
+### EventBaseline
+
+Normalidad acumulada de UN vehículo para UN contexto de evento (INFERRED).
+
+**Clasificación:** INFERRED (normalidad acumulada) · **Produce:** baseline builder (edge) · **Consume:** detección contextual, agente · **Vive en:** edge (por vehículo) → cloud (respaldo)
+**Papel en la investigación:** 'Lo normal PARA ESTE vehículo en ESTE contexto' (H6/PI.5)
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `baseline_id` | string | ✔ | — | — |
+| `vehicle_id` | string | ✔ | — | — |
+| `event_type` | string | ✔ | — | — |
+| `context_signature` | string | ✔ | — | — |
+| `sample_count` | integer | ✔ | — | minimum=0 |
+| `feature_distribution` | dict | ✔ | feature → {mean, std, p05, p50, p95} | — |
+| `centroid` | dict | opc. | — | — |
+| `feature_schema_version` | string | ✔ | — | — |
+| `first_seen` | string | ✔ | — | — |
+| `last_updated` | string | ✔ | — | — |
+| `version` | integer | opc. | — | minimum=1 |
+| `confidence` | number | opc. | — | minimum=0.0; maximum=1.0 |
+
 ## Enumeraciones
 
 - **SessionSource**: `real_vehicle`, `obd_simulator`, `dataset_replay`, `synthetic_generator`, `bench_test`
 - **DataClass**: `raw`, `normalized`, `derived`, `inferred`
+- **EventClass**: `observed`, `inferred`, `estimated`
+- **AnomalyScope**: `point`, `window`, `event`, `session`, `cross_event`
 - **CaseStatus**: `open`, `closed`
 - **HypothesisStatus**: `proposed`, `supported`, `contradicted`, `confirmed`, `rejected`, `inconclusive`
 - **EvidenceKind**: `telemetry`, `dtc`, `document`, `case`, `pattern`, `feedback`, `maintenance`

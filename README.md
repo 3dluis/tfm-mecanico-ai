@@ -21,6 +21,7 @@ mediante OBD-II. Trabajo Fin de Máster (UAX) — Luis Daniel Díaz, 2026.
 Arquitectura completa: [`docs/09_arquitectura_monorepo.md`](docs/09_arquitectura_monorepo.md) ·
 **Arquitectura de datos: [`docs/data-architecture/`](docs/data-architecture/README.md)** ·
 **Agent Runtime: [`docs/agent-runtime/`](docs/agent-runtime/README.md)** ·
+**Event Intelligence: [`docs/event-intelligence/`](docs/event-intelligence/README.md)** ·
 Diagrama: [`docs/diagrams/arquitectura.mermaid`](docs/diagrams/arquitectura.mermaid) ·
 Decisiones: [`docs/adr/`](docs/adr/README.md)
 

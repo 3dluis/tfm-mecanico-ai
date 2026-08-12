@@ -25,6 +25,19 @@ class DataClass(StrEnum):
     INFERRED = "inferred"  # producido por modelos o por el agente
 
 
+class AnomalyScope(StrEnum):
+    """Ámbito de una anomalía detectada (F6, ADR-0021).
+
+    ``WINDOW`` es el comportamiento F3 y el valor por defecto (retrocompatible).
+    """
+
+    POINT = "point"
+    WINDOW = "window"
+    EVENT = "event"
+    SESSION = "session"
+    CROSS_EVENT = "cross_event"
+
+
 class CaseStatus(StrEnum):
     OPEN = "open"
     CLOSED = "closed"

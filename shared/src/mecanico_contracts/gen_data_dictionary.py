@@ -201,6 +201,27 @@ ENTITY_META: dict[str, dict[str, str]] = {
         "vive": "outbox edge",
         "papel": "Push idempotente priorizado edge→cloud",
     },
+    "VehicleEvent": {
+        "clase": "INFERRED (event_class marca observed/inferred/estimated)",
+        "produce": "event detector (edge) / obd-lab (ground truth)",
+        "consume": "event features, baselines, agente, análisis",
+        "vive": "edge → cloud (metadatos; la telemetría se referencia, no se duplica)",
+        "papel": "Unidad formal de análisis contextual (F6): segmenta sin perder el RAW",
+    },
+    "EventFeatureVector": {
+        "clase": "DERIVED",
+        "produce": "event features (edge)",
+        "consume": "baselines, detección contextual, comparación de eventos",
+        "vive": "edge → cloud",
+        "papel": "Hace comparables eventos equivalentes (misma context_signature)",
+    },
+    "EventBaseline": {
+        "clase": "INFERRED (normalidad acumulada)",
+        "produce": "baseline builder (edge)",
+        "consume": "detección contextual, agente",
+        "vive": "edge (por vehículo) → cloud (respaldo)",
+        "papel": "'Lo normal PARA ESTE vehículo en ESTE contexto' (H6/PI.5)",
+    },
 }
 
 
@@ -280,6 +301,8 @@ def main() -> int:
     for enum_cls in (
         mc.SessionSource,
         mc.DataClass,
+        mc.EventClass,
+        mc.AnomalyScope,
         mc.CaseStatus,
         mc.HypothesisStatus,
         mc.EvidenceKind,

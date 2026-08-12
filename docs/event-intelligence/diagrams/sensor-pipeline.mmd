@@ -1,0 +1,10 @@
+flowchart LR
+    OBD["OBD-II 1-5 Hz<br/>(hoy)"] --> SF
+    IMU["IMU 50-100 Hz<br/>(SHOULD, simulable)"] --> SF
+    GPS["GPS 1 Hz<br/>(COULD, opcional)"] --> SF
+    SF["Sensor Fusion<br/>t_mono + UTC · agregación IMU<br/>huecos marcados, raw intacto"] --> ED["Event Detection<br/>reglas + state machine + señal<br/>(SIN LLM)"]
+    ED --> SEG["Event Segmentation<br/>histéresis · duración mín · fusión"]
+    SEG --> EF["Event Features<br/>(versionadas ×3)"]
+    EF --> CAD["Contextual Anomaly Detection<br/>vs EventBaseline"]
+    CAD --> RT["Agent Runtime"]
+    RT --> MEM["Memoria episódica/evolutiva"]

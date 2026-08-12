@@ -105,7 +105,7 @@ def run_pipeline(
         "windows_scored": len(scoring_ms),
         "anomalies": len(anomalies),
         "anomalies_stored": store.count(AnomalyRow),
-        "anomaly_ticks": [a.window_id.split(":")[1] for a in anomalies],
+        "anomaly_ticks": [a.window_id.split(":")[1] for a in anomalies if a.window_id],
         "mean_scoring_ms": round(sum(scoring_ms) / len(scoring_ms), 2) if scoring_ms else None,
         "model": f"{manifest.name}-{manifest.version}",
     }

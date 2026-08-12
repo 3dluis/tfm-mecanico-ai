@@ -74,6 +74,14 @@
       "title": "Related Dtcs",
       "type": "array"
     },
+    "related_event_ids": {
+      "description": "VehicleEvents en los que se manifestó el problema (F6, ADR-0021)",
+      "items": {
+        "type": "string"
+      },
+      "title": "Related Event Ids",
+      "type": "array"
+    },
     "anomaly_detector": {
       "anyOf": [
         {

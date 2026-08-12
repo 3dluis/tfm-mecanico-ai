@@ -13,7 +13,7 @@ from datetime import datetime
 from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-SCHEMA_DB_VERSION = 2
+SCHEMA_DB_VERSION = 3  # v3: tablas de eventos F6 + columnas event en anomalías/memoria
 
 
 class Base(DeclarativeBase):
@@ -129,7 +129,10 @@ class AnomalyRow(Base, _Row):
     inference_id: Mapped[str | None] = mapped_column(
         ForeignKey("model_inferences.inference_id"), nullable=True, index=True
     )
-    window_id: Mapped[str] = mapped_column(String, index=True)
+    window_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    event_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    baseline_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    anomaly_scope: Mapped[str] = mapped_column(String, default="window", index=True)
     session_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
     vehicle_id: Mapped[str] = mapped_column(String, index=True)
     detected_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -140,6 +143,74 @@ class AnomalyRow(Base, _Row):
     threshold: Mapped[float] = mapped_column(Float)
     involved_pids: Mapped[list[object]] = mapped_column(JSON, default=list)
     features: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+
+
+# --------------------------------------------------------- eventos (F6, ADR-0019/0021)
+
+
+class EventRow(Base, _Row):
+    """INFERRED: evento vehicular segmentado. Referencia telemetría (seq), no la duplica."""
+
+    __tablename__ = "vehicle_events"
+
+    event_id: Mapped[str] = mapped_column(String, primary_key=True)
+    vehicle_id: Mapped[str] = mapped_column(String, index=True)
+    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"), index=True)
+    event_type: Mapped[str] = mapped_column(String, index=True)
+    event_subtype: Mapped[str | None] = mapped_column(String, nullable=True)
+    event_class: Mapped[str] = mapped_column(String)  # observed|inferred|estimated
+    taxonomy_version: Mapped[int] = mapped_column(Integer, default=1)
+    parent_event_id: Mapped[str | None] = mapped_column(
+        ForeignKey("vehicle_events.event_id"), nullable=True, index=True
+    )
+    start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    end_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    seq_start: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    seq_end: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    confidence: Mapped[float] = mapped_column(Float, default=1.0)
+    detection_method: Mapped[str] = mapped_column(String)
+    detector_version: Mapped[str] = mapped_column(String)
+    source_sensors: Mapped[list[object]] = mapped_column(JSON, default=list)
+    evidence: Mapped[list[object]] = mapped_column(JSON, default=list)
+    meta: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)  # 'metadata' contrato
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class EventFeatureRow(Base, _Row):
+    """DERIVED: features de evento completo (comparables por context_signature)."""
+
+    __tablename__ = "event_feature_vectors"
+
+    efv_id: Mapped[str] = mapped_column(String, primary_key=True)
+    event_id: Mapped[str] = mapped_column(ForeignKey("vehicle_events.event_id"), index=True)
+    session_id: Mapped[str] = mapped_column(String, index=True)
+    vehicle_id: Mapped[str] = mapped_column(String, index=True)
+    event_type: Mapped[str] = mapped_column(String, index=True)
+    context_signature: Mapped[str] = mapped_column(String, index=True)
+    feature_schema_version: Mapped[str] = mapped_column(String)
+    preprocessing_version: Mapped[str] = mapped_column(String)
+    detector_version: Mapped[str] = mapped_column(String)
+    values: Mapped[dict[str, object]] = mapped_column(JSON)
+
+
+class EventBaselineRow(Base, _Row):
+    """INFERRED: normalidad acumulada por (vehículo, tipo de evento, contexto)."""
+
+    __tablename__ = "event_baselines"
+
+    baseline_id: Mapped[str] = mapped_column(String, primary_key=True)
+    vehicle_id: Mapped[str] = mapped_column(String, index=True)
+    event_type: Mapped[str] = mapped_column(String, index=True)
+    context_signature: Mapped[str] = mapped_column(String, index=True)
+    sample_count: Mapped[int] = mapped_column(Integer, default=0)
+    feature_distribution: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    centroid: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    feature_schema_version: Mapped[str] = mapped_column(String)
+    first_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    last_updated: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    version: Mapped[int] = mapped_column(Integer, default=1)
+    confidence: Mapped[float] = mapped_column(Float, default=0.0)
 
 
 # --------------------------------------------------------------- diagnóstico
@@ -227,6 +298,7 @@ class CaseMemoryRow(Base, _Row):
     symptom_signature: Mapped[dict[str, object]] = mapped_column(JSON)
     temporal_signature: Mapped[str | None] = mapped_column(String, nullable=True)
     related_dtcs: Mapped[list[object]] = mapped_column(JSON, default=list)
+    related_event_ids: Mapped[list[object]] = mapped_column(JSON, default=list)
     anomaly_detector: Mapped[str | None] = mapped_column(String, nullable=True)
     diagnosis: Mapped[str] = mapped_column(Text)
     outcome: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -247,6 +319,7 @@ class LearnedPatternRow(Base, _Row):
     telemetry_signature: Mapped[dict[str, object]] = mapped_column(JSON)
     temporal_signature: Mapped[str | None] = mapped_column(String, nullable=True)
     affected_metrics: Mapped[list[object]] = mapped_column(JSON, default=list)
+    event_types: Mapped[list[object]] = mapped_column(JSON, default=list)
     related_dtc: Mapped[list[object]] = mapped_column(JSON, default=list)
     suspected_failure_modes: Mapped[list[object]] = mapped_column(JSON, default=list)
     supporting_cases: Mapped[list[object]] = mapped_column(JSON, default=list)

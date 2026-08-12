@@ -9,8 +9,9 @@ Convenciones:
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from mecanico_contracts.data_enums import AnomalyScope
 from mecanico_contracts.enums import (
     AgentNode,
     DetectorKind,
@@ -78,7 +79,20 @@ class DetectedAnomaly(ContractBase):
     """Anomalía emitida por un detector matemático sobre una ventana."""
 
     anomaly_id: str
-    window_id: str
+    window_id: str | None = Field(
+        default=None,
+        description="Ventana origen; obligatoria si anomaly_scope=WINDOW (F3), opcional en F6",
+    )
+    event_id: str | None = Field(
+        default=None, description="VehicleEvent origen si anomaly_scope=EVENT (F6, ADR-0021)"
+    )
+    baseline_id: str | None = Field(
+        default=None, description="EventBaseline contra la que se evaluó (anomalías contextuales)"
+    )
+    anomaly_scope: AnomalyScope = Field(
+        default=AnomalyScope.WINDOW,
+        description="Ámbito: point|window|event|session|cross_event (default = F3)",
+    )
     session_id: str | None = Field(default=None, description="Sesión de origen (trazabilidad)")
     inference_id: str | None = Field(
         default=None, description="ModelInference que la produjo (trazabilidad, ADR-0012)"
@@ -94,6 +108,17 @@ class DetectedAnomaly(ContractBase):
     features: dict[str, float] = Field(
         default_factory=dict, description="Valores de features en la ventana anómala"
     )
+
+    @model_validator(mode="after")
+    def _scope_requires_anchor(self) -> "DetectedAnomaly":
+        """El ámbito exige su referencia: WINDOW→window_id, EVENT→event_id (ADR-0021)."""
+        if self.anomaly_scope is AnomalyScope.WINDOW and self.window_id is None:
+            msg = "anomaly_scope=window requiere window_id (compatibilidad F3)"
+            raise ValueError(msg)
+        if self.anomaly_scope is AnomalyScope.EVENT and self.event_id is None:
+            msg = "anomaly_scope=event requiere event_id"
+            raise ValueError(msg)
+        return self
 
 
 # ---------------------------------------------------------------------------

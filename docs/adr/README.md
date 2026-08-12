@@ -20,3 +20,6 @@
 | [0016](0016-tool-registry-y-seguridad.md) | Tool Registry y read-only sobre vehículo | 5 | Aceptada |
 | [0017](0017-loop-y-context-engineering.md) | Loop engineering con límites + context engineering | 5 | Aceptada |
 | [0018](0018-diseno-experimental-arquitecturas.md) | Diseño experimental A0–A6 con feature flags | 5 | Aceptada |
+| [0019](0019-event-intelligence-layer.md) | Capa Vehicle Event Intelligence | 6 | Aceptada |
+| [0020](0020-incorporacion-imu.md) | Incorporación de IMU (ICM-20948 ref.; simulada primero) | 6 | Aceptada (SHOULD) |
+| [0021](0021-deteccion-anomalias-contextual.md) | Anomalías contextuales y EventBaseline | 6 | Aceptada |

@@ -78,6 +78,14 @@
       "title": "Affected Metrics",
       "type": "array"
     },
+    "event_types": {
+      "description": "Tipos de evento donde el patrón se manifiesta (taxonomía F6, ADR-0021)",
+      "items": {
+        "type": "string"
+      },
+      "title": "Event Types",
+      "type": "array"
+    },
     "related_dtc": {
       "items": {
         "type": "string"

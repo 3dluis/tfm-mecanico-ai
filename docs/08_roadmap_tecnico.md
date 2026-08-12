@@ -5,6 +5,13 @@
 > COULD y plan incremental: [informe F5](fase5/informe_impacto_runtime.md). T8 adopta el
 > diseño experimental A0–A6 (agent-runtime/12). El resto (T0–T4, T9) permanece vigente.
 
+> **Actualización F6:** se añade la capa **Event Intelligence**
+> ([docs/event-intelligence/](event-intelligence/README.md), ADR-0019…0021): eventos
+> vehiculares como unidad formal de análisis, baselines por contexto y anomalías
+> contextuales (`anomaly_scope=EVENT`) que COEXISTEN con el pipeline de ventanas de F3.
+> El experimento ventana-vs-evento entra en T8 como dimensión `anomaly_mode`
+> (event-intelligence/11). Detalle: [informe F6](fase6/informe_event_intelligence.md).
+
 Secuencia de construcción con dependencias, criterios de "hecho" y orden pensado para que **siempre exista un sistema demostrable de extremo a extremo**, que se enriquece en cada paso (enfoque de esqueleto andante).
 
 ## 8.1 Estructura de repositorio propuesta

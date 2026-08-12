@@ -437,7 +437,7 @@ class DiagnosticAgentV1:
             subject_kind="diagnostic_case",
             subject_id=case.case_id,
             vehicle_id=case.vehicle_id,
-            window_ids=[anomaly.window_id],
+            window_ids=[anomaly.window_id] if anomaly.window_id else [],
             anomaly_ids=[anomaly.anomaly_id],
             model_refs=[f"{anomaly.model_name}@{anomaly.model_version}"]
             if anomaly.model_name

@@ -1,0 +1,6 @@
+flowchart TB
+    EV[VehicleEvents] --> CM[("CaseMemory<br/>+ related_event_ids<br/>recuperación por comportamiento")]
+    EV --> BL[("EventBaseline<br/>normalidad por vehículo/contexto")]
+    CM --> LP[("LearnedPattern<br/>+ event_types<br/>anormalidad recurrente")]
+    BL -.->|desviaciones repetidas| LP
+    LP -.->|"PRECEDES / FOLLOWS / CO_OCCURS<br/>(EventSequence, COULD)"| LP

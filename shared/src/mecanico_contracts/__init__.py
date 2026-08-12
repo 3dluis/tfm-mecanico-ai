@@ -6,6 +6,7 @@ Regla: los proyectos dependen de este paquete y NUNCA entre sí.
 """
 
 from mecanico_contracts.data_enums import (
+    AnomalyScope,
     CaseStatus,
     DataClass,
     EpistemicLevel,
@@ -47,6 +48,15 @@ from mecanico_contracts.enums import (
     SyncEntity,
     TransportKind,
 )
+from mecanico_contracts.events_model import (
+    ALL_EVENT_TYPES,
+    EVENT_TAXONOMY,
+    TAXONOMY_VERSION,
+    EventBaseline,
+    EventClass,
+    EventFeatureVector,
+    VehicleEvent,
+)
 from mecanico_contracts.models import (
     SCHEMA_VERSION,
     AgentEvent,
@@ -70,11 +80,15 @@ OBDObservation = OBDReading
 __version__ = "0.2.0"
 
 __all__ = [
+    "ALL_EVENT_TYPES",
+    "EVENT_TAXONOMY",
     "SCHEMA_VERSION",
+    "TAXONOMY_VERSION",
     "AgentEvent",
     "AgentNode",
     "AgentRun",
     "AgentStep",
+    "AnomalyScope",
     "CaseMemory",
     "CaseRecord",
     "CaseStatus",
@@ -88,6 +102,9 @@ __all__ = [
     "DiagnosticHypothesis",
     "DiagnosticResult",
     "EpistemicLevel",
+    "EventBaseline",
+    "EventClass",
+    "EventFeatureVector",
     "EvidenceKind",
     "EvidenceRole",
     "FeatureVector",
@@ -120,5 +137,6 @@ __all__ = [
     "TelemetrySession",
     "TelemetryWindow",
     "TransportKind",
+    "VehicleEvent",
     "VehicleTelemetry",
 ]

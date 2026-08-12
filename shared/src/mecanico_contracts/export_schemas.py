@@ -44,6 +44,9 @@ EXPORTABLE: list[type[BaseModel]] = [
     mc.RetrievalEvent,
     mc.KnowledgeDocument,
     mc.KnowledgeChunk,
+    mc.VehicleEvent,
+    mc.EventFeatureVector,
+    mc.EventBaseline,
 ]
 
 

@@ -30,10 +30,12 @@ _UNITS: dict[str, str] = {
 _SIM_EPOCH = datetime(2026, 1, 1, tzinfo=UTC)
 
 
-def iter_ticks(spec: ScenarioSpec) -> Iterator[dict[str, float]]:
-    """Genera tick a tick los valores de PIDs aplicando el fallo en su ventana.
+def iter_ticks_labeled(spec: ScenarioSpec) -> Iterator[tuple[dict[str, float], str]]:
+    """Como :func:`iter_ticks`, pero acompaña cada tick con la fase interna del motor.
 
-    Iterador para poder alimentar tanto la generación offline como el emulador en vivo.
+    La etiqueta de fase (``idle``/``accel``/``cruise``/``vary``/``decel``) es estado
+    PRIVADO del generador: alimenta el ground truth de eventos (F6, ADR-0019) y NUNCA
+    debe llegar al detector en inferencia.
     """
     engine = SignalEngine(
         profile=spec.driving_profile,
@@ -57,7 +59,16 @@ def iter_ticks(spec: ScenarioSpec) -> Iterator[dict[str, float]]:
             runtime.elapsed_s = t - start
             values = fault.apply(values, t, params, runtime)
         # Cuantización J1979: misma resolución que el camino vivo (ver encoding.quantize).
-        yield quantize_tick(values)
+        yield quantize_tick(values), engine.state.phase
+
+
+def iter_ticks(spec: ScenarioSpec) -> Iterator[dict[str, float]]:
+    """Genera tick a tick los valores de PIDs aplicando el fallo en su ventana.
+
+    Iterador para poder alimentar tanto la generación offline como el emulador en vivo.
+    """
+    for values, _phase in iter_ticks_labeled(spec):
+        yield values
 
 
 def generate_ticks(spec: ScenarioSpec) -> list[dict[str, float]]:

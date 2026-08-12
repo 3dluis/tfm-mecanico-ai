@@ -1,5 +1,20 @@
 # CHANGELOG — mecanico_contracts
 
+## v0.3.0 · SCHEMA_VERSION 2 (2026-08-12) — Event Intelligence (F6)
+
+Cambios ADITIVOS (retro-compatibles dentro de SCHEMA_VERSION 2, política de
+docs/data-architecture/07):
+
+- Nuevo módulo `events_model.py` (ADR-0019/0021): `VehicleEvent`, `EventFeatureVector`,
+  `EventBaseline`, `EventClass` (observed/inferred/estimated), `EVENT_TAXONOMY` v1
+  (`TAXONOMY_VERSION = 1`).
+- Nuevo enum `AnomalyScope` (point/window/event/session/cross_event) en `data_enums`.
+- `DetectedAnomaly`: `window_id` pasa a opcional (sigue siendo OBLIGATORIO cuando
+  `anomaly_scope=window`, validado por modelo → el pipeline F3 no cambia); nuevos campos
+  opcionales `event_id`, `baseline_id` y `anomaly_scope` (default `window`).
+- `CaseMemory`: nuevo campo `related_event_ids` (default `[]`).
+- `LearnedPattern`: nuevo campo `event_types` (default `[]`).
+
 ## v0.2.0 · SCHEMA_VERSION 2 (2026-08-12)
 
 Cambio MAYOR (permitido: aún no existen datos persistidos en producción; a partir de

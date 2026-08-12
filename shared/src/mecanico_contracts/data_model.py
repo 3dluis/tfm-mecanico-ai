@@ -205,6 +205,10 @@ class CaseMemory(ContractBase):
         default=None, description="Descripción compacta de la dinámica (p. ej. 'deriva 5 min')"
     )
     related_dtcs: list[str] = Field(default_factory=list)
+    related_event_ids: list[str] = Field(
+        default_factory=list,
+        description="VehicleEvents en los que se manifestó el problema (F6, ADR-0021)",
+    )
     anomaly_detector: str | None = None
     diagnosis: str
     outcome: str | None = None
@@ -232,6 +236,10 @@ class LearnedPattern(ContractBase):
     )
     temporal_signature: str | None = None
     affected_metrics: list[str] = Field(description="PIDs/features implicados")
+    event_types: list[str] = Field(
+        default_factory=list,
+        description="Tipos de evento donde el patrón se manifiesta (taxonomía F6, ADR-0021)",
+    )
     related_dtc: list[str] = Field(default_factory=list)
     suspected_failure_modes: list[str] = Field(default_factory=list)
     supporting_cases: list[str] = Field(default_factory=list, description="case_memory_ids")

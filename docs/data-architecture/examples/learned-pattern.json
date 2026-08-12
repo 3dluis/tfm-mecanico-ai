@@ -16,6 +16,7 @@
       "MAF",
       "ENGINE_LOAD"
     ],
+    "event_types": [],
     "related_dtc": [],
     "suspected_failure_modes": [
       "unknown_relational"

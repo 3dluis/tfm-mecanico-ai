@@ -1,5 +1,17 @@
 {
   "$defs": {
+    "AnomalyScope": {
+      "description": "Ámbito de una anomalía detectada (F6, ADR-0021).\n\n``WINDOW`` es el comportamiento F3 y el valor por defecto (retrocompatible).",
+      "enum": [
+        "point",
+        "window",
+        "event",
+        "session",
+        "cross_event"
+      ],
+      "title": "AnomalyScope",
+      "type": "string"
+    },
     "DetectorKind": {
       "description": "Familia del detector matemático de anomalías (separación ML/LLM).",
       "enum": [
@@ -26,8 +38,48 @@
       "type": "string"
     },
     "window_id": {
-      "title": "Window Id",
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Ventana origen; obligatoria si anomaly_scope=WINDOW (F3), opcional en F6",
+      "title": "Window Id"
+    },
+    "event_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "VehicleEvent origen si anomaly_scope=EVENT (F6, ADR-0021)",
+      "title": "Event Id"
+    },
+    "baseline_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "EventBaseline contra la que se evaluó (anomalías contextuales)",
+      "title": "Baseline Id"
+    },
+    "anomaly_scope": {
+      "$ref": "#/$defs/AnomalyScope",
+      "default": "window",
+      "description": "Ámbito: point|window|event|session|cross_event (default = F3)"
     },
     "session_id": {
       "anyOf": [
@@ -120,7 +172,6 @@
   },
   "required": [
     "anomaly_id",
-    "window_id",
     "vehicle_id",
     "detected_at",
     "detector",
