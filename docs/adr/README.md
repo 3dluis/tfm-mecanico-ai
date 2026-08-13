@@ -30,4 +30,5 @@
 | [0026](0026-alineacion-temporal-snapshots.md) | Alineación temporal `sync:v1` (1 Hz validado; 5 Hz candidato) | 11 | Aceptada |
 | [0027](0027-nulos-y-pids-no-soportados.md) | NULL ≠ 0: PIDs no soportados y calidad por señal | 11 | Aceptada |
 | [0028](0028-particionamiento-snapshots.md) | Particionamiento mensual de snapshots (candidato, no activado) | 11 | Aceptada |
-| [0029](0029-evaluacion-postgresql-pgvector-edge.md) | Evaluación PostgreSQL+pgvector en Edge → **HYBRID** (REJECT edge · ACCEPT cloud) | 11 | Evaluación ejecutada (pendiente de aprobación) |
+| [0029](0029-evaluacion-postgresql-pgvector-edge.md) | Evaluación PostgreSQL+pgvector en Edge → HYBRID (REJECT edge · ACCEPT cloud) | 11 | **Superada por [0030](0030-postgresql-pgvector-edge.md)** (se conserva con sus mediciones) |
+| [0030](0030-postgresql-pgvector-edge.md) | **PostgreSQL + pgvector = plataforma oficial de persistencia del Edge** (schemas lógicos, particionado, Alembic, SQLite→legacy) | 12 | Aceptada |

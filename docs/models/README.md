@@ -65,6 +65,11 @@ Diagramas: [ciclo ML](diagrams/ml-lifecycle.mmd) · [ciclo LLM](diagrams/llm-lif
   long→wide. El snapshot **no contiene features** (siguen en `FeatureVector`/
   `EventFeatureVector`) y `NULL` significa ausencia, no cero: imputar es decisión de la fase
   de features y debe declararse en la card del modelo.
+- **[PostgreSQL + pgvector](../data-architecture/13_postgresql_pgvector_edge.md) (F12):** las
+  inferencias viven en el schema `models`; los embeddings de conocimiento y memoria son
+  columnas `vector(384)` en la misma base (sin segunda base vectorial: regla ADR-0030). Los
+  modelos de embedding se siguen evaluando aparte (Recall@K/MRR/nDCG, [04](04_embedding_models.md)):
+  la latencia medida del motor NO es calidad de recuperación.
 - **[data-architecture](../data-architecture/README.md):** TrainingRun/ModelExperiment/
   ModelRegistryEntry/ModelEvaluation/ModelDeployment son contratos de
   `mecanico_contracts` (diccionario autogenerado); `ModelInference` (F4) enlaza cada

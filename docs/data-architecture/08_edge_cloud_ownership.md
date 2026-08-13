@@ -5,11 +5,16 @@
 Principio: **el edge es dueño de la operación; la nube, del histórico y la consolidación.**
 El sistema es 100 % funcional offline; la nube solo añade (ADR-0006).
 
+Desde F12 (ADR-0030) **ambos extremos usan PostgreSQL + pgvector**, como instancias
+**independientes**: mismo modelo lógico, responsabilidades distintas, sincronización por
+Outbox lógico — nunca replicación física.
+
 | Dato | Edge (RPi) | Cloud | Autoridad |
 |---|---|---|---|
 | Sesiones recientes + raw reciente | ✅ retención corta | opcional (config) | edge |
 | Telemetría normalizada | ✅ retención media | resúmenes | edge |
-| Snapshots alineados (wide) + enlaces N:M | ✅ retención media (SQLite, ADR-0029) | ✅ histórico consolidado (PostgreSQL, particionado mensual candidato ADR-0028) | edge crea, cloud consolida |
+| Snapshots alineados (wide) + enlaces N:M | ✅ retención media (PostgreSQL particionado por mes, ADR-0030) | ✅ histórico consolidado (mismo diseño) | edge crea, cloud consolida |
+| Embeddings (chunks · casos · patrones) | ✅ pgvector local (RAG y memoria offline) | ✅ corpus y memoria maestros | cloud maestro, edge cachea |
 | Ventanas/features | ✅ retención larga (metadatos) | con anomalías | edge |
 | Modelos ML activos (paquetes ONNX) | ✅ copia verificada | ✅ registry (maestro) | cloud |
 | Anomalías + inferencias | ✅ | ✅ (sync prioridad alta) | edge crea, ambos conservan |

@@ -6,8 +6,9 @@
 #   cloud    -> cloud-api + postgres                  (desarrollo de la nube)
 #   edge     -> agent-edge (límites RPi 5) + ollama   (validación de recursos, ADR-0002)
 #   full     -> todo                                  (integración extremo a extremo)
-#   edge-postgres -> PostgreSQL+pgvector LOCAL para el benchmark F11 (experimental;
-#                    NO sustituye a SQLite — docs/data-architecture/12)
+#   edge-db  -> PostgreSQL+pgvector: PLATAFORMA OFICIAL de persistencia del edge
+#               (ADR-0030). Incluido en dev/edge/full; `edge-postgres` se mantiene
+#               como alias del mismo servicio para no romper comandos previos.
 #
 # Uso:   docker compose --profile dev up --build      (o `make dev`)
 # ARM64: docker buildx build --platform linux/arm64 -f diagnostic-agent/Dockerfile .
@@ -42,6 +43,8 @@ services:
       MECANICO_OLLAMA_HOST: http://ollama:11434
       MECANICO_DEVICE_ID: ${MECANICO_DEVICE_ID:-dev-local}
       MECANICO_VEHICLE_ID: ${MECANICO_VEHICLE_ID:-veh-local}
+      # Persistencia oficial: PostgreSQL + pgvector (ADR-0030)
+      MECANICO_DB_URL: postgresql+psycopg://${MECANICO_PG_USER:-mecanico}:${MECANICO_PG_PASSWORD:-mecanico}@edge-postgres:5432/${MECANICO_PG_DB:-mecanico_edge}
     ports:
       - "8000:8000"
     volumes:
@@ -49,6 +52,8 @@ services:
       - models-artifacts:/app/models:ro
     depends_on:
       obd-emulator:
+        condition: service_healthy
+      edge-postgres:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import httpx;assert httpx.get('http://127.0.0.1:8000/health',timeout=2).status_code==200\""]
@@ -128,34 +133,45 @@ services:
       timeout: 3s
       retries: 10
 
-  # ----------------------------------- F11: evaluación PostgreSQL+pgvector en Edge
-  # (experimental; NO sustituye a SQLite — docs/data-architecture/12)
+  # ------------------------- PERSISTENCIA OFICIAL DEL EDGE (ADR-0030): PG + pgvector
+  # Imagen multi-arch (linux/amd64 y linux/arm64) — la compatibilidad ARM64 se valida
+  # de verdad en A2/A3 sobre hardware, no por el hecho de que la imagen exista.
   edge-postgres:
-    profiles: ["edge-postgres"]
+    profiles: [dev, edge, full, "edge-postgres"]
     image: pgvector/pgvector:pg16
     environment:
-      POSTGRES_USER: mecanico
-      POSTGRES_PASSWORD: mecanico
-      POSTGRES_DB: mecanico_edge_bench
+      POSTGRES_USER: ${MECANICO_PG_USER:-mecanico}
+      POSTGRES_PASSWORD: ${MECANICO_PG_PASSWORD:-mecanico}
+      POSTGRES_DB: ${MECANICO_PG_DB:-mecanico_edge}
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
     ports:
-      - "15432:5432"
+      - "${MECANICO_PG_PORT:-15432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${MECANICO_PG_USER:-mecanico} -d ${MECANICO_PG_DB:-mecanico_edge}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     deploy:
       resources:
         limits:
-          cpus: "4"
-          memory: 8G
+          cpus: "${MECANICO_PG_CPUS:-4}"
+          memory: ${MECANICO_PG_MEMORY:-2G}
     volumes:
       - edge-postgres-data:/var/lib/postgresql/data
-    # Benchmark desde el host (mismo código que SQLite):
-    #   python tools/edge_db_benchmark.py \
-    #     --pg-url postgresql+psycopg://mecanico:mecanico@localhost:15432/mecanico_edge_bench
+      - ./deploy/postgres/edge-postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    # Migraciones (mecanismo oficial):  make db-upgrade
+    # Benchmark de dimensionamiento:    make pg-bench
 
 
 volumes:
-  agent-data:        # SQLite + estado del edge
+  agent-data:        # artefactos locales del edge (y SQLite legacy mientras exista)
   ollama-models:     # pesos LLM descargados
   models-artifacts:  # paquetes model-<nombre>-<semver> (ADR-0009)
   lab-sessions:      # sesiones JSONL generadas por obd-lab
   pg-data:           # PostgreSQL
-  edge-postgres-data:  # F11: benchmark PostgreSQL+pgvector edge (experimental)
+  edge-postgres-data:  # PostgreSQL+pgvector del edge — PERSISTENCIA OFICIAL (ADR-0030)
 

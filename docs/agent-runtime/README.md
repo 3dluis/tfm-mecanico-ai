@@ -42,11 +42,13 @@ Relación con el resto de la documentación: la base de datos y contratos son lo
 [data-architecture](../data-architecture/README.md) (sin cambios de esquema: el runtime los
 CONSUME); la separación ML/LLM sigue siendo ADR-0009; la memoria sigue ADR-0013.
 
-**Persistencia (F11):** el runtime trabaja **contra interfaces**, jamás contra un motor
-concreto — `TelemetryRepository` / `MemoryRepository` / `KnowledgeRepository` /
-`AgentRunRepository` (`diagnostic_agent/storage/repositories.py`), con implementaciones
-SQLite (vigente) y PostgreSQL (experimental, mismo modelo lógico). El motor del edge sigue
-siendo **SQLite** tras la evaluación medida de
-[12](../data-architecture/12_edge_database_evaluation.md) (ADR-0029: HYBRID — SQLite en edge,
-PostgreSQL+pgvector en cloud). La entrada canónica horizontal para consultas multivariables es
-[VehicleTelemetrySnapshot](../data-architecture/11_vehicle_telemetry_snapshot.md).
+**Persistencia (F12, ADR-0030): PostgreSQL + pgvector es la plataforma oficial del edge**
+([13](../data-architecture/13_postgresql_pgvector_edge.md)). El runtime trabaja **contra
+interfaces**, jamás contra un motor: `TelemetryRepository` · `EventRepository` ·
+`DiagnosticRepository` · `MemoryRepository` · `KnowledgeRepository` · `AgentRunRepository` ·
+`ModelRepository` (`diagnostic_agent/storage/repositories.py`). LangGraph no toca el ORM ni el
+driver, y **el LLM NUNCA genera SQL**: la cadena es `Agent → Tool (tipada) → Repository → BD`.
+Memoria episódica, memoria evolutiva y RAG viven ahora en la MISMA base (búsqueda vectorial
+con filtrado relacional en una sola consulta). SQLite queda como camino
+`LEGACY / TEST COMPATIBILITY`. La entrada canónica horizontal para consultas multivariables
+sigue siendo [VehicleTelemetrySnapshot](../data-architecture/11_vehicle_telemetry_snapshot.md).

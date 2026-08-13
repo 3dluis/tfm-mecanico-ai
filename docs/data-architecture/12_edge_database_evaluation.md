@@ -1,7 +1,13 @@
 # 12 — Evaluación de persistencia Edge: SQLite vs PostgreSQL + pgvector (ADR-0029)
 
-**Estado: evaluación EJECUTADA con mediciones reales; recomendación al final —
-pendiente de aprobación del autor. SQLite NO ha sido reemplazado.** Fuente:
+> **DOCUMENTO HISTÓRICO (F11).** Su recomendación (HYBRID / KEEP SQLITE) fue **superada** por
+> la decisión de F12: **PostgreSQL + pgvector es la plataforma oficial del Edge**
+> ([13](13_postgresql_pgvector_edge.md), ADR-0030). No cambiaron las mediciones sino el
+> ALCANCE del edge (RAG + memoria episódica y evolutiva + runtime multiagente). Se conserva
+> íntegro porque sus números son la base de los costes que la nueva decisión asume
+> conscientemente.
+
+**Estado: evaluación EJECUTADA con mediciones reales (F11).** Fuente:
 `ai-models/experiments/edge_db_benchmark.json` (misma carga por el MISMO código —
 EdgeStoreV2 + repositorios — solo cambia el motor; sandbox x86 4CPU/8GB, proxy
 documentado del perfil RPi; el perfil `docker compose --profile edge-postgres up`

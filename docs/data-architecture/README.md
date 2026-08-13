@@ -6,8 +6,12 @@
 ## Principio rector: sin divergencia
 
 ```
-Documentación  ↔  Contratos Pydantic  ↔  JSON Schema  ↔  SQLite/PostgreSQL
+Documentación  ↔  Contratos Pydantic  ↔  JSON Schema  ↔  PostgreSQL + pgvector
 ```
+
+**Persistencia oficial (F12, ADR-0030): PostgreSQL + pgvector en el Edge y en el Cloud**, como
+instancias independientes sincronizadas por Outbox lógico. SQLite queda como camino
+`LEGACY / TEST COMPATIBILITY`.
 
 La **fuente de verdad son los contratos** (`shared/src/mecanico_contracts/`). De ellos se
 generan automáticamente: los JSON Schemas (`make schemas`), el
@@ -22,16 +26,17 @@ diverge, el build falla.
 |---|---|
 | [01 Modelo conceptual](01_modelo_conceptual.md) | Qué entidades existen, por qué, y cómo sirven a la pregunta de investigación |
 | [02 Diccionario de datos](02_diccionario_datos.md) | **(autogenerado)** Cada atributo: tipo, requerido, descripción, restricciones; clasificación RAW/NORMALIZED/DERIVED/INFERRED y productor/consumidor/residencia por entidad |
-| [03 Modelo relacional](03_modelo_relacional.md) | Tablas SQLite, migraciones, equivalencia PostgreSQL |
+| [03 Modelo relacional](03_modelo_relacional.md) | Tablas y schemas lógicos de PostgreSQL, particionado, migraciones Alembic, Edge vs Cloud |
 | [04 Telemetría](04_telemetria_series_temporales.md) | La cadena trazable sesión→raw→normalizado→ventana→features→inferencia→anomalía |
 | [05 Diagnósticos y evidencias](05_diagnosticos_evidencias.md) | Caso→hipótesis(estados)→evidencia; el diagnóstico nunca es solo texto |
 | [06 Memoria evolutiva](06_memoria_evolutiva.md) | Working/episódica/semántica; LearnedPattern; proceso de consolidación; experimento H3 |
 | [07 Provenance y versionado](07_provenance_versionado.md) | ProvenanceRecord; política de versionado de esquemas, modelos, prompts y grafo |
 | [08 Ownership Edge/Cloud](08_edge_cloud_ownership.md) | Matriz formal de qué vive dónde; funcionamiento offline |
-| [09 Retención y sincronización](09_retencion_sincronizacion.md) | Política de retención por clase de dato; outbox priorizado idempotente |
+| [09 Retención y sincronización](09_retencion_sincronizacion.md) | Política de retención por clase de dato; outbox priorizado idempotente; niveles CRITICAL/SUMMARY/OPTIONAL |
 | [10 Modelo vectorial y RAG](10_modelo_vectorial_rag.md) | KnowledgeDocument/Chunk/RetrievalEvent; grounding medible; plan de embeddings |
 | [11 VehicleTelemetrySnapshot](11_vehicle_telemetry_snapshot.md) | (F11, ADR-0025/26/27/28) Representación canónica **horizontal** alineada en el tiempo: propósito, política `sync:v1`, NULL≠0, eventos N:M, queries e índices, ejemplo real, rendimiento medido, retención y particionamiento |
-| [12 Evaluación de persistencia Edge](12_edge_database_evaluation.md) | (F11, ADR-0029) SQLite vs PostgreSQL+pgvector con **mediciones reales** → recomendación **HYBRID** (SQLite en edge · PostgreSQL+pgvector en cloud) |
+| [12 Evaluación de persistencia Edge](12_edge_database_evaluation.md) | (F11, ADR-0029 — **histórico, superado por ADR-0030**) SQLite vs PostgreSQL+pgvector con mediciones reales; sus números siguen siendo la base de los costes asumidos |
+| [13 PostgreSQL + pgvector en el Edge](13_postgresql_pgvector_edge.md) | **(F12, ADR-0030) Plataforma OFICIAL de persistencia**: schemas lógicos, particionado, claves, índices, ingesta por lotes y asíncrona, pgvector y RAG, tuning RPi, WAL, backup, observabilidad, consumo medido |
 | [Event Intelligence](../event-intelligence/README.md) | (F6, ADR-0019/0021) VehicleEvent/EventFeatureVector/EventBaseline como unidad formal de análisis; los eventos REFERENCIAN telemetría por `seq`, nunca la duplican ni la sustituyen |
 | [Modelos de IA](../models/README.md) | (F7, ADR-0022) TrainingRun/ModelExperiment/ModelEvaluation/ModelRegistryEntry/ModelDeployment: provenance completo Dataset→Experimento→Modelo→Manifest→Inferencia; entidades en el diccionario autogenerado |
 
@@ -60,4 +65,6 @@ runtime se persisten en las entidades ya definidas (AgentRun/AgentStep/Retrieval
 [ADR-0012](../adr/0012-arquitectura-de-datos.md) (modelo de datos, trazabilidad, provenance) ·
 [ADR-0013](../adr/0013-memoria-tres-niveles.md) (memoria en 3 niveles, pesos epistemológicos,
 consolidación no automática) · [ADR-0014](../adr/0014-agente-v1.md) (agente v1 y
-responsabilidades de nodos). Índice completo: [../adr/README.md](../adr/README.md).
+responsabilidades de nodos) · **[ADR-0030](../adr/0030-postgresql-pgvector-edge.md)
+(PostgreSQL + pgvector = plataforma oficial de persistencia del Edge; supera a ADR-0029)**.
+Índice completo: [../adr/README.md](../adr/README.md).

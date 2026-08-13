@@ -45,8 +45,11 @@ valiendo la regla de que los eventos REFERENCIAN telemetría por `seq`, nunca la
 LOF primario; fusión OR auditable configurable)
 · [models](../models/README.md) (F7: el detector `ed:1` y `event-baseline-z` son modelos ML
 registrados con card y ciclo de vida; comparación rule-vs-ML prevista en models/02 §3)
+· [PostgreSQL + pgvector en el edge](../data-architecture/13_postgresql_pgvector_edge.md)
+(F12: los eventos viven en el schema `events`; los snapshots se enlazan N:M desde
+`telemetry`; el `EventRepository` es la única frontera con la base — el LLM nunca consulta SQL)
 · ADRs [0019](../adr/0019-event-intelligence-layer.md), [0020](../adr/0020-incorporacion-imu.md),
-[0021](../adr/0021-deteccion-anomalias-contextual.md).
+[0021](../adr/0021-deteccion-anomalias-contextual.md), [0030](../adr/0030-postgresql-pgvector-edge.md).
 
 **Regla fundamental:** la telemetría original nunca se pierde y un evento inferido nunca se
 confunde con un hecho observado. Cadena trazable (ida y vuelta):

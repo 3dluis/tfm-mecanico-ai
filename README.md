@@ -1,7 +1,7 @@
 # Mecánico IA
 
 Sistema inteligente híbrido edge-cloud para diagnóstico y mantenimiento predictivo vehicular
-mediante OBD-II. Trabajo Fin de Máster (UAX) — Luis Daniel Díaz, 2026.
+mediante OBD-II. Trabajo Fin de Máster (Máster en IA, UAX) — Luis Daniel Díaz, 2026.
 
 > **Pregunta de investigación:** ¿puede un agente inteligente híbrido (LLM + aprendizaje no
 > supervisado + memoria evolutiva + RAG) descubrir y explicar patrones de fallo vehicular
@@ -25,6 +25,11 @@ Arquitectura completa: [`docs/09_arquitectura_monorepo.md`](docs/09_arquitectura
 **Modelos de IA: [`docs/models/`](docs/models/README.md)** ·
 Diagrama: [`docs/diagrams/arquitectura.mermaid`](docs/diagrams/arquitectura.mermaid) ·
 Decisiones: [`docs/adr/`](docs/adr/README.md)
+
+**Persistencia oficial (ADR-0030):** PostgreSQL + pgvector, tanto en el Edge como en el
+Cloud, como instancias independientes sincronizadas por Outbox lógico — telemetría, memoria,
+RAG y embeddings en un único motor ([`docs/data-architecture/13`](docs/data-architecture/13_postgresql_pgvector_edge.md)).
+SQLite queda como camino legacy/tests. Reglas del repositorio: [`REGLAS.md`](REGLAS.md).
 
 **Separación estricta ML/LLM:** la detección de anomalías es siempre matemática
 (IForest/autoencoder vía ONNX); el LLM razona, explica y recomienda sobre anomalías ya

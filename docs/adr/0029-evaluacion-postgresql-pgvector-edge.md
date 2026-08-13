@@ -1,8 +1,15 @@
 # ADR-0029 — Evaluación de PostgreSQL + pgvector como persistencia Edge
 
 - **Fase:** 11
-- **Estado:** **Evaluación ejecutada · resultado REJECT (para sustituir SQLite en Edge ahora) ·
-  ACCEPT (como motor Cloud) · re-evaluable por umbrales** — pendiente de aprobación del autor
+- **Estado:** **SUPERADA por [ADR-0030](0030-postgresql-pgvector-edge.md)** (2026-08-13).
+  Se conserva íntegra por su valor histórico y por sus mediciones, que siguen siendo válidas
+  y son la base del apartado de costes de la ADR-0030. Su resultado original fue: REJECT
+  (sustituir SQLite en Edge entonces) · ACCEPT (motor Cloud) · re-evaluable por umbrales.
+
+  **Qué cambió:** no las mediciones, sino el ALCANCE del edge (de "colector OBD + inferencia"
+  a plataforma con RAG, memoria episódica y evolutiva y runtime multiagente) y la decisión
+  arquitectónica del autor de unificar la persistencia. Los costes que esta ADR midió
+  (RAM, disco, WAL) se asumen conscientemente en la ADR-0030.
 - **Contexto documental:** [data-architecture/12](../data-architecture/12_edge_database_evaluation.md)
 - **Evidencia:** `ai-models/experiments/edge_db_benchmark.json` (mediciones reales,
   reproducibles con `docker compose --profile edge-postgres up` + `python tools/edge_db_benchmark.py`)

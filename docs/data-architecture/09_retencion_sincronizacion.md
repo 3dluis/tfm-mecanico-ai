@@ -40,3 +40,19 @@ checksum, `priority`, timestamps, `attempts`.
 
 No se sincroniza telemetría cruda de forma indiscriminada: el defecto es diagnósticos,
 anomalías, evidencia y resúmenes.
+
+## Niveles de sincronización (F12 §34)
+
+| Nivel | Qué incluye | Política |
+|---|---|---|
+| **CRITICAL** | anomalías · casos · hipótesis · evidencia · provenance · memoria episódica y patrones | siempre, prioridad alta |
+| **SUMMARY** | eventos · features de evento · agregados y métricas | por defecto |
+| **OPTIONAL** | **snapshots completos** · telemetría cruda | solo bajo configuración explícita (evita transferencias innecesarias) |
+
+**Transaccionalidad (ADR-0030).** El sobre de `sync.outbox` se escribe en la **misma
+transacción** que el cambio de negocio que lo origina (`store.add_with_outbox`,
+`store.transaction`): nunca queda un hecho sin su sobre ni un sobre sin su hecho. La entrega
+posterior sigue siendo idempotente por `envelope_id`.
+
+**Edge y Cloud son bases independientes** aunque ambas sean PostgreSQL + pgvector: la
+sincronización es SIEMPRE lógica (Outbox → API → Cloud), nunca replicación física.

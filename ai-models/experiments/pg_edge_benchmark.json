@@ -1,0 +1,184 @@
+{
+  "measured_at": "2026-08-13T16:42:14.029136+00:00",
+  "hardware": "x86_64 sandbox 4CPU/8GB (proxy RPi 5 — interpretar como x86)",
+  "postgres_version": "16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)",
+  "settings": {
+    "shared_buffers": "128MB",
+    "work_mem": "4MB",
+    "max_connections": "100",
+    "wal_compression": "off"
+  },
+  "frequency_hz": 1.0,
+  "volumes": [
+    {
+      "hours": 1.0,
+      "write_path": "executemany",
+      "snapshots": 3600,
+      "db_size_mb": 16.87,
+      "wal_generated_mb": 6.66,
+      "batch_insert_rows_per_s": 5570,
+      "single_insert_rows_per_s": 702,
+      "q_session_ms": 103.5,
+      "q_session_rows": 2000,
+      "q_vehicle_range_ms": 260.4,
+      "q_vehicle_range_rows": 3800,
+      "q_event_type_ms": 34.6,
+      "q_event_type_rows": 631,
+      "q_diagnostic_join_ms": 90.9,
+      "q_diagnostic_rows": 1800,
+      "partitions": [
+        {
+          "name": "snapshots_2026_08",
+          "mb": 2.42
+        },
+        {
+          "name": "snapshots_2026_09",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_10",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_11",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_default",
+          "mb": 0.09
+        }
+      ],
+      "postgres_rss_mb": 140.3,
+      "client_cpu_user_s_cum": 1.0,
+      "client_peak_rss_mb": 119.6
+    },
+    {
+      "hours": 8.0,
+      "write_path": "executemany",
+      "snapshots": 28800,
+      "db_size_mb": 43.79,
+      "wal_generated_mb": 53.44,
+      "batch_insert_rows_per_s": 5224,
+      "single_insert_rows_per_s": 702,
+      "q_session_ms": 107.8,
+      "q_session_rows": 2000,
+      "q_vehicle_range_ms": 4371.8,
+      "q_vehicle_range_rows": 29000,
+      "q_event_type_ms": 228.7,
+      "q_event_type_rows": 4527,
+      "q_diagnostic_join_ms": 104.2,
+      "q_diagnostic_rows": 1800,
+      "partitions": [
+        {
+          "name": "snapshots_2026_08",
+          "mb": 18.0
+        },
+        {
+          "name": "snapshots_2026_09",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_10",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_11",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_default",
+          "mb": 0.09
+        }
+      ],
+      "postgres_rss_mb": 170.2,
+      "client_cpu_user_s_cum": 7.0,
+      "client_peak_rss_mb": 450.1
+    },
+    {
+      "hours": 24.0,
+      "write_path": "executemany",
+      "snapshots": 86400,
+      "db_size_mb": 106.89,
+      "wal_generated_mb": 161.7,
+      "batch_insert_rows_per_s": 5068,
+      "single_insert_rows_per_s": 761,
+      "q_session_ms": 109.1,
+      "q_session_rows": 2000,
+      "q_vehicle_range_ms": 12201.4,
+      "q_vehicle_range_rows": 86600,
+      "q_event_type_ms": 1159.5,
+      "q_event_type_rows": 13539,
+      "q_diagnostic_join_ms": 110.8,
+      "q_diagnostic_rows": 1800,
+      "partitions": [
+        {
+          "name": "snapshots_2026_08",
+          "mb": 55.21
+        },
+        {
+          "name": "snapshots_2026_09",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_10",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_11",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_default",
+          "mb": 0.09
+        }
+      ],
+      "postgres_rss_mb": 235.9,
+      "client_cpu_user_s_cum": 19.7,
+      "client_peak_rss_mb": 1200.4
+    }
+  ],
+  "copy_vs_executemany_8h": [
+    {
+      "hours": 8.0,
+      "write_path": "COPY",
+      "snapshots": 28800,
+      "db_size_mb": 44.24,
+      "wal_generated_mb": 51.99,
+      "batch_insert_rows_per_s": 9703,
+      "single_insert_rows_per_s": 686,
+      "q_session_ms": 102.8,
+      "q_session_rows": 2000,
+      "q_vehicle_range_ms": 2232.0,
+      "q_vehicle_range_rows": 29000,
+      "q_event_type_ms": 411.3,
+      "q_event_type_rows": 4527,
+      "q_diagnostic_join_ms": 113.8,
+      "q_diagnostic_rows": 1800,
+      "partitions": [
+        {
+          "name": "snapshots_2026_08",
+          "mb": 18.3
+        },
+        {
+          "name": "snapshots_2026_09",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_10",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_2026_11",
+          "mb": 0.09
+        },
+        {
+          "name": "snapshots_default",
+          "mb": 0.09
+        }
+      ],
+      "postgres_rss_mb": 236.2,
+      "client_cpu_user_s_cum": 4.9,
+      "client_peak_rss_mb": 1200.4
+    }
+  ]
+}

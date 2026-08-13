@@ -3,7 +3,8 @@ COMPOSE := docker compose
 
 .PHONY: install schemas lint type test check \
         dev research cloud edge full down \
-        arm64-build eval-emulator
+        arm64-build eval-emulator \
+        db-up db-upgrade db-revision db-psql pg-bench pg-vector-bench test-pg
 
 # ------------------------------------------------------------- entorno local
 install:  ## instala todos los proyectos en editable + tooling (venv activo)
@@ -38,7 +39,7 @@ check: lint type test data-docs
 	git diff --quiet shared/schemas docs/data-architecture || (echo "ERROR: schemas/diccionario desactualizados; commitea los regenerados" && exit 1)
 
 # ------------------------------------------------------------ perfiles docker
-dev:  ## núcleo edge: emulador + agente + ollama
+dev:  ## núcleo edge: PostgreSQL+pgvector + emulador + agente + ollama (sin cloud)
 	$(COMPOSE) --profile dev up --build
 
 research:  ## jupyter para ai-models
@@ -81,3 +82,27 @@ llm-bench:  ## benchmark agent-diagnostics v1 (tras superar el smoke; requiere O
 
 llm-smoke:  ## smoke comparativo de SLMs (requiere Ollama con los modelos descargados)
 	python tools/llm_smoke.py
+
+# ------------------------------------- persistencia edge: PostgreSQL + pgvector (ADR-0030)
+MECANICO_DB_URL ?= postgresql+psycopg://mecanico:mecanico@localhost:15432/mecanico_edge
+
+db-up:  ## levanta solo PostgreSQL+pgvector del edge
+	$(COMPOSE) --profile edge-postgres up -d edge-postgres
+
+db-upgrade:  ## aplica las migraciones Alembic (mecanismo OFICIAL de esquema)
+	cd diagnostic-agent && MECANICO_DB_URL=$(MECANICO_DB_URL) alembic upgrade head
+
+db-revision:  ## nueva revisión con autogenerado (revisar SIEMPRE el diff antes de commitear)
+	cd diagnostic-agent && MECANICO_DB_URL=$(MECANICO_DB_URL) alembic revision --autogenerate -m "$(m)"
+
+db-psql:  ## consola psql contra el edge
+	psql "$(subst +psycopg,,$(MECANICO_DB_URL))"
+
+test-pg:  ## tests de integración REALES contra PostgreSQL (se saltan si no hay BD)
+	MECANICO_TEST_DB_URL=$(MECANICO_DB_URL) pytest tests-integration/test_pg_edge_e2e.py -q
+
+pg-bench:  ## dimensionamiento: 1h/8h/24h de snapshots en PostgreSQL (WAL, disco, RAM, CPU)
+	MECANICO_DB_URL=$(MECANICO_DB_URL) python tools/pg_edge_benchmark.py
+
+pg-vector-bench:  ## baseline del RAG local: top-K sobre chunks/casos/patrones
+	MECANICO_DB_URL=$(MECANICO_DB_URL) python tools/pg_vector_benchmark.py

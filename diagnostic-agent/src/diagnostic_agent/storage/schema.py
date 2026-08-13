@@ -1,19 +1,113 @@
-"""Esquema relacional v2 del edge (SQLite; equivalencia PostgreSQL en docs/data-architecture/03).
+"""Esquema relacional del edge — **PostgreSQL + pgvector es la plataforma oficial** (ADR-0030).
 
 Espejo relacional de los contratos de ``mecanico_contracts`` (la fuente de verdad son los
 contratos; este módulo NO redefine semántica, solo persistencia). Convenciones:
 - Ids globalmente únicos (UUID en texto) → sincronización idempotente (docs/da/09).
-- Dicts/listas de contratos → columnas JSON (portables a JSONB en PostgreSQL).
+- Dicts/listas de contratos → columnas JSON (JSONB en PostgreSQL).
 - ``schema_version`` de fila = versión del contrato con la que se escribió.
-- Versionado del esquema físico: ``PRAGMA user_version`` gestionado por ``migrations.py``.
+- **Schemas lógicos** (ADR-0030 §schemas): cada tabla declara su schema PostgreSQL
+  (telemetry/events/diagnostics/models/memory/knowledge/agent/sync; ``core`` reservado).
+  El camino SQLite LEGACY los aplana con ``schema_translate_map`` → None.
+- Versionado físico: **Alembic** es el mecanismo oficial (``make db-upgrade``);
+  ``PRAGMA user_version`` se conserva solo para el camino SQLite legacy/tests.
 """
 
 from datetime import datetime
+from typing import Any
 
-from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    TypeDecorator,
+)
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
-SCHEMA_DB_VERSION = 4  # v4: vehicle_telemetry_snapshots + snapshot_event_links (F11)
+SCHEMA_DB_VERSION = 5  # v5: schemas lógicos, particionado, columnas de embedding (F12)
+
+#: Dimensión de los embeddings del edge (all-MiniLM-L6-v2 y equivalentes; docs/da/10).
+EMBEDDING_DIM = 384
+
+#: Schemas lógicos de PostgreSQL. ``core`` queda RESERVADO: hoy no existen contratos
+#: Vehicle/EdgeDevice y no se inventan entidades para llenarlo (ADR-0030).
+SCHEMAS: tuple[str, ...] = (
+    "core",
+    "telemetry",
+    "events",
+    "diagnostics",
+    "models",
+    "memory",
+    "knowledge",
+    "agent",
+    "sync",
+)
+
+#: tabla → schema lógico.
+TABLE_SCHEMAS: dict[str, str] = {
+    "telemetry_sessions": "telemetry",
+    "obd_observations": "telemetry",
+    "telemetry_points": "telemetry",
+    "vehicle_telemetry_snapshots": "telemetry",
+    "snapshot_event_links": "telemetry",
+    "telemetry_windows": "telemetry",
+    "feature_vectors": "telemetry",
+    "vehicle_events": "events",
+    "event_feature_vectors": "events",
+    "event_baselines": "events",
+    "model_inferences": "models",
+    "detected_anomalies": "diagnostics",
+    "diagnostic_cases": "diagnostics",
+    "diagnostic_hypotheses": "diagnostics",
+    "diagnostic_evidence": "diagnostics",
+    "provenance_records": "diagnostics",
+    "diagnostic_feedback": "diagnostics",
+    "maintenance_events": "diagnostics",
+    "case_memory": "memory",
+    "learned_patterns": "memory",
+    "pattern_relations": "memory",
+    "knowledge_documents": "knowledge",
+    "knowledge_chunks": "knowledge",
+    "agent_runs": "agent",
+    "agent_steps": "agent",
+    "retrieval_events": "agent",
+    "sync_outbox": "sync",
+}
+
+
+class Embedding(TypeDecorator[Any]):
+    """Vector de embedding: ``vector(N)`` en PostgreSQL (pgvector), JSON en SQLite legacy.
+
+    Solo se vectoriza lo que tiene valor semántico (RAG, casos, patrones): la telemetría
+    NUNCA se vectoriza (ADR-0030 §13 — series temporales = SQL/features/ML).
+    """
+
+    impl = JSON
+    cache_ok = True
+
+    class Comparator(TypeDecorator.Comparator[Any]):
+        """Expone el operador de distancia coseno de pgvector (``<=>``)."""
+
+        def cosine_distance(self, other: Any) -> Any:
+            return self.op("<=>", return_type=Float)(other)
+
+    comparator_factory = Comparator
+
+    def __init__(self, dim: int = EMBEDDING_DIM) -> None:
+        self.dim = dim
+        super().__init__()
+
+    def load_dialect_impl(self, dialect: Any) -> Any:
+        if dialect.name == "postgresql":
+            from pgvector.sqlalchemy import Vector
+
+            return dialect.type_descriptor(Vector(self.dim))
+        return dialect.type_descriptor(JSON())
 
 
 class Base(DeclarativeBase):
@@ -21,9 +115,22 @@ class Base(DeclarativeBase):
 
 
 class _Row:
-    """Columnas comunes."""
+    """Columnas comunes + asignación automática del schema lógico."""
 
     schema_version: Mapped[int] = mapped_column(Integer, default=2)
+
+    @declared_attr.directive
+    def __table_args__(cls) -> Any:  # noqa: N805
+        extra = tuple(getattr(cls, "_extra_table_args", ()))
+        tablename: str = getattr(cls, "__tablename__", "")
+        opts: dict[str, Any] = {"schema": TABLE_SCHEMAS.get(tablename, "core")}
+        positional: list[Any] = []
+        for item in extra:  # un dict dentro de _extra_table_args = opciones de tabla
+            if isinstance(item, dict):
+                opts.update(item)
+            else:
+                positional.append(item)
+        return (*positional, opts)
 
 
 # ------------------------------------------------------------- telemetría (cadena)
@@ -53,7 +160,9 @@ class ObservationRow(Base, _Row):
     __tablename__ = "obd_observations"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"), index=True)
+    session_id: Mapped[str] = mapped_column(
+        ForeignKey("telemetry.telemetry_sessions.session_id"), index=True
+    )
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     pid: Mapped[str] = mapped_column(String, index=True)
     value: Mapped[float] = mapped_column(Float)
@@ -67,7 +176,9 @@ class PointRow(Base, _Row):
     __tablename__ = "telemetry_points"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"), index=True)
+    session_id: Mapped[str] = mapped_column(
+        ForeignKey("telemetry.telemetry_sessions.session_id"), index=True
+    )
     seq: Mapped[int] = mapped_column(Integer, index=True)
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     values: Mapped[dict[str, object]] = mapped_column(JSON)
@@ -80,7 +191,9 @@ class WindowRow(Base, _Row):
     __tablename__ = "telemetry_windows"
 
     window_id: Mapped[str] = mapped_column(String, primary_key=True)
-    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"), index=True)
+    session_id: Mapped[str] = mapped_column(
+        ForeignKey("telemetry.telemetry_sessions.session_id"), index=True
+    )
     seq_start: Mapped[int] = mapped_column(Integer)
     seq_end: Mapped[int] = mapped_column(Integer)
     start: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -95,7 +208,9 @@ class FeatureVectorRow(Base, _Row):
     __tablename__ = "feature_vectors"
 
     fv_id: Mapped[str] = mapped_column(String, primary_key=True)
-    window_id: Mapped[str] = mapped_column(ForeignKey("telemetry_windows.window_id"), index=True)
+    window_id: Mapped[str] = mapped_column(
+        ForeignKey("telemetry.telemetry_windows.window_id"), index=True
+    )
     session_id: Mapped[str] = mapped_column(String, index=True)
     feature_set_version: Mapped[str] = mapped_column(String)
     values: Mapped[dict[str, object]] = mapped_column(JSON)
@@ -107,7 +222,7 @@ class InferenceRow(Base, _Row):
     __tablename__ = "model_inferences"
 
     inference_id: Mapped[str] = mapped_column(String, primary_key=True)
-    fv_id: Mapped[str] = mapped_column(ForeignKey("feature_vectors.fv_id"), index=True)
+    fv_id: Mapped[str] = mapped_column(ForeignKey("telemetry.feature_vectors.fv_id"), index=True)
     window_id: Mapped[str] = mapped_column(String, index=True)
     session_id: Mapped[str] = mapped_column(String, index=True)
     model_id: Mapped[str] = mapped_column(String)
@@ -127,7 +242,7 @@ class AnomalyRow(Base, _Row):
 
     anomaly_id: Mapped[str] = mapped_column(String, primary_key=True)
     inference_id: Mapped[str | None] = mapped_column(
-        ForeignKey("model_inferences.inference_id"), nullable=True, index=True
+        ForeignKey("models.model_inferences.inference_id"), nullable=True, index=True
     )
     window_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
     event_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
@@ -159,12 +274,16 @@ class SnapshotRow(Base, _Row):
 
     __tablename__ = "vehicle_telemetry_snapshots"
 
+    # PK COMPUESTA (snapshot_id, timestamp_utc): PostgreSQL exige que toda restricción
+    # única de una tabla particionada incluya la clave de partición (ADR-0030 §PK).
+    # snapshot_id sigue siendo el identificador GLOBAL de trazabilidad (UUID) y es la
+    # columna principal del índice, por lo que las búsquedas por id siguen usándolo.
     snapshot_id: Mapped[str] = mapped_column(String, primary_key=True)
     vehicle_id: Mapped[str] = mapped_column(String)
     device_id: Mapped[str] = mapped_column(String)
-    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"))
+    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry.telemetry_sessions.session_id"))
     trip_id: Mapped[str | None] = mapped_column(String, nullable=True)
-    timestamp_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    timestamp_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), primary_key=True)
     sequence_number: Mapped[int] = mapped_column(Integer)
     snapshot_interval_ms: Mapped[int] = mapped_column(Integer, default=1000)
     synchronization_version: Mapped[str] = mapped_column(String, default="sync:v1")
@@ -205,10 +324,19 @@ class SnapshotRow(Base, _Row):
     quality_flags: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
-    __table_args__ = (
+    _extra_table_args = (
         Index("ix_snap_vehicle_ts", "vehicle_id", "timestamp_utc"),
         Index("ix_snap_session_ts", "session_id", "timestamp_utc"),
         Index("ix_snap_eventtype_ts", "primary_event_type", "timestamp_utc"),
+        # BRIN sobre el tiempo: la tabla se escribe en orden temporal, así que el índice
+        # es diminuto frente a un B-tree. Se MIDE antes de darlo por bueno (F12 §8).
+        Index(
+            "ix_snap_ts_brin",
+            "timestamp_utc",
+            postgresql_using="brin",
+            postgresql_with={"pages_per_range": 32},
+        ),
+        {"postgresql_partition_by": "RANGE (timestamp_utc)"},
     )
 
 
@@ -218,10 +346,11 @@ class SnapshotEventLinkRow(Base, _Row):
     __tablename__ = "snapshot_event_links"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    snapshot_id: Mapped[str] = mapped_column(
-        ForeignKey("vehicle_telemetry_snapshots.snapshot_id"), index=True
-    )
-    event_id: Mapped[str] = mapped_column(ForeignKey("vehicle_events.event_id"), index=True)
+    # Sin FK física: la tabla destino está particionada y su unique es COMPUESTA
+    # (snapshot_id, timestamp_utc). La integridad es LÓGICA (la garantiza el builder) y
+    # está verificada por tests de provenance — decisión documentada en ADR-0030.
+    snapshot_id: Mapped[str] = mapped_column(String, index=True)
+    event_id: Mapped[str] = mapped_column(ForeignKey("events.vehicle_events.event_id"), index=True)
     event_type: Mapped[str] = mapped_column(String, index=True)
 
 
@@ -235,13 +364,15 @@ class EventRow(Base, _Row):
 
     event_id: Mapped[str] = mapped_column(String, primary_key=True)
     vehicle_id: Mapped[str] = mapped_column(String, index=True)
-    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"), index=True)
+    session_id: Mapped[str] = mapped_column(
+        ForeignKey("telemetry.telemetry_sessions.session_id"), index=True
+    )
     event_type: Mapped[str] = mapped_column(String, index=True)
     event_subtype: Mapped[str | None] = mapped_column(String, nullable=True)
     event_class: Mapped[str] = mapped_column(String)  # observed|inferred|estimated
     taxonomy_version: Mapped[int] = mapped_column(Integer, default=1)
     parent_event_id: Mapped[str | None] = mapped_column(
-        ForeignKey("vehicle_events.event_id"), nullable=True, index=True
+        ForeignKey("events.vehicle_events.event_id"), nullable=True, index=True
     )
     start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     end_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
@@ -263,7 +394,7 @@ class EventFeatureRow(Base, _Row):
     __tablename__ = "event_feature_vectors"
 
     efv_id: Mapped[str] = mapped_column(String, primary_key=True)
-    event_id: Mapped[str] = mapped_column(ForeignKey("vehicle_events.event_id"), index=True)
+    event_id: Mapped[str] = mapped_column(ForeignKey("events.vehicle_events.event_id"), index=True)
     session_id: Mapped[str] = mapped_column(String, index=True)
     vehicle_id: Mapped[str] = mapped_column(String, index=True)
     event_type: Mapped[str] = mapped_column(String, index=True)
@@ -316,7 +447,9 @@ class HypothesisRow(Base, _Row):
     __tablename__ = "diagnostic_hypotheses"
 
     hypothesis_id: Mapped[str] = mapped_column(String, primary_key=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("diagnostic_cases.case_id"), index=True)
+    case_id: Mapped[str] = mapped_column(
+        ForeignKey("diagnostics.diagnostic_cases.case_id"), index=True
+    )
     rank: Mapped[int] = mapped_column(Integer)
     suspected_component: Mapped[str] = mapped_column(String)
     failure_mode: Mapped[str] = mapped_column(String, index=True)
@@ -331,9 +464,11 @@ class EvidenceRow(Base, _Row):
     __tablename__ = "diagnostic_evidence"
 
     evidence_id: Mapped[str] = mapped_column(String, primary_key=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("diagnostic_cases.case_id"), index=True)
+    case_id: Mapped[str] = mapped_column(
+        ForeignKey("diagnostics.diagnostic_cases.case_id"), index=True
+    )
     hypothesis_id: Mapped[str | None] = mapped_column(
-        ForeignKey("diagnostic_hypotheses.hypothesis_id"), nullable=True, index=True
+        ForeignKey("diagnostics.diagnostic_hypotheses.hypothesis_id"), nullable=True, index=True
     )
     kind: Mapped[str] = mapped_column(String)
     role: Mapped[str] = mapped_column(String)
@@ -371,7 +506,9 @@ class CaseMemoryRow(Base, _Row):
     __tablename__ = "case_memory"
 
     case_memory_id: Mapped[str] = mapped_column(String, primary_key=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("diagnostic_cases.case_id"), index=True)
+    case_id: Mapped[str] = mapped_column(
+        ForeignKey("diagnostics.diagnostic_cases.case_id"), index=True
+    )
     vehicle_id: Mapped[str] = mapped_column(String, index=True)
     vehicle_profile: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
     symptom_text: Mapped[str] = mapped_column(Text)
@@ -384,6 +521,8 @@ class CaseMemoryRow(Base, _Row):
     outcome: Mapped[str | None] = mapped_column(Text, nullable=True)
     epistemic_level: Mapped[str] = mapped_column(String, index=True)
     embedding_ref: Mapped[str | None] = mapped_column(String, nullable=True)
+    embedding: Mapped[Any | None] = mapped_column(Embedding(), nullable=True)
+    embedding_model: Mapped[str | None] = mapped_column(String, nullable=True)
     reinforcement_count: Mapped[int] = mapped_column(Integer, default=1)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -413,6 +552,8 @@ class LearnedPatternRow(Base, _Row):
     first_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     provenance_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    embedding: Mapped[Any | None] = mapped_column(Embedding(), nullable=True)
+    embedding_model: Mapped[str | None] = mapped_column(String, nullable=True)
 
 
 class PatternRelationRow(Base, _Row):
@@ -420,10 +561,10 @@ class PatternRelationRow(Base, _Row):
 
     relation_id: Mapped[str] = mapped_column(String, primary_key=True)
     from_pattern_id: Mapped[str] = mapped_column(
-        ForeignKey("learned_patterns.pattern_id"), index=True
+        ForeignKey("memory.learned_patterns.pattern_id"), index=True
     )
     to_pattern_id: Mapped[str] = mapped_column(
-        ForeignKey("learned_patterns.pattern_id"), index=True
+        ForeignKey("memory.learned_patterns.pattern_id"), index=True
     )
     kind: Mapped[str] = mapped_column(String)
     note: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -437,7 +578,9 @@ class FeedbackRow(Base, _Row):
     __tablename__ = "diagnostic_feedback"
 
     feedback_id: Mapped[str] = mapped_column(String, primary_key=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("diagnostic_cases.case_id"), index=True)
+    case_id: Mapped[str] = mapped_column(
+        ForeignKey("diagnostics.diagnostic_cases.case_id"), index=True
+    )
     kind: Mapped[str] = mapped_column(String)
     verdict: Mapped[str] = mapped_column(String)
     true_cause: Mapped[str | None] = mapped_column(String, nullable=True)
@@ -465,7 +608,9 @@ class AgentRunRow(Base, _Row):
     __tablename__ = "agent_runs"
 
     run_id: Mapped[str] = mapped_column(String, primary_key=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("diagnostic_cases.case_id"), index=True)
+    case_id: Mapped[str] = mapped_column(
+        ForeignKey("diagnostics.diagnostic_cases.case_id"), index=True
+    )
     graph_version: Mapped[str] = mapped_column(String)
     llm_model: Mapped[str] = mapped_column(String)
     prompt_version: Mapped[str] = mapped_column(String)
@@ -483,7 +628,7 @@ class AgentStepRow(Base, _Row):
     __tablename__ = "agent_steps"
 
     step_id: Mapped[str] = mapped_column(String, primary_key=True)
-    run_id: Mapped[str] = mapped_column(ForeignKey("agent_runs.run_id"), index=True)
+    run_id: Mapped[str] = mapped_column(ForeignKey("agent.agent_runs.run_id"), index=True)
     node: Mapped[str] = mapped_column(String)
     seq: Mapped[int] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String, default="ok")
@@ -500,7 +645,7 @@ class RetrievalRow(Base, _Row):
     __tablename__ = "retrieval_events"
 
     retrieval_id: Mapped[str] = mapped_column(String, primary_key=True)
-    run_id: Mapped[str] = mapped_column(ForeignKey("agent_runs.run_id"), index=True)
+    run_id: Mapped[str] = mapped_column(ForeignKey("agent.agent_runs.run_id"), index=True)
     step_id: Mapped[str] = mapped_column(String, index=True)
     source: Mapped[str] = mapped_column(String)
     query: Mapped[str] = mapped_column(Text)
@@ -530,12 +675,15 @@ class KnowledgeChunkRow(Base, _Row):
 
     chunk_id: Mapped[str] = mapped_column(String, primary_key=True)
     document_id: Mapped[str] = mapped_column(
-        ForeignKey("knowledge_documents.document_id"), index=True
+        ForeignKey("knowledge.knowledge_documents.document_id"), index=True
     )
     seq: Mapped[int] = mapped_column(Integer)
     text: Mapped[str] = mapped_column(Text)
     meta: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
     embedding_ref: Mapped[str | None] = mapped_column(String, nullable=True)
+    # pgvector (F12 §12): el VECTOR es físico, no viaja en el contrato de intercambio.
+    embedding: Mapped[Any | None] = mapped_column(Embedding(), nullable=True)
+    embedding_model: Mapped[str | None] = mapped_column(String, nullable=True)
 
 
 # ------------------------------------------------------------------ sincronización

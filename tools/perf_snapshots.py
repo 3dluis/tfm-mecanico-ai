@@ -30,7 +30,7 @@ EPOCH = datetime(2026, 1, 1, tzinfo=UTC)
 VEH = "veh-perf"
 
 
-def make_session_snapshots(hours: float, seed: int, vehicle_id: str = VEH):
+def make_session_snapshots(hours: float, seed: int, vehicle_id: str = VEH, epoch: datetime = EPOCH):
     """Genera snapshots realistas (ticks obd-lab + eventos detectados) por bloques."""
     out = []
     remaining = int(hours * 3600)
@@ -52,7 +52,7 @@ def make_session_snapshots(hours: float, seed: int, vehicle_id: str = VEH):
         sid = f"perf-{seed}-{idx}"
         events = detect_events(ticks, sid, vehicle_id)
         snaps, links = build_from_ticks(
-            ticks, sid, vehicle_id, events=events, epoch=EPOCH + timedelta(seconds=idx * block)
+            ticks, sid, vehicle_id, events=events, epoch=epoch + timedelta(seconds=idx * block)
         )
         out.append((sid, snaps, links, events))
         remaining -= dur
