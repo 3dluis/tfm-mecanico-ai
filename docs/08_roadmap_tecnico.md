@@ -18,6 +18,15 @@
 > al registro sin recalcular; T2/T6/T8 heredan el protocolo de evaluación y el
 > versionado en 4 ejes. Detalle: [informe F7](fase7/informe_estrategia_modelos.md).
 
+> **Actualización F10:** transición a validación científica: EXP-ANOM-001/002/003
+> clasificados EXPLORATORY; protocolo confirmatorio de H-EVT **pre-registrado y
+> congelado** ([PROTO-CONF-001](experiments/preregistered/PROTO-CONF-001.md)) con brazos
+> checksumados (arms-freeze-v1) y datos confirmatorios ocultos (suite_conf_v1, seeds
+> 901-925); arquitectura de detección dual documentada
+> ([deteccion-dual](diagrams/deteccion-dual.mmd)): LOF primario + eventos complementario
+> + fusión OR auditable configurable. Nomenclatura vigente: familias H-*
+> ([correspondencia](correspondencia_nomenclatura.md)).
+
 Secuencia de construcción con dependencias, criterios de "hecho" y orden pensado para que **siempre exista un sistema demostrable de extremo a extremo**, que se enriquece en cada paso (enfoque de esqueleto andante).
 
 ## 8.1 Estructura de repositorio propuesta

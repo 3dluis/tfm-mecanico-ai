@@ -1,0 +1,28 @@
+# ⛔ SUITE CONFIRMATORIA — PROTO-CONF-001 (F10). NO GENERAR NI EVALUAR hasta la
+# ejecución del protocolo pre-registrado (docs/experiments/preregistered/PROTO-CONF-001.md).
+#
+# Estas sesiones constituyen el conjunto CONFIRMATORY: nunca se han usado (ni se usarán)
+# para ajustar modelos, umbrales, features, contextos ni reglas. Semillas 901–923,
+# disjuntas de todas las usadas en DEVELOPMENT (101-142, 201-215) y EXPLORATORY
+# (301-322) — ver estrategia de datos en el protocolo §7. Definida ANTES de ejecutar y
+# congelada con el protocolo; cualquier cambio = versión nueva del protocolo.
+
+confirmatory:
+  # --- normales (control de falsas alarmas; 2 por perfil problemático + fríos)
+  - {scenario_id: c-normal-u1, description: "Conf normal urbano 1",  category: normal, driving_profile: urban,   duration_s: 1800, seed: 901, ambient_temp_c: 19.0}
+  - {scenario_id: c-normal-u2, description: "Conf normal urbano 2",  category: normal, driving_profile: urban,   duration_s: 1800, seed: 902, ambient_temp_c: 28.0}
+  - {scenario_id: c-normal-h1, description: "Conf normal autovía 1", category: normal, driving_profile: highway, duration_s: 1800, seed: 903, ambient_temp_c: 10.0}
+  - {scenario_id: c-normal-h2, description: "Conf normal autovía 2", category: normal, driving_profile: highway, duration_s: 1800, seed: 904, ambient_temp_c: 23.0}
+  - {scenario_id: c-normal-i1, description: "Conf normal ralentí",   category: normal, driving_profile: idle,    duration_s: 1200, seed: 905, ambient_temp_c: 17.0}
+  - {scenario_id: c-normal-c1, description: "Conf normal frío",      category: normal, driving_profile: cold_start, duration_s: 1500, seed: 906, ambient_temp_c: 7.0}
+  # --- fallos conocidos con semillas y parámetros NUEVOS (severidades no usadas antes)
+  - {scenario_id: c-vacuum-u,  description: "Conf vacuum urbano",    category: known_fault, driving_profile: urban,   duration_s: 1800, seed: 911, fault: vacuum_leak, fault_params: {severity: 0.5}, fault_start_s: 700, fault_end_s: 1800}
+  - {scenario_id: c-maf-h,     description: "Conf MAF autovía",      category: known_fault, driving_profile: highway, duration_s: 1800, seed: 912, fault: maf_drift,   fault_params: {drift: 0.12},   fault_start_s: 500, fault_end_s: 1800}
+  - {scenario_id: c-o2lag-u,   description: "Conf O2 lenta urbano",  category: known_fault, driving_profile: urban,   duration_s: 1800, seed: 913, fault: o2_lag,      fault_start_s: 600, fault_end_s: 1800}
+  - {scenario_id: c-misfire-u, description: "Conf misfire urbano",   category: known_fault, driving_profile: urban,   duration_s: 1800, seed: 914, fault: misfire,     fault_start_s: 800, fault_end_s: 1800}
+  # --- held-out relacionales con semillas nuevas y AMBOS perfiles (réplica del hallazgo clave)
+  - {scenario_id: c-corrbreak-u1, description: "Conf held-out desacoplo urbano 1",  category: held_out, driving_profile: urban,   duration_s: 1800, seed: 921, fault: corr_break_rpm_maf,    fault_start_s: 600, fault_end_s: 1800}
+  - {scenario_id: c-corrbreak-u2, description: "Conf held-out desacoplo urbano 2",  category: held_out, driving_profile: urban,   duration_s: 1800, seed: 922, fault: corr_break_rpm_maf,    fault_start_s: 900, fault_end_s: 1800}
+  - {scenario_id: c-corrbreak-h1, description: "Conf held-out desacoplo autovía",   category: held_out, driving_profile: highway, duration_s: 1800, seed: 923, fault: corr_break_rpm_maf,    fault_start_s: 600, fault_end_s: 1800}
+  - {scenario_id: c-coolfreeze-u, description: "Conf held-out térmica muerta",      category: held_out, driving_profile: urban,   duration_s: 1800, seed: 924, fault: load_coolant_decouple, fault_start_s: 600, fault_end_s: 1800}
+  - {scenario_id: c-jointdrift-h, description: "Conf held-out deriva conjunta",     category: held_out, driving_profile: highway, duration_s: 1800, seed: 925, fault: joint_slow_drift,      fault_start_s: 600, fault_end_s: 1800}

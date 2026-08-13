@@ -132,6 +132,14 @@ class ModelExperiment(ContractBase):
     evaluation_protocol: str = Field(
         description="Referencia al protocolo pre-registrado, p. ej. 'ADR-0011'"
     )
+    study_type: str | None = Field(
+        default=None,
+        description=(
+            "'exploratory' | 'confirmatory' (F10): los exploratorios informan el diseño; "
+            "solo los confirmatorios con protocolo CONGELADO antes de ejecutar sirven "
+            "como evidencia confirmatoria"
+        ),
+    )
     config_uri: str | None = Field(
         default=None, description="Config declarativa del experimento (YAML)"
     )

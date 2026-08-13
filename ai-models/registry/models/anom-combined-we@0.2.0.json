@@ -15,9 +15,9 @@
   "model_id": "anom-combined-we",
   "model_type": "ml",
   "name": "combinación window+event (OR por tick)",
-  "notes": "W-v1 OR E-d (EXP-ANOM-003): F1 0.70, FPR 0.071 (≈ ventana sola 0.067), held-out 2/4, recall 0.58 > 0.54 de la ventana sola. Propuesta de promoción a CANDIDATE pendiente de aprobación del autor.",
+  "notes": "PROMOCIÓN A CANDIDATE (F10) BASADA EN EVIDENCIA EXPLORATORIA de F8/F9 (EXP-ANOM-002/003, study_type=exploratory). La promoción a VALIDATED depende del confirmatorio pre-registrado PROTO-CONF-001 (docs/experiments/preregistered/). Configuración: LOF-v1 primario ∨ event-baseline-z@0.2.0 complementario; unión OR explícita y auditable, CONFIGURABLE (anomaly_mode) — no regla fija de producción. · CONGELADO en freeze-v1 (ai-models/registry/frozen/arms-freeze-v1.json): cualquier mejora posterior será una versión nueva.",
   "schema_version": 2,
-  "status": "experimental",
+  "status": "candidate",
   "training_run_id": null,
   "validated_at": null,
   "version": "0.2.0"

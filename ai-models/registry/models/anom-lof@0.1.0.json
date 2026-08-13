@@ -15,7 +15,7 @@
   "model_id": "anom-lof",
   "model_type": "ml",
   "name": "lof",
-  "notes": "Métricas importadas de e1_results.csv (informe F3 §4, ADR-0011).",
+  "notes": "Métricas importadas de e1_results.csv (informe F3 §4, ADR-0011). · CONGELADO en freeze-v1 (ai-models/registry/frozen/arms-freeze-v1.json): cualquier mejora posterior será una versión nueva.",
   "schema_version": 2,
   "status": "superseded",
   "training_run_id": "TR-E1-LOF",

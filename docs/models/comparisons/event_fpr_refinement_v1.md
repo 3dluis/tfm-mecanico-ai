@@ -1,5 +1,11 @@
 # Comparación — Refinamiento del FPR de Event Intelligence (EXP-ANOM-003, F9)
 
+> **CLASIFICACIÓN: PILOT / EXPLORATORY** (decisión del autor, F10). Evidencia
+> exploratoria — no confirmatoria. Inventario de decisiones ex-ante/durante/post:
+> [../experiments/exploratory/EXP-ANOM-003_clasificacion.md](../../experiments/exploratory/EXP-ANOM-003_clasificacion.md).
+> Confirmatorio pre-registrado: [PROTO-CONF-001](../../experiments/preregistered/PROTO-CONF-001.md).
+
+
 **Fuente:** `ai-models/experiments/e3_summary.json` + `e3_results.csv` +
 `e3_per_scenario.csv` + `e3_per_profile.csv` (runner `e3_event_refinement.py`, config
 `configs/exp-anom-003.yaml`). Los resultados de EXP-ANOM-002 NO se reetiquetan: los

@@ -165,10 +165,44 @@ def main() -> int:
 
     payload = json.dumps(report, indent=2, ensure_ascii=False, default=str)
     print(payload)
+    # Artefactos formales R2 (esquemas en docs/experiments/preregistered/r2_artefactos.md)
+    r2_dir = Path(__file__).parents[1] / "ai-models" / "experiments" / "r2"
+    r2_dir.mkdir(parents=True, exist_ok=True)
+    (r2_dir / "llm-smoke.json").write_text(payload + "\n", encoding="utf-8")
+    import platform as _pf
+
+    env = {
+        "platform": _pf.platform(),
+        "machine": _pf.machine(),
+        "python": _pf.python_version(),
+        "measured_at": report["measured_at"],
+    }
+    try:
+        env["ollama_version"] = _ollama(args.host, "/api/version").get("version")
+    except httpx.HTTPError:
+        env["ollama_version"] = None
+    (r2_dir / "environment.json").write_text(
+        json.dumps(env, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    try:
+        show = _ollama(args.host, "/api/show", {"model": args.model})
+        runtime = {
+            "model": args.model,
+            "details": show.get("details", {}),
+            "parameters_head": str(show.get("parameters", ""))[:500],
+            "license_head": str(show.get("license", ""))[:200],
+        }
+    except httpx.HTTPError as exc:
+        runtime = {"model": args.model, "error": str(exc)[:200]}
+    (r2_dir / "model-runtime.json").write_text(
+        json.dumps(runtime, indent=2, ensure_ascii=False, default=str) + "\n",
+        encoding="utf-8",
+    )
     out = Path(__file__).parents[1] / "ai-models" / "experiments" / "llm_smoke_deep.jsonl"
     with out.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(report, ensure_ascii=False, default=str) + "\n")
-    print(f"\nTraza anexada a {out} — pásamela para crear la Model Card con datos reales.")
+    print(f"\nArtefactos R2 en {r2_dir} (llm-smoke.json, environment.json, model-runtime.json)")
+    print("Pásamelos junto con llm-benchmark.json para importarlos SIN recalcular.")
     return 0
 
 

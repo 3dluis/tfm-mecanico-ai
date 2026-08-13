@@ -15,7 +15,7 @@
   "model_id": "event-baseline-z",
   "model_type": "ml",
   "name": "contextual event baseline (robust z)",
-  "notes": "Baselines sobre train v1.1 (22 sesiones normales), scoring media/σ (el robusto se evaluó y RECHAZÓ). FPR test 0.008 con umbral LOSO honesto; conserva la detección relacional urbana (R 0.41, retardo 38 s). Detalle: docs/models/comparisons/event_fpr_refinement_v1.md",
+  "notes": "Baselines sobre train v1.1 (22 sesiones normales), scoring media/σ (el robusto se evaluó y RECHAZÓ). FPR test 0.008 con umbral LOSO honesto; conserva la detección relacional urbana (R 0.41, retardo 38 s). Detalle: docs/models/comparisons/event_fpr_refinement_v1.md · CONGELADO en freeze-v1 (ai-models/registry/frozen/arms-freeze-v1.json): cualquier mejora posterior será una versión nueva.",
   "schema_version": 2,
   "status": "candidate",
   "training_run_id": "TR-E3-EVENT-EXT",

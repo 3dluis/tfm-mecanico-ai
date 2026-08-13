@@ -36,6 +36,8 @@ Diagramas: [sensor-pipeline](diagrams/sensor-pipeline.mmd) · [event-hierarchy](
 
 Cruces: [data-architecture](../data-architecture/README.md) (modelo de datos; VehicleEvent
 y compañía se integran allí) · [agent-runtime](../agent-runtime/README.md) (tools de eventos)
+· [deteccion-dual](../diagrams/deteccion-dual.mmd) (F10: papel COMPLEMENTARIO junto al
+LOF primario; fusión OR auditable configurable)
 · [models](../models/README.md) (F7: el detector `ed:1` y `event-baseline-z` son modelos ML
 registrados con card y ciclo de vida; comparación rule-vs-ML prevista en models/02 §3)
 · ADRs [0019](../adr/0019-event-intelligence-layer.md), [0020](../adr/0020-incorporacion-imu.md),

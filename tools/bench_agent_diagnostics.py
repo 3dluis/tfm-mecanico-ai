@@ -166,7 +166,13 @@ def main() -> int:
     }
     with OUT.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(summary, ensure_ascii=False, default=str) + "\n")
-    print(f"\nResumen anexado a {OUT} — pásamelo para el informe llm_qwen25_3b_pilot_v1.md")
+    r2_dir = REPO_ROOT / "ai-models" / "experiments" / "r2"
+    r2_dir.mkdir(parents=True, exist_ok=True)
+    (r2_dir / "llm-benchmark.json").write_text(
+        json.dumps(summary, indent=2, ensure_ascii=False, default=str) + "\n",
+        encoding="utf-8",
+    )
+    print(f"\nArtefacto formal: {r2_dir / 'llm-benchmark.json'} — pásamelo junto a los del smoke.")
     return 0
 
 

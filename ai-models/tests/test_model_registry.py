@@ -68,7 +68,7 @@ def test_registro_del_repo_es_integro_y_reconstruible(tmp_path: Path) -> None:
     # Reconstrucción determinista byte a byte (F3 + F8).
     import importlib.util
 
-    for script_name in ("register_f3.py", "register_e2.py", "register_e3.py"):
+    for script_name in ("register_f3.py", "register_e2.py", "register_e3.py", "register_f10.py"):
         script = REPO_REGISTRY.parent / "experiments" / script_name
         spec = importlib.util.spec_from_file_location(script.stem, script)
         assert spec and spec.loader
@@ -86,6 +86,12 @@ def test_registro_del_repo_es_integro_y_reconstruible(tmp_path: Path) -> None:
     # Ciclo de vida F9: 0.1.0 sucedidas por 0.2.0 sin reetiquetar evaluaciones E2.
     assert reg.get("event-baseline-z", "0.1.0").status == ModelStatus.SUPERSEDED
     assert reg.get("event-baseline-z", "0.2.0").status == ModelStatus.CANDIDATE
+    # F10: clasificación exploratoria + promoción CANDIDATE con nota de evidencia.
+    assert reg.get_experiment("EXP-ANOM-002").study_type == "exploratory"
+    assert reg.get_experiment("EXP-ANOM-003").study_type == "exploratory"
+    combined = reg.get("anom-combined-we", "0.2.0")
+    assert combined.status == ModelStatus.CANDIDATE
+    assert "EXPLORATORIA" in (combined.notes or "")
     # EXP-ANOM-002: la conclusión mantiene LOF como seleccionado (sin supersession).
     e2 = reg.get_experiment("EXP-ANOM-002")
     assert e2.selected_model_id == "anom-lof"

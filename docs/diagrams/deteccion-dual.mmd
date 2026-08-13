@@ -1,0 +1,10 @@
+%% Arquitectura de detección vigente (F10; decisión F8/F9 — exploratoria, confirmatorio pendiente)
+flowchart TD
+    RAW[Raw Telemetry<br/>OBD-II cuantizado J1979] --> NORM[Normalization<br/>esquema canónico]
+    NORM --> WF[Window Features fs1<br/>ventanas 60/30]
+    NORM --> EI[Event Intelligence<br/>detector ed:1 + efv:1]
+    WF --> LOF[LOF-v1 CONGELADO<br/>umbral 0.1632<br/>señal PRIMARIA]
+    EI --> EBZ[event-baseline-z v0.2.0 CONGELADO<br/>umbral LOSO 57.5<br/>detector contextual COMPLEMENTARIO]
+    LOF --> EF{Evidence Fusion<br/>AM-WE-d: OR explícito y AUDITABLE<br/>configurable: anomaly_mode = window / event / both<br/>NO es un modelo inteligente}
+    EBZ --> EF
+    EF --> AR[Agent Runtime<br/>razona sobre AMBAS señales:<br/>anomaly_summary + current_event +<br/>event_comparison + baseline confidence<br/>nunca 'anomaly_score = X' a secas]

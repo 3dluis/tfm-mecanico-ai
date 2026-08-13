@@ -31,6 +31,9 @@ class RuntimeConfig:
     """Flags de arquitectura + límites + contexto epistemológico."""
 
     memory_mode: MemoryMode = MemoryMode.EPISODIC
+    anomaly_mode: str = "window"  # 'window' | 'event' | 'both' (F10): la fusión OR de
+    # AM-WE-d es una ESTRATEGIA explícita y auditable, configurable para ablaciones —
+    # nunca una regla fija de producción (decisión del autor, F10 §5).
     enable_critic: bool = True
     enable_loop: bool = True  # False = una sola pasada (A1-A3)
     epistemic_level: EpistemicLevel = EpistemicLevel.SIMULATED

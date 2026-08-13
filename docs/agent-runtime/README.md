@@ -26,6 +26,7 @@ hipotetizar → obtener evidencia adicional → verificar → criticar → repet
 | [11 Observabilidad](11_observability.md) | Métricas del runtime para la evaluación científica |
 | [12 Diseño experimental](12_experimental_design.md) | Arquitecturas A0–A6 por feature flags; métricas; hipótesis H5 |
 | [Modelos de IA](../models/README.md) | (F7) Qué agente consume qué modelo (ML/embeddings/LLM), registro, ciclo de vida — mapa en [agent-model-use](../models/diagrams/agent-model-use.mmd) |
+| [Detección dual](../diagrams/deteccion-dual.mmd) | (F10) Entrada del runtime: LOF primario + Event Intelligence complementario + Evidence Fusion (OR auditable, `RuntimeConfig.anomaly_mode`); contexto estructurado, nunca score a secas (07 §decisión F8/F9) |
 
 Diagramas: [multi-agent](diagrams/multi-agent.mmd) · [flujo de diagnóstico](diagrams/diagnostic-flow.mmd) ·
 [loop de investigación](diagrams/investigation-loop.mmd) · [agentes↔tools](diagrams/agents-tools.mmd) ·

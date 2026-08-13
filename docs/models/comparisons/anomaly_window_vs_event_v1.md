@@ -1,5 +1,11 @@
 # Comparación — Window vs Event vs Both v1 (EXP-ANOM-002, F8)
 
+> **CLASIFICACIÓN: PILOT / EXPLORATORY** (decisión del autor, F10). Evidencia
+> exploratoria — no confirmatoria. Inventario de decisiones ex-ante/durante/post:
+> [../experiments/exploratory/EXP-ANOM-002_clasificacion.md](../../experiments/exploratory/EXP-ANOM-002_clasificacion.md).
+> Confirmatorio pre-registrado: [PROTO-CONF-001](../../experiments/preregistered/PROTO-CONF-001.md).
+
+
 **Fuente:** `ai-models/experiments/e2_summary.json` + `e2_results.csv` +
 `e2_per_scenario.csv` + `e2_event_quality.csv` (runner `e2_window_vs_event.py`, config
 `configs/exp-anom-002.yaml`, git del run registrado en runs.jsonl y en el registro).
