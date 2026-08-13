@@ -1,6 +1,36 @@
-# pyproject RAÍZ del monorepo: SOLO tooling compartido (ADR-0006).
+# pyproject RAÍZ del monorepo: tooling compartido (ADR-0006) + workspace uv (ADR-0032).
 # No define paquete; el código vive en shared/, obd-lab/, ai-models/,
 # diagnostic-agent/ y cloud-platform/, cada uno con su propio pyproject.toml.
+# Entorno: `uv sync --all-packages` crea .venv con los 5 miembros en editable + grupo dev,
+# reproducible por uv.lock (committeado). Ver docs/adr/0032-uv-gestion-entorno.md.
+
+[tool.uv.workspace]
+members = ["shared", "obd-lab", "ai-models", "diagnostic-agent", "cloud-platform"]
+
+[tool.uv.sources]
+ai-models = { workspace = true }
+diagnostic-agent = { workspace = true }
+obd-lab = { workspace = true }
+cloud-platform = { workspace = true }
+
+[dependency-groups]
+# Todo lo que exige `make check` (lint + tipos + tests + regeneración de docs de datos).
+# El emulador ELM327 queda FUERA del lock (setuptools<81 + --no-build-isolation, ADR-0003):
+# se instala con `make install-emulator`; sus tests se saltan si no está presente.
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pre-commit>=3.7",
+    "types-PyYAML",
+    # extras de miembros necesarios para el gate (export ONNX y runtime de inferencia)
+    "ai-models[export]",
+    "diagnostic-agent[detection]",
+    # tipado del runtime agéntico (subconjunto ligero del extra `reasoning`)
+    "langgraph>=0.2",
+    "langchain-core>=0.3",
+]
 
 [tool.ruff]
 line-length = 100
@@ -39,6 +69,11 @@ testpaths = [
     "tests-integration",
 ]
 addopts = "-q --strict-markers"
+filterwarnings = [
+    # Deprecación UPSTREAM (import interno de fastapi/testclient sobre starlette moderna);
+    # no es silenciable desde nuestro código. Se retirará al migrar el TestClient.
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated",
+]
 markers = [
     "emulator: pruebas que requieren ELM327-emulator (lentas, solo POSIX)",
     "docker: pruebas que requieren daemon Docker",

@@ -26,3 +26,6 @@ packages = ["src/obd_lab"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.uv.sources]
+mecanico-contracts = { workspace = true }

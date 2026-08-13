@@ -10,30 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v4
         with:
-          python-version: "3.11"
-      - name: Instalar monorepo
+          enable-cache: true
+      - name: Instalar monorepo (uv.lock, ADR-0032)
         run: |
-          pip install --upgrade pip "setuptools<81" wheel
-          pip install -e ./shared
-          pip install --no-build-isolation "ELM327-emulator>=3.0.5"
-          pip install -e "./obd-lab[dev]"
-          pip install -e "./ai-models[dev]"
-          pip install -e "./diagnostic-agent[detection,dev]"
-          pip install -e "./cloud-platform[dev]"
-          pip install ruff mypy pytest pytest-cov
+          uv sync --all-packages --locked
+          # Emulador FUERA del lock (setuptools<81 + no-build-isolation, ADR-0003)
+          uv pip install "setuptools<81" wheel
+          uv pip install --no-build-isolation "ELM327-emulator>=3.0.5"
       - name: Lint (ruff)
         run: |
-          ruff check shared obd-lab ai-models diagnostic-agent cloud-platform tools
-          ruff format --check shared obd-lab ai-models diagnostic-agent cloud-platform tools
+          uv run ruff check shared obd-lab ai-models diagnostic-agent cloud-platform tools
+          uv run ruff format --check shared obd-lab ai-models diagnostic-agent cloud-platform tools
       - name: Tipos (mypy)
-        run: mypy
+        run: uv run mypy
       - name: Tests
-        run: pytest --cov
+        run: uv run pytest --cov
       - name: Esquemas al día (ADR-0007)
         run: |
-          python -m mecanico_contracts.export_schemas shared/schemas
+          uv run python -m mecanico_contracts.export_schemas shared/schemas
           git diff --exit-code shared/schemas
 
   compose-validate:
