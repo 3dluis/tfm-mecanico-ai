@@ -34,3 +34,4 @@
 | [0030](0030-postgresql-pgvector-edge.md) | **PostgreSQL + pgvector = plataforma oficial de persistencia del Edge** (schemas lógicos, particionado, Alembic, SQLite→legacy) | 12 | Aceptada |
 | [0031](0031-linea-experimental-ml-wide.md) | Línea experimental ML sobre representación wide: snapshot = entrada canónica de ML (paridad EXP-ANOM-005), Protocolo ML v1, reactivación exploratoria de AE/temporales, familia EXP-PAT-*, semillas 401–599 | 13 | Aceptada |
 | [0032](0032-uv-gestion-entorno.md) | uv como gestor de entorno: workspace de 5 miembros, uv.lock committeado, `make install` = `uv sync --locked`, emulador fuera del lock, deps PG de diagnostic-agent declaradas | 13 | Aceptada |
+| [0033](0033-xai-transversal-shap.md) | XAI transversal con SHAP: dos niveles de explicación, métricas de atribución con GT sintético, decisiones D1/D2/D3, gate de selección ampliado, sin serie EXP-XAI-* | 15 | Aceptada |
