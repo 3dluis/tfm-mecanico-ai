@@ -34,4 +34,7 @@ sobre series temporales OBD-II (autoencoders, ventanas como hiperparámetro, emb
 descubrimiento de patrones) se rige por el [Protocolo Experimental ML v1](protocolo_ml_v1.md)
 (hipótesis HX-ML-*, splits anti-leakage con tests automáticos, semillas exploratorias
 401–599, criterio de «candidate undocumented pattern» y mapeo de la serie EXP-ML-* a la
-nomenclatura canónica). La evidencia confirmatoria sigue gobernada por los pre-registros.
+nomenclatura canónica) y por su [Adenda XAI v1](protocolo_ml_v1_adenda_xai.md) (F15,
+ADR-0033: métricas de atribución con ground truth sintético, estabilidad, agreement,
+decisiones D1/D2/D3 por experimento). La evidencia confirmatoria sigue gobernada por los
+pre-registros.

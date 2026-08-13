@@ -358,6 +358,12 @@ propio. pgvector no es dependencia del entrenamiento (los experimentos leen JSON
 
 ## 13. Explicabilidad (transversal desde el diseño)
 
+> **Adenda XAI v1 (F15):** este apartado queda desarrollado y operacionalizado por la
+> [Adenda XAI v1](protocolo_ml_v1_adenda_xai.md) (ADR-0033): SHAP como capa común de
+> explicación, métricas de atribución con ground truth sintético (AR@K), estabilidad,
+> agreement con los mecanismos propios, decisiones D1/D2/D3 por experimento y reglas de
+> background/sampling. Lo que sigue se conserva como principio general.
+
 Se conserva siempre información suficiente para responder: qué variables cambiaron,
 cuándo, durante cuánto tiempo, contra qué baseline, qué features contribuyeron y qué
 eventos históricos son similares. Instrumentos por familia: modelos clásicos → feature
