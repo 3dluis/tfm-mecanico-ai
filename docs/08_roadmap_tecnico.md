@@ -1,5 +1,15 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F15:** **XAI transversal** ([Adenda XAI v1](experiments/protocolo_ml_v1_adenda_xai.md),
+> ADR-0033): la explicabilidad pasa de producirse a EVALUARSE en cada experimento de la
+> línea ML (métricas de atribución contra el ground truth de inyección, estabilidad,
+> agreement, decisiones D1/D2/D3). Progresión de la línea: F13 (fundación wide) →
+> EXP-ANOM-006 (AE + severidad; D1 REJECT / D2·D3 needs-more-evidence) → EXP-ANOM-007
+> (AE + train v1.1 **+ evaluación XAI completa**) → representación candidata →
+> EXP-PAT-* (descubrimiento + pattern-level XAI: qué variables y momentos caracterizan
+> cada patrón candidato) → RAG + memoria → hipótesis del agente (capa b) → validación.
+> La atribución temporal feature×tiempo queda contemplada para el nivel secuencial (T3).
+
 > **Actualización F13:** se abre la **línea experimental ML sobre la representación wide**
 > ([Protocolo ML v1](experiments/protocolo_ml_v1.md), ADR-0031): el
 > `VehicleTelemetrySnapshot` queda validado como entrada canónica de ML por paridad exacta

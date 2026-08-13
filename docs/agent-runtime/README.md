@@ -38,6 +38,14 @@ ADRs: [0015 runtime multiagente](../adr/0015-edge-agent-runtime-multiagente.md) 
 [0017 loop y context engineering](../adr/0017-loop-y-context-engineering.md) ·
 [0018 diseño experimental A0–A6](../adr/0018-diseno-experimental-arquitecturas.md)
 
+**Evidencia XAI (F15, ADR-0033):** el paquete de evidencia que reciben los agentes se
+amplía con la capa de explicación del modelo (top_features, shap_values, per-feature
+reconstruction error, reference_baseline) según la
+[Adenda XAI v1](../experiments/protocolo_ml_v1_adenda_xai.md) §5. Regla vinculante: el
+agente enuncia la atribución como evidencia/compatibilidad («la desviación fue atribuida
+principalmente a…, comportamiento compatible con…»), JAMÁS como causalidad confirmada —
+la validación pertenece al nodo `verify` y al ciclo de estados de la memoria.
+
 Relación con el resto de la documentación: la base de datos y contratos son los de
 [data-architecture](../data-architecture/README.md) (sin cambios de esquema: el runtime los
 CONSUME); la separación ML/LLM sigue siendo ADR-0009; la memoria sigue ADR-0013.
