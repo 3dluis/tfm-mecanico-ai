@@ -89,6 +89,7 @@ from mecanico_contracts.models_registry import (
     validate_status_transition,
 )
 from mecanico_contracts.snapshot_model import (
+    PID_TO_SNAPSHOT_FIELD,
     SYNC_VERSION,
     SignalQuality,
     SnapshotEventLink,
@@ -105,6 +106,7 @@ __all__ = [
     "ALL_EVENT_TYPES",
     "EVENT_TAXONOMY",
     "MODEL_GOVERNANCE_VERSION",
+    "PID_TO_SNAPSHOT_FIELD",
     "SCHEMA_VERSION",
     "SYNC_VERSION",
     "TAXONOMY_VERSION",

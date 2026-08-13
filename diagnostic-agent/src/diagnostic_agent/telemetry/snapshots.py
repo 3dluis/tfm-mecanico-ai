@@ -23,24 +23,14 @@ from mecanico_contracts import (
     VehicleEvent,
     VehicleTelemetrySnapshot,
 )
-from mecanico_contracts.snapshot_model import SYNC_VERSION
+from mecanico_contracts.snapshot_model import PID_TO_SNAPSHOT_FIELD, SYNC_VERSION
 
-#: PID canónico (python-OBD) → campo del snapshot. Los campos sin PID en el ciclo de
-#: sondeo actual (fuel_pressure, battery_voltage, IMU, GPS…) quedan None+not_polled.
-PID_TO_FIELD: dict[str, str] = {
-    "RPM": "rpm",
-    "SPEED": "vehicle_speed",
-    "THROTTLE_POS": "throttle_position",
-    "ENGINE_LOAD": "engine_load",
-    "COOLANT_TEMP": "coolant_temperature",
-    "INTAKE_TEMP": "intake_air_temperature",
-    "MAF": "maf",
-    "INTAKE_PRESSURE": "map_kpa",
-    "SHORT_FUEL_TRIM_1": "stft_bank1",
-    "LONG_FUEL_TRIM_1": "ltft_bank1",
-    "O2_B1S1": "o2_sensor_1",
-    "TIMING_ADVANCE": "timing_advance",
-}
+#: PID canónico (python-OBD) → campo del snapshot. Desde F13 la definición vive en el
+#: contrato compartido (`PID_TO_SNAPSHOT_FIELD`) para que entrenamiento (ai_models) e
+#: inferencia (este módulo) usen exactamente la misma correspondencia; este alias se
+#: conserva por compatibilidad. Los campos sin PID en el ciclo de sondeo actual
+#: (fuel_pressure, battery_voltage, IMU, GPS…) quedan None+not_polled.
+PID_TO_FIELD: dict[str, str] = PID_TO_SNAPSHOT_FIELD
 
 
 @dataclass(frozen=True)

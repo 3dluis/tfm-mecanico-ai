@@ -1,5 +1,17 @@
 # CHANGELOG — mecanico_contracts
 
+## v0.5.1 · SCHEMA_VERSION 2 (2026-08-13) — Mapeo PID→snapshot compartido (F13)
+
+Cambios ADITIVOS (retro-compatibles):
+
+- Nueva constante `PID_TO_SNAPSHOT_FIELD` en `snapshot_model.py`: mapeo canónico PID
+  (python-OBD) → campo del snapshot, promovido desde `diagnostic_agent.telemetry.snapshots`
+  para que el camino wide de ML (`ai_models.data.snapshot_matrix`) y el snapshot builder
+  del edge usen exactamente la misma correspondencia (`PID_TO_FIELD` pasa a ser un alias;
+  `snapshots.py` no está en la lista congelada de arms-freeze-v1). La igualdad de ambos
+  mapeos se verifica en `tests-integration/test_wide_parity.py`.
+- Ningún modelo Pydantic cambia: los JSON Schema exportados quedan idénticos.
+
 ## v0.5.0 · SCHEMA_VERSION 2 (2026-08-13) — Representación canónica horizontal (F11)
 
 Cambios ADITIVOS (retro-compatibles):

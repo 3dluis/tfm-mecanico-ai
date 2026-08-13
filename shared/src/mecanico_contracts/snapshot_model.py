@@ -43,6 +43,26 @@ from mecanico_contracts.models import ContractBase
 #: nº de PIDs, hardware, almacenamiento).
 SYNC_VERSION = "sync:v1"
 
+#: PID canónico (nomenclatura python-OBD, ver ``features.CANONICAL_PIDS``) → campo del
+#: snapshot. Es el mapeo ÚNICO entrenamiento↔inferencia↔persistencia: el snapshot builder
+#: del edge (diagnostic_agent.telemetry.snapshots) y el camino wide de ML (ai_models.data)
+#: deben usar exactamente esta correspondencia; su igualdad se verifica por test de
+#: integración. Añadir un PID al ciclo de sondeo = añadir aquí su campo (cambio ADITIVO).
+PID_TO_SNAPSHOT_FIELD: dict[str, str] = {
+    "RPM": "rpm",
+    "SPEED": "vehicle_speed",
+    "THROTTLE_POS": "throttle_position",
+    "ENGINE_LOAD": "engine_load",
+    "COOLANT_TEMP": "coolant_temperature",
+    "INTAKE_TEMP": "intake_air_temperature",
+    "MAF": "maf",
+    "INTAKE_PRESSURE": "map_kpa",
+    "SHORT_FUEL_TRIM_1": "stft_bank1",
+    "LONG_FUEL_TRIM_1": "ltft_bank1",
+    "O2_B1S1": "o2_sensor_1",
+    "TIMING_ADVANCE": "timing_advance",
+}
+
 
 class SignalQuality(StrEnum):
     """Estado de calidad por señal (solo se persisten los ≠ MEASURED)."""
