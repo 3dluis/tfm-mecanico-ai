@@ -13,8 +13,8 @@ dist/
 htmlcov/
 
 # Datos y modelos (regenerables por script; ver README)
-data/
-!data/corpus/MANIFEST.md
+/data/
+!/data/corpus/MANIFEST.md
 *.sqlite3
 *.db
 *.onnx
