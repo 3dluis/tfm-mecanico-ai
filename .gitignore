@@ -21,7 +21,7 @@ htmlcov/
 *.gguf
 
 # Experimentos: solo se versionan resultados finales CSV/figuras seleccionadas
-experiments/**/tmp/
+**/experiments/tmp/
 
 # Entornos y secretos
 .env

@@ -31,6 +31,10 @@ dev = [
     "langgraph>=0.2",
     "langchain-core>=0.3",
 ]
+# Entrenamiento profundo (torch): SOLO para experimentos de la línea ML (F13+).
+# No entra en dev para no arrastrar torch a CI ni a entornos edge:
+# `uv sync --all-packages --group train` / `uv run --group train …`.
+train = ["ai-models[deep]"]
 
 [tool.ruff]
 line-length = 100
@@ -80,7 +84,7 @@ markers = [
 ]
 
 [[tool.mypy.overrides]]
-module = ["obd", "obd.*", "elm", "elm.*", "sklearn.*", "skl2onnx", "skl2onnx.*", "onnxruntime", "yaml"]
+module = ["obd", "obd.*", "elm", "elm.*", "sklearn.*", "skl2onnx", "skl2onnx.*", "onnxruntime", "yaml", "torch", "torch.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
