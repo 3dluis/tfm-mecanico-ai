@@ -37,8 +37,9 @@ modelos ya materializados; este inventario cubre también lo no construido.)
 | Clustering (perfiles de conducción) | ML | PLANNED | — |
 | Change-point detection (segmentación) | ML eventos | PLANNED | candidato a retar a `ed:1` |
 | HMM (estados vehiculares) | ML eventos | PLANNED | solo si supera a `ed:1`/CPD |
-| Autoencoder | ML ventana | PLANNED | solo si supera a LOF en held-out con FPR ≤ |
-| Modelos temporales profundos | ML | PLANNED | solo justificados |
+| Autoencoder | ML ventana | PLANNED → **línea abierta (F13)** | próximo: EXP-ANOM-006 sobre camino wide; condición intacta: solo si supera a LOF en held-out con FPR ≤ (ADR-0011/0031) |
+| Modelos temporales profundos (LSTM/GRU-AE) | ML | PLANNED → **línea abierta (F13)** | EXP-ANOM-007, condicionado a resultados de EXP-ANOM-006 (Protocolo ML v1 §5) |
+| HDBSCAN sobre embeddings (descubrimiento) | ML patrones | PLANNED (F13) | EXP-PAT-001/002; los clusters son `candidate_pattern`, nunca «fallos» (Protocolo ML v1 §10) |
 | Qwen 2.5/3 (1.5B–7B) | LLM | PLANNED | pendiente llm-smoke + benchmark |
 | Llama 3.2 (1B–3B) | LLM | PLANNED | ídem |
 | Gemma 2/3 (2B–4B) | LLM | PLANNED | ídem (licencia a revisar) |

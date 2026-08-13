@@ -32,3 +32,4 @@
 | [0028](0028-particionamiento-snapshots.md) | Particionamiento mensual de snapshots (candidato, no activado) | 11 | Aceptada |
 | [0029](0029-evaluacion-postgresql-pgvector-edge.md) | Evaluación PostgreSQL+pgvector en Edge → HYBRID (REJECT edge · ACCEPT cloud) | 11 | **Superada por [0030](0030-postgresql-pgvector-edge.md)** (se conserva con sus mediciones) |
 | [0030](0030-postgresql-pgvector-edge.md) | **PostgreSQL + pgvector = plataforma oficial de persistencia del Edge** (schemas lógicos, particionado, Alembic, SQLite→legacy) | 12 | Aceptada |
+| [0031](0031-linea-experimental-ml-wide.md) | Línea experimental ML sobre representación wide: snapshot = entrada canónica de ML (paridad EXP-ANOM-005), Protocolo ML v1, reactivación exploratoria de AE/temporales, familia EXP-PAT-*, semillas 401–599 | 13 | Aceptada |

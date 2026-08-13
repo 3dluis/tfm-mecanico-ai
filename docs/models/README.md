@@ -64,7 +64,10 @@ Diagramas: [ciclo ML](diagrams/ml-lifecycle.mmd) · [ciclo LLM](diagrams/llm-lif
   feature engineering → modelo`, sin que cada entrenamiento reconstruya su propio pivot
   long→wide. El snapshot **no contiene features** (siguen en `FeatureVector`/
   `EventFeatureVector`) y `NULL` significa ausencia, no cero: imputar es decisión de la fase
-  de features y debe declararse en la card del modelo.
+  de features y debe declararse en la card del modelo. **Desde F13 esta ruta está
+  implementada y validada por paridad exacta** (`ai_models.data.snapshot_matrix`,
+  [EXP-ANOM-005](comparisons/wide_path_parity_v1.md), ADR-0031); la línea de experimentos
+  ML se rige por el [Protocolo ML v1](../experiments/protocolo_ml_v1.md).
 - **[PostgreSQL + pgvector](../data-architecture/13_postgresql_pgvector_edge.md) (F12):** las
   inferencias viven en el schema `models`; los embeddings de conocimiento y memoria son
   columnas `vector(384)` en la misma base (sin segunda base vectorial: regla ADR-0030). Los

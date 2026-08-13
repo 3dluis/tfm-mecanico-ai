@@ -77,3 +77,21 @@ dimensión `anomaly_mode` y se interpretan dentro de **H-EVT** así:
 El protocolo confirmatorio pre-registrado de H-EVT es
 **[PROTO-CONF-001](experiments/preregistered/PROTO-CONF-001.md)** (F10): usa
 exclusivamente la nomenclatura nueva y datos confirmatorios nunca vistos.
+
+## 7. Adición F13 (2026-08-13) — línea experimental ML ↔ familias vigentes
+
+*Sección añadida en F13 (apertura de la línea de entrenamiento y evaluación de modelos
+ML). Las secciones 1–6 se conservan VERBATIM.*
+
+La instrucción de fase proponía una serie `EXP-ML-001…014`; se integra en la nomenclatura
+canónica `EXP-<FAMILIA>-<NNN>` (mapeo completo en
+[Protocolo ML v1 §7](experiments/protocolo_ml_v1.md)). Correspondencias con las familias
+de hipótesis:
+
+| Elemento F13 | Familia vigente | Nota |
+|---|---|---|
+| EXP-ANOM-005 (paridad camino wide) | infraestructura de H-EVT/H-MAIN | valida la entrada canónica de ML; no evalúa hipótesis |
+| EXP-ANOM-006 (autoencoder) / EXP-ANOM-007 (LSTM/GRU-AE) | precondición reforzada de H-EVT; alimenta H-MAIN | mismos splits/protocolo que E1; condición ADR-0011 |
+| EXP-PAT-001/002 (embeddings + HDBSCAN, patrones candidatos) | evidencia de diseño hacia **H-MAIN** (capacidad de descubrimiento) | los patrones candidatos solo cuentan para la PI tras el criterio §10 del protocolo y, en lo confirmatorio, tras EXP-MAIN-001 |
+| Hipótesis exploratorias HX-ML-1…6 | NO son familias H-* | verificables, con refutación declarada; nunca se promedian con evidencia confirmatoria |
+| Serie EXP-EMB-* | reservada para embeddings de RAG (ADR-0024/R3) | los embeddings de comportamiento van en EXP-PAT-* |

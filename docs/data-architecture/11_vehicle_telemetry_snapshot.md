@@ -124,6 +124,14 @@ test*, no del motor. Para ML se leerá por columnas/lotes/streaming — pendient
 identificado como el siguiente cuello de botella real a resolver antes de entrenar sobre
 snapshots.)
 
+> **Actualización F13:** la mitad in-memory de esa ruta existe y está validada:
+> `ai_models.data.snapshot_matrix` convierte los snapshots de una sesión en matriz
+> columnar NumPy (NaN para NULL, máscara de validez, rechazo de rejillas mixtas) y
+> EXP-ANOM-005 verificó paridad exacta con el pipeline long de F3
+> ([informe](../models/comparisons/wide_path_parity_v1.md), ADR-0031). La lectura columnar
+> DESDE PostgreSQL (SELECT por columnas / COPY hacia arrays, sin materializar Pydantic)
+> sigue pendiente y se abordará cuando los volúmenes de entrenamiento lo exijan.
+
 ## 10. Retención, downsampling y particionamiento
 
 Integrado con [09](09_retencion_sincronizacion.md): snapshots recientes → edge;

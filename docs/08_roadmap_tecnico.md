@@ -1,5 +1,15 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F13:** se abre la **línea experimental ML sobre la representación wide**
+> ([Protocolo ML v1](experiments/protocolo_ml_v1.md), ADR-0031): el
+> `VehicleTelemetrySnapshot` queda validado como entrada canónica de ML por paridad exacta
+> con el pipeline de F3 (EXP-ANOM-005), y T3 se extiende con una progresión exploratoria
+> por niveles — AE denso (EXP-ANOM-006) → LSTM/GRU-AE (EXP-ANOM-007, condicionado) →
+> embeddings + HDBSCAN para descubrimiento de patrones (EXP-PAT-001/002) — manteniendo la
+> condición de adopción de ADR-0011 (superar a LOF en held-out con FPR ≤) y el presupuesto
+> edge como criterio de viabilidad. T8 hereda las hipótesis HX-ML-* como banco
+> exploratorio; los confirmatorios siguen bloqueados hasta congelar el pre-registro.
+
 > **Actualización F5:** T5–T7 evolucionan al **Edge Agent Runtime multiagente**
 > ([docs/agent-runtime/](agent-runtime/README.md), ADR-0015…0018). Prioridades MUST/SHOULD/
 > COULD y plan incremental: [informe F5](fase5/informe_impacto_runtime.md). T8 adopta el
