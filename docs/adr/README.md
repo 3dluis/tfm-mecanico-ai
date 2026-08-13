@@ -33,3 +33,4 @@
 | [0029](0029-evaluacion-postgresql-pgvector-edge.md) | Evaluación PostgreSQL+pgvector en Edge → HYBRID (REJECT edge · ACCEPT cloud) | 11 | **Superada por [0030](0030-postgresql-pgvector-edge.md)** (se conserva con sus mediciones) |
 | [0030](0030-postgresql-pgvector-edge.md) | **PostgreSQL + pgvector = plataforma oficial de persistencia del Edge** (schemas lógicos, particionado, Alembic, SQLite→legacy) | 12 | Aceptada |
 | [0031](0031-linea-experimental-ml-wide.md) | Línea experimental ML sobre representación wide: snapshot = entrada canónica de ML (paridad EXP-ANOM-005), Protocolo ML v1, reactivación exploratoria de AE/temporales, familia EXP-PAT-*, semillas 401–599 | 13 | Aceptada |
+| [0032](0032-uv-gestion-entorno.md) | uv como gestor de entorno: workspace de 5 miembros, uv.lock committeado, `make install` = `uv sync --locked`, emulador fuera del lock, deps PG de diagnostic-agent declaradas | 13 | Aceptada |

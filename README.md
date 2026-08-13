@@ -53,12 +53,12 @@ make full           # todo
 Comprobación: `curl localhost:8000/health` y `curl localhost:8000/ready` (agente),
 `curl localhost:8080/health` (cloud).
 
-Desarrollo local sin Docker:
+Desarrollo local sin Docker (requiere [uv](https://docs.astral.sh/uv/); ADR-0032):
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
-make install
-make check          # lint + tipos + tests + esquemas al día
+make install            # uv sync --locked: crea .venv con los 5 paquetes + tooling
+make check              # lint + tipos + tests + esquemas al día (todo vía uv run)
+make install-emulator   # opcional: emulador ELM327 (fuera del lock, ADR-0003)
 ```
 
 ## Camino a la Raspberry Pi

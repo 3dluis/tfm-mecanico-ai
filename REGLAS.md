@@ -60,8 +60,11 @@ ampliación masiva del Agent Runtime antes de validar la capa de persistencia.
 
 ## Comandos
 
+El entorno lo gestiona **uv** (ADR-0032): `uv.lock` committeado es la única fuente de
+versiones; los targets del Makefile corren vía `uv run`. No instalar con pip suelto.
+
 ```bash
-make install        # entorno de desarrollo
+make install        # entorno de desarrollo (uv sync --all-packages --locked)
 make check          # ruff + mypy + pytest + regeneración de docs de datos
 make db-up          # PostgreSQL + pgvector del edge
 make db-upgrade     # migraciones Alembic (oficial)
