@@ -1,0 +1,18 @@
+{
+  "conclusion": "NINGÚN brazo AE cumple la condición de adopción de ADR-0011 (superar a LOF en held-out con FPR ≤): a 60/30 autoencoder_standard mejora mucho el held-out (recall 0.4562 vs 0.25 de LOF, corr_break 0.8375 vs 0.5, 6/6 episodios) pero con FPR 0.1121 ≈3× el de LOF (0.0345); autoencoder_robust EMPATA con LOF (F1 0.6522 vs 0.6448, mismo FPR, held-out +0.006). LOF k=10 SIGUE SELECTED. Evidencia direccional que justifica continuar: (1) el AE-standard detecta el held-out relacional a TODAS las severidades del sweep exploratorio (episodio detectado incluso con decouple 0.3, donde LOF no detecta nada por debajo de 0.9) y multiplica el recall de misfire; (2) el FPR del AE-standard se concentra en normales — mismo diagnóstico de insuficiencia de normalidad que F9 → siguiente paso: re-entrenar con train v1.1 (22 normales) SIN tocar val/test; (3) derivas lentas conjuntas siguen esencialmente indetectadas por todos (joint_slow_drift ≤0.1, load_coolant_decouple ≤0.175) → motivación de HX-ML-3 (secuenciales); (4) embeddings latentes con separación débil entre mecanismos (silhouette entre fallos 0.1175, global -0.0985): señal preliminar INSUFICIENTE para EXP-PAT-001 sin mejorar la representación. Resultados por ventana: 30 y 60 s dominan; 120 s colapsa el brazo robust (umbral 2.08, held-out 0). Sin modelo registrado: nada que gobernar/desplegar.",
+  "config_uri": "ai-models/configs/exp-anom-006.yaml",
+  "created_at": "2026-08-13T00:00:00Z",
+  "dataset_id": "obd-lab-suite-v1",
+  "dataset_version": "1",
+  "evaluation_protocol": "ADR-0011 (config exp-anom-006.yaml)",
+  "experiment_id": "EXP-ANOM-006",
+  "feature_schema_version": "fs1",
+  "objective": "HX-ML-2: evaluar si un autoencoder pequeño (4114 parámetros) iguala o supera a LOF k=10 bajo protocolo ADR-0011, con la ventana como hiperparámetro {10,30,60,120}s, resultados por anomalía y por severidad (sweep exploratorio solo-evaluación) y embeddings latentes preliminares.",
+  "report_uri": "docs/models/comparisons/autoencoder_vs_lof_v1.md",
+  "schema_version": 2,
+  "selected_model_id": null,
+  "split_version": "suite-v1-split-1",
+  "study_type": "exploratory",
+  "title": "Autoencoder denso vs LOF sobre el camino wide",
+  "training_run_ids": []
+}

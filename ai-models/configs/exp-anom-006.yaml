@@ -1,0 +1,36 @@
+# Config declarativa del experimento E5 (F14) — autoencoder vs LOF (HX-ML-2).
+# Fuente de resultados: experiments/e5_results.json + experiments/runs.jsonl.
+
+experiment:
+  id: EXP-ANOM-006
+  title: Autoencoder denso vs LOF sobre el camino wide (ventana como hiperparámetro)
+  protocol: ADR-0011   # umbral 1% FPR solo-train · sin point-adjustment · episodios · held-out intocable
+  study_type: exploratory
+  hypothesis: HX-ML-2 (Protocolo ML v1 §1) — condición de adopción de ADR-0011
+
+dataset:
+  id: obd-lab-suite-v1
+  version: "1"
+  split: suite-v1-split-1        # congelado; único conjunto de ajuste
+  severity_sweep: obd-lab/scenarios/suite_f14_severity.yaml   # SOLO evaluación, seeds 412-425
+
+features:
+  schema: fs1                    # 42 features por ventana
+  windows: [10, 30, 60, 120]     # hiperparámetro (stride = size/2); 60/30 = configuración canónica
+  preprocessing: scaler ajustado solo con train, persistido en el detector (no embebido aún)
+
+models:
+  - type: autoencoder_standard   # AE denso 42-32-16-8-16-32-42, 4114 parámetros
+    parameters: {hidden: [32, 16], latent: 8, epochs: 200, batch_size: 32, lr: 0.001, scaler: StandardScaler}
+  - type: autoencoder_robust
+    parameters: {hidden: [32, 16], latent: 8, epochs: 200, batch_size: 32, lr: 0.001, scaler: RobustScaler}
+  - type: lof                    # comparador; a 60/30 equivale al brazo congelado (paridad EXP-ANOM-005)
+    parameters: {n_neighbors: 10, novelty: true}
+
+random_seed: 42
+git_commit: 5035ae7
+hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)
+
+adoption_criteria: >
+  ADR-0011: el AE solo sustituye a LOF si lo supera en recall held-out con FPR ≤ LOF.
+  Un empate o una mejora con FPR superior NO promueve el modelo (evidencia direccional).
