@@ -44,6 +44,27 @@ def _to_row(row_cls: Any, contract: BaseModel, **extra: Any) -> Any:
     return row_cls(**out)
 
 
+def _to_row_dict(row_cls: Any, contract: BaseModel, **extra: Any) -> dict[str, Any]:
+    """Como _to_row pero devuelve el dict de columnas (para INSERT por lotes)."""
+    from datetime import datetime as _dt
+
+    from sqlalchemy import DateTime as SaDateTime
+
+    data = json.loads(contract.model_dump_json())
+    data.update(extra)
+    if "metadata" in data:
+        data["meta"] = data.pop("metadata")
+    out: dict[str, Any] = {}
+    for col in row_cls.__table__.columns:
+        if col.key not in data:
+            continue
+        value = data[col.key]
+        if isinstance(col.type, SaDateTime) and isinstance(value, str):
+            value = _dt.fromisoformat(value)
+        out[col.key] = value
+    return out
+
+
 def _to_contract(model_cls: type[M], row: Any) -> M:
     """Reconstruye el contrato desde la fila (ignora columnas ajenas al contrato)."""
     data = {c.key: getattr(row, c.key) for c in row.__table__.columns}
@@ -54,24 +75,37 @@ def _to_contract(model_cls: type[M], row: Any) -> M:
 
 
 class EdgeStoreV2:
-    """Acceso a la base local del edge (esquema v2)."""
+    """Acceso a la base local del edge (esquema v2+).
 
-    def __init__(self, db_path: str | Path) -> None:
-        path = Path(db_path)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        self.engine = create_engine(f"sqlite:///{path}")
+    Motor por defecto: SQLite (ruta de fichero). Acepta también una URL de SQLAlchemy
+    (``url=``) para el mismo modelo lógico sobre PostgreSQL (F11 §36/§38: el modelo
+    mapea a Edge y Cloud sin cambiar semántica; los repositorios abstraen el motor).
+    """
+
+    def __init__(self, db_path: str | Path | None = None, url: str | None = None) -> None:
+        if url is not None:
+            self.engine = create_engine(url)
+            self._is_sqlite = url.startswith("sqlite")
+        else:
+            assert db_path is not None, "db_path o url"
+            path = Path(db_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            self.engine = create_engine(f"sqlite:///{path}")
+            self._is_sqlite = True
         self.migrate()
 
     # ------------------------------------------------------------- migración
     def migrate(self) -> int:
-        """Crea tablas ausentes y sella ``user_version``; devuelve la versión final."""
+        """Crea tablas ausentes y sella la versión física; devuelve la versión final."""
         with self.engine.connect() as conn:
-            current = conn.execute(text("PRAGMA user_version")).scalar() or 0
-            if current > SCHEMA_DB_VERSION:
-                msg = f"BD con esquema {current} más nuevo que el runtime ({SCHEMA_DB_VERSION})"
-                raise RuntimeError(msg)
+            if self._is_sqlite:
+                current = conn.execute(text("PRAGMA user_version")).scalar() or 0
+                if current > SCHEMA_DB_VERSION:
+                    msg = f"BD con esquema {current} más nuevo que el runtime ({SCHEMA_DB_VERSION})"
+                    raise RuntimeError(msg)
             Base.metadata.create_all(conn)
-            conn.execute(text(f"PRAGMA user_version = {SCHEMA_DB_VERSION}"))
+            if self._is_sqlite:
+                conn.execute(text(f"PRAGMA user_version = {SCHEMA_DB_VERSION}"))
             conn.commit()
         return SCHEMA_DB_VERSION
 
@@ -84,6 +118,17 @@ class EdgeStoreV2:
     def add_all(self, row_cls: type, contracts: list[BaseModel], **extra: Any) -> None:
         with OrmSession(self.engine) as s:
             s.add_all(_to_row(row_cls, c, **extra) for c in contracts)
+            s.commit()
+
+    def bulk_insert(self, row_cls: type, contracts: list[BaseModel], **extra: Any) -> None:
+        """Inserción por lotes vía core INSERT (camino rápido para snapshots, F11 §26)."""
+        if not contracts:
+            return
+        from sqlalchemy import insert
+
+        rows = [_to_row_dict(row_cls, c, **extra) for c in contracts]
+        with OrmSession(self.engine) as s:
+            s.execute(insert(row_cls), rows)
             s.commit()
 
     def get(self, model_cls: type[M], row_cls: type, **filters: Any) -> M | None:

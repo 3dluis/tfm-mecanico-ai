@@ -1,5 +1,19 @@
 # CHANGELOG — mecanico_contracts
 
+## v0.5.0 · SCHEMA_VERSION 2 (2026-08-13) — Representación canónica horizontal (F11)
+
+Cambios ADITIVOS (retro-compatibles):
+
+- Nuevo módulo `snapshot_model.py` (ADR-0025/0026/0027): `VehicleTelemetrySnapshot`
+  (45 campos: identidad, contexto, tiempo/alineación, evento primario, OBD estándar, IMU,
+  GPS, calidad), `SnapshotEventLink` (relación N:M snapshot↔evento) y enum `SignalQuality`
+  (`measured`/`stale`/`not_supported`/`not_polled`/`timeout`/`missing`/`invalid`).
+  Constante `SYNC_VERSION = "sync:v1"`.
+- Ninguna entidad existente cambia: `OBDObservation` sigue siendo RAW LONG y
+  `TelemetryPoint` NORMALIZED LONG. El snapshot es NORMALIZED WIDE/TIME-ALIGNED — jamás
+  INFERRED — y NO contiene features derivadas.
+- Esquemas exportados: 41 → 42 entidades; diccionario de datos regenerado.
+
 ## v0.4.1 · SCHEMA_VERSION 2 (2026-08-13) — ajuste de ciclo de vida (F9)
 
 - `ALLOWED_STATUS_TRANSITIONS`: EXPERIMENTAL y CANDIDATE pueden pasar a SUPERSEDED

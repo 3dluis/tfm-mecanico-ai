@@ -10,10 +10,10 @@ contratos; este módulo NO redefine semántica, solo persistencia). Convenciones
 
 from datetime import datetime
 
-from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-SCHEMA_DB_VERSION = 3  # v3: tablas de eventos F6 + columnas event en anomalías/memoria
+SCHEMA_DB_VERSION = 4  # v4: vehicle_telemetry_snapshots + snapshot_event_links (F11)
 
 
 class Base(DeclarativeBase):
@@ -143,6 +143,86 @@ class AnomalyRow(Base, _Row):
     threshold: Mapped[float] = mapped_column(Float)
     involved_pids: Mapped[list[object]] = mapped_column(JSON, default=list)
     features: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+
+
+# ----------------------------------------- snapshots (F11, ADR-0025/0026/0027)
+
+
+class SnapshotRow(Base, _Row):
+    """NORMALIZED WIDE / TIME-ALIGNED: estado multivariable por instante canónico.
+
+    Índices según los query patterns documentados (docs/data-architecture/11 §queries):
+    (vehicle_id, timestamp_utc) · (session_id, timestamp_utc) ·
+    (primary_event_type, timestamp_utc). En PostgreSQL la tabla es candidata a
+    particionado mensual por timestamp_utc (ADR-0028; evaluar volumen antes).
+    """
+
+    __tablename__ = "vehicle_telemetry_snapshots"
+
+    snapshot_id: Mapped[str] = mapped_column(String, primary_key=True)
+    vehicle_id: Mapped[str] = mapped_column(String)
+    device_id: Mapped[str] = mapped_column(String)
+    session_id: Mapped[str] = mapped_column(ForeignKey("telemetry_sessions.session_id"))
+    trip_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    timestamp_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    sequence_number: Mapped[int] = mapped_column(Integer)
+    snapshot_interval_ms: Mapped[int] = mapped_column(Integer, default=1000)
+    synchronization_version: Mapped[str] = mapped_column(String, default="sync:v1")
+    primary_event_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    primary_event_type: Mapped[str | None] = mapped_column(String, nullable=True)
+    vehicle_state: Mapped[str | None] = mapped_column(String, nullable=True)
+    # OBD estándar — NULL = no disponible (quality_flags), jamás 0 (ADR-0027)
+    rpm: Mapped[float | None] = mapped_column(Float, nullable=True)
+    vehicle_speed: Mapped[float | None] = mapped_column(Float, nullable=True)
+    throttle_position: Mapped[float | None] = mapped_column(Float, nullable=True)
+    engine_load: Mapped[float | None] = mapped_column(Float, nullable=True)
+    coolant_temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
+    intake_air_temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
+    maf: Mapped[float | None] = mapped_column(Float, nullable=True)
+    map_kpa: Mapped[float | None] = mapped_column(Float, nullable=True)
+    stft_bank1: Mapped[float | None] = mapped_column(Float, nullable=True)
+    ltft_bank1: Mapped[float | None] = mapped_column(Float, nullable=True)
+    stft_bank2: Mapped[float | None] = mapped_column(Float, nullable=True)
+    ltft_bank2: Mapped[float | None] = mapped_column(Float, nullable=True)
+    fuel_pressure: Mapped[float | None] = mapped_column(Float, nullable=True)
+    fuel_level: Mapped[float | None] = mapped_column(Float, nullable=True)
+    timing_advance: Mapped[float | None] = mapped_column(Float, nullable=True)
+    battery_voltage: Mapped[float | None] = mapped_column(Float, nullable=True)
+    o2_sensor_1: Mapped[float | None] = mapped_column(Float, nullable=True)
+    o2_sensor_2: Mapped[float | None] = mapped_column(Float, nullable=True)
+    commanded_equivalence_ratio: Mapped[float | None] = mapped_column(Float, nullable=True)
+    active_dtc_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    acceleration_x: Mapped[float | None] = mapped_column(Float, nullable=True)
+    acceleration_y: Mapped[float | None] = mapped_column(Float, nullable=True)
+    acceleration_z: Mapped[float | None] = mapped_column(Float, nullable=True)
+    gyro_x: Mapped[float | None] = mapped_column(Float, nullable=True)
+    gyro_y: Mapped[float | None] = mapped_column(Float, nullable=True)
+    gyro_z: Mapped[float | None] = mapped_column(Float, nullable=True)
+    gps_speed: Mapped[float | None] = mapped_column(Float, nullable=True)
+    gps_heading: Mapped[float | None] = mapped_column(Float, nullable=True)
+    quality_score: Mapped[float] = mapped_column(Float, default=1.0)
+    missing_metric_count: Mapped[int] = mapped_column(Integer, default=0)
+    quality_flags: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+    __table_args__ = (
+        Index("ix_snap_vehicle_ts", "vehicle_id", "timestamp_utc"),
+        Index("ix_snap_session_ts", "session_id", "timestamp_utc"),
+        Index("ix_snap_eventtype_ts", "primary_event_type", "timestamp_utc"),
+    )
+
+
+class SnapshotEventLinkRow(Base, _Row):
+    """Relación N:M snapshot↔evento (un instante pertenece a TRIP+ACCELERATION+…)."""
+
+    __tablename__ = "snapshot_event_links"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    snapshot_id: Mapped[str] = mapped_column(
+        ForeignKey("vehicle_telemetry_snapshots.snapshot_id"), index=True
+    )
+    event_id: Mapped[str] = mapped_column(ForeignKey("vehicle_events.event_id"), index=True)
+    event_type: Mapped[str] = mapped_column(String, index=True)
 
 
 # --------------------------------------------------------- eventos (F6, ADR-0019/0021)

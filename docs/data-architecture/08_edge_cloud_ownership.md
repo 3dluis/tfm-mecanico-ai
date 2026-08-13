@@ -9,6 +9,7 @@ El sistema es 100 % funcional offline; la nube solo añade (ADR-0006).
 |---|---|---|---|
 | Sesiones recientes + raw reciente | ✅ retención corta | opcional (config) | edge |
 | Telemetría normalizada | ✅ retención media | resúmenes | edge |
+| Snapshots alineados (wide) + enlaces N:M | ✅ retención media (SQLite, ADR-0029) | ✅ histórico consolidado (PostgreSQL, particionado mensual candidato ADR-0028) | edge crea, cloud consolida |
 | Ventanas/features | ✅ retención larga (metadatos) | con anomalías | edge |
 | Modelos ML activos (paquetes ONNX) | ✅ copia verificada | ✅ registry (maestro) | cloud |
 | Anomalías + inferencias | ✅ | ✅ (sync prioridad alta) | edge crea, ambos conservan |

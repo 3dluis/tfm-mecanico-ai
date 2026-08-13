@@ -53,6 +53,8 @@ EXPORTABLE: list[type[BaseModel]] = [
     mc.ModelRegistryEntry,
     mc.ModelDeployment,
     mc.HardwareValidation,
+    mc.VehicleTelemetrySnapshot,
+    mc.SnapshotEventLink,
 ]
 
 

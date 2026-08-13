@@ -30,6 +30,8 @@ diverge, el build falla.
 | [08 Ownership Edge/Cloud](08_edge_cloud_ownership.md) | Matriz formal de qué vive dónde; funcionamiento offline |
 | [09 Retención y sincronización](09_retencion_sincronizacion.md) | Política de retención por clase de dato; outbox priorizado idempotente |
 | [10 Modelo vectorial y RAG](10_modelo_vectorial_rag.md) | KnowledgeDocument/Chunk/RetrievalEvent; grounding medible; plan de embeddings |
+| [11 VehicleTelemetrySnapshot](11_vehicle_telemetry_snapshot.md) | (F11, ADR-0025/26/27/28) Representación canónica **horizontal** alineada en el tiempo: propósito, política `sync:v1`, NULL≠0, eventos N:M, queries e índices, ejemplo real, rendimiento medido, retención y particionamiento |
+| [12 Evaluación de persistencia Edge](12_edge_database_evaluation.md) | (F11, ADR-0029) SQLite vs PostgreSQL+pgvector con **mediciones reales** → recomendación **HYBRID** (SQLite en edge · PostgreSQL+pgvector en cloud) |
 | [Event Intelligence](../event-intelligence/README.md) | (F6, ADR-0019/0021) VehicleEvent/EventFeatureVector/EventBaseline como unidad formal de análisis; los eventos REFERENCIAN telemetría por `seq`, nunca la duplican ni la sustituyen |
 | [Modelos de IA](../models/README.md) | (F7, ADR-0022) TrainingRun/ModelExperiment/ModelEvaluation/ModelRegistryEntry/ModelDeployment: provenance completo Dataset→Experimento→Modelo→Manifest→Inferencia; entidades en el diccionario autogenerado |
 
@@ -37,10 +39,13 @@ Diagramas: [ER](diagrams/er-model.mmd) · [flujo de telemetría](diagrams/teleme
 [diagnóstico y memoria](diagrams/diagnostic-memory-flow.mmd) ·
 [datos edge↔cloud](diagrams/edge-cloud-data-flow.mmd) · Ejemplos JSON: [examples/](examples/)
 
-## Las cuatro clases de datos (regla de oro)
+## Las clases de datos (regla de oro)
 
-**RAW** (observado directamente) → **NORMALIZED** (esquema canónico) → **DERIVED**
-(features/ventanas calculadas) → **INFERRED** (producido por modelos o agente).
+**RAW LONG** (`OBDObservation`, observado directamente) → **NORMALIZED LONG**
+(`TelemetryPoint`, esquema canónico) → **NORMALIZED WIDE / ALIGNED**
+(`VehicleTelemetrySnapshot`: el mismo hecho pivotado y alineado en el tiempo — **no es una
+inferencia**) → **DERIVED** (`TelemetryWindow`, `VehicleEvent`, `EventFeatureVector`,
+`FeatureVector`) → **INFERRED** (`ModelInference`, `DetectedAnomaly`, `DiagnosticHypothesis`).
 *Un dato INFERRED jamás se presenta como observación real*: cada entidad declara su clase
 en el diccionario, y API/UI deben etiquetarla.
 

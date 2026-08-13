@@ -1,8 +1,14 @@
 flowchart LR
-    S[TelemetrySession<br/>source · seed · versiones] --> R[OBDObservation<br/>RAW]
-    R -->|validación rangos<br/>unidades canónicas| N[TelemetryPoint<br/>NORMALIZED]
-    N -->|ventana 60 / stride 30<br/>según ModelManifest| W[TelemetryWindow<br/>DERIVED]
+    S[TelemetrySession<br/>source · seed · versiones] --> R[OBDObservation<br/>RAW LONG]
+    R -->|validación rangos<br/>unidades canónicas| N[TelemetryPoint<br/>NORMALIZED LONG]
+    N -->|alineación sync:v1<br/>rejilla snapshot_interval_ms| X[VehicleTelemetrySnapshot<br/>NORMALIZED WIDE / ALIGNED]
+    N -->|ventana 60 / stride 30<br/>según ModelManifest<br/>camino F3 VIGENTE| W[TelemetryWindow<br/>DERIVED]
+    X -->|windowing / event grouping<br/>camino wide PARALELO| W
+    X -->|N:M SnapshotEventLink<br/>+ primary_event_id| E[VehicleEvent<br/>DERIVED]
+    E --> EFV[EventFeatureVector<br/>DERIVED]
     W -->|42 features canónicas<br/>feature_set_version| F[FeatureVector<br/>DERIVED]
     F -->|ONNX Runtime| I[ModelInference<br/>INFERRED · SIEMPRE persistida]
+    EFV -->|score contextual<br/>EventBaseline| I
     I -->|score > umbral<br/>+ gating calentamiento| A[DetectedAnomaly<br/>INFERRED]
     A -.->|trazabilidad inversa por FK<br/>verificada en tests| R
+    X -.->|session_id + sequence_number<br/>test_provenance_hacia_atras| R

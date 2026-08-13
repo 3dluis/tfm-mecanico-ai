@@ -59,6 +59,12 @@ Diagramas: [ciclo ML](diagrams/ml-lifecycle.mmd) · [ciclo LLM](diagrams/llm-lif
 
 ## Relación con el resto del sistema
 
+- **[VehicleTelemetrySnapshot](../data-architecture/11_vehicle_telemetry_snapshot.md) (F11):**
+  entrada canónica para ML — `snapshots[] → matriz/dataframe → windowing/event grouping →
+  feature engineering → modelo`, sin que cada entrenamiento reconstruya su propio pivot
+  long→wide. El snapshot **no contiene features** (siguen en `FeatureVector`/
+  `EventFeatureVector`) y `NULL` significa ausencia, no cero: imputar es decisión de la fase
+  de features y debe declararse en la card del modelo.
 - **[data-architecture](../data-architecture/README.md):** TrainingRun/ModelExperiment/
   ModelRegistryEntry/ModelEvaluation/ModelDeployment son contratos de
   `mecanico_contracts` (diccionario autogenerado); `ModelInference` (F4) enlaza cada

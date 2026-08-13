@@ -6,6 +6,8 @@
 #   cloud    -> cloud-api + postgres                  (desarrollo de la nube)
 #   edge     -> agent-edge (límites RPi 5) + ollama   (validación de recursos, ADR-0002)
 #   full     -> todo                                  (integración extremo a extremo)
+#   edge-postgres -> PostgreSQL+pgvector LOCAL para el benchmark F11 (experimental;
+#                    NO sustituye a SQLite — docs/data-architecture/12)
 #
 # Uso:   docker compose --profile dev up --build      (o `make dev`)
 # ARM64: docker buildx build --platform linux/arm64 -f diagnostic-agent/Dockerfile .
@@ -126,9 +128,34 @@ services:
       timeout: 3s
       retries: 10
 
+  # ----------------------------------- F11: evaluación PostgreSQL+pgvector en Edge
+  # (experimental; NO sustituye a SQLite — docs/data-architecture/12)
+  edge-postgres:
+    profiles: ["edge-postgres"]
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: mecanico
+      POSTGRES_PASSWORD: mecanico
+      POSTGRES_DB: mecanico_edge_bench
+    ports:
+      - "15432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 8G
+    volumes:
+      - edge-postgres-data:/var/lib/postgresql/data
+    # Benchmark desde el host (mismo código que SQLite):
+    #   python tools/edge_db_benchmark.py \
+    #     --pg-url postgresql+psycopg://mecanico:mecanico@localhost:15432/mecanico_edge_bench
+
+
 volumes:
   agent-data:        # SQLite + estado del edge
   ollama-models:     # pesos LLM descargados
   models-artifacts:  # paquetes model-<nombre>-<semver> (ADR-0009)
   lab-sessions:      # sesiones JSONL generadas por obd-lab
   pg-data:           # PostgreSQL
+  edge-postgres-data:  # F11: benchmark PostgreSQL+pgvector edge (experimental)
+

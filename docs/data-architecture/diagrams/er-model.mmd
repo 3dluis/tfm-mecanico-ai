@@ -1,6 +1,11 @@
 erDiagram
     TelemetrySession ||--o{ OBDObservation : "raw"
     TelemetrySession ||--o{ TelemetryPoint : "normalized"
+    TelemetrySession ||--o{ VehicleTelemetrySnapshot : "normalized wide"
+    TelemetryPoint }o--|| VehicleTelemetrySnapshot : "alineado sync:v1 (por seq)"
+    VehicleTelemetrySnapshot }o--o{ VehicleEvent : "SnapshotEventLink (N:M)"
+    VehicleTelemetrySnapshot }o--o| VehicleEvent : "primary_event_id"
+    VehicleEvent ||--|| EventFeatureVector : "derived"
     TelemetrySession ||--o{ TelemetryWindow : ""
     TelemetryWindow ||--|| FeatureVector : "derived"
     FeatureVector ||--o{ ModelInference : "inferred"

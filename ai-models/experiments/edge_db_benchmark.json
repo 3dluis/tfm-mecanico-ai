@@ -1,0 +1,54 @@
+{
+  "measured_at": "2026-08-13T13:43:28.919497+00:00",
+  "hardware": "x86_64 sandbox 4CPU/8GB (proxy RPi; interpretar como x86)",
+  "workload": "8h de snapshots obd-lab (28800 filas + N:M) por el MISMO código",
+  "sqlite": {
+    "rows": 28800,
+    "batch_insert_rows_per_s": 7697,
+    "single_insert_rows_per_s": 655,
+    "q_session_ms": 134.2,
+    "q_range2h_ms": 984.4,
+    "q_event_type_ms": 401.0,
+    "q_diagnostic_join_ms": 35.4,
+    "q_rows": {
+      "session": 2000,
+      "range2h": 7401,
+      "event": 4607,
+      "diag_join": 1800
+    },
+    "startup_ms": 139.2,
+    "idle_extra_ram_mb": 0.0,
+    "disk_mb": 29.2,
+    "vector": {
+      "topk_bruteforce_median_ms": 0.039,
+      "ram_for_vectors_mb": 2.5,
+      "n_vectors": 1600,
+      "dims": 384
+    }
+  },
+  "postgresql_pgvector": {
+    "rows": 28800,
+    "batch_insert_rows_per_s": 5091,
+    "single_insert_rows_per_s": 707,
+    "q_session_ms": 295.7,
+    "q_range2h_ms": 836.4,
+    "q_event_type_ms": 266.1,
+    "q_diagnostic_join_ms": 45.2,
+    "q_rows": {
+      "session": 2000,
+      "range2h": 7401,
+      "event": 4607,
+      "diag_join": 1800
+    },
+    "startup_ms_connect_migrate": 233.5,
+    "idle_ram_postgres_processes_mb": 149.5,
+    "disk_mb": 39.71,
+    "vector": {
+      "load_s": 0.85,
+      "topk_exact_median_ms": 1.28,
+      "topk_ivfflat_median_ms": 0.6,
+      "n_vectors": 1600,
+      "dims": 384
+    }
+  }
+}

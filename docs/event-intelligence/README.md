@@ -35,7 +35,12 @@ Diagramas: [sensor-pipeline](diagrams/sensor-pipeline.mmd) · [event-hierarchy](
 [contextual-anomaly](diagrams/contextual-anomaly.mmd) · [event-memory](diagrams/event-memory.mmd)
 
 Cruces: [data-architecture](../data-architecture/README.md) (modelo de datos; VehicleEvent
-y compañía se integran allí) · [agent-runtime](../agent-runtime/README.md) (tools de eventos)
+y compañía se integran allí) ·
+[VehicleTelemetrySnapshot](../data-architecture/11_vehicle_telemetry_snapshot.md) (F11: cada
+snapshot lleva `primary_event_id`/`primary_event_type` para consulta rápida y se enlaza N:M
+con TODOS los eventos simultáneos vía `SnapshotEventLink`, **sin duplicar snapshots**; sigue
+valiendo la regla de que los eventos REFERENCIAN telemetría por `seq`, nunca la copian) ·
+[agent-runtime](../agent-runtime/README.md) (tools de eventos)
 · [deteccion-dual](../diagrams/deteccion-dual.mmd) (F10: papel COMPLEMENTARIO junto al
 LOF primario; fusión OR auditable configurable)
 · [models](../models/README.md) (F7: el detector `ed:1` y `event-baseline-z` son modelos ML

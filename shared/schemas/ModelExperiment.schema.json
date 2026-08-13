@@ -58,6 +58,19 @@
       "title": "Evaluation Protocol",
       "type": "string"
     },
+    "study_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "'exploratory' | 'confirmatory' (F10): los exploratorios informan el diseño; solo los confirmatorios con protocolo CONGELADO antes de ejecutar sirven como evidencia confirmatoria",
+      "title": "Study Type"
+    },
     "config_uri": {
       "anyOf": [
         {

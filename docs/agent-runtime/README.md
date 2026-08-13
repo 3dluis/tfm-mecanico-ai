@@ -41,3 +41,12 @@ ADRs: [0015 runtime multiagente](../adr/0015-edge-agent-runtime-multiagente.md) 
 Relación con el resto de la documentación: la base de datos y contratos son los de
 [data-architecture](../data-architecture/README.md) (sin cambios de esquema: el runtime los
 CONSUME); la separación ML/LLM sigue siendo ADR-0009; la memoria sigue ADR-0013.
+
+**Persistencia (F11):** el runtime trabaja **contra interfaces**, jamás contra un motor
+concreto — `TelemetryRepository` / `MemoryRepository` / `KnowledgeRepository` /
+`AgentRunRepository` (`diagnostic_agent/storage/repositories.py`), con implementaciones
+SQLite (vigente) y PostgreSQL (experimental, mismo modelo lógico). El motor del edge sigue
+siendo **SQLite** tras la evaluación medida de
+[12](../data-architecture/12_edge_database_evaluation.md) (ADR-0029: HYBRID — SQLite en edge,
+PostgreSQL+pgvector en cloud). La entrada canónica horizontal para consultas multivariables es
+[VehicleTelemetrySnapshot](../data-architecture/11_vehicle_telemetry_snapshot.md).

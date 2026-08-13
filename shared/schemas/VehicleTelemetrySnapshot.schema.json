@@ -1,0 +1,515 @@
+{
+  "$defs": {
+    "SignalQuality": {
+      "description": "Estado de calidad por señal (solo se persisten los ≠ MEASURED).",
+      "enum": [
+        "measured",
+        "stale",
+        "not_supported",
+        "not_polled",
+        "timeout",
+        "missing",
+        "invalid"
+      ],
+      "title": "SignalQuality",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Estado multivariable del vehículo alineado a un instante canónico (WIDE).",
+  "properties": {
+    "schema_version": {
+      "default": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "snapshot_id": {
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "device_id": {
+      "title": "Device Id",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "trip_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "VehicleEvent TRIP contenedor",
+      "title": "Trip Id"
+    },
+    "timestamp_utc": {
+      "description": "Instante canónico (rejilla, UTC)",
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    },
+    "sequence_number": {
+      "description": "Índice en la rejilla de la sesión",
+      "minimum": 0,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "snapshot_interval_ms": {
+      "description": "Paso de la rejilla (1000 = 1 Hz)",
+      "exclusiveMinimum": 0,
+      "title": "Snapshot Interval Ms",
+      "type": "integer"
+    },
+    "synchronization_version": {
+      "default": "sync:v1",
+      "description": "Política de alineación aplicada (ADR-0026)",
+      "title": "Synchronization Version",
+      "type": "string"
+    },
+    "primary_event_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Evento hoja más específico activo en el instante",
+      "title": "Primary Event Id"
+    },
+    "primary_event_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Primary Event Type"
+    },
+    "vehicle_state": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Estado de la máquina de estados (OFF/IDLE/MOVING…)",
+      "title": "Vehicle State"
+    },
+    "rpm": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rpm"
+    },
+    "vehicle_speed": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "km/h",
+      "title": "Vehicle Speed"
+    },
+    "throttle_position": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "%",
+      "title": "Throttle Position"
+    },
+    "engine_load": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "%",
+      "title": "Engine Load"
+    },
+    "coolant_temperature": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "°C",
+      "title": "Coolant Temperature"
+    },
+    "intake_air_temperature": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "°C",
+      "title": "Intake Air Temperature"
+    },
+    "maf": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "g/s",
+      "title": "Maf"
+    },
+    "map_kpa": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "kPa (nombre 'map' es builtin)",
+      "title": "Map Kpa"
+    },
+    "stft_bank1": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "%",
+      "title": "Stft Bank1"
+    },
+    "ltft_bank1": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "%",
+      "title": "Ltft Bank1"
+    },
+    "stft_bank2": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "% (motores 2 bancos)",
+      "title": "Stft Bank2"
+    },
+    "ltft_bank2": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ltft Bank2"
+    },
+    "fuel_pressure": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "kPa",
+      "title": "Fuel Pressure"
+    },
+    "fuel_level": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "%",
+      "title": "Fuel Level"
+    },
+    "timing_advance": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "° BTDC",
+      "title": "Timing Advance"
+    },
+    "battery_voltage": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "V (PID 42)",
+      "title": "Battery Voltage"
+    },
+    "o2_sensor_1": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "V (B1S1)",
+      "title": "O2 Sensor 1"
+    },
+    "o2_sensor_2": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "V (B1S2)",
+      "title": "O2 Sensor 2"
+    },
+    "commanded_equivalence_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "λ (PID 44)",
+      "title": "Commanded Equivalence Ratio"
+    },
+    "active_dtc_count": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Active Dtc Count"
+    },
+    "acceleration_x": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "m/s²",
+      "title": "Acceleration X"
+    },
+    "acceleration_y": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acceleration Y"
+    },
+    "acceleration_z": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acceleration Z"
+    },
+    "gyro_x": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "°/s",
+      "title": "Gyro X"
+    },
+    "gyro_y": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Gyro Y"
+    },
+    "gyro_z": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Gyro Z"
+    },
+    "gps_speed": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "km/h",
+      "title": "Gps Speed"
+    },
+    "gps_heading": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "°",
+      "title": "Gps Heading"
+    },
+    "quality_score": {
+      "description": "señales medidas / señales esperadas en el ciclo",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Quality Score",
+      "type": "number"
+    },
+    "missing_metric_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Missing Metric Count",
+      "type": "integer"
+    },
+    "quality_flags": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SignalQuality"
+      },
+      "description": "SOLO señales ≠ measured (compacto); vacío = todo medido",
+      "title": "Quality Flags",
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "vehicle_id",
+    "device_id",
+    "session_id",
+    "timestamp_utc",
+    "sequence_number",
+    "snapshot_interval_ms",
+    "quality_score",
+    "created_at"
+  ],
+  "title": "VehicleTelemetrySnapshot",
+  "type": "object"
+}

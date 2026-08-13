@@ -88,6 +88,12 @@ from mecanico_contracts.models_registry import (
     TrainingRun,
     validate_status_transition,
 )
+from mecanico_contracts.snapshot_model import (
+    SYNC_VERSION,
+    SignalQuality,
+    SnapshotEventLink,
+    VehicleTelemetrySnapshot,
+)
 
 #: Alias semántico: la observación cruda de la cadena de telemetría ES OBDReading.
 OBDObservation = OBDReading
@@ -100,6 +106,7 @@ __all__ = [
     "EVENT_TAXONOMY",
     "MODEL_GOVERNANCE_VERSION",
     "SCHEMA_VERSION",
+    "SYNC_VERSION",
     "TAXONOMY_VERSION",
     "AgentEvent",
     "AgentNode",
@@ -156,6 +163,8 @@ __all__ = [
     "ScenarioSpec",
     "SessionSource",
     "Severity",
+    "SignalQuality",
+    "SnapshotEventLink",
     "StepStatus",
     "SyncEntity",
     "SyncEnvelope",
@@ -166,5 +175,6 @@ __all__ = [
     "TransportKind",
     "VehicleEvent",
     "VehicleTelemetry",
+    "VehicleTelemetrySnapshot",
     "validate_status_transition",
 ]

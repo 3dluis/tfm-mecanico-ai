@@ -257,6 +257,23 @@ ENTITY_META: dict[str, dict[str, str]] = {
         "vive": "edge (activo) + registro",
         "papel": "active/previous por dispositivo: rollback posible aunque sea manual",
     },
+    "VehicleTelemetrySnapshot": {
+        "clase": "NORMALIZED WIDE / TIME-ALIGNED (ADR-0025; jamás INFERRED)",
+        "produce": "snapshot builder (edge) desde TelemetryPoint",
+        "consume": "ML, Event Intelligence, análisis longitudinal, visualización",
+        "vive": "edge (retención media) → cloud (particionado por timestamp)",
+        "papel": (
+            "Estado multivariable alineado por instante: elimina el pivot long→wide "
+            "de cada consumidor; NULL≠0 con quality_flags"
+        ),
+    },
+    "SnapshotEventLink": {
+        "clase": "relación N:M",
+        "produce": "snapshot builder / event linker",
+        "consume": "consultas por evento",
+        "vive": "edge → cloud",
+        "papel": "Pertenencia simultánea a varios eventos sin duplicar snapshots",
+    },
     "HardwareValidation": {
         "clase": "metadatos de validación",
         "produce": "validación por objetivo hardware",
@@ -360,6 +377,7 @@ def main() -> int:
         mc.ModelStatus,
         mc.ModelCapability,
         mc.HardwareValidationStatus,
+        mc.SignalQuality,
         mc.Severity,
         mc.DetectorKind,
         mc.TransportKind,

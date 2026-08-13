@@ -787,6 +787,7 @@ Comparación científicamente válida: varios TrainingRuns con dataset/split/fea
 | `split_version` | string \| null | opc. | — | — |
 | `feature_schema_version` | string \| null | opc. | — | — |
 | `evaluation_protocol` | string | ✔ | Referencia al protocolo pre-registrado, p. ej. 'ADR-0011' | — |
+| `study_type` | string \| null | opc. | 'exploratory' \| 'confirmatory' (F10): los exploratorios informan el diseño; solo los confirmatorios con protocolo CONGELADO antes de ejecutar sirven como evidencia confirmatoria | — |
 | `config_uri` | string \| null | opc. | Config declarativa del experimento (YAML) | — |
 | `training_run_ids` | list[string] | opc. | — | — |
 | `conclusion` | string \| null | opc. | Interpretación y decisión | — |
@@ -883,6 +884,75 @@ Celda de la matriz de compatibilidad hardware (docs/models/10 §matriz).
 | `validated_at` | string \| null | opc. | — | — |
 | `notes` | string \| null | opc. | — | — |
 
+### VehicleTelemetrySnapshot
+
+Estado multivariable del vehículo alineado a un instante canónico (WIDE).
+
+**Clasificación:** NORMALIZED WIDE / TIME-ALIGNED (ADR-0025; jamás INFERRED) · **Produce:** snapshot builder (edge) desde TelemetryPoint · **Consume:** ML, Event Intelligence, análisis longitudinal, visualización · **Vive en:** edge (retención media) → cloud (particionado por timestamp)
+**Papel en la investigación:** Estado multivariable alineado por instante: elimina el pivot long→wide de cada consumidor; NULL≠0 con quality_flags
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `snapshot_id` | string | ✔ | — | — |
+| `vehicle_id` | string | ✔ | — | — |
+| `device_id` | string | ✔ | — | — |
+| `session_id` | string | ✔ | — | — |
+| `trip_id` | string \| null | opc. | VehicleEvent TRIP contenedor | — |
+| `timestamp_utc` | string | ✔ | Instante canónico (rejilla, UTC) | — |
+| `sequence_number` | integer | ✔ | Índice en la rejilla de la sesión | minimum=0 |
+| `snapshot_interval_ms` | integer | ✔ | Paso de la rejilla (1000 = 1 Hz) | exclusiveMinimum=0 |
+| `synchronization_version` | string | opc. | Política de alineación aplicada (ADR-0026) | — |
+| `primary_event_id` | string \| null | opc. | Evento hoja más específico activo en el instante | — |
+| `primary_event_type` | string \| null | opc. | — | — |
+| `vehicle_state` | string \| null | opc. | Estado de la máquina de estados (OFF/IDLE/MOVING…) | — |
+| `rpm` | number \| null | opc. | — | — |
+| `vehicle_speed` | number \| null | opc. | km/h | — |
+| `throttle_position` | number \| null | opc. | % | — |
+| `engine_load` | number \| null | opc. | % | — |
+| `coolant_temperature` | number \| null | opc. | °C | — |
+| `intake_air_temperature` | number \| null | opc. | °C | — |
+| `maf` | number \| null | opc. | g/s | — |
+| `map_kpa` | number \| null | opc. | kPa (nombre 'map' es builtin) | — |
+| `stft_bank1` | number \| null | opc. | % | — |
+| `ltft_bank1` | number \| null | opc. | % | — |
+| `stft_bank2` | number \| null | opc. | % (motores 2 bancos) | — |
+| `ltft_bank2` | number \| null | opc. | — | — |
+| `fuel_pressure` | number \| null | opc. | kPa | — |
+| `fuel_level` | number \| null | opc. | % | — |
+| `timing_advance` | number \| null | opc. | ° BTDC | — |
+| `battery_voltage` | number \| null | opc. | V (PID 42) | — |
+| `o2_sensor_1` | number \| null | opc. | V (B1S1) | — |
+| `o2_sensor_2` | number \| null | opc. | V (B1S2) | — |
+| `commanded_equivalence_ratio` | number \| null | opc. | λ (PID 44) | — |
+| `active_dtc_count` | integer \| null | opc. | — | — |
+| `acceleration_x` | number \| null | opc. | m/s² | — |
+| `acceleration_y` | number \| null | opc. | — | — |
+| `acceleration_z` | number \| null | opc. | — | — |
+| `gyro_x` | number \| null | opc. | °/s | — |
+| `gyro_y` | number \| null | opc. | — | — |
+| `gyro_z` | number \| null | opc. | — | — |
+| `gps_speed` | number \| null | opc. | km/h | — |
+| `gps_heading` | number \| null | opc. | ° | — |
+| `quality_score` | number | ✔ | señales medidas / señales esperadas en el ciclo | minimum=0.0; maximum=1.0 |
+| `missing_metric_count` | integer | opc. | — | minimum=0 |
+| `quality_flags` | dict | opc. | SOLO señales ≠ measured (compacto); vacío = todo medido | — |
+| `created_at` | string | ✔ | — | — |
+
+### SnapshotEventLink
+
+Pertenencia N:M snapshot↔evento SIN duplicar snapshots (F11 §11).
+
+**Clasificación:** relación N:M · **Produce:** snapshot builder / event linker · **Consume:** consultas por evento · **Vive en:** edge → cloud
+**Papel en la investigación:** Pertenencia simultánea a varios eventos sin duplicar snapshots
+
+| Campo | Tipo | Req. | Descripción | Restricciones |
+|---|---|---|---|---|
+| `schema_version` | integer | opc. | — | — |
+| `snapshot_id` | string | ✔ | — | — |
+| `event_id` | string | ✔ | — | — |
+| `event_type` | string | ✔ | Denormalizado para filtrar sin join | — |
+
 ## Enumeraciones
 
 - **SessionSource**: `real_vehicle`, `obd_simulator`, `dataset_replay`, `synthetic_generator`, `bench_test`
@@ -904,6 +974,7 @@ Celda de la matriz de compatibilidad hardware (docs/models/10 §matriz).
 - **ModelStatus**: `experimental`, `candidate`, `validated`, `edge_approved`, `deployed`, `rejected`, `superseded`, `retired`
 - **ModelCapability**: `triage`, `hypothesis_generation`, `critique`, `reporting`, `tool_selection`, `embeddings`, `anomaly_detection`, `event_detection`
 - **HardwareValidationStatus**: `compatible`, `not_tested`, `failed`, `approved`
+- **SignalQuality**: `measured`, `stale`, `not_supported`, `not_polled`, `timeout`, `missing`, `invalid`
 - **Severity**: `info`, `low`, `medium`, `high`, `critical`
 - **DetectorKind**: `zscore`, `isolation_forest`, `lof`, `ocsvm`, `autoencoder`
 - **TransportKind**: `serial`, `tcp`, `bluetooth-rfcomm`

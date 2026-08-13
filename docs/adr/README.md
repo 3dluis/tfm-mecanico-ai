@@ -26,3 +26,8 @@
 | [0022](0022-gobernanza-de-modelos.md) | Gobernanza de modelos: registry, cards, manifest, ciclo de vida | 7 | Aceptada |
 | [0023](0023-estrategia-llm-local.md) | Estrategia LLM: local cuantizado, escalera de adaptación, benchmark propio | 7 | Aceptada |
 | [0024](0024-embeddings-y-experimentos.md) | Embeddings evaluados aparte; configs declarativas; selección multicriterio | 7 | Aceptada |
+| [0025](0025-representacion-canonica-wide.md) | Representación canónica horizontal (VehicleTelemetrySnapshot) | 11 | Aceptada |
+| [0026](0026-alineacion-temporal-snapshots.md) | Alineación temporal `sync:v1` (1 Hz validado; 5 Hz candidato) | 11 | Aceptada |
+| [0027](0027-nulos-y-pids-no-soportados.md) | NULL ≠ 0: PIDs no soportados y calidad por señal | 11 | Aceptada |
+| [0028](0028-particionamiento-snapshots.md) | Particionamiento mensual de snapshots (candidato, no activado) | 11 | Aceptada |
+| [0029](0029-evaluacion-postgresql-pgvector-edge.md) | Evaluación PostgreSQL+pgvector en Edge → **HYBRID** (REJECT edge · ACCEPT cloud) | 11 | Evaluación ejecutada (pendiente de aprobación) |
