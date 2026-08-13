@@ -109,7 +109,23 @@ que solo él detecta (185 s promedia detecciones tardías de fallos lentos); sin
 ONNX ni medición edge del AE (pendiente declarado); sweep de severidad ≤ referencia
 (no explora severidades mayores).
 
-## Decisión
+## Decisión (estructura D1/D2/D3 según Adenda XAI v1, aplicada retrospectivamente)
+
+> Adición F15 (ADR-0033) — no altera ningún resultado; formaliza la decisión en las
+> tres dimensiones independientes del experimento:
+>
+> - **D1 — Autoencoder como detector: REJECT** (en su forma actual): FPR 0.112 ≈3× LOF
+>   viola la condición de adopción de ADR-0011; vía de mejora identificada (EXP-ANOM-007,
+>   train v1.1).
+> - **D2 — Encoder como representación: NEEDS MORE EVIDENCE**: silhouette entre
+>   mecanismos 0.118 (débil) — no se promueve a EXP-PAT ni se rechaza; la decisión se
+>   re-evalúa con la representación mejorada.
+> - **D3 — SHAP/XAI como mecanismo explicativo: NEEDS MORE EVIDENCE**: SHAP no se
+>   ejecutó en E5 (la adenda es posterior); el per-feature reconstruction error está
+>   implementado pero su evaluación formal (AR@K, estabilidad, agreement) se ejecuta a
+>   partir de EXP-ANOM-007.
+>
+> Nota: D1=REJECT con D2/D3 abiertas NO es inconsistente — son dimensiones separadas.
 
 - LOF k=10 **sigue SELECTED**; ningún modelo nuevo entra al registro (sin artefacto que
   gobernar). EXP-ANOM-006 registrado como exploratorio con conclusión completa.

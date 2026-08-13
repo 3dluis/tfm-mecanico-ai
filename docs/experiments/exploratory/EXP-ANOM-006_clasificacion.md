@@ -25,6 +25,13 @@ held-out confirmatorio; el sweep de severidad usa semillas nuevas del rango expl
 - Propuesta de EXP-ANOM-007 (re-entrenar con train v1.1) como mejora candidata
   precedentada por F9 — pendiente de aprobación del autor.
 
+## Adición F15 — decisiones D1/D2/D3 (Adenda XAI v1, retro-aplicada)
+
+D1 detector = **REJECT** (forma actual; FPR) · D2 representación = **NEEDS MORE
+EVIDENCE** (silhouette 0.118) · D3 mecanismo explicativo = **NEEDS MORE EVIDENCE**
+(SHAP no ejecutado en E5; se evalúa desde EXP-ANOM-007 según la adenda). Los resultados
+registrados no se modifican.
+
 ## Estado en el registro
 
 - `ai-models/registry/experiments/EXP-ANOM-006.json` (`study_type: exploratory`)
