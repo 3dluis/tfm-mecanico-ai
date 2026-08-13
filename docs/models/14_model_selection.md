@@ -6,6 +6,26 @@
 Accuracy + Generalization (held-out) + FPR + Latency + RAM + Interpretability + Edge feasibility
 ```
 
+> **Extensión F15 (ADR-0033, [Adenda XAI v1](../experiments/protocolo_ml_v1_adenda_xai.md)):**
+> la dimensión Interpretability se desagrega y se hace EVALUABLE:
+>
+> ```
+> Detection Performance + Explainability + Explanation Stability
+> + Representation Quality + Edge Feasibility
+> ```
+>
+> **Decision gate** (todo modelo candidato responde las 7 antes de promoverse):
+> 1. ¿Detecta adecuadamente? · 2. ¿Mantiene el FPR permitido? · 3. ¿Las variables
+> atribuidas son coherentes con el ground truth cuando existe (AR@K vs baseline
+> aleatorio)? · 4. ¿Las explicaciones son estables (perturbación y seeds)? · 5. ¿Hay
+> señales de leakage? · 6. ¿Hay señales de synthetic-domain bias? · 7. ¿Mantiene
+> viabilidad edge?
+>
+> La evidencia negativa de explicación (atribuciones inestables o incoherentes con lo
+> inyectado) es motivo legítimo de no-promoción aunque el F1 sea superior. Cada
+> experimento separa además las decisiones D1 (detector) / D2 (representación) /
+> D3 (mecanismo explicativo).
+
 No hay fórmula cerrada con pesos: cada selección documenta sus trade-offs en el informe
 de comparación y en la card. Ejemplo real (E1): OC-SVM tuvo MEJOR F1 (0.68 vs 0.64) y
 6/6 episodios, pero se seleccionó **LOF k=10** por FPR 2.5× menor (0.035 vs 0.086) con

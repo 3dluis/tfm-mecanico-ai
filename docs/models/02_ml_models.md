@@ -65,3 +65,12 @@ reconstrucción (si algún autoencoder entra). El Agent Runtime usa esa informac
 **evidencia** (`DiagnosticEvidence`): el LLM no inventa por qué el modelo detectó una
 anomalía — narra sobre salidas del modelo, telemetría, RAG, casos y verificación
 determinista ([03 §7](03_llm_models.md)).
+
+> **Extensión F15 (ADR-0033):** la interpretabilidad se organiza en DOS niveles
+> comparables — el mecanismo específico del modelo (per-feature reconstruction error del
+> autoencoder, vecindario/distancias de LOF, z contextual del event-baseline) y **SHAP
+> como capa común** sobre una función declarada (`anomaly_score(x)` o
+> `reconstruction_error(x)`). La explicación no solo se produce: se EVALÚA (Attribution
+> Recall@K contra el ground truth de inyección, estabilidad, agreement entre métodos)
+> según la [Adenda XAI v1](../experiments/protocolo_ml_v1_adenda_xai.md). Regla de
+> capas: atribución estadística ≠ causalidad mecánica ≠ diagnóstico confirmado.
