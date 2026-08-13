@@ -1,0 +1,78 @@
+{
+  "all_equal": true,
+  "dataset_parity": {
+    "test": {
+      "features_identical": true,
+      "labels_equal": true,
+      "max_abs_feature_diff": 0.0,
+      "sessions_equal": true,
+      "shape_long": [
+        472,
+        42
+      ],
+      "shape_wide": [
+        472,
+        42
+      ],
+      "shapes_equal": true,
+      "snapshot_build_seconds": 0.384,
+      "starts_equal": true,
+      "windows_discarded_by_validity": 0
+    },
+    "train": {
+      "features_identical": true,
+      "labels_equal": true,
+      "max_abs_feature_diff": 0.0,
+      "sessions_equal": true,
+      "shape_long": [
+        324,
+        42
+      ],
+      "shape_wide": [
+        324,
+        42
+      ],
+      "shapes_equal": true,
+      "snapshot_build_seconds": 0.339,
+      "starts_equal": true,
+      "windows_discarded_by_validity": 0
+    },
+    "validation": {
+      "features_identical": true,
+      "labels_equal": true,
+      "max_abs_feature_diff": 0.0,
+      "sessions_equal": true,
+      "shape_long": [
+        403,
+        42
+      ],
+      "shape_wide": [
+        403,
+        42
+      ],
+      "shapes_equal": true,
+      "snapshot_build_seconds": 0.319,
+      "starts_equal": true,
+      "windows_discarded_by_validity": 0
+    }
+  },
+  "experiment": "EXP-ANOM-005 (e4_wide_parity)",
+  "metric_parity": {
+    "isolation_forest": {
+      "detail": {},
+      "metrics_equal": true
+    },
+    "lof": {
+      "detail": {},
+      "metrics_equal": true
+    },
+    "ocsvm": {
+      "detail": {},
+      "metrics_equal": true
+    },
+    "robust_zscore": {
+      "detail": {},
+      "metrics_equal": true
+    }
+  }
+}

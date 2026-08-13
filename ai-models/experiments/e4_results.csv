@@ -1,0 +1,5 @@
+model,threshold_wide,threshold_long,metrics_equal
+robust_zscore,316.683652,316.683652,True
+isolation_forest,0.067288,0.067288,True
+lof,0.163197,0.163197,True
+ocsvm,0.000241,0.000241,True

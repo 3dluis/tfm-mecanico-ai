@@ -1,0 +1,44 @@
+# Config declarativa del experimento E4 (F13) — paridad del camino wide.
+# Los parámetros críticos NUNCA viven solo en notebooks (regla docs/models/12).
+# Fuente de los resultados: experiments/e4_parity.json + experiments/e4_results.csv.
+
+experiment:
+  id: EXP-ANOM-005
+  title: Paridad del camino wide (snapshot → matriz → ventanas → fs1)
+  protocol: ADR-0011   # mismo protocolo que E1; la VI es el CAMINO de construcción del dataset
+  study_type: exploratory   # validación de infraestructura; no toca pre-registro ni held-out reservado
+
+dataset:
+  id: obd-lab-suite-v1
+  version: "1"
+  split: suite-v1-split-1   # el MISMO split congelado de E1; ninguna semilla reservada se toca
+
+features:
+  schema: fs1               # FEATURE_NAMES v1 (42 features) — congelado en arms-freeze-v1
+  preprocessing: embedded-standard-scaler
+  window: 60
+  stride: 30
+
+paths:
+  reference: long   # F3: sesión → series → ventanas (build_dataset)
+  candidate: wide   # F13: sesión → VehicleTelemetrySnapshot (sync:v1) → matriz columnar → ventanas
+
+random_seed: 42
+git_commit: d083f66
+hardware: sandbox-x86 (4 CPU / 8 GB)
+
+models:   # idénticos a E1 por construcción (make_baselines, seed 42): la VI es el camino, no el modelo
+  - type: robust_zscore
+    parameters: {method: median/MAD, aggregation: "max|z|"}
+  - type: isolation_forest
+    parameters: {n_estimators: 200, random_state: 42}
+  - type: lof
+    parameters: {n_neighbors: 10, novelty: true}
+  - type: ocsvm
+    parameters: {nu: 0.01, gamma: 0.005}
+
+success_criteria:
+  - features idénticas byte a byte en train/validation/test (max_abs_diff == 0.0)
+  - etiquetas, sesiones y offsets de ventana idénticos
+  - métricas point/event/per-category idénticas para los 4 detectores
+  - umbrales idénticos a E1 (ancla: anom-lof 0.163197 de arms-freeze-v1)
