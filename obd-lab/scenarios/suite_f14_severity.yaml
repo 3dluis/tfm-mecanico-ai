@@ -1,0 +1,34 @@
+# Suite EXPLORATORIA de severidad — F14 / EXP-ANOM-006. SOLO EVALUACIÓN.
+#
+# Objetivo: medir cómo degrada el recall de los detectores (LOF congelado y autoencoder)
+# cuando la severidad del fallo baja respecto a la usada en suite v1. Ninguna de estas
+# sesiones se usa para entrenar ni para fijar umbrales; los detectores llegan entrenados
+# con el train congelado de suite v1 (ADR-0011). Las clases held-out solo aparecen aquí
+# porque este fichero es íntegramente conjunto de evaluación (split test, RI1).
+#
+# Semillas 412-425: rango exploratorio F13+ (401-599, Protocolo ML v1 §3); ningún bloque
+# reservado del pre-registro se toca. Severidades de referencia en suite v1 (defaults del
+# catálogo): vacuum_leak severity 0.6 · maf_drift drift 0.15 · misfire rate 0.06 ·
+# corr_break_rpm_maf decouple 0.9.
+
+splits:
+  test:
+    # --- controles normales (FPR del sweep)
+    - {scenario_id: sev-normal-a, description: "Control normal urbano", category: normal, driving_profile: urban, duration_s: 1200, seed: 412}
+    - {scenario_id: sev-normal-b, description: "Control normal autovía", category: normal, driving_profile: highway, duration_s: 1200, seed: 413}
+    # --- vacuum_leak (severity)
+    - {scenario_id: sev-vacuum-low,  description: "Fuga de vacío leve",     category: known_fault, driving_profile: urban, duration_s: 1200, seed: 414, fault: vacuum_leak, fault_start_s: 300, fault_params: {severity: 0.2}}
+    - {scenario_id: sev-vacuum-mid,  description: "Fuga de vacío media",    category: known_fault, driving_profile: urban, duration_s: 1200, seed: 415, fault: vacuum_leak, fault_start_s: 300, fault_params: {severity: 0.4}}
+    - {scenario_id: sev-vacuum-high, description: "Fuga de vacío severa",   category: known_fault, driving_profile: urban, duration_s: 1200, seed: 416, fault: vacuum_leak, fault_start_s: 300, fault_params: {severity: 0.6}}
+    # --- maf_drift (drift)
+    - {scenario_id: sev-maf-low,  description: "Deriva MAF leve",   category: known_fault, driving_profile: urban, duration_s: 1200, seed: 417, fault: maf_drift, fault_start_s: 300, fault_params: {drift: 0.05}}
+    - {scenario_id: sev-maf-mid,  description: "Deriva MAF media",  category: known_fault, driving_profile: urban, duration_s: 1200, seed: 418, fault: maf_drift, fault_start_s: 300, fault_params: {drift: 0.10}}
+    - {scenario_id: sev-maf-high, description: "Deriva MAF severa", category: known_fault, driving_profile: urban, duration_s: 1200, seed: 419, fault: maf_drift, fault_start_s: 300, fault_params: {drift: 0.15}}
+    # --- misfire (rate)
+    - {scenario_id: sev-misfire-low,  description: "Misfire esporádico", category: known_fault, driving_profile: urban, duration_s: 1200, seed: 420, fault: misfire, fault_start_s: 300, fault_params: {rate: 0.02}}
+    - {scenario_id: sev-misfire-mid,  description: "Misfire moderado",   category: known_fault, driving_profile: urban, duration_s: 1200, seed: 421, fault: misfire, fault_start_s: 300, fault_params: {rate: 0.04}}
+    - {scenario_id: sev-misfire-high, description: "Misfire frecuente",  category: known_fault, driving_profile: urban, duration_s: 1200, seed: 422, fault: misfire, fault_start_s: 300, fault_params: {rate: 0.06}}
+    # --- corr_break_rpm_maf (decouple; held-out relacional, solo evaluación)
+    - {scenario_id: sev-corrbreak-low,  description: "Desacoplo RPM-MAF leve",   category: held_out, driving_profile: urban, duration_s: 1200, seed: 423, fault: corr_break_rpm_maf, fault_start_s: 300, fault_params: {decouple: 0.3}}
+    - {scenario_id: sev-corrbreak-mid,  description: "Desacoplo RPM-MAF medio",  category: held_out, driving_profile: urban, duration_s: 1200, seed: 424, fault: corr_break_rpm_maf, fault_start_s: 300, fault_params: {decouple: 0.6}}
+    - {scenario_id: sev-corrbreak-high, description: "Desacoplo RPM-MAF fuerte", category: held_out, driving_profile: urban, duration_s: 1200, seed: 425, fault: corr_break_rpm_maf, fault_start_s: 300, fault_params: {decouple: 0.9}}
