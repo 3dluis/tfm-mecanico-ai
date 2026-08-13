@@ -1,3 +1,6 @@
+# ⚠ RECONCILIACIÓN 2026-08-13: si el autor adopta pre-registro-v1 (rc1) como maestro,
+# el dataset confirmatorio será obd-lab-suite-v2 (R=10 réplicas, semillas 11000-20036)
+# y esta suite queda SIN USO (se retiraría por enmienda antes de ejecutar nada).
 # ⛔ SUITE CONFIRMATORIA — PROTO-CONF-001 (F10). NO GENERAR NI EVALUAR hasta la
 # ejecución del protocolo pre-registrado (docs/experiments/preregistered/PROTO-CONF-001.md).
 #

@@ -1,5 +1,20 @@
 # PROTO-CONF-001 — Protocolo confirmatorio de H-EVT (pre-registro v1.0)
 
+> **⚠ NOTA DE RECONCILIACIÓN (enmienda pre-ejecución, 2026-08-13).** Tras redactar este
+> protocolo se constató que OTRA sesión había preparado en paralelo un pre-registro
+> GLOBAL (`docs/experiments/pre-registro-v1.md`, v1.0-rc1, PROPUESTO — en el disco del
+> autor, aún sin commit), que cubre TODAS las familias H-* y pre-registra el
+> confirmatorio de H-EVT como **EXP-ANOM-004 sobre obd-lab-suite-v2 con R=10 réplicas**
+> (40 episodios held-out; semillas por bloques 11000–20036) — un diseño con más potencia
+> que el de este documento (15 sesiones, 5 episodios). **Ambos documentos están SIN
+> ejecutar; la elección corresponde al autor.** Recomendación: adoptar pre-registro-v1
+> como maestro (congelándolo con su aprobación + tag `prereg-v1.0`) y tratar este
+> PROTO-CONF-001 como fusionado/superseded en su sección EXP-ANOM-004, conservando de
+> aquí lo complementario: el **manifiesto de congelación con checksums**
+> (`arms-freeze-v1.json`) y la regla de verificación de sha256 previa a la ejecución.
+> Esta nota es una enmienda fechada previa a cualquier ejecución (regla §Estado); nada
+> se modifica retroactivamente.
+
 **Estado: PRE-REGISTRADO — NO EJECUTADO.** Este protocolo queda congelado en el commit
 que lo introduce (el manifiesto `ai-models/registry/frozen/arms-freeze-v1.json` fija
 además los brazos con checksums). **Regla: no se modifica retroactivamente**; cualquier
