@@ -1,0 +1,141 @@
+# Config declarativa del experimento E8 (F18) — modelos temporales LSTM-AE / GRU-AE.
+# CONGELADA ANTES DE EJECUTAR (hipótesis, brazos, métricas y regla de parada).
+# Fuente de resultados: experiments/e8_results.json (runner e8_temporal.py).
+
+experiment:
+  id: EXP-ANOM-009
+  title: Autoencoders recurrentes (LSTM/GRU) sobre secuencias crudas OBD-II
+  protocol: ADR-0011 + Adenda XAI v1 (ADR-0033) + adenda temporal F18
+  study_type: exploratory
+  validity: entorno emulado/sintético (obd-lab); SIN validez externa hasta HCRL + ARM64/RPi5
+
+hypothesis:
+  id: HX-ML-3
+  statement: >
+    Un autoencoder recurrente entrenado solo con normalidad, que observa la SECUENCIA
+    cruda de señales en lugar de estadísticos agregados por ventana, detecta anomalías
+    lentas y relacionales (joint_slow_drift, load_coolant_decouple, degradación
+    progresiva, respuesta retardada, ruptura de correlación) mejor que los detectores
+    estáticos ya evaluados, MANTENIENDO el FPR por escenario normal.
+  rationale: >
+    EXP-ANOM-006/007/008 demostraron tres veces el mismo techo con representaciones
+    estáticas: el FPR de autovía está dominado por un evento discreto de adaptación del
+    LTFT cuantizado (J1979, paso 0.7812) raro en train, y los drifts lentos quedan en
+    recall ~0.025. Ambos son fenómenos de CONTEXTO TEMPORAL: la ventana resumida no
+    puede distinguir una transición legítima persistente de una deriva anómala.
+  falsifiable_by: >
+    Si LSTM-AE y GRU-AE no mejoran de forma defendible el recall de anomalías lentas
+    manteniendo el FPR, HX-ML-3 queda REFUTADA para este espacio de modelos y datos.
+    La hipótesis NO se reformula después de ver resultados.
+
+dataset:
+  id: sequence-dataset-v1
+  derived_from: obd-lab-suite-v1 (train v1.1; validation/test CONGELADOS)
+  representation: raw sequence [T x 12 PIDs] desde VehicleTelemetrySnapshot en orden temporal
+  missing: máscara de validez explícita (NULL != 0, ADR-0027); sin imputación que borre dropouts
+  manifest_fields: [dataset_hash, session_id, scenario_id, start_s, end_s, sampling_rate_hz,
+                    sequence_steps, sequence_duration_seconds, provenance, seed, label, fault,
+                    fault_start_s, fault_end_s]
+  anti_leakage: >
+    split por sesión (idéntico a E1/E5/E6/E7); ninguna secuencia comparte pasos con otra
+    partición; sin fragmentos solapados entre train/validation/test. Test automático.
+
+sequence_lengths:  # elección vinculada a duración real, no a métricas
+  steps: [30, 60, 120]
+  stride: mitad de la longitud (coherente con 60/30 canónico)
+  sampling_rate_hz: 1.0
+  note: la longitud final se elige por el fenómeno temporal declarado, no a posteriori
+
+arms:
+  - {name: lstm_ae, change: encoder/decoder LSTM sobre secuencia cruda}
+  - {name: gru_ae, change: encoder/decoder GRU sobre secuencia cruda}
+  - {name: static_ae_fs1, change: NINGUNO — mejor AE estático conocido (F17), sin reoptimizar}
+  - {name: lof_frozen, change: NINGUNO — arms-freeze-v1 (fs1, train v1.0, umbral 0.163197)}
+  - {name: fs1_sequence_ablation, change: secuencia de features fs1 por sub-ventana (ablation secundaria, solo si el coste lo permite)}
+  - name: control_quantization_coverage
+    change: >
+      BRAZO CONTROL DIAGNÓSTICO (no candidato a adopción): AE denso fs1 entrenado con
+      normalidad ampliada que SÍ contiene cruces de cuantización del LTFT. Prueba directa
+      de la causa refinada de F17: si el FPR de autovía cae, la explicación queda
+      validada; si no, queda refutada y se documenta
+
+architecture:
+  budget_parameters: "< 150k (preferencia); superarlo exige documentarlo ANTES de promover"
+  search_space: {hidden_size: acotado, latent_size: acotado, num_layers: [1], dropout: acotado}
+  excluded_for_now: [Transformer, TCN, VAE, attention]
+  rationale: aislar primero si la memoria recurrente aporta valor
+
+training:
+  data: solo normalidad (sin entrenar sobre anomalías conocidas)
+  scaler: >
+    train-only, POR FEATURE y global a la partición (NO por secuencia: normalizar cada
+    secuencia borraría justamente el drift y los cambios de nivel a detectar) — auditado
+  early_stopping: sí (partición permitida, nunca test)
+  seeds: {runner: 42, finalists: [42, 43, 44], reservadas: intactas}
+
+threshold:
+  method: cuantil (1-FPR) sobre scores de la partición permitida
+  partition: train
+  test_nunca: true
+  registrar: [threshold_method, threshold_partition, threshold_value]
+
+metrics:
+  core: [precision, recall, f1, pr_auc, roc_auc, fpr, fnr]
+  breakdowns: [FPR by normal scenario, recall by anomaly type, recall by severity, recall by duration]
+  temporal: [time_to_detection, detection_delay, first_detection_position, score_persistence,
+             false_alarm_duration, anomaly_score_curve]
+  reconstruction: error[time][feature] persistido + agregados per-feature / per-time / global
+  reference_point: recall ~0.025 en anomalías lentas (F17) — una mejora marginal NO es resolución
+
+ltft_quantization_analysis:  # el hallazgo de F17 como caso experimental explícito
+  question: >
+    ¿El modelo temporal distingue la adaptación discreta NORMAL (transición de
+    cuantización legítima, persistente tras minutos de régimen estable) de una deriva
+    anómala persistente?
+  rule: la transición de cuantización NO se etiqueta automáticamente como fallo
+  separation: [sensor/protocol discretization behaviour, actual anomalous dynamics]
+
+xai:
+  canonical_output: SHAP[time_step, feature] (matriz; los agregados se derivan de ella)
+  explained_function: f(sequence) = reconstruction_error(sequence)
+  explainer: >
+    NO fijado a priori — se comprueba compatibilidad con modelos recurrentes PyTorch y se
+    registra shap_version, explainer, background, background_hash, samples, runtime
+  background: solo train normal, selección determinista y hasheada
+  metrics:
+    - "FAR@{1,3,5} con azar hipergeométrico (n = n_features)"
+    - "TAR@{5,10,20} con azar hipergeométrico (n = n_steps)"
+    - "FTH@{5,10,20} con azar hipergeométrico (n = n_steps * n_features)"
+    - "cell_stability_jaccard entre seeds y bajo perturbación"
+    - "agreement de celdas con error[t][f] del propio modelo"
+  ground_truth: ai_models.xai.temporal (congelado en la adenda temporal F18, antes de ejecutar)
+  excluded_sequences: las que no solapan el intervalo inyectado (GT_t vacío) — se excluyen, no se puntúan como 0
+
+embeddings_d2:
+  extract: representación latente de LSTM-AE y GRU-AE
+  evaluate: [PCA, separabilidad normal/anomalía, consistencia de vecindario por tipo de fallo,
+             estabilidad entre seeds]
+  note: silhouette NO es criterio único (referencia estática ≈0.20)
+
+edge_indication:  # ARM64 real sigue PENDIENTE: nada se declara validado en edge
+  record: [parameter_count, model_size_bytes, inference_latency_ms, peak_rss_mb, sequence_processing_cost]
+
+decisions:
+  D1: Temporal AE como detector — ADOPT / REJECT / INCONCLUSIVE
+  D2: Embeddings temporales — PROMOTE TO EXP-PAT / REJECT / NEEDS MORE EVIDENCE
+  D3: XAI temporal — ADOPT / REJECT / NEEDS MORE EVIDENCE
+  extra: comparación explícita LSTM-AE vs GRU-AE con candidato preferido o NO WINNER
+
+stop_rule: >
+  Si ni LSTM-AE ni GRU-AE mejoran de forma defendible la detección de anomalías lentas
+  manteniendo el FPR, NO se añade profundidad automáticamente ni se pasa a TCN/Transformer:
+  se emite un informe de causa que decida entre representación temporal insuficiente /
+  dataset insuficiente / emulador insuficiente / ground truth insuficiente.
+
+constraints:
+  - EXP-PAT-001 solo se recomienda si D2 = PROMOTE TO EXP-PAT (con contrato estable de embeddings)
+  - no tocar la capa confirmatoria ni las seeds reservadas; el freeze del pre-registro sigue aparte
+  - LOF y el AE estático no se reoptimizan
+  - no regenerar datos para mejorar métricas
+git_commit: pendiente de commit F18
+hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)

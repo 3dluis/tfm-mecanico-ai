@@ -327,7 +327,7 @@ validación de hipótesis (H-EXP/H-MAIN), fuera del alcance de esta adenda.
 | correlated-feature attribution ambiguity | regla §13; interpretación por conjuntos GT; agreement entre métodos |
 | synthetic-domain bias | vigilancia §13; contraste con replay real cuando exista; limitación declarada |
 | explanation overinterpretation | regla de capas §1 + regla del agente §5 + criterio 8 condiciones |
-| temporal attribution complexity | alcance acotado: feature-level ahora, feature×tiempo en roadmap (nivel 3) |
+| temporal attribution complexity | alcance acotado: feature-level ahora, feature×tiempo en roadmap (nivel 3) — **realizado en F18**: [adenda temporal](protocolo_ml_v1_adenda_xai_temporal.md), congelada antes de EXP-ANOM-009 |
 
 (El fichero docs/04_riesgos.md está en el paquete evictado pendiente de verificación
 del autor; esta tabla se integrará allí cuando ese paquete se commitee — nota en el
