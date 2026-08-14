@@ -137,5 +137,5 @@ constraints:
   - no tocar la capa confirmatoria ni las seeds reservadas; el freeze del pre-registro sigue aparte
   - LOF y el AE estático no se reoptimizan
   - no regenerar datos para mejorar métricas
-git_commit: pendiente de commit F18
+git_commit: abb4a55 (protocolo congelado ANTES del run; código E8 committeado en F18)
 hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)

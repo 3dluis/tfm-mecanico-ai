@@ -68,8 +68,8 @@ eval-emulator:  ## evaluación práctica del emulador (Fase 1)
 generate-suite:  ## genera las sesiones de la suite v1 en data/sessions
 	$(RUN) python -m obd_lab.cli generate --suite obd-lab/scenarios/suite_v1.yaml --out data/sessions
 
-registry:  ## reconstruye el Model Registry desde F3+F8+F9+F10+F13+F14+F16+F17 (determinista)
-	cd ai-models && $(RUN) python experiments/register_f3.py && $(RUN) python experiments/register_e2.py && $(RUN) python experiments/register_e3.py && $(RUN) python experiments/register_f10.py && $(RUN) python experiments/register_f13.py && $(RUN) python experiments/register_f14.py && $(RUN) python experiments/register_f16.py && $(RUN) python experiments/register_f17.py
+registry:  ## reconstruye el Model Registry desde F3+F8+F9+F10+F13+F14+F16+F17+F18 (determinista)
+	cd ai-models && $(RUN) python experiments/register_f3.py && $(RUN) python experiments/register_e2.py && $(RUN) python experiments/register_e3.py && $(RUN) python experiments/register_f10.py && $(RUN) python experiments/register_f13.py && $(RUN) python experiments/register_f14.py && $(RUN) python experiments/register_f16.py && $(RUN) python experiments/register_f17.py && $(RUN) python experiments/register_f18.py
 
 experiments: generate-suite  ## reproduce el experimento E1 de baselines
 	$(RUN) python ai-models/experiments/e1_baselines.py --sessions data/sessions
@@ -85,6 +85,9 @@ experiments-ae-v2: generate-suite  ## reproduce el experimento E6 (F16): AE v2 +
 
 experiments-fs2: generate-suite  ## reproduce el experimento E7 (F17): ablation fs2-lite vs fs1 (grupo train)
 	uv run --group train python ai-models/experiments/e7_fs2_ablation.py --sessions data/sessions
+
+experiments-temporal: generate-suite  ## reproduce el experimento E8 (F18): LSTM/GRU-AE + XAI temporal (grupo train)
+	uv run --group train python ai-models/experiments/e8_temporal.py --sessions data/sessions
 
 llm-smoke-deep:  ## smoke PROFUNDO del candidato R2 (Qwen2.5-3B-Instruct Q4_K_M; requiere Ollama)
 	$(RUN) python tools/llm_smoke_deep.py
