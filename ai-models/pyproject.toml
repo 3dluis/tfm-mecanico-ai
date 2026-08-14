@@ -12,6 +12,9 @@ dependencies = [
     "numpy>=1.26",
     "pandas>=2.2",
     "scikit-learn>=1.4",
+    # usada por ai_models.xai.metrics (spearmanr) y por la auditoría F19; se importaba
+    # sin declarar (hueco de reproducibilidad detectado por tools/dep_inventory.py)
+    "scipy>=1.11",
     "pydantic>=2.7",
 ]
 
