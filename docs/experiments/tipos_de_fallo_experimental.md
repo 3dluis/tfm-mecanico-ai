@@ -49,6 +49,33 @@ Ante cualquier resultado negativo de detección, en este orden:
 - Las métricas históricas **no se reescriben**: se añade contexto (ver la tabla de
   reinterpretación del informe F19).
 
+## 3-bis. Variante añadida en F21: cobertura declarada ≠ cobertura efectiva
+
+EXP-ANOM-010 encontró un modo de fallo que esta taxonomía no distinguía y que produce
+conclusiones falsas en las dos direcciones: **un hueco de cobertura puede declararse
+cerrado y seguir abierto**, si el instrumento que lo mide no vive en el espacio de
+representación que el modelo consume.
+
+Caso medido: el contador de cobertura de F19 es de **sesión y binario** («¿algún tick
+cambia?», «¿algún tick es ≠ 0?»). Con él, la expansión de F20 cerraba el hueco de cruce de
+cuantización del LTFT (2 → 6 sesiones). Medido en el espacio real —fracción de **ventanas**
+cuyo `LONG_FUEL_TRIM_1_mean` está en un cuanto positivo sostenido— la expansión aportaba
+**0.0000**, exactamente igual que antes, mientras el 82.8 % de los falsos positivos vivían
+justo ahí.
+
+**Regla que se deriva:** todo criterio de cobertura debe declararse y verificarse
+
+1. sobre la **unidad que el modelo consume** (ventana de features), no sobre la sesión;
+2. con **signo, magnitud y persistencia**, no solo con presencia binaria;
+3. contra el **cuantizador real** del canal (aquí `int(v·128/100)`, que trunca hacia cero:
+   el nivel cambia al superar un cuanto completo, no medio);
+4. con el **dimensionado probabilístico** correspondiente (¿cuántas sesiones y de qué
+   duración hacen falta para esperar k con el fenómeno?), no con una afirmación cualitativa.
+
+Comprobación mínima antes de dar por cerrado un hueco: la fracción de ventanas del train
+con el fenómeno, junto a la fracción del conjunto de evaluación. Si la primera es 0, el
+hueco sigue abierto por definición.
+
 ## 4. Instrumentación de referencia
 
 `ai_models.audit.detectability` (métricas y umbrales congelados),
