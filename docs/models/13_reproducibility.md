@@ -4,6 +4,12 @@
 
 ```
 git_commit · python_version · dependencies (lockfile/pyproject) · hardware
+
+> **Fuente canónica de versiones (F20-aud):** el stack real —qué librerías se usan, en qué
+> versión instalada y en qué capa— vive en [15 Stack ML/XAI](15_stack_ml_xai.md). No se
+> repiten versiones en otros documentos para evitar divergencia. El inventario es
+> reproducible (`uv run python tools/dep_inventory.py`) y está verificado por
+> `tests-integration/test_dependency_inventory.py`.
 dataset_version · feature_version (feature_schema_version + preprocessing_version)
 seed · hyperparameters
 model artifact checksum (cuando hay artefacto)

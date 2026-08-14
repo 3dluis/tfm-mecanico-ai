@@ -51,6 +51,7 @@ debe poder reconstruirse **en ambos sentidos, siempre**.
 | [12 Tracking](12_experiment_tracking.md) | Configs declarativas, tracking simple, notebooks ≠ pipeline, CI |
 | [13 Reproducibilidad](13_reproducibility.md) | Qué registra cada experimento y cómo re-ejecutarlo |
 | [14 Selección](14_model_selection.md) | Criterios multicriterio, trade-offs, inventario de modelos |
+| [15 Stack ML/XAI](15_stack_ml_xai.md) | **Fuente canónica de versiones**: librerías realmente usadas, clasificación, mapeo a modelos y experimentos, matriz training/edge |
 
 Diagramas: [ciclo ML](diagrams/ml-lifecycle.mmd) · [ciclo LLM](diagrams/llm-lifecycle.mmd) ·
 [provenance](diagrams/model-provenance.mmd) · [uso por agente](diagrams/agent-model-use.mmd)

@@ -251,6 +251,9 @@ su F1 sea superior.
 
 ## 15. Metodología SHAP (implementación)
 
+> Versiones exactas de `shap` y del resto del stack: [docs/models/15](../models/15_stack_ml_xai.md)
+> (fuente canónica). Aquí se fija el MÉTODO; allí, la tecnología y sus versiones.
+
 - **Explainer**: no se fija KernelExplainer por defecto; se elige por tipo de modelo,
   versión de SHAP, coste computacional y framework soportado (p. ej. explainers
   agnósticos con background para AE/LOF; el explainer exacto es parte del registro).

@@ -13,6 +13,11 @@ y el manifest la dejan preparada (ADR-0022, docs/data-architecture/09 para el tr
 ## 2. Formatos por categoría
 
 | Categoría | Formato | Runtime | Nota |
+> **Dependencias del edge (auditado F20-aud):** la Raspberry Pi 5 solo necesita
+> `onnxruntime` + `numpy` (extra `diagnostic-agent[detection]`). scikit-learn, PyTorch,
+> SHAP y Matplotlib **no se instalan en el edge**. Matriz completa training/evaluation/
+> edge/cloud-XAI en [15 Stack ML/XAI](15_stack_ml_xai.md).
+
 |---|---|---|---|
 | ML | **ONNX** (skl2onnx; paridad exacta verificada) | onnxruntime | joblib/pickle solo justificado y nunca como formato de distribución |
 | LLM | **GGUF** (cuantizado) | Ollama / llama.cpp | formato final depende del runtime elegido en R2 |

@@ -2,6 +2,12 @@
 
 **Estado: VIGENTE para trabajo EXPLORATORIO · 2026-08-13 · clasificación según regla F10**
 
+> **Stack tecnológico:** las librerías y versiones que sostienen cada nivel de este
+> protocolo (NumPy, SciPy, scikit-learn, PyTorch, SHAP, Matplotlib, ONNX Runtime) están
+> auditadas en [docs/models/15](../models/15_stack_ml_xai.md), **fuente canónica única de
+> versiones**. Los documentos experimentales citan el framework junto al modelo
+> —«Local Outlier Factor (scikit-learn)»— sin repetir versiones, para evitar divergencia.
+
 Este protocolo gobierna la línea experimental de **entrenamiento y evaluación de modelos
 de IA sobre series temporales OBD-II** abierta en F13 por decisión del autor. Es el marco
 común de los experimentos exploratorios de detección, representación y descubrimiento de
