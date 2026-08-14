@@ -74,15 +74,35 @@ def test_la_inyeccion_sobrevive_generacion_codificacion_y_ventaneo() -> None:
     assert trace["n_features_changed"] > 0
 
 
-def test_integridad_del_ground_truth_detecta_discrepancias_reales() -> None:
-    """El GT de misfire omite STFT, que la inyección sí modifica (hallazgo F19)."""
-    trace = pipeline_trace("misfire", SEED)
-    gt = ground_truth_integrity("misfire", trace)
-    assert "SHORT_FUEL_TRIM_1" in gt["observed_not_declared"]
-    assert not gt["ground_truth_consistent"]
-    # y en un fallo bien declarado no hay discrepancia
-    gt_ok = ground_truth_integrity("vacuum_leak", pipeline_trace("vacuum_leak", SEED))
-    assert gt_ok["ground_truth_consistent"]
+def test_integridad_del_ground_truth_es_consistente_tras_la_correccion_f20() -> None:
+    """Las tres discrepancias que detectó F19 quedaron corregidas en F20 (ADR-0035).
+
+    F19 encontró que `misfire` omitía SHORT_FUEL_TRIM_1 y que corr_break/load_coolant
+    declaraban señales que la inyección no toca. El comprobador sigue vivo: aquí se
+    verifica que YA no hay discrepancia en el catálogo real, y que el mecanismo seguiría
+    detectándola si reapareciera.
+    """
+    for fault in ("misfire", "vacuum_leak", "corr_break_rpm_maf", "load_coolant_decouple"):
+        gt = ground_truth_integrity(fault, pipeline_trace(fault, SEED))
+        assert gt["ground_truth_consistent"], (
+            f"{fault}: declarado {gt['declared_affected_pids']} vs "
+            f"observado {gt['observed_affected_pids']}"
+        )
+
+
+def test_el_comprobador_detecta_una_discrepancia_inyectada() -> None:
+    """Si el GT volviera a declarar una señal que la inyección no toca, se detecta."""
+    from ai_models.xai import ground_truth as gt_mod
+
+    trace = pipeline_trace("thermostat_stuck", SEED)
+    original = gt_mod.FAULT_AFFECTED_PIDS["thermostat_stuck"]
+    gt_mod.FAULT_AFFECTED_PIDS["thermostat_stuck"] = original | {"SPEED"}
+    try:
+        gt = ground_truth_integrity("thermostat_stuck", trace)
+        assert not gt["ground_truth_consistent"]
+        assert "SPEED" in gt["declared_not_observed"]
+    finally:
+        gt_mod.FAULT_AFFECTED_PIDS["thermostat_stuck"] = original
 
 
 def test_el_catalogo_queda_limpio_tras_la_auditoria() -> None:

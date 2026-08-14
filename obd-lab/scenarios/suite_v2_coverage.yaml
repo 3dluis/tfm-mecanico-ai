@@ -1,0 +1,52 @@
+# Suite de EXPANSIÓN DE COBERTURA — Synthetic Benchmark v2 (F20).
+#
+# NO sustituye a suite_v1.yaml: la amplía. Los splits validation/test de v1 quedan
+# INTACTOS y sus datos se conservan como evidencia histórica (incluido el distribution
+# shift documentado por AUDIT-DATA-001).
+#
+# Cada escenario ataca un HUECO DE COBERTURA MEDIDO en F19, y su diseño se deriva del
+# MECANISMO del generador, nunca de observar el conjunto de test:
+#
+#   hueco medido                        → decisión de diseño derivada del mecanismo
+#   ----------------------------------------------------------------------------------
+#   LTFT_quantization_crossing ABSENT   → el LTFT es un paseo aleatorio de σ=0.01 %/tick
+#   LTFT_nonzero_level        ABSENT      y el paso J1979 es 0.78125 %; para que el
+#                                         cruce ocurra hace falta que la desviación
+#                                         acumulada σ·√n se acerque a un cuanto:
+#                                           1800 s → 0.42 % (0.54 cuantos) → raro
+#                                           3600 s → 0.60 % (0.77 cuantos) → ~40 %
+#                                           5400 s → 0.74 % (0.94 cuantos) → ~50 %
+#                                         ⇒ sesiones normales LARGAS, no más sesiones cortas
+#   cruise            RARE (2)          → más sesiones de autovía sostenida
+#   high_load_cruise  RARE (2)          → autovía con carga alta sostenida
+#
+# Semillas: bloque EXPLORATORIO 530-559 (Protocolo ML v1; 401-599). Ninguna reservada.
+# Los escenarios NORMALES no llevan anomaly_seed (no hay inyección que sembrar).
+
+benchmark:
+  id: synthetic-benchmark-v2
+  supersedes: null            # v2 NO reemplaza a v1: la amplía
+  extends: synthetic-benchmark-v1 (suite_v1.yaml + suite_v1_train_ext.yaml)
+  purpose: >
+    Expansión de la cobertura de normalidad dirigida por los huecos medidos en
+    AUDIT-DATA-001, para que el entrenamiento contenga comportamientos normales legítimos
+    que hoy solo aparecen en evaluación.
+  generator_rng: separado (ADR-0034) — los escenarios con fallo declaran anomaly_seed
+
+# Solo se amplía TRAIN: la cobertura que falta es la de normalidad de entrenamiento.
+coverage_extension:
+  # --- huecos LTFT: sesiones largas (el cruce necesita tiempo, no más sesiones) ---
+  - {scenario_id: c2-urban-long-a,   description: "Normal urbano largo (cobertura de cruce de cuantización LTFT)",   category: normal, driving_profile: urban,   duration_s: 5400, seed: 530, coverage_target: "LTFT_quantization_crossing,LTFT_nonzero_level"}
+  - {scenario_id: c2-urban-long-b,   description: "Normal urbano largo B",                                            category: normal, driving_profile: urban,   duration_s: 5400, seed: 531, coverage_target: "LTFT_quantization_crossing,LTFT_nonzero_level"}
+  - {scenario_id: c2-urban-long-c,   description: "Normal urbano largo C",                                            category: normal, driving_profile: urban,   duration_s: 3600, seed: 532, coverage_target: "LTFT_quantization_crossing"}
+  - {scenario_id: c2-highway-long-a, description: "Normal autovía larga (cruce LTFT + crucero sostenido)",            category: normal, driving_profile: highway, duration_s: 5400, seed: 533, coverage_target: "LTFT_quantization_crossing,cruise"}
+  - {scenario_id: c2-highway-long-b, description: "Normal autovía larga B",                                           category: normal, driving_profile: highway, duration_s: 5400, seed: 534, coverage_target: "LTFT_quantization_crossing,cruise"}
+  - {scenario_id: c2-highway-long-c, description: "Normal autovía larga C",                                           category: normal, driving_profile: highway, duration_s: 3600, seed: 535, coverage_target: "LTFT_nonzero_level,cruise"}
+  # --- huecos de régimen: crucero y crucero a alta carga ---
+  - {scenario_id: c2-cruise-a,       description: "Crucero sostenido A",                                              category: normal, driving_profile: highway, duration_s: 2400, seed: 536, coverage_target: "cruise"}
+  - {scenario_id: c2-cruise-b,       description: "Crucero sostenido B",                                              category: normal, driving_profile: highway, duration_s: 2400, seed: 537, coverage_target: "cruise"}
+  - {scenario_id: c2-cruise-load-a,  description: "Crucero a alta carga A",                                           category: normal, driving_profile: highway, duration_s: 2400, seed: 538, coverage_target: "high_load_cruise"}
+  - {scenario_id: c2-cruise-load-b,  description: "Crucero a alta carga B",                                           category: normal, driving_profile: highway, duration_s: 2400, seed: 539, coverage_target: "high_load_cruise"}
+  # --- transiciones ya presentes pero escasas: se refuerzan sin cambiar su naturaleza ---
+  - {scenario_id: c2-warmup-a,       description: "Arranque frío y transición térmica A",                             category: normal, driving_profile: cold_start, duration_s: 2400, seed: 540, ambient_temp_c: 6.0,  coverage_target: "warmup_cold_ECT"}
+  - {scenario_id: c2-warmup-b,       description: "Arranque frío y transición térmica B",                             category: normal, driving_profile: cold_start, duration_s: 2400, seed: 541, ambient_temp_c: 12.0, coverage_target: "warmup_cold_ECT"}

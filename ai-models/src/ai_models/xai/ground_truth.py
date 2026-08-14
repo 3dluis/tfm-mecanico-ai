@@ -17,15 +17,26 @@ El mapeo se congela en la config del experimento antes de calcular métricas.
 
 from ai_models.features.schema import FS1, FeatureSchema
 
-#: PIDs afectados por cada fallo (firma de la transformación del catálogo, adenda §7).
+#: PIDs afectados por cada fallo — **política verificable (F20)**: contiene EXACTAMENTE
+#: los PIDs que la inyección modifica de verdad, comprobado señal a señal por la auditoría
+#: AUDIT-DATA-001 y protegido por test. La firma RELACIONAL (la pareja de la relación que
+#: se rompe) NO va aquí: vive en ``FAULT_RELATIONAL_FEATURES_BY_SCHEMA`` como features de
+#: correlación, que sí cambian y sí son atribuibles.
+#:
+#: Cambios respecto al mapeo de F16 (documentados, no silenciosos):
+#: - ``misfire``: se AÑADE ``SHORT_FUEL_TRIM_1`` — la inyección lo modifica y el GT lo omitía.
+#: - ``corr_break_rpm_maf``: se RETIRA ``RPM`` — la inyección solo toca MAF.
+#: - ``load_coolant_decouple``: se RETIRA ``ENGINE_LOAD`` — la inyección solo toca COOLANT_TEMP.
+#: Motivo: declarar señales inalteradas penalizaba AR@K a explicadores que atribuían
+#: correctamente. Las métricas ya publicadas (F16/F17/F18) NO se reescriben.
 FAULT_AFFECTED_PIDS: dict[str, frozenset[str]] = {
     "vacuum_leak": frozenset({"SHORT_FUEL_TRIM_1", "LONG_FUEL_TRIM_1", "INTAKE_PRESSURE", "RPM"}),
     "maf_drift": frozenset({"MAF", "SHORT_FUEL_TRIM_1", "LONG_FUEL_TRIM_1"}),
     "thermostat_stuck": frozenset({"COOLANT_TEMP"}),
     "o2_lag": frozenset({"O2_B1S1", "SHORT_FUEL_TRIM_1"}),
-    "misfire": frozenset({"RPM", "ENGINE_LOAD", "O2_B1S1"}),
-    "corr_break_rpm_maf": frozenset({"RPM", "MAF"}),
-    "load_coolant_decouple": frozenset({"COOLANT_TEMP", "ENGINE_LOAD"}),
+    "misfire": frozenset({"RPM", "ENGINE_LOAD", "O2_B1S1", "SHORT_FUEL_TRIM_1"}),
+    "corr_break_rpm_maf": frozenset({"MAF"}),
+    "load_coolant_decouple": frozenset({"COOLANT_TEMP"}),
     "joint_slow_drift": frozenset({"MAF", "TIMING_ADVANCE"}),
 }
 
