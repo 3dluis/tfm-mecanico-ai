@@ -137,3 +137,34 @@ def test_dataset_v11_sin_leakage_y_reproducible(tmp_path: Path) -> None:
     # reproducibilidad de una sesión de la extensión
     spec = ScenarioSpec(**raw["train_extension"][0])
     assert generate_ticks(spec) == generate_ticks(spec)
+
+
+def test_dataset_fs2lite_mismas_ventanas_que_fs1(tmp_path: Path) -> None:
+    """F17: el camino fs2-lite produce EXACTAMENTE las mismas ventanas/etiquetas que fs1
+    (cambio único = features, 48 columnas) y es determinista; las features fs1
+    conservadas son idénticas byte a byte a las del camino wide fs1."""
+    import sys
+
+    sys.path.insert(0, str(REPO_ROOT / "ai-models" / "experiments"))
+    from e4_wide_parity import build_dataset_wide
+    from e7_fs2_ablation import build_dataset_fs2lite
+
+    from ai_models.features.fs2_lite import FS2_LITE_NAMES
+    from mecanico_contracts.features import FEATURE_NAMES
+
+    split_dir = tmp_path / "test"
+    split_dir.mkdir()
+    for spec in (_NORMAL, _FAULT):
+        write_session(spec, split_dir)
+    fs1_ds, _, _ = build_dataset_wide(split_dir, 60, 30)
+    fs2_ds = build_dataset_fs2lite(split_dir, 60, 30)
+    assert fs2_ds.x.shape == (fs1_ds.x.shape[0], 48)
+    assert fs2_ds.session_ids == fs1_ds.session_ids
+    assert fs2_ds.window_starts == fs1_ds.window_starts
+    assert np.array_equal(fs2_ds.y, fs1_ds.y)
+    kept = [n for n in FEATURE_NAMES if n in set(FS2_LITE_NAMES)]
+    idx1 = [list(FEATURE_NAMES).index(n) for n in kept]
+    idx2 = [list(FS2_LITE_NAMES).index(n) for n in kept]
+    assert np.array_equal(fs1_ds.x[:, idx1], fs2_ds.x[:, idx2])
+    fs2_again = build_dataset_fs2lite(split_dir, 60, 30)
+    assert np.array_equal(fs2_ds.x, fs2_again.x)

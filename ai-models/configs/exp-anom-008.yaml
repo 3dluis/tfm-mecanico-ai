@@ -1,0 +1,58 @@
+# Config declarativa del experimento E7 (F17) — ablation fs2-lite vs fs1.
+# Fuente de resultados: experiments/e7_results.json (runner e7_fs2_ablation.py).
+
+experiment:
+  id: EXP-ANOM-008
+  title: Ablation de esquema de features (fs2-lite vs fs1) contra el FPR del AE
+  protocol: ADR-0011 + Adenda XAI v1 (ADR-0033)
+  study_type: exploratory
+  validity: entorno emulado/sintético (obd-lab); SIN validez externa hasta HCRL + ARM64/RPi5
+
+dataset:
+  id: obd-lab-suite-v1
+  train_version: "1.1"          # 22 sesiones normales (seeds 101-106 + 111-142), SIMULATED
+  eval_split: suite-v1-split-1  # validation/test CONGELADOS e idénticos a E1/E5/E6
+  severity_sweep: suite_f14_severity (solo evaluación)
+  dataset_hash: registrado en e7_results.json (sha256 de las 22 sesiones)
+
+features:
+  schemas_compared: [fs1, fs2-lite]
+  fs2_lite: >
+    48 features = fs1 SIN los absolutos LONG_FUEL_TRIM_1_mean/total_trim_mean
+    (sustituidos por LTFT_session_drift/total_trim_session_drift relativos a los
+    primeros 120 s de la PROPIA sesión) + std multiescala (bloques de 15) para
+    RPM/MAF/COOLANT_TEMP/LTFT + correlaciones lag-1 RPM↔MAF y THROTTLE_POS↔MAF.
+    Extracción: ai_models.features.fs2_lite. NO promovido a contrato (resultado: KEEP fs1).
+  window: 60
+  stride: 30
+
+arms:  # cambio único = esquema de features (mismo train v1.1, misma normalización)
+  - {name: fs1+AE-S, change: referencia (esquema fs1, 4.1k params)}
+  - {name: fs1+AE-M, change: esquema fs1, capacidad AE-M (hidden 64-32, latent 16)}
+  - {name: fs2-lite+AE-S, change: esquema fs2-lite}
+  - {name: fs2-lite+AE-M, change: esquema fs2-lite + capacidad AE-M}
+  - {name: lof_frozen, change: NINGUNO — brazo congelado arms-freeze-v1 (fs1, train v1.0, umbral 0.163197), jamás re-entrenado ni reajustado}
+
+seeds: {runner: 42, replicas_all_arms: [43, 44], reservadas: intactas}
+threshold: {method: cuantil (1-FPR) sobre scores de train del brazo, partition: train, test_nunca: true}
+
+breakdowns:  # exigidos por la instrucción F17
+  - FPR por escenario normal (y por perfil)
+  - recall por tipo de fallo / severidad (suite F14) / duración
+  - fallos foco: joint_slow_drift, load_coolant_decouple, corr_break_rpm_maf, degradación progresiva
+
+xai:  # parte de la DECISIÓN, no adorno: sin promoción automática si explicaciones inestables
+  explained_function: reconstruction_error(x)
+  explainer: shap.explainers.Permutation
+  background: 100 muestras del train del brazo (NORMAL), selección determinista seed 42, hash registrado
+  finalists: mejor brazo fs2-lite (menor FPR, desempate F1) + su homólogo fs1
+  metrics: [AR@K vs baseline aleatorio (n=42/48 según esquema), agreement SHAP↔per-feature error, estabilidad seeds (3) y perturbación, features dominantes inesperadas, sonda fingerprint]
+  ground_truth: ai_models.xai.ground_truth parametrizado por esquema (gt_features_for(fault, schema))
+
+adoption_criteria: >
+  Decisión de esquema (PROMOTE fs2-lite / KEEP fs1 / NEEDS MORE EVIDENCE) + D1/D2/D3
+  independientes (Adenda XAI v1 §12). fs2-lite NO se promueve a contrato antes de
+  resultados; no hay promoción si F1 mejora pero las explicaciones son inestables.
+  No se maquilla el resultado.
+git_commit: df436a4 (base del árbol de trabajo del run; código E7 committeado en F17)
+hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)
