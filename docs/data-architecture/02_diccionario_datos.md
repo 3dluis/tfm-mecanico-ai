@@ -241,7 +241,8 @@ Especificación declarativa de un escenario del laboratorio.
 | `ambient_temp_c` | number | opc. | Temperatura ambiente simulada | — |
 | `duration_s` | number | ✔ | — | exclusiveMinimum=0 |
 | `sample_rate_hz` | number | opc. | — | exclusiveMinimum=0 |
-| `seed` | integer | ✔ | Semilla de reproducibilidad (obligatoria) | — |
+| `seed` | integer | ✔ | Semilla del COMPORTAMIENTO NORMAL del vehículo (vehicle_behavior_seed). Obligatoria y reproducible. | — |
+| `anomaly_seed` | integer \| null | opc. | Semilla INDEPENDIENTE de la inyección de anomalías (anomaly_injection_seed, ADR-0034). Si es None se mantiene el comportamiento heredado v1 —la anomalía comparte el generador aleatorio del motor— para que los datasets ya generados sigan reproduciéndose byte a byte. Si se indica, la anomalía usa su propio generador y NO altera la trayectoria normal fuera de la región intervenida. | — |
 
 ### RecordedSession
 

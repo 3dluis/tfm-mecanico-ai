@@ -10,7 +10,6 @@ requires-python = ">=3.11"
 dependencies = [
     "mecanico-contracts",
     "numpy>=1.26",
-    "pandas>=2.2",
     "scikit-learn>=1.4",
     # usada por ai_models.xai.metrics (spearmanr) y por la auditoría F19; se importaba
     # sin declarar (hueco de reproducibilidad detectado por tools/dep_inventory.py)

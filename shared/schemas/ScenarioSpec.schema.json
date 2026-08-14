@@ -90,9 +90,22 @@
       "type": "number"
     },
     "seed": {
-      "description": "Semilla de reproducibilidad (obligatoria)",
+      "description": "Semilla del COMPORTAMIENTO NORMAL del vehículo (vehicle_behavior_seed). Obligatoria y reproducible.",
       "title": "Seed",
       "type": "integer"
+    },
+    "anomaly_seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Semilla INDEPENDIENTE de la inyección de anomalías (anomaly_injection_seed, ADR-0034). Si es None se mantiene el comportamiento heredado v1 —la anomalía comparte el generador aleatorio del motor— para que los datasets ya generados sigan reproduciéndose byte a byte. Si se indica, la anomalía usa su propio generador y NO altera la trayectoria normal fuera de la región intervenida.",
+      "title": "Anomaly Seed"
     }
   },
   "required": [

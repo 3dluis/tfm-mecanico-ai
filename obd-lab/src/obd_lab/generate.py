@@ -1,5 +1,6 @@
 """Generación de sesiones reproducibles: ScenarioSpec → JSONL (cabecera + OBDReadings)."""
 
+import random
 from collections.abc import Iterator
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -46,7 +47,13 @@ def iter_ticks_labeled(spec: ScenarioSpec) -> Iterator[tuple[dict[str, float], s
     fault = CATALOG[spec.fault] if spec.fault else None
     params = dict(fault.default_params) if fault else {}
     params.update(spec.fault_params)
-    runtime = FaultRuntime(rng=engine.rng)
+    # Separación de generadores aleatorios (ADR-0034, F20). Con `anomaly_seed` la
+    # inyección usa su PROPIO generador: no consume extracciones del motor de señales, de
+    # modo que la trayectoria normal es idéntica fuera de la región intervenida y los
+    # contrafactuales quedan limpios. Sin `anomaly_seed` se conserva el comportamiento
+    # heredado (RNG compartido) para reproducir byte a byte los datasets v1.
+    fault_rng = random.Random(spec.anomaly_seed) if spec.anomaly_seed is not None else engine.rng
+    runtime = FaultRuntime(rng=fault_rng)
 
     n = int(spec.duration_s * spec.sample_rate_hz)
     start = spec.fault_start_s if spec.fault_start_s is not None else 0.0

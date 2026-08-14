@@ -4,7 +4,7 @@
 COMPOSE := docker compose
 RUN := uv run
 
-.PHONY: install install-emulator schemas lint type test check \
+.PHONY: install install-train check-train-env install-emulator schemas lint type test check \
         dev research cloud edge full down \
         arm64-build eval-emulator \
         db-up db-upgrade db-revision db-psql pg-bench pg-vector-bench test-pg
@@ -13,6 +13,12 @@ RUN := uv run
 install:  ## crea/sincroniza .venv desde uv.lock (miembros editable + grupo dev)
 	uv sync --all-packages --locked
 	$(RUN) pre-commit install
+
+install-train:  ## entorno de ENTRENAMIENTO (torch + shap + matplotlib); necesario para experimentos ML
+	uv sync --all-packages --group train --locked
+
+check-train-env:  ## verifica que el entorno de entrenamiento está completo ANTES de lanzar un experimento
+	$(RUN) python tools/check_train_env.py
 
 install-emulator:  ## emulador ELM327 (fuera del lock: setuptools<81 + no-build-isolation, ADR-0003)
 	uv pip install "setuptools<81" wheel
@@ -77,16 +83,16 @@ experiments: generate-suite  ## reproduce el experimento E1 de baselines
 experiments-wide: generate-suite  ## reproduce el experimento E4 (F13): paridad del camino wide
 	$(RUN) python ai-models/experiments/e4_wide_parity.py --sessions data/sessions
 
-experiments-ae: generate-suite  ## reproduce el experimento E5 (F14): autoencoder vs LOF (requiere grupo train)
+experiments-ae: check-train-env generate-suite  ## reproduce el experimento E5 (F14): autoencoder vs LOF (requiere grupo train)
 	uv run --group train python ai-models/experiments/e5_autoencoder.py --sessions data/sessions
 
-experiments-ae-v2: generate-suite  ## reproduce el experimento E6 (F16): AE v2 + XAI/SHAP (grupo train)
+experiments-ae-v2: check-train-env generate-suite  ## reproduce el experimento E6 (F16): AE v2 + XAI/SHAP (grupo train)
 	uv run --group train python ai-models/experiments/e6_ae_v2.py --sessions data/sessions
 
-experiments-fs2: generate-suite  ## reproduce el experimento E7 (F17): ablation fs2-lite vs fs1 (grupo train)
+experiments-fs2: check-train-env generate-suite  ## reproduce el experimento E7 (F17): ablation fs2-lite vs fs1 (grupo train)
 	uv run --group train python ai-models/experiments/e7_fs2_ablation.py --sessions data/sessions
 
-experiments-temporal: generate-suite  ## reproduce el experimento E8 (F18): LSTM/GRU-AE + XAI temporal (grupo train)
+experiments-temporal: check-train-env generate-suite  ## reproduce el experimento E8 (F18): LSTM/GRU-AE + XAI temporal (grupo train)
 	uv run --group train python ai-models/experiments/e8_temporal.py --sessions data/sessions
 
 llm-smoke-deep:  ## smoke PROFUNDO del candidato R2 (Qwen2.5-3B-Instruct Q4_K_M; requiere Ollama)

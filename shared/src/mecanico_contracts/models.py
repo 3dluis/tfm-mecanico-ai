@@ -297,7 +297,22 @@ class ScenarioSpec(ContractBase):
     ambient_temp_c: float = Field(default=22.0, description="Temperatura ambiente simulada")
     duration_s: float = Field(gt=0)
     sample_rate_hz: float = Field(gt=0, default=1.0)
-    seed: int = Field(description="Semilla de reproducibilidad (obligatoria)")
+    seed: int = Field(
+        description=(
+            "Semilla del COMPORTAMIENTO NORMAL del vehículo (vehicle_behavior_seed). "
+            "Obligatoria y reproducible."
+        )
+    )
+    anomaly_seed: int | None = Field(
+        default=None,
+        description=(
+            "Semilla INDEPENDIENTE de la inyección de anomalías (anomaly_injection_seed, "
+            "ADR-0034). Si es None se mantiene el comportamiento heredado v1 —la anomalía "
+            "comparte el generador aleatorio del motor— para que los datasets ya generados "
+            "sigan reproduciéndose byte a byte. Si se indica, la anomalía usa su propio "
+            "generador y NO altera la trayectoria normal fuera de la región intervenida."
+        ),
+    )
 
 
 class RecordedSession(ContractBase):
