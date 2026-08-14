@@ -1,5 +1,17 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F17:** la ablation EXP-ANOM-008 cierra la vía de features estáticas
+> (fs2-lite = KEEP fs1; causa refinada: evento de adaptación del LTFT cuantizado, raro
+> en train — contexto temporal) → la línea ML continúa en **EXP-ANOM-009 (modelos
+> temporales, LSTM/GRU-AE, HX-ML-3)**. Quedan registradas como **tareas de dependencia
+> EXTERNAS, separadas de los experimentos y en el lado del autor** (su ausencia NO
+> bloquea la fase exploratoria, pero mantiene la validez declarada en «entorno
+> emulado/sintético», sin validez externa): **A2/A3** — validación ARM64/Raspberry Pi 5
+> (nada se declara validado en edge hasta ejecutarla); **HCRL** — descarga y replay del
+> dataset real (primera evidencia fuera del simulador; re-examen de la sonda de
+> cuantización y del fingerprint sintético); **pre-registro** — reconciliación y freeze
+> de prereg-v1.0 (condición previa a CUALQUIER experimento confirmatorio, regla F10).
+>
 > **Actualización F15:** **XAI transversal** ([Adenda XAI v1](experiments/protocolo_ml_v1_adenda_xai.md),
 > ADR-0033): la explicabilidad pasa de producirse a EVALUARSE en cada experimento de la
 > línea ML (métricas de atribución contra el ground truth de inyección, estabilidad,
