@@ -1,5 +1,18 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F18:** EXP-ANOM-009 **refuta HX-ML-3** (los AE recurrentes son peores
+> que los estáticos y que LOF) y, con su brazo control, **demuestra cuál era el techo
+> real de toda la serie EXP-ANOM-006/007/008/009: la cobertura de normalidad**. El FPR
+> de la familia AE proviene íntegramente de un evento discreto legítimo y raro — la
+> transición de cuantización del LTFT — que apenas aparecía en train; al cubrirlo, el
+> mismo AE denso pasa de FPR 0.129 a 0.022 y supera a LOF en F1. La línea ML deja por
+> tanto de buscar arquitecturas y pasa a **(1) replicar esa cobertura de forma
+> independiente del diagnóstico** (primera adopción posible de un AE) y **(2) auditar la
+> inyección de anomalías lentas**, que ningún modelo de la serie detecta. Secuenciales
+> profundos: REJECTED; TCN/Transformer NO se abren (regla de parada). Las dependencias
+> externas (A2/A3, HCRL, freeze del pre-registro) siguen vigentes — y HCRL gana una
+> pregunta concreta: ¿existe el patrón de cuantización fuera del emulador?
+>
 > **Actualización F17:** la ablation EXP-ANOM-008 cierra la vía de features estáticas
 > (fs2-lite = KEEP fs1; causa refinada: evento de adaptación del LTFT cuantizado, raro
 > en train — contexto temporal) → la línea ML continúa en **EXP-ANOM-009 (modelos
