@@ -1,0 +1,111 @@
+# Config declarativa de la auditoría F19 (AUDIT-DATA-001).
+# CONGELADA ANTES DE MEDIR: clases, umbrales, métricas y criterios de cobertura.
+# Fuente de resultados: experiments/e9_audit_results.json (runner e9_anomaly_audit.py).
+
+audit:
+  id: AUDIT-DATA-001
+  title: Auditoría de detectabilidad y validez de las anomalías sintéticas
+  study_type: exploratory
+  scope: >
+    NO se entrenan modelos nuevos ni se modifica el generador. Se audita el banco de
+    pruebas tal y como está, para decidir si los fenómenos que pedimos detectar son
+    distinguibles del comportamiento normal generado.
+  validity: entorno emulado/sintético; los hallazgos sobre realismo requieren HCRL
+
+question: >
+  ¿Las anomalías sintéticas utilizadas representan desviaciones estadística y
+  temporalmente distinguibles del comportamiento normal generado?
+
+classification:  # umbrales EXPLORATORIOS congelados (ai_models.audit.detectability)
+  classes: [DETECTABLE, WEAKLY_DETECTABLE, INDISTINGUISHABLE, INVALID_BY_CONSTRUCTION, NEEDS_MORE_EVIDENCE]
+  rules:
+    DETECTABLE: AUC >= 0.90 y |d| >= 0.8
+    WEAKLY_DETECTABLE: AUC >= 0.70 (sin cumplir lo anterior)
+    INDISTINGUISHABLE: AUC < 0.60 y |d| < 0.8
+    NEEDS_MORE_EVIDENCE: zona intermedia o señales contradictorias
+    INVALID_BY_CONSTRUCTION: >
+      inyección por debajo del paso de cuantización del sensor, o ground truth que no
+      sobrevive al pipeline. Domina sobre las métricas: en ese caso el número medido no
+      es interpretable como capacidad de detección.
+  note: la clasificación se deriva de métricas, nunca de inspección visual
+
+paired_counterfactual:
+  design: mismo scenario_id, seed, duración, perfil y ventana temporal; única diferencia = fault
+  known_limitation: >
+    El fallo comparte el generador aleatorio del motor de señales
+    (generate.iter_ticks_labeled: FaultRuntime(rng=engine.rng)), de modo que a partir de
+    fault_start el gemelo se DESINCRONIZA: la diferencia observada mezcla el efecto de la
+    inyección con la divergencia del flujo aleatorio.
+  sham_control: >
+    Para separar ambos efectos, la auditoría construye un brazo SHAM que consume
+    exactamente las mismas extracciones aleatorias que el fallo real pero descarta sus
+    modificaciones. Es instrumentación de auditoría (vive en el runner, NO modifica el
+    generador). Descomposición: normal vs sham = efecto de desincronización;
+    sham vs anómalo = efecto real de la inyección.
+
+levels:  # el mismo efecto se mide en los tres niveles en que lo ve el sistema
+  - tick crudo (por PID, antes y después de cuantizar)
+  - ventana fs1 (las features que consumen los detectores; 60 s / stride 30 s)
+  - multivariable (Mahalanobis, PCA, vecino más cercano, desplazamiento de correlación)
+
+metrics:
+  per_signal: [diferencia absoluta, desplazamiento estandarizado, Cohen d, solape de distribuciones (OVL), AUC]
+  multivariate: [Mahalanobis, desplazamiento de correlación, desplazamiento de covarianza, distancia en espacio PCA, distancia al vecino más cercano]
+  separability: >
+    AUC de la mejor dimensión inyectada y AUC de la distancia multivariable, ambas SIN
+    usar los modelos principales (LOF, AE, LSTM, GRU). Es un sanity check, no un detector.
+  signal_to_normal_ratio: "|Δ inyectado| / σ de la misma señal en normal (<1 = enterrado por el ruido)"
+  quantization_absorption: "|Δ inyectado| / paso de cuantización (<1 = perdido al codificar)"
+
+temporal_audit:  # para las lentas (joint_slow_drift, load_coolant_decouple)
+  measure: [pendiente inyectada, duración efectiva, cambio acumulado, deriva normal de la misma señal, paso de cuantización]
+  question: ¿la trayectoria introducida supera la variabilidad normal de esa señal o relación?
+
+quantization:
+  formalize: paso por PID derivado de obd_lab.emulator.encoding.quantize (J1979)
+  ltft_step_expected: 0.78125  # 100/128 %
+  distinguish: [quantization transition, normal adaptive behaviour, synthetic drift]
+  rule: no se altera la implementación de J1979 para favorecer a ningún modelo
+
+coverage:
+  dimensions: [scenario, régimen operativo, rangos de PID, transiciones de cuantización, estados térmicos, estados de carga, estados de fuel trim]
+  buckets: {ABSENT: 0, RARE: 1-2, FEW: 3-9, REPRESENTED: ">=10"}
+  matrix: TRAIN / VALIDATION / TEST por comportamiento
+  gap_rule: comportamiento con presencia en test y ABSENT/RARE en train = hueco de cobertura
+  note: buckets exploratorios; NO son umbrales confirmatorios
+
+severity:
+  evaluate_separately: [low, mid, high]
+  admissible_outcome: >
+    LOW indistinguible + MID débil + HIGH detectable es un resultado legítimo y valioso;
+    no se exige que toda severidad sea detectable.
+
+ground_truth_integrity:
+  verify_after: [generation, quantization, snapshot conversion, matrix, windowing, feature extraction]
+  fields: [anomaly_start, anomaly_end, affected_features, affected_relationships]
+
+xai:
+  scope: >
+    SIN campaña SHAP nueva. Se reutilizan los artefactos existentes (F16/F18) para
+    comprobar si la atribución señalaba features realmente alteradas o features asociadas
+    al distribution shift normal, con foco en los FP de LTFT.
+  tar_at_k_applicability: >
+    Documentar formalmente: si la anomalía cubre toda la ventana, el baseline aleatorio de
+    TAR@K tiende a 1 y la métrica deja de discriminar. No se elimina la métrica: se
+    declara su dominio de aplicabilidad.
+  separation: XAI-feature (potencialmente informativa) vs XAI-time (localización aún no fiable)
+
+decisions:
+  A: Dataset normal coverage — SUFFICIENT / INSUFFICIENT / MIXED
+  B: Synthetic anomaly validity — VALID / PARTIAL / REQUIRES REDESIGN
+  C: Training progression — REPLICATE WITH COVERAGE / REDESIGN ANOMALIES / BOTH / STOP MODEL TRAINING TEMPORARILY
+
+constraints:
+  - NO entrenar modelos nuevos; la regla de parada de F18 sigue activa
+  - NO introducir TCN, Transformer, VAE ni nuevas familias de detector
+  - NO modificar el generador ni las anomalías durante la auditoría (solo bugs inequívocos, con antes/después registrado)
+  - NO cambiar ni eliminar casos del test; el distribution shift se documenta
+  - NO reescribir métricas históricas; la reinterpretación se añade como contexto
+  - seeds reservadas intactas; capa confirmatoria sin tocar
+git_commit: pendiente de commit F19
+hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)
