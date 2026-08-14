@@ -25,6 +25,7 @@ evaluaciones) e informe de comparación (`docs/models/comparisons/`). Protocolo 
 | **EXP-ANOM-007** (E6, F16) | ¿AE v2 (train v1.1/capacidad/wd) corrige el FPR? + D2 embeddings + D3 primera evaluación XAI | **EXPLORATORY** | [autoencoder_v2_xai_v1](../models/comparisons/autoencoder_v2_xai_v1.md) | D1 REJECT (v1.1 NO corrige FPR: causa = features absolutas de fuel trim, confirmada por diagnóstico + SHAP) · D2 NEEDS MORE EVIDENCE (AE-M 0.202) · **D3 ADOPT** (AR@K ≫ azar, FP diagnosticados); propuesto EXP-ANOM-008 (fs2-lite) |
 | **EXP-ANOM-008** (E7, F17) | ¿fs2-lite (deriva de sesión + multiescala + lag-1) corrige el FPR y mejora lentas/relacionales sin degradar XAI? | **EXPLORATORY** | [fs2_lite_ablation_v1](../models/comparisons/fs2_lite_ablation_v1.md) | **Esquema KEEP fs1** (3 seeds: rangos solapados; lentas indetectadas; estabilidad XAI bajo perturbación cae 0.83→0.63) · D1 REJECT (3ª) · D2 NEEDS MORE EVIDENCE · D3 ADOPT confirmado · causa refinada: evento de adaptación del LTFT cuantizado, raro en train → contexto TEMPORAL; siguiente: EXP-ANOM-009 (LSTM/GRU-AE) |
 | **EXP-ANOM-009** (E8, F18) | ¿Un AE recurrente (LSTM/GRU) sobre secuencia cruda detecta lo que los estáticos no? (HX-ML-3) + brazo control de cobertura | **EXPLORATORY** | [temporal_autoencoders_v1](../models/comparisons/temporal_autoencoders_v1.md) | **HX-ML-3 REFUTADA** (F1 0.46 vs 0.70 estático; held-out 0.006; lentas 0.000; estable en 3 seeds y 3 longitudes) · D1 REJECT · D2 NEEDS MORE EVIDENCE · D3 (celda) NEEDS MORE EVIDENCE · LSTM vs GRU NO WINNER · **el brazo control demuestra que el techo de la serie era COBERTURA DE NORMALIDAD** (FPR 0.129→0.022) |
+| **AUDIT-DATA-001** (E9, F19) | ¿Las anomalías sintéticas son distinguibles del normal generado? ¿La cobertura de normalidad es suficiente? | **EXPLORATORY (auditoría, sin modelos)** | [fase19/informe_audit_data_001](../fase19/informe_audit_data_001.md) | 7/8 anomalías DETECTABLE o WEAKLY sin usar detectores (AUC 0.67-1.00) → el recall 0.000 de `joint_slow_drift` (separable a 0.986) es **fallo de modelo**, no del banco · 4 huecos de cobertura (cruce de cuantización del LTFT ABSENT en train) · 3 discrepancias de ground truth · A INSUFFICIENT / B PARTIAL / C BOTH |
 | R2 / LLM smoke + benchmark | ¿Qué LLM local equilibra calidad diagnóstica y recursos edge? | pendiente (requiere llm-smoke en el Mac) | benchmarks/agent-diagnostics | — |
 | A0–A6 (agentes) + H3/H5 | ¿Qué componentes de la arquitectura agéntica aportan? | pospuesto hasta cerrar la representación de entrada (decisión F8) | agent-runtime/12 | — |
 
@@ -41,3 +42,9 @@ nomenclatura canónica) y por su [Adenda XAI v1](protocolo_ml_v1_adenda_xai.md) 
 ADR-0033: métricas de atribución con ground truth sintético, estabilidad, agreement,
 decisiones D1/D2/D3 por experimento). La evidencia confirmatoria sigue gobernada por los
 pre-registros.
+
+**Tipos de fallo experimental (F19):** todo resultado negativo se clasifica antes de
+atribuirlo — [`tipos_de_fallo_experimental.md`](tipos_de_fallo_experimental.md):
+`model failure` ≠ `dataset coverage failure` ≠ `anomaly construction failure`, con orden
+de comprobación obligatorio (separabilidad sin modelos → traza del pipeline → integridad
+del ground truth → cobertura → modelo).

@@ -71,6 +71,13 @@ modelos ya materializados; este inventario cubre también lo no construido.)
 | multilingual-e5-small | Embedding | PLANNED | ídem |
 | bge-m3 | Embedding | PLANNED | ídem (validar RAM en RPi) |
 
+> **Contexto F19 (AUDIT-DATA-001):** la auditoría del banco sintético comprobó, sin usar
+> detectores, que 7 de las 8 anomalías del catálogo son separables del comportamiento
+> normal (AUC 0.67–1.00). En consecuencia, los `recall = 0.000` de `joint_slow_drift`
+> (separable a AUC 0.986) que aparecen en las filas anteriores deben leerse como
+> **limitación del detector**, no del banco de pruebas; y los FPR de la familia AE, como
+> **hueco de cobertura de normalidad** documentado. Las cifras no se han modificado.
+
 ## 4. Alcance controlado (F7)
 
 **MUST:** ML Model Cards · documentación LOF · Registry básico · ModelManifest ·

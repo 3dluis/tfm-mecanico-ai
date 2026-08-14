@@ -91,6 +91,36 @@ Dos consecuencias que se asumen antes de medir:
 2. En anomalías relacionales, la señal «culpable» puede ser cualquiera de las dos de la
    relación; el GT es un conjunto y así se evalúa (adenda §7).
 
+## 5.bis Dominio de aplicabilidad de TAR@K (adición F19, tras EXP-ANOM-009)
+
+**TAR@K solo discrimina si la anomalía ocupa una FRACCIÓN de la ventana.** Si el
+intervalo inyectado cubre la secuencia entera, `GT_t` = todos los pasos, el baseline
+aleatorio vale 1.0 y la métrica deja de informar: un TAR@K de 1.0 en ese caso no dice
+nada sobre la calidad de la localización temporal. Verificado empíricamente en
+EXP-ANOM-009 (TAR@10 = 1.000 con azar = 1.000 en los tres fallos explicados).
+
+Regla: **la métrica no se elimina; se declara su dominio.** TAR@K se reporta solo cuando
+`|GT_t| / n_steps ≤ 0.5`; en caso contrario se marca `NO APLICABLE (GT temporal satura la
+ventana)` y la evaluación temporal se apoya en FTH@K, que sí conserva discriminación
+porque su espacio de celdas incluye la dimensión de features.
+
+Corolario para el diseño experimental: para evaluar localización temporal hacen falta
+escenarios con fallos **cortos respecto a la ventana** (o ventanas más largas que el
+episodio). Es un requisito de diseño de datos, no del explicador.
+
+## 5.ter Separación XAI-feature / XAI-time (adición F19)
+
+Las dos dimensiones de la matriz `A[t,f]` tienen madurez distinta y **se decide sobre
+ellas por separado**:
+
+| Dimensión | Estado (F18/F19) | Uso admitido |
+|---|---|---|
+| **XAI-feature** (`Σ_t |A[t,f]|`) | por encima del azar y estable (0.61–0.81 entre seeds y bajo perturbación) | evidencia y diagnóstico, como en F16 |
+| **XAI-time** (`Σ_f |A[t,f]|`, celdas) | localización **no fiable**: dos variantes de SHAP coinciden en solo 0.14–0.26 de sus Top-K celdas | exploratorio; no sustenta decisiones |
+
+Una decisión D3 puede por tanto ser ADOPT en el nivel de feature y NEEDS MORE EVIDENCE
+en el nivel de celda simultáneamente, y así debe declararse.
+
 ## 6. Riesgo añadido
 
 | Riesgo | Mitigación |

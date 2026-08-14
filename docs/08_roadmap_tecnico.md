@@ -1,5 +1,17 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F19:** la auditoría AUDIT-DATA-001 cierra la duda abierta en F18: **las
+> anomalías sintéticas SÍ son distinguibles** (7/8 DETECTABLE o WEAKLY sin usar
+> detectores), así que los ceros de recall en anomalías lentas son limitación de los
+> detectores y no del banco. Lo que sí falla es la **cobertura de normalidad** (4 huecos,
+> con el cruce de cuantización del LTFT ausente en train v1.0) y tres **ground truths**
+> de atribución. Decisiones: A = INSUFFICIENT · B = PARTIAL · C = BOTH. La línea ML
+> continúa en **F20 — Normal Coverage Expansion + Synthetic Benchmark v2** (cobertura
+> definida a priori, corrección de GT, escenarios con fallos cortos para recuperar
+> TAR@K); los modelos se replican DESPUÉS. Regla nueva del protocolo: clasificar todo
+> resultado negativo como `model failure` / `dataset coverage failure` /
+> `anomaly construction failure` antes de atribuirlo.
+>
 > **Actualización F18:** EXP-ANOM-009 **refuta HX-ML-3** (los AE recurrentes son peores
 > que los estáticos y que LOF) y, con su brazo control, **demuestra cuál era el techo
 > real de toda la serie EXP-ANOM-006/007/008/009: la cobertura de normalidad**. El FPR
