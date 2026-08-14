@@ -19,7 +19,8 @@ evitar divergencia. Inventario reproducible: `uv run python tools/dep_inventory.
 | Instalación base | `make install` → `uv sync --all-packages --locked` |
 | Grupo `dev` | ruff, mypy, pytest, pytest-cov, pre-commit, types-PyYAML + extras `ai-models[export]` y `diagnostic-agent[detection]` |
 | Grupo `train` | `ai-models[deep]` (torch, onnx) + shap + matplotlib — **no entra en dev** para no arrastrar torch a CI ni al edge |
-| Ejecutar con entrenamiento | `uv sync --all-packages --group train --locked` o `uv run --group train …` |
+| Instalar entrenamiento | **`make install-train`** → `uv sync --all-packages --group train --locked` |
+| Verificar antes de un experimento | **`make check-train-env`** — lo invocan los targets `experiments-*`, de modo que un run largo no arranca con el entorno incompleto |
 
 **Aviso operativo verificado en esta auditoría:** `uv sync --all-packages --locked` (sin
 `--group train`) **desinstala torch, shap y matplotlib** y puede resolver versiones
@@ -45,7 +46,7 @@ tiempo de ejecución (p. ej. `shap.__version__` registrado en los artefactos XAI
 | **onnxruntime** | 1.28.0 | 1.28.0 | diagnostic-agent[detection], ai-models[export] | detector edge, `tools/edge_validate.py` | **CORE (edge)** | inferencia en el edge |
 | **skl2onnx** | 1.20.0 | 1.20.0 | ai-models[export] | `ai_models.export.onnx_export` | **CORE (deployment)** | conversión sklearn → ONNX |
 | **onnx** | — | 1.22.0 | ai-models[deep] y [export] | sin import directo | **TRANSITIVE** + `DECLARED_BUT_UNUSED` | formato; lo usa skl2onnx |
-| **pandas** | 3.0.5 | 3.0.5 | ai-models | **ningún import** | **DECLARED_BUT_UNUSED** · `DEPRECATED_CANDIDATE` | — |
+| ~~pandas~~ | — | 3.0.5 (transitiva) | **RETIRADA en F20** | ningún import | eliminada del stack | — |
 | pyyaml | 6.0.3 | 6.0.3 | obd-lab, grupo dev | suites, configs, tests | CORE (datos) | escenarios y configs |
 | pydantic / pydantic-settings | 2.13.4 / 2.15.0 | ídem | todos los paquetes | contratos | CORE | contratos tipados (ADR-0007) |
 | pytest | 9.1.1 | 9.1.1 | grupo dev | 20 ficheros | **TEST_ONLY** | suite de pruebas |
@@ -65,7 +66,7 @@ fijado para skl2onnx). El test de higiene falla si aparece una nueva sin justifi
 ## 3. Stack por capas (estado real)
 
 ```
-Data / Numerical        NumPy · PyYAML          (pandas declarada pero SIN USO)
+Data / Numerical        NumPy · PyYAML          (pandas RETIRADA en F20)
 Estadística             SciPy (spearmanr)
 Classical ML            scikit-learn
 Deep Learning           PyTorch                 (solo grupo `train`)
@@ -85,14 +86,14 @@ evaluación (`ai_models.evaluation.protocol`), métricas XAI y de auditoría, y 
 sintética. Es la única dependencia científica que también viaja al **edge**
 (`diagnostic-agent[detection]`).
 
-### pandas — DECLARED_BUT_UNUSED
-Declarada en `ai-models` desde el inicio y **sin un solo import** en todo el repositorio:
+### pandas — RETIRADA (F20)
+Estuvo declarada en `ai-models` desde el inicio y **sin un solo import** en todo el repositorio:
 el pipeline trabaja con arrays NumPy por decisión de rendimiento (F11/F12: materializar
 objetos por fila costaba 1.2 GB de RSS). Los artefactos de experimentos se serializan en
-JSON/CSV con la librería estándar. **Recomendación: retirar de las dependencias de
-`ai-models`** en la próxima fase que toque manifiestos; no se retira aquí porque esta
-tarea es de auditoría y documentación. No es legacy ni accidental: fue una previsión de
-uso que el diseño acabó no necesitando.
+JSON/CSV con la librería estándar. **Retirada en F20** (aprobada por el autor tras verificar 0 imports), con
+`uv lock` + `uv sync` + gate completo en verde y el inventario reproducible como prueba.
+No era legacy ni accidental: fue una previsión de uso que el diseño acabó no necesitando.
+Sigue presente en el lock como transitiva de otros paquetes, que es lo correcto.
 
 ### SciPy — CORE (XAI)
 Un único uso, pero en el camino crítico: `scipy.stats.spearmanr` en
@@ -229,16 +230,46 @@ Regla operativa: **la Raspberry Pi 5 solo necesita `onnxruntime` + `numpy`** (ex
 `diagnostic-agent[detection]`). Ni scikit-learn ni PyTorch ni SHAP ni Matplotlib se
 instalan en el edge — es exactamente lo que garantiza la separación de ADR-0009.
 
-## 8. Recomendaciones (no aplicadas en esta auditoría)
+## 8. Capas de entorno (separación explícita)
 
-1. **Retirar `pandas`** de las dependencias de `ai-models` (sin uso real).
-2. Mantener `onnx` declarado: fija el rango que necesita `skl2onnx`, aunque no se importe.
-3. Ejecutar siempre los experimentos con `--group train`; considerar un target
-   `make install-train` que evite la desinstalación accidental del grupo.
-4. Si en el futuro se promueve un autoencoder, decidir y documentar la vía de exportación
-   (`torch.onnx` vs reimplementación), hoy inexistente.
+| Capa | Qué instala | Comando | Contiene |
+|---|---|---|---|
+| **runtime / edge** | extra `diagnostic-agent[detection]` | imagen edge | `onnxruntime` + `numpy` **y nada más del stack científico** |
+| **development** | grupo `dev` | `make install` | ruff, mypy, pytest, extras de export y detección |
+| **training** | grupo `train` | **`make install-train`** | torch, shap, matplotlib (sobre el anterior) |
+| **XAI / evaluación** | incluida en `train` | ídem | shap + matplotlib + scipy; **offline, nunca en el edge** |
 
-## 9. Software / Technology references
+`make check-train-env` verifica la capa de entrenamiento antes de lanzar un experimento.
+Motivo documentado: `uv sync --all-packages --locked` **sin** `--group train` desinstala
+torch, shap y matplotlib sin avisar.
+
+## 9. Política de exportación de modelos (vía futura, aún no ejercida)
+
+```
+modelo scikit-learn            modelo PyTorch promovido
+        ↓                              ↓
+     skl2onnx                 evaluar exportación torch.onnx
+        ↓                              ↓
+      ONNX                    verificar paridad y compatibilidad ONNX
+        ↓                              ↓
+  ONNX Runtime                     ONNX Runtime
+```
+
+**Regla:** si en el futuro se promueve un AE denso, LSTM-AE o GRU-AE, su vía preferente es
+**PyTorch → ONNX → ONNX Runtime**, condicionada a demostrar paridad numérica y
+compatibilidad (el mismo listón que se aplicó al paquete LOF en F3/F4). **No se mantiene
+PyTorch completo en la Raspberry Pi solo porque el entrenamiento se hiciera con PyTorch.**
+Hoy la vía no está ejercida: ningún autoencoder ha sido promovido (D1 = REJECT en
+EXP-ANOM-006/007/008/009), de modo que no existe artefacto que exportar y `torch.onnx` no
+se usa en el repositorio.
+
+## 10. Recomendaciones pendientes
+
+1. Mantener `onnx` declarado: fija el rango que necesita `skl2onnx`, aunque no se importe.
+2. Revisar los extras de la capa LLM (`chromadb`, `sentence-transformers`, `ollama`) cuando
+   se aborde el runtime agéntico: hoy son previsión, no uso.
+
+## 11. Software / Technology references
 
 Documentación **oficial** de cada proyecto. Estas referencias son **técnicas** y no forman
 parte de la bibliografía científica del TFM (que recoge los trabajos que justifican

@@ -1,5 +1,16 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F20:** ingeniería de datos y de benchmark, sin reentrenar modelos.
+> (1) **RNG separado** (ADR-0034): `vehicle_behavior_seed` y `anomaly_injection_seed`, de
+> modo que los contrafactuales son exactos por construcción y v1 se preserva byte a byte.
+> (2) **Synthetic Benchmark v2**: expansión de cobertura DIRIGIDA por los huecos medidos
+> en F19 y derivada del mecanismo (el cruce de cuantización del LTFT exige duración, no
+> más sesiones) — los cuatro huecos se cierran; v1 y el test histórico intactos.
+> (3) **Ground truth verificable**: declara exactamente los PIDs que la inyección altera.
+> (4) **ADR-0035 library-first** como regla permanente, `pandas` retirado y entorno de
+> entrenamiento explícito (`make install-train`, `make check-train-env`). Siguiente:
+> congelar el benchmark v2 y abrir la **réplica** (LOF + AE denso + temporal si procede).
+>
 > **Actualización F19:** la auditoría AUDIT-DATA-001 cierra la duda abierta en F18: **las
 > anomalías sintéticas SÍ son distinguibles** (7/8 DETECTABLE o WEAKLY sin usar
 > detectores), así que los ceros de recall en anomalías lentas son limitación de los
