@@ -11,6 +11,7 @@
 """
 
 import hashlib
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -75,12 +76,14 @@ class ShapExplainer:
         }
 
 
-def attributions_as_dict(values: np.ndarray) -> dict[str, float]:
-    """Fila SHAP → dict feature→valor (orden fs1)."""
-    if values.shape[-1] != len(FEATURE_NAMES):
-        msg = f"dimensión SHAP {values.shape} incompatible con fs1 ({len(FEATURE_NAMES)})"
+def attributions_as_dict(
+    values: np.ndarray, feature_names: Sequence[str] = FEATURE_NAMES
+) -> dict[str, float]:
+    """Fila SHAP → dict feature→valor (orden del esquema; fs1 por defecto)."""
+    if values.shape[-1] != len(feature_names):
+        msg = f"dimensión SHAP {values.shape} incompatible con el esquema ({len(feature_names)})"
         raise ValueError(msg)
-    return {name: float(v) for name, v in zip(FEATURE_NAMES, values, strict=True)}
+    return {name: float(v) for name, v in zip(feature_names, values, strict=True)}
 
 
 def explanation_artifact(

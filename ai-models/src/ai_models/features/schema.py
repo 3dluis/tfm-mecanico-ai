@@ -20,6 +20,14 @@ Reglas:
 from dataclasses import dataclass
 from enum import StrEnum
 
+from ai_models.features.fs2_lite import (
+    FS2_LITE_NAMES,
+    LAG1_PAIRS,
+    MULTISCALE_BLOCK,
+    MULTISCALE_PIDS,
+    REF_S,
+    REPLACED,
+)
 from mecanico_contracts.features import _CORR_PAIRS, CANONICAL_PIDS, FEATURE_NAMES
 
 #: Unidad física canónica por PID (fuente: obd_lab.generate._UNITS, docs/03 §3.1).
@@ -179,12 +187,99 @@ FS2_DRAFT = FeatureSchema(
     ),
 )
 
+
+def _fs2_lite_specs() -> tuple[FeatureSpec, ...]:
+    """fs2-lite = fs1 sin los absolutos de trim + las 3 candidatas implementadas.
+
+    El orden replica EXACTAMENTE ``fs2_lite.FS2_LITE_NAMES`` (la extracción ejecutable);
+    ``validate_fs2_lite_against_extraction`` (y su test) fallan si divergen.
+    """
+    base = [s for s in _fs1_specs() if s.name not in REPLACED]
+    drift = [
+        FeatureSpec(
+            name="LTFT_session_drift",
+            source_pids=("LONG_FUEL_TRIM_1",),
+            unit="percent",
+            kind=FeatureKind.DERIVED,
+            windowed=True,
+            required=True,
+            description=(
+                "media de LTFT en la ventana menos media de los primeros "
+                f"{REF_S} s de la PROPIA sesión (deriva relativa; SUSTITUYE a "
+                "LONG_FUEL_TRIM_1_mean — mantener el absoluto conservaría la patología "
+                "de offsets identificada en EXP-ANOM-007)"
+            ),
+        ),
+        FeatureSpec(
+            name="total_trim_session_drift",
+            source_pids=("SHORT_FUEL_TRIM_1", "LONG_FUEL_TRIM_1"),
+            unit="percent",
+            kind=FeatureKind.DERIVED,
+            windowed=True,
+            required=True,
+            description=(
+                "media de STFT+LTFT en la ventana menos su media en los primeros "
+                f"{REF_S} s de la PROPIA sesión (SUSTITUYE a total_trim_mean)"
+            ),
+        ),
+    ]
+    multiscale = [
+        FeatureSpec(
+            name=f"{pid}_std_15",
+            source_pids=(pid,),
+            unit=PID_UNITS[pid],
+            kind=FeatureKind.RAW_STAT,
+            windowed=True,
+            required=True,
+            description=(
+                f"media de std muestrales en sub-bloques de {MULTISCALE_BLOCK} muestras "
+                f"({pid}), multiescala (ADR-0011)"
+            ),
+        )
+        for pid in MULTISCALE_PIDS
+    ]
+    lag = [
+        FeatureSpec(
+            name=f"corr_lag1_{a}_{b}",
+            source_pids=(a, b),
+            unit="",
+            kind=FeatureKind.DERIVED,
+            windowed=True,
+            required=True,
+            description=f"correlación de Pearson {a}(t)↔{b}(t-1) (0.0 si una serie es constante)",
+        )
+        for a, b in LAG1_PAIRS
+    ]
+    return tuple(base + drift + multiscale + lag)
+
+
+#: Esquema EXPERIMENTAL fs2-lite (48 features) — SOLO ablation EXP-ANOM-008, NO canónico.
+#: No se promueve a `shared` (contrato) salvo que la ablation lo justifique (Protocolo ML
+#: v1 §4). Extracción ejecutable: ``ai_models.features.fs2_lite``.
+FS2_LITE = FeatureSchema(
+    schema_id="fs2-lite",
+    status="experimental (ablation EXP-ANOM-008; prohibido su uso fuera de ai-models)",
+    normalization="embedded-standard-scaler",  # mismo criterio que fs1 para comparabilidad
+    specs=_fs2_lite_specs(),
+)
+
 #: Registro de esquemas conocidos por identificador.
-SCHEMAS: dict[str, FeatureSchema] = {FS1.schema_id: FS1, FS2_DRAFT.schema_id: FS2_DRAFT}
+SCHEMAS: dict[str, FeatureSchema] = {
+    FS1.schema_id: FS1,
+    FS2_DRAFT.schema_id: FS2_DRAFT,
+    FS2_LITE.schema_id: FS2_LITE,
+}
 
 
 def validate_fs1_against_contract() -> None:
     """Falla si la descripción fs1 diverge del contrato ejecutable compartido."""
     if FS1.names != list(FEATURE_NAMES):
         msg = "FS1 (descripción) no coincide con FEATURE_NAMES (contrato): revisar schema.py"
+        raise RuntimeError(msg)
+
+
+def validate_fs2_lite_against_extraction() -> None:
+    """Falla si la descripción fs2-lite diverge de la extracción ejecutable."""
+    if FS2_LITE.names != list(FS2_LITE_NAMES):
+        msg = "FS2_LITE (descripción) no coincide con fs2_lite.FS2_LITE_NAMES: revisar schema.py"
         raise RuntimeError(msg)
