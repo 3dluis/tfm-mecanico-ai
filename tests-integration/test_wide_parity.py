@@ -118,3 +118,22 @@ def test_reproducibilidad_por_semilla() -> None:
     assert a == b
     c = generate_ticks(_NORMAL.model_copy(update={"seed": 402}))
     assert a != c
+
+
+def test_dataset_v11_sin_leakage_y_reproducible(tmp_path: Path) -> None:
+    """train v1.1 (22 normales): seeds disjuntas de val/test congelados y hash estable."""
+    import yaml
+
+    raw = yaml.safe_load((REPO_ROOT / "obd-lab/scenarios/suite_v1_train_ext.yaml").read_text())
+    ext_seeds = {e["seed"] for e in raw["train_extension"]}
+    suite = load_suite(SUITE_V1)
+    train_seeds = {s.seed for s in suite["train"]} | ext_seeds
+    eval_seeds = {s.seed for s in suite["validation"]} | {s.seed for s in suite["test"]}
+    assert not train_seeds & eval_seeds, "leakage: semilla de train v1.1 en val/test"
+    assert all(e["category"] == "normal" for e in raw["train_extension"])
+    # bloques confirmatorios RESERVADOS jamás en datasets exploratorios
+    reserved = set(range(901, 926)) | set(range(11000, 20037)) | set(range(30000, 30080))
+    assert not (train_seeds | eval_seeds) & reserved
+    # reproducibilidad de una sesión de la extensión
+    spec = ScenarioSpec(**raw["train_extension"][0])
+    assert generate_ticks(spec) == generate_ticks(spec)

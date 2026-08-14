@@ -79,3 +79,25 @@ def test_sin_entrenar_falla_claro() -> None:
     det = AutoencoderDetector()
     with pytest.raises(RuntimeError, match="fit"):
         det.scores(np.zeros((3, 42)))
+
+
+def test_serializacion_e_inferencia_identica(
+    tmp_path, entrenado: AutoencoderDetector, datos
+) -> None:
+    """save/load: la inferencia post-recarga es EXACTAMENTE la misma (scores, embed, pfe)."""
+    _train, outliers = datos
+    path = tmp_path / "ae.pt"
+    entrenado.save(path)
+    loaded = AutoencoderDetector.load(path)
+    assert np.array_equal(entrenado.scores(outliers), loaded.scores(outliers))
+    assert np.array_equal(entrenado.embed(outliers), loaded.embed(outliers))
+    assert np.array_equal(entrenado.per_feature_error(outliers), loaded.per_feature_error(outliers))
+    assert loaded.loss_history == entrenado.loss_history
+
+
+def test_weight_decay_y_loss_history(datos) -> None:
+    train, _ = datos
+    det = AutoencoderDetector(seed=42, epochs=10, weight_decay=1e-4)
+    det.fit(train)
+    assert len(det.loss_history) == 10
+    assert det.loss_history[0] > det.loss_history[-1]  # la pérdida desciende
