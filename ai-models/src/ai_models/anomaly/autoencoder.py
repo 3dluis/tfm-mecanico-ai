@@ -72,10 +72,13 @@ class AutoencoderDetector:
     epochs: int = 200
     batch_size: int = 32
     lr: float = 1e-3
+    weight_decay: float = 0.0  # regularización L2 (ablation controlada, EXP-ANOM-007 §12)
     scaler_kind: str = "standard"  # 'standard' | 'robust' (comparación Protocolo ML v1 §4)
     _model: Any = field(default=None, repr=False)
     _scaler: Any = field(default=None, repr=False)
     train_loss: float = field(default=float("nan"), init=False)
+    #: pérdida media de train por época (curvas de entrenamiento; se rellena en fit)
+    loss_history: list[float] = field(default_factory=list, init=False)
 
     @property
     def name(self) -> str:
@@ -102,7 +105,7 @@ class AutoencoderDetector:
         self._scaler = self._make_scaler()
         xs = self._scaler.fit_transform(x).astype(np.float32)
         self._model = _build_model(x.shape[1], self.hidden, self.latent)
-        opt = torch.optim.Adam(self._model.parameters(), lr=self.lr)
+        opt = torch.optim.Adam(self._model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
         loss_fn = torch.nn.MSELoss()
         data = torch.from_numpy(xs)
         gen = torch.Generator().manual_seed(self.seed)
@@ -120,6 +123,7 @@ class AutoencoderDetector:
                 total += float(loss.item())
                 batches += 1
             last = total / max(batches, 1)
+            self.loss_history.append(last)
         self.train_loss = last
         self._model.eval()
 
@@ -153,3 +157,63 @@ class AutoencoderDetector:
         with torch.no_grad():
             z = self._model.encoder(torch.from_numpy(xs)).numpy()
         return np.asarray(z, dtype=np.float64)
+
+    def save(self, path: Any) -> None:
+        """Serializa modelo + scaler + config en un único artefacto torch."""
+        torch = _torch()
+        if self._model is None or self._scaler is None:
+            msg = "detector sin entrenar: nada que guardar"
+            raise RuntimeError(msg)
+        scaler_state = {
+            "kind": self.scaler_kind,
+            "center": getattr(self._scaler, "mean_", getattr(self._scaler, "center_", None)),
+            "scale": self._scaler.scale_,
+        }
+        torch.save(
+            {
+                "state_dict": self._model.state_dict(),
+                "config": {
+                    "seed": self.seed,
+                    "hidden": list(self.hidden),
+                    "latent": self.latent,
+                    "epochs": self.epochs,
+                    "batch_size": self.batch_size,
+                    "lr": self.lr,
+                    "weight_decay": self.weight_decay,
+                    "scaler_kind": self.scaler_kind,
+                    "n_features": int(scaler_state["scale"].shape[0]),
+                },
+                "scaler": scaler_state,
+                "loss_history": self.loss_history,
+            },
+            path,
+        )
+
+    @classmethod
+    def load(cls, path: Any) -> "AutoencoderDetector":
+        """Reconstruye el detector; la inferencia post-carga es idéntica (test)."""
+        torch = _torch()
+        blob = torch.load(path, weights_only=False)
+        cfg = blob["config"]
+        det = cls(
+            seed=cfg["seed"],
+            hidden=tuple(cfg["hidden"]),
+            latent=cfg["latent"],
+            epochs=cfg["epochs"],
+            batch_size=cfg["batch_size"],
+            lr=cfg["lr"],
+            weight_decay=cfg.get("weight_decay", 0.0),
+            scaler_kind=cfg["scaler_kind"],
+        )
+        det._scaler = det._make_scaler()
+        sc = blob["scaler"]
+        if cfg["scaler_kind"] == "standard":
+            det._scaler.mean_ = sc["center"]
+        else:
+            det._scaler.center_ = sc["center"]
+        det._scaler.scale_ = sc["scale"]
+        det._model = _build_model(cfg["n_features"], tuple(cfg["hidden"]), cfg["latent"])
+        det._model.load_state_dict(blob["state_dict"])
+        det._model.eval()
+        det.loss_history = list(blob.get("loss_history", []))
+        return det

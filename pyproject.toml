@@ -34,7 +34,7 @@ dev = [
 # Entrenamiento profundo (torch): SOLO para experimentos de la línea ML (F13+).
 # No entra en dev para no arrastrar torch a CI ni a entornos edge:
 # `uv sync --all-packages --group train` / `uv run --group train …`.
-train = ["ai-models[deep]"]
+train = ["ai-models[deep]", "shap>=0.46", "matplotlib>=3.8"]
 
 [tool.ruff]
 line-length = 100
@@ -84,7 +84,7 @@ markers = [
 ]
 
 [[tool.mypy.overrides]]
-module = ["obd", "obd.*", "elm", "elm.*", "sklearn.*", "skl2onnx", "skl2onnx.*", "onnxruntime", "yaml", "torch", "torch.*"]
+module = ["obd", "obd.*", "elm", "elm.*", "sklearn.*", "skl2onnx", "skl2onnx.*", "onnxruntime", "yaml", "torch", "torch.*", "shap", "shap.*", "matplotlib", "matplotlib.*", "scipy.*", "joblib"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
