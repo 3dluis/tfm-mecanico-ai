@@ -1,0 +1,45 @@
+# Config declarativa del experimento E6 (F16) — AE v2 + train v1.1 + XAI/SHAP.
+# Fuente de resultados: experiments/e6_results.json + e6_diagnosis.json + e6_explanations.json.
+
+experiment:
+  id: EXP-ANOM-007
+  title: Autoencoder v2 con train v1.1 y primera evaluación XAI formal (D1/D2/D3)
+  protocol: ADR-0011 + Adenda XAI v1 (ADR-0033)
+  study_type: exploratory
+
+dataset:
+  id: obd-lab-suite-v1
+  train_version: "1.1"          # 22 sesiones normales (seeds 101-106 + 111-142), SIMULATED
+  eval_split: suite-v1-split-1  # validation/test CONGELADOS e idénticos a E1/E5/E6
+  severity_sweep: suite_f14_severity (solo evaluación)
+  dataset_hash: registrado en e6_results.json (sha256 de las 22 sesiones)
+
+features:
+  schema: fs1                   # fs2-draft NO usado (sigue siendo ablation futura, §14)
+  window: 60
+  stride: 30
+  window_sweep_candidate: [10, 30, 120]
+
+arms:  # ablation: UN cambio por brazo respecto a la referencia
+  - {name: ae_s_v10, change: referencia E5 (train v1.0)}
+  - {name: ae_s_v11, change: train v1.1}
+  - {name: ae_m_v11, change: capacidad (hidden 64-32, latent 16; 10k params)}
+  - {name: ae_s_v11_wd, change: weight decay 1e-4}
+  - {name: lof_frozen, change: NINGUNO — brazo congelado arms-freeze-v1 (umbral 0.163197), sin re-entrenar}
+
+seeds: {runner: 42, extra_development: [43, 44], reservadas: intactas}
+threshold: {method: cuantil (1-FPR) sobre scores de train del brazo, partition: train, test_nunca: true}
+
+xai:  # primera ejecución formal de D3 (Adenda XAI v1)
+  explained_function: reconstruction_error(x)
+  explainer: shap.explainers.Permutation (no KernelExplainer fijado)
+  background: 100 muestras de train v1.1 NORMAL, selección determinista seed 42, hash registrado
+  sampling: estratificado {TP,FN}x fallo + FP + TN normales, seed 42
+  metrics: [AR@1, AR@3, AR@5, random_baseline, Precision@K si |GT|>=K, Jaccard@5, Spearman, estabilidad seeds/perturbación]
+  ground_truth: ai_models.xai.ground_truth (mapeo fallo→features fs1, congelado antes de medir)
+
+adoption_criteria: >
+  D1 según ADR-0011 (superar/complementar a LOF respetando FPR); D2 y D3 según Adenda
+  XAI v1 §12; las tres decisiones son independientes. No se maquilla el resultado.
+git_commit: b8537ce
+hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)

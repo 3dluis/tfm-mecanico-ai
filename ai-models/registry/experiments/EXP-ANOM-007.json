@@ -1,0 +1,18 @@
+{
+  "conclusion": "D1 (detector) = REJECT: el train v1.1 NO corrige el FPR del AE (0.112 a 0.1293; AE-M 0.1681; weight decay 0.1336) frente a LOF congelado 0.0345 — el precedente de F9 no transfiere al AE. CAUSA RAIZ identificada por dos diagnósticos independientes convergentes (per-feature error + SHAP): los FP se concentran en normales de autovía (FPR por perfil 0.47-0.51 vs urbano 0.00-0.03) y están dominados por features ABSOLUTAS de fuel trim (LTFT mean/slope/std y total_trim son el top-5 global de atribución) — offsets de LTFT entre sesiones que son variación normal legítima; ni más datos, ni capacidad, ni regularización lo corrigen porque el problema es de REPRESENTACION de features. D2 (representación) = NEEDS MORE EVIDENCE: AE-M mejora silhouette entre fallos a 0.2022 (vs 0.1175 en E5, +72%) con PCA-2c 0.92, pero el espacio sigue contaminado por la misma patología; no se promueve a EXP-PAT todavía. D3 (SHAP/XAI) = ADOPT como mecanismo de evaluación y diagnóstico (no decisión automática): fidelidad muy por encima del azar en los fallos bien detectados (vacuum AR@1/3/5 = 1.0/1.0/1.0 vs azar 0.38; maf 1.0/1.0/0.85 vs 0.29; corr_break 1.0/0.67/0.70 vs 0.24; los apenas detectados quedan cerca del azar con n=1, coherente), agreement parcial (Jaccard@5 0.419; {'AGREE': 7, 'DISAGREE': 2, 'PARTIAL_AGREEMENT': 13}), estabilidad moderada (seeds 0.5952, perturbación 0.6825), coste trivial (9.1s/33 muestras) y VALOR DEMOSTRADO: las explicaciones de FP señalaron la causa del FPR de forma independiente al diagnóstico. Contrafactual validado (ventanas pre-fallo idénticas al gemelo; score 0.13 a 0.89 al inyectar). Sonda de fingerprint: el perfil de atribución en normales difiere entre escenarios (cos 0.05) — consistente con la patología de trims; se vigilará con datos reales. PROXIMO: EXP-ANOM-008 = ablation fs2-lite (LTFT_session_drift + multiescala + lag-1 vs fs1), la corrección a nivel de features respaldada por ambos diagnósticos; secuenciales pospuestos (la patología no es de orden temporal).",
+  "config_uri": "ai-models/configs/exp-anom-007.yaml",
+  "created_at": "2026-08-13T00:00:00Z",
+  "dataset_id": "obd-lab-suite-v1",
+  "dataset_version": "1.1",
+  "evaluation_protocol": "ADR-0011 + Adenda XAI v1 (config exp-anom-007.yaml)",
+  "experiment_id": "EXP-ANOM-007",
+  "feature_schema_version": "fs1",
+  "objective": "Resolver las tres decisiones abiertas de EXP-ANOM-006: D1 corregir el FPR del AE (train v1.1, capacidad, weight decay — un cambio por brazo), D2 re-evaluar el espacio latente, D3 ejecutar por primera vez la evaluación XAI completa de la Adenda (AR@K vs azar, agreement, estabilidad, FP).",
+  "report_uri": "docs/models/comparisons/autoencoder_v2_xai_v1.md",
+  "schema_version": 2,
+  "selected_model_id": null,
+  "split_version": "suite-v1-split-1",
+  "study_type": "exploratory",
+  "title": "Autoencoder v2 (train v1.1, ablaciones) + primera evaluación XAI formal",
+  "training_run_ids": []
+}

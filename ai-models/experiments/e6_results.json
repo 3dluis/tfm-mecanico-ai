@@ -1,0 +1,1460 @@
+{
+  "arms": {
+    "ae_m_v11": {
+      "fit_seconds": 10.94,
+      "fpr_by_profile_test": {
+        "highway": 0.5085,
+        "urban": 0.0339
+      },
+      "infer_ms_per_window": 0.013,
+      "loss_first_last": [
+        0.95014,
+        0.01264
+      ],
+      "n_parameters": 10746,
+      "note": "ablation capacidad (AE-M)",
+      "test": {
+        "event": {
+          "episodes_detected": 6,
+          "episodes_total": 6,
+          "mean_detection_delay_s": 95.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:t-normal-b-seed302": 0.5085,
+          "urban:t-normal-a-seed301": 0.0339
+        },
+        "per_category": {
+          "held_out_recall": 0.5625,
+          "known_fault_recall": 0.9875,
+          "normal_fp_rate": 0.2712
+        },
+        "per_fault_recall": {
+          "corr_break_rpm_maf": 1.0,
+          "joint_slow_drift": 0.175,
+          "load_coolant_decouple": 0.075,
+          "maf_drift": 0.975,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.7545,
+          "fp_rate_normal": 0.1681,
+          "precision": 0.8125,
+          "recall": 0.7042
+        },
+        "pr_auc": 0.85,
+        "recall_by_duration": {
+          "t-coolfreeze-seed313": {
+            "duration_s": 1200.0,
+            "fault": "load_coolant_decouple",
+            "recall": 0.075
+          },
+          "t-corrbreak-h-seed312": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 1.0
+          },
+          "t-corrbreak-u-seed311": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 1.0
+          },
+          "t-jointdrift-seed314": {
+            "duration_s": 1200.0,
+            "fault": "joint_slow_drift",
+            "recall": 0.175
+          },
+          "t-maf-seed322": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.975
+          },
+          "t-vacuum-seed321": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.8511,
+        "temporal": {
+          "anomaly_score_persistence": 0.7042,
+          "mean_detection_delay_s": 95.0,
+          "mean_false_alarm_duration_s": 192.0
+        }
+      },
+      "threshold": 0.046289,
+      "validation": {
+        "event": {
+          "episodes_detected": 5,
+          "episodes_total": 5,
+          "mean_detection_delay_s": 108.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:v-normal-b-seed202": 0.0169,
+          "urban:v-normal-a-seed201": 0.2373
+        },
+        "per_category": {
+          "known_fault_recall": 0.7512,
+          "normal_fp_rate": 0.1271
+        },
+        "per_fault_recall": {
+          "maf_drift": 0.975,
+          "misfire": 0.2,
+          "o2_lag": 1.0,
+          "thermostat_stuck": 0.6122,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.8198,
+          "fp_rate_normal": 0.0876,
+          "precision": 0.9023,
+          "recall": 0.7512
+        },
+        "pr_auc": 0.9295,
+        "recall_by_duration": {
+          "v-maf-seed212": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.975
+          },
+          "v-misfire-seed215": {
+            "duration_s": 1200.0,
+            "fault": "misfire",
+            "recall": 0.2
+          },
+          "v-o2lag-seed214": {
+            "duration_s": 1200.0,
+            "fault": "o2_lag",
+            "recall": 1.0
+          },
+          "v-thermo-seed213": {
+            "duration_s": 1500.0,
+            "fault": "thermostat_stuck",
+            "recall": 0.6122
+          },
+          "v-vacuum-seed211": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.9159,
+        "temporal": {
+          "anomaly_score_persistence": 0.7574,
+          "mean_detection_delay_s": 108.0,
+          "mean_false_alarm_duration_s": 112.5
+        }
+      }
+    },
+    "ae_s_v10": {
+      "fit_seconds": 2.97,
+      "fpr_by_profile_test": {
+        "highway": 0.2712,
+        "urban": 0.0678
+      },
+      "infer_ms_per_window": 0.015,
+      "loss_first_last": [
+        0.93218,
+        0.1307
+      ],
+      "n_parameters": 4114,
+      "note": "referencia E5 (train v1.0)",
+      "test": {
+        "event": {
+          "episodes_detected": 6,
+          "episodes_total": 6,
+          "mean_detection_delay_s": 185.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:t-normal-b-seed302": 0.2712,
+          "urban:t-normal-a-seed301": 0.0678
+        },
+        "per_category": {
+          "held_out_recall": 0.4562,
+          "known_fault_recall": 0.975,
+          "normal_fp_rate": 0.1695
+        },
+        "per_fault_recall": {
+          "corr_break_rpm_maf": 0.8375,
+          "joint_slow_drift": 0.1,
+          "load_coolant_decouple": 0.05,
+          "maf_drift": 0.95,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.7242,
+          "fp_rate_normal": 0.1121,
+          "precision": 0.8531,
+          "recall": 0.6292
+        },
+        "pr_auc": 0.8632,
+        "recall_by_duration": {
+          "t-coolfreeze-seed313": {
+            "duration_s": 1200.0,
+            "fault": "load_coolant_decouple",
+            "recall": 0.05
+          },
+          "t-corrbreak-h-seed312": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 1.0
+          },
+          "t-corrbreak-u-seed311": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 0.675
+          },
+          "t-jointdrift-seed314": {
+            "duration_s": 1200.0,
+            "fault": "joint_slow_drift",
+            "recall": 0.1
+          },
+          "t-maf-seed322": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.95
+          },
+          "t-vacuum-seed321": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.8147,
+        "temporal": {
+          "anomaly_score_persistence": 0.6292,
+          "mean_detection_delay_s": 185.0,
+          "mean_false_alarm_duration_s": 54.5
+        }
+      },
+      "threshold": 0.363064,
+      "validation": {
+        "event": {
+          "episodes_detected": 5,
+          "episodes_total": 5,
+          "mean_detection_delay_s": 78.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:v-normal-b-seed202": 0.0169,
+          "urban:v-normal-a-seed201": 0.1864
+        },
+        "per_category": {
+          "known_fault_recall": 0.7703,
+          "normal_fp_rate": 0.1017
+        },
+        "per_fault_recall": {
+          "maf_drift": 0.975,
+          "misfire": 0.8,
+          "o2_lag": 1.0,
+          "thermostat_stuck": 0.2041,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.8256,
+          "fp_rate_normal": 0.1031,
+          "precision": 0.8895,
+          "recall": 0.7703
+        },
+        "pr_auc": 0.9482,
+        "recall_by_duration": {
+          "v-maf-seed212": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.975
+          },
+          "v-misfire-seed215": {
+            "duration_s": 1200.0,
+            "fault": "misfire",
+            "recall": 0.8
+          },
+          "v-o2lag-seed214": {
+            "duration_s": 1200.0,
+            "fault": "o2_lag",
+            "recall": 1.0
+          },
+          "v-thermo-seed213": {
+            "duration_s": 1500.0,
+            "fault": "thermostat_stuck",
+            "recall": 0.2041
+          },
+          "v-vacuum-seed211": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.9326,
+        "temporal": {
+          "anomaly_score_persistence": 0.7958,
+          "mean_detection_delay_s": 78.0,
+          "mean_false_alarm_duration_s": 40.0
+        }
+      }
+    },
+    "ae_s_v11": {
+      "fit_seconds": 9.84,
+      "fpr_by_profile_test": {
+        "highway": 0.4746,
+        "urban": 0.0169
+      },
+      "infer_ms_per_window": 0.012,
+      "loss_first_last": [
+        1.00835,
+        0.09845
+      ],
+      "n_parameters": 4114,
+      "note": "cambio ÚNICO: train v1.1",
+      "severity": {
+        "fpr": {
+          "highway:sev-normal-b-seed413": 0.0,
+          "urban:sev-normal-a-seed412": 0.0256
+        },
+        "sev-corrbreak-high-seed425": {
+          "duration_s": 900.0,
+          "fault": "corr_break_rpm_maf",
+          "recall": 0.7333
+        },
+        "sev-corrbreak-low-seed423": {
+          "duration_s": 900.0,
+          "fault": "corr_break_rpm_maf",
+          "recall": 0.0
+        },
+        "sev-corrbreak-mid-seed424": {
+          "duration_s": 900.0,
+          "fault": "corr_break_rpm_maf",
+          "recall": 0.1
+        },
+        "sev-maf-high-seed419": {
+          "duration_s": 900.0,
+          "fault": "maf_drift",
+          "recall": 0.9333
+        },
+        "sev-maf-low-seed417": {
+          "duration_s": 900.0,
+          "fault": "maf_drift",
+          "recall": 0.8333
+        },
+        "sev-maf-mid-seed418": {
+          "duration_s": 900.0,
+          "fault": "maf_drift",
+          "recall": 0.9333
+        },
+        "sev-misfire-high-seed422": {
+          "duration_s": 900.0,
+          "fault": "misfire",
+          "recall": 0.6
+        },
+        "sev-misfire-low-seed420": {
+          "duration_s": 900.0,
+          "fault": "misfire",
+          "recall": 0.1333
+        },
+        "sev-misfire-mid-seed421": {
+          "duration_s": 900.0,
+          "fault": "misfire",
+          "recall": 0.2333
+        },
+        "sev-vacuum-high-seed416": {
+          "duration_s": 900.0,
+          "fault": "vacuum_leak",
+          "recall": 1.0
+        },
+        "sev-vacuum-low-seed414": {
+          "duration_s": 900.0,
+          "fault": "vacuum_leak",
+          "recall": 0.9333
+        },
+        "sev-vacuum-mid-seed415": {
+          "duration_s": 900.0,
+          "fault": "vacuum_leak",
+          "recall": 1.0
+        }
+      },
+      "test": {
+        "event": {
+          "episodes_detected": 6,
+          "episodes_total": 6,
+          "mean_detection_delay_s": 115.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:t-normal-b-seed302": 0.4746,
+          "urban:t-normal-a-seed301": 0.0169
+        },
+        "per_category": {
+          "held_out_recall": 0.4188,
+          "known_fault_recall": 0.9875,
+          "normal_fp_rate": 0.2458
+        },
+        "per_fault_recall": {
+          "corr_break_rpm_maf": 0.8125,
+          "joint_slow_drift": 0.025,
+          "load_coolant_decouple": 0.025,
+          "maf_drift": 0.975,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.7019,
+          "fp_rate_normal": 0.1293,
+          "precision": 0.8295,
+          "recall": 0.6083
+        },
+        "pr_auc": 0.8157,
+        "recall_by_duration": {
+          "t-coolfreeze-seed313": {
+            "duration_s": 1200.0,
+            "fault": "load_coolant_decouple",
+            "recall": 0.025
+          },
+          "t-corrbreak-h-seed312": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 1.0
+          },
+          "t-corrbreak-u-seed311": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 0.625
+          },
+          "t-jointdrift-seed314": {
+            "duration_s": 1200.0,
+            "fault": "joint_slow_drift",
+            "recall": 0.025
+          },
+          "t-maf-seed322": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.975
+          },
+          "t-vacuum-seed321": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.7927,
+        "temporal": {
+          "anomaly_score_persistence": 0.6083,
+          "mean_detection_delay_s": 115.0,
+          "mean_false_alarm_duration_s": 290.0
+        }
+      },
+      "threshold": 0.315462,
+      "validation": {
+        "event": {
+          "episodes_detected": 5,
+          "episodes_total": 5,
+          "mean_detection_delay_s": 102.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:v-normal-b-seed202": 0.0,
+          "urban:v-normal-a-seed201": 0.2542
+        },
+        "per_category": {
+          "known_fault_recall": 0.7464,
+          "normal_fp_rate": 0.1271
+        },
+        "per_fault_recall": {
+          "maf_drift": 0.95,
+          "misfire": 0.75,
+          "o2_lag": 1.0,
+          "thermostat_stuck": 0.1633,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.8125,
+          "fp_rate_normal": 0.0979,
+          "precision": 0.8914,
+          "recall": 0.7464
+        },
+        "pr_auc": 0.9318,
+        "recall_by_duration": {
+          "v-maf-seed212": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.95
+          },
+          "v-misfire-seed215": {
+            "duration_s": 1200.0,
+            "fault": "misfire",
+            "recall": 0.75
+          },
+          "v-o2lag-seed214": {
+            "duration_s": 1200.0,
+            "fault": "o2_lag",
+            "recall": 1.0
+          },
+          "v-thermo-seed213": {
+            "duration_s": 1500.0,
+            "fault": "thermostat_stuck",
+            "recall": 0.1633
+          },
+          "v-vacuum-seed211": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.913,
+        "temporal": {
+          "anomaly_score_persistence": 0.7727,
+          "mean_detection_delay_s": 102.0,
+          "mean_false_alarm_duration_s": 112.5
+        }
+      }
+    },
+    "ae_s_v11_wd": {
+      "fit_seconds": 10.4,
+      "fpr_by_profile_test": {
+        "highway": 0.4915,
+        "urban": 0.0
+      },
+      "infer_ms_per_window": 0.014,
+      "loss_first_last": [
+        1.00849,
+        0.10841
+      ],
+      "n_parameters": 4114,
+      "note": "ablation regularización (weight decay)",
+      "test": {
+        "event": {
+          "episodes_detected": 4,
+          "episodes_total": 6,
+          "mean_detection_delay_s": 22.5
+        },
+        "fpr_by_normal_scenario": {
+          "highway:t-normal-b-seed302": 0.4915,
+          "urban:t-normal-a-seed301": 0.0
+        },
+        "per_category": {
+          "held_out_recall": 0.4,
+          "known_fault_recall": 0.9875,
+          "normal_fp_rate": 0.2458
+        },
+        "per_fault_recall": {
+          "corr_break_rpm_maf": 0.8,
+          "joint_slow_drift": 0.0,
+          "load_coolant_decouple": 0.0,
+          "maf_drift": 0.975,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.6908,
+          "fp_rate_normal": 0.1336,
+          "precision": 0.8218,
+          "recall": 0.5958
+        },
+        "pr_auc": 0.8122,
+        "recall_by_duration": {
+          "t-coolfreeze-seed313": {
+            "duration_s": 1200.0,
+            "fault": "load_coolant_decouple",
+            "recall": 0.0
+          },
+          "t-corrbreak-h-seed312": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 1.0
+          },
+          "t-corrbreak-u-seed311": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 0.6
+          },
+          "t-jointdrift-seed314": {
+            "duration_s": 1200.0,
+            "fault": "joint_slow_drift",
+            "recall": 0.0
+          },
+          "t-maf-seed322": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.975
+          },
+          "t-vacuum-seed321": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.7817,
+        "temporal": {
+          "anomaly_score_persistence": 0.5958,
+          "mean_detection_delay_s": 22.5,
+          "mean_false_alarm_duration_s": 290.0
+        }
+      },
+      "threshold": 0.358071,
+      "validation": {
+        "event": {
+          "episodes_detected": 5,
+          "episodes_total": 5,
+          "mean_detection_delay_s": 30.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:v-normal-b-seed202": 0.0,
+          "urban:v-normal-a-seed201": 0.2203
+        },
+        "per_category": {
+          "known_fault_recall": 0.7129,
+          "normal_fp_rate": 0.1102
+        },
+        "per_fault_recall": {
+          "maf_drift": 0.925,
+          "misfire": 0.625,
+          "o2_lag": 1.0,
+          "thermostat_stuck": 0.1429,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.8011,
+          "fp_rate_normal": 0.0722,
+          "precision": 0.9141,
+          "recall": 0.7129
+        },
+        "pr_auc": 0.9321,
+        "recall_by_duration": {
+          "v-maf-seed212": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.925
+          },
+          "v-misfire-seed215": {
+            "duration_s": 1200.0,
+            "fault": "misfire",
+            "recall": 0.625
+          },
+          "v-o2lag-seed214": {
+            "duration_s": 1200.0,
+            "fault": "o2_lag",
+            "recall": 1.0
+          },
+          "v-thermo-seed213": {
+            "duration_s": 1500.0,
+            "fault": "thermostat_stuck",
+            "recall": 0.1429
+          },
+          "v-vacuum-seed211": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.916,
+        "temporal": {
+          "anomaly_score_persistence": 0.7386,
+          "mean_detection_delay_s": 30.0,
+          "mean_false_alarm_duration_s": 130.0
+        }
+      }
+    },
+    "lof_frozen": {
+      "fpr_by_profile_test": {
+        "highway": 0.0847,
+        "urban": 0.0
+      },
+      "note": "brazo congelado arms-freeze-v1 (SIN re-entrenar en v1.1)",
+      "severity": {
+        "fpr": {
+          "highway:sev-normal-b-seed413": 0.0256,
+          "urban:sev-normal-a-seed412": 0.0
+        },
+        "sev-corrbreak-high-seed425": {
+          "duration_s": 900.0,
+          "fault": "corr_break_rpm_maf",
+          "recall": 0.1333
+        },
+        "sev-corrbreak-low-seed423": {
+          "duration_s": 900.0,
+          "fault": "corr_break_rpm_maf",
+          "recall": 0.0
+        },
+        "sev-corrbreak-mid-seed424": {
+          "duration_s": 900.0,
+          "fault": "corr_break_rpm_maf",
+          "recall": 0.0
+        },
+        "sev-maf-high-seed419": {
+          "duration_s": 900.0,
+          "fault": "maf_drift",
+          "recall": 0.9333
+        },
+        "sev-maf-low-seed417": {
+          "duration_s": 900.0,
+          "fault": "maf_drift",
+          "recall": 0.8333
+        },
+        "sev-maf-mid-seed418": {
+          "duration_s": 900.0,
+          "fault": "maf_drift",
+          "recall": 0.9333
+        },
+        "sev-misfire-high-seed422": {
+          "duration_s": 900.0,
+          "fault": "misfire",
+          "recall": 0.0667
+        },
+        "sev-misfire-low-seed420": {
+          "duration_s": 900.0,
+          "fault": "misfire",
+          "recall": 0.0
+        },
+        "sev-misfire-mid-seed421": {
+          "duration_s": 900.0,
+          "fault": "misfire",
+          "recall": 0.0333
+        },
+        "sev-vacuum-high-seed416": {
+          "duration_s": 900.0,
+          "fault": "vacuum_leak",
+          "recall": 1.0
+        },
+        "sev-vacuum-low-seed414": {
+          "duration_s": 900.0,
+          "fault": "vacuum_leak",
+          "recall": 0.8667
+        },
+        "sev-vacuum-mid-seed415": {
+          "duration_s": 900.0,
+          "fault": "vacuum_leak",
+          "recall": 1.0
+        }
+      },
+      "test": {
+        "event": {
+          "episodes_detected": 4,
+          "episodes_total": 6,
+          "mean_detection_delay_s": 37.5
+        },
+        "fpr_by_normal_scenario": {
+          "highway:t-normal-b-seed302": 0.0847,
+          "urban:t-normal-a-seed301": 0.0
+        },
+        "per_category": {
+          "held_out_recall": 0.25,
+          "known_fault_recall": 0.975,
+          "normal_fp_rate": 0.0424
+        },
+        "per_fault_recall": {
+          "corr_break_rpm_maf": 0.5,
+          "joint_slow_drift": 0.0,
+          "load_coolant_decouple": 0.0,
+          "maf_drift": 0.95,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.6448,
+          "fp_rate_normal": 0.0345,
+          "precision": 0.9365,
+          "recall": 0.4917
+        },
+        "pr_auc": 0.8382,
+        "recall_by_duration": {
+          "t-coolfreeze-seed313": {
+            "duration_s": 1200.0,
+            "fault": "load_coolant_decouple",
+            "recall": 0.0
+          },
+          "t-corrbreak-h-seed312": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 0.875
+          },
+          "t-corrbreak-u-seed311": {
+            "duration_s": 1200.0,
+            "fault": "corr_break_rpm_maf",
+            "recall": 0.125
+          },
+          "t-jointdrift-seed314": {
+            "duration_s": 1200.0,
+            "fault": "joint_slow_drift",
+            "recall": 0.0
+          },
+          "t-maf-seed322": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.95
+          },
+          "t-vacuum-seed321": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.7859,
+        "temporal": {
+          "anomaly_score_persistence": 0.4917,
+          "mean_detection_delay_s": 37.5,
+          "mean_false_alarm_duration_s": 37.5
+        }
+      },
+      "threshold": 0.163197,
+      "validation": {
+        "event": {
+          "episodes_detected": 5,
+          "episodes_total": 5,
+          "mean_detection_delay_s": 96.0
+        },
+        "fpr_by_normal_scenario": {
+          "highway:v-normal-b-seed202": 0.0169,
+          "urban:v-normal-a-seed201": 0.0
+        },
+        "per_category": {
+          "known_fault_recall": 0.6364,
+          "normal_fp_rate": 0.0085
+        },
+        "per_fault_recall": {
+          "maf_drift": 0.975,
+          "misfire": 0.275,
+          "o2_lag": 1.0,
+          "thermostat_stuck": 0.0612,
+          "vacuum_leak": 1.0
+        },
+        "point": {
+          "f1": 0.7733,
+          "fp_rate_normal": 0.0103,
+          "precision": 0.9852,
+          "recall": 0.6364
+        },
+        "pr_auc": 0.9425,
+        "recall_by_duration": {
+          "v-maf-seed212": {
+            "duration_s": 1200.0,
+            "fault": "maf_drift",
+            "recall": 0.975
+          },
+          "v-misfire-seed215": {
+            "duration_s": 1200.0,
+            "fault": "misfire",
+            "recall": 0.275
+          },
+          "v-o2lag-seed214": {
+            "duration_s": 1200.0,
+            "fault": "o2_lag",
+            "recall": 1.0
+          },
+          "v-thermo-seed213": {
+            "duration_s": 1500.0,
+            "fault": "thermostat_stuck",
+            "recall": 0.0612
+          },
+          "v-vacuum-seed211": {
+            "duration_s": 1200.0,
+            "fault": "vacuum_leak",
+            "recall": 1.0
+          }
+        },
+        "roc_auc": 0.9239,
+        "temporal": {
+          "anomaly_score_persistence": 0.6622,
+          "mean_detection_delay_s": 96.0,
+          "mean_false_alarm_duration_s": 30.0
+        }
+      }
+    }
+  },
+  "counterfactual": {
+    "caveat": "gemelo EXACTO antes de fault_start; aproximado después (el fallo comparte el generador aleatorio del motor de señales)",
+    "mean_score_post_fault": 0.8857,
+    "mean_score_pre_fault": 0.1279,
+    "mean_score_twin_post": 0.1288,
+    "paired_example": {
+      "score_fault": 0.4157,
+      "score_twin": 0.0592,
+      "shap_top5_fault": [
+        "corr_ENGINE_LOAD_MAF",
+        "corr_RPM_SPEED",
+        "SHORT_FUEL_TRIM_1_mean",
+        "total_trim_mean",
+        "SPEED_mean"
+      ],
+      "shap_top5_twin": [
+        "RPM_std",
+        "SHORT_FUEL_TRIM_1_mean",
+        "RPM_slope",
+        "O2_B1S1_slope",
+        "corr_RPM_SPEED"
+      ],
+      "window_start_s": 720
+    },
+    "pre_fault_windows_identical": true,
+    "scenario": "sev-corrbreak-high"
+  },
+  "dataset_v11": {
+    "dataset_hash": "a17c0bce3b51321ad7f67c9f6da19eaa3656c0398eb7c871be0f33e99f7afe34",
+    "dataset_id": "obd-lab-suite-v1",
+    "dataset_version": "1.1",
+    "generator_config": {
+      "profiles": [
+        "cold_start",
+        "highway",
+        "idle",
+        "urban"
+      ],
+      "suites": [
+        "suite_v1.yaml (train)",
+        "suite_v1_train_ext.yaml"
+      ]
+    },
+    "n_sessions": 22,
+    "provenance": "SIMULATED (obd-lab; generación determinista por semilla)",
+    "seeds": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      131,
+      132,
+      141,
+      142
+    ]
+  },
+  "embeddings": {
+    "ae_m_v11": {
+      "latent_dim": 16,
+      "pca_var_explained_2c": 0.9222,
+      "silhouette_all_vs_normal": -0.036,
+      "silhouette_between_faults": 0.2022
+    },
+    "ae_s_v10": {
+      "latent_dim": 8,
+      "pca_var_explained_2c": 0.8795,
+      "silhouette_all_vs_normal": -0.0985,
+      "silhouette_between_faults": 0.1175
+    },
+    "ae_s_v11": {
+      "latent_dim": 8,
+      "pca_var_explained_2c": 0.9146,
+      "silhouette_all_vs_normal": -0.1105,
+      "silhouette_between_faults": 0.1061
+    }
+  },
+  "fingerprint": {
+    "cosine_similarity_between_profiles": 0.0498,
+    "nota": "similitud alta = el perfil de atribución en normales no depende del escenario; baja = posible huella de generador/escenario. Sonda limitada: sin datos reales aún, comparación intra-simulador",
+    "profiles": [
+      "highway",
+      "urban"
+    ],
+    "windows_used": 12
+  },
+  "seeds": {
+    "43": {
+      "held_out_recall": 0.4188,
+      "test_point": {
+        "f1": 0.6986,
+        "fp_rate_normal": 0.1379,
+        "precision": 0.8202,
+        "recall": 0.6083
+      },
+      "threshold": 0.341877
+    },
+    "44": {
+      "held_out_recall": 0.4062,
+      "test_point": {
+        "f1": 0.6906,
+        "fp_rate_normal": 0.1422,
+        "precision": 0.8136,
+        "recall": 0.6
+      },
+      "threshold": 0.299402
+    }
+  },
+  "total_runtime_s": 252.3,
+  "windows": {
+    "10": {
+      "fpr_by_profile": {
+        "highway": 0.4429,
+        "urban": 0.0167
+      },
+      "held_out_recall": 0.1792,
+      "test_point": {
+        "f1": 0.57,
+        "fp_rate_normal": 0.1208,
+        "precision": 0.788,
+        "recall": 0.4465
+      },
+      "threshold": 0.406861
+    },
+    "120": {
+      "fpr_by_profile": {
+        "highway": 0.5172,
+        "urban": 0.0
+      },
+      "held_out_recall": 0.5125,
+      "test_point": {
+        "f1": 0.7465,
+        "fp_rate_normal": 0.1429,
+        "precision": 0.8351,
+        "recall": 0.675
+      },
+      "threshold": 0.366888
+    },
+    "30": {
+      "fpr_by_profile": {
+        "highway": 0.4454,
+        "urban": 0.0336
+      },
+      "held_out_recall": 0.35,
+      "test_point": {
+        "f1": 0.665,
+        "fp_rate_normal": 0.1314,
+        "precision": 0.8133,
+        "recall": 0.5625
+      },
+      "threshold": 0.315798
+    }
+  },
+  "xai": {
+    "agreement": {
+      "cases": [
+        {
+          "case": "TP:corr_break_rpm_maf",
+          "class": "DISAGREE",
+          "jaccard5": 0.111,
+          "spearman": 0.324,
+          "window": 83
+        },
+        {
+          "case": "TP:corr_break_rpm_maf",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.429,
+          "spearman": 0.473,
+          "window": 106
+        },
+        {
+          "case": "TP:corr_break_rpm_maf",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.414,
+          "window": 141
+        },
+        {
+          "case": "TP:corr_break_rpm_maf",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.429,
+          "spearman": 0.323,
+          "window": 153
+        },
+        {
+          "case": "TP:joint_slow_drift",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.516,
+          "window": 214
+        },
+        {
+          "case": "TP:load_coolant_decouple",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.318,
+          "window": 21
+        },
+        {
+          "case": "TP:maf_drift",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.13,
+          "window": 260
+        },
+        {
+          "case": "TP:maf_drift",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.429,
+          "spearman": 0.287,
+          "window": 273
+        },
+        {
+          "case": "TP:maf_drift",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.429,
+          "spearman": 0.146,
+          "window": 274
+        },
+        {
+          "case": "TP:maf_drift",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.429,
+          "spearman": 0.246,
+          "window": 287
+        },
+        {
+          "case": "TP:vacuum_leak",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.52,
+          "window": 448
+        },
+        {
+          "case": "TP:vacuum_leak",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.54,
+          "window": 457
+        },
+        {
+          "case": "TP:vacuum_leak",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.401,
+          "window": 461
+        },
+        {
+          "case": "TP:vacuum_leak",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.323,
+          "window": 466
+        },
+        {
+          "case": "FP:normal",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.429,
+          "spearman": 0.219,
+          "window": 334
+        },
+        {
+          "case": "FP:normal",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.054,
+          "window": 383
+        },
+        {
+          "case": "FP:normal",
+          "class": "AGREE",
+          "jaccard5": 0.667,
+          "spearman": 0.239,
+          "window": 388
+        },
+        {
+          "case": "FP:normal",
+          "class": "DISAGREE",
+          "jaccard5": 0.111,
+          "spearman": 0.546,
+          "window": 393
+        },
+        {
+          "case": "FP:normal",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.338,
+          "window": 397
+        },
+        {
+          "case": "FP:normal",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.42,
+          "window": 406
+        },
+        {
+          "case": "FP:normal",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.51,
+          "window": 407
+        },
+        {
+          "case": "FP:normal",
+          "class": "PARTIAL_AGREEMENT",
+          "jaccard5": 0.25,
+          "spearman": 0.18,
+          "window": 412
+        }
+      ],
+      "class_counts": {
+        "AGREE": 7,
+        "DISAGREE": 2,
+        "PARTIAL_AGREEMENT": 13
+      },
+      "examples": {
+        "AGREE": {
+          "case": "TP:joint_slow_drift",
+          "pfe_top5": [
+            "O2_B1S1_std",
+            "O2_B1S1_mean",
+            "SHORT_FUEL_TRIM_1_slope",
+            "TIMING_ADVANCE_mean",
+            "SHORT_FUEL_TRIM_1_std"
+          ],
+          "shap_top5": [
+            "TIMING_ADVANCE_mean",
+            "O2_B1S1_std",
+            "SHORT_FUEL_TRIM_1_slope",
+            "O2_B1S1_mean",
+            "corr_RPM_SPEED"
+          ],
+          "window": 214
+        },
+        "DISAGREE": {
+          "case": "TP:corr_break_rpm_maf",
+          "pfe_top5": [
+            "corr_ENGINE_LOAD_MAF",
+            "corr_RPM_SPEED",
+            "O2_B1S1_mean",
+            "O2_B1S1_std",
+            "SHORT_FUEL_TRIM_1_mean"
+          ],
+          "shap_top5": [
+            "corr_ENGINE_LOAD_MAF",
+            "SPEED_mean",
+            "MAF_mean",
+            "RPM_mean",
+            "MAF_std"
+          ],
+          "window": 83
+        },
+        "PARTIAL_AGREEMENT": {
+          "case": "TP:corr_break_rpm_maf",
+          "pfe_top5": [
+            "corr_ENGINE_LOAD_MAF",
+            "MAF_mean",
+            "O2_B1S1_std",
+            "RPM_mean",
+            "SHORT_FUEL_TRIM_1_slope"
+          ],
+          "shap_top5": [
+            "corr_ENGINE_LOAD_MAF",
+            "corr_RPM_SPEED",
+            "SPEED_mean",
+            "RPM_mean",
+            "MAF_mean"
+          ],
+          "window": 106
+        }
+      },
+      "mean_jaccard5": 0.419
+    },
+    "background": {
+      "background_hash": "1ddf84d0f336a78226317e4d329528dc04c1dc2ded810480fda3477431504a40",
+      "background_selection_method": "uniform-without-replacement(train-normal)",
+      "background_size": 100,
+      "selection_seed": 42
+    },
+    "explainer": {
+      "explained_output": "reconstruction_error",
+      "explainer_type": "shap.explainers.Permutation",
+      "max_evals": 200,
+      "shap_version": "0.51.0"
+    },
+    "fidelity_by_fault": {
+      "corr_break_rpm_maf": {
+        "AR": {
+          "1": 1.0,
+          "3": 0.6667,
+          "5": 0.7
+        },
+        "gt_size": 10,
+        "n_explained": 4,
+        "precision": {
+          "1": 1.0,
+          "3": 0.6667,
+          "5": 0.7
+        },
+        "random_baseline": {
+          "1": 0.2381,
+          "3": 0.2381,
+          "5": 0.2381
+        }
+      },
+      "joint_slow_drift": {
+        "AR": {
+          "1": 1.0,
+          "3": 0.3333,
+          "5": 0.2
+        },
+        "gt_size": 8,
+        "n_explained": 1,
+        "precision": {
+          "1": 1.0,
+          "3": 0.3333,
+          "5": 0.2
+        },
+        "random_baseline": {
+          "1": 0.1905,
+          "3": 0.1905,
+          "5": 0.1905
+        }
+      },
+      "load_coolant_decouple": {
+        "AR": {
+          "1": 0.0,
+          "3": 0.0,
+          "5": 0.2
+        },
+        "gt_size": 8,
+        "n_explained": 1,
+        "precision": {
+          "1": 0.0,
+          "3": 0.0,
+          "5": 0.2
+        },
+        "random_baseline": {
+          "1": 0.1905,
+          "3": 0.1905,
+          "5": 0.1905
+        }
+      },
+      "maf_drift": {
+        "AR": {
+          "1": 1.0,
+          "3": 1.0,
+          "5": 0.85
+        },
+        "gt_size": 12,
+        "n_explained": 4,
+        "precision": {
+          "1": 1.0,
+          "3": 1.0,
+          "5": 0.85
+        },
+        "random_baseline": {
+          "1": 0.2857,
+          "3": 0.2857,
+          "5": 0.2857
+        }
+      },
+      "vacuum_leak": {
+        "AR": {
+          "1": 1.0,
+          "3": 1.0,
+          "5": 1.0
+        },
+        "gt_size": 16,
+        "n_explained": 4,
+        "precision": {
+          "1": 1.0,
+          "3": 1.0,
+          "5": 1.0
+        },
+        "random_baseline": {
+          "1": 0.381,
+          "3": 0.381,
+          "5": 0.381
+        }
+      }
+    },
+    "fp_explanations": {
+      "334": {
+        "session": "t-normal-a-seed301",
+        "shap_top5": [
+          "SHORT_FUEL_TRIM_1_std",
+          "O2_B1S1_mean",
+          "O2_B1S1_slope",
+          "SPEED_mean",
+          "corr_RPM_SPEED"
+        ],
+        "start_s": 1170.0
+      },
+      "383": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_slope",
+          "LONG_FUEL_TRIM_1_std",
+          "LONG_FUEL_TRIM_1_mean",
+          "TIMING_ADVANCE_mean",
+          "MAF_mean"
+        ],
+        "start_s": 870.0
+      },
+      "388": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_slope",
+          "LONG_FUEL_TRIM_1_mean",
+          "LONG_FUEL_TRIM_1_std",
+          "total_trim_mean",
+          "corr_RPM_MAF"
+        ],
+        "start_s": 1020.0
+      },
+      "393": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_mean",
+          "total_trim_mean",
+          "TIMING_ADVANCE_mean",
+          "SPEED_std",
+          "RPM_mean"
+        ],
+        "start_s": 1170.0
+      },
+      "397": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_mean",
+          "total_trim_mean",
+          "SHORT_FUEL_TRIM_1_mean",
+          "SPEED_mean",
+          "SHORT_FUEL_TRIM_1_slope"
+        ],
+        "start_s": 1290.0
+      },
+      "406": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_mean",
+          "total_trim_mean",
+          "RPM_mean",
+          "O2_B1S1_slope",
+          "TIMING_ADVANCE_std"
+        ],
+        "start_s": 1560.0
+      },
+      "407": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_mean",
+          "total_trim_mean",
+          "SHORT_FUEL_TRIM_1_mean",
+          "SPEED_mean",
+          "RPM_mean"
+        ],
+        "start_s": 1590.0
+      },
+      "412": {
+        "session": "t-normal-b-seed302",
+        "shap_top5": [
+          "LONG_FUEL_TRIM_1_mean",
+          "total_trim_mean",
+          "SHORT_FUEL_TRIM_1_mean",
+          "MAF_std",
+          "SPEED_slope"
+        ],
+        "start_s": 1740.0
+      }
+    },
+    "global_mean_abs_shap_top10": {
+      "LONG_FUEL_TRIM_1_mean": 35.82712,
+      "LONG_FUEL_TRIM_1_slope": 5.08752,
+      "LONG_FUEL_TRIM_1_std": 6.62188,
+      "SHORT_FUEL_TRIM_1_mean": 2.28866,
+      "SHORT_FUEL_TRIM_1_slope": 0.11322,
+      "SHORT_FUEL_TRIM_1_std": 0.23014,
+      "SPEED_mean": 0.11925,
+      "TIMING_ADVANCE_mean": 0.1131,
+      "corr_ENGINE_LOAD_MAF": 0.14061,
+      "total_trim_mean": 14.0404
+    },
+    "runtime_seconds": 9.1,
+    "samples_explained": 33,
+    "stability": {
+      "between_seeds_jaccard5": 0.5952,
+      "n_windows": 6,
+      "under_perturbation_jaccard5": 0.6825
+    }
+  }
+}
