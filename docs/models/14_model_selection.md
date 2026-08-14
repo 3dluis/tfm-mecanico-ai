@@ -57,8 +57,9 @@ modelos ya materializados; este inventario cubre también lo no construido.)
 | Clustering (perfiles de conducción) | ML | PLANNED | — |
 | Change-point detection (segmentación) | ML eventos | PLANNED | candidato a retar a `ed:1` |
 | HMM (estados vehiculares) | ML eventos | PLANNED | solo si supera a `ed:1`/CPD |
-| Autoencoder (denso 4.1k params) | ML ventana | **EXPERIMENTING** (F14) | EXP-ANOM-006: adopción denegada — AE-standard held-out 0.456 vs 0.25 de LOF pero FPR 0.112 vs 0.035; AE-robust empata con LOF; condición ADR-0011 intacta; candidato EXP-ANOM-007 con train v1.1 |
-| Modelos temporales profundos (LSTM/GRU-AE) | ML | PLANNED → **línea abierta (F13)** | EXP-ANOM-007, condicionado a resultados de EXP-ANOM-006 (Protocolo ML v1 §5) |
+| Autoencoder (denso 4.1k/10.2k params) | ML ventana | **EXPERIMENTING** (F14-F16) | EXP-ANOM-006/007: D1 REJECT ×2 — ni train v1.1 ni capacidad ni weight decay corrigen el FPR (0.129-0.168 vs 0.035 LOF); causa raíz identificada (features absolutas de fuel trim; diagnóstico + SHAP convergentes); candidato EXP-ANOM-008 = ablation fs2-lite |
+| SHAP (Permutation) como capa XAI | XAI | **ADOPT** (D3, F16) | EXP-ANOM-007: AR@K ≫ azar en fallos detectados (vacuum 1.0 vs 0.38), agreement parcial con per-feature error (J5 0.42), estabilidad moderada (0.60/0.68), diagnóstico de FP demostrado; uso como evidencia/diagnóstico, NO decisión automática |
+| Modelos temporales profundos (LSTM/GRU-AE) | ML | PLANNED (pospuestos, F16) | la patología identificada en EXP-ANOM-007 (offsets absolutos de trim) NO es de orden temporal → primero la ablation de features (EXP-ANOM-008); línea secuencial después, como experimento independiente |
 | HDBSCAN sobre embeddings (descubrimiento) | ML patrones | PLANNED (F13) | EXP-PAT-001/002; los clusters son `candidate_pattern`, nunca «fallos» (Protocolo ML v1 §10) |
 | Qwen 2.5/3 (1.5B–7B) | LLM | PLANNED | pendiente llm-smoke + benchmark |
 | Llama 3.2 (1B–3B) | LLM | PLANNED | ídem |
