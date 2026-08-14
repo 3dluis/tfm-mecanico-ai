@@ -107,5 +107,5 @@ constraints:
   - NO cambiar ni eliminar casos del test; el distribution shift se documenta
   - NO reescribir métricas históricas; la reinterpretación se añade como contexto
   - seeds reservadas intactas; capa confirmatoria sin tocar
-git_commit: pendiente de commit F19
+git_commit: 703163e (protocolo congelado ANTES de medir; código E9 committeado en F19)
 hardware: sandbox-x86 (4 CPU / 8 GB, CPU-only)
