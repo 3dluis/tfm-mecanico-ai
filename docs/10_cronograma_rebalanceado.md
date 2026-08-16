@@ -61,7 +61,7 @@ bloque preparado.** La memoria pasa a ser entregable continuo, no fase final.
 | O1 | UI web ligera | Solo si aporta a la demo; **no reactivar Flutter** |
 | O2 | Brazo C de H2: RAG + reranking | Únicamente si el baseline lo justifica |
 | O3 | Ablation volumen vs cobertura (cierra el confound de F22) | Científicamente valiosa; no imprescindible para defender |
-| O4 | D3 — evaluación XAI sobre `ae_v3` | Su condición se ha disparado por primera vez (ver §10.6) |
+| O4 | D3 — evaluación XAI sobre `ae_v3` | D3 **congelado sin evaluar** por decisión del 16-08-2026; queda aquí por si sobra tiempo |
 
 ### CUT IF NEEDED — orden de sacrificio preacordado
 
@@ -120,12 +120,16 @@ bloqueado esperando una Raspberry Pi.
 
 ## 10.6 Decisiones abiertas que condicionan este cronograma
 
-1. **Extensión de la memoria.** La plantilla exige 50 000–60 000 palabras y a la vez
-   recomienda 31–73 páginas por capítulo (≈ 12 000–29 000 palabras). Un factor de 2 a 4 de
-   diferencia. **Hay que preguntar al tutor**: con 50 000 palabras, la escritura es la
-   actividad dominante de las cinco semanas y hay que recortar antes en la lista de §10.3.
-3. **D3 (XAI).** Su condición —`D1 = PROMOTE_CANDIDATE`— se ha cumplido por primera vez en
-   F22. Evaluarlo es trabajo nuevo; congelarlo sin evaluar desaprovecha la única ocasión.
-4. **Tutor.** No consta asignado en la documentación del proyecto. Es un bloqueante
-   administrativo con plazo, no técnico.
+1. **Extensión de la memoria — ABIERTA, y es la que más condiciona este plan.** La plantilla
+   exige 50 000–60 000 palabras y a la vez recomienda 31–73 páginas por capítulo
+   (≈ 12 000–29 000 palabras): un factor de 2 a 4 de diferencia. **Hay que preguntar al
+   tutor.** Mientras tanto se planifica en modo contingencia: se redacta primero el núcleo
+   defendible (≈ 25 000 palabras) y cada capítulo marca qué apartados se ampliarían si el
+   tutor confirma las 50 000. Si se confirman, hay que recortar antes en §10.3 —
+   previsiblemente O1-O4 completos y probablemente S2 y S4.
+3. ~~**D3 (XAI).**~~ **RESUELTA** (16-08-2026): D3 se congela **sin evaluar**, dejando
+   constancia expresa de que su precondición se cumplió y no se aprovechó, para que no se
+   lea como que se evaluó y salió mal.
+4. **Tutor — ABIERTA.** No consta asignado en la documentación del proyecto. Es un
+   bloqueante administrativo con plazo, no técnico, y de él depende también la decisión 1.
 
