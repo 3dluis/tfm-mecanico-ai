@@ -1,5 +1,12 @@
 # F-PREREG — comparación de los dos pre-registros y decisión propuesta
 
+> **SUPERADO por [`F-PREREG_reconciliacion.md`](F-PREREG_reconciliacion.md) (16-08-2026),**
+> que cubre todos los documentos de pre-registro con la tabla elemento a elemento y añade
+> tres contradicciones que este documento no detectó — en particular que el banco
+> confirmatorio propuesto reproduciría el fallo de cobertura diagnosticado en F22. Se
+> conserva como registro fechado del primer análisis, según la regla de no borrar documentos
+> superados.
+
 **16 de agosto de 2026 · pasos 1 y 2 de [F-PREREG](F-PREREG_tarea.md) · el paso 7 (tag
 `prereg-v1.0`) REQUIERE LA APROBACIÓN DEL AUTOR EXPLÍCITA y no se ha ejecutado.**
 
