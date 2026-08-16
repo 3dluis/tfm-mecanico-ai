@@ -1,15 +1,46 @@
 # 8. Roadmap técnico del prototipo
 
+## Tabla de estado (vigente a 16 de agosto de 2026)
+
+| Línea | Estado | Detalle |
+|---|---|---|
+| **H1 — detección** | **exploratory: CLOSED** | `HX-ML-5` **SUPPORTED** · D1 = **CANDIDATE FOR PROMOTION**, no adopción · no se reabre sin datos reales o fase confirmatoria |
+| **H2 — RAG** | **pending** | Corpus auditado y **no utilizable** como evidencia (7 docs, 631 palabras, circular). Requiere corpus nuevo |
+| **H3 — memoria longitudinal** | **pending** | `EXP-MEM-001` **ya pre-registrado** (brazos M0/M1/M2). Requiere D1 del SLM, que fija R2 |
+| **H4 — edge** | **pending** | Es **criterio transversal**, no experimento propio. Requiere A2/A3 en ARM64 real |
+| **Memoria del TFM** | **ACTIVE** | Estructura sobre plantilla oficial UAX creada; redacción de capítulos 1-3 en curso |
+| **Pre-registro** | **pending freeze** | Comparación y decisión redactadas; tag `prereg-v1.0` **NO creado**, requiere aprobación |
+
+> **Nota de nomenclatura.** H1–H4 son la denominación del plan original (`docs/02` §OE8). La
+> nomenclatura científica vigente los mapea así
+> ([correspondencia](correspondencia_nomenclatura.md) §1): H1 → precondición de **H-EVT** ·
+> H2 → integrada en **H-EXP** · H3 → subsumida en **H-MEM** (`EXP-MEM-001`) · H4 → **criterio
+> transversal edge**, que deja de ser hipótesis. La memoria debe usar la vigente y explicar
+> la correspondencia una sola vez.
+
+---
+
 > **Actualización F22 — REBALANCEO DEL PROYECTO y cierre de la línea exploratoria H1.**
 >
-> **(1) H1 queda respondida en lo exploratorio y CONGELADA.** EXP-ANOM-010-R2 responde la
-> pregunta que F21 dejó abierta: con cobertura de normalidad **efectiva** verificada en el
-> espacio de features (`positive_level_share` 0.0496 frente a 0.0000 de v2), el mismo AE
-> denso fs1 —sin tocar arquitectura ni protocolo— pasa de FPR 0.1379 a **0.0086** y de F1
-> 0.6986 a **0.7494**, con FPR de autovía **0.0000**. **D1 = PROMOTE_CANDIDATE** por primera
-> vez en la serie y **estado exploratorio de H1 = `SUPPORTED`**. El techo era cobertura, y
-> F21 no podía verlo porque el banco que debía aportarla no la aportaba.
-> Detalle: [informe F22](fase22/informe_exp_anom_010_r2.md).
+> **(1) H1 queda respondida en lo exploratorio y CERRADA.** EXP-ANOM-010-R2 responde la
+> pregunta que F21 dejó abierta: **el problema principal no era la arquitectura del
+> autoencoder, sino la cobertura efectiva del comportamiento normal en el espacio de
+> entrada.** Con esa cobertura verificada en el espacio de features
+> (`positive_level_share` 0.0496 frente a 0.0000 de v2), el mismo AE denso fs1 —sin tocar
+> arquitectura ni protocolo— pasa de FPR 0.1379 a **0.0086** y de F1 0.6986 a **0.7494**, con
+> FPR de autovía **0.0000**. `HX-ML-5` = **SUPPORTED**; **D1 = `PROMOTE_CANDIDATE` ≡
+> CANDIDATE FOR PROMOTION**, que **no es adopción**: seguimos en entorno emulado/sintético y
+> faltan validación real (HCRL), ARM64/RPi5 y fase confirmatoria. El detector clásico mejora
+> igual con el mismo banco (`lof_v3`: FPR 0.1293 → 0.0172), lo que refuerza que la causa era
+> de datos y no de familia de modelo. Detalle:
+> [informe F22](fase22/informe_exp_anom_010_r2.md).
+>
+> **Cadena causal documentada** (cada eslabón medido, no supuesto):
+> FPR alto → falsos positivos concentrados en LTFT +0.78125 → estado ausente del train
+> efectivo → el banco v2 declaraba cobertura **por sesión** → el banco v3 la verifica **por
+> ventana/feature** → el FPR cae **sin cambiar el modelo**. Dos instrumentos independientes
+> convergen en la misma feature: SHAP global de F16 (`LONG_FUEL_TRIM_1_mean` = 35.83, la
+> siguiente 14.04) y el error de reconstrucción por feature de F21 (MSE 190.2).
 >
 > **(2) No se abre nada detrás.** Ni EXP-ANOM-011, ni benchmark v4, ni TCN, ni Transformer,
 > ni otra familia de detector — **tampoco ahora que el resultado es positivo**. D1, D2 y D3
