@@ -1,5 +1,42 @@
 # 8. Roadmap técnico del prototipo
 
+> **Actualización F22 — REBALANCEO DEL PROYECTO y cierre de la línea exploratoria H1.**
+>
+> **(1) H1 queda respondida en lo exploratorio y CONGELADA.** EXP-ANOM-010-R2 responde la
+> pregunta que F21 dejó abierta: con cobertura de normalidad **efectiva** verificada en el
+> espacio de features (`positive_level_share` 0.0496 frente a 0.0000 de v2), el mismo AE
+> denso fs1 —sin tocar arquitectura ni protocolo— pasa de FPR 0.1379 a **0.0086** y de F1
+> 0.6986 a **0.7494**, con FPR de autovía **0.0000**. **D1 = PROMOTE_CANDIDATE** por primera
+> vez en la serie y **estado exploratorio de H1 = `SUPPORTED`**. El techo era cobertura, y
+> F21 no podía verlo porque el banco que debía aportarla no la aportaba.
+> Detalle: [informe F22](fase22/informe_exp_anom_010_r2.md).
+>
+> **(2) No se abre nada detrás.** Ni EXP-ANOM-011, ni benchmark v4, ni TCN, ni Transformer,
+> ni otra familia de detector — **tampoco ahora que el resultado es positivo**. D1, D2 y D3
+> se congelan con la evidencia existente. La línea H1 permanece congelada hasta disponer de
+> datos reales (HCRL) o hasta la serie confirmatoria posterior al freeze del pre-registro.
+> `PROMOTE_CANDIDATE` es candidato a adopción, **no** adopción.
+>
+> **(3) Aportación metodológica de la fase:** *cobertura declarada ≠ cobertura efectiva*. Un
+> hueco de cobertura debe medirse en el espacio de representación que el modelo consume y
+> con el **mismo instrumento** que después lo verifica (`ai_models.audit.coverage`). Medir la
+> misma magnitud con dos implementaciones distintas fue la causa raíz del fallo de F20/F21.
+> Además, el ancla de reproducibilidad se rompía ante un crecimiento **aditivo** de contrato
+> (+20 bytes por `anomaly_seed`, ADR-0034): corregido con hash semántico.
+>
+> **(4) El proyecto se rebalancea a cuatro frentes** con la memoria como entregable continuo:
+> **P0** memoria del TFM · **P1** cierre de H1 (esta fase) · **P2** H2 (RAG) + H3 (memoria) ·
+> **P3** H4 (edge) + prototipo mínimo. Cronograma, clasificación MUST/SHOULD/OPTIONAL/CUT y
+> dependencias: [docs/10](10_cronograma_rebalanceado.md). Estructura de la memoria sobre la
+> plantilla oficial UAX: [docs/memoria/](memoria/README.md). Congelación del pre-registro,
+> bloqueante para todo lo confirmatorio:
+> [F-PREREG](experiments/preregistered/F-PREREG_tarea.md).
+>
+> **(5) Estado de las etapas técnicas** frente a §8.2: T0-T3 y T6 hechos; **T4 (RAG) queda
+> reabierto** porque el corpus actual no es evidencia defendible de recuperación documental;
+> **T7 (API+UI) esencialmente sin empezar** y se reduce a la API mínima del flujo científico;
+> T8 cubre H1 y debe cubrir H2/H3/H4; T9 sin empezar.
+
 > **Actualización F20:** ingeniería de datos y de benchmark, sin reentrenar modelos.
 > (1) **RNG separado** (ADR-0034): `vehicle_behavior_seed` y `anomaly_injection_seed`, de
 > modo que los contrafactuales son exactos por construcción y v1 se preserva byte a byte.

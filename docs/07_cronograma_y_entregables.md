@@ -1,5 +1,12 @@
 # 7. Cronograma por fases y entregables
 
+> ⚠️ **Superado operativamente desde el 16 de agosto de 2026.** El plan de §7.2 asumía cinco
+> fases secuenciales; el trabajo real se organizó en 22 fases técnicas concentradas en H1.
+> El cronograma vigente, con clasificación MUST/SHOULD/OPTIONAL/CUT y dependencias, está en
+> **[docs/10 — Cronograma rebalanceado](10_cronograma_rebalanceado.md)**. Este documento se
+> conserva como registro fechado del plan original: la lista de entregables (§7.4) y la de
+> recortes preacordados (§7.3) siguen vigentes.
+
 ## 7.1 Marco temporal
 
 Inicio: 13 de agosto de 2026. Entrega: septiembre de 2026 (fecha exacta pendiente de confirmación por el autor; el plan asume disponibilidad de la memoria completa el **18 de septiembre** y una semana final de margen). Son **~6 semanas**: el cronograma es agresivo por necesidad y la escritura de la memoria es **transversal desde la semana 1**, no una fase final.
