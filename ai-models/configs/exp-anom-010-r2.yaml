@@ -1,0 +1,172 @@
+# Config declarativa del experimento E11/R2 (F22) — RÉPLICA con cobertura EFECTIVA.
+# CONGELADA ANTES DE EJECUTAR: este fichero se commitea en su propio commit, previo al
+# commit que trae resultados (la marca de tiempo de Git es la prueba de anterioridad).
+# Fuente de resultados: experiments/e12_results.json (runner e11_replica.py --benchmark v3).
+#
+# REGLA DE ESTA FASE: F22 cierra la exploración de H1. No se introducen arquitecturas
+# nuevas, ni familias de modelos nuevas, ni TCN/Transformer, ni features nuevas, ni tuning
+# adicional del AE. Lo ÚNICO que cambia respecto a EXP-ANOM-010 son los datos de
+# entrenamiento del brazo candidato.
+
+experiment:
+  id: EXP-ANOM-010-R2
+  title: Réplica de la réplica — AE denso fs1 con cobertura EFECTIVA verificada en features
+  replicates: EXP-ANOM-010 (F21), sin cambiar arquitectura, protocolo ni criterios numéricos
+  protocol: ADR-0011 + Adenda XAI v1 (ADR-0033)
+  study_type: exploratory   # NO confirmatorio: el pre-registro sigue sin congelar (regla F10)
+  validity: entorno emulado/sintético (obd-lab); SIN validez externa hasta HCRL + ARM64/RPi5
+
+background: >
+  EXP-ANOM-010 refutó HX-ML-4, pero su informe de causa demostró que la refutación NO era
+  del modelo: la expansión v2 no aportó ni una sola ventana con nivel positivo de LTFT
+  (positive_level_share = 0.0000), de modo que la cobertura que se creía añadida no se
+  añadió. El fallo se clasificó como `dataset coverage failure`, variante nueva
+  «cobertura declarada ≠ cobertura efectiva». La pregunta original quedó por tanto SIN
+  responder, no respondida en negativo. F22 la responde con un banco cuyo criterio de
+  cobertura se define y se verifica en el espacio de features que el modelo consume.
+
+question: >
+  ¿El FPR del AE denso fs1 se debe a cobertura de normalidad EFECTIVA insuficiente, o a
+  una limitación del detector (representación/canal)? Es la única pregunta de F22.
+
+hypothesis:
+  id: HX-ML-4-R2
+  statement: >
+    Si el techo de la serie EXP-ANOM-006…009 era cobertura de normalidad, entonces el mismo
+    AE denso fs1 —misma arquitectura, mismos hiperparámetros, mismo protocolo de umbral—
+    entrenado con el banco v3 (cobertura efectiva verificada: positive_level_share ≥ 0.03 y
+    negative_level_share ≥ 0.03 sobre las ventanas de train) reproduce el comportamiento del
+    brazo control de F18 sobre el test histórico INTACTO: FPR ≈ 0.02 y F1 ≈ 0.73.
+  falsifiable_by: >
+    Si con cobertura efectiva verificada el FPR NO cae de forma defendible, la hipótesis de
+    cobertura queda refutada CON criterio limpio y el techo es de representación. Esta vez
+    la refutación sí sería informativa, porque el antecedente (cobertura efectiva) está
+    medido y no supuesto. La hipótesis no se reformula tras ver resultados.
+
+dataset:
+  benchmark: synthetic-benchmark-v3 (CONGELADO)
+  freeze_manifest: ai-models/configs/benchmark-v3-freeze.json
+  benchmark_sha256: 294b4f30e85ada4a8d35237b53af26b881d1ee75700b4b5516dd96a8c2cf48ec
+  train_v3: train_v11 (22 sesiones, 9.75 h) + expansion_v3 (23 sesiones, 34.5 h) = 45 sesiones normales
+  test: test_historico (8 sesiones, 4.0 h) — NO se toca, NO se regenera, NO se filtra
+  test_shift_note: >
+    el distribution shift documentado en AUDIT-DATA-001 se conserva a propósito, igual que
+    en F21: corregirlo ahora convertiría la réplica en una comparación amañada
+  representation: fs1 (42 features) por el camino wide canónico, ventana 60 s / stride 30 s
+  anti_leakage: split por sesión; el escalador se ajusta SOLO con train; test jamás interviene
+
+# ------------------------------------------------- criterio de cobertura, verificado
+coverage_criterion:                  # declarado ANTES de generar el banco (suite_v3_coverage.yaml)
+  measured_on: ventanas de train (el espacio que consume el modelo), no sesiones
+  feature: LONG_FUEL_TRIM_1_mean
+  instrument: ai_models.audit.coverage.ltft_level_coverage (el MISMO que usa el runner)
+  positive_level_share_min: 0.03
+  negative_level_share_min: 0.03
+  enforcement: >
+    e12_coverage_v3.py aborta y NO emite manifiesto si no se cumple; el runner de la
+    réplica vuelve a medirlo sobre el train que va a usar y aborta si no se cumple.
+  measured_at_build: {positive_level_share: 0.0496, negative_level_share: 0.0858}
+  v2_para_comparar: {positive_level_share: 0.0000, negative_level_share: 0.0000}
+
+arms:
+  - name: lof_frozen
+    change: NINGUNO — arms-freeze-v1 (fs1, train v1.0, umbral 0.163197). Control externo.
+    role: control de integridad del pipeline y referencia de comparación
+  - name: ae_v11
+    change: NINGUNO respecto a F17/F18/F21 — AE denso fs1 (AE-S) entrenado con train v1.1
+    role: línea base interna; aísla el efecto de la cobertura
+  - name: ae_v3
+    change: SOLO los datos de entrenamiento (train v1.1 + expansión v3). Arquitectura,
+      hiperparámetros, escalador, ventana y protocolo de umbral IDÉNTICOS a ae_v11 y a ae_v2.
+    role: candidato de la réplica
+  - name: lof_v3
+    change: LOF re-entrenado con el banco v3 (informativo)
+    role: comprobar si la cobertura efectiva ayuda también al detector clásico; NO candidato
+
+training:
+  data: solo normalidad
+  scaler: standard, ajustado solo con el train del brazo
+  seeds: {arms: [42, 43, 44], reservadas: intactas (901-925, 11000-20036, 30000-30079, 55000, 111000+)}
+  note: semillas de datos 542-564 (bloque exploratorio), gastadas y congeladas en el freeze
+
+threshold:
+  method: cuantil (1-FPR) sobre los scores del train del propio brazo (ADR-0011)
+  target_fpr: 0.01
+  partition: train
+  test_nunca: true
+
+metrics:
+  core: [precision, recall, f1, pr_auc, roc_auc, fp_rate_normal, fn_rate]
+  breakdowns: [FPR por escenario normal y por perfil, recall por fallo, recall por duración]
+  temporal: [detection_delay, score_persistence, false_alarm_duration]
+  aggregation: mediana sobre las 3 semillas; se reportan además mínimo y máximo
+
+# ---------------------------------------------------------------- criterios A PRIORI
+# IDÉNTICOS a exp-anom-010.yaml. No se relajan ni se endurecen: si cambiaran, la
+# comparación con F21 dejaría de ser una réplica.
+decision_criteria:
+  D1_ae_v3:
+    PROMOTE_CANDIDATE:
+      - mediana(fp_rate_normal) <= 0.03
+      - todas las semillas con fp_rate_normal <= 0.05
+      - mediana(f1) >= 0.70
+      - mediana(f1) > 0.6448       # LOF congelado (F18, mismo test)
+    PARTIAL:
+      - mediana(fp_rate_normal) <= 0.05 y mediana(f1) >= 0.65, sin cumplir todo lo anterior
+    REJECT:
+      - mediana(fp_rate_normal) > 0.05 o mediana(f1) < 0.6448
+  D2_representacion: embeddings — PROMOTE TO EXP-PAT / REJECT / NEEDS MORE EVIDENCE
+  D3_xai: solo si D1 = PROMOTE_CANDIDATE (AR@K vs azar sobre el brazo candidato)
+
+predictions:                       # falsables, declaradas ANTES de ejecutar
+  P1: fp_rate_normal(ae_v3) < fp_rate_normal(ae_v11)
+  P2: FPR de perfil highway del brazo ae_v3 <= 0.10       # el brazo control de F18 dio 0.0847
+  P3: >
+    PREDICCIÓN NEGATIVA — el recall de joint_slow_drift y load_coolant_decouple sigue
+    < 0.10 con el banco v3. La cobertura NO arregla las anomalías lentas/relacionales.
+    Se ha cumplido en F20 y en F21; si fallara ahora, la lectura de la serie cambia y se dice.
+  P4: lof_frozen reproduce EXACTAMENTE F18 (f1 0.6448, fp_rate_normal 0.0345, umbral 0.163197)
+
+# ------------------------------------------ estado exploratorio de H1 (cierre de línea)
+# Regla declarada A PRIORI. Delta = reducción RELATIVA de la mediana de FPR del brazo
+# candidato respecto a ae_v11: (FPR(ae_v11) - FPR(ae_v3)) / FPR(ae_v11).
+h1_exploratory_status:
+  SUPPORTED: >
+    D1 = PROMOTE_CANDIDATE. El FPR se debía a cobertura efectiva insuficiente; con la
+    cobertura verificada el AE alcanza el criterio de adopción exploratoria.
+  PARTIALLY_SUPPORTED: >
+    D1 != PROMOTE_CANDIDATE pero Delta >= 0.50 y mediana(f1) >= 0.65. La cobertura explica
+    una parte sustancial del FPR, pero no toda: coexisten causa de datos y de representación.
+  NOT_SUPPORTED: >
+    Delta < 0.25 con el criterio de cobertura CUMPLIDO. La cobertura efectiva no era la
+    causa: el techo es del detector/representación.
+  INCONCLUSIVE: >
+    cualquier otro caso — 0.25 <= Delta < 0.50; o P4 falla (deriva de pipeline); o el
+    criterio de cobertura no se cumple; o la categoría de D1 no es la misma en las 3 semillas.
+  note: >
+    Es un estado EXPLORATORIO sobre la pregunta de F22. NO es el resultado confirmatorio de
+    la hipótesis H1 del TFM, que exige el freeze del pre-registro y una serie confirmatoria
+    posterior. Ambas cosas no deben confundirse en la memoria.
+
+freeze_after_this_phase:
+  D1: se congela con la evidencia existente (EXP-ANOM-006/007/008/009/010 + esta réplica)
+  D2: se congela con la evidencia existente (silhouette < referencia estática 0.202 en 4 medidas)
+  D3: se congela; no evaluado por no haberse dado nunca la condición D1 = PROMOTE_CANDIDATE
+  line: >
+    la línea exploratoria H1 queda CONGELADA tras F22, cualquiera que sea el resultado,
+    hasta disponer de datos reales (HCRL) o hasta la fase confirmatoria posterior al
+    freeze del pre-registro.
+
+stop_rule: >
+  (a) Si P4 falla, el pipeline ha cambiado: se detiene el experimento y se emite informe de
+  deriva; NO se interpretan los brazos. (b) Si D1 = REJECT, NO se abre EXP-ANOM-011, ni
+  benchmark v4, ni TCN, ni Transformer, ni otra familia de detector: se emite informe de
+  causa y el siguiente trabajo científico CAMBIA de hipótesis.
+
+constraints:
+  - no se modifica ninguna inyección de anomalía ni su intensidad
+  - no se regeneran datos para mejorar métricas; el banco está congelado por hash
+  - LOF congelado no se re-entrena ni se reajusta (arms-freeze-v1)
+  - no se añaden arquitecturas, familias de modelos, features ni tuning del AE
+  - nada de esto es confirmatorio: el pre-registro sigue sin congelar
+  - sin seeds reservadas

@@ -33,12 +33,60 @@ from mecanico_contracts.session_io import read_session_header
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
+#: Campos de la cabecera que definen el EXPERIMENTO (frente a los que definen el formato).
+#: Un cambio aditivo de contrato (ADR: los contratos solo crecen) altera los bytes de la
+#: cabecera sin alterar ninguno de estos campos ni una sola lectura.
+SEMANTIC_SCENARIO_FIELDS = (
+    "scenario_id",
+    "category",
+    "driving_profile",
+    "fault",
+    "fault_params",
+    "fault_start_s",
+    "fault_end_s",
+    "ambient_temp_c",
+    "duration_s",
+    "sample_rate_hz",
+    "seed",
+    "anomaly_seed",
+)
+
+
 def file_sha256(path: Path) -> str:
     """SHA-256 del contenido íntegro del fichero (streaming, sin cargarlo en memoria)."""
     digest = hashlib.sha256()
     with path.open("rb") as fh:
         for chunk in iter(lambda: fh.read(1 << 20), b""):
             digest.update(chunk)
+    return digest.hexdigest()
+
+
+def semantic_sha256(path: Path) -> str:
+    """SHA-256 **invariante a cambios aditivos de la cabecera** de sesión.
+
+    Motivación (medida, no hipotética): al reconstruir el banco v2 desde cero en F22, las
+    8 sesiones del test histórico dieron hash distinto con un delta CONSTANTE de +20 bytes
+    — exactamente ``,"anomaly_seed":null``, el campo que ADR-0034 añadió al contrato. El
+    cuerpo de lecturas era idéntico byte a byte. Es decir: el ancla de reproducibilidad se
+    rompía por un cambio de contrato **legítimo y aditivo**, no por un cambio de datos.
+
+    Este hash cubre (1) el flujo de lecturas íntegro y (2) la proyección canónica de los
+    campos del escenario que definen el experimento. Garantía declarada con precisión:
+    es invariante a campos nuevos en la CABECERA; **no** lo es a cambios en el esquema de
+    las LECTURAS, que sí serían un cambio de datos y exigirían una versión nueva de banco.
+    """
+    raw = path.read_bytes()
+    head, _, body = raw.partition(b"\n")
+    header = json.loads(head)
+    scenario = header.get("scenario") or {}
+    canonical = {
+        "scenario": {f: scenario.get(f) for f in SEMANTIC_SCENARIO_FIELDS},
+        "n_readings": header.get("n_readings"),
+        "pids": header.get("pids"),
+    }
+    digest = hashlib.sha256()
+    digest.update(json.dumps(canonical, sort_keys=True, ensure_ascii=False).encode("utf-8"))
+    digest.update(body)
     return digest.hexdigest()
 
 
@@ -58,6 +106,7 @@ def session_entry(path: Path) -> dict[str, Any]:
         "file": path.name,
         "session_id": header.session_id,
         "sha256": file_sha256(path),
+        "semantic_sha256": semantic_sha256(path),
         "bytes": path.stat().st_size,
         "n_readings": header.n_readings,
         "scenario_id": scenario.scenario_id if scenario else None,
@@ -78,9 +127,12 @@ def partition_manifest(name: str, directory: Path) -> dict[str, Any]:
         raise FileNotFoundError(msg)
     sessions = [session_entry(p) for p in files]
     aggregate = hashlib.sha256()
+    aggregate_semantic = hashlib.sha256()
     for entry in sessions:
         aggregate.update(entry["file"].encode("utf-8"))
         aggregate.update(entry["sha256"].encode("utf-8"))
+        aggregate_semantic.update(entry["file"].encode("utf-8"))
+        aggregate_semantic.update(entry["semantic_sha256"].encode("utf-8"))
     return {
         "name": name,
         "path": _repo_path(directory),
@@ -89,6 +141,7 @@ def partition_manifest(name: str, directory: Path) -> dict[str, Any]:
         "seeds": sorted(s["seed"] for s in sessions if s["seed"] is not None),
         "faults": sorted({s["fault"] for s in sessions if s["fault"]}),
         "aggregate_sha256": aggregate.hexdigest(),
+        "aggregate_semantic_sha256": aggregate_semantic.hexdigest(),
         "sessions": sessions,
     }
 
@@ -115,9 +168,25 @@ def freeze(version: str, parts: dict[str, Path], note: str = "") -> dict[str, An
 
 
 def verify(manifest_path: Path) -> tuple[bool, list[str]]:
-    """Recomprueba el manifiesto contra los datos en disco. Devuelve (ok, incidencias)."""
+    """Recomprueba el manifiesto contra los datos en disco. Devuelve (ok, incidencias).
+
+    Dos niveles de coincidencia, ambos explícitos en la salida:
+
+    ``EXACT``
+        el fichero es idéntico byte a byte al congelado;
+    ``SEMANTIC``
+        las lecturas y los campos de escenario coinciden, pero los bytes de la CABECERA
+        han cambiado por un crecimiento aditivo del contrato. No es una incidencia: es el
+        caso que rompía el ancla en F22 (ADR-0034 añadió ``anomaly_seed``, +20 bytes) sin
+        que ninguna medición cambiara.
+
+    Solo el desacuerdo semántico invalida el banco. Los manifiestos anteriores a F22 no
+    llevan ``semantic_sha256``; para ellos la deriva de cabecera no puede clasificarse y
+    se reporta como incidencia, indicando cómo re-emitir el manifiesto.
+    """
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     problems: list[str] = []
+    drifted: list[str] = []
     for part in manifest["partitions"]:
         directory = REPO_ROOT / part["path"]
         if not directory.is_dir():
@@ -129,11 +198,25 @@ def verify(manifest_path: Path) -> tuple[bool, list[str]]:
             if path is None:
                 problems.append(f"{part['name']}: falta {entry['file']}")
                 continue
-            actual = file_sha256(path)
-            if actual != entry["sha256"]:
-                problems.append(f"{part['name']}: hash distinto en {entry['file']}")
+            if file_sha256(path) == entry["sha256"]:
+                continue
+            expected_semantic = entry.get("semantic_sha256")
+            if expected_semantic is None:
+                problems.append(
+                    f"{part['name']}: hash distinto en {entry['file']} "
+                    "(manifiesto sin semantic_sha256: re-emitir el freeze para clasificar)"
+                )
+            elif semantic_sha256(path) == expected_semantic:
+                drifted.append(f"{part['name']}/{entry['file']}")
+            else:
+                problems.append(f"{part['name']}: DATOS distintos en {entry['file']}")
         for extra in sorted(on_disk):
             problems.append(f"{part['name']}: sesión NO declarada en el freeze: {extra}")
+    if drifted:
+        print(
+            f"  · {len(drifted)} sesión(es) con deriva ADITIVA de cabecera "
+            "(lecturas y escenario intactos): coincidencia SEMANTIC"
+        )
     return (not problems), problems
 
 

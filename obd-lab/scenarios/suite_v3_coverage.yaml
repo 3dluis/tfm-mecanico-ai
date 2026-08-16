@@ -1,0 +1,104 @@
+# Suite de COBERTURA EFECTIVA — Synthetic Benchmark v3 (F22).
+#
+# NO sustituye a v1 ni a v2: los splits validation/test de v1 quedan INTACTOS y el banco v2
+# se conserva congelado como evidencia del resultado negativo de EXP-ANOM-010.
+#
+# ------------------------------------------------------------------------------------
+# POR QUÉ EXISTE ESTA SUITE (resultado negativo que la origina)
+# ------------------------------------------------------------------------------------
+# EXP-ANOM-010 (F21) refutó HX-ML-4 y midió la causa: la expansión v2 declaraba cerrar el
+# hueco `LTFT_quantization_crossing` y **no aportó ni una sola ventana** con nivel positivo
+# de LTFT (positive_level_share = 0.0000 en las 12 sesiones). El error fue de instrumento,
+# no de intención:
+#
+#   F20 contó cobertura con un contador de SESIÓN y binario  → «6 de 12 cruzan»
+#   el modelo consume VENTANAS de features                   → 0 de 12 emiten nivel +
+#
+# La discrepancia se explica por el cuantizador real: `int(v · 128/100)` **trunca hacia
+# cero** (obd_lab/emulator/encoding.py), así que el nivel emitido solo cambia cuando el
+# paseo supera un cuanto COMPLETO (±0.78125 %), no medio como asumió F20.
+#
+# ------------------------------------------------------------------------------------
+# DIMENSIONADO — derivado de la sonda Monte Carlo del MECANISMO (F21 §3), no de test
+# ------------------------------------------------------------------------------------
+# Sonda con el cuantizador REAL (4 000 paseos/duración, semilla exploratoria 572):
+#
+#   duración   P(sesión con nivel + sostenido)   share mediano de ventanas si aparece
+#   -------------------------------------------------------------------------------
+#   1 800 s    0.0512                            0.1667
+#   2 400 s    0.0885                            0.1500
+#   3 600 s    0.1685                            0.1833
+#   5 400 s    0.2595                            0.2222
+#
+# ⇒ la duración es la variable de control, no el número de sesiones cortas.
+#
+# Con 23 sesiones de 5 400 s:
+#   · esperadas con nivel positivo    = 23 · 0.2595 ≈ 5.97
+#   · P(ninguna con nivel positivo)   = (1 - 0.2595)^23 ≈ 0.0009   (v2: 0.53 con su mezcla)
+#   · share esperado sobre train v3   ≈ (0.2595 · 0.2222 · W_exp) / (1148 + W_exp) ≈ 0.045
+#     con W_exp ≈ 23 · 179 ventanas, frente al criterio declarado de 0.03
+#
+# El criterio NO se cumple por construcción: se VERIFICA en el espacio de features con
+# `ai_models.audit.coverage.ltft_level_coverage`, el mismo instrumento que usa el runner de
+# la réplica, y el banco se rechaza si no lo alcanza (e12_coverage_v3.py aborta).
+#
+# ------------------------------------------------------------------------------------
+# COMPOSICIÓN — mezcla de perfiles HEREDADA de v2, no elegida mirando el test
+# ------------------------------------------------------------------------------------
+# El paseo del LTFT es independiente del perfil de conducción (obd_lab/signals.py), de modo
+# que el perfil NO es la palanca del criterio: la duración lo es. Para no introducir un
+# confound, las proporciones de perfil replican las de la expansión v2
+# (urban 25 % · highway 58 % · cold_start 17 %) y lo único que cambia es que TODAS las
+# sesiones duran 5 400 s, que es lo que el mecanismo exige.
+#
+# Semillas: bloque EXPLORATORIO 542-564 (Protocolo ML v1: 401-599). Ninguna reservada
+# (901-925, 11000-20036, 30000-30079, 55000, 111000+ intactas) y ninguna reutilizada
+# (v2 gastó 530-541; la sonda del mecanismo gastó 572).
+# Los escenarios NORMALES no llevan anomaly_seed: no hay inyección que sembrar.
+
+benchmark:
+  id: synthetic-benchmark-v3
+  supersedes: null            # v3 NO reemplaza a v1 ni a v2: los amplía
+  extends: synthetic-benchmark-v1 (suite_v1.yaml + suite_v1_train_ext.yaml)
+  replaces_expansion_of: synthetic-benchmark-v2 (suite_v2_coverage.yaml, cobertura inefectiva)
+  purpose: >
+    Cobertura de normalidad EFECTIVA en el espacio de features: que el entrenamiento
+    contenga ventanas con nivel de LTFT en un cuanto sostenido, positivo y negativo, que
+    hoy solo aparecen en evaluación. Es la condición que v2 declaró y no cumplió.
+  coverage_criterion:
+    measured_on: ventanas de train (fs1, w=60 s, stride=30 s) — el espacio que consume el modelo
+    feature: LONG_FUEL_TRIM_1_mean
+    positive_level_share_min: 0.03
+    negative_level_share_min: 0.03
+    threshold: 0.390625        # medio cuanto J1979; ver ai_models.audit.coverage
+    enforced_by: ai-models/experiments/e12_coverage_v3.py (aborta si no se cumple)
+  generator_rng: separado (ADR-0034) — los escenarios con fallo declaran anomaly_seed
+
+# Solo se amplía TRAIN: la cobertura que falta es la de normalidad de entrenamiento.
+coverage_extension:
+  # --- urbano largo (6) ---
+  - {scenario_id: c3-urban-long-a, description: "Normal urbano largo A (cobertura efectiva de nivel LTFT)", category: normal, driving_profile: urban, duration_s: 5400, seed: 542, coverage_target: "LTFT_effective_level"}
+  - {scenario_id: c3-urban-long-b, description: "Normal urbano largo B", category: normal, driving_profile: urban, duration_s: 5400, seed: 543, coverage_target: "LTFT_effective_level"}
+  - {scenario_id: c3-urban-long-c, description: "Normal urbano largo C", category: normal, driving_profile: urban, duration_s: 5400, seed: 544, coverage_target: "LTFT_effective_level"}
+  - {scenario_id: c3-urban-long-d, description: "Normal urbano largo D", category: normal, driving_profile: urban, duration_s: 5400, seed: 545, coverage_target: "LTFT_effective_level"}
+  - {scenario_id: c3-urban-long-e, description: "Normal urbano largo E", category: normal, driving_profile: urban, duration_s: 5400, seed: 546, coverage_target: "LTFT_effective_level"}
+  - {scenario_id: c3-urban-long-f, description: "Normal urbano largo F", category: normal, driving_profile: urban, duration_s: 5400, seed: 547, coverage_target: "LTFT_effective_level"}
+  # --- autovía largo (13): mismo peso relativo que en v2 ---
+  - {scenario_id: c3-highway-long-a, description: "Normal autovía larga A", category: normal, driving_profile: highway, duration_s: 5400, seed: 548, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-b, description: "Normal autovía larga B", category: normal, driving_profile: highway, duration_s: 5400, seed: 549, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-c, description: "Normal autovía larga C", category: normal, driving_profile: highway, duration_s: 5400, seed: 550, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-d, description: "Normal autovía larga D", category: normal, driving_profile: highway, duration_s: 5400, seed: 551, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-e, description: "Normal autovía larga E", category: normal, driving_profile: highway, duration_s: 5400, seed: 552, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-f, description: "Normal autovía larga F", category: normal, driving_profile: highway, duration_s: 5400, seed: 553, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-g, description: "Normal autovía larga G", category: normal, driving_profile: highway, duration_s: 5400, seed: 554, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-h, description: "Normal autovía larga H", category: normal, driving_profile: highway, duration_s: 5400, seed: 555, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-i, description: "Normal autovía larga I", category: normal, driving_profile: highway, duration_s: 5400, seed: 556, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-j, description: "Normal autovía larga J", category: normal, driving_profile: highway, duration_s: 5400, seed: 557, coverage_target: "LTFT_effective_level,cruise"}
+  - {scenario_id: c3-highway-long-k, description: "Normal autovía larga K", category: normal, driving_profile: highway, duration_s: 5400, seed: 558, coverage_target: "LTFT_effective_level,high_load_cruise"}
+  - {scenario_id: c3-highway-long-l, description: "Normal autovía larga L", category: normal, driving_profile: highway, duration_s: 5400, seed: 559, coverage_target: "LTFT_effective_level,high_load_cruise"}
+  - {scenario_id: c3-highway-long-m, description: "Normal autovía larga M", category: normal, driving_profile: highway, duration_s: 5400, seed: 560, coverage_target: "LTFT_effective_level,high_load_cruise"}
+  # --- arranque frío largo (4): misma naturaleza que en v2, con la duración que exige el mecanismo ---
+  - {scenario_id: c3-warmup-long-a, description: "Arranque frío y transición térmica larga A", category: normal, driving_profile: cold_start, duration_s: 5400, seed: 561, ambient_temp_c: 6.0,  coverage_target: "LTFT_effective_level,warmup_cold_ECT"}
+  - {scenario_id: c3-warmup-long-b, description: "Arranque frío y transición térmica larga B", category: normal, driving_profile: cold_start, duration_s: 5400, seed: 562, ambient_temp_c: 12.0, coverage_target: "LTFT_effective_level,warmup_cold_ECT"}
+  - {scenario_id: c3-warmup-long-c, description: "Arranque frío y transición térmica larga C", category: normal, driving_profile: cold_start, duration_s: 5400, seed: 563, ambient_temp_c: 2.0,  coverage_target: "LTFT_effective_level,warmup_cold_ECT"}
+  - {scenario_id: c3-warmup-long-d, description: "Arranque frío y transición térmica larga D", category: normal, driving_profile: cold_start, duration_s: 5400, seed: 564, ambient_temp_c: 16.0, coverage_target: "LTFT_effective_level,warmup_cold_ECT"}

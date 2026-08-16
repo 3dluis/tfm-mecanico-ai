@@ -1,0 +1,194 @@
+{
+  "anomaly_catalog_version": "catalog-v1 (8 fallos; sin cambios de inyección en F22)",
+  "benchmark_version": "synthetic-benchmark-v3",
+  "config_hash": "4287bb82dba90b5b744e46aa0d4abc9fddfb8071a90a1bf4a63c96ac2c01c480",
+  "coverage_criterion": {
+    "criterion": {
+      "declared": "a priori, antes de generar el banco (config exp-anom-010-r2.yaml)",
+      "negative_level_share>=": 0.03,
+      "positive_level_share>=": 0.03
+    },
+    "measured": {
+      "n_windows": 5265.0,
+      "negative_level_share": 0.0858,
+      "positive_level_share": 0.0496
+    },
+    "negative_ok": true,
+    "passes": true,
+    "positive_ok": true
+  },
+  "declared_coverage_session_counter": {
+    "gaps": [
+      "LTFT_quantization_crossing",
+      "LTFT_nonzero_level"
+    ],
+    "note": "instrumento de F19/F20 (sesión, binario). Se reporta SOLO para dejar constancia de la discrepancia con la cobertura efectiva: es el instrumento que produjo el falso cierre de hueco en v2 (informe F21 §3)."
+  },
+  "effective_coverage": {
+    "expansion_v2_para_comparar": {
+      "max": 0.0,
+      "min": -0.2734,
+      "n_windows": 1428.0,
+      "negative_level_share": 0.0,
+      "p50": 0.0,
+      "positive_level_share": 0.0
+    },
+    "expansion_v3": {
+      "max": 1.5625,
+      "min": -1.5625,
+      "n_windows": 4117.0,
+      "negative_level_share": 0.1069,
+      "p50": 0.0,
+      "positive_level_share": 0.0634
+    },
+    "train_v11": {
+      "max": 0.0,
+      "min": -0.7812,
+      "n_windows": 1148.0,
+      "negative_level_share": 0.0105,
+      "p50": 0.0,
+      "positive_level_share": 0.0
+    },
+    "train_v3_total": {
+      "max": 1.5625,
+      "min": -1.5625,
+      "n_windows": 5265.0,
+      "negative_level_share": 0.0858,
+      "p50": 0.0,
+      "positive_level_share": 0.0496
+    }
+  },
+  "expansion": {
+    "coverage_targets": {
+      "c3-highway-long-a": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-b": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-c": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-d": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-e": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-f": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-g": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-h": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-i": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-j": [
+        "LTFT_effective_level",
+        "cruise"
+      ],
+      "c3-highway-long-k": [
+        "LTFT_effective_level",
+        "high_load_cruise"
+      ],
+      "c3-highway-long-l": [
+        "LTFT_effective_level",
+        "high_load_cruise"
+      ],
+      "c3-highway-long-m": [
+        "LTFT_effective_level",
+        "high_load_cruise"
+      ],
+      "c3-urban-long-a": [
+        "LTFT_effective_level"
+      ],
+      "c3-urban-long-b": [
+        "LTFT_effective_level"
+      ],
+      "c3-urban-long-c": [
+        "LTFT_effective_level"
+      ],
+      "c3-urban-long-d": [
+        "LTFT_effective_level"
+      ],
+      "c3-urban-long-e": [
+        "LTFT_effective_level"
+      ],
+      "c3-urban-long-f": [
+        "LTFT_effective_level"
+      ],
+      "c3-warmup-long-a": [
+        "LTFT_effective_level",
+        "warmup_cold_ECT"
+      ],
+      "c3-warmup-long-b": [
+        "LTFT_effective_level",
+        "warmup_cold_ECT"
+      ],
+      "c3-warmup-long-c": [
+        "LTFT_effective_level",
+        "warmup_cold_ECT"
+      ],
+      "c3-warmup-long-d": [
+        "LTFT_effective_level",
+        "warmup_cold_ECT"
+      ]
+    },
+    "criterion_declared_in": "obd-lab/scenarios/suite_v3_coverage.yaml",
+    "dataset_hash": "c96f35dfc66195d232e254d9df25bbef9234e94c6b7295d7e1a25fb38eec6a86",
+    "n_sessions": 23,
+    "provenance": "SIMULATED (obd-lab; determinista por semilla)",
+    "seeds": [
+      542,
+      543,
+      544,
+      545,
+      546,
+      547,
+      548,
+      549,
+      550,
+      551,
+      552,
+      553,
+      554,
+      555,
+      556,
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564
+    ],
+    "total_duration_s": 124200
+  },
+  "extends": "synthetic-benchmark-v1 (suite_v1.yaml + suite_v1_train_ext.yaml)",
+  "generator_version": "obd-lab/generate.py @ ADR-0034 (RNG separado, modo heredado disponible)",
+  "pid_schema": "CANONICAL_PIDS (12) · features fs1 (42) — sin cambios respecto a v1/v2",
+  "replaces_expansion_of": "synthetic-benchmark-v2 (cobertura declarada pero no efectiva)",
+  "sampling": {
+    "sample_rate_hz": 1.0,
+    "stride": 30,
+    "window": 60
+  },
+  "supersedes": null,
+  "total_runtime_s": 16.8,
+  "v1_v2_untouched": true,
+  "validity_note": "EXPLORATORIO; entorno emulado/sintético. El test histórico NO se modifica: el distribution shift documentado en AUDIT-DATA-001 se conserva como evidencia."
+}

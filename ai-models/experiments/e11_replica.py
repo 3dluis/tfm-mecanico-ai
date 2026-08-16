@@ -17,7 +17,17 @@ Umbral SIEMPRE por cuantil (1-FPR) sobre el train del propio brazo (ADR-0011); e
 histórico jamás interviene en el ajuste. Sin seeds reservadas. El banco está congelado por
 hash: el runner aborta si los datos no coinciden con el freeze.
 
-Uso: python experiments/e11_replica.py --sessions data/sessions [--seed 42] [--fpr 0.01]
+**F22 — réplica sobre el banco v3 (EXP-ANOM-010-R2).** El runner se parametriza por banco
+(``--benchmark v2|v3``) en lugar de duplicarse: un fork sería indistinguible de un cambio
+silencioso de protocolo, mientras que aquí «no cambia nada más» se comprueba por diff. Con
+``v3`` el brazo candidato pasa a ser ``ae_v3`` y se añade una verificación previa: el train
+debe cumplir el criterio de cobertura EFECTIVA declarado a priori, medido en el espacio de
+features con el mismo instrumento que construyó el banco. Esa comprobación es la que faltó
+en F20/F21, donde un banco congelado por hash no contenía la cobertura que declaraba.
+
+Uso:
+    python experiments/e11_replica.py --sessions data/sessions [--benchmark v2|v3]
+                                      [--seed 42] [--fpr 0.01]
 """
 
 import argparse
@@ -48,6 +58,11 @@ from sklearn.preprocessing import StandardScaler
 
 from ai_models.anomaly.autoencoder import AutoencoderDetector
 from ai_models.anomaly.baselines import make_baselines
+from ai_models.audit.coverage import (
+    LTFT_FEATURE,
+    check_coverage_criterion,
+    ltft_level_coverage,
+)
 from ai_models.audit.detectability import nearest_neighbour_ratio
 from ai_models.data.dataset import WindowDataset
 from ai_models.evaluation.protocol import threshold_from_normal
@@ -61,10 +76,34 @@ sys.path.insert(0, str(REPO_ROOT / "tools"))
 from freeze_benchmark import verify  # noqa: E402
 
 RUNS_FILE = Path(__file__).parent / "runs.jsonl"
-RESULTS_JSON = Path(__file__).parent / "e11_results.json"
-FREEZE = REPO_ROOT / "ai-models" / "configs" / "benchmark-v2-freeze.json"
 V11_ROOT = REPO_ROOT / "data" / "sessions_v11"
 V2_TRAIN = REPO_ROOT / "data" / "sessions_v2" / "train"
+
+#: Bancos que puede replicar este runner. El código es el MISMO para los dos: lo único que
+#: cambia son los datos de entrenamiento del brazo candidato, que es exactamente lo que la
+#: réplica exige. Mantener `v2` como valor por defecto preserva la reproducibilidad de los
+#: resultados publicados en F21 (`e11_results.json`) sin duplicar el runner —un fork sería
+#: indistinguible de un cambio silencioso de protocolo.
+BENCHMARKS: dict[str, dict[str, Any]] = {
+    "v2": {
+        "experiment": "EXP-ANOM-010",
+        "config": "ai-models/configs/exp-anom-010.yaml (congelada antes de ejecutar)",
+        "freeze": REPO_ROOT / "ai-models" / "configs" / "benchmark-v2-freeze.json",
+        "expansion_dir": V2_TRAIN,
+        "results": Path(__file__).parent / "e11_results.json",
+        "train_label": "v1.1 + expansión v2 (34)",
+        "coverage_criterion": None,  # v2 no declaró criterio de cobertura efectiva
+    },
+    "v3": {
+        "experiment": "EXP-ANOM-010-R2",
+        "config": "ai-models/configs/exp-anom-010-r2.yaml (congelada antes de ejecutar)",
+        "freeze": REPO_ROOT / "ai-models" / "configs" / "benchmark-v3-freeze.json",
+        "expansion_dir": REPO_ROOT / "data" / "sessions_v3" / "train",
+        "results": Path(__file__).parent / "e12_results.json",
+        "train_label": "v1.1 + expansión v3 (45)",
+        "coverage_criterion": {"positive": 0.03, "negative": 0.03},
+    },
+}
 #: Normalidad del brazo control de F18 (elegida DESPUÉS de diagnosticar test): aquí solo
 #: se usa como referencia de medición en el informe de causa, nunca para entrenar.
 CONTROL_DIR = REPO_ROOT / "data" / "sessions_qcontrol" / "train"
@@ -189,19 +228,14 @@ def cause_report(
         "interna de cada conjunto y NO es comparable entre conjuntos de tamaño distinto"
     )
 
-    ltft = FEATURE_NAMES.index("LONG_FUEL_TRIM_1_mean")
-    half_quantum = 0.390625
+    ltft = FEATURE_NAMES.index(LTFT_FEATURE)
     coverage_sets = dict(sets)
     coverage_sets["false_positives"] = fp_x
+    #: instrumento ÚNICO (ai_models.audit.coverage), el mismo que construye y valida el
+    #: banco v3: medir la misma magnitud con dos implementaciones fue la causa raíz del
+    #: falso cierre de hueco de F20 (informe F21 §3).
     report["ltft_mean_coverage"] = {
-        name: {
-            "min": round(float(arr[:, ltft].min()), 4),
-            "p50": round(float(np.median(arr[:, ltft])), 4),
-            "max": round(float(arr[:, ltft].max()), 4),
-            "positive_level_share": round(float((arr[:, ltft] >= half_quantum).mean()), 4),
-            "negative_level_share": round(float((arr[:, ltft] <= -half_quantum).mean()), 4),
-        }
-        for name, arr in coverage_sets.items()
+        name: ltft_level_coverage(arr, ltft) for name, arr in coverage_sets.items()
     }
     report["ltft_note"] = (
         "0.390625 % = medio cuanto J1979 del LTFT. `positive_level_share` es la fracción de "
@@ -258,9 +292,68 @@ def quantization_probe(
     return out
 
 
-def check_predictions(results: dict[str, Any]) -> dict[str, Any]:
-    """Contrasta P1-P4 y D1 EXACTAMENTE como se declararon en exp-anom-010.yaml."""
-    ae2 = results["arms"]["ae_v2"]["aggregate"]
+def h1_exploratory_status(
+    candidate: dict[str, Any],
+    baseline: dict[str, Any],
+    d1: str,
+    p4_holds: bool,
+    coverage_ok: bool,
+    seed_categories: set[str],
+) -> dict[str, Any]:
+    """Estado EXPLORATORIO de la línea H1, con la regla declarada a priori (F22).
+
+    Traduce el resultado numérico a una de las cuatro etiquetas fijadas en
+    ``exp-anom-010-r2.yaml`` §h1_exploratory_status. No sustituye al resultado
+    confirmatorio de la hipótesis H1 del TFM, que exige el freeze del pre-registro y una
+    serie posterior: son dos cosas distintas y el informe debe decirlo.
+    """
+    fpr_base = baseline["fp_rate_normal_median"]
+    fpr_cand = candidate["fp_rate_normal_median"]
+    delta = (fpr_base - fpr_cand) / fpr_base if fpr_base > 0 else 0.0
+    stable = len(seed_categories) == 1
+
+    if not p4_holds or not coverage_ok or not stable:
+        status = "INCONCLUSIVE"
+    elif d1 == "PROMOTE_CANDIDATE":
+        status = "SUPPORTED"
+    elif delta >= 0.50 and candidate["f1_median"] >= 0.65:
+        status = "PARTIALLY_SUPPORTED"
+    elif delta < 0.25:
+        status = "NOT_SUPPORTED"
+    else:
+        status = "INCONCLUSIVE"
+
+    return {
+        "status": status,
+        "relative_fpr_reduction": round(float(delta), 4),
+        "inputs": {
+            "fpr_median_baseline": fpr_base,
+            "fpr_median_candidate": fpr_cand,
+            "f1_median_candidate": candidate["f1_median"],
+            "D1": d1,
+            "P4_holds": p4_holds,
+            "coverage_criterion_met": coverage_ok,
+            "d1_category_stable_across_seeds": stable,
+        },
+        "scope": (
+            "EXPLORATORIO y referido a la pregunta de F22 (¿cobertura efectiva o límite del "
+            "detector?). NO es el resultado confirmatorio de la hipótesis H1 del TFM."
+        ),
+    }
+
+
+def _d1_category(fpr: float, f1: float, all_seeds_ok: bool) -> str:
+    """Criterio D1 declarado en la config congelada (idéntico en F21 y F22)."""
+    if fpr <= 0.03 and all_seeds_ok and f1 >= 0.70 and f1 > 0.6448:
+        return "PROMOTE_CANDIDATE"
+    if fpr > 0.05 or f1 < 0.6448:
+        return "REJECT"
+    return "PARTIAL" if (fpr <= 0.05 and f1 >= 0.65) else "REJECT"
+
+
+def check_predictions(results: dict[str, Any], candidate: str) -> dict[str, Any]:
+    """Contrasta P1-P4 y D1 EXACTAMENTE como se declararon en la config congelada."""
+    ae2 = results["arms"][candidate]["aggregate"]
     ae11 = results["arms"]["ae_v11"]["aggregate"]
     lof = results["arms"]["lof_frozen"]["test"]["point"]
 
@@ -268,7 +361,9 @@ def check_predictions(results: dict[str, Any]) -> dict[str, Any]:
         abs(lof["f1"] - F18_REFERENCE["lof_frozen"]["f1"]) < 1e-4
         and abs(lof["fp_rate_normal"] - F18_REFERENCE["lof_frozen"]["fp_rate_normal"]) < 1e-4
     )
-    slow = {f: results["arms"]["ae_v2"]["per_fault_recall_median"].get(f, 0.0) for f in SLOW_FAULTS}
+    slow = {
+        f: results["arms"][candidate]["per_fault_recall_median"].get(f, 0.0) for f in SLOW_FAULTS
+    }
     checks = {
         "P1_fpr_baja_respecto_a_v11": {
             "holds": ae2["fp_rate_normal_median"] < ae11["fp_rate_normal_median"],
@@ -293,17 +388,18 @@ def check_predictions(results: dict[str, Any]) -> dict[str, Any]:
 
     fpr_med, f1_med = ae2["fp_rate_normal_median"], ae2["f1_median"]
     all_seeds_ok = ae2["fp_rate_normal_max"] <= 0.05
-    promote = fpr_med <= 0.03 and all_seeds_ok and f1_med >= 0.70 and f1_med > 0.6448
-    partial = fpr_med <= 0.05 and f1_med >= 0.65
-    reject = fpr_med > 0.05 or f1_med < 0.6448
-    d1 = (
-        "PROMOTE_CANDIDATE"
-        if promote
-        else ("REJECT" if reject else ("PARTIAL" if partial else "REJECT"))
-    )
+    d1 = _d1_category(fpr_med, f1_med, all_seeds_ok)
+    #: la MISMA regla aplicada semilla a semilla: si la categoría cambia entre semillas, la
+    #: decisión no es estable y el estado de H1 se declara INCONCLUSIVE (regla a priori F22)
+    per_seed_categories = {
+        seed: _d1_category(
+            s["point"]["fp_rate_normal"], s["point"]["f1"], s["point"]["fp_rate_normal"] <= 0.05
+        )
+        for seed, s in results["arms"][candidate]["seeds"].items()
+    }
     return {
         "predictions": checks,
-        "D1_ae_v2": {
+        f"D1_{candidate}": {
             "decision": d1,
             "criteria_evaluated": {
                 "median_fpr<=0.03": fpr_med <= 0.03,
@@ -316,6 +412,7 @@ def check_predictions(results: dict[str, Any]) -> dict[str, Any]:
                 "max_fpr": ae2["fp_rate_normal_max"],
                 "median_f1": f1_med,
             },
+            "per_seed_category": per_seed_categories,
             "meaning": (
                 "PROMOTE_CANDIDATE = candidato a adopción, NO adopción: la adopción exige un "
                 "confirmatorio posterior al freeze del pre-registro"
@@ -324,29 +421,35 @@ def check_predictions(results: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def main() -> int:  # noqa: PLR0915
+def main() -> int:  # noqa: PLR0912, PLR0915
     parser = argparse.ArgumentParser()
     parser.add_argument("--sessions", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--fpr", type=float, default=0.01)
+    parser.add_argument("--benchmark", choices=sorted(BENCHMARKS), default="v2")
     args = parser.parse_args()
     t0 = time.perf_counter()
+    tag = args.benchmark
+    bench = BENCHMARKS[tag]
+    candidate, lof_arm = f"ae_{tag}", f"lof_{tag}"
+    freeze_path, results_json = bench["freeze"], bench["results"]
+    expansion_dir = bench["expansion_dir"]
     results: dict[str, Any] = {
-        "experiment": "EXP-ANOM-010",
+        "experiment": bench["experiment"],
         "study_type": "exploratory",
-        "config": "ai-models/configs/exp-anom-010.yaml (congelada antes de ejecutar)",
+        "config": bench["config"],
         "arms": {},
     }
 
     # ------------------------------------------------- fase 0: freeze + datasets
-    print("fase 0: verificando el freeze del banco v2…", flush=True)
-    ok, problems = verify(FREEZE)
+    print(f"fase 0: verificando el freeze del banco {tag}…", flush=True)
+    ok, problems = verify(freeze_path)
     if not ok:
         for p in problems[:10]:
             print(f"  ✗ {p}")
         print("ABORTADO: los datos no coinciden con el banco congelado")
         return 1
-    freeze_manifest = json.loads(FREEZE.read_text(encoding="utf-8"))
+    freeze_manifest = json.loads(freeze_path.read_text(encoding="utf-8"))
     results["benchmark"] = {
         "version": freeze_manifest["benchmark_version"],
         "benchmark_sha256": freeze_manifest["benchmark_sha256"],
@@ -357,23 +460,48 @@ def main() -> int:  # noqa: PLR0915
     print("fase 0: construyendo datasets fs1 (camino wide canónico)…", flush=True)
     train10, _, _ = build_dataset_wide(args.sessions / "train", CANON_W, CANON_S)
     train11, _, _ = build_dataset_wide(V11_ROOT / "train", CANON_W, CANON_S)
-    expansion, _, _ = build_dataset_wide(V2_TRAIN, CANON_W, CANON_S)
+    expansion, _, _ = build_dataset_wide(expansion_dir, CANON_W, CANON_S)
     test, _, _ = build_dataset_wide(args.sessions / "test", CANON_W, CANON_S)
     x_v2 = np.vstack([train11.x, expansion.x])
     headers = {**_headers(args.sessions / "test"), **_headers(args.sessions / "train")}
     results["datasets"] = {
         "train_v11_windows": int(train11.x.shape[0]),
-        "expansion_v2_windows": int(expansion.x.shape[0]),
-        "train_v2_windows": int(x_v2.shape[0]),
+        f"expansion_{tag}_windows": int(expansion.x.shape[0]),
+        f"train_{tag}_windows": int(x_v2.shape[0]),
         "test_windows": int(test.x.shape[0]),
         "test_anomalous_windows": int(test.y.sum()),
         "note": "test histórico intacto; el escalador de cada brazo se ajusta solo con su train",
     }
     print(
         f"  train v1.1={train11.x.shape[0]} · expansión={expansion.x.shape[0]} · "
-        f"train v2={x_v2.shape[0]} · test={test.x.shape[0]}",
+        f"train {tag}={x_v2.shape[0]} · test={test.x.shape[0]}",
         flush=True,
     )
+
+    # Re-verificación del criterio de cobertura EFECTIVA sobre el train que se va a usar,
+    # con el mismo instrumento que construyó el banco. Es el control que F20/F21 no tenían:
+    # el banco puede estar congelado por hash y aun así no contener la cobertura declarada.
+    coverage_ok = True
+    criterion = bench["coverage_criterion"]
+    if criterion is not None:
+        ltft_idx = FEATURE_NAMES.index(LTFT_FEATURE)
+        measured = ltft_level_coverage(x_v2, ltft_idx)
+        verdict = check_coverage_criterion(measured, criterion["positive"], criterion["negative"])
+        coverage_ok = bool(verdict["passes"])
+        results["coverage_criterion"] = verdict
+        print(
+            f"  cobertura efectiva del train {tag}: nivel+ {measured['positive_level_share']} "
+            f"· nivel− {measured['negative_level_share']} → "
+            f"{'CUMPLE' if coverage_ok else 'NO CUMPLE'}",
+            flush=True,
+        )
+        if not coverage_ok:
+            results["stop_rule_triggered"] = (
+                "el train no alcanza el criterio de cobertura efectiva declarado a priori"
+            )
+            results_json.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n")
+            print("ABORTADO: el banco no cumple su propio criterio de cobertura")
+            return 1
 
     # ------------------------------- fase 1: control de integridad del pipeline (P4)
     print("fase 1: LOF congelado (arms-freeze-v1)…", flush=True)
@@ -395,13 +523,13 @@ def main() -> int:  # noqa: PLR0915
     )
     if not frozen_ok:
         results["stop_rule_triggered"] = "P4: el LOF congelado no reproduce el umbral del freeze"
-        RESULTS_JSON.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n")
+        results_json.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n")
         print("ABORTADO por regla de parada (a): deriva de pipeline")
         return 1
 
     # --------------------------------------------- fase 2: brazos AE multi-seed
-    print("fase 2: AE denso fs1 — train v1.1 vs train v2 (seeds 42/43/44)…", flush=True)
-    trains = {"ae_v11": train11.x, "ae_v2": x_v2}
+    print(f"fase 2: AE denso fs1 — train v1.1 vs train {tag} (seeds 42/43/44)…", flush=True)
+    trains = {"ae_v11": train11.x, candidate: x_v2}
     finalists: dict[str, AutoencoderDetector] = {}
     finalist_thresholds: dict[str, float] = {}
     for arm, x_train in trains.items():
@@ -425,7 +553,7 @@ def main() -> int:  # noqa: PLR0915
                 finalists[arm] = det
                 finalist_thresholds[arm] = thr
         results["arms"][arm] = {
-            "train": "v1.1 (22 sesiones)" if arm == "ae_v11" else "v1.1 + expansión v2 (34)",
+            "train": "v1.1 (22 sesiones)" if arm == "ae_v11" else bench["train_label"],
             "architecture": "AE-S denso fs1 (42→32→16→8→…); idéntica en ambos brazos",
             "n_train_windows": int(x_train.shape[0]),
             "seeds": per_seed,
@@ -450,42 +578,63 @@ def main() -> int:  # noqa: PLR0915
         )
 
     # ------------------------------------------------- fase 3: LOF v2 informativo
-    print("fase 3: LOF re-entrenado con el banco v2 (informativo)…", flush=True)
+    print(f"fase 3: LOF re-entrenado con el banco {tag} (informativo)…", flush=True)
     lof2 = next(d for d in make_baselines(args.seed) if d.name == "lof")
     lof2.fit(x_v2)
     thr_lof2 = float(threshold_from_normal(lof2.scores(x_v2), target_fpr=args.fpr))
     r_lof2 = evaluate(lof2, thr_lof2, test, headers)
-    results["arms"]["lof_v2"] = {
+    results["arms"][lof_arm] = {
         "note": "INFORMATIVO — no candidato a adopción; el brazo congelado sigue siendo el control",
         "threshold_value": round(thr_lof2, 6),
         "test": arm_summary(r_lof2),
     }
     print(
-        f"  lof_v2: F1={r_lof2['point']['f1']:.4f} FPR={r_lof2['point']['fp_rate_normal']:.4f}",
+        f"  {lof_arm}: F1={r_lof2['point']['f1']:.4f} FPR={r_lof2['point']['fp_rate_normal']:.4f}",
         flush=True,
     )
 
     # ------------------------------- fase 4: predicciones y criterio D1 declarados
     print("fase 4: contraste de predicciones y criterio D1…", flush=True)
-    results["hypothesis_test"] = check_predictions(results)
+    results["hypothesis_test"] = check_predictions(results, candidate)
+    d1_block = results["hypothesis_test"][f"D1_{candidate}"]
     for name, check in results["hypothesis_test"]["predictions"].items():
         print(f"  {name}: {'SE CUMPLE' if check['holds'] else 'FALLA'}", flush=True)
-    print(f"  D1 = {results['hypothesis_test']['D1_ae_v2']['decision']}", flush=True)
+    print(f"  D1 = {d1_block['decision']}", flush=True)
+
+    # Estado exploratorio de H1 (cierre de línea): solo para el banco que declara criterio
+    # de cobertura, porque la regla exige saber si el antecedente se cumplió.
+    if criterion is not None:
+        results["h1_exploratory_status"] = h1_exploratory_status(
+            results["arms"][candidate]["aggregate"],
+            results["arms"]["ae_v11"]["aggregate"],
+            d1_block["decision"],
+            bool(
+                results["hypothesis_test"]["predictions"]["P4_lof_congelado_reproduce_F18"]["holds"]
+            ),
+            coverage_ok,
+            set(d1_block["per_seed_category"].values()),
+        )
+        h1 = results["h1_exploratory_status"]
+        print(
+            f"  H1 exploratory status = {h1['status']} "
+            f"(reducción relativa de FPR = {h1['relative_fpr_reduction']})",
+            flush=True,
+        )
 
     # ------------------------------------------------------ fase 5: embeddings (D2)
     print("fase 5: embeddings (D2)…", flush=True)
     results["embeddings"] = {arm: embeddings_report(det, test) for arm, det in finalists.items()}
 
     # ------------------------- fase 6: informe de causa (obligatorio si D1 = REJECT)
-    if results["hypothesis_test"]["D1_ae_v2"]["decision"] != "PROMOTE_CANDIDATE":
+    if d1_block["decision"] != "PROMOTE_CANDIDATE":
         print("fase 6: informe de causa (regla de parada b)…", flush=True)
         control_x = None
         if CONTROL_DIR.is_dir() and any(CONTROL_DIR.glob("*.jsonl")):
             control_ds, _, _ = build_dataset_wide(CONTROL_DIR, CANON_W, CANON_S)
             control_x = control_ds.x
         results["cause_report"] = cause_report(
-            finalists["ae_v2"],
-            finalist_thresholds["ae_v2"],
+            finalists[candidate],
+            finalist_thresholds[candidate],
             test,
             headers,
             train11.x,
@@ -524,18 +673,19 @@ def main() -> int:  # noqa: PLR0915
     results["total_runtime_s"] = round(time.perf_counter() - t0, 1)
     results["peak_rss_mb"] = peak_rss_mb()
     results["git_sha"] = git_sha(REPO_ROOT)
-    RESULTS_JSON.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n")
+    results_json.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n")
     record_run(
         RUNS_FILE,
         {
-            "experiment": "EXP-ANOM-010",
+            "experiment": bench["experiment"],
             "seed": args.seed,
             "target_fpr": args.fpr,
-            "decision_d1": results["hypothesis_test"]["D1_ae_v2"]["decision"],
+            "decision_d1": d1_block["decision"],
+            "h1_exploratory_status": results.get("h1_exploratory_status", {}).get("status"),
             "benchmark_sha256": results["benchmark"]["benchmark_sha256"],
         },
     )
-    print(f"\nresultados → {RESULTS_JSON.name} ({results['total_runtime_s']}s)")
+    print(f"\nresultados → {results_json.name} ({results['total_runtime_s']}s)")
     return 0
 
 
