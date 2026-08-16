@@ -37,6 +37,13 @@ def _results(fpr_median: float, fpr_max: float, f1_median: float) -> dict[str, A
                     "fp_rate_normal_max": fpr_max,
                     "highway_fpr_median": 0.05,
                 },
+                # la mediana y el máximo bastan para D1; las semillas individuales solo
+                # deciden si la categoría es ESTABLE (regla del estado de H1, F22)
+                "seeds": {
+                    "42": {"point": {"f1": f1_median, "fp_rate_normal": fpr_median}},
+                    "43": {"point": {"f1": f1_median, "fp_rate_normal": fpr_median}},
+                    "44": {"point": {"f1": f1_median, "fp_rate_normal": fpr_max}},
+                },
                 "per_fault_recall_median": {"joint_slow_drift": 0.0, "load_coolant_decouple": 0.0},
             },
             "ae_v11": {"aggregate": {"fp_rate_normal_median": 0.1379}},
@@ -58,7 +65,7 @@ def _results(fpr_median: float, fpr_max: float, f1_median: float) -> dict[str, A
 def test_d1_sigue_los_umbrales_preespecificados(
     fpr_median: float, fpr_max: float, f1_median: float, expected: str
 ) -> None:
-    out = check_predictions(_results(fpr_median, fpr_max, f1_median))
+    out = check_predictions(_results(fpr_median, fpr_max, f1_median), "ae_v2")
     assert out["D1_ae_v2"]["decision"] == expected
 
 
@@ -66,16 +73,22 @@ def test_p4_detecta_deriva_del_pipeline() -> None:
     """Si el LOF congelado no reproduce F18, P4 debe fallar (activa la regla de parada)."""
     res = _results(0.02, 0.03, 0.73)
     res["arms"]["lof_frozen"]["test"]["point"]["f1"] = 0.6500
-    out = check_predictions(res)
+    out = check_predictions(res, "ae_v2")
     assert out["predictions"]["P4_lof_congelado_reproduce_F18"]["holds"] is False
 
 
 def test_p3_es_una_prediccion_negativa_falsable() -> None:
     """P3 se cumple con recalls bajos y FALLA si la cobertura sí arregla lo lento."""
     res = _results(0.02, 0.03, 0.73)
-    assert check_predictions(res)["predictions"]["P3_lentas_siguen_bajo_0.10"]["holds"] is True
+    assert (
+        check_predictions(res, "ae_v2")["predictions"]["P3_lentas_siguen_bajo_0.10"]["holds"]
+        is True
+    )
     res["arms"]["ae_v2"]["per_fault_recall_median"]["joint_slow_drift"] = 0.42
-    assert check_predictions(res)["predictions"]["P3_lentas_siguen_bajo_0.10"]["holds"] is False
+    assert (
+        check_predictions(res, "ae_v2")["predictions"]["P3_lentas_siguen_bajo_0.10"]["holds"]
+        is False
+    )
 
 
 def test_sonda_del_mecanismo_usa_el_cuantizador_real() -> None:

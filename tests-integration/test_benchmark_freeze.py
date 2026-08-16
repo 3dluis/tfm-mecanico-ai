@@ -3,6 +3,10 @@
 Un manifiesto de congelación solo sirve si FALLA cuando los datos cambian. Estos tests
 comprueban las tres formas de romperlo: contenido alterado, sesión perdida y sesión
 añadida sin declarar.
+
+Y una cuarta condición, simétrica y añadida en F22: el freeze **no** debe fallar cuando lo
+único que cambia es un campo nuevo de la cabecera, porque los contratos de este repositorio
+crecen de forma aditiva por regla.
 """
 
 import json
@@ -65,9 +69,34 @@ def test_freeze_detecta_contenido_alterado(sessions: Path, tmp_path: Path) -> No
     try:
         ok, problems = verify(path)
         assert not ok
-        assert any("hash distinto" in p for p in problems)
+        assert any("DATOS distintos" in p for p in problems)
     finally:
         target.write_text(original, encoding="utf-8")
+
+
+def test_freeze_tolera_deriva_aditiva_de_cabecera(sessions: Path, tmp_path: Path) -> None:
+    """Un campo NUEVO en la cabecera no invalida el banco; un cambio de lecturas sí.
+
+    Regresión de un fallo real (F22): al reconstruir el banco v2 desde cero, las sesiones
+    del test histórico dieron hash distinto con un delta constante de +20 bytes —el campo
+    `anomaly_seed` que ADR-0034 añadió al contrato— pese a ser idénticas lectura a lectura.
+    Como la regla del repositorio exige que los contratos crezcan de forma ADITIVA, el
+    ancla de reproducibilidad no puede romperse por ejercer esa regla.
+    """
+    path = _manifest(sessions, tmp_path)
+    target = sorted(sessions.glob("*.jsonl"))[0]
+    original = target.read_bytes()
+    head, _, body = original.partition(b"\n")
+    header = json.loads(head)
+    header["campo_nuevo_del_contrato"] = "valor"  # crecimiento aditivo, no cambio de datos
+    grown = json.dumps(header, ensure_ascii=False).encode("utf-8") + b"\n" + body
+    assert len(grown) != len(original)
+    try:
+        target.write_bytes(grown)
+        ok, problems = verify(path)
+        assert ok, f"la deriva aditiva de cabecera no debe invalidar el banco: {problems}"
+    finally:
+        target.write_bytes(original)
 
 
 def test_freeze_detecta_sesion_perdida(sessions: Path, tmp_path: Path) -> None:
