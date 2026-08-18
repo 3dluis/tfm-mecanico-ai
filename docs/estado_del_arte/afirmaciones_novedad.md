@@ -65,3 +65,26 @@ D9. Cualquier variante de **"no existe ningún sistema similar"** en términos a
 D10. Equiparar **anomalía estadística con fallo nuevo**: la definición de patrón no documentado exige recurrencia, ausencia de correspondencia documental y validación (§2.6.1); un outlier aislado nunca se reporta como descubrimiento.
 
 D11. Presentar los resultados de la literatura sobre ventajas del multiagente como si aplicaran automáticamente a nuestro caso (las ablaciones de SAGE/MA-RCA son de otros dominios; nuestro caso se decide con A0–A6).
+
+---
+
+## Adenda v3 (2026-08-18) — remapeo al vacío central V\*
+
+La alineación científica v3 sustituye V1–V7 por **V\*** con dimensiones S1–S6
+(`docs/alineacion_v3/01_nucleo_cientifico.md` §3; correspondencia en
+`docs/correspondencia_nomenclatura.md` §5). Efectos sobre esta clasificación:
+
+- **A1 (vacío integrador de cinco ejes):** deja de usarse como argumento científico
+  principal. Se conserva como observación de cobertura de la matriz de antecedentes
+  (`docs/alineacion_v3/02_trazabilidad.md` §3): ningún trabajo revisado recorre la cadena
+  detección→…→consolidación con open-set y evaluación conjunta. La novedad defendible es
+  la **transición epistemológica evaluada**, no la integración tecnológica.
+- **A2** sostiene S1 (contraste de H-EVT) · **A3–A4** sostienen S4 (memoria validada) ·
+  **A5** sostiene S5 (condición habilitante; contribución solo si A0–A6 lo demuestra) ·
+  **A6** sostiene S6 (banco held-out) · **A7** se mantiene como síntesis.
+- **C7** pasa a enunciarse sobre la PI v3: la capacidad de *identificar un patrón no
+  representado, reconocer la insuficiencia, hipotetizar, verificar y consolidar o
+  abstenerse* solo será defendible tras EXP-MAIN-001 con la exclusión triple verificada.
+- Regla de estilo v3: en documentos vivos se sustituye «literatura (analizada)» por
+  «trabajos revisados/analizados» o «estado del conocimiento»; este fichero conserva su
+  redacción original de 12-ago por ser documento fechado, y esta adenda fija el uso nuevo.

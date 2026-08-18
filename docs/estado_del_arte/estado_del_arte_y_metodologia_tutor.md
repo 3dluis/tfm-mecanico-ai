@@ -1,5 +1,14 @@
 # Estado del Arte y Metodología de Investigación
 
+> **NOTA DE VIGENCIA (alineación v3, 2026-08-18).** Este documento (12-ago) usa la PI v2 y
+> la estructura V1–V7. La versión consolidada v2.0 para el tutor se reestructura alrededor
+> de la **PI v3**, el vacío central **V\*** con dimensiones S1–S6 y la cadena
+> epistemológica de ocho pasos — fuente canónica:
+> [`docs/alineacion_v3/01_nucleo_cientifico.md`](../alineacion_v3/01_nucleo_cientifico.md).
+> Se conserva sin reescribir como documento fechado; las citas de PI/vacíos se leen a
+> través de `docs/correspondencia_nomenclatura.md` §0 y §5.
+
+
 **Trabajo Fin de Máster — Máster Universitario en Inteligencia Artificial**
 **Universidad Alfonso X el Sabio (UAX)**
 

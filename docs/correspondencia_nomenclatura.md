@@ -1,6 +1,16 @@
-# Correspondencia de nomenclatura (alineación científica v2, 2026-08-12)
+# Correspondencia de nomenclatura (alineaciones científicas v2 y v3)
 
-Tabla de trazabilidad entre la nomenclatura anterior (Fase 0 y extensiones de fases) y la vigente tras la decisión de alineación (docs/propuesta_alineacion_final.md, aprobada; PI Opción B). **Regla:** los documentos históricos (informes de fase cerrados, ADRs ya aceptados) NO se reescriben — conservan la nomenclatura de su época y se interpretan mediante esta tabla; los documentos vivos (planes pendientes, protocolo experimental, harness, memoria del TFM) usan la nomenclatura nueva.
+Tabla de trazabilidad entre nomenclaturas. **Regla:** los documentos históricos (informes de fase cerrados, ADRs aceptados) NO se reescriben — conservan la nomenclatura de su época y se interpretan mediante esta tabla; los documentos vivos usan la nomenclatura vigente (v3). Fuente canónica de la estructura vigente: `docs/alineacion_v3/01_nucleo_cientifico.md`.
+
+## 0. Pregunta de investigación (historia)
+
+| Versión | Enunciado (resumen) | Vigencia | Dónde puede aparecer |
+|---|---|---|---|
+| **PI v1** | «¿Puede un agente híbrido, que combine LLM + no supervisado + memoria + RAG, descubrir y explicar patrones no documentados…?» | Fase 0 → 12-ago-2026 | docs/01 v1, informes F0–F9 |
+| **PI v2** («Opción B») | «¿Puede un sistema híbrido descubrir y explicar patrones de fallo previamente no documentados mediante análisis contextual y longitudinal de OBD-II?» | 12-ago → 18-ago-2026 | propuesta_alineacion_final, pre-registro-v1 (§1 hasta su enmienda), estado_del_arte_y_metodologia_tutor, consolidado v1.0 Parte II |
+| **PI v3** (OFICIAL) | «¿Puede un sistema híbrido **identificar** patrones **no representados en su conocimiento disponible**, **generar hipótesis** diagnósticas a partir del análisis contextual y longitudinal de OBD-II y **validarlas mediante evidencia antes de incorporarlas como conocimiento reutilizable**?» | desde 18-ago-2026 | docs/01 v3, núcleo científico, todo documento vivo |
+
+Cambios sustantivos v2→v3: (1) la cadena completa entra en el enunciado (identificar + hipotetizar + validar + incorporar); (2) «no documentado» → «no representado en su conocimiento disponible» (novedad relativa al sistema, operacionalizable por exclusión triple); (3) la consolidación validada deja de ser un mecanismo y pasa a ser parte de la pregunta. «Patrón no documentado» en textos históricos se lee como «patrón no representado» sin cambio de significado experimental (la definición operacional por exclusión triple ya era la vigente).
 
 ## 1. Hipótesis
 
@@ -96,3 +106,31 @@ de hipótesis:
 | Hipótesis exploratorias HX-ML-1…6 | NO son familias H-* | verificables, con refutación declarada; nunca se promedian con evidencia confirmatoria |
 | `HX-ML-4-R2` (nombre en `exp-anom-010-r2.yaml`, congelado antes de ejecutar) | **`HX-ML-5`** — denominación canónica fijada por el autor (F22) | **Alineación de nomenclatura, NO cambio de criterios**: enunciado, umbrales y predicciones son literalmente los del YAML congelado. Estado: **SUPPORTED** (exploratorio) |
 | Serie EXP-EMB-* | reservada para embeddings de RAG (ADR-0024/R3) | los embeddings de comportamiento van en EXP-PAT-* |
+
+## 5. Vacíos de investigación (v3): V1–V7 → V\* + S1–S6
+
+Desde la alineación v3 existe **un único vacío central V\*** con seis dimensiones
+subordinadas. V1–V7 conservan su evidencia; dejan de presentarse como siete vacíos
+independientes de igual rango.
+
+| Anterior | Vigente (v3) | Nota |
+|---|---|---|
+| V7 (diagnóstico basado en eventos; «central» en v2) | **S1** (detección contextual) + parte de S6 | la comparación evento-vs-continuo sigue siendo el contraste de H-EVT |
+| V3 (personalización por vehículo) | **S1** (dimensión longitudinal/personalizada) | |
+| V4 (de anomalía a explicación comprobable) | **S2** (generación de hipótesis) + **S3** (verificación con evidencia) | |
+| V2 (memoria con validación de hipótesis) | **S4** (memoria longitudinal validada) | |
+| V6 (multiagente vehicular híbrido en edge) | **S5** (condición habilitante / artefacto; contribución solo si A0–A6 lo demuestra) | |
+| V1 (integración end-to-end) | absorbido por **V\*** (la integración es artefacto, no vacío por sí misma) | la «formulación integradora» deja de usarse como argumento principal |
+| V5 (evaluación con fallos reproducibles) | **S6** (patrones no representados como escenario; banco held-out) | |
+
+## 6. Hipótesis exploratorias de la línea ML (serie HX-ML)
+
+| Código | Fase | Estado | Nota |
+|---|---|---|---|
+| HX-ML-1/2 | F14/F16 | resueltas (negativas) | AE denso no supera a LOF sin cobertura |
+| HX-ML-3 | F18 | REFUTADA | temporales no superan a estáticos |
+| HX-ML-4 | F21 | REFUTADA | cobertura declarada ≠ efectiva |
+| HX-ML-5 (= HX-ML-4-R2 en el YAML congelado) | F22 | SUPPORTED | cobertura efectiva verificada ⇒ FPR 0.0086; cierra H1 exploratoria |
+
+Toda la serie HX-ML pertenece a los pasos 1–3 de la cadena epistemológica y a la
+precondición de H-EVT; ninguna responde H-EVT ni las familias de los pasos 4–8.

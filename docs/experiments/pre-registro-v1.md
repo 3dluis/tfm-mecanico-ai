@@ -13,6 +13,19 @@
 > completarse durante F-PREREG antes de cualquier congelación. No se actualiza aquí para no
 > reescribir retrospectivamente un documento fechado.
 
+> **NOTA DE ALINEACIÓN v3 (2026-08-18) — no modifica el cuerpo de este documento fechado.**
+> La alineación científica v3 (`docs/alineacion_v3/01_nucleo_cientifico.md`) fija la **PI v3**
+> («identificar patrones no representados en su conocimiento disponible, generar hipótesis
+> diagnósticas y validarlas mediante evidencia antes de incorporarlas como conocimiento
+> reutilizable») y reformula **H-MAIN** añadiendo explícitamente el contraste con evidencia
+> contradictoria y la consolidación/abstención (co-primaria P5), manteniendo P1–P4 tal como
+> aquí se operacionalizan. La versión que se congele (rc2 → `prereg-v1.0`) deberá incorporar:
+> (1) PI v3 en §1; (2) H-MAIN v3 en §4.6 con P5 y los controles negativos CN1–CN9;
+> (3) la enmienda de cobertura efectiva del dataset confirmatorio (F-PREREG §2.2);
+> (4) el §11 completado con EXP-ANOM-005…010-R2 y AUDIT-DATA-001;
+> (5) la corrección del instrumento de RAM previa a cualquier criterio edge (F-PREREG §2.5).
+> Nada de esto es retroactivo: ningún experimento confirmatorio se ha ejecutado.
+
 **TFM Mecánico IA · UAX · 2026-08-12.**
 **Estado: PROPUESTO (rc1) — pendiente de aprobación del autor. La congelación se produce con la aprobación + commit + tag `prereg-v1.0` (§13). Hasta entonces este documento no vincula.**
 

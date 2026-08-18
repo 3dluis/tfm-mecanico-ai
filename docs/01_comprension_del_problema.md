@@ -18,25 +18,31 @@ Los escáneres comerciales leen y borran códigos; las plataformas telemáticas 
 
 ## 1.3 Pregunta de investigación
 
-> **PI:** ¿Puede un agente inteligente híbrido, que combine modelos de lenguaje, aprendizaje no supervisado, memoria evolutiva y recuperación aumentada por generación (RAG), descubrir y explicar patrones de fallo vehicular previamente no documentados utilizando datos OBD-II?
+> **PI (v3, oficial desde la alineación científica v3, 2026-08-18):** ¿Puede un sistema
+> inteligente híbrido identificar patrones de fallo no representados en su conocimiento
+> disponible, generar hipótesis diagnósticas a partir del análisis contextual y
+> longitudinal de datos OBD-II y validarlas mediante evidencia antes de incorporarlas como
+> conocimiento reutilizable?
 
-Para hacerla operativa y evaluable, se descompone en subpreguntas:
+*Especificación metodológica (fuera del enunciado):* el sistema se implementa mediante aprendizaje no supervisado, análisis de eventos operativos, arquitectura multiagente, modelos de lenguaje, RAG y memoria con validación, sobre una arquitectura Edge–Cloud. Los mecanismos son medios: la refutación de cualquier hipótesis parcial no invalida la PI — la responde. Historia de la PI (v1 de Fase 0; v2 «Opción B» de 12-ago) en `docs/correspondencia_nomenclatura.md` §0.
 
-- **PI.1** ¿Con qué precisión pueden detectarse, mediante técnicas no supervisadas sobre series temporales de PIDs OBD-II, desviaciones del comportamiento normal del vehículo *antes* de que se genere un DTC? (métricas: precisión, exhaustividad, F1, tiempo de anticipación sobre fallos inyectados).
-- **PI.2** ¿Mejora la incorporación de RAG sobre documentación técnica la calidad y la fiabilidad factual de las explicaciones generadas por un LLM local, frente al mismo LLM sin recuperación? (evaluación comparativa con rúbrica y/o LLM-as-judge, declarando sus limitaciones).
-- **PI.3** ¿La acumulación de casos diagnósticos en una memoria persistente mejora el diagnóstico de casos posteriores similares? (evaluación con secuencias de casos repetidos/variantes).
-- **PI.4** ¿Es viable ejecutar este pipeline completo con los recursos de una Raspberry Pi (4 GB–8 GB de RAM, CPU ARM)? (medición de latencia, memoria y throughput en entorno emulado con límites de recursos equivalentes).
+La investigación estudia la transición epistemológica «observación → contexto → anomalía → reconocimiento de conocimiento insuficiente → hipótesis → evidencia → verificación → conocimiento validado/abstención» (cadena completa y subpreguntas PI.a–PI.e en [`docs/alineacion_v3/01_nucleo_cientifico.md`](alineacion_v3/01_nucleo_cientifico.md), fuente canónica).
 
-**Precisión terminológica importante:** "patrones no documentados" se entenderá como *combinaciones de síntomas en los datos que no corresponden a un DTC activo ni a un patrón previamente registrado en la memoria del sistema*, verificables porque el fallo se habrá inyectado sintéticamente de forma controlada. No se afirmará el descubrimiento de fallos desconocidos para la ingeniería automotriz, afirmación que este diseño experimental no puede sustentar.
+**Definición operacional:** un patrón de fallo está **no representado en el conocimiento disponible** cuando se cumplen simultáneamente las tres exclusiones E-DET (fuera del entrenamiento/ajuste del detector), E-RAG (fuera del corpus recuperable) y E-MEM (fuera de la memoria longitudinal) — propiedad relativa al sistema, comprobable por construcción y auditada antes de cada ejecución. Los términos «desconocido», «nuevo» o «nunca visto» no se usan como sinónimos técnicos, y no se afirmará el descubrimiento de fallos desconocidos para la ingeniería automotriz.
 
 ## 1.4 Hipótesis de trabajo
 
-- **H1:** Un detector no supervisado (p. ej., basado en reconstrucción o en aislamiento) entrenado sobre ventanas de operación normal detecta fallos incipientes inyectados con F1 superior a un umbral fijado a priori y antelación medible respecto al DTC.
-- **H2:** El agente con RAG produce explicaciones con menor tasa de afirmaciones no verificables que el LLM sin RAG, medido sobre un conjunto fijo de casos.
-- **H3:** La memoria de casos reduce pasos de razonamiento y/o mejora la exactitud del diagnóstico en la segunda aparición de un patrón, frente a la primera.
-- **H4:** El pipeline completo se ejecuta dentro de los límites de recursos de una Raspberry Pi 5 (8 GB) emulada, con latencia de diagnóstico aceptable para el caso de uso (orden de decenas de segundos, no interactivo en tiempo real).
+La hipótesis integradora contrasta directamente la PI; cinco subordinadas aíslan mecanismos. Formulación completa, criterios de apoyo/refutación/no-concluyente y operacionalización: núcleo científico §5.
 
-Estas hipótesis son falsables y cada una tiene un experimento asociado (véase `07_cronograma_y_entregables.md`, Fase 4, y el protocolo experimental E3, que se publicará a priori en el repositorio).
+- **H-MAIN (integradora):** bajo el protocolo held-out/open-set de exclusión triple, el sistema podrá identificar la anomalía, reconocer la insuficiencia de su conocimiento (en lugar de identificar erróneamente con confianza), generar hipótesis trazables, contrastarlas con evidencia y consolidar solo lo que satisfaga criterios de validación pre-establecidos — absteniéndose en caso contrario.
+- **H-EVT:** la representación contextual por eventos mejora la detección frente a las alternativas por ventanas.
+- **H-PERS:** la normalidad personalizada por vehículo reduce falsos positivos o mejora la detección.
+- **H-EXP:** recuperar y contrastar evidencia mejora la exactitud factual, trazabilidad y calibración de las hipótesis frente a la generación sin evidencia o sin verificación.
+- **H-MEM:** la memoria sometida a validación reduce la contaminación del conocimiento y permite reutilizar experiencias verificadas sin propagar hipótesis incorrectas (M0/M1/M2).
+- **H-MAS (secundaria):** la descomposición multiagente aporta ventaja medible en alguna parte concreta de la cadena frente a alternativas más simples. **No se asume verdadera**: si el monolítico iguala, se publica como resultado.
+- **Criterio transversal edge** (no es hipótesis): latencia, RAM, CPU y coste de tokens dentro del presupuesto pre-registrado; una configuración que lo viole se declara no viable aunque gane en calidad.
+
+Correspondencia con las históricas H1–H4: `docs/correspondencia_nomenclatura.md`. Las hipótesis son falsables, sus umbrales se congelan en el pre-registro antes de ejecutar y los resultados negativos se publican con el mismo detalle.
 
 ## 1.5 Usuarios y casos de uso previstos
 
