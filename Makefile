@@ -95,6 +95,9 @@ experiments-fs2: check-train-env generate-suite  ## reproduce el experimento E7 
 experiments-temporal: check-train-env generate-suite  ## reproduce el experimento E8 (F18): LSTM/GRU-AE + XAI temporal (grupo train)
 	uv run --group train python ai-models/experiments/e8_temporal.py --sessions data/sessions
 
+contamination-audit:  ## auditoria ejecutable de la exclusion triple E-DET/E-RAG/E-MEM (B0.5)
+	$(RUN) python tools/contamination_audit.py
+
 llm-smoke-deep:  ## smoke PROFUNDO del candidato R2 (Qwen2.5-3B-Instruct Q4_K_M; requiere Ollama)
 	$(RUN) python tools/llm_smoke_deep.py
 

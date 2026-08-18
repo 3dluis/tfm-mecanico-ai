@@ -1,0 +1,63 @@
+{
+  "audited_at": "2026-08-18T21:45:50.763445+00:00",
+  "spec": "ai-models/configs/heldout-exclusions.yaml",
+  "heldout_classes": [
+    "corr_break_rpm_maf",
+    "joint_slow_drift",
+    "load_coolant_decouple"
+  ],
+  "checks_run": [
+    "E-DET/suites",
+    "E-DET/sessions",
+    "E-DET/training-runs",
+    "E-RAG/corpus",
+    "prompts",
+    "E-MEM/memory"
+  ],
+  "memory_state_provided": false,
+  "evaluation_side_whitelist": [
+    "obd-lab/scenarios/*.yaml (secciones test/held-out)",
+    "benchmarks/agent-diagnostics/cases_v1.yaml (caso held-out del benchmark)",
+    "ai-models/configs/*.yaml (los pre-registros NOMBRAN las clases held-out)",
+    "docs/** (documentación del protocolo)",
+    "obd-lab/src/obd_lab/injection/** y tests (la inyección IMPLEMENTA los fallos)",
+    "ai-models/registry/{evaluations,experiments}/** (resultados de evaluación)"
+  ],
+  "declared_limits": "Este auditor cubre artefactos versionados y directorios de datos declarados. No puede ver: estados de memoria vivos en PostgreSQL (exportar y pasar con --memory-state), corpus cargados fuera de `diagnostic-agent/knowledge/`, ni conocimiento implícito en pesos de modelos preentrenados. Esas fronteras se declaran en el pre-registro.\n",
+  "n_violations": 4,
+  "clean": false,
+  "violations": [
+    {
+      "check": "E-RAG/corpus",
+      "file": "diagnostic-agent/knowledge/corpus_v1.yaml",
+      "heldout_class": "corr_break_rpm_maf",
+      "kind": "mechanism_term",
+      "match": "pérdida de correlación entre RPM y MAF",
+      "line": null
+    },
+    {
+      "check": "E-RAG/corpus",
+      "file": "diagnostic-agent/knowledge/corpus_v1.yaml",
+      "heldout_class": "corr_break_rpm_maf",
+      "kind": "mechanism_term",
+      "match": "correlación entre RPM y MAF",
+      "line": null
+    },
+    {
+      "check": "E-RAG/corpus",
+      "file": "diagnostic-agent/knowledge/corpus_v1.yaml",
+      "heldout_class": "load_coolant_decouple",
+      "kind": "mechanism_term",
+      "match": "temperatura clavada",
+      "line": null
+    },
+    {
+      "check": "E-RAG/corpus",
+      "file": "diagnostic-agent/knowledge/corpus_v1.yaml",
+      "heldout_class": "joint_slow_drift",
+      "kind": "mechanism_term",
+      "match": "derivas conjuntas lentas",
+      "line": null
+    }
+  ]
+}

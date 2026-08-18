@@ -9,6 +9,7 @@ import json
 import platform
 import resource
 import subprocess
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -30,8 +31,15 @@ def git_sha(repo_root: Path) -> str:
 
 
 def peak_rss_mb() -> float:
-    """Pico de RSS del proceso en MB (aprox., vía resource; Linux: KB)."""
-    return round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0, 1)
+    """Pico de RSS del proceso en MB (vía ``resource``).
+
+    ``ru_maxrss`` está en **KB en Linux** y en **BYTES en macOS/BSD** (hallazgo F22:
+    la versión anterior asumía KB siempre e inflaba ×1024 las medidas hechas en macOS).
+    Corregido como requisito previo del criterio edge del pre-registro (F-PREREG §2.5).
+    """
+    raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    divisor = 1024.0 * 1024.0 if sys.platform == "darwin" else 1024.0
+    return round(raw / divisor, 1)
 
 
 def record_run(runs_file: Path, run: dict[str, Any]) -> None:
