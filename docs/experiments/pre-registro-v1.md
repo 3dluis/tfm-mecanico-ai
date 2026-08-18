@@ -1,35 +1,19 @@
-# Pre-registro del protocolo experimental — v1.0-rc1
+# Pre-registro del protocolo experimental — v1.0
 
-> **NOTA DE ADOPCIÓN (M0, 2026-08-16) — no modifica el contenido de este documento.**
-> Incorporado a `main` desde la rama `backup-alineacion-cientifica`, donde permanecía sin
-> fusionar. **Sigue sin ser canónico:** su reconciliación con
-> [`PROTO-CONF-001.md`](preregistered/PROTO-CONF-001.md) se resuelve en
-> [F-PREREG](preregistered/F-PREREG_tarea.md), y el tag `prereg-v1.0` no se ha creado.
->
-> **Advertencia de vigencia:** este documento está fechado el 2026-08-12 y por tanto es
-> anterior a las fases F13–F22. En particular, su §11 («evidencia exploratoria previa») solo
-> recoge EXP-ANOM-001/002/003; desde entonces se han ejecutado y publicado
-> EXP-ANOM-005…010-R2 y AUDIT-DATA-001, todos ellos **también exploratorios**. Esa lista debe
-> completarse durante F-PREREG antes de cualquier congelación. No se actualiza aquí para no
-> reescribir retrospectivamente un documento fechado.
-
-> **NOTA DE ALINEACIÓN v3 (2026-08-18) — no modifica el cuerpo de este documento fechado.**
-> La alineación científica v3 (`docs/alineacion_v3/01_nucleo_cientifico.md`) fija la **PI v3**
-> («identificar patrones no representados en su conocimiento disponible, generar hipótesis
-> diagnósticas y validarlas mediante evidencia antes de incorporarlas como conocimiento
-> reutilizable») y reformula **H-MAIN** añadiendo explícitamente el contraste con evidencia
-> contradictoria y la consolidación/abstención (co-primaria P5), manteniendo P1–P4 tal como
-> aquí se operacionalizan. La versión que se congele (rc2 → `prereg-v1.0`) deberá incorporar:
-> (1) PI v3 en §1; (2) H-MAIN v3 en §4.6 con P5 y los controles negativos CN1–CN9;
-> (3) la enmienda de cobertura efectiva del dataset confirmatorio (F-PREREG §2.2);
-> (4) el §11 completado con EXP-ANOM-005…010-R2 y AUDIT-DATA-001;
-> (5) la corrección del instrumento de RAM previa a cualquier criterio edge (F-PREREG §2.5).
-> Nada de esto es retroactivo: ningún experimento confirmatorio se ha ejecutado.
+> **CONSOLIDACIÓN rc2 Y CONGELACIÓN (2026-08-18).** Documento redactado el 2026-08-12
+> (rc1) y consolidado a rc2 el 2026-08-18 con la aprobación de la alineación científica
+> v3, ANTES de ejecutar ningún experimento confirmatorio. Cambios rc1→rc2 registrados en
+> **ENM-000** (§13); ninguno es retroactivo porque nada confirmatorio se ha ejecutado.
+> La reconciliación con PROTO-CONF-001 está cerrada
+> ([F-PREREG](preregistered/F-PREREG_reconciliacion.md)): este documento es el canónico e
+> incorpora de A la verificación de checksums; A permanece congelado como histórico.
+> **Estado: CONGELADO con el tag `prereg-v1.0`** (el hash del commit del tag es la
+> referencia citable del pre-registro).
 
 **TFM Mecánico IA · UAX · 2026-08-12.**
-**Estado: PROPUESTO (rc1) — pendiente de aprobación del autor. La congelación se produce con la aprobación + commit + tag `prereg-v1.0` (§13). Hasta entonces este documento no vincula.**
+**Estado: APROBADO Y CONGELADO (v1.0, 2026-08-18) — vincula desde el tag `prereg-v1.0`.**
 
-Este documento fija, **antes de ejecutar cualquier experimento confirmatorio**, las hipótesis, comparaciones, baselines, escenarios, unidades experimentales, semillas, splits, métricas, umbrales numéricos, pruebas estadísticas y criterios de aceptación/refutación del TFM. Es la frontera formal entre el diseño de la investigación y la fase de validación científica. Usa exclusivamente la nomenclatura vigente (docs/correspondencia_nomenclatura.md); las especificaciones de hipótesis derivan de docs/auditoria_alineacion_investigacion.md §4 y de docs/propuesta_alineacion_final.md §4 (PI Opción B adoptada), convirtiendo los umbrales provisionales ◊ en valores definitivos.
+Este documento fija, **antes de ejecutar cualquier experimento confirmatorio**, las hipótesis, comparaciones, baselines, escenarios, unidades experimentales, semillas, splits, métricas, umbrales numéricos, pruebas estadísticas y criterios de aceptación/refutación del TFM. Es la frontera formal entre el diseño de la investigación y la fase de validación científica. Usa exclusivamente la nomenclatura vigente (docs/correspondencia_nomenclatura.md); las especificaciones de hipótesis derivan del núcleo científico canónico (docs/alineacion_v3/01_nucleo_cientifico.md, PI v3) y de docs/auditoria_alineacion_investigacion.md §4, convirtiendo los umbrales provisionales ◊ en valores definitivos.
 
 **Distinción central de este pre-registro:** los experimentos ya ejecutados (EXP-ANOM-001, EXP-ANOM-002, EXP-ANOM-003) son **evidencia exploratoria previa** (§11): motivan decisiones de diseño y umbrales, pero **no cuentan como evidencia confirmatoria de ninguna hipótesis** ni se combinan estadísticamente con los experimentos confirmatorios. La confirmación o refutación de cada familia recae únicamente en los experimentos pre-registrados aquí (EXP-SEG-001, EXP-ANOM-004, EXP-PERS-001, EXP-MAS-001, EXP-MEM-001, EXP-EXP-001, EXP-MAIN-001).
 
@@ -39,10 +23,12 @@ Este documento fija, **antes de ejecutar cualquier experimento confirmatorio**, 
 
 ## 1. Pregunta de investigación e hipótesis cubiertas
 
-**PI (Opción B, adoptada):** ¿Puede un sistema inteligente híbrido descubrir y explicar patrones de fallo vehicular previamente no documentados mediante el análisis contextual y longitudinal de datos OBD-II?
-*Especificación metodológica:* el sistema se implementa mediante aprendizaje no supervisado, análisis de eventos operativos, arquitectura multiagente, modelos de lenguaje, RAG y memoria evolutiva con validación de hipótesis. Los mecanismos no forman parte del enunciado: la refutación de cualquier hipótesis parcial (en particular H-MAS, secundaria) no invalida la PI.
+**PI (v3, oficial):** ¿Puede un sistema inteligente híbrido identificar patrones de fallo no representados en su conocimiento disponible, generar hipótesis diagnósticas a partir del análisis contextual y longitudinal de datos OBD-II y validarlas mediante evidencia antes de incorporarlas como conocimiento reutilizable?
+*Especificación metodológica:* el sistema se implementa mediante aprendizaje no supervisado, análisis de eventos operativos, arquitectura multiagente, modelos de lenguaje, RAG y memoria con validación. Los mecanismos no forman parte del enunciado: la refutación de cualquier hipótesis parcial (en particular H-MAS, secundaria) no invalida la PI. Historia de la PI (v1/v2) en docs/correspondencia_nomenclatura.md §0.
 
-**Precisión terminológica vigente:** "patrones no documentados" = combinaciones de síntomas que no corresponden a un DTC activo, ni a conocimiento presente en el corpus RAG, ni a un patrón registrado en la memoria del sistema, verificables porque el fallo se inyecta sintéticamente de forma controlada (protocolo held-out/open-set triple, §7). No se afirma descubrimiento de fallos desconocidos para la ingeniería automotriz.
+**Definición operacional congelada:** un patrón de fallo está **no representado en el conocimiento disponible** cuando se cumplen simultáneamente las tres exclusiones verificables: **E-DET** (ninguna sesión con el patrón ni su clase participó en entrenamiento, validación, selección de modelo ni ajuste de umbrales del detector), **E-RAG** (el corpus recuperable no contiene documentos que describan el fallo ni su mecanismo de forma directamente recuperable) y **E-MEM** (la memoria no contiene casos, hipótesis ni conocimiento consolidado derivados del patrón), más recurrencia mínima (una anomalía aislada no es un patrón). Es una propiedad relativa al sistema, comprobable por construcción y auditada de forma ejecutable antes de cada run (§7). No se afirma descubrimiento de fallos desconocidos para la ingeniería automotriz; «no documentado», en textos históricos, se lee como «no representado».
+
+**Marco de lectura:** la evaluación recorre la cadena epistemológica de ocho pasos (observar → contextualizar → detectar → reconocer insuficiencia → hipotetizar → recuperar/contrastar evidencia → verificar → consolidar o abstenerse). El resultado correcto de un caso puede ser descubrir, verificar, refutar o **abstenerse**: el objetivo no es que el sistema diagnostique siempre.
 
 Familias de hipótesis contrastadas: **H-MAIN** (integradora), **H-EVT**, **H-MEM**, **H-MAS** (explícitamente secundaria), **H-PERS**, **H-EXP**, más el **criterio transversal edge** (antes H4; restricción de aceptación, no hipótesis). Correspondencia con la nomenclatura histórica: docs/correspondencia_nomenclatura.md.
 
@@ -68,7 +54,8 @@ Entorno 100 % emulado y reproducible: emulador OBD-II/ELM327 de obd-lab (generad
 - **Estructura de splits (anti-circularidad, idéntica a suite v1):** train = solo conducción normal; validation = normales + fallos conocidos (selección de modelo/umbral); test = normales de control FP + fallos conocidos con semillas nuevas + anomalías held-out (evaluación final, jamás para ajustar).
 - **Clases de fallo conocidas (5):** `vacuum_leak`, `maf_drift`, `thermostat_stuck`, `o2_lag`, `misfire`.
 - **Clases held-out (3):** `corr_break_rpm_maf` (episodios urbano y autovía), `load_coolant_decouple`, `joint_slow_drift`. Congeladas; no se añaden ni retiran clases held-out por enmienda una vez ejecutado el primer experimento confirmatorio.
-- **Dataset confirmatorio `obd-lab-suite-v2` (a generar antes de EXP-SEG-001):** R = 10 réplicas de la estructura de suite v1 **con la normalidad de train ampliada** (por réplica: 22 sesiones de train — 8 urbano, 8 autovía, 3 ralentí, 3 frío — replicando la composición del train total v1.1, es decir, train v1 + el patrón de `suite_v1_train_ext.yaml`; 7 de validation; 8 de test). Decisión de diseño motivada por el piloto EXP-ANOM-003 (2 sesiones/perfil son insuficientes para representar la deriva LTFT entre sesiones), tomada aquí, antes de ejecutar los confirmatorios.
+- **Dataset confirmatorio `obd-lab-suite-v2` (a generar antes de EXP-SEG-001):** R = 10 réplicas de la estructura de suite v1 **con la normalidad de train ampliada** (por réplica: 22 sesiones de train — 8 urbano, 8 autovía, 3 ralentí, 3 frío —; 7 de validation; 8 de test). Decisión motivada por el piloto EXP-ANOM-003, tomada antes de ejecutar los confirmatorios.
+- **Criterio bloqueante de COBERTURA EFECTIVA (incorpora F-PREREG §2.2, hallazgo F21/F22):** el train de cada réplica debe satisfacer `positive_level_share ≥ 0.03` **y** `negative_level_share ≥ 0.03` de nivel de LTFT, medidos **por ventana en el espacio de features** con `ai_models.audit.coverage` — el mismo instrumento que construyó el banco v3 —, nunca con contadores binarios por sesión (el instrumento que F21 refutó). Para alcanzarlo, las 8 sesiones de autovía y las 8 urbanas de cada réplica adoptan duración 5 400 s (patrón v3, que en F22 midió cobertura 0.0496 y P(sesión con nivel positivo) ≈ 0.26). Si una réplica no cumple el criterio con su bloque de semillas, se **regeneran sus sesiones alargando duraciones dentro del mismo bloque** — jamás seleccionando semillas por métricas de modelo (el criterio es de señal, no de resultado). El manifiesto de congelación de la suite verifica el criterio réplica a réplica y falla si no se cumple; una réplica que incumpla invalida su uso, no se «repesca».
 - **Semillas de suite-v2 (asignación determinista por bloques, sin colisiones):** la réplica r (1–10) usa el bloque `[10000 + 1000·r, 10000 + 1000·r + 999]`, asignando semillas consecutivas desde el inicio del bloque en el orden de escenarios listado (22 train, 7 validation, 8 test): réplica 1 → 11000–11036, …, réplica 10 → 20000–20036. Los bloques no intersecan entre sí ni con ninguna semilla existente (suite v1: 101–322; train_ext: 111–142; benchmark: 31–9001; `cases_v2`: 30000–30039). La lista materializada se commitea en `obd-lab/scenarios/suite_v2/` antes de ejecutar.
 - **Semilla de runner:** 42 en todos los experimentos (idéntica a los pilotos).
 - **Justificación de R = 10:** la suite v1 tiene 6 episodios de fallo en test (lecturas direccionales, no concluyentes — limitación reconocida en los pilotos). Con 10 réplicas: 40 episodios held-out, 20 episodios de fallo conocido en test y 20 sesiones normales de control por brazo, manteniendo el coste computacional dentro del presupuesto del sandbox (los pilotos completos costaron RSS pico 213 MB y minutos de CPU).
@@ -179,16 +166,33 @@ Su refutación no afecta a C-INT ni a la PI (propuesta_alineacion_final.md §4, 
 
 El contraste directo de la PI. Se ejecuta en último lugar, con los mecanismos ya resueltos por las parciales.
 
-- **Enunciado:** ante patrones retirados simultáneamente del detector, del corpus RAG y de la memoria, el sistema integrado los detecta como anómalos, los señala como no cubiertos, formula hipótesis correctas o parcialmente correctas respecto al mecanismo inyectado, con evidencia suficiente, y los explica — en lugar de identificarlos erróneamente con confianza.
-- **H0:** el sistema identifica los held-out como fallos conocidos con confianza alta, o sus hipótesis no superan al control aleatorio. **H1:** el sistema cumple conjuntamente P1–P4 (abajo).
+- **Enunciado:** ante patrones retirados simultáneamente del detector, del corpus RAG y de la memoria, el sistema integrado los identifica como anómalos, reconoce la insuficiencia de su conocimiento disponible en lugar de identificarlos erróneamente con confianza, genera hipótesis diagnósticas trazables, las contrasta mediante evidencia favorable y contradictoria, y consolida conocimiento únicamente cuando se satisfacen los criterios de validación pre-establecidos — absteniéndose en caso contrario (formulación H-MAIN v3, alineación científica aprobada).
+- **H0:** el sistema identifica los held-out como fallos conocidos con confianza alta, o sus hipótesis no superan al control aleatorio. **H1:** el sistema cumple conjuntamente P1–P5 (abajo).
 - **VI:** disponibilidad del conocimiento — condición held-out (triple retirada, §7) vs condición de conocimiento completo (cota superior).
 - **Baselines:** (B1) el mismo sistema con conocimiento completo de las clases held-out (cota superior de detección/identificación); (B2) clasificador supervisado entrenado solo con fallos conocidos (cota de contraste: mide la identificación errónea confiada de un sistema cerrado).
-- **VD (co-primarias, las cuatro):** (P1) recall de señalización de anomalía en episodios held-out; (P2) tasa de "no cubierto" correcta entre los held-out señalados; (P3) tasa de identificación errónea confiada (el sistema afirma un fallo conocido con confianza alta ante un held-out); (P4) calidad de las hipótesis generadas, operacionalizada **sin recurrir a "plausibilidad" subjetiva** (conforme a la operacionalización de H-MAIN aprobada en la alineación científica v2, 2026-08-12; docs/01 v2): rúbrica anclada 1–5 de **corrección respecto al mecanismo GT del fallo inyectado** (correcta / parcialmente correcta / incorrecta) más suficiencia del anclaje en la evidencia; juez calibrado + validación manual §6.4; comparada frente a control de hipótesis plantilla/aleatoria.
+- **VD (co-primarias, las cuatro):** (P1) recall de señalización de anomalía en episodios held-out; (P2) tasa de "no cubierto" correcta entre los held-out señalados; (P3) tasa de identificación errónea confiada (el sistema afirma un fallo conocido con confianza alta ante un held-out); (P4) calidad de las hipótesis generadas, operacionalizada **sin recurrir a "plausibilidad" subjetiva** (conforme a la operacionalización de H-MAIN aprobada en la alineación científica v2, 2026-08-12; docs/01 v2): rúbrica anclada 1–5 de **corrección respecto al mecanismo GT del fallo inyectado** (correcta / parcialmente correcta / incorrecta) más suficiencia del anclaje en la evidencia; juez calibrado + validación manual §6.4; comparada frente a control de hipótesis plantilla/aleatoria; y (P5) **decisión de consolidación/abstención correcta**: en los controles negativos aplicables (CN4–CN9, abajo), fracción de casos con decisión final correcta (refutación o abstención donde corresponde), con la condición absoluta de CERO consolidaciones de hipótesis no validadas como conocimiento reutilizable (gate de §6.3 respetado también bajo memoria contaminada, CN5).
 - **Secundarias:** calibración de confianza (ECE), retardo, desglose por clase held-out, comparación con B1/B2, tasa de outcomes honestos (INCONCLUSIVE/INSUFFICIENT_DATA donde procede).
-- **Escenario:** episodios held-out de suite-v2 (40) para P1–P3; casos held-out end-to-end (40, uno por episodio) para P4. Sistema en configuración final aprobada (detección AM-WE-d + runtime según resultados de las parciales, fijado antes de ejecutar).
-- **Umbrales fijados (antes "fracción pre-registrada"):** aceptación si **P1 ≥ 0.60**, **P2 ≥ 0.70**, **P3 ≤ 0.10** y **P4**: mediana de rúbrica ≥ 3/5 **y** superioridad sobre el control (test de permutación pareado, unilateral, α=0.05). Justificación de P1: el piloto alcanzó 2/4 (0.5) solo con detección y sin razonador; 0.60 exige que la integración aporte sin ser inalcanzable. P3 ≤ 0.10 operacionaliza "no identificar erróneamente con confianza" (con B2 se espera ≫ 0.10).
+- **Escenario:** episodios held-out de suite-v2 (40) para P1–P3; casos held-out end-to-end (40, uno por episodio) para P4; y el **banco de controles negativos CN1–CN9** (abajo) para P5. El banco final de H-MAIN contiene OBLIGATORIAMENTE casos cuya salida correcta es: hipótesis refutada, evidencia insuficiente, varias causas plausibles, anomalía sin relevancia diagnóstica, evidencia documental distractora y memoria contaminada — no solo casos positivos. Sistema en configuración final aprobada (detección AM-WE-d + runtime según resultados de las parciales, fijado antes de ejecutar).
+- **Umbrales fijados (antes "fracción pre-registrada"):** aceptación si **P1 ≥ 0.60**, **P2 ≥ 0.70**, **P3 ≤ 0.10**, **P4**: mediana de rúbrica ≥ 3/5 **y** superioridad sobre el control (test de permutación pareado, unilateral, α=0.05), y **P5 ≥ 0.70 con cero consolidaciones indebidas**. Justificación de P1: el piloto alcanzó 2/4 (0.5) solo con detección y sin razonador; 0.60 exige que la integración aporte sin ser inalcanzable. P3 ≤ 0.10 operacionaliza "no identificar erróneamente con confianza" (con B2 se espera ≫ 0.10).
 - **Análisis:** P1–P3 como proporciones con IC 95 % exacto de Clopper-Pearson (n=40; clúster por clase reportado como desglose); P4 con permutación pareada por caso. Sin corrección entre P1–P4: son co-primarias conjuntivas (todas deben cumplirse), lo que ya es conservador. *Desviación declarada de la convención común (§4 intro):* P1–P3 se contrastan contra umbrales absolutos, no contra un brazo comparador, por lo que la exigencia de significación se sustituye por estimación puntual + IC exacto reportado; P4 conserva el contraste inferencial.
-- **Aceptación/refutación:** aceptación si las cuatro co-primarias se cumplen (P1–P3 en estimación puntual con IC reportado; P4 con significación). **Refutación** si P3 > 0.25 (límite inferior del IC 95 % > 0.10), o P1 < 0.40, o P4 no distinguible del control. Zona intermedia: no concluyente, reportada como respuesta matizada a la PI con análisis de por qué.
+- **Aceptación/refutación:** aceptación si las cinco co-primarias se cumplen (P1–P3 en estimación puntual con IC reportado; P4 con significación). **Refutación** si P3 > 0.25 (límite inferior del IC 95 % > 0.10), o P1 < 0.40, o P4 no distinguible del control, o UNA SOLA consolidación de hipótesis no validada como conocimiento reutilizable en CN5/CN6 (la contaminación de memoria refuta la parte (v) con independencia del resto). Zona intermedia: no concluyente, reportada como respuesta matizada a la PI con análisis de por qué.
+
+
+**Controles negativos congelados (CN1–CN9; materialización en el banco de H-MAIN y, donde se indica, en EXP-MEM-001):**
+
+| CN | Inyección | Salida correcta |
+|---|---|---|
+| CN1 | comportamiento normal poco frecuente (nivel de LTFT sostenido / crucero largo — familia del hallazgo F21/F22) | no señalar, o señalar y reconocer normalidad al contextualizar |
+| CN2 | condiciones ambientales extremas pero normales | no diagnosticar avería |
+| CN3 | documentación distractora plausible en el corpus (manifiesto declarado) | no anclar la hipótesis en el distractor |
+| CN4 | evidencia contradictoria explícita | degradar la hipótesis; no consolidar |
+| CN5 | memoria contaminada deliberadamente (hipótesis falsa pre-cargada como SUPPORTED; también en EXP-MEM-001) | no propagarla; el gate la mantiene fuera del conocimiento reutilizable |
+| CN6 | hipótesis falsa inyectada al verificador | REFUTED o INSUFFICIENT_EVIDENCE |
+| CN7 | varias causas plausibles simultáneas | hipótesis múltiples con ranking y evidencia diferencial; sin colapso confiado |
+| CN8 | evidencia insuficiente por construcción | abstención (INSUFFICIENT_DATA/INCONCLUSIVE) |
+| CN9 | anomalía estadística sin relevancia diagnóstica (transitorio aislado) | no promover a hipótesis (regla de recurrencia, §1) |
+
+CN1/CN2/CN8/CN9 se instancian como episodios/casos; CN3 como documento con manifiesto; CN4/CN6/CN7 como casos de `cases_v2` ya previstos (§6.2: 8 sin fallo + 6 insuficientes + ambiguos); CN5 como los escenarios de propagación de §6.3. La lista y el número exacto de instancias por CN se congelan con la materialización del banco, antes de ver salidas de ningún modelo.
 
 ### 4.7 Precondición pre-registrada: calidad de la segmentación (EXP-SEG-001)
 
@@ -225,7 +229,7 @@ Extiende `cases_v1` (6 casos, inmutable) a **40 casos** definidos por (scenario_
 
 ### 6.3 Condiciones de actualización de memoria (H-MEM y todo experimento con memoria)
 
-- **Ciclo de estados (7):** observación → anomalía → patrón candidato → hipótesis → validación → confirmada/descartada → conocimiento. Consolidación de patrones aprendidos: CANDIDATE → EMERGING → VALIDATED.
+- **Estados epistemológicos (canónicos, alineación v3 §7):** OBSERVED → ANOMALOUS → HYPOTHESIZED → SUPPORTED → EXPERIMENTALLY_VERIFIED → EXTERNALLY_CONFIRMED, con INSUFFICIENT_EVIDENCE y REFUTED como salidas; solo VERIFIED/CONFIRMED son conocimiento reutilizable; REFUTED bloquea la re-consolidación del mismo mecanismo sin evidencia nueva; el LLM nunca promueve a ANOMALOUS y EXTERNALLY_CONFIRMED solo lo otorga el evaluador externo. El ciclo histórico de 7 estados (observación → … → conocimiento) y la consolidación de patrones CANDIDATE → EMERGING → VALIDATED se leen como proyección de estos estados (correspondencia en el núcleo científico); los gates de abajo no cambian.
 - **Gate de admisión (brazo M2):** solo se consolida un caso cuyo hipótesis-top haya superado la verificación determinista contra features **y** con ≥ 2 piezas de evidencia de soporte (`minimum_evidence` del runtime) **y** outcome ∈ {probable, confirmed}; INCONCLUSIVE/INSUFFICIENT_DATA/FAILED no consolidan (se registran como episodios, no como conocimiento).
 - **Brazo M1 (sin validación):** consolida todo caso cerrado con su hipótesis-top, sin gate — es el contraste tipo ExpeL.
 - **Aislamiento entre brazos:** cada brazo parte del mismo snapshot inicial (hash registrado); la memoria evoluciona solo dentro de la secuencia; reseteo entre secuencias; prohibido compartir memoria entre brazos o experimentos.
@@ -263,7 +267,9 @@ H-MAIN es especialmente sensible a fuga de conocimiento: un patrón "no document
 
 ¹ El train de los detectores es exclusivamente conducción normal (anti-circularidad §3.2). ² Como conocimiento legítimo del dominio (descripciones de DTC/fallos conocidos), no como pistas de casos concretos. ³ En suite v1/v2 el test incluye con semillas nuevas solo vacuum_leak y maf_drift; el resto de conocidos se evalúa en validation.
 
-**Procedimiento de auditoría (ejecutable y registrado):** (a) búsqueda léxica automatizada de los identificadores y descriptores de las clases held-out (lista de términos congelada con el corpus) sobre corpus RAG, snapshot de memoria, prompts y configs; (b) búsqueda por similitud de embeddings (top-20 por firma held-out) con revisión manual de los recuperados; (c) hashes del corpus, del snapshot de memoria y de los prompts registrados en runs.jsonl; (d) resultado de la auditoría archivado como artefacto del experimento. Cualquier positivo → se retira el elemento, se re-audita y se documenta; si la retirada altera un experimento ya ejecutado, ese run queda invalidado y se repite.
+**Procedimiento de auditoría (IMPLEMENTADO, B0.5):** la comprobación léxica y de mecanismo está implementada en `tools/contamination_audit.py` con especificación declarativa congelada en `ai-models/configs/heldout-exclusions.yaml` (alias + términos de mecanismo por clase held-out; alcance: suites y sesiones de train/validation, registro de corridas de entrenamiento, corpus RAG, plantillas de prompt, semillas de memoria y exports del estado vivo vía `--memory-state`; resolución de escapes JSON; límites de lo auditable declarados en la propia especificación). Se ejecuta y archiva su informe **antes de cada experimento confirmatorio de los pasos 4–8**; exit ≠ 0 ⇒ el run no se ejecuta o, si estaba en curso, queda NO CONCLUYENTE. Se complementa con: (b) búsqueda por similitud de embeddings (top-20 por firma held-out) con revisión manual cuando el corpus tenga recuperación densa; (c) hashes del corpus, del snapshot de memoria y de los prompts en runs.jsonl; (d) verificación sha256 de `arms-freeze-v1.json` (heredada del pre-registro A) antes de cada confirmatorio. Cualquier positivo → se retira el elemento, se re-audita y se documenta; si la retirada altera un experimento ya ejecutado, ese run queda invalidado y se repite.
+
+**Estado vigente en la congelación (2026-08-18, declarado — no bloquea el freeze pero sí los runs):** la primera ejecución de la auditoría detecta que `corpus_v1.yaml` (documento `doc-relational-anomalies`) **viola E-RAG**: describe los mecanismos de las tres clases held-out (pérdida de correlación RPM–MAF, temperatura clavada, derivas conjuntas lentas). En consecuencia, EXP-EXP-001 y EXP-MAIN-001 **no pueden ejecutarse** hasta que el rediseño del corpus (R3, ya auditado en docs/experiments/auditoria_corpus_rag.md) produzca un corpus v2 con manifiesto y hash que pase la auditoría. El hash del corpus congelado se registrará por enmienda al fijarlo, como prevé este §.
 
 ## 8. Plan estadístico global
 
@@ -317,7 +323,23 @@ Comparación de baselines no supervisados sobre suite v1. Resultado: LOF k=10 me
 - **Resultados observados (test):** causa del FPR = insuficiencia de normalidad (descomposición de varianza: LTFT en autovía, ratio entre/intra 1.56); AM-E-d FPR 0.149→0.008 con event precision 0.98 y cobertura 97.6 %; trade-off: `t-corrbreak-u` R 0.73→0.41 (sigue detectada); AM-WE-d F1 0.70 / FPR 0.071 / held-out 2/4. Negativos conservados: scoring robusto rechazado (held-out 0/4); LOF reentrenado con v1.1 empeora (FPR 0.067→0.142) — la calibración es por detector.
 - **Decisiones metodológicas que motivó:** ampliar la normalidad de train en el diseño confirmatorio (§3.2); fijar `event-baseline-z@0.2.0` y AM-WE-d como configuración de partida (§3.5); no fragmentar `context_signature` (§6.1); añadir métricas por-evento como secundarias (§4.1).
 
-### 11.4 Límite de uso
+### 11.4 Serie exploratoria F13–F22 (línea ML; pasos 1–3 de la cadena)
+
+Ejecutados tras la redacción de rc1 y registrados aquí en la consolidación rc2 con el mismo límite de uso. Detalle en docs/experiments/README.md y docs/alineacion_v3/02_trazabilidad.md §2.
+
+- **EXP-ANOM-005** (F13): paridad exacta del camino wide (ancla LOF 0.163197) — control de integridad de toda la serie.
+- **EXP-ANOM-006** (F14): AE denso vs LOF — adopción DENEGADA (FPR 3×).
+- **EXP-ANOM-007** (F16): AE v2 + primera evaluación XAI — D1 REJECT; D3 ADOPT (AR@K ≫ azar).
+- **EXP-ANOM-008** (F17): fs2-lite — KEEP fs1; causa refinada al evento de adaptación del LTFT cuantizado.
+- **EXP-ANOM-009** (F18): LSTM/GRU-AE — HX-ML-3 REFUTADA; el brazo control reveló el techo de cobertura.
+- **AUDIT-DATA-001** (F19): 7/8 anomalías separables sin modelos ⇒ los recalls 0.000 son fallo de modelo; taxonomía de tipos de fallo experimental.
+- **F20**: benchmark v2 + RNG separado (ADR-0034); su «huecos cerrados» resultó ser cobertura declarada.
+- **EXP-ANOM-010** (F21): HX-ML-4 REFUTADA — cobertura declarada ≠ cobertura efectiva (motiva el criterio bloqueante de §3.2).
+- **EXP-ANOM-010-R2** (F22): HX-ML-5 SUPPORTED — con cobertura efectiva verificada, FPR 0.0086 sin tocar el modelo; AE = CANDIDATE FOR PROMOTION (**no** adopción; la adopción exige el confirmatorio de este pre-registro).
+
+**Aviso interpretativo vinculante (F-PREREG §2.1):** el cierre exploratorio de H1 (HX-ML-5) responde «¿basta con cubrir la normalidad?» y NO responde H-EVT («¿aporta el evento como contexto?»), cuyos brazos confirmatorios E0/E1/E3/E4/W∨E siguen sin ejecutarse. Toda la serie pertenece a los pasos 1–3 de la cadena: los pasos 4–8 no tienen evidencia propia.
+
+### 11.5 Límite de uso
 
 Ningún número de §11 entra en los análisis de §4; ninguna tabla de la memoria del TFM presentará resultados exploratorios y confirmatorios agregados. En la memoria, los pilotos aparecen en la sección de metodología/diseño (como justificación) y los confirmatorios en resultados.
 
@@ -347,6 +369,20 @@ Toda familia refutada o no concluyente se reporta en la memoria con el mismo niv
   - **D2 — perfiles de vehículo de obd-lab v2** (para EXP-PERS-001 y el brazo E4): ≥ 3 perfiles con firmas de normalidad distintas, definidos y congelados antes de generar suite-v2-multi.
   - Ningún otro parámetro queda abierto. Si la ejecución revela un parámetro no previsto, se fija por enmienda **antes** de ejecutar el experimento afectado y se declara en la memoria.
 - **Publicación:** el pre-registro y sus enmiendas viven en `docs/experiments/` del monorepo (histórico completo vía git), citados desde el capítulo de metodología.
+
+### ENM-000 — Consolidación rc1 → rc2 previa a la congelación (2026-08-18)
+
+Única «enmienda» pre-congelación; se registra con el mismo formato por transparencia, aunque no afecta a ningún experimento ejecutado (ninguno confirmatorio lo está). Cambios:
+
+1. §1: PI v2 → **PI v3** + definición operacional de «no representado» (E-DET/E-RAG/E-MEM) + marco de la cadena de 8 pasos y del resultado correcto (descubrir / verificar / refutar / abstenerse).
+2. §3.2: criterio bloqueante de **cobertura efectiva** para el train de cada réplica de suite-v2 (corrige el confound medido en F-PREREG §2.2; instrumento: `ai_models.audit.coverage`).
+3. §4.6: H-MAIN v3 con (v) consolidación/abstención; co-primaria **P5** con sus umbrales; refutación ampliada (una consolidación indebida en CN5/CN6 refuta); banco con **controles negativos CN1–CN9 obligatorios**.
+4. §6.3: estados epistemológicos canónicos (8) con reglas de admisión; los gates no cambian.
+5. §7: auditoría anti-contaminación **implementada** (B0.5) como gate ejecutable pre-run + verificación sha256 heredada de A + **hallazgo vigente declarado**: corpus_v1 viola E-RAG (bloquea EXP-EXP/EXP-MAIN hasta corpus v2).
+6. §11: serie exploratoria completada (F13–F22) con el aviso interpretativo de F-PREREG §2.1.
+7. Instrumento de RAM corregido (B0.2): el criterio edge vuelve a ser verificable.
+
+Con ENM-000 quedan incorporadas las cinco condiciones que la nota de alineación v3 exigía para poder congelar. Nada de lo anterior modifica umbrales, métricas ni criterios de un experimento ejecutado o en curso.
 
 ---
 

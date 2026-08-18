@@ -1,5 +1,13 @@
 # F-PREREG — Reconciliación de los pre-registros
 
+> **CIERRE (2026-08-18).** Las propuestas de esta reconciliación quedaron incorporadas al
+> canónico `pre-registro-v1.md` en su consolidación rc2 (ENM-000) y el tag `prereg-v1.0`
+> se ha creado con la aprobación del autor. Las cinco contradicciones del §2 quedaron
+> resueltas: §2.1 aviso interpretativo incorporado al §11 del canónico; §2.2 criterio
+> bloqueante de cobertura efectiva en §3.2; §2.3 decidido B (semillas 11000–20036;
+> 901–925 siguen reservadas); §2.4 §11 completado; §2.5 instrumento de RAM corregido
+> con tests (B0.2).
+
 **16 de agosto de 2026 · pasos 1 y 2 de [F-PREREG](F-PREREG_tarea.md) · el tag
 `prereg-v1.0` NO se ha creado y no se creará sin aprobación explícita.**
 
