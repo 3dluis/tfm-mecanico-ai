@@ -138,8 +138,13 @@ def check_session_dirs(spec: dict[str, Any]) -> list[dict[str, Any]]:
     """E-DET (b): ninguna sesión materializada de train/validation con fallo held-out."""
     violations = []
     heldout = {a for c in spec["heldout_classes"].values() for a in c["aliases"]}
+    directories: list[Path] = []
     for rel in spec["scan"]["session_dirs"]:
-        directory = REPO_ROOT / rel
+        if any(ch in rel for ch in "*?["):
+            directories.extend(Path(d) for d in sorted(glob.glob(str(REPO_ROOT / rel))))
+        else:
+            directories.append(REPO_ROOT / rel)
+    for directory in directories:
         if not directory.is_dir():
             continue
         for session in sorted(directory.glob("*.jsonl")):

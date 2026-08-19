@@ -1,0 +1,282 @@
+# GENERADO por tools/gen_suite_v2.py — no editar a mano (pre-registro §3.2).
+suite: obd-lab-suite-v2
+replica: 9
+seed_block:
+- 19000
+- 19999
+escalation: 0
+coverage_rule: positive_level_share >= 0.03 y negative_level_share >= 0.03 sobre las ventanas fs1 del train (ai_models.audit.coverage);
+  si falla, re-generar con escalation+1 (mismo bloque de semillas)
+train:
+- scenario_id: r09-tr-urban-0
+  description: Train normal urbano 0 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19000
+- scenario_id: r09-tr-urban-1
+  description: Train normal urbano 1 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19001
+- scenario_id: r09-tr-urban-2
+  description: Train normal urbano 2 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19002
+- scenario_id: r09-tr-urban-3
+  description: Train normal urbano 3 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19003
+- scenario_id: r09-tr-urban-4
+  description: Train normal urbano 4 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19004
+- scenario_id: r09-tr-urban-5
+  description: Train normal urbano 5 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19005
+- scenario_id: r09-tr-urban-6
+  description: Train normal urbano 6 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19006
+- scenario_id: r09-tr-urban-7
+  description: Train normal urbano 7 (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 5400.0
+  seed: 19007
+- scenario_id: r09-tr-highway-0
+  description: Train normal autovía 0 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19008
+- scenario_id: r09-tr-highway-1
+  description: Train normal autovía 1 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19009
+- scenario_id: r09-tr-highway-2
+  description: Train normal autovía 2 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19010
+- scenario_id: r09-tr-highway-3
+  description: Train normal autovía 3 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19011
+- scenario_id: r09-tr-highway-4
+  description: Train normal autovía 4 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19012
+- scenario_id: r09-tr-highway-5
+  description: Train normal autovía 5 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19013
+- scenario_id: r09-tr-highway-6
+  description: Train normal autovía 6 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19014
+- scenario_id: r09-tr-highway-7
+  description: Train normal autovía 7 (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 5400.0
+  seed: 19015
+- scenario_id: r09-tr-idle-0
+  description: Train ralentí 0 (réplica 9)
+  category: normal
+  driving_profile: idle
+  duration_s: 1800.0
+  seed: 19016
+- scenario_id: r09-tr-idle-1
+  description: Train ralentí 1 (réplica 9)
+  category: normal
+  driving_profile: idle
+  duration_s: 1800.0
+  seed: 19017
+- scenario_id: r09-tr-idle-2
+  description: Train ralentí 2 (réplica 9)
+  category: normal
+  driving_profile: idle
+  duration_s: 1800.0
+  seed: 19018
+- scenario_id: r09-tr-cold-0
+  description: Train arranque frío 0 (réplica 9)
+  category: normal
+  driving_profile: cold_start
+  duration_s: 2400.0
+  seed: 19019
+  ambient_temp_c: 8.0
+- scenario_id: r09-tr-cold-1
+  description: Train arranque frío 1 (réplica 9)
+  category: normal
+  driving_profile: cold_start
+  duration_s: 2400.0
+  seed: 19020
+  ambient_temp_c: 6.0
+- scenario_id: r09-tr-cold-2
+  description: Train arranque frío 2 (réplica 9)
+  category: normal
+  driving_profile: cold_start
+  duration_s: 2400.0
+  seed: 19021
+  ambient_temp_c: 12.0
+validation:
+- scenario_id: r09-v-normal-a
+  description: Validation normal urbano (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19022
+- scenario_id: r09-v-normal-b
+  description: Validation normal autovía (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 1800.0
+  seed: 19023
+- scenario_id: r09-v-vacuum
+  description: Fuga de vacío (validation, réplica 9)
+  category: known_fault
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19024
+  anomaly_seed: 19524
+  fault: vacuum_leak
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-v-maf
+  description: Deriva de MAF (validation, réplica 9)
+  category: known_fault
+  driving_profile: highway
+  duration_s: 1800.0
+  seed: 19025
+  anomaly_seed: 19525
+  fault: maf_drift
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-v-thermo
+  description: Termostato abierto (validation, réplica 9)
+  category: known_fault
+  driving_profile: cold_start
+  duration_s: 1500.0
+  seed: 19026
+  anomaly_seed: 19526
+  fault: thermostat_stuck
+  fault_start_s: 0.0
+  fault_end_s: 1500.0
+  ambient_temp_c: 8.0
+- scenario_id: r09-v-o2lag
+  description: Sonda O2 lenta (validation, réplica 9)
+  category: known_fault
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19027
+  anomaly_seed: 19527
+  fault: o2_lag
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-v-misfire
+  description: Fallo de encendido (validation, réplica 9)
+  category: known_fault
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19028
+  anomaly_seed: 19528
+  fault: misfire
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+test:
+- scenario_id: r09-t-normal-a
+  description: Test normal urbano, control FP (réplica 9)
+  category: normal
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19029
+- scenario_id: r09-t-normal-b
+  description: Test normal autovía, control FP (réplica 9)
+  category: normal
+  driving_profile: highway
+  duration_s: 1800.0
+  seed: 19030
+- scenario_id: r09-t-corrbreak-u
+  description: Held-out desacoplo MAF urbano (réplica 9)
+  category: held_out
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19031
+  anomaly_seed: 19531
+  fault: corr_break_rpm_maf
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-t-corrbreak-h
+  description: Held-out desacoplo MAF autovía (réplica 9)
+  category: held_out
+  driving_profile: highway
+  duration_s: 1800.0
+  seed: 19032
+  anomaly_seed: 19532
+  fault: corr_break_rpm_maf
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-t-coolfreeze
+  description: Held-out dinámica térmica muerta (réplica 9)
+  category: held_out
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19033
+  anomaly_seed: 19533
+  fault: load_coolant_decouple
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-t-jointdrift
+  description: Held-out deriva conjunta MAF/avance (réplica 9)
+  category: held_out
+  driving_profile: highway
+  duration_s: 1800.0
+  seed: 19034
+  anomaly_seed: 19534
+  fault: joint_slow_drift
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-t-vacuum
+  description: Fuga de vacío, semilla nueva (réplica 9)
+  category: known_fault
+  driving_profile: urban
+  duration_s: 1800.0
+  seed: 19035
+  anomaly_seed: 19535
+  fault: vacuum_leak
+  fault_start_s: 600.0
+  fault_end_s: 1800.0
+- scenario_id: r09-t-maf
+  description: Deriva de MAF, semilla nueva (réplica 9)
+  category: known_fault
+  driving_profile: highway
+  duration_s: 1800.0
+  seed: 19036
+  anomaly_seed: 19536
+  fault: maf_drift
+  fault_start_s: 600.0
+  fault_end_s: 1800.0

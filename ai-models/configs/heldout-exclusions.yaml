@@ -39,6 +39,10 @@ scan:
     - 'data/sessions_v2/train'
     - 'data/sessions_v3/train'
     - 'data/sessions_qcontrol/train'
+    # suite-v2 confirmatoria (F25): held-out prohibido en train Y validation; el test
+    # de cada réplica es lado de evaluación (whitelist).
+    - 'data/suite_v2/replica-*/train'
+    - 'data/suite_v2/replica-*/validation'
   # E-DET (c): registro de modelos — ninguna corrida de entrenamiento puede referenciar
   # una clase held-out.
   training_runs: 'ai-models/registry/training-runs/*.json'
