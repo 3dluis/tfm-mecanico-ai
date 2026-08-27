@@ -10,6 +10,31 @@ TFM del Máster en Inteligencia Artificial de la **UAX** (Universidad Alfonso X 
 Luis Daniel Díaz, entrega **septiembre de 2026**. Sistema híbrido edge-cloud de diagnóstico
 vehicular por OBD-II.
 
+## Núcleo científico vigente (alineación v4, ADR-0036)
+
+**PI v4:** ¿puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos
+OBD-II reales, rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo
+la evidencia disponible no es suficiente para sostener una explicación en lugar de generar
+una hipótesis sin fundamento?
+
+Fuente canónica: `docs/alineacion_v4/01_nucleo_cientifico.md`. Reglas derivadas, vinculantes:
+
+- **Flujo científico:** OBD-II → contexto → diagnóstico → RAG → evidencia → verificación del
+  soporte → explicación trazable **o** abstención. Los detectores de anomalías y el runtime
+  multiagente son **subsistemas auxiliares**, no la contribución.
+- **Fuera del alcance experimental** (código y diseño conservados, no evaluados):
+  memoria evolutiva y consolidación de conocimiento, descubrimiento de fallos no
+  representados, aprendizaje autónomo, ablación de arquitecturas A0–A6.
+  Catálogo: `docs/alineacion_v4/05_fuera_de_alcance.md`.
+- **Vocabulario:** *dato*, *evidencia*, *diagnóstico*, *explicación*, *afirmación*,
+  *hipótesis* (objeto interno, nunca un resultado) y *abstención* (salida correcta) tienen
+  una única definición operativa (núcleo científico §2). **No usar «descubrimiento» como
+  contribución.** No escribir «literatura»: usar «trabajos revisados», «estudios
+  analizados» o equivalentes. Nunca afirmar «no existe»: «no fue identificado en los
+  trabajos analizados».
+- **Pre-registro congelado** (`prereg-v1.0`): solo se modifica por enmienda fechada y no
+  retroactiva. La vigente es **ENM-001**.
+
 ## Reglas arquitectónicas
 
 1. **PostgreSQL + pgvector es la plataforma oficial de persistencia de Mecánico IA Edge**
@@ -56,7 +81,8 @@ vehicular por OBD-II.
 LoRA/QLoRA y cualquier fine-tuning · online learning · base de datos de grafos · varios LLM
 concurrentes · MLOps en la nube · escritura sobre la ECU · consolidación automática de
 patrones · ejecución de experimentos confirmatorios antes de congelar el pre-registro ·
-ampliación masiva del Agent Runtime antes de validar la capa de persistencia.
+ampliación masiva del Agent Runtime antes de validar la capa de persistencia · **ampliar de
+nuevo el alcance científico más allá de la PI v4**.
 
 ## Comandos
 

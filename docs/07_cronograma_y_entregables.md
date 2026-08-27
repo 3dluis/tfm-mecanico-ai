@@ -1,5 +1,12 @@
 # 7. Cronograma por fases y entregables
 
+> **⚠ Nota de vigencia (2026-08-27).** Plan original, conservado como registro. Vigente:
+> [`docs/10_cronograma_rebalanceado.md`](10_cronograma_rebalanceado.md) con su revisión del
+> 27-ago. Las hipótesis H1–H4 que aquí se citan se leen por
+> `docs/correspondencia_nomenclatura.md`; las vigentes son H-MAIN, H-GRD, H-TRC, H-ABS y
+> H-SEL (`docs/alineacion_v4/01_nucleo_cientifico.md` §5).
+
+
 > ⚠️ **Superado operativamente desde el 16 de agosto de 2026.** El plan de §7.2 asumía cinco
 > fases secuenciales; el trabajo real se organizó en 22 fases técnicas concentradas en H1.
 > El cronograma vigente, con clasificación MUST/SHOULD/OPTIONAL/CUT y dependencias, está en

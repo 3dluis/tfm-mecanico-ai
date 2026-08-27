@@ -33,7 +33,7 @@
 
 ## 3.3 Limitaciones (declaradas, no eliminables en este TFM)
 
-**L1 — Validación sobre datos emulados/sintéticos.** La principal limitación metodológica: los fallos se inyectan según modelos de fallo definidos por el autor a partir de literatura y documentación técnica, no se observan en vehículos reales. Las conclusiones sobre detección "temprana" son válidas dentro del entorno emulado; su transferencia a vehículos reales queda como trabajo futuro. Esta limitación se mitigará parcialmente validando la capa de detección también sobre al menos un dataset público con datos reales.
+**L1 — Validación sobre datos emulados/sintéticos.** La principal limitación metodológica: los fallos se inyectan según modelos de fallo definidos por el autor a partir de los trabajos revisados y de documentación técnica, no se observan en vehículos reales. Las conclusiones sobre detección "temprana" son válidas dentro del entorno emulado; su transferencia a vehículos reales queda como trabajo futuro. Esta limitación se mitigará parcialmente validando la capa de detección también sobre al menos un dataset público con datos reales.
 
 **L2 — Rendimiento medido en emulación.** QEMU no reproduce fielmente el rendimiento de la CPU ARM real (suele ser más lento en emulación de instrucciones y no modela la microarquitectura del Cortex-A76). Las mediciones se harán en contenedor con límites de recursos y se reportarán como *cota aproximada*, declarando el método. Si se consigue una Raspberry Pi física antes de la entrega, se repetirán las mediciones clave.
 

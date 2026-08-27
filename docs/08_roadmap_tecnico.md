@@ -1,5 +1,14 @@
 # 8. Roadmap técnico del prototipo
 
+> **⚠ Nota de vigencia (2026-08-27, ADR-0036).** Roadmap anterior a la acotación de la
+> pregunta de investigación. El camino crítico vigente es: **R2** (fijar el modelo de
+> lenguaje local) → **R3/D4** (construir y congelar las variantes de corpus C-A / C-B /
+> C-B′) → **EXP-RET-001** → **EXP-EVID-001**. Las líneas EXP-PAT-* (descubrimiento de
+> patrones) y los experimentos de memoria y de arquitecturas agénticas quedan fuera del
+> alcance experimental (`docs/alineacion_v4/05_fuera_de_alcance.md`). Plan vigente:
+> [`03_diseno_experimental.md`](alineacion_v4/03_diseno_experimental.md) §5.
+
+
 ## Tabla de estado (vigente a 16 de agosto de 2026)
 
 | Línea | Estado | Detalle |

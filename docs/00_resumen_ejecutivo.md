@@ -3,9 +3,26 @@
 **Proyecto:** Sistema Inteligente Híbrido Edge-Cloud para Diagnóstico y Mantenimiento Predictivo Vehicular mediante OBD-II
 **Autor:** Luis Daniel Díaz
 **Documento:** Fase 0 — Base del proyecto (versión 0.1, 12 de agosto de 2026)
-**Estado:** Borrador pendiente de aprobación del autor
+**Estado:** Borrador de planificación; **la estructura científica vigente es la alineación v4 (27-ago-2026)**
 
 ---
+
+> **⚠ Núcleo científico vigente (2026-08-27, ADR-0036).** Los documentos de planificación
+> `00`–`10` se conservan como registro del plan. La estructura científica del TFM es la de
+> [`docs/alineacion_v4/`](alineacion_v4/01_nucleo_cientifico.md):
+>
+> - **Pregunta de investigación (PI v4):** ¿puede un agente con RAG explicar el diagnóstico
+>   de un vehículo a partir de datos OBD-II reales, rastreando cada explicación hasta su
+>   evidencia de origen, y reconocer cuándo la evidencia disponible no es suficiente para
+>   sostener una explicación en lugar de generar una hipótesis sin fundamento?
+> - **Cadena:** observar → contextualizar → diagnosticar → recuperar evidencia → verificar
+>   el soporte → explicación trazable **o** abstención declarada.
+> - **Fuera del alcance experimental:** memoria evolutiva, consolidación de conocimiento,
+>   descubrimiento de fallos no representados, aprendizaje autónomo y comparación de
+>   arquitecturas multiagente. Se conservan diseño y código
+>   ([`05_fuera_de_alcance.md`](alineacion_v4/05_fuera_de_alcance.md)).
+> - **Historia del cambio:** [`04_historial_pi.md`](alineacion_v4/04_historial_pi.md).
+> - **Auditoría del impacto:** [`00_auditoria_impacto.md`](alineacion_v4/00_auditoria_impacto.md).
 
 ## 1. Propósito de este conjunto de documentos
 

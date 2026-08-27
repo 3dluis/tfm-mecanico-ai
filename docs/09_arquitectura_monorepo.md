@@ -15,7 +15,7 @@ Docker desde el inicio, cinco dominios + contratos compartidos.
 La propuesta de cinco dominios es correcta y madura. Sus tres aciertos principales:
 
 1. **Separar `ai-models` (entrenamiento) de `diagnostic-agent` (inferencia)** materializa el
-   desacoplamiento entrenamiento/inferencia que la literatura de edge ML recomienda y que ya
+   desacoplamiento entrenamiento/inferencia que los trabajos revisados sobre aprendizaje automático en el borde recomiendan y que ya
    estaba implícito en docs/05: el edge nunca entrena, solo ejecuta artefactos exportados.
 2. **Elevar `obd-lab` a dominio propio** convierte el generador de escenarios en un artefacto
    independiente, instalable y citable — condición necesaria para que sea contribución técnica

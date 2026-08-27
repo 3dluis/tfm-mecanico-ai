@@ -35,7 +35,7 @@ Arquitectura híbrida edge-cloud con **autonomía total del edge** como principi
 
 ## 5.2 Componentes principales
 
-**C1 — Emulador de vehículo.** Emulador ELM327 por software más un *generador de escenarios* propio que define perfiles de conducción (arranque en frío, urbano, carretera) y modelos de fallo parametrizados (deriva de MAF, fuga de vacío→fuel trims positivos, termostato atascado→refrigerante que no alcanza temperatura, sonda O2 lenta, fallo de encendido intermitente). Cada escenario es reproducible por semilla. *Este componente es también instrumento experimental: la definición de los modelos de fallo se documenta y justifica con literatura técnica.*
+**C1 — Emulador de vehículo.** Emulador ELM327 por software más un *generador de escenarios* propio que define perfiles de conducción (arranque en frío, urbano, carretera) y modelos de fallo parametrizados (deriva de MAF, fuga de vacío→fuel trims positivos, termostato atascado→refrigerante que no alcanza temperatura, sonda O2 lenta, fallo de encendido intermitente). Cada escenario es reproducible por semilla. *Este componente es también instrumento experimental: la definición de los modelos de fallo se documenta y justifica con los trabajos técnicos revisados.*
 
 **C2 — Adquisición.** Cliente OBD-II (python-OBD) con capa de transporte plugable (`serial | tcp | bluetooth-rfcomm`), sondeo de PIDs a frecuencia configurable (nominal 1 Hz), validación de rangos y cola de escritura a persistencia.
 

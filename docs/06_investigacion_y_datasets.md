@@ -1,4 +1,13 @@
-# 6. Plan de investigación: literatura, datasets, contribuciones y delimitación investigación/ingeniería
+# 6. Plan de investigación: estado del conocimiento, datasets, contribuciones y delimitación investigación/ingeniería
+
+> **⚠ Nota de vigencia (2026-08-27, ADR-0036).** Documento de planificación anterior a la
+> acotación de la pregunta de investigación. Las contribuciones vigentes son **C1**
+> (protocolo de disponibilidad de evidencia controlada), **C2** (trazabilidad
+> afirmación→evidencia→dato) y **C3** (caracterización empírica de la abstención):
+> `docs/alineacion_v4/01_nucleo_cientifico.md` §7. Las contribuciones enunciadas aquí que
+> dependían de la memoria evolutiva y de la integración de la cadena completa pasan a
+> trabajo futuro (`05_fuera_de_alcance.md`). El plan de datasets y la delimitación
+> investigación/ingeniería siguen vigentes.
 
 ## 6.1 Investigaciones necesarias (lista de trabajo, Fase 1)
 
@@ -14,7 +23,7 @@ Cada ítem tiene un producto concreto. **Ninguna referencia se citará en la mem
 | IN-6 | **Verificación de datasets** (§6.2): disponibilidad real, licencia, variables incluidas | Decisión documentada de qué datasets se usan |
 | IN-7 | Estándares: SAE J1979 (PIDs), J2012 (DTC), J1962, ISO 15031, ISO 15765 (CAN); qué puede citarse desde fuentes accesibles | Base normativa del capítulo de contexto |
 | IN-8 | Modelos de fallo de motor de gasolina documentados (relación causa→firma en PIDs: fuga de vacío→LTFT+, MAF derivado→carga incoherente, etc.) para diseñar la inyección de fallos con fundamento | Especificación justificada de los 5+ escenarios de fallo (C1, RI1) |
-| IN-9 | Trabajos que afirman "descubrimiento de patrones nuevos" en mantenimiento predictivo: cómo lo operativizan y evalúan | Defensa metodológica de la redefinición hecha en `01`, §1.3 |
+| IN-9 | Trabajos que evalúan el soporte de una explicación por la evidencia recuperada, la atribución verificable de citas y la abstención ante evidencia insuficiente | Línea D de la revisión (`estado_del_arte/linea_d_trazabilidad_fidelidad_abstencion.md`); sostiene el vacío V4\* |
 
 Presupuesto temporal: IN-1 a IN-9 concentradas en Fase 1 (véase `07`), con actualización puntual durante la escritura.
 
@@ -55,9 +64,9 @@ Decisión sobre a cuál apuntar: después de la Fase 4 (resultados), con el tuto
 
 ## 6.5 Aspectos innovadores del proyecto
 
-1. La **integración** en un único sistema edge de detección no supervisada + agente LLM con grafo explícito + RAG + memoria de casos aplicada a OBD-II. Las piezas existen por separado en la literatura; el sistema integrado y evaluado en recursos limitados es el hueco (a confirmar/matizar con IN-1/IN-3).
+1. La **trazabilidad verificable** entre cada afirmación de una explicación diagnóstica y la evidencia que la sostiene, con doble anclaje documental y telemétrico. Las piezas existen por separado en los trabajos revisados; su verificación conjunta sobre diagnóstico OBD-II no fue identificada.
 2. El **nodo de verificación** del agente: contrastar cada hipótesis del LLM contra la telemetría real antes de emitirla (reduce alucinación por diseño, no solo por prompt).
-3. La **memoria evolutiva** como objeto de estudio medido, no como característica anecdótica.
+3. La **abstención ante evidencia insuficiente** como comportamiento diseñado, implementado y medido —con su curva riesgo-cobertura— y no como una advertencia en el texto de la respuesta. *(La memoria evolutiva, que esta lista enunciaba antes en este punto, pasa a trabajo futuro: `docs/alineacion_v4/05_fuera_de_alcance.md`.)*
 4. El **banco de fallos inyectables reproducible** para un dominio donde los datos de fallo etiquetados son escasos.
 5. La evaluación **honesta de la frontera edge/cloud**: mismo agente, dos LLM, cuantificación del coste de la autonomía local.
 

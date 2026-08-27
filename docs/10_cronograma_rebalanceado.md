@@ -1,8 +1,25 @@
 # 10. Cronograma rebalanceado hasta la entrega (desde F22)
 
-**Fecha de emisión:** 16 de agosto de 2026 · **Sustituye operativamente a** `docs/07`
-§7.2, que se conserva como registro del plan original · **Estado:** propuesta, pendiente de
-la aprobación del autor.
+**Fecha de emisión:** 16 de agosto de 2026 · **Revisado el 27 de agosto de 2026** ·
+**Sustituye operativamente a** `docs/07` §7.2, que se conserva como registro del plan
+original.
+
+> **⚠ Revisión del 27-ago-2026 (ADR-0036).** La acotación de la pregunta de investigación
+> **simplifica este cronograma**: de tres experimentos agénticos encadenados (EXP-EXP-001,
+> EXP-MEM-001, EXP-MAS-001) se pasa a dos (**EXP-RET-001** y **EXP-EVID-001**), y el
+> contraste principal deja de depender de la memoria. Cambios en las tareas MUST:
+>
+> | Antes | Ahora |
+> |---|---|
+> | **M4** — corpus e índice RAG con métricas descriptivas | **M4** — corpus en **tres variantes** C-A / C-B / C-B′ con manifiesto, checksum y evidencia de referencia por caso (parámetro diferido **D4**), más **EXP-RET-001**: la recuperación deja de ser instrumental y **contrasta H-GRD** |
+> | **M5** — EXP-MEM-001 (M0/M1/M2) | **Retirada del alcance.** Diseño conservado sin ejecutar (`alineacion_v4/05_fuera_de_alcance.md` §1) |
+> | **M5b** — EXP-EXP-001 (X0/X1/X2) | **M5** — **EXP-EVID-001**: absorbe EXP-EXP-001 y EXP-COV-001; 3 brazos B1/B2/B3 × 2 escenarios × 40 casos; contrasta H-MAIN, H-GRD, H-TRC, H-ABS y H-SEL |
+>
+> **M2b (R2, fijar el modelo de lenguaje) sigue siendo el camino crítico** y ahora comparte
+> ese lugar con **M4**, que pasa a ser bloqueante. El orden de sacrificio pre-declarado, si
+> el calendario aprieta: validaciones externas → variante C-B′ → brazo B1 → EXP-SEG-001;
+> **nunca** el Escenario B ni el brazo B3. Plan experimental vigente:
+> [`03_diseno_experimental.md`](alineacion_v4/03_diseno_experimental.md) §5.
 
 ## 10.1 Punto de partida real
 
@@ -10,7 +27,7 @@ la aprobación del autor.
 |---|---|
 | Fases técnicas cerradas | F1–F22 |
 | H1 (detección) | exploratorio **`SUPPORTED`** — línea **congelada** tras F22 |
-| H2 (RAG) · H3 (memoria) · H4 (edge) | **sin ejecutar** |
+| H2 (RAG) · H3 (memoria) · H4 (edge) | **sin ejecutar** — bajo la PI v4: H-GRD/H-TRC/H-ABS/H-SEL sin ejecutar; H-MEM fuera de alcance; el criterio edge sigue vigente |
 | Memoria del TFM | esqueleto creado en F22; 0 palabras **en `main`** — pero ver la corrección de §10.1.1 |
 | Pre-registro | **sin congelar** ⇒ nada confirmatorio es posible todavía |
 | API del prototipo | solo `/health` y `/ready` |
