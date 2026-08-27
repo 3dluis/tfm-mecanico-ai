@@ -46,8 +46,15 @@ scan:
   # E-DET (c): registro de modelos — ninguna corrida de entrenamiento puede referenciar
   # una clase held-out.
   training_runs: 'ai-models/registry/training-runs/*.json'
-  # E-RAG: corpus recuperable completo.
-  corpus: 'diagnostic-agent/knowledge/*.yaml'
+  # E-RAG: corpus recuperable completo. Lista de patrones desde R3 (corpus v2): se auditan
+  # las fuentes (capa externa y capa propia) Y las variantes construidas. C-A y sus variantes
+  # NO pueden describir los mecanismos held-out: los episodios held-out de suite_v2 son
+  # Escenario B de origen natural y esa propiedad debe verificarse, no suponerse.
+  corpus:
+    - 'diagnostic-agent/knowledge/*.yaml'
+    - 'diagnostic-agent/knowledge/corpus_v2/own/*.yaml'
+    - 'diagnostic-agent/knowledge/corpus_v2/external/*.txt'
+    - 'diagnostic-agent/knowledge/corpus_v2/build/*.yaml'
   # Prompts: plantillas que ve el LLM.
   prompt_sources:
     - 'diagnostic-agent/src/diagnostic_agent/reasoning/llm/generator.py'

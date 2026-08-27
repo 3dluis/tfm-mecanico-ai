@@ -181,7 +181,10 @@ def check_training_runs(spec: dict[str, Any]) -> list[dict[str, Any]]:
 def check_corpus(spec: dict[str, Any]) -> list[dict[str, Any]]:
     """E-RAG: el corpus recuperable no describe clases held-out (alias NI mecanismo)."""
     violations = []
-    for path in sorted(glob.glob(str(REPO_ROOT / spec["scan"]["corpus"]))):
+    declared = spec["scan"]["corpus"]
+    patterns = [declared] if isinstance(declared, str) else list(declared)
+    paths = sorted({p for pattern in patterns for p in glob.glob(str(REPO_ROOT / pattern))})
+    for path in paths:
         raw = Path(path).read_text(encoding="utf-8")
         for hit in scan_text(raw, spec, mechanisms=True):
             violations.append(
