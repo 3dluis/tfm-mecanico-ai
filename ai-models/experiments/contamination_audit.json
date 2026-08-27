@@ -1,5 +1,5 @@
 {
-  "audited_at": "2026-08-27T20:20:31.393438+00:00",
+  "audited_at": "2026-08-27T20:27:05.150040+00:00",
   "spec": "ai-models/configs/heldout-exclusions.yaml",
   "heldout_classes": [
     "corr_break_rpm_maf",
