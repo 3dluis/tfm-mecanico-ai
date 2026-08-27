@@ -6,6 +6,13 @@
 
 ---
 
+> **⚠ Nota de vigencia (2026-08-27).** Entrega conservada íntegra como evidencia histórica
+> del proceso de revisión. La pregunta de revisión se reorientó a explicación diagnóstica
+> trazable y abstención ante evidencia insuficiente: ver
+> [`entrega3_revision_sistematica.md`](entrega3_revision_sistematica.md) §0-bis y
+> [`linea_d_trazabilidad_fidelidad_abstencion.md`](linea_d_trazabilidad_fidelidad_abstencion.md).
+
+
 ## 1. Protocolo de revisión
 
 ### 1.1 Objetivo de la revisión

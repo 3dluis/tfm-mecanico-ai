@@ -6,6 +6,40 @@
 
 ---
 
+## 0-bis. Reorientación de la revisión (2026-08-27, alineación v4)
+
+> **Esta entrega se conserva íntegra como evidencia histórica del proceso de revisión.** Sus
+> búsquedas, cadenas, criterios y fichas siguen siendo válidas y no se descartan. Lo que
+> cambia es la pregunta a la que la revisión sirve.
+>
+> **Pregunta de revisión anterior:** ¿qué se ha hecho para descubrir patrones de fallo no
+> documentados a partir de telemetría vehicular, generar hipótesis diagnósticas, validarlas
+> e incorporarlas como conocimiento reutilizable?
+>
+> **Pregunta de revisión vigente:** ¿qué se ha hecho para **explicar diagnósticos
+> vehiculares con evidencia recuperada**, **verificar que cada afirmación se sostiene en esa
+> evidencia** y **decidir no explicar cuando la evidencia es insuficiente**?
+>
+> **Criterios de relevancia actualizados.** Un trabajo es central para la revisión vigente si
+> aborda al menos una de estas cuatro capacidades: diagnóstico sobre telemetría vehicular ·
+> explicación mediante evidencia recuperada · atribución verificable de la evidencia
+> (corrección y completitud de la cita, procedencia hasta el dato) · comportamiento ante
+> evidencia insuficiente (incertidumbre, predicción selectiva, abstención). Los trabajos
+> sobre memoria de agentes, consolidación validada, aprendizaje continuo y descomposición
+> multiagente pasan de **centrales** a **antecedente y trabajo futuro**: se conservan
+> citados, dejan de sostener el vacío.
+>
+> **Lo que esta revisión no cubrió** y debe cubrirse antes del depósito: fidelidad
+> (*groundedness*, *faithfulness*), atribución de evidencia y citación verificable,
+> incertidumbre y predicción selectiva, abstención y mitigación de alucinación en dominios
+> técnicos. Protocolo de la línea nueva, con sus cadenas de búsqueda, criterios y búsqueda
+> adversarial: [`linea_d_trazabilidad_fidelidad_abstencion.md`](linea_d_trazabilidad_fidelidad_abstencion.md).
+>
+> **Matriz de evidencias y síntesis.** La matriz de los quince antecedentes se recodifica por
+> las capacidades de la PI v4 en [`docs/alineacion_v4/02_trazabilidad.md`](../alineacion_v4/02_trazabilidad.md) §3;
+> la síntesis y la formulación del vacío, en `capitulo2_estado_del_arte.md` §§2.15–2.16.
+> Los vacíos V1–V7 de esta entrega se leen a través de `docs/correspondencia_nomenclatura.md`.
+
 ## 0. Resumen ejecutivo
 
 1. **RQ16 respondida con evidencia en ambos sentidos** (§2): la especialización multiagente tiene ablaciones favorables contundentes en tareas heterogéneas (SAGE −48 % de F1 sin especialistas; MA-RCA de 0,952 a 0,716 sin descomposición), pero la literatura crítica (MAST, Gao et al.) documenta que la coordinación es la primera fuente de fallo y que el margen se estrecha con modelos potentes. La configuración con mejor evidencia coincide con nuestra propuesta: **orquestador + especialistas + recuperación/memoria + verificador, con vía rápida mono-agente** — y en edge con SLM pequeños el argumento pro-descomposición se refuerza.

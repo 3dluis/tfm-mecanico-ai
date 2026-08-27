@@ -6,6 +6,13 @@
 
 ---
 
+> **⚠ Nota de vigencia (2026-08-27).** Entrega conservada íntegra como evidencia histórica
+> del proceso de revisión. La pregunta de revisión se reorientó a explicación diagnóstica
+> trazable y abstención ante evidencia insuficiente: ver
+> [`entrega3_revision_sistematica.md`](entrega3_revision_sistematica.md) §0-bis y
+> [`linea_d_trazabilidad_fidelidad_abstencion.md`](linea_d_trazabilidad_fidelidad_abstencion.md).
+
+
 ## 0. Resumen ejecutivo de la iteración
 
 Se añaden **39 referencias nuevas verificadas** (corpus total ≈ 110). Los cuatro resultados que cambian el estado del análisis:

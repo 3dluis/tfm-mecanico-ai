@@ -1,5 +1,9 @@
 # Línea B — Detección de anomalías en series temporales y SLMs en edge
 
+> **⚠ Nota de vigencia (2026-08-27).** Bajo la PI v4 esta línea es **antecedente
+> instrumental**: sostiene el contexto diagnóstico (pasos 1–3) y el criterio transversal edge,
+> no la contribución científica. Se conserva íntegra.
+
 > Fichas de trabajo del primer barrido (Fase 1, 2026-08-12). Referencias verificadas en la fecha
 > del barrido; releer texto completo antes de citar en la memoria.
 

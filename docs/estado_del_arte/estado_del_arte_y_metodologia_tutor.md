@@ -1,6 +1,15 @@
 # Estado del Arte y Metodología de Investigación
 
-> **NOTA DE VIGENCIA (alineación v3, 2026-08-18).** Este documento (12-ago) usa la PI v2 y
+> **NOTA DE VIGENCIA (alineación v4, 2026-08-27).** Documento **histórico**. Tanto esta
+> versión (PI v2, V1–V7) como la consolidada v2.0 (PI v3, V\*, S1–S6, cadena de ocho pasos)
+> quedan superadas por la **PI v4**: explicación diagnóstica trazable con RAG y abstención
+> ante evidencia insuficiente. Fuente canónica vigente:
+> [`docs/alineacion_v4/01_nucleo_cientifico.md`](../alineacion_v4/01_nucleo_cientifico.md);
+> motivo del cambio: [`04_historial_pi.md`](../alineacion_v4/04_historial_pi.md). Se conserva
+> sin reescribir; las citas de PI, vacíos e hipótesis se leen a través de
+> `docs/correspondencia_nomenclatura.md` y del §11 del núcleo científico v4.
+
+> **NOTA DE VIGENCIA ANTERIOR (alineación v3, 2026-08-18).** Este documento (12-ago) usa la PI v2 y
 > la estructura V1–V7. La versión consolidada v2.0 para el tutor se reestructura alrededor
 > de la **PI v3**, el vacío central **V\*** con dimensiones S1–S6 y la cadena
 > epistemológica de ocho pasos — fuente canónica:

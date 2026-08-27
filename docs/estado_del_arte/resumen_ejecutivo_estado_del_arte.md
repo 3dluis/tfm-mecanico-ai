@@ -3,9 +3,11 @@
 **TFM:** Sistema inteligente híbrido Edge–Cloud para diagnóstico y mantenimiento predictivo de vehículos con OBD-II y Raspberry Pi · Universidad Alfonso X el Sabio · 2026-08-12
 **Base:** capítulo 2 completo (`capitulo2_estado_del_arte.md`), corpus ≈153 referencias verificadas en fuente primaria (entregas 1–4 en `docs/estado_del_arte/`).
 
-**Pregunta principal:** ¿Puede un agente inteligente híbrido (LLM + aprendizaje no supervisado + memoria evolutiva + RAG) descubrir y explicar patrones de fallo vehicular previamente no documentados a partir de datos OBD-II?
+> **⚠ Nota de vigencia (2026-08-27).** Resumen redactado el 12-ago bajo la pregunta anterior. Se conserva fechado; la pregunta y la cadena vigentes son las que siguen.
 
-**Cadena que la operacionaliza:** evento → anomalía contextual → patrón candidato → hipótesis → verificación → conocimiento. Un "patrón no documentado" exige recurrencia, ausencia de correspondencia documental y validación posterior; nunca se equipara a un outlier estadístico.
+**Pregunta principal (PI v4, 27-ago-2026):** ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II reales, rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin fundamento? *(Sustituye a la pregunta anterior, centrada en descubrir y explicar patrones de fallo no documentados; historia y motivo en `docs/alineacion_v4/04_historial_pi.md`.)*
+
+**Cadena que la operacionaliza:** telemetría → contexto → diagnóstico → evidencia recuperada → verificación del soporte → explicación trazable **o** abstención. Una explicación solo es defendible si cada afirmación se rastrea hasta una evidencia concreta; cuando la evidencia disponible no sostiene ninguna, la salida correcta es declarar la insuficiencia, no producir una hipótesis plausible.
 
 ## Matriz ejecutiva
 

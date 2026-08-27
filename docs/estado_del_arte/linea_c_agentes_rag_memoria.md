@@ -1,5 +1,14 @@
 # Línea C — Agentes LLM, memoria, RAG, LLM-as-judge y "patrones no documentados"
 
+> **⚠ Nota de vigencia (2026-08-27, alineación v4).** Esta línea se divide. Sus fichas de
+> **RAG, agentes y evaluación con juez** siguen siendo centrales y alimentan la línea D
+> ([`linea_d_trazabilidad_fidelidad_abstencion.md`](linea_d_trazabilidad_fidelidad_abstencion.md)),
+> que cubre fidelidad, atribución de evidencia, incertidumbre y abstención. Sus fichas de
+> **memoria de agentes, consolidación validada y «patrones no documentados»** pasan de
+> centrales a **antecedente y trabajo futuro**
+> ([`docs/alineacion_v4/05_fuera_de_alcance.md`](../alineacion_v4/05_fuera_de_alcance.md)):
+> se conservan y se citan, pero ya no sostienen el vacío del TFM.
+
 > Fichas de trabajo del primer barrido (Fase 1, 2026-08-12). Referencias verificadas en la fecha
 > del barrido; releer texto completo antes de citar en la memoria.
 

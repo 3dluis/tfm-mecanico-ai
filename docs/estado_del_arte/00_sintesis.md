@@ -5,6 +5,17 @@ anomalías y SLM en edge; C: agentes LLM, RAG, memoria y evaluación). 35+ refer
 verificadas en venue en la fecha del barrido. Este documento se convertirá en el capítulo 2
 de la memoria; las fichas completas están en `linea_a…`, `linea_b…`, `linea_c….md`.
 
+> **⚠ Nota de reorientación (2026-08-27).** Documento del primer barrido (v0, 12-ago-2026),
+> redactado bajo la pregunta de investigación anterior. **Se conserva como registro histórico
+> del proceso de revisión.** Bajo la PI v4 (explicación trazable y abstención): H-EA1, H-EA3,
+> H-EA4 y H-EA7 siguen vigentes; H-EA2 queda **reformulado** —sí existen sistemas RAG para
+> diagnóstico vehicular, y el vacío es la evaluación conjunta con trazabilidad y abstención
+> (V4\*, `capitulo2_estado_del_arte.md` §2.15.3)—; H-EA5 conserva su mecanismo (held-out /
+> open-set) con otra finalidad —controlar la disponibilidad de evidencia, no demostrar
+> descubrimiento—; y H-EA6 pasa a antecedente de trabajo futuro
+> (`docs/alineacion_v4/05_fuera_de_alcance.md`). La línea de análisis que la PI v4 exige y
+> que este barrido no cubría está en `linea_d_trazabilidad_fidelidad_abstencion.md`.
+
 ## Hallazgos que cambian (o confirman) decisiones del proyecto
 
 **H-EA1. No existe dataset público de OBD-II con fallos mecánicos reales etiquetados** (Línea A).
