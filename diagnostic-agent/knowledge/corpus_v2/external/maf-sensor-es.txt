@@ -1,0 +1,105 @@
+Un caudalímetro, medidor de caudal, medidor de flujo o flujómetro es un instrumento de medición para la medición del caudal volumétrico de un fluido o para la medición del caudal másico. Estos aparatos suelen colocarse en línea con la tubería que transporta el fluido.
+Existen versiones mecánicas y eléctricas. Un ejemplo de caudalímetro eléctrico lo podemos encontrar en los calentadores de agua de paso que lo utilizan para determinar el caudal que está circulando o en las lavadoras para llenar su tanque a diferentes niveles.
+Un hidrómetro​ permite medir el caudal, la velocidad o la fuerza de los líquidos que se encuentran en movimiento, dependiendo de la graduación y aplicación de este mismo.
+Evítese la confusión con el término utilizado en inglés hydrometer como equivalente a lo que en español es un densímetro, esto es, un instrumento que sirve para medir la densidad de los líquidos.
+
+
+== Tipos de caudalímetros ==
+
+
+=== Mecánicos visuales (de área variable) (rotámetros) ===
+Se trata de un cono transparente invertido con una bola plástica en su base. El fluido al circular impulsa la bola hacia arriba, a mayor caudal más sube la bola. La gravedad hace bajar la bola al detenerse el flujo. El cono tiene unas marcas que indican el caudal.
+Generalmente empleado para medir gases en lugares donde se requiere conocer el caudal con poca precisión. Un ejemplo lo podemos ver en los hospitales, unidos de la llave del suministro de oxígeno. 
+Una modificación de este modelo permite medir la capacidad pulmonar de una persona que haya sufrido alguna lesión recogiendo una exhalación a través de un adaptador para los labios.
+
+
+=== Mecánico de molino ===
+Consisten en un molino cuyas aspas están transversales a la circulación de fluido. El flujo hace girar el molino cuyo eje mueve un contador que acumula lecturas.
+Un ejemplo de este uso son los contadores de agua de las viviendas o los antiguos contadores de gas natural.
+
+
+=== Electrónicos de molino ===
+Sus partes mecánicas consisten en un molino con aspas transversales a la circulación de flujo, el molino tiene en un extremo un imán permanente. Cuando este imán gira genera un campo magnético variable que es leído por un sensor de efecto de campo magnético (sensor de efecto Hall), después el circuito electrónico lo convierte en pulsos que transmite a través de un cable.
+En otra versión de este tipo de caudalímetro se instalan imanes en los extremos de las aspas. Al girar los imanes pasan cerca de un reed switch que cuenta los pulsos. La desventaja de este diseño está en la limitación de las revoluciones por minuto (RPM) que puede alcanzar a leer un reed switch.
+También existe de tipo de caudalímetro de molino en versión transparente donde solo se requiera confirmar que existe circulación sin importar el caudal.
+
+
+=== Electrónicos de turbina ===
+Una turbina colocada de frente al flujo, encapsulada en las paredes de un tubo, rota proporcionalmente al caudal. La turbina, fabricada con un compuesto de resina y polvo de alnico, genera un campo magnético que es leído y codificado por un sensor de efecto Hall.
+
+
+=== Diferencial de presión ===
+
+Los más comunes. La tubería disminuye su diámetro levemente (por ejemplo, con un plato de orificio o un tubo de Venturi) y después regresa a su diámetro original. El fluido obligado a circular por esta reducción disminuye su presión a la salida. La diferencia de presión de antes y después es medida de manera mecánica o electrónica. A mayor diferencia de presión mayor es el caudal.
+Existen otras variantes pero todas basadas en la diferencia de la lectura de presión antes y después.
+Un ejemplo se observa en los motores de combustión interna a la entrada del aire del motor. Parámetro que necesitan las computadoras de los automóviles para determinar que cantidad de aire está entrando al motor para logar una mezcla (aire-combustible) ideal.
+
+
+=== V-Cone ===
+El medidor de flujo de presión diferencial V-Cone es una tecnología patentada de medición de flujos con alta precisión, aplicable a gran variedad de fluidos, todo tipo de condiciones y un amplio intervalo de números de Reynolds. Utiliza el mismo principio físico que otros medidores de flujo de presión diferencial: el teorema de conservación de la energía del flujo de fluidos a través de una tubería. No obstante, las características de desempeño del V-Cone, muy notables, son el resultado de su exclusivo diseño, que incluye un cono central en el interior del tubo. 
+El cono interactúa con el flujo del fluido, modificando su perfil de velocidad para crear una región de presión más baja inmediatamente aguas abajo del cono. La diferencia entre la presión estática de la línea y la presión más baja creada aguas abajo del cono se mide a través de dos tomas piezosensibles. Una de las tomas se coloca inmediatamente aguas arriba del cono y la otra se coloca en la cara orientada aguas abajo. Después, la diferencia de presión se puede incluir en una derivada de la ecuación de Bernoulli para determinar el régimen de flujo. La posición central del cono en la línea optimiza el perfil de velocidad del flujo en el punto donde se hace la medición, asegurando mediciones de flujo altamente precisas y confiables, sin importar la condición del flujo aguas arriba del medidor.
+Y es de esta manera como se logra esto.
+
+
+=== Magnéticos ===
+
+Están basados en la fuerza de Lorentz (que experimentan cargas moviéndose en el seno de un campo magnético), de la que se deriva que el voltaje inducido a través de un conductor que se desplaza transversal a un campo magnético es proporcional a la velocidad del conductor.
+Aplicamos un campo magnético a una tubería (en una zona con un recubrimiento interior aislante) y medimos la diferencia de potencial (voltaje) de extremo a extremo de un diámetro de la tubería. Este sistema es muy poco intrusivo pero solo funciona con líquidos que tengan algo de conductividad eléctrica. Es de muy bajo mantenimiento ya que no tiene partes móviles.
+Cuando el fluido (libre de vacíos) pasa a través de  las bobinas, se induce un pequeño voltaje en los electrodos que es proporcional al cambio del campo magnético, el caudalimetro usa este valor para calcular el caudal del líquido.
+
+
+=== Vortex ===
+
+Está basado en el principio de generación de vórtices. Un cuerpo que atraviese un fluido generará vórtices flujo abajo. Estos vórtices se forman alternándose de un lado al otro causando diferencias de presión, esta son censadas por un cristal piezoeléctrico. La velocidad de flujo es proporcional a la frecuencia de formación de los vórtices. 
+Son equipos de bajo mantenimiento y buena precisión.
+
+
+=== Desplazamiento positivo ===
+Separan el líquido en porciones que llenan un recipiente mientras se desplaza. Después cada porción es contada para medir el caudal. Existen muchas variantes de este sistema. De tornillo, de engranajes, pistones, etc.
+
+Engranajes: consiste en dos engranajes encontrados que hacen un sello perfecto, el fluido debe circular entre los dos engranajes forzándolos a girar. Este movimiento se puede medir de forma electrónica o mecánica.
+Cada uno de los engranajes tiene un imán permanente que se usa para enviar información a la parte electrónica del equipo (se instala arriba mediante tornillos), y se detecta el paso del imán mediante un sensor de efecto Hall.
+Pistones: el agua entra por el puerto A y comienza a desplazar el pistón amarillo mientras llena el espacio C. El agua que sigue entrado ahora llena el espacio B y sigue forzando al pistón amarillo a girar hasta que el agua que ocupaba el espacio C sale por el puerto D. Posteriormente el agua que ocupa el espacio B igualmente saldrá por el puerto D al momento de comenzar otro ciclo. El agua entre los puertos de entrada y salida (A y D) está aislada por la barrera E. La oscilación del pistón G (magnético) traza un círculo que rodea al eje F. Un medidor de campo colocado fuera del caudalímetro mide estas oscilaciones y las convierte en pulsos.
+
+
+=== Ultrasónicos ===
+Son alimentados eléctricamente, y es posible encontrar dos tipos según su principio de medición: de efecto Doppler y de tiempo de tránsito; este último consiste en medir la diferencia entre el tiempo que le toma a dos señales atravesar una misma distancia, pero en sentido contrario utilizando como medio un fluido. Si el caudal del fluido es nulo, los tiempos serán iguales, pero cuando hay flujo los tiempos serán diferentes, ya que las velocidades de las señales serán afectadas por la del fluido cuyo caudal se desea determinar; esta diferencia de tiempo más el conocimiento sobre la geometría de la cañería y la velocidad del sonido en el medio permiten evaluar la velocidad del fluido o el caudal.
+Los de tiempo de tránsito son más exactos que los de efecto Doppler, pero para obtener lecturas se requiere que los fluidos tengan un bajo porcentaje de impurezas; en caso contrario, los de efecto Doppler son de utilidad y entregan una muy buena señal, ya que su principio de funcionamiento se basa en el cambio de frecuencia de la señal reflejada sobre algún elemento que se mueve con el fluido.
+La exactitud de estos sistemas de medición es muy dependiente del cumplimiento de los supuestos de flujo laminar.
+
+
+=== Diferencial de temperatura ===
+Se colocan dos termistores y en el centro de ellos una pequeña resistencia calentadora. Si ambos termistores leen la misma temperatura el fluido no está circulando. Según aumenta el flujo uno de los termistores lee la temperatura inicial fluido mientras que el otro lee el fluido calentado.
+Con este sistema no solo se puede leer el caudal, sino que además se sabe el sentido de circulación.
+La ventaja de este tipo de caudalímetro es que se puede conocer la cantidad de masa del fluido que ha circulado y las variaciones de presión en el fluido afectan poco la medición.
+
+
+=== Medidor de Coriolis ===
+Los medidores de Coriolis se basan en el principio de las fuerzas inerciales que se generan cuando una partícula en un cuerpo rotatorio se mueve con respecto al cuerpo acercándose o alejándose del centro de rotación. 
+Si una partícula de masa dm se mueve con velocidad constante en un tubo T que está rotando con una velocidad angular w con respecto a un punto fijo P adquiere 2 componentes de aceleración Coriolis.
+
+
+== Consideraciones finales ==
+La gran cantidad de teorías y modelos de caudalímetros que existen nos confirman que no hay una fórmula ideal para medir caudal. La decisión final se debe tomar en base al caudal, viscosidad, temperatura, composición química y presión del fluido que deseamos medir. Cada aplicación tiene una caudalímetro que se adapta mejor a su necesidad.
+Los costos son también un factor a considerar, la confiabilidad, precisión y durabilidad son factores muy asociados al costo. No es lo mismo buscar un caudalímetro para un producto de consumo masivo como un calentador de agua, que buscar un caudalímetro para la medir la cantidad de sangre que está circulando por un baipás o un caudalímetro para medir la cantidad de vapor a presión que se desecha a una chimenea de una planta de energía de fisión nuclear.
+
+
+== Véase también ==
+Densímetro para medidas de densidad.
+Higrómetro para medidas de humedad.
+Caudalímetro magnético
+
+
+== Referencias ==
+
+
+== Enlaces externos ==
+Liquid Flowmeters teorías y ejemplos Archivado el 9 de septiembre de 2017 en Wayback Machine.
+Universal Vortex Flowmeters teoría, recomendaciones y ejemplos
+M & C Industrial Thermal Mass Flowmeters teorías, principios, medición y control
+Teorías de diseño
+Flujómetros Ultrasónicos y Tecnología V-Cone
+Introduction to Magnetic Flow Meters teoría y ejemplos
+Caudalímetros a engranajes ovales y Electromagnéticos principios de funcionamiento y demostraciones digitales
+Computadores de caudales
+Caudalímetros Electromagnéticos

@@ -1,0 +1,92 @@
+Un termostato es el componente de un sistema de control simple que abre o cierra un circuito eléctrico en función de la temperatura.
+Su versión más simple consiste en una lámina metálica como la que utilizan los equipos de aire acondicionado para apagar o encender el compresor.
+Otro ejemplo lo podemos encontrar en los motores de combustión interna, donde controlan el flujo del líquido refrigerante que regresa al radiador dependiendo de la temperatura del motor.
+
+
+== Bimetálicos ==
+
+Consiste en dos láminas de metal unidas, con diferente coeficiente de dilatación térmico. Cuando la temperatura cambia, la lámina cambia de forma automáticamente, actuando sobre unos contactos que cierran un circuito eléctrico.
+Pueden estar normalmente abiertos o normalmente cerrados, cambiando su estado cuando la temperatura alcanza el nivel para el que están preparados.
+
+
+=== Manuales ===
+Son los que requieren intervención humana para regresar a su estado inicial, como los termostatos de seguridad que realizan una función en caso de que la temperatura alcance niveles peligrosos.
+
+
+=== Automáticos ===
+Regresan a su estado inicial sin necesidad de intervención humana. Actúan de una forma totalmente automática, de ahí su aplicación actual en gran parte de los hogares.
+
+
+== De gas encerrado ==
+Consiste en un gas encerrado dentro de un tubo de cobre. Cuando la temperatura sube, el gas se expande y empuja la válvula, que realiza una determinada función. Para regularlo se modifica el volumen del tubo, variando la presión.
+
+
+== De parafina ==
+
+Empleados en válvulas de control de fluido, contienen parafina encapsulada que se expande al aumentar la temperatura; ésta, a su vez, empuja un disco que permite el paso del fluido. Cuando el fluido baja su temperatura, un resorte vuelve el disco a su posición inicial cerrando el paso. Un ejemplo de este termostato es el empleado en el sistema de enfriamiento de los motores de combustión interna.
+
+
+== Electrónicos ==
+Los termostatos electrónicos cada vez son más habituales debido a sus ventajas.
+
+Pueden estar libres de partes móviles y contactos que sufren deterioro.
+Se puede configurar tanto una temperatura como un umbral o un tiempo mínimo entre activaciones.
+Se pueden integrar fácilmente en un sistema con más funciones como programador horario con otros sucesos.
+Con un controlador PID puede hacer una gestión más inteligente.
+Un termostato electrónico puede mejorar las aplicaciones en que se usan los termostatos mecánicos.
+
+En un frigorífico puede evitar que se encienda si hay una subida breve de temperatura, por ejemplo, al abrir la nevera y ventilarse el aire interior.
+En el sistema de refrigeración de un vehículo se puede utilizar una bomba eléctrica comandada electrónicamente de modo que no encienda en el periodo de calentamiento (evitando gastar energía inútilmente) y variando su velocidad según la demanda de potencia. Un sistema mecánico tal vez no podría eliminar bien el calor acumulado a pocas RPM y en altas podría requerir excesiva potencia para la necesidad de refrigeración.
+En una casa un termostato se puede complementar con una programación según la hora, el día de la semana, otros eventos o según la eficiencia.
+En un aire acondicionado residencial se puede programar tiempos mínimos de compresor detenido para evitar que el compresor una vez detenido no encienda demasiado pronto, evitando problemas de arranque y prolongando la vida útil.
+Hay motores eléctricos (generalmente de grandes potencias) que incluyen un termistor tipo ptc o ntc en la bobina para poder proteger el bobinado de recalentamientos de manera más rápida y precisa que un termostato mecánico tipo bimetal.
+El elemento que permite medir la temperatura puede ser un sistema infrarrojo u otro, pero el más habitual suele ser un termistor que se puede fabricar de diferentes formas.
+
+
+=== Termistor ===
+
+Este tipo de termostatos están construidos alrededor de un termistor. Un termistor es un dispositivo que cambia su impedancia dependiendo de la temperatura. 
+La impedancia del termistor es leída por un sistema de control, usualmente basado en un microcontrolador, que es programado para realizar diferentes operaciones a determinadas temperaturas. 
+Existen muchas variantes de termostatos electrónicos, pero la mayoría de las veces el componente real de lectura de temperatura es el termistor. Existen versiones antiguas donde empleaban termostatos de gas.
+En general, cualquier dispositivo que permita medir con electrónica la temperatura puede ser integrado en un termostato. Por ejemplo, resistencias de platino, semiconductores sensores de temperatura, etc.
+
+
+== Termostatos inteligentes ==
+En los últimos años, muchas personas han recurrido a los termostatos inteligentes para ajustar a distancia la calefacción y la refrigeración de sus hogares. No sólo tienen un aspecto más elegante y sofisticado que sus homólogos no inteligentes, sino que ofrecen mucho en términos de eficiencia, comodidad y funciones. Y lo mejor de todo es que pueden ayudarle a ahorrar en gastos de calefacción y refrigeración.
+
+
+=== ¿Qué es exactamente un termostato inteligente? ===
+Un termostato inteligente es un termostato que se puede controlar con un teléfono, una tableta, un altavoz inteligente u otro dispositivo conectado a Internet. Los termostatos inteligentes suelen permitir programar los ajustes de temperatura deseados, y también se pueden incorporar a los sistemas de automatización del hogar.
+
+
+=== ¿Qué más puede hacer un termostato inteligente? ===
+Dependiendo del modelo específico, los termostatos inteligentes pueden ofrecer una gran cantidad de funciones interesantes. Algunos termostatos, como el Nest Learning Thermostat, pueden aprender sus preferencias de calefacción y refrigeración y ajustarse automáticamente en función de dicho aprendizaje. Muchos de los mejores termostatos inteligentes tienen funciones de diagnóstico, que pueden detectar si hay un problema con los conductos o el sistema de calefacción y aire acondicionado. Su termostato inteligente también puede recordarle cuándo es el momento de realizar el mantenimiento del sistema, por ejemplo, cuándo es el momento de cambiar el filtro de aire. Además, su termostato puede proporcionarle detalles sobre su consumo de energía.
+Si opta por un Ecobee 4 o Ecobee SmartThermostat, tiene Alexa integrado, por lo que no tiene que comprar necesariamente un altavoz inteligente por separado. Algunos termostatos también incluyen sensores de habitación que pueden medir la temperatura en una habitación o área específica del hogar y calentar o enfriar esa habitación específicamente en función de la temperatura en esa área local, reduciendo los puntos calientes o fríos en el hogar. Si su termostato dispone de geofencing, puede reconocer cuándo entra en la casa y ahorrar costes de calefacción y refrigeración cuando está fuera de ella.
+
+
+=== ¿Cómo funciona un termostato inteligente? ===
+Para entender cómo funciona un termostato inteligente, primero hay que entender cómo funcionan los termostatos normales. Un termostato utiliza la temperatura para determinar cuándo debe encender y apagar el ventilador y el aire acondicionado o la calefacción. En realidad, funciona como un interruptor de la luz, salvo que incorpora la temperatura y en la ecuación (para ayudarle a determinar cuándo debe encender y apagar el ventilador, la calefacción y el frío). Un termostato típico tiene un cable caliente, un cable común, un cable que se conecta al ventilador y cables que se conectan a su sistema de calefacción y refrigeración. También puede tener cables adicionales para cosas como la calefacción auxiliar, la calefacción de emergencia, la calefacción o la refrigeración de dos etapas, o cables para sistemas que tienen aire acondicionado o calefacción separados o independientes. Cuando se ajusta una temperatura específica en el termostato, el ventilador y la calefacción o refrigeración se apagan una vez que el termómetro interno alcanza la temperatura deseada. A continuación le explicamos cómo comprobar su termostato.
+Los termostatos inteligentes funcionan de forma similar, excepto que también se conectan al Wi-Fi de la casa. Esto le permite cambiar los ajustes del termostato a distancia mediante una aplicación complementaria. Cuando introduces un ajuste de temperatura en la aplicación, esta transmite ese ajuste al termostato a través de tu red Wi-Fi, y el termostato envía entonces esa señal al ventilador y al sistema de climatización. Cuando se utiliza un altavoz inteligente como Google Home y se dice "OK Google, ajusta la temperatura a 70 grados", la aplicación Google Home comunica la orden a la aplicación complementaria del termostato, que viaja a través de la red Wi-Fi hasta el termostato. Todo sucede tan rápido que probablemente nunca te darás cuenta de todos los componentes que intervienen en el simple ajuste de la temperatura de tu casa.
+
+
+=== ¿Cuál es la diferencia entre un termostato inteligente y un termostato programable? ===
+Un termostato programable permite al usuario introducir los ajustes del horario y del programa. Un termostato inteligente es un paso más allá de un termostato programable, ya que normalmente permite al usuario programar los ajustes deseados y se conecta a Wi-Fi para obtener características y funcionalidades más avanzadas.
+
+
+== Usos ==
+Se puede usar en diversos aparatos en los cuales actúa como sensor en un diagrama de bloques con realimentación previamente manipulado para su propio uso.
+
+
+== Referencias ==
+
+Termostatos por suelo radiante Warmup [1]
+
+
+== Véase también ==
+Domótica
+Electromecánica
+Estación meteorológica automática
+Grifo termostático
+Temporizador
+Termostato modulante
+Termostato programable

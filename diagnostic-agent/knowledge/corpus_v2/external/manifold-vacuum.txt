@@ -1,0 +1,81 @@
+Manifold vacuum, or engine vacuum in a petrol engine is the difference in air pressure between the engine's intake manifold and Earth's atmosphere.
+Manifold vacuum is an effect of a piston's movement on the induction stroke and the airflow through a throttle in the intervening carburetor or throttle body leading to the intake manifold. It is a result of the amount of restriction of airflow through the engine. In some engines, the manifold vacuum is also used as an auxiliary power source to drive engine accessories and for the crankcase ventilation system.
+Manifold vacuums should not be confused with venturi vacuums, which are an effect exploited in some carburetors to establish a pressure difference roughly proportional to mass airflow and to maintain a somewhat constant air/fuel ratio. 
+It is also used in light airplanes to provide airflow for pneumatic gyroscopic instruments.
+
+
+== Overview ==
+The rate of airflow through an internal combustion engine is an important factor determining the amount of power the engine generates. Most gasoline engines are controlled by limiting that flow with a throttle that restricts intake airflow, while a diesel engine is controlled by the amount of fuel supplied to the cylinder, and so has no "throttle" as such. Manifold vacuum is present in all naturally aspirated engines that use throttles (including carbureted and fuel injected gasoline engines using the Otto cycle or the two-stroke cycle; diesel engines do not have throttle plates).
+The mass flow through the engine is the product of the rotation rate of the engine, the displacement of the engine, and the density of the intake stream in the intake manifold. In most applications the rotation rate is set by the application (engine speed in a vehicle or machinery speed in other applications). The displacement is dependent on the engine geometry, which is generally not adjustable while the engine is in use (although a handful of models do have this feature, see variable displacement). Restricting the input flow reduces the density (and hence pressure) in the intake manifold, reducing the amount of power produced. It is also a major source of engine drag (see engine braking), as the low-pressure air in the intake manifold provides less pressure on the piston during the induction stroke.
+When the throttle is opened (in a car, the accelerator pedal is depressed), ambient air is free to fill the intake manifold, increasing the pressure (filling the vacuum). A carburetor or fuel injection system adds fuel to the airflow in the correct proportion, providing energy to the engine. When the throttle is opened all the way, the engine's air induction system is exposed to full atmospheric pressure, and maximum airflow through the engine is achieved. In a naturally aspirated engine, output power is limited by the ambient barometric pressure. Superchargers and turbochargers boost manifold pressure above atmospheric pressure.
+
+
+== Modern developments ==
+Modern engines use a manifold absolute pressure (abbreviated as MAP) sensor to measure air pressure in the intake manifold. Manifold absolute pressure is one of a multitude of parameters used by the engine control unit (ECU) to optimize engine operation. It is important to differentiate between absolute and gauge pressure when dealing with certain applications, particularly those that experience changes in elevation during normal operation.  
+Motivated by government regulations mandating reduction of fuel consumption (in the USA) or reduction of carbon dioxide emissions (in Europe), passenger cars and light trucks have been fitted with a variety of technologies (downsized engines; lockup, multi-ratio and overdrive transmissions; variable valve timing, forced induction, diesel engines, et al.) which render manifold vacuum inadequate or unavailable. Electric vacuum pumps are now commonly used for powering pneumatic accessories.
+
+
+== Manifold vacuum vs. venturi vacuum ==
+Manifold vacuum is caused by a different phenomenon than venturi vacuum, which is present inside carburetors. Venturi vacuum is caused by the venturi effect which, for fixed ambient conditions (air density and temperature), depends on the total mass flow through the carburetor. In engines that use carburetors, the venturi vacuum is approximately proportional to the total mass flow through the engine (and hence the total power output). As ambient pressure (altitude, weather) or temperature change, the carburetor may need to be adjusted to maintain this relationship.
+Manifold pressure may also be "ported". Porting is selecting a location for the pressure tap within the throttle plate's range of motion. Depending on throttle position, a ported pressure tap may be either upstream or downstream of the throttle. As the throttle position changes, a "ported" pressure tap is selectively connected to either manifold pressure or ambient pressure. Older (pre-OBD II) engines often used ported manifold pressure taps for ignition distributors and emission-control components.
+
+
+== Manifold vacuum in cars ==
+Most automobiles use four-stroke Otto cycle engines with multiple cylinders attached to a single inlet manifold. During the intake stroke, the piston descends in the cylinder and the intake valve is open. As the piston descends it effectively increases the volume in the cylinder above it, setting up low pressure. Atmospheric pressure pushes air through the manifold and carburetor or fuel injection system, where it is mixed with fuel. Because multiple cylinders operate at different times in the engine cycle, there is almost constant pressure difference through the inlet manifold from carburetor to engine.
+To control the amount of fuel/air mix entering a carbureted engine, a simple butterfly valve (throttle plate) is generally fitted close to the start of the intake manifold and at the end of the carburetor. The butterfly valve can be simply a circular disc fitted on a spindle, fitting inside the pipe work. It is connected to the accelerator pedal of the car, and is set to be fully open when the pedal is fully pressed and nearly or fully closed when the pedal is released. The butterfly valve often contains a small "idle bypass", a hole that allows small amounts of fuel/air mixture into the engine even if the valve is fully closed, or the carburetor has a separate air bypass with its own idle jet.
+If the engine is operating under light or no load and low or closed throttle, there is high manifold vacuum. As the throttle is opened, the engine speed increases rapidly. The engine speed is limited only by the amount of fuel/air mixture that is available in the manifold. Under full throttle and light load, other effects (such as valve float, turbulence in the cylinders, or ignition timing) limit engine speed so that the manifold pressure can increase—but in practice, parasitic drag on the internal walls of the manifold, plus the restrictive nature of the venturi at the heart of the carburetor, means that a low pressure will always be set up as the engine's internal volume exceeds the amount of the air the manifold is capable of delivering.
+If the engine is operating under heavy load at wide throttle openings (such as accelerating from a stop or pulling the car up a hill) then engine speed is limited by the load and minimal vacuum will be created. Engine speed is low but the butterfly valve is fully open. Since the pistons are descending more slowly than under no load, the pressure differences are less marked and parasitic drag in the induction system is negligible. The engine pulls air into the cylinders at the full ambient pressure.
+More vacuum is created in some situations. On deceleration or when descending a hill, the throttle will be closed and a low gear selected to control speed. The engine will be rotating fast because the road wheels and transmission are moving quickly, but the butterfly valve will be fully closed. The flow of air through the engine is strongly restricted by the throttle, producing a strong vacuum on the engine side of the butterfly valve which will tend to limit the speed of the engine. This phenomenon, known as engine braking, is used to prevent acceleration or even to slow down with minimal or no brake usage (as when descending a long or steep hill). This vacuum braking should not be confused with compression braking (aka a "Jake brake"), or with exhaust braking, which are often used on large diesel trucks. Such devices are necessary for engine braking with a diesel as they lack a throttle to restrict the air flow enough to create sufficient vacuum to brake a vehicle.
+
+
+=== Uses of manifold vacuum ===
+
+This low (or negative) pressure can be put to use. A pressure gauge measuring the manifold pressure can be fitted to give the driver an indication of how hard the engine is working and it can be used to achieve maximum momentary fuel efficiency by adjusting driving habits: minimizing manifold vacuum increases momentary efficiency. A weak manifold vacuum under closed-throttle conditions shows that the butterfly valve or internal components of the engine (valves or piston rings) are worn, preventing good pumping action by the engine and reducing overall efficiency. 
+Vacuum used to be a common way to drive auxiliary systems on the vehicle. Vacuum systems tend to be unreliable with age as the vacuum tubing becomes brittle and susceptible to leaks.
+
+
+==== Before 1960 ====
+Windshield wiper motors - Prior to the introduction of Federal Motor Vehicle Safety Standards in the USA by the National Traffic and Motor Vehicle Safety Act of 1966, it was common to use manifold vacuum to drive windscreen wipers with a pneumatic motor. This system is cheap and simple but resulted in wipers whose speed is inversely proportional to how hard the engine is working.
+Power door lock motors.
+"Autovac" fuel lifter, which uses vacuum to raise fuel from the main tank to a small auxiliary tank, from which it flows by gravity to the carburetor. This eliminated the fuel pump which, in early cars, was an unreliable item.
+
+
+==== 1960–1990 ====
+Automotive vacuum systems reached their height of use between the 1960s and 1980s. During this time a huge variety of vacuum switches, delay valves and accessory devices were created. As an example, a 1967 Ford Thunderbird used vacuum for:
+
+Vacuum-assist brake servos (power brakes) use atmospheric pressure pressing against the engine manifold vacuum to increase pressure on the brakes. Since braking is nearly always accompanied by the closing of the throttle and associated high manifold vacuum, this system is simple and almost foolproof. Vacuum tanks were installed on trailers to control their integrated braking systems.
+Transmission shift control
+Doors for the hidden headlamps
+Remote trunk latch release
+Power door locks
+HVAC air routing - Vehicle HVAC systems used manifold vacuum to drive actuators controlling airflow and temperature.
+Control of the heater core valve
+Rear cabin vent control
+Tilt-away steering wheel release
+Other items that can be powered by vacuum include:
+
+Exhaust gas recirculation solenoid
+Power steering pump
+Fuel pressure regulator
+
+
+==== Modern usage ====
+Modern cars have a minimal amount of accessories that use vacuum. Many accessories previously driven by vacuum have been replaced by electronic accessories. Some modern accessories that sometimes use vacuum include:
+
+Vacuum-assist brake servos
+Positive crankcase ventilation valve
+Charcoal canister
+
+
+=== Manifold vacuum in diesel engines ===
+Many diesel engines do not have butterfly valve throttles. The manifold is connected directly to the air intake and the only suction created is that caused by the descending piston with no venturi to increase it, and the engine power is controlled by varying the amount of fuel that is injected into the cylinder by a fuel injection system. This assists in making diesels much more efficient than petrol engines.
+If vacuum is required (vehicles that are available with either petrol and diesel engines often have systems requiring it), a butterfly valve connected to the throttle can be fitted to the manifold. This reduces efficiency and is still not as effective as it is not connected to a venturi. Since low-pressure is only created on the overrun (such as when descending hills with a closed throttle), not over a wide range of situations as in a petrol engine, a vacuum tank is fitted.
+Most diesel engines now have a separate vacuum pump ("exhauster") fitted to provide vacuum at all times, at all engine speeds.
+Many new BMW petrol engines do not use a throttle in normal running, but instead use "Valvetronic" variable-lift intake valves to control the amount of air entering the engine. Like a diesel engine, manifold vacuum is practically non-existent in these engines and a different source must be utilised to power the brake servo.
+
+
+== See also ==
+Vacuum delay valve
+
+
+== References ==
