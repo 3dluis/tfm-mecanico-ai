@@ -4,6 +4,12 @@ Supervisor LangGraph con política de decisión determinista, agentes como roles
 (reutilizan los componentes de F3/F4: memoria, retriever, hipotetizadores, verify_rules),
 Tool Registry auditado, loop con stop conditions y persistencia completa en el modelo de
 datos v2 (AgentRun/AgentStep/RetrievalEvent/caso/hipótesis/evidencia/provenance).
+
+
+FUERA DEL ALCANCE EXPERIMENTAL de la PI v4 (ADR-0036): la comparación de arquitecturas
+agénticas (A0–A6) no forma parte de la validación del TFM. El runtime se conserva como
+ingeniería y como banco para el trabajo futuro; los experimentos de la PI v4 se ejecutan
+sobre el grafo ``agent_v1`` (docs/alineacion_v4/05_fuera_de_alcance.md §4).
 """
 
 import time

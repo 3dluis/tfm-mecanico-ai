@@ -1,5 +1,12 @@
 # 12 — Diseño experimental de arquitecturas (A0–A6)
 
+> **⚠ Fuera del alcance experimental del TFM (ADR-0036, 27-ago-2026).** Tras la
+> acotación de la pregunta de investigación a explicación diagnóstica trazable y
+> abstención ante evidencia insuficiente, la ablación de arquitecturas agénticas no forma parte de la validación
+> experimental de este trabajo. **El diseño y el código se conservan** y siguen siendo
+> correctos; simplemente no se evalúan. Catálogo completo y justificación:
+> [`docs/alineacion_v4/05_fuera_de_alcance.md`](../../alineacion_v4/05_fuera_de_alcance.md).
+
 > **Nota F8:** las etiquetas A0–A6 designan ARQUITECTURAS DE AGENTE (esta página). La
 > comparación de detección window/event/both (R1+E1) usa la dimensión `anomaly_mode`
 > (AM-W/AM-E/AM-WE) y se cerró SIN LLM antes de los experimentos de agentes — resultado

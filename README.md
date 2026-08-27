@@ -28,7 +28,7 @@ Arquitectura completa: [`docs/09_arquitectura_monorepo.md`](docs/09_arquitectura
 **Agent Runtime: [`docs/agent-runtime/`](docs/agent-runtime/README.md)** ·
 **Event Intelligence: [`docs/event-intelligence/`](docs/event-intelligence/README.md)** ·
 **Modelos de IA: [`docs/models/`](docs/models/README.md)** ·
-Diagrama: [`docs/diagrams/arquitectura.mermaid`](docs/diagrams/arquitectura.mermaid) ·
+Diagramas: [flujo científico](docs/diagrams/flujo-cientifico.mmd) · [arquitectura](docs/diagrams/arquitectura.mermaid) ·
 Decisiones: [`docs/adr/`](docs/adr/README.md)
 
 **Persistencia oficial (ADR-0030):** PostgreSQL + pgvector, tanto en el Edge como en el

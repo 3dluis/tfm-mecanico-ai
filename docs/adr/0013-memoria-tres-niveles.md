@@ -1,5 +1,12 @@
 # ADR-0013 — Memoria del agente en tres niveles con pesos epistemológicos
 
+> **⚠ Fuera del alcance experimental del TFM (ADR-0036, 27-ago-2026).** Tras la
+> acotación de la pregunta de investigación a explicación diagnóstica trazable y
+> abstención ante evidencia insuficiente, la memoria de casos con estados y consolidación no forma parte de la validación
+> experimental de este trabajo. **El diseño y el código se conservan** y siguen siendo
+> correctos; simplemente no se evalúan. Catálogo completo y justificación:
+> [`docs/alineacion_v4/05_fuera_de_alcance.md`](../alineacion_v4/05_fuera_de_alcance.md).
+
 **Fecha:** 2026-08-12 · **Estado:** Aceptada · **Fase:** 4 · **Docs:** docs/data-architecture/06
 
 ## Contexto

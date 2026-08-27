@@ -19,10 +19,13 @@ Arquitectura híbrida edge-cloud con **autonomía total del edge** como principi
 │                             │    (ventanas, no supervisado)│        └──────────────────┘        │
 │                             ├──────────────────────────────┤                                    │
 │                             │ 4. Agente LangGraph          │   ┌────────────────────────┐       │
-│                             │    + LLM local (Ollama)      │──▶│ 5a. RAG (ChromaDB +    │       │
-│                             │    + herramientas            │   │  sentence-transformers)│       │
-│                             │                              │──▶│ 5b. Memoria de casos   │       │
-│                             └──────────────────────────────┘   └────────────────────────┘       │
+│                             │    + LLM local (Ollama)      │──▶│ 5a. RAG (pgvector,     │       │
+│                             │    + verificación de soporte │   │  corpus con manifiesto)│       │
+│                             │    + política de abstención  │──▶│ 5b. Memoria de casos   │       │
+│                             └───────────────┬──────────────┘   │  (fuera de alcance)    │       │
+│                                             ▼                  └────────────────────────┘       │
+│                            ¿evidencia suficiente? sí → explicación trazable                     │
+│                                                   no → abstención declarada                     │
 └───────────────────────────────────────┬─────────────────────────────────────────────────────────┘
                                         │ opcional, asíncrono
 ┌───────────────────────────────────────▼─────────────────────────────────────────────────────────┐
@@ -42,9 +45,11 @@ Arquitectura híbrida edge-cloud con **autonomía total del edge** como principi
 
 **C5a — RAG.** Corpus técnico de licencia compatible → chunking → embeddings (sentence-transformers multilingüe compacto) → ChromaDB local. Recuperación híbrida si el tiempo lo permite (denso + BM25).
 
-**C5b — Memoria evolutiva de casos.** Registro estructurado de cada diagnóstico: síntomas (vector de características de la anomalía + embedding textual), hipótesis, diagnóstico final, retroalimentación si existe. Recuperación por similitud al iniciar un diagnóstico nuevo; el agente decide si el caso pasado aplica. Es una memoria episódica con consolidación simple (casos repetidos elevan la confianza del patrón).
+**C5b — Memoria evolutiva de casos.** *(Fuera del alcance experimental, ADR-0036: se conserva funcional y documentada, pero no se evalúa; ver `docs/alineacion_v4/05_fuera_de_alcance.md`.)* Registro estructurado de cada diagnóstico: síntomas (vector de características de la anomalía + embedding textual), hipótesis, diagnóstico final, retroalimentación si existe. Recuperación por similitud al iniciar un diagnóstico nuevo; el agente decide si el caso pasado aplica. Es una memoria episódica con consolidación simple (casos repetidos elevan la confianza del patrón).
 
-**C6 — Agente de diagnóstico (LangGraph).** Grafo explícito con nodos: `triage` (¿anomalía + DTC? ¿solo anomalía?) → `recall` (memoria de casos) → `retrieve` (RAG) → `hypothesize` (generación de hipótesis con LLM) → `verify` (contraste de hipótesis contra los datos: ¿los PIDs implicados son consistentes con la hipótesis?) → `report` (diagnóstico estructurado: causa probable, evidencia, severidad, recomendación, confianza) → `memorize` (escritura en memoria). El estado del grafo y las trazas se persisten para explicabilidad y para la evaluación.
+**C6 — Agente de diagnóstico (LangGraph).** Grafo explícito con nodos: `triage` (¿anomalía + DTC? ¿solo anomalía?) → `recall` (memoria de casos; desactivable) → `retrieve` (RAG sobre el corpus con manifiesto) → `hypothesize` (generación de la explicación candidata con LLM) → `verify` (contraste determinista contra las features de la ventana) → **`decide`** (descomposición de la explicación en afirmaciones atómicas, verificación del soporte de cada una contra la evidencia recuperada, y decisión de suficiencia) → `report` (explicación diagnóstica trazable **o** abstención declarada indicando qué evidencia faltó) → `memorize` (escritura en memoria; fuera del alcance experimental y desactivable). El estado del grafo y las trazas se persisten para explicabilidad y para la evaluación.
+
+**El nodo `decide` es el núcleo científico del sistema** (ADR-0036). Una afirmación se considera sostenida cuando su referencia resuelve a un fragmento realmente recuperado cuyo contenido la respalda, o a una feature existente del vector de la ventana; y una explicación se emite solo cuando alcanza el umbral de soporte **y** el verificador confirma la firma en la telemetría —doble anclaje documental y telemétrico—. En caso contrario el sistema se abstiene. La abstención es una salida correcta, no un fallo. Los tres brazos del experimento central se obtienen configurando este nodo y la recuperación: sin RAG (B1), con RAG y sin verificación ni abstención (B2), y completo (B3).
 
 **C7 — API REST (FastAPI).** Endpoints: estado actual, telemetría, eventos de anomalía, diagnósticos, casos de memoria, disparo manual de diagnóstico. OpenAPI autogenerado.
 

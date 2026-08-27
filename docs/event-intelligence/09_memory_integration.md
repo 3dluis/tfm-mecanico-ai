@@ -1,5 +1,12 @@
 # 09 — Integración con memoria episódica y evolutiva
 
+> **⚠ Fuera del alcance experimental del TFM (ADR-0036, 27-ago-2026).** Tras la
+> acotación de la pregunta de investigación a explicación diagnóstica trazable y
+> abstención ante evidencia insuficiente, la integración de eventos con la memoria no forma parte de la validación
+> experimental de este trabajo. **El diseño y el código se conservan** y siguen siendo
+> correctos; simplemente no se evalúan. Catálogo completo y justificación:
+> [`docs/alineacion_v4/05_fuera_de_alcance.md`](../alineacion_v4/05_fuera_de_alcance.md).
+
 [← Índice](README.md) · Diagrama: [event-memory.mmd](diagrams/event-memory.mmd)
 
 - **CaseMemory** gana `related_event_ids` y las firmas de evento relevantes dentro de

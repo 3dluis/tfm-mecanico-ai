@@ -1,5 +1,12 @@
 # ADR-0015 — Edge Agent Runtime multiagente con agentes lógicos y LangGraph
 
+> **⚠ Fuera del alcance experimental del TFM (ADR-0036, 27-ago-2026).** Tras la
+> acotación de la pregunta de investigación a explicación diagnóstica trazable y
+> abstención ante evidencia insuficiente, el runtime multiagente no forma parte de la validación
+> experimental de este trabajo. **El diseño y el código se conservan** y siguen siendo
+> correctos; simplemente no se evalúan. Catálogo completo y justificación:
+> [`docs/alineacion_v4/05_fuera_de_alcance.md`](../alineacion_v4/05_fuera_de_alcance.md).
+
 **Fecha:** 2026-08-12 · **Estado:** Aceptada · **Fase:** 5 · **Docs:** docs/agent-runtime/
 
 ## Decisión

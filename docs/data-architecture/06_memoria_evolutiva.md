@@ -1,5 +1,12 @@
 # 06 — Memoria del agente: tres niveles y evolución
 
+> **⚠ Fuera del alcance experimental del TFM (ADR-0036, 27-ago-2026).** Tras la
+> acotación de la pregunta de investigación a explicación diagnóstica trazable y
+> abstención ante evidencia insuficiente, la memoria evolutiva no forma parte de la validación
+> experimental de este trabajo. **El diseño y el código se conservan** y siguen siendo
+> correctos; simplemente no se evalúan. Catálogo completo y justificación:
+> [`docs/alineacion_v4/05_fuera_de_alcance.md`](../alineacion_v4/05_fuera_de_alcance.md).
+
 [← Índice](README.md) · ADR: [0013](../adr/0013-memoria-tres-niveles.md) · Diagrama: [diagnostic-memory-flow.mmd](diagrams/diagnostic-memory-flow.mmd)
 
 ## Nivel 1 — Working memory (efímera)

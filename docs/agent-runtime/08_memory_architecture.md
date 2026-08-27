@@ -1,5 +1,12 @@
 # 08 — Memoria en el runtime
 
+> **⚠ Fuera del alcance experimental del TFM (ADR-0036, 27-ago-2026).** Tras la
+> acotación de la pregunta de investigación a explicación diagnóstica trazable y
+> abstención ante evidencia insuficiente, la arquitectura de memoria del agente no forma parte de la validación
+> experimental de este trabajo. **El diseño y el código se conservan** y siguen siendo
+> correctos; simplemente no se evalúan. Catálogo completo y justificación:
+> [`docs/alineacion_v4/05_fuera_de_alcance.md`](../../alineacion_v4/05_fuera_de_alcance.md).
+
 [← Índice](README.md) · Diagrama: [memory.mmd](diagrams/memory.mmd) · Base: [ADR-0013](../adr/0013-memoria-tres-niveles.md) y [data-architecture/06](../data-architecture/06_memoria_evolutiva.md)
 
 Sin cambios de modelo de datos: el runtime CONSUME la arquitectura de F4.

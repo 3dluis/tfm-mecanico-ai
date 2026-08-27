@@ -1,3 +1,6 @@
+%% Arquitectura del monorepo. Flujo científico principal (PI v4, ADR-0036) resaltado en
+%% el bloque de razonamiento: diagnóstico → RAG → verificación del soporte →
+%% explicación trazable o abstención. Detección y memoria son subsistemas auxiliares.
 flowchart TB
     subgraph LAB["obd-lab · Laboratorio OBD-II (dev/experimentos)"]
         SCEN["Escenarios YAML<br/>(conducción + fallos, semilla)"]
@@ -16,16 +19,22 @@ flowchart TB
             SCORE["Scoring → DetectedAnomaly"]
         end
         subgraph LLMZ["Razonamiento (LLM, sin decidir anomalías)"]
-            GRAPH["Agente LangGraph<br/>triage→recall→retrieve→<br/>hypothesize→verify→report"]
-            RAG["RAG · ChromaDB<br/>+ embeddings"]
-            MEM["Memoria de casos<br/>(episódica, evolutiva)"]
+            GRAPH["Agente LangGraph<br/>triage→recall→retrieve→hypothesize→<br/>verify→<b>decide</b>→report"]
+            RAG["RAG · pgvector<br/>corpus con manifiesto"]
+            SUF{"¿Evidencia<br/>suficiente?"}
+            EXPL["Explicación trazable"]
+            ABST["Abstención declarada"]
+            MEM["Memoria de casos<br/>(fuera del alcance experimental)"]
+            GRAPH --> SUF
+            SUF -- "sí" --> EXPL
+            SUF -- "no" --> ABST
         end
         OLL["Ollama · SLM 1-4B"]
-        DB[("SQLite<br/>telemetría · casos · trazas · outbox")]
+        DB[("PostgreSQL + pgvector<br/>telemetría · casos · evidencia · trazas · outbox")]
         APIL["API local FastAPI + UI"]
         ACQ --> TEL --> FEAT --> ONNX --> SCORE --> GRAPH
         GRAPH <--> RAG
-        GRAPH <--> MEM
+        GRAPH <-.-> MEM
         GRAPH <--> OLL
         TEL --> DB
         SCORE --> DB

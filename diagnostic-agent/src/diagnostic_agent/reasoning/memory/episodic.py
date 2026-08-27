@@ -2,6 +2,12 @@
 
 ADR-0013: un caso simulado jamás pesa como uno validado por humanos. La similitud de la
 firma numérica se multiplica por el peso del nivel epistemológico del caso.
+
+
+FUERA DEL ALCANCE EXPERIMENTAL de la PI v4 (ADR-0036): la memoria no participa en la
+evaluación del TFM y los experimentos se ejecutan con ``AgentConfig.memory_enabled=False``.
+El módulo se conserva funcional y cubierto por tests; su evaluación queda como
+continuación del trabajo (docs/alineacion_v4/05_fuera_de_alcance.md §1).
 """
 
 import math
