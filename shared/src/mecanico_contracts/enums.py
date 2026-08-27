@@ -39,6 +39,7 @@ class AgentNode(StrEnum):
     RETRIEVE = "retrieve"
     HYPOTHESIZE = "hypothesize"
     VERIFY = "verify"
+    DECIDE = "decide"  # suficiencia de la evidencia: explicar o abstenerse (ADR-0036)
     REPORT = "report"
     MEMORIZE = "memorize"
 

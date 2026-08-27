@@ -397,6 +397,8 @@ Caso de diagnóstico (INFERRED): unidad de trabajo del agente sobre un disparado
 | `trigger_anomaly_ids` | list[string] | opc. | — | — |
 | `trigger_dtcs` | list[DTCRecord] | opc. | — | — |
 | `explanation` | string \| null | opc. | Explicación final para el usuario (nodo report) | — |
+| `decision` | ExplanationDecision \| null | opc. | Decisión del nodo decide sobre la suficiencia de la evidencia (ADR-0036): explicación sostenida, contradicha, no concluyente o abstención | — |
+| `supported_claim_ratio` | number \| null | opc. | Fracción de afirmaciones que requieren evidencia y que la tienen | — |
 | `provenance_id` | string \| null | opc. | — | — |
 
 ### DiagnosticEvidence
@@ -979,5 +981,5 @@ Pertenencia N:M snapshot↔evento SIN duplicar snapshots (F11 §11).
 - **Severity**: `info`, `low`, `medium`, `high`, `critical`
 - **DetectorKind**: `zscore`, `isolation_forest`, `lof`, `ocsvm`, `autoencoder`
 - **TransportKind**: `serial`, `tcp`, `bluetooth-rfcomm`
-- **AgentNode**: `triage`, `recall`, `retrieve`, `hypothesize`, `verify`, `report`, `memorize`
+- **AgentNode**: `triage`, `recall`, `retrieve`, `hypothesize`, `verify`, `decide`, `report`, `memorize`
 - **SyncEntity**: `telemetry_window`, `anomaly`, `diagnostic`, `case`

@@ -13,6 +13,8 @@
     ],
     "trigger_dtcs": [],
     "explanation": "Diagnóstico más probable: fuga de vacío en admisión (confianza 0.86)…",
+    "decision": null,
+    "supported_claim_ratio": null,
     "provenance_id": "prov-0003"
   },
   "DiagnosticHypothesis (rank 1 de 3)": {

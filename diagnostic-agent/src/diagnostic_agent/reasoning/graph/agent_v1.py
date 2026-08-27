@@ -6,8 +6,12 @@ Responsabilidades estrictas por nodo (requisito del autor):
   retrieve    recupera documentación técnica (auditado)
   hypothesize propone hipótesis estructuradas (LLM plugable; único nodo generativo)
   verify      contrasta CADA hipótesis contra features reales (determinista)
-  report      compone la explicación final basada en evidencia (determinista)
-  memorize    persiste el episodio; NO promociona conocimiento (solo CANDIDATE)
+  decide      descompone la explicación en afirmaciones, verifica su soporte documental
+              y decide entre explicar o ABSTENERSE (determinista, ADR-0036)
+  report      compone la explicación final o la declaración de evidencia insuficiente
+  memorize    persiste el episodio; NO promociona conocimiento (solo CANDIDATE).
+              FUERA DEL ALCANCE EXPERIMENTAL de la PI v4: se desactiva con
+              ``AgentConfig.memory_enabled=False`` (docs/alineacion_v4/05_fuera_de_alcance.md)
 
 Todo queda persistido: AgentRun, AgentStep (E/S estructuradas, sin chain-of-thought),
 RetrievalEvent, DiagnosticCase/Hypothesis/Evidence y ProvenanceRecord.
@@ -21,6 +25,17 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, StateGraph
 
+from diagnostic_agent.reasoning.grounding import (
+    DEFAULT_MIN_RETRIEVAL_SCORE,
+    DEFAULT_SUFFICIENCY_RATIO,
+    DEFAULT_SUPPORT_THRESHOLD,
+    Claim,
+    EvidenceRef,
+    assess_support,
+    decide_sufficiency,
+    decompose_explanation,
+    supports,
+)
 from diagnostic_agent.reasoning.llm.generator import PROMPT_VERSION, Hypothesizer
 from diagnostic_agent.reasoning.memory.episodic import EpisodicMemory, SemanticMemory
 from diagnostic_agent.reasoning.rag.retriever import LexicalRetriever
@@ -41,11 +56,15 @@ from mecanico_contracts import (
     AgentStep,
     CaseMemory,
     CaseStatus,
+    ClaimKind,
     DetectedAnomaly,
     DiagnosticCase,
     DiagnosticEvidence,
     DiagnosticHypothesis,
     EpistemicLevel,
+    EvidenceKind,
+    EvidenceRole,
+    ExplanationDecision,
     HypothesisStatus,
     LearnedPattern,
     MemoryMode,
@@ -60,11 +79,33 @@ GRAPH_VERSION = "g1"
 
 @dataclass
 class AgentConfig:
-    """Configuración de una ejecución (memory_mode es la variable del experimento H3)."""
+    """Configuración de una ejecución.
+
+    Las tres banderas de abajo definen los brazos del experimento central (ADR-0036,
+    `docs/alineacion_v4/03_diseno_experimental.md` §1.2):
+
+    ===========  ==================  ================  ==================================
+    Brazo        ``use_retrieval``   ``verify_support``  ``abstention_enabled``
+    ===========  ==================  ================  ==================================
+    **B1**       False               False             False
+    **B2**       True                False             False
+    **B3**       True                True              True
+    ===========  ==================  ================  ==================================
+
+    ``memory_enabled`` queda **fuera del alcance experimental** de la PI v4 y por defecto
+    sigue activo para no romper el comportamiento existente; los experimentos lo apagan.
+    """
 
     memory_mode: MemoryMode = MemoryMode.EPISODIC
     epistemic_level: EpistemicLevel = EpistemicLevel.SIMULATED
     max_hypotheses: int = 3
+    use_retrieval: bool = True
+    verify_support: bool = True
+    abstention_enabled: bool = True
+    memory_enabled: bool = True
+    support_threshold: float = DEFAULT_SUPPORT_THRESHOLD
+    sufficiency_ratio: float = DEFAULT_SUFFICIENCY_RATIO
+    min_retrieval_score: float = DEFAULT_MIN_RETRIEVAL_SCORE
     extra: dict[str, Any] = field(default_factory=dict)
 
 
@@ -85,6 +126,14 @@ class AgentState(TypedDict, total=False):
     severity: str
     memorized_case_id: str
     candidate_pattern_id: str
+    retrieval_scores: list[float]
+    decision: str
+    supported_ratio: float
+    unsupported_claims: int
+    citation_correctness: float
+    citation_completeness: float
+    trace_depth: float
+    missing_evidence: list[str]
 
 
 class DiagnosticAgentV1:
@@ -216,6 +265,16 @@ class DiagnosticAgentV1:
 
     def _retrieve(self, state: AgentState) -> AgentState:
         t0 = time.time()
+        if not self.config.use_retrieval:
+            # Brazo B1: el generador trabaja sin evidencia recuperada. No es un fallo de
+            # recuperación, es la condición experimental — y así se registra en la traza.
+            self._record(
+                AgentNode.RETRIEVE,
+                t0,
+                {"query": state["query"], "use_retrieval": False},
+                {"chunk_ids": []},
+            )
+            return {"retrieved": [], "retrieval_scores": []}
         hits = self.retriever.search(state["query"], k=3)
         chunks = [(cid, self.retriever.chunk_text(cid), meta) for cid, _s, meta in hits]
         self._retrievals.append(
@@ -237,7 +296,7 @@ class DiagnosticAgentV1:
             {"chunk_ids": [cid for cid, _, _ in chunks]},
             tools_used=["lexical_retriever"],
         )
-        return {"retrieved": chunks}
+        return {"retrieved": chunks, "retrieval_scores": [s for _, s, _ in hits]}
 
     def _hypothesize(self, state: AgentState) -> AgentState:
         t0 = time.time()
@@ -290,11 +349,180 @@ class DiagnosticAgentV1:
         )
         return {"hypotheses": verified, "evidences": evidences}
 
+    def _decide(self, state: AgentState) -> AgentState:
+        """Descompone la explicación en afirmaciones, verifica su soporte y decide.
+
+        Es el nodo que responde a la pregunta de investigación: aquí se establece la
+        correspondencia afirmación→evidencia→dato y aquí se decide si el sistema tiene
+        derecho a explicar. Todo determinista; ningún modelo de lenguaje interviene.
+        """
+        t0 = time.time()
+        assert self._case is not None
+        top = state["hypotheses"][0] if state["hypotheses"] else None
+        documents = {cid: text for cid, text, _ in state.get("retrieved", [])}
+        scores = state.get("retrieval_scores", [])
+
+        if top is None:
+            verdict = decide_sufficiency(
+                assess_support([], documents={}, features={}),
+                retrieved_scores=scores,
+                enabled=self.config.abstention_enabled,
+            )
+            self._record(
+                AgentNode.DECIDE, t0, {"n_hypotheses": 0}, {"decision": verdict.decision.value}
+            )
+            return {
+                "decision": verdict.decision.value,
+                "supported_ratio": 0.0,
+                "unsupported_claims": 0,
+                "citation_correctness": 0.0,
+                "citation_completeness": 0.0,
+                "trace_depth": 0.0,
+                "missing_evidence": list(verdict.missing),
+            }
+
+        telemetry_statements = [
+            (str(e["statement"]), e.get("reference_id"))
+            for e in state.get("evidences", [])
+            if e["hypothesis_id"] == top["hypothesis_id"] and e["role"] == EvidenceRole.SUPPORTS
+        ]
+        claims = decompose_explanation(
+            cause=str(top["cause"]),
+            mechanism=str(top["mechanism"]),
+            telemetry_statements=telemetry_statements,
+        )
+        self._attach_refs(claims, documents)
+
+        assessment = assess_support(
+            claims,
+            documents=documents,
+            features=state.get("features", {}),
+            threshold=self.config.support_threshold,
+        )
+        # Sin verificación del soporte (brazo B2) las afirmaciones se dan por buenas: es
+        # exactamente la diferencia que H-GRD mide.
+        if not self.config.verify_support:
+            for claim in assessment.claims:
+                claim.supported = True
+
+        statuses = [h["status"] for h in state["hypotheses"]]
+        verdict = decide_sufficiency(
+            assessment,
+            retrieved_scores=scores,
+            contradicted=top["status"] == HypothesisStatus.CONTRADICTED.value,
+            telemetry_supported=top["status"] == HypothesisStatus.SUPPORTED.value,
+            ambiguous=statuses.count(HypothesisStatus.SUPPORTED.value) > 1,
+            ratio_threshold=self.config.sufficiency_ratio,
+            min_retrieval_score=self.config.min_retrieval_score,
+            enabled=self.config.abstention_enabled,
+        )
+        self._persist_claim_evidence(assessment.claims, top["hypothesis_id"], state)
+        out: AgentState = {
+            "decision": verdict.decision.value,
+            "supported_ratio": round(assessment.supported_ratio, 4),
+            "unsupported_claims": assessment.unsupported_count,
+            "citation_correctness": round(assessment.citation_correctness, 4),
+            "citation_completeness": round(assessment.citation_completeness, 4),
+            "trace_depth": round(assessment.trace_depth, 4),
+            "missing_evidence": list(verdict.missing),
+        }
+        self._record(
+            AgentNode.DECIDE,
+            t0,
+            {"n_claims": len(assessment.claims), "n_chunks": len(documents)},
+            {k: v for k, v in out.items() if k != "missing_evidence"},
+        )
+        return out
+
+    def _attach_refs(self, claims: list[Claim], documents: dict[str, str]) -> None:
+        """Asigna a cada afirmación documental la referencia de evidencia que le corresponde.
+
+        La referencia se elige **por contenido** —el fragmento recuperado con mayor solape
+        léxico con la afirmación— y no por posición en la lista recuperada. Esa distinción
+        es la que hace que el control de atribución trivial del experimento (que cita
+        siempre el primer resultado) sea una comparación real y no una tautología.
+
+        Las afirmaciones telemétricas ya llegan ancladas a su feature desde el verificador
+        (``reference_id``), de modo que la traza alcanza el dato y no se detiene en el
+        documento.
+        """
+        for claim in claims:
+            if claim.kind is not ClaimKind.DOCUMENTARY:
+                continue
+            best: tuple[float, str] | None = None
+            for chunk_id, text in documents.items():
+                _, overlap = supports(claim.text, text, self.config.support_threshold)
+                if best is None or overlap > best[0]:
+                    best = (overlap, chunk_id)
+            if best is not None and best[0] > 0.0:
+                claim.refs.append(
+                    EvidenceRef(
+                        ref_id=best[1],
+                        kind=ClaimKind.DOCUMENTARY,
+                        source_id=self.retriever.document_id(best[1]),
+                        score=best[0],
+                    )
+                )
+
+    def _persist_claim_evidence(
+        self, claims: list[Claim], hypothesis_id: str, state: AgentState
+    ) -> None:
+        """Persiste la evidencia documental por afirmación (trazabilidad auditable)."""
+        assert self._case is not None
+        now = datetime.now(tz=UTC)
+        rows = state.setdefault("evidences", [])
+        for claim in claims:
+            if claim.kind is not ClaimKind.DOCUMENTARY:
+                continue
+            ref = claim.refs[0] if claim.refs else None
+            rows.append(
+                DiagnosticEvidence(
+                    evidence_id=str(uuid.uuid4()),
+                    case_id=self._case.case_id,
+                    hypothesis_id=hypothesis_id,
+                    kind=EvidenceKind.DOCUMENT,
+                    role=EvidenceRole.SUPPORTS if claim.supported else EvidenceRole.NEUTRAL,
+                    reference_id=ref.ref_id if ref else None,
+                    statement=f"[claim] {claim.text[:240]}"
+                    + ("" if claim.supported else f" — NO SUSTENTADA: {claim.reason}"),
+                    strength=round(ref.score, 3) if ref else 0.0,
+                    produced_by="decide",
+                    created_at=now,
+                ).model_dump(mode="json")
+            )
+
     def _report(self, state: AgentState) -> AgentState:
         t0 = time.time()
         top = state["hypotheses"][0] if state["hypotheses"] else None
-        if top is None:
+        decision = state.get("decision", ExplanationDecision.SUPPORTED.value)
+        if decision == ExplanationDecision.INSUFFICIENT_EVIDENCE.value:
+            # Abstención declarada: salida CORRECTA del sistema, no un fallo. Se dice qué
+            # falta, para que el usuario sepa qué haría falta para poder responder.
+            severity = Severity.INFO
+            faltan = state.get("missing_evidence", [])
+            detalle = (
+                " Evidencia que faltó: " + "; ".join(faltan[:3]) + "."
+                if faltan
+                else " No se recuperó evidencia que sostenga ninguna explicación."
+            )
+            explanation = (
+                "EVIDENCIA INSUFICIENTE: no puede sostenerse una explicación diagnóstica "
+                "con la evidencia disponible." + detalle + " No se emite un diagnóstico "
+                "explicado; se recomienda ampliar la documentación o recoger más "
+                "telemetría. Aviso: prototipo de investigación, no sustituye el "
+                "diagnóstico profesional."
+            )
+        elif top is None:
             explanation, severity = "Sin hipótesis generadas.", Severity.INFO
+        elif decision == ExplanationDecision.INCONCLUSIVE.value:
+            severity = Severity.LOW
+            explanation = (
+                "NO CONCLUYENTE: varias explicaciones alcanzan un soporte comparable y la "
+                "evidencia recuperada no permite diferenciarlas. Candidatas: "
+                + "; ".join(f"{h['cause']} ({h['status']})" for h in state["hypotheses"][:3])
+                + ". Aviso: prototipo de investigación, no sustituye el diagnóstico "
+                "profesional."
+            )
         elif top["status"] == HypothesisStatus.SUPPORTED.value:
             support = [
                 e["statement"]
@@ -321,14 +549,25 @@ class DiagnosticAgentV1:
         self._record(
             AgentNode.REPORT,
             t0,
-            {"top_status": top["status"] if top else None},
+            {"top_status": top["status"] if top else None, "decision": decision},
             {"severity": severity.value, "explanation_chars": len(explanation)},
         )
         return {"explanation": explanation, "severity": severity.value}
 
     def _memorize(self, state: AgentState) -> AgentState:
+        """Persiste el episodio en la memoria de casos.
+
+        **Fuera del alcance experimental de la PI v4** (ADR-0036,
+        `docs/alineacion_v4/05_fuera_de_alcance.md` §1): la memoria no participa en la
+        evaluación y los experimentos ejecutan con ``memory_enabled=False``. El nodo se
+        conserva funcional y cubierto por tests para no romper el trabajo previo ni la
+        continuación futura.
+        """
         t0 = time.time()
         assert self._case is not None
+        if not self.config.memory_enabled:
+            self._record(AgentNode.MEMORIZE, t0, {"memory_enabled": False}, {"skipped": True})
+            return {}
         now = datetime.now(tz=UTC)
         top = state["hypotheses"][0] if state["hypotheses"] else None
         diagnosis = top["cause"] if top else "sin diagnóstico"
@@ -395,6 +634,7 @@ class DiagnosticAgentV1:
         g.add_node("retrieve", self._retrieve)
         g.add_node("hypothesize", self._hypothesize)
         g.add_node("verify", self._verify)
+        g.add_node("decide", self._decide)
         g.add_node("report", self._report)
         g.add_node("memorize", self._memorize)
         g.set_entry_point("triage")
@@ -403,7 +643,8 @@ class DiagnosticAgentV1:
             ("recall", "retrieve"),
             ("retrieve", "hypothesize"),
             ("hypothesize", "verify"),
-            ("verify", "report"),
+            ("verify", "decide"),
+            ("decide", "report"),
             ("report", "memorize"),
         ]:
             g.add_edge(a, b)
@@ -454,6 +695,10 @@ class DiagnosticAgentV1:
                 "closed_at": ended,
                 "severity": Severity(final.get("severity", "info")),
                 "explanation": final.get("explanation"),
+                "decision": ExplanationDecision(
+                    final.get("decision", ExplanationDecision.SUPPORTED.value)
+                ),
+                "supported_claim_ratio": final.get("supported_ratio"),
                 "provenance_id": provenance.provenance_id,
             }
         )
@@ -469,7 +714,11 @@ class DiagnosticAgentV1:
             latency_ms=round((time.perf_counter() - t0) * 1000, 1),
             tokens_in=self._llm_metrics.get("tokens_in"),
             tokens_out=self._llm_metrics.get("tokens_out"),
-            result_status="ok" if final.get("hypotheses") else "no_hypothesis",
+            result_status=(
+                "abstained"
+                if final.get("decision") == ExplanationDecision.INSUFFICIENT_EVIDENCE.value
+                else ("ok" if final.get("hypotheses") else "no_hypothesis")
+            ),
         )
         self.store.add(CaseRow, closed_case)
         self.store.add(AgentRunRow, run)

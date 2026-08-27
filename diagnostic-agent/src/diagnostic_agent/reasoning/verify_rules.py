@@ -18,8 +18,13 @@ from mecanico_contracts import (
     HypothesisStatus,
 )
 
-#: (nombre, predicado sobre features, plantilla de afirmación, peso)
-Check = tuple[str, Callable[[dict[str, float]], bool], str, float]
+#: (nombre, predicado sobre features, plantilla de afirmación, peso, feature de anclaje)
+#:
+#: La *feature de anclaje* es lo que hace la evidencia rastreable **hasta el dato**: se
+#: registra como ``reference_id`` de la ``DiagnosticEvidence``, de modo que una afirmación
+#: telemétrica no solo se afirme, sino que apunte a la magnitud concreta del vector de
+#: features que la sostiene (ADR-0036; métrica de profundidad de traza).
+Check = tuple[str, Callable[[dict[str, float]], bool], str, float, str]
 
 _RULES: dict[str, list[Check]] = {
     "vacuum_leak": [
@@ -28,18 +33,21 @@ _RULES: dict[str, list[Check]] = {
             lambda f: f.get("total_trim_mean", 0) > 4.0,
             "total_trim_mean={total_trim_mean:+.1f}% (esperado >+4% con fuga de vacío)",
             0.9,
+            "total_trim_mean",
         ),
         (
             "map_elevado_baja_velocidad",
             lambda f: f.get("INTAKE_PRESSURE_mean", 0) > 30 and f.get("SPEED_mean", 99) < 30,
             "MAP medio={INTAKE_PRESSURE_mean:.0f} kPa con velocidad media {SPEED_mean:.0f} km/h",
             0.5,
+            "INTAKE_PRESSURE_mean",
         ),
         (
             "ralenti_inestable",
             lambda f: f.get("RPM_std", 0) > 35 and f.get("SPEED_mean", 99) < 10,
             "RPM_std={RPM_std:.0f} en ralentí (inestabilidad)",
             0.4,
+            "RPM_std",
         ),
     ],
     "maf_drift": [
@@ -48,6 +56,7 @@ _RULES: dict[str, list[Check]] = {
             lambda f: f.get("total_trim_mean", 0) > 4.0,
             "total_trim_mean={total_trim_mean:+.1f}% (compensación por MAF que subestima)",
             0.8,
+            "total_trim_mean",
         ),
         (
             "maf_bajo_para_regimen",
@@ -57,6 +66,7 @@ _RULES: dict[str, list[Check]] = {
             ),
             "MAF_mean={MAF_mean:.1f} g/s inferior al esperado para RPM×carga",
             0.7,
+            "MAF_mean",
         ),
     ],
     "thermostat_stuck": [
@@ -65,12 +75,14 @@ _RULES: dict[str, list[Check]] = {
             lambda f: f.get("COOLANT_TEMP_mean", 99) < 80.0,
             "COOLANT_TEMP_mean={COOLANT_TEMP_mean:.1f} °C (<80 °C: no alcanza régimen)",
             0.9,
+            "COOLANT_TEMP_mean",
         ),
         (
             "meseta_estable",
             lambda f: f.get("COOLANT_TEMP_std", 99) < 2.0,
             "COOLANT_TEMP_std={COOLANT_TEMP_std:.2f} (meseta, no calentamiento en curso)",
             0.5,
+            "COOLANT_TEMP_std",
         ),
     ],
     "o2_lag": [
@@ -79,12 +91,14 @@ _RULES: dict[str, list[Check]] = {
             lambda f: f.get("O2_B1S1_std", 99) < 0.15,
             "O2_B1S1_std={O2_B1S1_std:.3f} V (oscilación amortiguada; sano ≈0.25)",
             0.8,
+            "O2_B1S1_std",
         ),
         (
             "stft_ruidoso",
             lambda f: f.get("SHORT_FUEL_TRIM_1_std", 0) > 2.0,
             "STFT_std={SHORT_FUEL_TRIM_1_std:.1f}% (control de mezcla degradado)",
             0.4,
+            "SHORT_FUEL_TRIM_1_std",
         ),
     ],
     "misfire": [
@@ -93,12 +107,14 @@ _RULES: dict[str, list[Check]] = {
             lambda f: f.get("RPM_std", 0) > 60,
             "RPM_std={RPM_std:.0f} (caídas de régimen)",
             0.7,
+            "RPM_std",
         ),
         (
             "o2_rico_intermitente",
             lambda f: f.get("O2_B1S1_mean", 0) > 0.55,
             "O2_B1S1_mean={O2_B1S1_mean:.2f} V (combustible sin quemar)",
             0.5,
+            "O2_B1S1_mean",
         ),
     ],
 }
@@ -117,7 +133,7 @@ def verify_hypothesis(
         return HypothesisStatus.INCONCLUSIVE, [], min(hypothesis.confidence, 0.4)
 
     support, contradict = 0.0, 0.0
-    for name, predicate, template, weight in checks:
+    for name, predicate, template, weight, anchor in checks:
         holds = predicate(features)
         role = EvidenceRole.SUPPORTS if holds else EvidenceRole.CONTRADICTS
         try:
@@ -131,7 +147,7 @@ def verify_hypothesis(
                 hypothesis_id=hypothesis.hypothesis_id,
                 kind=EvidenceKind.TELEMETRY,
                 role=role,
-                reference_id=None,
+                reference_id=anchor,
                 statement=f"[{name}] {statement}",
                 strength=weight,
                 produced_by="verify",

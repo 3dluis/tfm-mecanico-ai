@@ -23,6 +23,7 @@ from mecanico_contracts.data_enums import (
     EpistemicLevel,
     EvidenceKind,
     EvidenceRole,
+    ExplanationDecision,
     FeedbackKind,
     FeedbackVerdict,
     MemoryMode,
@@ -134,6 +135,19 @@ class DiagnosticCase(ContractBase):
     trigger_dtcs: list[DTCRecord] = Field(default_factory=list)
     explanation: str | None = Field(
         default=None, description="Explicación final para el usuario (nodo report)"
+    )
+    decision: ExplanationDecision | None = Field(
+        default=None,
+        description=(
+            "Decisión del nodo decide sobre la suficiencia de la evidencia (ADR-0036): "
+            "explicación sostenida, contradicha, no concluyente o abstención"
+        ),
+    )
+    supported_claim_ratio: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description="Fracción de afirmaciones que requieren evidencia y que la tienen",
     )
     provenance_id: str | None = None
 

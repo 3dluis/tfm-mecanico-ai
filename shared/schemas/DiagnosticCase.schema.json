@@ -58,6 +58,17 @@
       "title": "DTCRecord",
       "type": "object"
     },
+    "ExplanationDecision": {
+      "description": "Decisión final del agente sobre la explicación de un caso (ADR-0036 §6.1).\n\nSustituye, en el alcance evaluado del TFM, a los estados de promoción de conocimiento:\naquí no se decide si algo se recuerda, sino si puede explicarse con la evidencia\ndisponible. ``INSUFFICIENT_EVIDENCE`` es la abstención y es una salida CORRECTA.",
+      "enum": [
+        "supported",
+        "contradicted",
+        "inconclusive",
+        "insufficient_evidence"
+      ],
+      "title": "ExplanationDecision",
+      "type": "string"
+    },
     "Severity": {
       "description": "Severidad de una anomalía, diagnóstico o recomendación.",
       "enum": [
@@ -151,6 +162,33 @@
       "default": null,
       "description": "Explicación final para el usuario (nodo report)",
       "title": "Explanation"
+    },
+    "decision": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExplanationDecision"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Decisión del nodo decide sobre la suficiencia de la evidencia (ADR-0036): explicación sostenida, contradicha, no concluyente o abstención"
+    },
+    "supported_claim_ratio": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Fracción de afirmaciones que requieren evidencia y que la tienen",
+      "title": "Supported Claim Ratio"
     },
     "provenance_id": {
       "anyOf": [

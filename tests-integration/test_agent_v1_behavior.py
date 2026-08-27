@@ -1,7 +1,14 @@
-"""Comportamiento del agente v1: fallo conocido → SUPPORTED; held-out → candidato.
+"""Comportamiento del agente v1: fallo conocido → explicación sostenida; held-out → abstención.
 
-También verifica la responsabilidad estricta de verify (evidencias a favor Y en contra)
-y el efecto del memory_mode (recall solo consulta memoria si está habilitada).
+Actualizado a la PI v4 (ADR-0036). El caso *held-out* ya no se lee como «el sistema
+registra un patrón candidato» sino como **el sistema reconoce que no dispone de evidencia
+suficiente y se abstiene**, que es el comportamiento que la pregunta de investigación
+interroga. El registro del patrón candidato sigue produciéndose porque la memoria continúa
+activa por defecto, y se comprueba para garantizar que la reorientación no rompió el
+componente; pero la aserción científica del test es la abstención.
+
+También verifica la responsabilidad estricta de verify (evidencias a favor Y en contra) y
+el efecto del memory_mode (recall solo consulta memoria si está habilitada).
 """
 
 import uuid
@@ -18,6 +25,7 @@ from diagnostic_agent.storage.store import EdgeStoreV2
 from mecanico_contracts import (
     DetectedAnomaly,
     DetectorKind,
+    ExplanationDecision,
     MemoryMode,
 )
 from mecanico_contracts.features import FEATURE_NAMES
@@ -95,19 +103,26 @@ def test_fallo_conocido_hipotesis_soportada(store: EdgeStoreV2) -> None:
     assert case.explanation and "fuga" in case.explanation.lower()
 
 
-def test_held_out_produce_candidato_no_alucina(store: EdgeStoreV2) -> None:
+def test_held_out_se_abstiene_y_no_alucina(store: EdgeStoreV2) -> None:
+    """Objetivo científico: el corpus no describe este mecanismo → abstención declarada.
+
+    Contrasta la parte (iv) de H-MAIN y la hipótesis H-ABS: ante un mecanismo cuya
+    evidencia no está en el corpus recuperable, la salida correcta es declarar la
+    insuficiencia, no producir una explicación plausible.
+    """
     case = _agent(store, MemoryMode.EPISODIC_SEMANTIC).run(
         _anomaly(HELD_OUT, ["RPM", "MAF", "ENGINE_LOAD"])
     )
     hyps = store.raw_rows(dbs.HypothesisRow, case_id=case.case_id)
     top = min(hyps, key=lambda h: h.rank)
     assert top.status in ("inconclusive", "contradicted")  # no afirma lo que no puede verificar
+    assert case.decision is ExplanationDecision.INSUFFICIENT_EVIDENCE
+    assert "evidencia insuficiente" in (case.explanation or "").lower()
+    # el sistema NO nombra un modo de fallo documentado como si lo hubiera diagnosticado
+    assert "fuga de vacío" not in (case.explanation or "").lower()
+    # la memoria sigue funcionando (fuera del alcance experimental, no retirada)
     patterns = store.raw_rows(dbs.LearnedPatternRow)
     assert len(patterns) == 1 and patterns[0].status == "candidate"
-    assert (
-        "candidato" in (case.explanation or "").lower()
-        or "no cubiert" in (case.explanation or "").lower()
-    )
 
 
 def test_memory_mode_none_no_consulta_memoria(store: EdgeStoreV2) -> None:

@@ -440,6 +440,10 @@ class CaseRow(Base, _Row):
     trigger_anomaly_ids: Mapped[list[object]] = mapped_column(JSON, default=list)
     trigger_dtcs: Mapped[list[object]] = mapped_column(JSON, default=list)
     explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # ADR-0036: decisión sobre la suficiencia de la evidencia (explicar o abstenerse) y
+    # fracción de afirmaciones sustentadas de la explicación emitida.
+    decision: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    supported_claim_ratio: Mapped[float | None] = mapped_column(Float, nullable=True)
     provenance_id: Mapped[str | None] = mapped_column(String, nullable=True)
 
 

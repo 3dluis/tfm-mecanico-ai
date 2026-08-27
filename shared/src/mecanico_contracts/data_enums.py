@@ -52,6 +52,28 @@ class HypothesisStatus(StrEnum):
     INCONCLUSIVE = "inconclusive"
 
 
+class ClaimKind(StrEnum):
+    """Tipo de afirmación de una explicación, según qué evidencia necesita (ADR-0036)."""
+
+    DOCUMENTARY = "documentary"  # requiere un fragmento del corpus que la sostenga
+    TELEMETRIC = "telemetric"  # requiere una comprobación determinista sobre features
+    GENERIC = "generic"  # no requiere evidencia (aviso, recomendación de revisión)
+
+
+class ExplanationDecision(StrEnum):
+    """Decisión final del agente sobre la explicación de un caso (ADR-0036 §6.1).
+
+    Sustituye, en el alcance evaluado del TFM, a los estados de promoción de conocimiento:
+    aquí no se decide si algo se recuerda, sino si puede explicarse con la evidencia
+    disponible. ``INSUFFICIENT_EVIDENCE`` es la abstención y es una salida CORRECTA.
+    """
+
+    SUPPORTED = "supported"  # explicación sostenida y trazable
+    CONTRADICTED = "contradicted"  # evidencia contradictoria dominante
+    INCONCLUSIVE = "inconclusive"  # varias candidatas con soporte comparable
+    INSUFFICIENT_EVIDENCE = "insufficient_evidence"  # abstención declarada
+
+
 class EvidenceKind(StrEnum):
     TELEMETRY = "telemetry"  # features/ventanas contrastadas
     DTC = "dtc"

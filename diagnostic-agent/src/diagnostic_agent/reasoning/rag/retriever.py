@@ -2,14 +2,21 @@
 
 Decisión ADR-0014: el retriever v1 es LÉXICO y determinista (solape de términos con
 ponderación tf) para que la iteración sea evaluable sin depender de modelos de
-embeddings; la recuperación densa (ChromaDB + sentence-transformers) se incorpora en la
-iteración RAG siguiendo el mismo contrato (``KnowledgeChunk`` + ``RetrievalEvent``).
+embeddings; la recuperación densa se incorpora en la iteración RAG siguiendo el mismo
+contrato (``KnowledgeChunk`` + ``RetrievalEvent``).
+
+**Disponibilidad de evidencia controlada (ADR-0036).** ``ingest_corpus`` admite un
+conjunto de documentos a excluir: es el mecanismo experimental que construye las
+variantes del corpus del experimento central — C-A con la evidencia del mecanismo
+evaluado, C-B sin ella y C-B\' con evidencia parcial. La exclusión es explícita y
+auditable, nunca implícita.
 """
 
 import hashlib
 import re
 import unicodedata
 from collections import Counter
+from collections.abc import Collection
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -55,11 +62,25 @@ def _tokens(text: str) -> list[str]:
     return [t for t in re.findall(r"[a-z0-9_]+", norm) if t not in _STOP and len(t) > 2]
 
 
-def ingest_corpus(store: EdgeStoreV2, corpus_path: Path) -> int:
-    """Carga el corpus YAML como documentos+chunks (idempotente por checksum)."""
+def ingest_corpus(
+    store: EdgeStoreV2,
+    corpus_path: Path,
+    *,
+    exclude_document_ids: Collection[str] = (),
+) -> int:
+    """Carga el corpus YAML como documentos+chunks (idempotente por checksum).
+
+    ``exclude_document_ids`` retira documentos del corpus recuperable. Es la variable
+    independiente del experimento central: retirar la documentación del mecanismo
+    evaluado produce la condición de *evidencia insuficiente* sin tocar nada más
+    (mismo modelo, mismo caso, misma semilla).
+    """
     raw = yaml.safe_load(corpus_path.read_text(encoding="utf-8"))
+    excluded = set(exclude_document_ids)
     n = 0
     for doc in raw["documents"]:
+        if doc["id"] in excluded:
+            continue
         checksum = hashlib.sha256(doc["text"].encode()).hexdigest()[:16]
         if store.count(KnowledgeDocumentRow, document_id=doc["id"]) == 0:
             store.add(
@@ -112,3 +133,19 @@ class LexicalRetriever:
             if chunk.chunk_id == chunk_id:
                 return str(chunk.text)
         return ""
+
+    def document_id(self, chunk_id: str) -> str | None:
+        """Documento del que procede un fragmento.
+
+        Es el eslabón que permite rastrear una afirmación **hasta su fuente** y no solo
+        hasta el fragmento citado: sin él, la trazabilidad se detiene en un identificador
+        opaco (métrica de profundidad de traza, `03_diseno_experimental.md` §2.4).
+        """
+        for chunk in self._chunks:
+            if chunk.chunk_id == chunk_id:
+                return str(chunk.document_id)
+        return None
+
+    def document_ids(self) -> set[str]:
+        """Documentos presentes en el corpus recuperable, para auditar la variante activa."""
+        return {str(c.document_id) for c in self._chunks}

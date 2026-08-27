@@ -244,7 +244,7 @@ def test_cadena_completa_persistida(populated: EdgeStoreV2) -> None:
     assert s.count(dbs.HypothesisRow) >= 1
     assert s.count(dbs.EvidenceRow) >= 0
     assert s.count(dbs.AgentRunRow) == 1
-    assert s.count(dbs.AgentStepRow) == 7  # los 7 nodos del grafo
+    assert s.count(dbs.AgentStepRow) == 8  # los 8 nodos del grafo (decide añadido, ADR-0036)
     assert s.count(dbs.CaseMemoryRow) == 1
     assert s.count(dbs.LearnedPatternRow) == 1  # candidato (held-out no casó con fichas)
     assert s.count(dbs.ProvenanceRow) == 1
