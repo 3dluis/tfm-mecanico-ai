@@ -19,6 +19,7 @@ abstención · B3 con recuperación, verificación del soporte y abstención.
 """
 
 import uuid
+from collections.abc import Collection
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -63,7 +64,7 @@ VACUUM = {
 PIDS = ["SHORT_FUEL_TRIM_1", "LONG_FUEL_TRIM_1", "INTAKE_PRESSURE", "RPM"]
 
 #: Documento distractor: plausible, del mismo dominio, irrelevante para este caso (CN3).
-DISTRACTOR = {
+DISTRACTOR: dict[str, object] = {
     "id": "doc-distractor-neumaticos",
     "title": "Presión de neumáticos y consumo",
     "metadata": {"failure_mode": "tyre_pressure", "component": "neumáticos"},
@@ -92,7 +93,12 @@ def _anomaly(features: dict[str, float]) -> DetectedAnomaly:
     )
 
 
-def _store(tmp_path: Path, *, exclude: set[str] = frozenset(), extra: list[dict] | None = None):
+def _store(
+    tmp_path: Path,
+    *,
+    exclude: Collection[str] = (),
+    extra: list[dict[str, object]] | None = None,
+) -> EdgeStoreV2:
     """Construye una variante de corpus con exclusión controlada y devuelve el store."""
     corpus_path = CORPUS
     if extra:
@@ -186,7 +192,7 @@ def test_escenario_b_evidencia_retirada_produce_abstencion(tmp_path: Path) -> No
     """
     store = _store(tmp_path, exclude=FAMILIA_MECANISMO)
     presentes = LexicalRetriever(store).document_ids()
-    assert not (FAMILIA_MECANISMO & presentes)  # control de la variante, verificado
+    assert not (set(FAMILIA_MECANISMO) & presentes)  # control de la variante, verificado
 
     case = _agent(store).run(_anomaly(VACUUM))
     assert case.decision is ExplanationDecision.INSUFFICIENT_EVIDENCE
@@ -267,7 +273,8 @@ def test_corpus_con_distractor_no_ancla_en_evidencia_irrelevante(tmp_path: Path)
     documentales = _claims(store, case.case_id)
     anclajes = {c.reference_id for c in documentales if c.role == "supports" and c.reference_id}
     assert anclajes, "debe haber afirmaciones sustentadas en el Escenario A con distractor"
-    assert all(not str(a).startswith(DISTRACTOR["id"]) for a in anclajes), (
+    distractor_id = str(DISTRACTOR["id"])
+    assert all(not str(a).startswith(distractor_id) for a in anclajes), (
         "ninguna afirmación puede sostenerse en el documento distractor"
     )
     top = min(store.raw_rows(dbs.HypothesisRow, case_id=case.case_id), key=lambda h: h.rank)
