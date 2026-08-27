@@ -1,0 +1,394 @@
+version: d1-selection-1
+purpose: 'Banco de SELECCIÓN de modelo (D1). Instrumental: no contrasta hipótesis y su resultado no se
+  combina con evidencia confirmatoria. Disjunto de cases_v2.'
+seed_block:
+- 60000
+- 60019
+composition:
+  total: 20
+  con_fallo: 15
+  normales: 5
+  control_trivial: un generador que responda siempre el mismo mecanismo acierta 3/20 = 0.15
+context_note: 'input_context DERIVADO de las features medidas de la ventana, nunca redactado a mano: no
+  nombra mecanismos ni insinúa la respuesta.'
+cases:
+- case_id: D1-d1-vacuum_leak-0
+  description: Selección D1 · vacuum_leak · repetición 0
+  scenario:
+    scenario_id: d1-vacuum_leak-0
+    seed: 60000
+    profile: urban
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 7.77 %; dispersión del ajuste a corto plazo 2.22
+    %; media del ajuste a largo plazo 3.49 %; régimen medio 1407.26 rpm; dispersión del régimen 638.16
+    rpm; velocidad media 18.17 km/h; flujo de aire medio 7.92 g/s; carga media 10.25 %; temperatura media
+    del refrigerante 87.13 °C; presión media del colector 32.08 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 1140.0
+  ground_truth:
+    failure_mode: vacuum_leak
+    component: null
+  acceptable_hypotheses:
+  - vacuum_leak
+  expected_outcome: probable
+- case_id: D1-d1-vacuum_leak-1
+  description: Selección D1 · vacuum_leak · repetición 1
+  scenario:
+    scenario_id: d1-vacuum_leak-1
+    seed: 60001
+    profile: highway
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 2.80 %; dispersión del ajuste a corto plazo 1.47
+    %; media del ajuste a largo plazo 0.03 %; régimen medio 3246.15 rpm; dispersión del régimen 134.28
+    rpm; velocidad media 116.90 km/h; flujo de aire medio 39.74 g/s; carga media 26.91 %; temperatura
+    media del refrigerante 87.35 °C; presión media del colector 45.07 kPa; tensión media de la sonda de
+    oxígeno 0.45 V; dispersión de la sonda de oxígeno 0.26 V
+  window_start_s: 300.0
+  ground_truth:
+    failure_mode: vacuum_leak
+    component: null
+  acceptable_hypotheses:
+  - vacuum_leak
+  expected_outcome: probable
+- case_id: D1-d1-vacuum_leak-2
+  description: Selección D1 · vacuum_leak · repetición 2
+  scenario:
+    scenario_id: d1-vacuum_leak-2
+    seed: 60002
+    profile: idle
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 7.50 %; dispersión del ajuste a corto plazo 1.54
+    %; media del ajuste a largo plazo 0.65 %; régimen medio 820.15 rpm; dispersión del régimen 26.42 rpm;
+    velocidad media 0.05 km/h; flujo de aire medio 2.20 g/s; carga media 5.73 %; temperatura media del
+    refrigerante 86.00 °C; presión media del colector 29.85 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 300.0
+  ground_truth:
+    failure_mode: vacuum_leak
+    component: null
+  acceptable_hypotheses:
+  - vacuum_leak
+  expected_outcome: probable
+- case_id: D1-d1-maf_drift-0
+  description: Selección D1 · maf_drift · repetición 0
+  scenario:
+    scenario_id: d1-maf_drift-0
+    seed: 60003
+    profile: cold_start
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 8.80 %; dispersión del ajuste a corto plazo 1.46
+    %; media del ajuste a largo plazo 3.63 %; régimen medio 1952.70 rpm; dispersión del régimen 570.74
+    rpm; velocidad media 30.30 km/h; flujo de aire medio 26.63 g/s; carga media 37.55 %; temperatura media
+    del refrigerante 72.92 °C; presión media del colector 51.72 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 480.0
+  ground_truth:
+    failure_mode: maf_drift
+    component: null
+  acceptable_hypotheses:
+  - maf_drift
+  expected_outcome: probable
+- case_id: D1-d1-maf_drift-1
+  description: Selección D1 · maf_drift · repetición 1
+  scenario:
+    scenario_id: d1-maf_drift-1
+    seed: 60004
+    profile: urban
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 8.96 %; dispersión del ajuste a corto plazo 1.63
+    %; media del ajuste a largo plazo 3.78 %; régimen medio 1876.30 rpm; dispersión del régimen 617.10
+    rpm; velocidad media 28.10 km/h; flujo de aire medio 26.60 g/s; carga media 37.03 %; temperatura media
+    del refrigerante 87.32 °C; presión media del colector 51.13 kPa; tensión media de la sonda de oxígeno
+    0.46 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 480.0
+  ground_truth:
+    failure_mode: maf_drift
+    component: null
+  acceptable_hypotheses:
+  - maf_drift
+  expected_outcome: probable
+- case_id: D1-d1-maf_drift-2
+  description: Selección D1 · maf_drift · repetición 2
+  scenario:
+    scenario_id: d1-maf_drift-2
+    seed: 60005
+    profile: highway
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 7.21 %; dispersión del ajuste a corto plazo 1.88
+    %; media del ajuste a largo plazo 2.62 %; régimen medio 3120.67 rpm; dispersión del régimen 160.15
+    rpm; velocidad media 112.33 km/h; flujo de aire medio 32.98 g/s; carga media 25.49 %; temperatura
+    media del refrigerante 87.38 °C; presión media del colector 41.88 kPa; tensión media de la sonda de
+    oxígeno 0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 450.0
+  ground_truth:
+    failure_mode: maf_drift
+    component: null
+  acceptable_hypotheses:
+  - maf_drift
+  expected_outcome: probable
+- case_id: D1-d1-thermostat_stuck-0
+  description: Selección D1 · thermostat_stuck · repetición 0
+  scenario:
+    scenario_id: d1-thermostat_stuck-0
+    seed: 60006
+    profile: idle
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.07 %; dispersión del ajuste a corto plazo 1.25
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 821.02 rpm; dispersión del régimen 9.85 rpm;
+    velocidad media 0.28 km/h; flujo de aire medio 2.37 g/s; carga media 6.08 %; temperatura media del
+    refrigerante 76.20 °C; presión media del colector 26.87 kPa; tensión media de la sonda de oxígeno
+    0.46 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: thermostat_stuck
+    component: null
+  acceptable_hypotheses:
+  - thermostat_stuck
+  expected_outcome: probable
+- case_id: D1-d1-thermostat_stuck-1
+  description: Selección D1 · thermostat_stuck · repetición 1
+  scenario:
+    scenario_id: d1-thermostat_stuck-1
+    seed: 60007
+    profile: cold_start
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.21 %; dispersión del ajuste a corto plazo 1.56
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 1307.39 rpm; dispersión del régimen 548.55
+    rpm; velocidad media 16.95 km/h; flujo de aire medio 5.90 g/s; carga media 8.69 %; temperatura media
+    del refrigerante 55.62 °C; presión media del colector 28.43 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.26 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: thermostat_stuck
+    component: null
+  acceptable_hypotheses:
+  - thermostat_stuck
+  expected_outcome: probable
+- case_id: D1-d1-thermostat_stuck-2
+  description: Selección D1 · thermostat_stuck · repetición 2
+  scenario:
+    scenario_id: d1-thermostat_stuck-2
+    seed: 60008
+    profile: urban
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible -0.07 %; dispersión del ajuste a corto plazo 1.33
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 1270.55 rpm; dispersión del régimen 527.70
+    rpm; velocidad media 22.47 km/h; flujo de aire medio 10.01 g/s; carga media 16.89 %; temperatura media
+    del refrigerante 77.35 °C; presión media del colector 35.05 kPa; tensión media de la sonda de oxígeno
+    0.44 V; dispersión de la sonda de oxígeno 0.26 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: thermostat_stuck
+    component: null
+  acceptable_hypotheses:
+  - thermostat_stuck
+  expected_outcome: probable
+- case_id: D1-d1-o2_lag-0
+  description: Selección D1 · o2_lag · repetición 0
+  scenario:
+    scenario_id: d1-o2_lag-0
+    seed: 60009
+    profile: highway
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible -0.39 %; dispersión del ajuste a corto plazo 1.81
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 2850.95 rpm; dispersión del régimen 113.90
+    rpm; velocidad media 102.15 km/h; flujo de aire medio 35.63 g/s; carga media 27.64 %; temperatura
+    media del refrigerante 87.37 °C; presión media del colector 43.77 kPa; tensión media de la sonda de
+    oxígeno 0.47 V; dispersión de la sonda de oxígeno 0.18 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: o2_lag
+    component: null
+  acceptable_hypotheses:
+  - o2_lag
+  expected_outcome: probable
+- case_id: D1-d1-o2_lag-1
+  description: Selección D1 · o2_lag · repetición 1
+  scenario:
+    scenario_id: d1-o2_lag-1
+    seed: 60010
+    profile: idle
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible -0.18 %; dispersión del ajuste a corto plazo 1.64
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 819.70 rpm; dispersión del régimen 12.57 rpm;
+    velocidad media 0.10 km/h; flujo de aire medio 2.44 g/s; carga media 6.16 %; temperatura media del
+    refrigerante 85.40 °C; presión media del colector 26.73 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.18 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: o2_lag
+    component: null
+  acceptable_hypotheses:
+  - o2_lag
+  expected_outcome: probable
+- case_id: D1-d1-o2_lag-2
+  description: Selección D1 · o2_lag · repetición 2
+  scenario:
+    scenario_id: d1-o2_lag-2
+    seed: 60011
+    profile: cold_start
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.20 %; dispersión del ajuste a corto plazo 1.72
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 1805.59 rpm; dispersión del régimen 213.11
+    rpm; velocidad media 30.12 km/h; flujo de aire medio 9.32 g/s; carga media 11.14 %; temperatura media
+    del refrigerante 55.97 °C; presión media del colector 30.90 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.17 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: o2_lag
+    component: null
+  acceptable_hypotheses:
+  - o2_lag
+  expected_outcome: probable
+- case_id: D1-d1-misfire-0
+  description: Selección D1 · misfire · repetición 0
+  scenario:
+    scenario_id: d1-misfire-0
+    seed: 60012
+    profile: urban
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.35 %; dispersión del ajuste a corto plazo 1.56
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 1517.02 rpm; dispersión del régimen 686.15
+    rpm; velocidad media 27.85 km/h; flujo de aire medio 10.51 g/s; carga media 13.99 %; temperatura media
+    del refrigerante 87.22 °C; presión media del colector 31.98 kPa; tensión media de la sonda de oxígeno
+    0.47 V; dispersión de la sonda de oxígeno 0.27 V
+  window_start_s: 840.0
+  ground_truth:
+    failure_mode: misfire
+    component: null
+  acceptable_hypotheses:
+  - misfire
+  expected_outcome: probable
+- case_id: D1-d1-misfire-1
+  description: Selección D1 · misfire · repetición 1
+  scenario:
+    scenario_id: d1-misfire-1
+    seed: 60013
+    profile: highway
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.21 %; dispersión del ajuste a corto plazo 1.51
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 2738.24 rpm; dispersión del régimen 338.78
+    rpm; velocidad media 95.77 km/h; flujo de aire medio 54.03 g/s; carga media 43.10 %; temperatura media
+    del refrigerante 87.42 °C; presión media del colector 55.55 kPa; tensión media de la sonda de oxígeno
+    0.46 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 270.0
+  ground_truth:
+    failure_mode: misfire
+    component: null
+  acceptable_hypotheses:
+  - misfire
+  expected_outcome: probable
+- case_id: D1-d1-misfire-2
+  description: Selección D1 · misfire · repetición 2
+  scenario:
+    scenario_id: d1-misfire-2
+    seed: 60014
+    profile: idle
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible -0.26 %; dispersión del ajuste a corto plazo 1.49
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 810.74 rpm; dispersión del régimen 36.52 rpm;
+    velocidad media 0.25 km/h; flujo de aire medio 2.23 g/s; carga media 6.20 %; temperatura media del
+    refrigerante 86.52 °C; presión media del colector 26.32 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 330.0
+  ground_truth:
+    failure_mode: misfire
+    component: null
+  acceptable_hypotheses:
+  - misfire
+  expected_outcome: probable
+- case_id: D1-d1-normal-0
+  description: Selección D1 · normalidad 0
+  scenario:
+    scenario_id: d1-normal-0
+    seed: 60015
+    profile: cold_start
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.23 %; dispersión del ajuste a corto plazo 1.30
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 951.45 rpm; dispersión del régimen 330.71
+    rpm; velocidad media 3.47 km/h; flujo de aire medio 12.74 g/s; carga media 22.23 %; temperatura media
+    del refrigerante 82.90 °C; presión media del colector 39.52 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 720.0
+  ground_truth:
+    failure_mode: null
+    component: null
+  acceptable_hypotheses:
+  - none
+  expected_outcome: no_fault
+- case_id: D1-d1-normal-1
+  description: Selección D1 · normalidad 1
+  scenario:
+    scenario_id: d1-normal-1
+    seed: 60016
+    profile: urban
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible -0.13 %; dispersión del ajuste a corto plazo 1.27
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 1449.94 rpm; dispersión del régimen 662.47
+    rpm; velocidad media 16.87 km/h; flujo de aire medio 27.61 g/s; carga media 36.58 %; temperatura media
+    del refrigerante 79.67 °C; presión media del colector 50.93 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 0.0
+  ground_truth:
+    failure_mode: null
+    component: null
+  acceptable_hypotheses:
+  - none
+  expected_outcome: no_fault
+- case_id: D1-d1-normal-2
+  description: Selección D1 · normalidad 2
+  scenario:
+    scenario_id: d1-normal-2
+    seed: 60017
+    profile: highway
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.09 %; dispersión del ajuste a corto plazo 1.04
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 2753.55 rpm; dispersión del régimen 361.49
+    rpm; velocidad media 83.17 km/h; flujo de aire medio 74.99 g/s; carga media 62.56 %; temperatura media
+    del refrigerante 82.15 °C; presión media del colector 71.72 kPa; tensión media de la sonda de oxígeno
+    0.43 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 0.0
+  ground_truth:
+    failure_mode: null
+    component: null
+  acceptable_hypotheses:
+  - none
+  expected_outcome: no_fault
+- case_id: D1-d1-normal-3
+  description: Selección D1 · normalidad 3
+  scenario:
+    scenario_id: d1-normal-3
+    seed: 60018
+    profile: idle
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible -0.22 %; dispersión del ajuste a corto plazo 1.30
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 820.52 rpm; dispersión del régimen 13.25 rpm;
+    velocidad media 0.18 km/h; flujo de aire medio 2.43 g/s; carga media 6.07 %; temperatura media del
+    refrigerante 78.50 °C; presión media del colector 26.20 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.26 V
+  window_start_s: 0.0
+  ground_truth:
+    failure_mode: null
+    component: null
+  acceptable_hypotheses:
+  - none
+  expected_outcome: no_fault
+- case_id: D1-d1-normal-4
+  description: Selección D1 · normalidad 4
+  scenario:
+    scenario_id: d1-normal-4
+    seed: 60019
+    profile: cold_start
+    duration_s: 1200.0
+  input_context: media de los ajustes de combustible 0.18 %; dispersión del ajuste a corto plazo 1.44
+    %; media del ajuste a largo plazo 0.00 %; régimen medio 2007.69 rpm; dispersión del régimen 408.16
+    rpm; velocidad media 36.52 km/h; flujo de aire medio 30.78 g/s; carga media 35.80 %; temperatura media
+    del refrigerante 50.83 °C; presión media del colector 50.05 kPa; tensión media de la sonda de oxígeno
+    0.45 V; dispersión de la sonda de oxígeno 0.25 V
+  window_start_s: 210.0
+  ground_truth:
+    failure_mode: null
+    component: null
+  acceptable_hypotheses:
+  - none
+  expected_outcome: no_fault

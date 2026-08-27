@@ -1,0 +1,190 @@
+# GENERADO por tools/gen_cases_d1.py — no editar a mano.
+suite: obd-lab-suite-d1
+purpose: SELECCIÓN DE MODELO (D1) — instrumental, jamás confirmatorio. Disjunto de
+  cases_v2 y de suite_v2.
+seed_block:
+- 60000
+- 60019
+anomaly_seed_rule: seed + 10000
+splits:
+  validation:
+  - scenario_id: d1-vacuum_leak-0
+    description: Selección D1 · vacuum_leak · repetición 0
+    category: known_fault
+    driving_profile: urban
+    duration_s: 1200.0
+    seed: 60000
+    anomaly_seed: 70000
+    fault: vacuum_leak
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-vacuum_leak-1
+    description: Selección D1 · vacuum_leak · repetición 1
+    category: known_fault
+    driving_profile: highway
+    duration_s: 1200.0
+    seed: 60001
+    anomaly_seed: 70001
+    fault: vacuum_leak
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-vacuum_leak-2
+    description: Selección D1 · vacuum_leak · repetición 2
+    category: known_fault
+    driving_profile: idle
+    duration_s: 1200.0
+    seed: 60002
+    anomaly_seed: 70002
+    fault: vacuum_leak
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-maf_drift-0
+    description: Selección D1 · maf_drift · repetición 0
+    category: known_fault
+    driving_profile: cold_start
+    duration_s: 1200.0
+    seed: 60003
+    anomaly_seed: 70003
+    fault: maf_drift
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-maf_drift-1
+    description: Selección D1 · maf_drift · repetición 1
+    category: known_fault
+    driving_profile: urban
+    duration_s: 1200.0
+    seed: 60004
+    anomaly_seed: 70004
+    fault: maf_drift
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-maf_drift-2
+    description: Selección D1 · maf_drift · repetición 2
+    category: known_fault
+    driving_profile: highway
+    duration_s: 1200.0
+    seed: 60005
+    anomaly_seed: 70005
+    fault: maf_drift
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-thermostat_stuck-0
+    description: Selección D1 · thermostat_stuck · repetición 0
+    category: known_fault
+    driving_profile: idle
+    duration_s: 1200.0
+    seed: 60006
+    anomaly_seed: 70006
+    fault: thermostat_stuck
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-thermostat_stuck-1
+    description: Selección D1 · thermostat_stuck · repetición 1
+    category: known_fault
+    driving_profile: cold_start
+    duration_s: 1200.0
+    seed: 60007
+    anomaly_seed: 70007
+    fault: thermostat_stuck
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-thermostat_stuck-2
+    description: Selección D1 · thermostat_stuck · repetición 2
+    category: known_fault
+    driving_profile: urban
+    duration_s: 1200.0
+    seed: 60008
+    anomaly_seed: 70008
+    fault: thermostat_stuck
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-o2_lag-0
+    description: Selección D1 · o2_lag · repetición 0
+    category: known_fault
+    driving_profile: highway
+    duration_s: 1200.0
+    seed: 60009
+    anomaly_seed: 70009
+    fault: o2_lag
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-o2_lag-1
+    description: Selección D1 · o2_lag · repetición 1
+    category: known_fault
+    driving_profile: idle
+    duration_s: 1200.0
+    seed: 60010
+    anomaly_seed: 70010
+    fault: o2_lag
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-o2_lag-2
+    description: Selección D1 · o2_lag · repetición 2
+    category: known_fault
+    driving_profile: cold_start
+    duration_s: 1200.0
+    seed: 60011
+    anomaly_seed: 70011
+    fault: o2_lag
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-misfire-0
+    description: Selección D1 · misfire · repetición 0
+    category: known_fault
+    driving_profile: urban
+    duration_s: 1200.0
+    seed: 60012
+    anomaly_seed: 70012
+    fault: misfire
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-misfire-1
+    description: Selección D1 · misfire · repetición 1
+    category: known_fault
+    driving_profile: highway
+    duration_s: 1200.0
+    seed: 60013
+    anomaly_seed: 70013
+    fault: misfire
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-misfire-2
+    description: Selección D1 · misfire · repetición 2
+    category: known_fault
+    driving_profile: idle
+    duration_s: 1200.0
+    seed: 60014
+    anomaly_seed: 70014
+    fault: misfire
+    fault_start_s: 300.0
+    fault_end_s: 1200.0
+  - scenario_id: d1-normal-0
+    description: Selección D1 · normalidad 0
+    category: normal
+    driving_profile: cold_start
+    duration_s: 1200.0
+    seed: 60015
+  - scenario_id: d1-normal-1
+    description: Selección D1 · normalidad 1
+    category: normal
+    driving_profile: urban
+    duration_s: 1200.0
+    seed: 60016
+  - scenario_id: d1-normal-2
+    description: Selección D1 · normalidad 2
+    category: normal
+    driving_profile: highway
+    duration_s: 1200.0
+    seed: 60017
+  - scenario_id: d1-normal-3
+    description: Selección D1 · normalidad 3
+    category: normal
+    driving_profile: idle
+    duration_s: 1200.0
+    seed: 60018
+  - scenario_id: d1-normal-4
+    description: Selección D1 · normalidad 4
+    category: normal
+    driving_profile: cold_start
+    duration_s: 1200.0
+    seed: 60019
