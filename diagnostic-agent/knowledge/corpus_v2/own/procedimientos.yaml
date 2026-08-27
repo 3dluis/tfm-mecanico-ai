@@ -1,0 +1,247 @@
+# Capa propia del corpus C-A — procedimientos e interpretación de observables.
+#
+# Obra propia del proyecto Mecánico IA · licencia CC-BY-4.0 · registrada en CORPUS_MANIFEST.md.
+#
+# REGLA ANTI-CIRCULARIDAD (R3 §2.1). Los documentos se organizan por OBSERVABLE y por
+# PROCEDIMIENTO, nunca por modo de fallo: no hay «un documento por avería» ni metadato
+# `failure_mode`. Varios mecanismos comparten documento (el diferencial de mezcla pobre
+# cubre fuga de vacío, deriva de MAF y presión de combustible a la vez), de modo que
+# recuperar el documento correcto no equivale a acertar el diagnóstico.
+#
+# REGLA E-RAG. Ningún documento describe los mecanismos de las clases held-out declaradas
+# en `ai-models/configs/heldout-exclusions.yaml` (no se reproducen aquí: nombrarlos en este
+# fichero sería ya una violación). Esa ausencia es deliberada y la verifica
+# `tools/contamination_audit.py`.
+#
+# Fundamento técnico: convenciones J1979 de los PID, comportamiento del lazo cerrado de
+# combustible y firmas efectivamente reproducidas por el emulador del proyecto
+# (`obd-lab/src/obd_lab/injection/faults.py`). No se copia texto de manuales propietarios.
+
+documents:
+  - id: own-trims-fundamentos
+    title: "Ajustes de combustible: definición, signo y constantes de tiempo"
+    metadata: {topic: combustible, component: mezcla, pids: "SHORT_FUEL_TRIM_1,LONG_FUEL_TRIM_1"}
+    text: >
+      Los ajustes de combustible expresan, en tanto por ciento, la corrección que la unidad
+      de control aplica sobre el tiempo de inyección calculado. El ajuste a corto plazo
+      (STFT, PID 06) reacciona en fracciones de segundo a la señal de la sonda de oxígeno y
+      oscila alrededor de cero durante el funcionamiento en lazo cerrado. El ajuste a largo
+      plazo (LTFT, PID 07) es la memoria adaptativa de esa corrección: integra el valor medio
+      del STFT a lo largo de minutos de funcionamiento y desplaza el punto de partida de la
+      inyección.
+      El SIGNO es la clave de lectura. Un valor POSITIVO significa que la unidad de control
+      está añadiendo combustible porque la mezcla resulta más pobre de lo previsto; un valor
+      NEGATIVO significa que lo está restando por mezcla más rica de lo previsto. Valores
+      dentro de aproximadamente ±5 % se consideran normales; entre ±5 % y ±10 % indican una
+      desviación que conviene explicar; por encima de ±10 % la desviación es significativa y
+      por encima de ±20 % la unidad de control suele agotar su margen de corrección.
+      La CONSTANTE DE TIEMPO importa al interpretar una sesión corta. El STFT responde de
+      inmediato, pero el LTFT necesita varios minutos de conducción estabilizada para
+      reflejar plenamente una desviación sostenida: en los primeros minutos tras un arranque,
+      o tras un borrado de la memoria adaptativa, un LTFT bajo NO descarta una desviación
+      real. Al analizar ventanas cortas debe declararse esta limitación en lugar de concluir
+      normalidad.
+
+  - id: own-mezcla-pobre-diferencial
+    title: "Diagnóstico diferencial de una desviación positiva sostenida de los ajustes"
+    metadata: {topic: combustible, component: mezcla, pids: "SHORT_FUEL_TRIM_1,LONG_FUEL_TRIM_1,MAF,INTAKE_PRESSURE"}
+    text: >
+      Una desviación positiva sostenida de los ajustes de combustible indica que entra al
+      cilindro menos combustible del necesario para la masa de aire realmente admitida, o
+      que la unidad de control cree admitir menos aire del que entra. Es un SÍNTOMA
+      compartido por varias causas y, por sí solo, no identifica ninguna. Las causas que lo
+      producen con mayor frecuencia son cuatro.
+      Primera, la entrada de aire no medido aguas abajo del medidor de flujo: la unidad de
+      control desconoce ese aire, la sonda de oxígeno detecta mezcla pobre y la corrección
+      sube. Segunda, la subestimación del flujo de aire por parte del propio medidor, ya sea
+      por contaminación del elemento sensor o por deriva de su calibración: la unidad calcula
+      una masa de aire inferior a la real e inyecta en consecuencia. Tercera, una presión de
+      combustible insuficiente por filtro obstruido, bomba degradada o regulador defectuoso.
+      Cuarta, una señal de oxígeno que informa incorrectamente del estado de la mezcla.
+      Las cuatro producen la MISMA lectura de partida. Distinguirlas exige comparar el
+      comportamiento en distintos regímenes de funcionamiento y contrastar el flujo de aire
+      medido con el esperado, según los procedimientos correspondientes. Concluir una causa
+      concreta a partir únicamente del signo de los ajustes no está sostenido por la
+      evidencia disponible.
+
+  - id: own-trims-por-regimen
+    title: "Comparación de los ajustes entre ralentí y régimen sostenido"
+    metadata: {topic: procedimiento, component: mezcla, pids: "SHORT_FUEL_TRIM_1,LONG_FUEL_TRIM_1,SPEED,RPM"}
+    text: >
+      El procedimiento con mayor poder discriminante ante una desviación positiva de los
+      ajustes consiste en comparar su magnitud en ralentí frente a la que presenta en régimen
+      sostenido, por ejemplo a velocidad de crucero o alrededor de 2500 rpm.
+      Cuando la desviación es MARCADAMENTE MAYOR EN RALENTÍ y se atenúa o desaparece al subir
+      el régimen, el comportamiento es compatible con una entrada de aire no medido de caudal
+      aproximadamente constante: en ralentí ese caudal representa una fracción grande del aire
+      total admitido, mientras que a régimen elevado queda diluido en un flujo mucho mayor.
+      Cuando la desviación se MANTIENE O CRECE con el flujo de aire, y por tanto aparece
+      también a velocidad de crucero con magnitud comparable o superior, el comportamiento es
+      compatible con un error proporcional en la medida del flujo de aire, no con una entrada
+      puntual: un error multiplicativo del medidor afecta a todo el rango de funcionamiento.
+      La comparación debe hacerse con el motor a temperatura de régimen y en lazo cerrado. Si
+      la sesión analizada no contiene ambos regímenes con duración suficiente, el
+      procedimiento no es aplicable y la distinción entre ambas familias de causa no puede
+      establecerse con la evidencia disponible.
+
+  - id: own-maf-verificacion
+    title: "Contraste del flujo de aire medido frente al esperado por régimen y carga"
+    metadata: {topic: procedimiento, component: maf, pids: "MAF,RPM,ENGINE_LOAD"}
+    text: >
+      El caudal másico de aire admitido guarda una relación aproximadamente proporcional con
+      el producto del régimen de giro por la carga del motor. Esa proporcionalidad permite
+      contrastar el valor informado por el medidor de flujo con un valor esperado calculado a
+      partir de otros dos PID independientes, sin necesidad de instrumentación externa.
+      El procedimiento consiste en evaluar, sobre ventanas en las que el régimen y la carga
+      sean estables, el cociente entre el flujo informado y el producto régimen por carga. Un
+      valor de ese cociente sistemáticamente inferior al de referencia del vehículo indica que
+      el medidor informa de menos aire del que razonablemente circula, lo que obliga a la
+      unidad de control a inyectar por defecto y explica una corrección positiva de los
+      ajustes extendida a todo el rango.
+      Dos cautelas. La constante de proporcionalidad depende de la cilindrada y del llenado
+      volumétrico, por lo que el contraste es válido como comparación relativa dentro de un
+      mismo vehículo y no como valor absoluto entre vehículos distintos. Y la relación se
+      degrada en transitorios bruscos: sólo debe evaluarse en ventanas estabilizadas. Una
+      desviación observada únicamente en aceleraciones no sostiene la conclusión.
+
+  - id: own-admision-estanqueidad
+    title: "Comprobación de la estanqueidad del circuito de admisión"
+    metadata: {topic: procedimiento, component: colector, pids: "INTAKE_PRESSURE,RPM,SPEED"}
+    text: >
+      La presión absoluta del colector de admisión en ralentí es un indicador directo del
+      grado de vacío que el motor genera. Con el motor a temperatura de régimen y en ralentí
+      estable, esa presión se sitúa muy por debajo de la atmosférica. Una presión de colector
+      MÁS ALTA DE LO ESPERADO EN RALENTÍ indica que el vacío es menor, lo que ocurre cuando
+      entra aire al circuito por una vía distinta de la mariposa.
+      Ese mismo defecto suele acompañarse de INESTABILIDAD DEL RÉGIMEN DE RALENTÍ: la
+      variabilidad del régimen aumenta porque la unidad de control corrige de forma continua
+      un aporte de aire que no controla. La combinación de presión de colector elevada en
+      ralentí, aumento de la dispersión del régimen y corrección positiva de los ajustes
+      concentrada en ralentí constituye un conjunto de evidencia convergente.
+      La comprobación física habitual es la inspección de manguitos y juntas y, cuando está
+      disponible, la prueba de humo a baja presión, que revela el punto de entrada. Ninguna de
+      estas comprobaciones puede realizarse a partir de telemetría: la telemetría sostiene la
+      hipótesis y orienta la inspección, pero la confirmación es física.
+
+  - id: own-refrigeracion-dinamica
+    title: "Dinámica térmica del circuito de refrigeración y su lectura por PID"
+    metadata: {topic: refrigeracion, component: termostato, pids: "COOLANT_TEMP,ENGINE_LOAD,SPEED"}
+    text: >
+      La temperatura del refrigerante (PID 05) describe una curva característica: asciende de
+      forma sostenida desde la temperatura ambiente tras el arranque en frío y se estabiliza
+      en una banda de regulación, típicamente entre 85 y 100 grados centígrados, en la que
+      oscila levemente conforme el elemento regulador abre y cierra el paso hacia el radiador.
+      Dos rasgos de esa curva son diagnósticos. El primero es el TIEMPO HASTA ALCANZAR LA
+      BANDA DE REGULACIÓN, que depende de la temperatura ambiente y de la carga, y que se
+      alarga de forma anómala cuando el refrigerante circula por el radiador antes de tiempo.
+      El segundo es la EXISTENCIA MISMA DE LA BANDA: en funcionamiento normal la temperatura
+      estabilizada presenta microvariaciones asociadas a los ciclos de regulación y a los
+      cambios de carga. Una temperatura que se estabiliza por debajo de la banda esperada, o
+      que no alcanza el valor de régimen tras un tiempo de conducción suficiente, indica que
+      la regulación no está reteniendo el calor.
+      La interpretación exige contexto. Una temperatura baja durante los primeros minutos tras
+      un arranque en frío es normal; a temperatura ambiente muy baja el calentamiento es más
+      lento por razones legítimas. Sin conocer la duración de la sesión, la temperatura
+      ambiente y el régimen de conducción, una lectura baja aislada no sostiene ninguna
+      conclusión.
+
+  - id: own-lambda-dinamica
+    title: "Respuesta dinámica de la sonda de oxígeno y efecto de su envejecimiento"
+    metadata: {topic: escape, component: o2, pids: "O2_B1S1,SHORT_FUEL_TRIM_1"}
+    text: >
+      Una sonda de oxígeno de circonio en buen estado y a temperatura de trabajo conmuta con
+      rapidez entre tensión baja, del orden de 0,1 voltios en mezcla pobre, y tensión alta,
+      del orden de 0,8 a 0,9 voltios en mezcla rica. En lazo cerrado esa conmutación es
+      CONTINUA y relativamente rápida: la unidad de control corrige, la sonda responde, la
+      corrección se invierte. La amplitud y la frecuencia de esa oscilación son la señal de
+      que el lazo está vivo.
+      El envejecimiento de la sonda no suele manifestarse como una lectura fuera de rango,
+      sino como una PÉRDIDA DE VELOCIDAD DE RESPUESTA. La señal se amortigua: la amplitud de
+      la oscilación disminuye, las transiciones se vuelven lentas y la tensión tiende a
+      permanecer en valores intermedios durante más tiempo. Como la unidad de control corrige
+      a partir de una señal retardada, el ajuste a corto plazo se vuelve más ERRÁTICO, con
+      mayor dispersión, sin que su valor medio se desplace necesariamente.
+      El rasgo diagnóstico es, por tanto, estadístico y no de nivel: interesa la varianza y la
+      dinámica de la señal en la ventana, no su valor medio. Un valor medio dentro de rango es
+      compatible con una sonda degradada y no permite descartarla.
+
+  - id: own-combustion-irregular
+    title: "Detección de combustión irregular por variación instantánea del régimen"
+    metadata: {topic: encendido, component: encendido, pids: "RPM,ENGINE_LOAD,O2_B1S1,SHORT_FUEL_TRIM_1"}
+    text: >
+      Cuando un cilindro no completa la combustión, el par entregado en ese ciclo desaparece y
+      el régimen de giro sufre una CAÍDA BREVE Y ABRUPTA seguida de una recuperación. Sobre
+      telemetría muestreada a baja frecuencia el fenómeno no se observa ciclo a ciclo, pero sí
+      deja rastro estadístico: aumento de la dispersión del régimen y presencia de descensos
+      puntuales que no se corresponden con una acción del conductor ni con un cambio de marcha.
+      El fenómeno suele acompañarse de dos efectos secundarios. La carga calculada del motor
+      REACCIONA AL ALZA, porque la unidad de control demanda más para sostener el régimen
+      objetivo. Y el combustible que no arde llega al escape sin quemar, de modo que la sonda
+      de oxígeno registra excursiones hacia tensión más alta, propias de mezcla aparentemente
+      rica, junto con mayor inquietud del ajuste a corto plazo.
+      La firma es INTERMITENTE por naturaleza: aparece en episodios cortos separados por
+      periodos de funcionamiento normal. Evaluarla sobre una ventana promediada la diluye
+      hasta hacerla indistinguible del ruido, por lo que debe buscarse mediante estadísticos
+      sensibles a excursiones breves y no mediante valores medios de la sesión.
+
+  - id: own-normalidad-y-contexto
+    title: "Qué aspecto tiene el funcionamiento normal y por qué el contexto condiciona la lectura"
+    metadata: {topic: referencia, component: general, pids: "RPM,SPEED,ENGINE_LOAD,COOLANT_TEMP,SHORT_FUEL_TRIM_1,LONG_FUEL_TRIM_1"}
+    text: >
+      En funcionamiento normal y a temperatura de régimen, los ajustes de combustible oscilan
+      en torno a cero dentro de una banda estrecha, la temperatura del refrigerante permanece
+      en su banda de regulación, el flujo de aire acompaña al régimen y a la carga, y la sonda
+      de oxígeno conmuta de forma continua. Las relaciones entre señales se conservan aunque
+      los valores absolutos cambien con la conducción.
+      Existen situaciones NORMALES PERO POCO FRECUENTES que se parecen superficialmente a una
+      anomalía. Un ajuste a largo plazo estabilizado en un valor no nulo tras un periodo de
+      adaptación puede reflejar simplemente una compensación aprendida y legítima. Una
+      conducción prolongada a velocidad constante produce señales inusualmente estables, con
+      dispersión muy baja en todos los PID. Una temperatura ambiente extrema, tanto muy baja
+      como muy alta, desplaza la curva de calentamiento y los valores de régimen sin que exista
+      avería alguna.
+      La consecuencia metodológica es que una desviación estadística respecto de un
+      comportamiento de referencia NO ES POR SÍ MISMA UNA AVERÍA. Antes de atribuirla a un
+      fallo debe descartarse que el contexto operativo —arranque en frío, ambiente extremo,
+      régimen sostenido, adaptación reciente— la explique. Sin ese contexto, la atribución no
+      está sostenida.
+
+  - id: own-dtc-y-sintoma
+    title: "Los códigos de diagnóstico identifican síntomas, no causas"
+    metadata: {topic: estandar, component: ecu, pids: "DTC"}
+    text: >
+      Un código de diagnóstico almacenado indica que un parámetro supervisado ha superado un
+      umbral durante el tiempo requerido por el monitor correspondiente. Describe, por tanto,
+      LO QUE LA UNIDAD DE CONTROL HA OBSERVADO, no lo que lo ha provocado. Los códigos de la
+      familia relativa a mezcla pobre en un banco, por ejemplo, se activan cuando la corrección
+      de combustible acumulada supera el margen previsto, situación a la que conducen causas
+      físicamente muy distintas.
+      De ahí que la relación entre código y reparación no sea biunívoca: un mismo código admite
+      varias causas y una misma causa puede no generar código alguno mientras la desviación se
+      mantenga dentro del margen de corrección. Esto último es especialmente relevante en
+      degradaciones progresivas, que producen desviación medible en los PID mucho antes de
+      alcanzar el umbral que enciende el testigo.
+      En consecuencia, la ausencia de código no es evidencia de ausencia de problema, y la
+      presencia de código no identifica la causa. El código acota el espacio de hipótesis; la
+      evidencia que las distingue procede del comportamiento de los PID y de las
+      comprobaciones físicas.
+
+  - id: own-ventanas-y-estadisticos
+    title: "Agregación de PID en ventanas: qué significa cada estadístico"
+    metadata: {topic: metodo, component: general, pids: "RPM,SPEED,MAF,ENGINE_LOAD,COOLANT_TEMP,INTAKE_PRESSURE,O2_B1S1,SHORT_FUEL_TRIM_1,LONG_FUEL_TRIM_1"}
+    text: >
+      El análisis de telemetría OBD-II agrega las muestras en ventanas temporales y calcula
+      estadísticos por PID. La elección del estadístico determina qué fenómenos son visibles y
+      cuáles quedan ocultos, por lo que forma parte de la evidencia y debe declararse.
+      El VALOR MEDIO describe el nivel de la señal en la ventana y es apropiado para
+      desviaciones sostenidas, como una corrección de combustible mantenida o una temperatura
+      estabilizada fuera de su banda. La DESVIACIÓN TÍPICA describe la variabilidad y es
+      apropiada para fenómenos de dinámica, como la inestabilidad de un régimen de ralentí o la
+      inquietud de una señal de corrección. Los fenómenos INTERMITENTES y de duración breve son
+      los peor servidos por ambos: el valor medio los diluye y la desviación típica sólo los
+      revela si su amplitud es considerable frente al resto de la ventana.
+      La longitud de la ventana introduce un compromiso explícito. Ventanas largas estabilizan
+      los estadísticos y reducen el ruido, pero retrasan la detección y difuminan los episodios
+      cortos. Ventanas cortas reaccionan antes y conservan los episodios, a costa de mayor
+      variabilidad. Una conclusión sobre una ventana no se traslada automáticamente a otra
+      longitud, y la longitud empleada debe formar parte de la traza de la explicación.

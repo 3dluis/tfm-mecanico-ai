@@ -5,6 +5,7 @@ COMPOSE := docker compose
 RUN := uv run
 
 .PHONY: install install-train check-train-env install-emulator schemas lint type test check \
+ corpus-fetch corpus-build corpus-verify \
         dev research cloud edge full down \
         arm64-build eval-emulator \
         db-up db-upgrade db-revision db-psql pg-bench pg-vector-bench test-pg
@@ -109,6 +110,15 @@ llm-smoke:  ## smoke comparativo de SLMs (requiere Ollama con los modelos descar
 
 # ------------------------------------- persistencia edge: PostgreSQL + pgvector (ADR-0030)
 MECANICO_DB_URL ?= postgresql+psycopg://mecanico:mecanico@localhost:15432/mecanico_edge
+
+corpus-fetch:  ## descarga la capa externa del corpus con revision fijada (R3)
+	$(RUN) python tools/fetch_corpus_sources.py
+
+corpus-build:  ## construye y congela C-A y las variantes C-B / C-B' (R3)
+	$(RUN) python tools/build_corpus.py
+
+corpus-verify:  ## verifica que el corpus congelado no ha cambiado
+	$(RUN) python tools/build_corpus.py --verify
 
 db-up:  ## levanta solo PostgreSQL+pgvector del edge
 	$(COMPOSE) --profile edge-postgres up -d edge-postgres

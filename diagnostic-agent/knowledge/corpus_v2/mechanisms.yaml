@@ -1,0 +1,59 @@
+# Especificación declarativa de la EXCLUSIÓN CONTROLADA DE EVIDENCIA (R3, PI v4).
+#
+# La disponibilidad de evidencia es la variable independiente principal del experimento
+# central (`docs/alineacion_v4/03_diseno_experimental.md` §1.1). Este fichero declara, para
+# cada mecanismo evaluado, qué documentos se retiran de C-A para construir cada variante.
+# Se congela con el manifiesto: cambiarlo después de ejecutar exige enmienda fechada.
+#
+#   C-A       corpus completo — Escenario A (evidencia suficiente)
+#   C-B(m)    C-A menos `causal` y menos `componente` — Escenario B (evidencia ausente):
+#             no queda nada sobre el subsistema implicado
+#   C-B'(m)   C-A menos `causal` únicamente — Escenario B duro (evidencia parcial):
+#             la recuperación devuelve descripciones genéricas del componente y del PID,
+#             pero ninguna establece la relación causa→síntoma
+#
+# `causal`     documentos que establecen la relación causa→síntoma del mecanismo.
+# `componente` documentos que describen el componente o el PID implicado de forma genérica.
+#
+# Obsérvese que varios mecanismos COMPARTEN documentos causales (el diferencial de mezcla
+# pobre y la comparación por régimen sirven a la vez a la fuga de vacío y a la deriva del
+# medidor de flujo). Esa superposición es deliberada: impide la correspondencia uno a uno
+# entre documento y respuesta que invalidaba el corpus v1.
+
+version: corpus-v2
+mechanisms:
+  vacuum_leak:
+    label: "entrada de aire no medido en el circuito de admisión"
+    causal: [own-mezcla-pobre-diferencial, own-trims-por-regimen, own-admision-estanqueidad]
+    componente: [ext-manifold-vacuum]
+  maf_drift:
+    label: "subestimación del flujo de aire por el medidor"
+    causal: [own-mezcla-pobre-diferencial, own-trims-por-regimen, own-maf-verificacion]
+    componente: [ext-maf-sensor-en, ext-maf-sensor-es]
+  o2_lag:
+    label: "pérdida de velocidad de respuesta de la sonda de oxígeno"
+    causal: [own-lambda-dinamica]
+    componente: [ext-o2-sensor-en, ext-o2-sensor-es]
+  thermostat_stuck:
+    label: "regulación térmica que no retiene el calor"
+    causal: [own-refrigeracion-dinamica]
+    componente: [ext-thermostat-en, ext-thermostat-es, ext-cooling]
+  misfire:
+    label: "combustión irregular en algún cilindro"
+    causal: [own-combustion-irregular]
+    componente: [ext-misfire, ext-ignition]
+
+# Documentos que NUNCA se retiran: fundamentos, contexto y método. Su permanencia garantiza
+# que en el Escenario B el corpus siga siendo grande y plausible, y que la abstención no
+# pueda explicarse por un corpus vacío.
+always_present:
+  - own-trims-fundamentos
+  - own-normalidad-y-contexto
+  - own-dtc-y-sintoma
+  - own-ventanas-y-estadisticos
+  - ext-obd2-pids
+  - ext-obd2-standard
+  - ext-ecu
+  - ext-afr
+  - ext-fuel-injection
+  - ext-catalytic
