@@ -1,6 +1,6 @@
-# Correspondencia de nomenclatura (alineaciones científicas v2 y v3)
+# Correspondencia de nomenclatura (alineaciones científicas v2, v3 y v4)
 
-Tabla de trazabilidad entre nomenclaturas. **Regla:** los documentos históricos (informes de fase cerrados, ADRs aceptados) NO se reescriben — conservan la nomenclatura de su época y se interpretan mediante esta tabla; los documentos vivos usan la nomenclatura vigente (v3). Fuente canónica de la estructura vigente: `docs/alineacion_v3/01_nucleo_cientifico.md`.
+Tabla de trazabilidad entre nomenclaturas. **Regla:** los documentos históricos (informes de fase cerrados, ADRs aceptados) NO se reescriben — conservan la nomenclatura de su época y se interpretan mediante esta tabla; los documentos vivos usan la nomenclatura vigente (v3). Fuente canónica de la estructura vigente: `docs/alineacion_v4/01_nucleo_cientifico.md` (la v3 pasa a histórica; su correspondencia con la v4 está en el §11 de ese documento).
 
 ## 0. Pregunta de investigación (historia)
 
@@ -8,7 +8,11 @@ Tabla de trazabilidad entre nomenclaturas. **Regla:** los documentos históricos
 |---|---|---|---|
 | **PI v1** | «¿Puede un agente híbrido, que combine LLM + no supervisado + memoria + RAG, descubrir y explicar patrones no documentados…?» | Fase 0 → 12-ago-2026 | docs/01 v1, informes F0–F9 |
 | **PI v2** («Opción B») | «¿Puede un sistema híbrido descubrir y explicar patrones de fallo previamente no documentados mediante análisis contextual y longitudinal de OBD-II?» | 12-ago → 18-ago-2026 | propuesta_alineacion_final, pre-registro-v1 (§1 hasta su enmienda), estado_del_arte_y_metodologia_tutor, consolidado v1.0 Parte II |
-| **PI v3** (OFICIAL) | «¿Puede un sistema híbrido **identificar** patrones **no representados en su conocimiento disponible**, **generar hipótesis** diagnósticas a partir del análisis contextual y longitudinal de OBD-II y **validarlas mediante evidencia antes de incorporarlas como conocimiento reutilizable**?» | desde 18-ago-2026 | docs/01 v3, núcleo científico, todo documento vivo |
+| **PI v3** (OFICIAL) | «¿Puede un sistema híbrido **identificar** patrones **no representados en su conocimiento disponible**, **generar hipótesis** diagnósticas a partir del análisis contextual y longitudinal de OBD-II y **validarlas mediante evidencia antes de incorporarlas como conocimiento reutilizable**?» | 18-ago → 27-ago-2026 | `alineacion_v3/`, pre-registro v1 (ENM-000), memoria cap. 1–3 |
+
+| **PI v4** (OFICIAL) | «¿Puede un **agente con RAG explicar** el diagnóstico de un vehículo a partir de datos OBD-II reales, **rastreando cada explicación hasta su evidencia de origen**, y **reconocer cuándo la evidencia disponible no es suficiente** para sostener una explicación en lugar de generar una hipótesis sin fundamento?» | desde 27-ago-2026 | docs/01 v4, `alineacion_v4/`, todo documento vivo |
+
+Cambios sustantivos v3→v4 (acordados con el tutor, 27-ago-2026): (1) el enunciado se acota de la cadena de ocho pasos a la de seis (observar → contextualizar → diagnosticar → recuperar evidencia → verificar el soporte → explicar o abstenerse); (2) salen del núcleo la generación de hipótesis como resultado, la validación de hipótesis y la consolidación en memoria; (3) entran como exigencias explícitas la **trazabilidad verificable** afirmación→evidencia→dato y la **abstención** ante evidencia insuficiente; (4) la exclusión E-RAG deja de ser una restricción y pasa a ser la variable independiente principal. Justificación completa: `docs/alineacion_v4/04_historial_pi.md`. Lo retirado no se borra: `docs/alineacion_v4/05_fuera_de_alcance.md`.
 
 Cambios sustantivos v2→v3: (1) la cadena completa entra en el enunciado (identificar + hipotetizar + validar + incorporar); (2) «no documentado» → «no representado en su conocimiento disponible» (novedad relativa al sistema, operacionalizable por exclusión triple); (3) la consolidación validada deja de ser un mecanismo y pasa a ser parte de la pregunta. «Patrón no documentado» en textos históricos se lee como «patrón no representado» sin cambio de significado experimental (la definición operacional por exclusión triple ya era la vigente).
 

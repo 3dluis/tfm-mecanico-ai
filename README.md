@@ -3,9 +3,14 @@
 Sistema inteligente híbrido edge-cloud para diagnóstico y mantenimiento predictivo vehicular
 mediante OBD-II. Trabajo Fin de Máster (Máster en IA, UAX) — Luis Daniel Díaz, 2026.
 
-> **Pregunta de investigación:** ¿puede un agente inteligente híbrido (LLM + aprendizaje no
-> supervisado + memoria evolutiva + RAG) descubrir y explicar patrones de fallo vehicular
-> previamente no documentados a partir de datos OBD-II?
+> **Pregunta de investigación (v4, 27-ago-2026):** ¿puede un agente con RAG explicar el
+> diagnóstico de un vehículo a partir de datos OBD-II reales, rastreando cada explicación
+> hasta su evidencia de origen, y reconocer cuándo la evidencia disponible no es suficiente
+> para sostener una explicación en lugar de generar una hipótesis sin fundamento?
+
+Núcleo científico canónico: [`docs/alineacion_v4/`](docs/alineacion_v4/01_nucleo_cientifico.md) ·
+historia de la PI: [`04_historial_pi.md`](docs/alineacion_v4/04_historial_pi.md) ·
+fuera del alcance experimental: [`05_fuera_de_alcance.md`](docs/alineacion_v4/05_fuera_de_alcance.md).
 
 ## Monorepo
 
@@ -34,6 +39,12 @@ SQLite queda como camino legacy/tests. Reglas del repositorio: [`REGLAS.md`](REG
 **Separación estricta ML/LLM:** la detección de anomalías es siempre matemática
 (IForest/autoencoder vía ONNX); el LLM razona, explica y recomienda sobre anomalías ya
 detectadas — nunca las decide (ADR-0009).
+
+**Flujo científico principal (PI v4):** vehículo → OBD-II → procesamiento y contexto →
+diagnóstico → recuperación de evidencia (RAG) → verificación del soporte → *¿evidencia
+suficiente?* → explicación diagnóstica trazable **o** abstención declarada. Los detectores
+de anomalías y el runtime multiagente son subsistemas auxiliares que producen el contexto;
+no son la contribución científica (ADR-0036).
 
 ## Arranque rápido
 

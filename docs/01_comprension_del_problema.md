@@ -12,37 +12,44 @@ El diagnóstico convencional presenta tres carencias que motivan este trabajo:
 
 ## 1.2 Problema
 
-**No existe, en el ámbito del diagnóstico accesible al usuario final, un sistema que combine (a) análisis continuo de series temporales OBD-II en el borde (edge), (b) detección de anomalías no supervisada capaz de señalar comportamientos degradados sin DTC asociado, (c) razonamiento explicable apoyado en documentación técnica, y (d) acumulación de experiencia diagnóstica a lo largo del tiempo.**
+**Las herramientas de diagnóstico accesibles al usuario final no explican sus conclusiones de forma verificable, y los asistentes basados en modelos de lenguaje producen explicaciones fluidas cuya relación con la evidencia disponible no puede comprobarse ni tiene por qué existir.**
 
-Los escáneres comerciales leen y borran códigos; las plataformas telemáticas de flota centralizan datos pero dependen de conectividad y reglas predefinidas; los asistentes basados exclusivamente en LLM carecen de anclaje en los datos reales del vehículo y son propensos a alucinación. El hueco que este TFM explora es la integración de estas piezas en un agente híbrido edge-cloud.
+Los escáneres comerciales leen y borran códigos sin justificar nada. Las plataformas telemáticas de flota centralizan datos pero aplican reglas predefinidas. Los asistentes basados exclusivamente en modelos de lenguaje carecen de anclaje en los datos reales del vehículo y en la documentación técnica: pueden producir una explicación plausible tanto cuando la documentación la respalda como cuando no existe documentación alguna sobre el caso, y nada en la salida permite distinguir ambas situaciones. Ese es el problema que este TFM aborda: no la ausencia de explicación, sino la **imposibilidad de comprobar si una explicación está sostenida**, y la ausencia de un comportamiento definido cuando no lo está.
+
+Dos consecuencias delimitan el trabajo:
+
+1. Una explicación diagnóstica solo es defendible si cada afirmación puede rastrearse hasta una evidencia concreta —un fragmento del corpus técnico o una comprobación sobre la telemetría—, y esa correspondencia debe **verificarse**, no declararse.
+2. Cuando la evidencia disponible no sostiene ninguna explicación, la salida correcta no es una hipótesis plausible: es declarar la insuficiencia. Un sistema que completa los huecos transmite al usuario una confianza injustificada, y es más peligroso que uno que no responde.
 
 ## 1.3 Pregunta de investigación
 
-> **PI (v3, oficial desde la alineación científica v3, 2026-08-18):** ¿Puede un sistema
-> inteligente híbrido identificar patrones de fallo no representados en su conocimiento
-> disponible, generar hipótesis diagnósticas a partir del análisis contextual y
-> longitudinal de datos OBD-II y validarlas mediante evidencia antes de incorporarlas como
-> conocimiento reutilizable?
+> **PI (v4, oficial desde el 27-ago-2026):** ¿Puede un agente con RAG explicar el
+> diagnóstico de un vehículo a partir de datos OBD-II reales, rastreando cada explicación
+> hasta su evidencia de origen, y reconocer cuándo la evidencia disponible no es suficiente
+> para sostener una explicación en lugar de generar una hipótesis sin fundamento?
 
-*Especificación metodológica (fuera del enunciado):* el sistema se implementa mediante aprendizaje no supervisado, análisis de eventos operativos, arquitectura multiagente, modelos de lenguaje, RAG y memoria con validación, sobre una arquitectura Edge–Cloud. Los mecanismos son medios: la refutación de cualquier hipótesis parcial no invalida la PI — la responde. Historia de la PI (v1 de Fase 0; v2 «Opción B» de 12-ago) en `docs/correspondencia_nomenclatura.md` §0.
+*Especificación metodológica (fuera del enunciado):* el sistema se implementa mediante un agente sobre un grafo explícito, recuperación documental sobre un corpus con manifiesto, un modelo de lenguaje pequeño ejecutado localmente, un verificador determinista y una política de abstención, sobre la arquitectura Edge–Cloud construida en las fases anteriores. Los mecanismos son medios: la refutación de una hipótesis parcial no invalida la PI, la responde.
 
-La investigación estudia la transición epistemológica «observación → contexto → anomalía → reconocimiento de conocimiento insuficiente → hipótesis → evidencia → verificación → conocimiento validado/abstención» (cadena completa y subpreguntas PI.a–PI.e en [`docs/alineacion_v3/01_nucleo_cientifico.md`](alineacion_v3/01_nucleo_cientifico.md), fuente canónica).
+La investigación estudia la cadena «observar → contextualizar → diagnosticar → recuperar evidencia → verificar el soporte → explicación trazable o abstención», con las subpreguntas PI.a–PI.f detalladas en la fuente canónica [`docs/alineacion_v4/01_nucleo_cientifico.md`](alineacion_v4/01_nucleo_cientifico.md).
 
-**Definición operacional:** un patrón de fallo está **no representado en el conocimiento disponible** cuando se cumplen simultáneamente las tres exclusiones E-DET (fuera del entrenamiento/ajuste del detector), E-RAG (fuera del corpus recuperable) y E-MEM (fuera de la memoria longitudinal) — propiedad relativa al sistema, comprobable por construcción y auditada antes de cada ejecución. Los términos «desconocido», «nuevo» o «nunca visto» no se usan como sinónimos técnicos, y no se afirmará el descubrimiento de fallos desconocidos para la ingeniería automotriz.
+**Historia de la PI.** Esta formulación sustituye a la PI v3 (18-ago-2026), centrada en identificar patrones no representados, generar hipótesis, validarlas e incorporarlas como conocimiento reutilizable. El cambio, acordado con el tutor, acota el alcance a un tramo ejecutable dentro del plazo del TFM y conserva todo el trabajo previo. La evolución completa v1 → v4 y su justificación están en [`docs/alineacion_v4/04_historial_pi.md`](alineacion_v4/04_historial_pi.md); lo que sale del alcance experimental, en [`05_fuera_de_alcance.md`](alineacion_v4/05_fuera_de_alcance.md).
+
+**Definiciones operativas.** El trabajo distingue con un único significado **dato**, **evidencia**, **diagnóstico**, **explicación**, **afirmación**, **hipótesis** (objeto interno del proceso, nunca un resultado) y **abstención** (salida correcta, no fallo). Tabla completa en el núcleo científico §2. La condición de **evidencia insuficiente** no se simula: se construye retirando del corpus recuperable, con manifiesto y checksum verificados, los documentos que describen el mecanismo evaluado.
 
 ## 1.4 Hipótesis de trabajo
 
-La hipótesis integradora contrasta directamente la PI; cinco subordinadas aíslan mecanismos. Formulación completa, criterios de apoyo/refutación/no-concluyente y operacionalización: núcleo científico §5.
+La hipótesis integradora contrasta directamente la PI; cuatro subordinadas aíslan mecanismos. Formulación completa, criterios de apoyo/refutación/no-concluyente y umbrales: núcleo científico §5 y [`03_diseno_experimental.md`](alineacion_v4/03_diseno_experimental.md) §4.
 
-- **H-MAIN (integradora):** bajo el protocolo held-out/open-set de exclusión triple, el sistema podrá identificar la anomalía, reconocer la insuficiencia de su conocimiento (en lugar de identificar erróneamente con confianza), generar hipótesis trazables, contrastarlas con evidencia y consolidar solo lo que satisfaga criterios de validación pre-establecidos — absteniéndose en caso contrario.
-- **H-EVT:** la representación contextual por eventos mejora la detección frente a las alternativas por ventanas.
-- **H-PERS:** la normalidad personalizada por vehículo reduce falsos positivos o mejora la detección.
-- **H-EXP:** recuperar y contrastar evidencia mejora la exactitud factual, trazabilidad y calibración de las hipótesis frente a la generación sin evidencia o sin verificación.
-- **H-MEM:** la memoria sometida a validación reduce la contaminación del conocimiento y permite reutilizar experiencias verificadas sin propagar hipótesis incorrectas (M0/M1/M2).
-- **H-MAS (secundaria):** la descomposición multiagente aporta ventaja medible en alguna parte concreta de la cadena frente a alternativas más simples. **No se asume verdadera**: si el monolítico iguala, se publica como resultado.
-- **Criterio transversal edge** (no es hipótesis): latencia, RAM, CPU y coste de tokens dentro del presupuesto pre-registrado; una configuración que lo viole se declara no viable aunque gane en calidad.
+- **H-MAIN (integradora):** con la cobertura del corpus controlada experimentalmente, el agente podrá producir una explicación correcta cuando la evidencia esté disponible, mantener cada afirmación relevante rastreable hasta una evidencia concreta, no introducir afirmaciones sin soporte y declarar evidencia insuficiente cuando el corpus no la contenga. Co-primarias Q1–Q5.
+- **H-GRD (soporte):** recuperar evidencia y verificar el soporte de cada afirmación reduce las afirmaciones no sustentadas frente a generar la explicación sin evidencia o sin verificarla.
+- **H-TRC (trazabilidad):** la correspondencia afirmación→evidencia→dato que produce el sistema es efectiva —las referencias resuelven y su contenido sostiene la afirmación— por encima de una atribución posicional trivial.
+- **H-ABS (abstención):** ante evidencia deliberadamente retirada del corpus el sistema declara insuficiencia en lugar de explicar, con una tasa de falsa abstención acotada cuando la evidencia sí está.
+- **H-SEL (exactitud selectiva):** la abstención mejora la exactitud sobre los casos no abstenidos sin reducir la cobertura por debajo del mínimo pre-registrado.
+- **Criterio transversal edge** (no es hipótesis): latencia, RAM y coste de tokens dentro del presupuesto pre-registrado; una configuración que lo viole se declara no viable aunque gane en calidad.
 
-Correspondencia con las históricas H1–H4: `docs/correspondencia_nomenclatura.md`. Las hipótesis son falsables, sus umbrales se congelan en el pre-registro antes de ejecutar y los resultados negativos se publican con el mismo detalle.
+**Hipótesis retiradas del contraste principal**, con su diseño conservado y sin ejecutar: H-MEM (memoria validada) y H-MAS (multiagente) pasan a trabajo futuro; H-EVT y H-PERS pasan a línea instrumental sobre la calidad del contexto diagnóstico y no condicionan la respuesta a la PI. Correspondencia con las históricas H1–H4 y con la nomenclatura v3: `docs/correspondencia_nomenclatura.md` y núcleo científico §11.
+
+Las hipótesis son falsables, sus umbrales se congelan mediante la enmienda ENM-001 del pre-registro antes de ejecutar, y los resultados negativos se publican con el mismo detalle.
 
 ## 1.5 Usuarios y casos de uso previstos
 

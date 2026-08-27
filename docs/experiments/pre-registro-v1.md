@@ -10,6 +10,15 @@
 > **Estado: CONGELADO con el tag `prereg-v1.0`** (el hash del commit del tag es la
 > referencia citable del pre-registro).
 
+> **⚠ ENMENDADO POR ENM-001 (2026-08-27).** La pregunta de investigación, las hipótesis
+> confirmatorias y la tabla maestra de experimentos han sido **acotadas** conforme a la
+> alineación científica v4 (PI v4: explicación diagnóstica trazable y abstención ante
+> evidencia insuficiente). El cuerpo del documento **no se reescribe**: se lee a través de
+> **ENM-001** (§13), que declara qué queda vigente, qué se reformula y qué pasa a trabajo
+> futuro. La enmienda no es retroactiva porque ningún experimento confirmatorio se ha
+> ejecutado. Fuente canónica de la estructura vigente:
+> `docs/alineacion_v4/01_nucleo_cientifico.md` y `03_diseno_experimental.md`.
+
 **TFM Mecánico IA · UAX · 2026-08-12.**
 **Estado: APROBADO Y CONGELADO (v1.0, 2026-08-18) — vincula desde el tag `prereg-v1.0`.**
 
@@ -383,6 +392,98 @@ Toda familia refutada o no concluyente se reporta en la memoria con el mismo niv
 7. Instrumento de RAM corregido (B0.2): el criterio edge vuelve a ser verificable.
 
 Con ENM-000 quedan incorporadas las cinco condiciones que la nota de alineación v3 exigía para poder congelar. Nada de lo anterior modifica umbrales, métricas ni criterios de un experimento ejecutado o en curso.
+
+### ENM-001 — Acotación del alcance científico a explicación trazable y abstención (2026-08-27)
+
+**Motivo.** Acuerdo con el tutor tras constatar que la cadena de ocho pasos de la PI v3 no
+era contrastable en el plazo de entrega: los catorce experimentos ejecutados cubren los
+pasos 1–3 y *«nada de lo ejecutado responde PI.b–PI.d»*
+(`alineacion_v3/02_trazabilidad.md` §2). Registrada conforme a §13: fechada, justificada y
+**no retroactiva** — ningún experimento confirmatorio se ha ejecutado. Decisión completa y
+alternativas descartadas: [ADR-0036](../adr/0036-acotacion-alcance-cientifico-v4.md).
+
+**1. §1 — Pregunta de investigación.** PI v3 → **PI v4**:
+
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II
+> reales, rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la
+> evidencia disponible no es suficiente para sostener una explicación en lugar de generar
+> una hipótesis sin fundamento?
+
+La cadena de ocho pasos se reduce a seis (observar → contextualizar → diagnosticar →
+recuperar evidencia → verificar el soporte → explicar o abstenerse). La definición
+operacional por exclusión triple **se conserva íntegra**, con un cambio de papel: **E-DET**
+sigue protegiendo el contexto diagnóstico; **E-RAG pasa de restricción a variable
+independiente principal** (construye la condición de evidencia insuficiente); **E-MEM sale
+del protocolo** porque la memoria no participa en la evaluación. Definiciones operativas de
+dato, evidencia, diagnóstico, explicación, afirmación, hipótesis y abstención: núcleo
+científico v4 §2.
+
+**2. §4 — Hipótesis confirmatorias.** Estado de cada familia:
+
+| Familia | Estado tras ENM-001 |
+|---|---|
+| **§4.1 H-EVT** | **Retirada del contraste principal.** Pasa a línea instrumental sobre la calidad del contexto diagnóstico. Diseño de EXP-ANOM-004 conservado sin cambio; su resultado no condiciona la PI. |
+| **§4.2 H-MEM** | **Retirada. Trabajo futuro.** Diseño de EXP-MEM-001, secuencias, umbrales y escenarios de propagación conservados sin ejecutar. |
+| **§4.3 H-MAS** | **Retirada. Trabajo futuro.** Ablación A0–A6 conservada sin ejecutar. |
+| **§4.4 H-PERS** | **Retirada del contraste principal.** Seguía condicionada al parámetro diferido D2, nunca materializado. Pasa a línea instrumental. |
+| **§4.5 H-EXP** | **Vigente y ampliada como H-GRD.** Los brazos X0/X1/X2 se conservan como **B1/B2/B3**; la métrica primaria (recuento de afirmaciones no sustentadas por explicación) y su umbral (**reducción ≥ 50 % relativa**, no-inferioridad de utilidad ≤ 0.5 puntos sobre 5) **se conservan literalmente**; se añaden como secundarias el soporte (*groundedness*) y la fidelidad. |
+| **§4.6 H-MAIN v3** | **Sustituida por H-MAIN v4.** Correspondencia de co-primarias: P1 (recall de señalización) → **precondición instrumental**, se reporta aparte; P2 (tasa de «no cubierto» correcta, ≥ 0.70) → **Q4** tasa de abstención correcta, **mismo umbral**; P3 (identificación errónea confiada, ≤ 0.10) → **Q5** tasa de falsa aceptación, umbral ≤ 0.15 sobre una tarea distinta; P4 (calidad de hipótesis) → **Q1** exactitud diagnóstica y **Q2** soporte; P5 (decisión de consolidación) → **sale del alcance**. Se añade **Q3** (corrección de la citación) y la restricción no degenerativa **falsa abstención ≤ 0.20**. |
+| **§4.7 EXP-SEG-001** | **Vigente sin cambio.** Precondición instrumental; no usa modelo de lenguaje. |
+| **§3.4 Criterio transversal edge** | **Vigente sin cambio.** |
+
+Hipótesis nuevas: **H-GRD** (soporte), **H-TRC** (trazabilidad efectiva frente a atribución
+posicional trivial), **H-ABS** (abstención) y **H-SEL** (exactitud selectiva). Enunciados,
+contrastes y umbrales: `docs/alineacion_v4/01_nucleo_cientifico.md` §5 y
+`03_diseno_experimental.md` §4.
+
+**3. §4.6 — Controles negativos.** Se conservan **CN1, CN2, CN3, CN4, CN7, CN8 y CN9**, ya
+materializados en `cases_v2` y congelados antes de ver salidas de modelo alguno. **CN5**
+(memoria contaminada) y **CN6** (hipótesis falsa inyectada al verificador) salen del alcance
+por depender de la memoria. CN8 (evidencia insuficiente por construcción, 6 casos) pasa a
+ser un control central, no periférico.
+
+**4. §6.3 — Estados.** Los ocho estados epistemológicos se reducen, en el alcance evaluado,
+a cuatro **estados de la explicación**: `SUPPORTED`, `CONTRADICTED`, `INSUFFICIENT_EVIDENCE`
+e `INCONCLUSIVE`. Los estados de promoción a conocimiento reutilizable
+(`EXPERIMENTALLY_VERIFIED`, `EXTERNALLY_CONFIRMED`) permanecen en los contratos por
+compatibilidad y **no se evalúan**.
+
+**5. §10 — Tabla maestra de experimentos.** De ocho experimentos pendientes se pasa a tres:
+**EXP-SEG-001** (precondición, vigente), **EXP-RET-001** (nuevo: calidad de la recuperación
+y validación del control de disponibilidad de evidencia) y **EXP-EVID-001** (nuevo,
+central: 3 brazos × 2 escenarios × 40 casos). EXP-EXP-001 y EXP-COV-001 quedan **absorbidos**
+por EXP-EVID-001; EXP-MAIN-001 queda **sustituido** por él, reutilizando su protocolo de
+exclusión. Orden de sacrificio pre-declarado si el calendario obliga a recortar:
+validaciones externas → variante de corpus C-B′ → brazo B1 → EXP-SEG-001; **nunca** el
+Escenario B ni el brazo B3.
+
+**6. §7 — Protocolo anti-contaminación.** Se conserva el instrumento ejecutable
+(`tools/contamination_audit.py`) y la verificación sha256. El hallazgo declarado en ENM-000
+—`corpus_v1` viola E-RAG— **deja de ser un bloqueante y pasa a ser el punto de partida**: el
+corpus completo es la base de la variante **C-A**, y la manipulación experimental consiste
+en construir **C-B** (evidencia retirada) y **C-B′** (evidencia parcial no concluyente) con
+manifiesto y checksum. Esta construcción es el nuevo parámetro diferido **D4** y es
+bloqueante de EXP-RET-001 y EXP-EVID-001.
+
+**7. §8 — Plan estadístico.** Sin cambio en los métodos. Se aplica a las comparaciones
+nuevas: McNemar exacto para decisiones binarias apareadas por caso (abstención, acierto),
+Wilcoxon para recuentos apareados, Clopper-Pearson para proporciones contra umbral
+absoluto, bootstrap BCa para tamaños de efecto y Holm dentro de familia. Se declara por
+adelantado la limitación de potencia: con n = 40 casos pareados, diferencias de proporción
+inferiores a ≈0.25 no serán detectables y se reportarán como no concluyentes.
+
+**8. §13 — Parámetros diferidos.** **D1/D1b** (modelo de lenguaje y juez) siguen abiertos y
+siguen siendo el camino crítico. **D2** (perfiles de vehículo) queda **inactivo** al retirarse
+H-PERS. Se añade **D4 — variantes de corpus C-A / C-B / C-B′**, que se fijan y congelan con
+manifiesto y checksum antes de ejecutar EXP-RET-001.
+
+**Lo que ENM-001 no toca:** los bancos congelados `suite_v2` (freeze
+`4e0ac623c5fdd4d0…`) y `cases_v2` (40 casos, semillas 30000–30039), el criterio de cobertura
+efectiva, las clases held-out, el esquema de semillas, el criterio transversal edge, el
+procedimiento de evaluación en dos capas (§6.4) y la política de resultados negativos
+(§12.3). Los casos held-out **se reutilizan sin modificación** y solo cambia su
+interpretación: de prueba de descubrimiento a casos con disponibilidad de evidencia
+controlada (`03_diseno_experimental.md` §3).
 
 ---
 
