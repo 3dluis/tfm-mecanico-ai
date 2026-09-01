@@ -11,7 +11,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E2 datos sintéticos | [E2_datos_sinteticos.md](E2_datos_sinteticos.md) | cerrada |
 | E3 datos reales | — | **bloqueada** — falta decidir la fuente |
 | E4 análisis exploratorio | [E4_eda_temporal.md](E4_eda_temporal.md) | cerrada |
-| E5 preprocesamiento | — | pendiente |
+| E5 preprocesamiento | [E5_preprocesamiento.md](E5_preprocesamiento.md) | cerrada |
 | E6 baseline | — | pendiente |
 | E7 modelo temporal | — | pendiente |
 | E8 evaluación del modelo | — | pendiente |

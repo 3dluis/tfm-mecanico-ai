@@ -273,3 +273,47 @@ def temporal_drift(datos: pd.DataFrame, signal: str) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(filas)
+
+
+def noise_floor_max_delta(
+    x: np.ndarray,
+    session_ids: pd.Series,
+    *,
+    n_repeats: int = 30,
+    seed: int = 7,
+    quantile: float = 0.9,
+) -> float:
+    """Suelo de ruido del estadístico «mayor efecto entre muchos descriptores».
+
+    Cuando se busca el descriptor con mayor tamaño de efecto entre cientos, el
+    máximo está inflado: con suficientes comparaciones, algo destaca siempre.
+    Sin una referencia, un valor moderado se confunde con evidencia.
+
+    Este control lo cuantifica. Parte **solo de la condición normal**, la divide
+    en dos mitades **por sesión** y calcula el mismo estadístico. No hay fallo de
+    por medio, así que todo lo que salga es ruido. Se repite con particiones
+    distintas y se devuelve el cuantil pedido.
+
+    Un efecto observado por debajo de este suelo no es evidencia de nada.
+
+    La partición es por sesión y no por ventana por la misma razón que el reparto
+    de E5: dos ventanas de una sesión no son observaciones independientes, y
+    partirlas al azar daría un suelo artificialmente bajo.
+    """
+    sesiones = np.array(sorted(session_ids.unique()))
+    if sesiones.size < 2:
+        msg = "Hacen falta al menos dos sesiones para construir un control"
+        raise ValueError(msg)
+
+    rng = np.random.default_rng(seed)
+    maximos: list[float] = []
+    for _ in range(n_repeats):
+        orden = rng.permutation(sesiones.size)
+        mitad = set(sesiones[orden[: sesiones.size // 2]].tolist())
+        mascara = session_ids.isin(mitad).to_numpy(dtype=bool)
+        if not mascara.any() or mascara.all():
+            continue
+        a, b = x[mascara], x[~mascara]
+        maximos.append(max(abs(cliffs_delta(a[:, j], b[:, j])) for j in range(x.shape[1])))
+
+    return float(np.quantile(maximos, quantile))
