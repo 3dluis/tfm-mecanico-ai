@@ -49,6 +49,11 @@ nb = [
 llm = [
     "tenacity>=8.3",
 ]
+# Embeddings locales: sin clave de API y sin red tras la primera descarga
+# del modelo. La abstracción EmbeddingProvider permite sustituirlo.
+embeddings = [
+    "sentence-transformers>=3.0",
+]
 
 [dependency-groups]
 dev = [

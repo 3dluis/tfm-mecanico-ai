@@ -1,0 +1,479 @@
+"""Almacén vectorial sobre PostgreSQL con pgvector.
+
+**El vehículo es un parámetro obligatorio de la búsqueda, no un filtro
+opcional.** No existe forma de llamar a ``search`` sin decir de qué vehículo se
+busca evidencia. Es deliberado: un filtro que se puede omitir se omite, y
+entonces documentación de otro coche aparece como evidencia por parecerse.
+
+Cada recuperación queda registrada con su consulta, sus parámetros y lo que
+devolvió. Sin ese registro, «el sistema recuperó este fragmento» no es
+comprobable después, y la trazabilidad que la pregunta de investigación exige se
+quedaría en una afirmación.
+"""
+
+from __future__ import annotations
+
+import uuid
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from typing import Any
+
+import numpy as np
+import numpy.typing as npt
+import sqlalchemy as sa
+
+from mecanico_ia_exp.config.settings import get_settings
+from mecanico_ia_exp.rag.chunking import Chunk
+from mecanico_ia_exp.rag.embeddings import EmbeddingIdentity
+from mecanico_ia_exp.rag.manifest import DocumentEntry
+from mecanico_ia_exp.rag.vehicle import VehicleProfile
+
+ESQUEMA = "rag"
+
+
+@dataclass(frozen=True)
+class RetrievedChunk:
+    """Un fragmento recuperado, con todo lo necesario para citarlo."""
+
+    chunk_id: str
+    document_id: str
+    vehicle_id: str
+    text: str
+    score: float
+    rank: int
+    chapter: str | None
+    section: str | None
+    page_start: int | None
+    page_end: int | None
+    dtc_codes: tuple[str, ...]
+    vehicle_system: str | None
+    engine_codes: tuple[str, ...]
+    source_file: str | None
+    document_title: str | None = None
+    publisher: str | None = None
+    source_url: str | None = None
+    authority_level: str | None = None
+    document_type: str | None = None
+
+    def provenance(self) -> str:
+        """Cita completa. Nunca «según el manual» sin decir cuál."""
+        partes: list[str] = []
+        if self.publisher:
+            partes.append(self.publisher)
+        if self.document_title:
+            partes.append(self.document_title)
+        if self.section:
+            partes.append(f"sección «{self.section}»")
+        if self.page_start is not None:
+            partes.append(
+                f"página {self.page_start}"
+                if self.page_start == self.page_end
+                else f"páginas {self.page_start}-{self.page_end}"
+            )
+        partes.append(f"fragmento {self.chunk_id}")
+        if self.source_url:
+            partes.append(self.source_url)
+        return " · ".join(partes)
+
+
+class VectorStore(ABC):
+    """Contrato del almacén. La lógica científica no depende de la implementación."""
+
+    @abstractmethod
+    def search(
+        self,
+        query_vector: npt.NDArray[np.float32],
+        *,
+        vehicle_id: str,
+        top_k: int = 10,
+        document_types: tuple[str, ...] | None = None,
+        engine_codes: tuple[str, ...] | None = None,
+        dtc_codes: tuple[str, ...] | None = None,
+        exclude_documents: tuple[str, ...] = (),
+        exclude_chunks: tuple[str, ...] = (),
+    ) -> list[RetrievedChunk]:
+        """Busca fragmentos **del vehículo indicado**.
+
+        ``exclude_documents`` y ``exclude_chunks`` construyen las variantes del
+        corpus del experimento central: retirar evidencia es una operación
+        explícita y auditable, nunca un efecto lateral.
+        """
+
+
+class PgVectorStore(VectorStore):
+    """Implementación sobre PostgreSQL + pgvector."""
+
+    def __init__(self, url: str | None = None) -> None:
+        self._url = url or get_settings().database.url
+        self._engine = sa.create_engine(self._url, future=True)
+
+    def dispose(self) -> None:
+        self._engine.dispose()
+
+    # ------------------------------------------------------------- registro
+
+    def register_vehicle(self, perfil: VehicleProfile) -> None:
+        with self._engine.begin() as cx:
+            cx.execute(
+                sa.text(f"""
+                    INSERT INTO {ESQUEMA}.vehicle (
+                        vehicle_id, manufacturer, model, model_year, generation,
+                        market, engine_code, engine_displacement, fuel_type,
+                        transmission, obd_protocol, notes)
+                    VALUES (:vehicle_id, :manufacturer, :model, :model_year, :generation,
+                            :market, :engine_code, :engine_displacement, :fuel_type,
+                            :transmission, :obd_protocol, :notes)
+                    ON CONFLICT (vehicle_id) DO UPDATE SET
+                        manufacturer = EXCLUDED.manufacturer,
+                        model = EXCLUDED.model,
+                        model_year = EXCLUDED.model_year,
+                        generation = EXCLUDED.generation,
+                        market = EXCLUDED.market,
+                        engine_code = EXCLUDED.engine_code,
+                        engine_displacement = EXCLUDED.engine_displacement,
+                        fuel_type = EXCLUDED.fuel_type,
+                        transmission = EXCLUDED.transmission,
+                        obd_protocol = EXCLUDED.obd_protocol,
+                        notes = EXCLUDED.notes
+                """),
+                {
+                    "vehicle_id": perfil.vehicle_id,
+                    "manufacturer": perfil.manufacturer,
+                    "model": perfil.model,
+                    "model_year": perfil.model_year,
+                    "generation": perfil.generation,
+                    "market": perfil.market,
+                    "engine_code": perfil.engine_code,
+                    "engine_displacement": perfil.engine_displacement,
+                    "fuel_type": perfil.fuel_type,
+                    "transmission": perfil.transmission,
+                    "obd_protocol": perfil.obd_protocol,
+                    "notes": perfil.notes,
+                },
+            )
+
+    def register_document(self, entrada: DocumentEntry) -> None:
+        with self._engine.begin() as cx:
+            cx.execute(
+                sa.text(f"""
+                    INSERT INTO {ESQUEMA}.document (
+                        document_id, vehicle_id, document_type, title, publisher,
+                        acquisition_source, acquisition_channel, source_url,
+                        authority_level, access_type, language, model_year_start,
+                        model_year_end, engine_codes, market, redistributable,
+                        verified, verification_notes, active)
+                    VALUES (:document_id, :vehicle_id, :document_type, :title, :publisher,
+                            :acquisition_source, :acquisition_channel, :source_url,
+                            :authority_level, :access_type, :language, :model_year_start,
+                            :model_year_end, :engine_codes, :market, :redistributable,
+                            :verified, :verification_notes, :active)
+                    ON CONFLICT (document_id) DO UPDATE SET
+                        verified = EXCLUDED.verified,
+                        verification_notes = EXCLUDED.verification_notes,
+                        active = EXCLUDED.active
+                """),
+                {
+                    "document_id": entrada.document_id,
+                    "vehicle_id": entrada.vehicle_id,
+                    "document_type": entrada.document_type.value,
+                    "title": entrada.title,
+                    "publisher": entrada.publisher,
+                    "acquisition_source": entrada.acquisition_source,
+                    "acquisition_channel": (
+                        entrada.acquisition_channel.value if entrada.acquisition_channel else None
+                    ),
+                    "source_url": entrada.source_url,
+                    "authority_level": entrada.authority_level.value,
+                    "access_type": entrada.access_type.value,
+                    "language": entrada.language,
+                    "model_year_start": entrada.model_year_start,
+                    "model_year_end": entrada.model_year_end,
+                    "engine_codes": list(entrada.engine_codes),
+                    "market": entrada.market,
+                    "redistributable": entrada.redistributable,
+                    "verified": entrada.verified,
+                    "verification_notes": entrada.verification_notes,
+                    "active": entrada.active,
+                },
+            )
+
+    def register_version(
+        self,
+        *,
+        version_id: str,
+        document_id: str,
+        sha256: str,
+        revision: str | None = None,
+        file_size: int | None = None,
+        local_file: str | None = None,
+    ) -> str:
+        """Registra una versión documental. Si la huella ya existe, la reutiliza.
+
+        Nunca se sobrescribe una versión anterior: un experimento ejecutado
+        contra ella debe seguir siendo reconstruible.
+        """
+        with self._engine.begin() as cx:
+            existente = cx.execute(
+                sa.text(
+                    f"SELECT version_id FROM {ESQUEMA}.document_version "
+                    "WHERE document_id = :d AND sha256 = :s"
+                ),
+                {"d": document_id, "s": sha256},
+            ).scalar_one_or_none()
+            if existente:
+                return str(existente)
+            cx.execute(
+                sa.text(f"""
+                    INSERT INTO {ESQUEMA}.document_version (
+                        version_id, document_id, sha256, retrieved_at, revision,
+                        file_size, local_file, active)
+                    VALUES (:v, :d, :s, :t, :r, :f, :l, true)
+                """),
+                {
+                    "v": version_id,
+                    "d": document_id,
+                    "s": sha256,
+                    "t": datetime.now(UTC),
+                    "r": revision,
+                    "f": file_size,
+                    "l": local_file,
+                },
+            )
+        return version_id
+
+    def store_chunks(self, fragmentos: list[Chunk]) -> int:
+        if not fragmentos:
+            return 0
+        filas = [
+            {
+                "chunk_id": c.chunk_id,
+                "version_id": c.version_id,
+                "document_id": c.document_id,
+                "vehicle_id": c.vehicle_id,
+                "ordinal": c.ordinal,
+                "text": c.text,
+                "content_hash": c.content_hash,
+                "chapter": c.chapter,
+                "section": c.section,
+                "subsection": c.subsection,
+                "page_start": c.page_start,
+                "page_end": c.page_end,
+                "dtc_codes": list(c.dtc_codes),
+                "vehicle_system": c.vehicle_system.value,
+                "system_classification": c.system_classification.value,
+                "engine_codes": list(c.engine_codes),
+                "source_file": c.source_file,
+                "n_tokens": c.n_tokens,
+            }
+            for c in fragmentos
+        ]
+        with self._engine.begin() as cx:
+            cx.execute(
+                sa.text(f"""
+                    INSERT INTO {ESQUEMA}.document_chunk (
+                        chunk_id, version_id, document_id, vehicle_id, ordinal, text,
+                        content_hash, chapter, section, subsection, page_start, page_end,
+                        dtc_codes, vehicle_system, system_classification, engine_codes,
+                        source_file, n_tokens)
+                    VALUES (:chunk_id, :version_id, :document_id, :vehicle_id, :ordinal,
+                            :text, :content_hash, :chapter, :section, :subsection,
+                            :page_start, :page_end, :dtc_codes, :vehicle_system,
+                            :system_classification, :engine_codes, :source_file, :n_tokens)
+                    ON CONFLICT (chunk_id) DO NOTHING
+                """),
+                filas,
+            )
+        return len(filas)
+
+    def store_embeddings(
+        self,
+        fragmentos: list[Chunk],
+        vectores: npt.NDArray[np.float32],
+        identidad: EmbeddingIdentity,
+        *,
+        ingestion_run_id: str | None = None,
+    ) -> int:
+        if not fragmentos:
+            return 0
+        if vectores.shape[0] != len(fragmentos):
+            msg = f"{len(fragmentos)} fragmentos y {vectores.shape[0]} vectores"
+            raise ValueError(msg)
+        if vectores.shape[1] != identidad.dimension:
+            msg = (
+                f"El proveedor declara {identidad.dimension} dimensiones y produjo "
+                f"{vectores.shape[1]}"
+            )
+            raise ValueError(msg)
+
+        ahora = datetime.now(UTC)
+        filas = [
+            {
+                "embedding_id": f"{c.chunk_id}:{identidad.model}",
+                "chunk_id": c.chunk_id,
+                "vehicle_id": c.vehicle_id,
+                "document_id": c.document_id,
+                "provider": identidad.provider,
+                "model": identidad.model,
+                "dimension": identidad.dimension,
+                "version": identidad.version,
+                "created_at": ahora,
+                "run": ingestion_run_id,
+                "vector": "[" + ",".join(f"{v:.6f}" for v in vectores[i]) + "]",
+            }
+            for i, c in enumerate(fragmentos)
+        ]
+        with self._engine.begin() as cx:
+            cx.execute(
+                sa.text(f"""
+                    INSERT INTO {ESQUEMA}.embedding (
+                        embedding_id, chunk_id, vehicle_id, document_id,
+                        embedding_provider, embedding_model, embedding_dimension,
+                        embedding_version, created_at, ingestion_run_id, vector)
+                    VALUES (:embedding_id, :chunk_id, :vehicle_id, :document_id,
+                            :provider, :model, :dimension, :version, :created_at,
+                            :run, CAST(:vector AS vector))
+                    ON CONFLICT (chunk_id, embedding_model) DO NOTHING
+                """),
+                filas,
+            )
+        return len(filas)
+
+    # ----------------------------------------------------------- búsqueda
+
+    def search(
+        self,
+        query_vector: npt.NDArray[np.float32],
+        *,
+        vehicle_id: str,
+        top_k: int = 10,
+        document_types: tuple[str, ...] | None = None,
+        engine_codes: tuple[str, ...] | None = None,
+        dtc_codes: tuple[str, ...] | None = None,
+        exclude_documents: tuple[str, ...] = (),
+        exclude_chunks: tuple[str, ...] = (),
+    ) -> list[RetrievedChunk]:
+        vector = "[" + ",".join(f"{v:.6f}" for v in np.asarray(query_vector).ravel()) + "]"
+        condiciones = ["e.vehicle_id = :vehicle_id"]
+        parametros: dict[str, Any] = {"vehicle_id": vehicle_id, "vector": vector, "top_k": top_k}
+        if document_types:
+            condiciones.append("d.document_type = ANY(:document_types)")
+            parametros["document_types"] = list(document_types)
+        if engine_codes:
+            # Un fragmento sin motores declarados no se descarta: puede ser
+            # información general del vehículo. Se descarta el que declara
+            # motores y ninguno coincide.
+            condiciones.append(
+                "(cardinality(c.engine_codes) = 0 OR c.engine_codes && :engine_codes)"
+            )
+            parametros["engine_codes"] = list(engine_codes)
+        if dtc_codes:
+            condiciones.append("c.dtc_codes && :dtc_codes")
+            parametros["dtc_codes"] = list(dtc_codes)
+        if exclude_documents:
+            condiciones.append("NOT (c.document_id = ANY(:exclude_documents))")
+            parametros["exclude_documents"] = list(exclude_documents)
+        if exclude_chunks:
+            condiciones.append("NOT (c.chunk_id = ANY(:exclude_chunks))")
+            parametros["exclude_chunks"] = list(exclude_chunks)
+
+        consulta = sa.text(f"""
+            SELECT c.chunk_id, c.document_id, c.vehicle_id, c.text,
+                   1 - (e.vector <=> CAST(:vector AS vector)) AS score,
+                   c.chapter, c.section, c.page_start, c.page_end, c.dtc_codes,
+                   c.vehicle_system, c.engine_codes, c.source_file,
+                   d.title, d.publisher, d.source_url, d.authority_level, d.document_type
+            FROM {ESQUEMA}.embedding e
+            JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id
+            JOIN {ESQUEMA}.document d ON d.document_id = c.document_id
+            WHERE {" AND ".join(condiciones)}
+            ORDER BY e.vector <=> CAST(:vector AS vector)
+            LIMIT :top_k
+        """)
+        with self._engine.connect() as cx:
+            filas = cx.execute(consulta, parametros).mappings().all()
+
+        return [
+            RetrievedChunk(
+                chunk_id=f["chunk_id"],
+                document_id=f["document_id"],
+                vehicle_id=f["vehicle_id"],
+                text=f["text"],
+                score=float(f["score"]),
+                rank=i + 1,
+                chapter=f["chapter"],
+                section=f["section"],
+                page_start=f["page_start"],
+                page_end=f["page_end"],
+                dtc_codes=tuple(f["dtc_codes"] or ()),
+                vehicle_system=f["vehicle_system"],
+                engine_codes=tuple(f["engine_codes"] or ()),
+                source_file=f["source_file"],
+                document_title=f["title"],
+                publisher=f["publisher"],
+                source_url=f["source_url"],
+                authority_level=f["authority_level"],
+                document_type=f["document_type"],
+            )
+            for i, f in enumerate(filas)
+        ]
+
+    def log_retrieval(
+        self,
+        *,
+        vehicle_id: str,
+        query_text: str,
+        resultados: list[RetrievedChunk],
+        identidad: EmbeddingIdentity,
+        top_k: int,
+        filters: dict[str, Any] | None = None,
+        corpus_variant: str | None = None,
+        experiment_id: str | None = None,
+    ) -> str:
+        """Registra una recuperación y devuelve su identificador."""
+        import json
+
+        run_id = str(uuid.uuid4())
+        with self._engine.begin() as cx:
+            cx.execute(
+                sa.text(f"""
+                    INSERT INTO {ESQUEMA}.retrieval_run (
+                        run_id, vehicle_id, query_text, executed_at, embedding_provider,
+                        embedding_model, top_k, filters, corpus_variant, experiment_id)
+                    VALUES (:r, :v, :q, :t, :p, :m, :k, :f, :cv, :e)
+                """),
+                {
+                    "r": run_id,
+                    "v": vehicle_id,
+                    "q": query_text,
+                    "t": datetime.now(UTC),
+                    "p": identidad.provider,
+                    "m": identidad.model,
+                    "k": top_k,
+                    "f": json.dumps(filters or {}, ensure_ascii=False),
+                    "cv": corpus_variant,
+                    "e": experiment_id,
+                },
+            )
+            if resultados:
+                cx.execute(
+                    sa.text(f"""
+                        INSERT INTO {ESQUEMA}.retrieval_result (
+                            result_id, run_id, chunk_id, rank, score,
+                            authority_level, evidence_rank)
+                        VALUES (:i, :r, :c, :k, :s, :a, :er)
+                    """),
+                    [
+                        {
+                            "i": f"{run_id}:{r.rank}",
+                            "r": run_id,
+                            "c": r.chunk_id,
+                            "k": r.rank,
+                            "s": r.score,
+                            "a": r.authority_level,
+                            "er": None,
+                        }
+                        for r in resultados
+                    ],
+                )
+        return run_id

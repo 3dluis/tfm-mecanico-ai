@@ -48,6 +48,7 @@ documents:
     redistributable: false
     verified: false
     active: true
+    local_file: raw/user-provided/workshop-manual
     verification_notes: >-
       Contenido inspeccionado: texto auténtico de manual de taller Mazda
       (foreword de Mazda Motor Corporation, identificadores de documento del
