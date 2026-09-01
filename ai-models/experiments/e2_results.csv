@@ -1,9 +1,0 @@
-arm,split,precision,recall,f1,fpr,episodes_detected,episodes_total,heldout_detected,heldout_total,mean_delay_s
-AM-W,validation,0.96,0.6857,0.8,0.03,5,5,0,0,84.0
-AM-W,test,0.8897,0.5375,0.6701,0.0667,4,6,2,4,15.0
-AM-E,validation,0.6387,0.3848,0.4802,0.2285,3,5,0,0,53.0
-AM-E,test,0.7576,0.4654,0.5766,0.1489,4,6,2,4,177.0
-AM-E-NOCTX,validation,0.793,0.3789,0.5128,0.1038,3,5,0,0,404.3
-AM-E-NOCTX,test,0.7309,0.4043,0.5206,0.1489,3,6,1,4,18.7
-AM-WE,validation,0.7372,0.6857,0.7105,0.2567,5,5,0,0,84.0
-AM-WE,test,0.7698,0.6315,0.6938,0.1889,4,6,2,4,4.2

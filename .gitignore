@@ -1,36 +1,38 @@
-# Python
+# Entorno
+.venv/
+.env
+.env.local
 __pycache__/
 *.py[cod]
-*.egg-info/
-.venv/
-venv/
-build/
-dist/
+.python-version.local
+
+# Herramientas
 .mypy_cache/
 .ruff_cache/
 .pytest_cache/
+.ipynb_checkpoints/
 .coverage
 htmlcov/
-
-# Datos y modelos (regenerables por script; ver README)
-/data/
-!/data/corpus/MANIFEST.md
-*.sqlite3
-*.db
-*.onnx
-*.gguf
-
-# Experimentos: solo se versionan resultados finales CSV/figuras seleccionadas
-**/experiments/tmp/
-
-# Entornos y secretos
-.env
-*.local
-
-# SO / editores
-.DS_Store
 .idea/
-.vscode/
-errores.log
-.env
-ai-models/models/
+.DS_Store
+
+# Datos y artefactos pesados: se regeneran, no se versionan.
+# Se conservan los .gitkeep y los manifiestos que documentan su procedencia.
+data/raw/**
+data/interim/**
+data/processed/**
+corpus/raw/**
+corpus/processed/**
+models/**
+results/**
+figures/**
+tables/**
+experiments/runs/**
+
+# Se reincluyen los directorios para que Git descienda en ellos y encuentre
+# los .gitkeep; los ficheros de datos siguen excluidos.
+!**/
+!**/.gitkeep
+!corpus/manifests/**
+!data/**/*.md
+!results/RESULTADOS_TFM.md

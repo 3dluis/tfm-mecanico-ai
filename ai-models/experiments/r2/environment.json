@@ -1,7 +1,0 @@
-{
-  "platform": "macOS-26.5.2-arm64-arm-64bit",
-  "machine": "arm64",
-  "python": "3.11.14",
-  "measured_at": "2026-08-27T20:30:16.987365+00:00",
-  "ollama_version": "0.33.0"
-}

@@ -1,9 +1,0 @@
-flowchart TB
-    WM["WORKING MEMORY<br/>DiagnosticState (efímera;<br/>traza = AgentRun/AgentStep)"]
-    WM -->|memorize| CM[("EPISÓDICA · CaseMemory<br/>similitud × peso epistemológico<br/>SIMULATED 0.5 … HUMAN 1.0")]
-    CM -->|comparación de patrón| Q{¿Conocido?}
-    Q -->|sí| UPD["actualizar evidencia<br/>supporting/contradicting · versión"]
-    Q -->|no| CAND[("EVOLUTIVA · LearnedPattern<br/>CANDIDATE")]
-    CAND -.->|más evidencia| EMG[EMERGING]
-    EMG -.->|validación<br/>NO automática| VAL[VALIDATED]
-    UPD --> PAT[(LearnedPattern)]

@@ -1,8 +1,0 @@
-flowchart LR
-    VE["VehicleEvent<br/>ACCELERATION #927"] --> EFV["EventFeatureVector<br/>maf_response, trims, rpm…"]
-    EFV --> CTX["context_signature<br/>ACCELERATION|40-80|warm"]
-    CTX --> BL[("EventBaseline<br/>47 eventos comparables")]
-    BL --> DET["Detector contextual<br/>z-robusto por feature + centroide<br/>(determinista)"]
-    EFV --> DET
-    DET -->|"maf_response −18%<br/>trims compensando"| AN["DetectedAnomaly<br/>scope=EVENT"]
-    AN --> RT["Agent Runtime<br/>(contexto destilado)"]

@@ -1,5 +1,0 @@
-model,threshold,val_f1,val_fpr,test_f1,test_fpr,test_recall_known,test_recall_heldout,episodes_detected,mean_delay_s,infer_ms_per_window,fit_s,peak_rss_mb
-robust_zscore,316.683652,0.5253,0.0515,0.4425,0.1034,0.9375,0.0,2/6,75.0,0.0,0.005,164.6
-isolation_forest,0.067288,0.0188,0.0103,0.0,0.0172,0.0,0.0,0/6,,0.095,0.496,169.1
-lof,0.163197,0.7733,0.0103,0.6448,0.0345,0.975,0.25,4/6,37.5,0.007,0.075,171.5
-ocsvm,0.000241,0.8152,0.0464,0.6835,0.0862,0.9875,0.35,6/6,225.0,0.003,0.004,171.8
