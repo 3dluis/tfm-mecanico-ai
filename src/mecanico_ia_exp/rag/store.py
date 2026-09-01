@@ -477,3 +477,98 @@ class PgVectorStore(VectorStore):
                     ],
                 )
         return run_id
+
+    # ------------------------------------------------------ búsqueda léxica
+
+    def search_lexical(
+        self,
+        query_text: str,
+        *,
+        vehicle_id: str,
+        top_k: int = 10,
+        engine_codes: tuple[str, ...] | None = None,
+    ) -> list[RetrievedChunk]:
+        """Búsqueda de texto completo de PostgreSQL, con el mismo filtro de vehículo.
+
+        Complementa a la semántica donde esta es débil: códigos como P0133,
+        referencias de pieza y terminología exacta. Un embedding coloca «P0133» y
+        «P0134» prácticamente en el mismo sitio; la coincidencia exacta no.
+        """
+        condiciones = [
+            "c.vehicle_id = :vehicle_id",
+            "to_tsvector('english', c.text) @@ plainto_tsquery('english', :q)",
+        ]
+        parametros: dict[str, Any] = {"vehicle_id": vehicle_id, "q": query_text, "top_k": top_k}
+        if engine_codes:
+            condiciones.append(
+                "(cardinality(c.engine_codes) = 0 OR c.engine_codes && :engine_codes)"
+            )
+            parametros["engine_codes"] = list(engine_codes)
+
+        consulta = sa.text(f"""
+            SELECT c.chunk_id, c.document_id, c.vehicle_id, c.text,
+                   ts_rank(to_tsvector('english', c.text),
+                           plainto_tsquery('english', :q)) AS score,
+                   c.chapter, c.section, c.page_start, c.page_end, c.dtc_codes,
+                   c.vehicle_system, c.engine_codes, c.source_file,
+                   d.title, d.publisher, d.source_url, d.authority_level, d.document_type
+            FROM {ESQUEMA}.document_chunk c
+            JOIN {ESQUEMA}.document d ON d.document_id = c.document_id
+            WHERE {" AND ".join(condiciones)}
+            ORDER BY score DESC
+            LIMIT :top_k
+        """)
+        with self._engine.connect() as cx:
+            filas = cx.execute(consulta, parametros).mappings().all()
+
+        return [
+            RetrievedChunk(
+                chunk_id=f["chunk_id"],
+                document_id=f["document_id"],
+                vehicle_id=f["vehicle_id"],
+                text=f["text"],
+                score=float(f["score"]),
+                rank=i + 1,
+                chapter=f["chapter"],
+                section=f["section"],
+                page_start=f["page_start"],
+                page_end=f["page_end"],
+                dtc_codes=tuple(f["dtc_codes"] or ()),
+                vehicle_system=f["vehicle_system"],
+                engine_codes=tuple(f["engine_codes"] or ()),
+                source_file=f["source_file"],
+                document_title=f["title"],
+                publisher=f["publisher"],
+                source_url=f["source_url"],
+                authority_level=f["authority_level"],
+                document_type=f["document_type"],
+            )
+            for i, f in enumerate(filas)
+        ]
+
+
+def reciprocal_rank_fusion(
+    listas: list[list[RetrievedChunk]], *, k: int = 60, top_k: int = 10
+) -> list[RetrievedChunk]:
+    """Fusiona varias listas ordenadas por la suma de rangos recíprocos.
+
+    Se elige frente a sumar puntuaciones porque las escalas no son comparables:
+    la distancia coseno vive en [0, 1] y ``ts_rank`` no tiene cota superior fija.
+    Sumar ambas daría a la léxica un peso arbitrario que dependería del corpus.
+
+    La constante ``k`` amortigua las primeras posiciones para que un único primer
+    puesto no domine la fusión.
+    """
+    puntos: dict[str, float] = {}
+    fragmentos: dict[str, RetrievedChunk] = {}
+    for lista in listas:
+        for posicion, fragmento in enumerate(lista, start=1):
+            puntos[fragmento.chunk_id] = puntos.get(fragmento.chunk_id, 0.0) + 1.0 / (k + posicion)
+            fragmentos.setdefault(fragmento.chunk_id, fragmento)
+
+    ordenados = sorted(puntos.items(), key=lambda par: par[1], reverse=True)[:top_k]
+    salida: list[RetrievedChunk] = []
+    for posicion, (chunk_id, punto) in enumerate(ordenados, start=1):
+        base = fragmentos[chunk_id]
+        salida.append(RetrievedChunk(**{**base.__dict__, "rank": posicion, "score": punto}))
+    return salida
