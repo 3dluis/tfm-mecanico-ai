@@ -1,0 +1,133 @@
+{
+  "experiment_id": "E6_baseline",
+  "dataset_id": "synthetic_v2",
+  "model": "RandomForestClassifier",
+  "config": {
+    "n_estimators": 400,
+    "max_depth": null,
+    "min_samples_leaf": 2,
+    "class_weight": "balanced",
+    "seed": 20260901
+  },
+  "n_features": 139,
+  "n_train": 392,
+  "n_validation": 98,
+  "majority_class": "F00_normal",
+  "majority_baseline": {
+    "partition": "validation",
+    "n": 98,
+    "accuracy": 0.2857,
+    "macro_f1": 0.0741,
+    "weighted_f1": 0.127,
+    "balanced_accuracy": 0.1667,
+    "calibration": {},
+    "per_class": [
+      {
+        "label": "F00_normal",
+        "precision": 0.2857,
+        "recall": 1.0,
+        "f1": 0.4444,
+        "support": 28
+      },
+      {
+        "label": "F01_vacuum_leak",
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      },
+      {
+        "label": "F02_maf_drift",
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      },
+      {
+        "label": "F03_thermostat_stuck",
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      },
+      {
+        "label": "F04_o2_lag",
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      },
+      {
+        "label": "F05_misfire",
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      }
+    ]
+  },
+  "metrics": {
+    "partition": "validation",
+    "n": 98,
+    "accuracy": 0.8776,
+    "macro_f1": 0.8758,
+    "weighted_f1": 0.8701,
+    "balanced_accuracy": 0.8571,
+    "calibration": {
+      "ece": 0.1396,
+      "mean_confidence": 0.738,
+      "accuracy": 0.8776,
+      "overconfidence": -0.1396
+    },
+    "per_class": [
+      {
+        "label": "F00_normal",
+        "precision": 0.7179,
+        "recall": 1.0,
+        "f1": 0.8358,
+        "support": 28,
+        "pr_auc": 0.8813
+      },
+      {
+        "label": "F01_vacuum_leak",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 14,
+        "pr_auc": 1.0
+      },
+      {
+        "label": "F02_maf_drift",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 14,
+        "pr_auc": 1.0
+      },
+      {
+        "label": "F03_thermostat_stuck",
+        "precision": 1.0,
+        "recall": 0.6429,
+        "f1": 0.7826,
+        "support": 14,
+        "pr_auc": 0.8465
+      },
+      {
+        "label": "F04_o2_lag",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 14,
+        "pr_auc": 1.0
+      },
+      {
+        "label": "F05_misfire",
+        "precision": 0.875,
+        "recall": 0.5,
+        "f1": 0.6364,
+        "support": 14,
+        "pr_auc": 0.8224
+      }
+    ]
+  }
+}
