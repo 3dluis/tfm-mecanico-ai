@@ -154,3 +154,97 @@ cases:
       cambia es que se retira del índice la evidencia documental que sostenía la
       explicación. Es el experimento central del TFM en un solo caso: si el
       agente explica aquí igual que en C05, no estaba usando la evidencia.
+
+  # --- Las cuatro condiciones de disponibilidad de evidencia -----------------
+  # Mismo caso OBD-II, mismo modelo, misma atribución. Lo único que cambia entre
+  # las cuatro es qué hay en el índice. Si la decisión no cambiara, el agente no
+  # estaría usando la evidencia.
+
+  - case_id: C07_partial
+    fault_id: F01_vacuum_leak
+    dtc: P2187
+    corpus_variant: PARTIAL
+    # Se retiran los PROCEDIMIENTOS diagnósticos y se dejan las tablas de códigos
+    # y la lógica de detección. El corpus sigue mencionando la condición: dice
+    # que ese código existe y qué lo dispara, pero no cómo se diagnostica.
+    # Es evidencia relacionada e insuficiente.
+    exclude_files: [srvc/B3E010202100W09.pdf, srvc/B3E010202100W07.pdf,
+                    srvc/B3E010202100W08.pdf, srvc/B3E010202100W10.pdf,
+                    srvc/B3E010202000W10.pdf, srvc/B3E010202100W11.pdf,
+                    srvc/B3E010202100W12.pdf]
+    query: >-
+      Fuel trims persistently positive and markedly larger at idle than at road
+      speed, with elevated intake manifold pressure at idle and unstable idle
+      speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente mayores en
+      ralentí que a velocidad de carretera, con presión del colector de admisión
+      elevada en ralentí y régimen de ralentí inestable.
+    relevant_files: []
+    supporting_files: [srvc/B3E010200102W22.pdf, srvc/B3E010200102T09.pdf]
+    distractor_files: []
+    expected_action: ABSTAIN
+    justificacion: >-
+      Que el corpus mencione el código no basta. Una tabla de DTC dice que ese
+      código existe; no dice cómo se comprueba ni qué lo causa. La verificación
+      de soporte debería rechazarla por no ser contenido diagnóstico, y el
+      agente abstenerse.
+
+  - case_id: C08_distractor
+    fault_id: F01_vacuum_leak
+    dtc: P2187
+    corpus_variant: DISTRACTOR
+    # Se retira el procedimiento del motor Z6 y se DEJA el del motor LF. Mismo
+    # código, contenido casi idéntico, motor inaplicable a este vehículo.
+    # La prueba más dura del filtro de aplicabilidad: un sistema guiado por
+    # similitud lo aceptará sin dudar.
+    exclude_files: [srvc/B3E010202100W09.pdf, srvc/B3E010202100W07.pdf]
+    query: >-
+      Fuel trims persistently positive and markedly larger at idle than at road
+      speed, with elevated intake manifold pressure at idle and unstable idle
+      speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente mayores en
+      ralentí que a velocidad de carretera, con presión del colector de admisión
+      elevada en ralentí y régimen de ralentí inestable.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/B3E010202100W03.pdf, srvc/B3E010202100W01.pdf]
+    expected_action: ABSTAIN
+    justificacion: >-
+      El procedimiento del motor LF describe exactamente la misma condición con
+      casi las mismas palabras, y no aplica a un Z6. Si el agente lo acepta como
+      evidencia, la trazabilidad es aparente: la cita existiría, resolvería y
+      sería del vehículo equivocado.
+
+  - case_id: C09_distractor_sin_filtro
+    fault_id: F01_vacuum_leak
+    dtc: P2187
+    corpus_variant: DISTRACTOR_NO_FILTER
+    # C08 no probaba lo que decía probar: el filtro de motor bloquea el
+    # procedimiento del LF antes de que llegue a ordenarse, así que el distractor
+    # nunca alcanzaba al verificador y C08 acababa siendo idéntico a PARTIAL.
+    #
+    # Aquí se DESACTIVA el filtro a propósito. Es la única forma de medir la
+    # última línea de defensa: si el distractor llega, ¿lo rechaza el verificador
+    # por sí solo, o lo acepta porque habla de lo mismo con las mismas palabras?
+    apply_engine_filter: false
+    exclude_files: [srvc/B3E010202100W09.pdf, srvc/B3E010202100W07.pdf]
+    query: >-
+      Fuel trims persistently positive and markedly larger at idle than at road
+      speed, with elevated intake manifold pressure at idle and unstable idle
+      speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente mayores en
+      ralentí que a velocidad de carretera, con presión del colector de admisión
+      elevada en ralentí y régimen de ralentí inestable.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/B3E010202100W03.pdf, srvc/B3E010202100W01.pdf]
+    expected_action: ABSTAIN
+    justificacion: >-
+      El procedimiento del LF describe la misma condición con casi las mismas
+      palabras y no aplica a un Z6. Sin el filtro de motor, la aplicabilidad del
+      fragmento debería bastar para rechazarlo. Si el agente explica aquí, la
+      trazabilidad es aparente: la cita existiría, resolvería, y sería del
+      vehículo equivocado.

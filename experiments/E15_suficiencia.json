@@ -3,8 +3,8 @@
   "dataset_id": "synthetic_v2",
   "vehicle_id": "mazda-3-bk-2007",
   "thresholds": {
-    "min_confidence": 0.6,
-    "min_retrieval_score": 0.35,
+    "min_confidence": 0.8,
+    "min_retrieval_score": 0.0,
     "min_supporting_chunks": 2,
     "min_distinct_sources": 1,
     "min_claim_coverage": 0.8,
@@ -93,7 +93,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.516006,
+            "score": 0.608697,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -110,24 +110,204 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001381",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.342098,
+            "score": 0.601248,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2178 [ZJ, Z6]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.596629,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2177 [ZJ, Z6]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.555024,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
             "publisher": "Mazda Motor Corporation",
             "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
+            "page_start": 7,
+            "page_end": 7,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
-              "P0038",
-              "P0102",
-              "P0103",
-              "P0111"
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001841",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.502843,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2177 [ZJ, Z6]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001398",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.494112,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2089",
+              "P2096",
+              "P2097",
+              "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.484749,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "KOEO/KOER SELF - TEST [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125",
+              "P0132",
+              "P0133",
+              "P0134",
+              "P0138",
+              "P0140",
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0602",
+              "P0610",
+              "P0661",
+              "P0662",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2009",
+              "P2010",
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.465156,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001809",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.442687,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2178 [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178"
             ]
           },
           {
@@ -135,7 +315,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.337038,
+            "score": 0.440489,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -143,208 +323,6 @@
             "section": "DTC P0102 [ZJ, Z6]",
             "page_start": 1,
             "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0102"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.279234,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC TABLE [FN4A - EL]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0101",
-              "P0102",
-              "P0103",
-              "P0107",
-              "P0108",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132",
-              "P0133"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.267502,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "KOEO/KOER SELF - TEST [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0102",
-              "P0103",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001581",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.257555,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0101 [LF]",
-            "page_start": 2,
-            "page_end": 2,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0101"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.243763,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
-            "page_start": 3,
-            "page_end": 3,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0102",
-              "P0103",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001268",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.234215,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0102 [ZJ, Z6]",
-            "page_start": 2,
-            "page_end": 2,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0102"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.226786,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC TABLE [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0102",
-              "P0103",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132",
-              "P0133",
-              "P0134",
-              "P0138",
-              "P0140"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001269",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.162102,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0102 [ZJ, Z6]",
-            "page_start": 3,
-            "page_end": 3,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
               "P0102"
@@ -358,9 +336,12 @@
             "observational_evidence": [
               "OBS001"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C02",
@@ -368,9 +349,12 @@
             "observational_evidence": [
               "OBS002"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C03",
@@ -378,9 +362,12 @@
             "observational_evidence": [
               "OBS003"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           }
         ]
       },
@@ -389,9 +376,7 @@
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
-          "LOW_RETRIEVAL_SUPPORT",
-          "LOW_CLAIM_COVERAGE"
+          "LOW_MODEL_CONFIDENCE"
         ],
         "signals": {
           "confidence": 0.5999,
@@ -399,208 +384,71 @@
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
-          "n_documents_applicable": 7,
+          "n_documents_applicable": 6,
           "n_distinct_sources": 1,
-          "best_retrieval_score": 0.337,
-          "claim_coverage": 0.0,
+          "best_retrieval_score": 0.6012,
+          "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.600 < 0.60",
-          "mejor puntuación 0.337 < 0.35",
-          "cobertura 0.00 < 0.80"
+          "confianza 0.600 < 0.80"
         ]
       },
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
-          "mentions_signal": false,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         },
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
-          "mentions_signal": false,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001268",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001269",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
-          "mentions_signal": false,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
-          "mentions_signal": false,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001268",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001269",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
-          "mentions_signal": false,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
-          "mentions_signal": false,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001268",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001269",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         }
       ]
     },
@@ -682,7 +530,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.405288,
+            "score": 0.560697,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -696,32 +544,11 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001384",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.390943,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
-            "page_start": 2,
-            "page_end": 2,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132"
-            ]
-          },
-          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.243129,
+            "score": 0.365283,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -752,86 +579,11 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001306",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.206614,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0125 [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0125"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001307",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.179341,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0125 [ZJ, Z6]",
-            "page_start": 2,
-            "page_end": 2,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0125"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.167998,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC TABLE [FN4A - EL]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0101",
-              "P0102",
-              "P0103",
-              "P0107",
-              "P0108",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132",
-              "P0133"
-            ]
-          },
-          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.147921,
+            "score": 0.334938,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -889,11 +641,50 @@
             ]
           },
           {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001306",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.334675,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P0125 [ZJ, Z6]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001384",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.306078,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0122",
+              "P0123",
+              "P0125",
+              "P0132"
+            ]
+          },
+          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.129636,
+            "score": 0.293636,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -928,7 +719,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.120433,
+            "score": 0.285972,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -963,66 +754,60 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001307",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.095345,
+            "score": 0.267569,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
             "publisher": "Mazda Motor Corporation",
-            "section": " CONTROL SYSTEM WIRING DIAGRAM [ZJ, Z6]",
+            "section": "DTC P0125 [ZJ, Z6]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001384",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.25713,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0122",
+              "P0123",
+              "P0125",
+              "P0132"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.252709,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P0125 [ZJ, Z6]",
             "page_start": 1,
             "page_end": 1,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0102",
-              "P0103",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132",
-              "P0133",
-              "P0134",
-              "P0138",
-              "P0140",
-              "P0300",
-              "P0301",
-              "P0302",
-              "P0303",
-              "P0304",
-              "P0327",
-              "P0328",
-              "P0335",
-              "P0340",
-              "P0403",
-              "P0420",
-              "P0443",
-              "P0480",
-              "P0500",
-              "P0505",
-              "P0506",
-              "P0507",
-              "P0511",
-              "P0550",
-              "P0602",
-              "P0610",
-              "P0660",
-              "P0668",
-              "P0669"
+              "P0125"
             ]
           }
         ],
@@ -1079,9 +864,9 @@
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
-          "n_documents_applicable": 8,
+          "n_documents_applicable": 7,
           "n_distinct_sources": 1,
-          "best_retrieval_score": 0.4053,
+          "best_retrieval_score": 0.5607,
           "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
@@ -1219,30 +1004,11 @@
         ],
         "documents": [
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.455367,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
-            "page_start": 3,
-            "page_end": 3,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0132",
-              "P0133"
-            ]
-          },
-          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.438108,
+            "score": 0.45946,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1256,73 +1022,11 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.408999,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "KOEO/KOER SELF - TEST [LF]",
-            "page_start": 2,
-            "page_end": 2,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0125",
-              "P0132",
-              "P0133",
-              "P0134",
-              "P0138",
-              "P0140",
-              "P0300",
-              "P0301",
-              "P0302",
-              "P0303",
-              "P0304",
-              "P0327",
-              "P0328",
-              "P0335",
-              "P0340",
-              "P0403",
-              "P0420",
-              "P0443",
-              "P0480",
-              "P0500",
-              "P0505",
-              "P0506",
-              "P0507",
-              "P0511",
-              "P0602",
-              "P0610",
-              "P0661",
-              "P0662",
-              "P0703",
-              "P0704",
-              "P0850",
-              "P1260",
-              "P2006",
-              "P2009",
-              "P2010",
-              "P2096",
-              "P2097",
-              "P2177",
-              "P2178",
-              "P2187",
-              "P2188",
-              "P2195",
-              "P2196",
-              "P2228",
-              "P2229"
-            ]
-          },
-          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.368919,
+            "score": 0.458117,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1381,29 +1085,11 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.366428,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0133 [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0133"
-            ]
-          },
-          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001377",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.321213,
+            "score": 0.446684,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1454,41 +1140,101 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.321003,
+            "score": 0.426983,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0132",
+              "P0133"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.42629,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "KOEO/KOER SELF - TEST [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125",
+              "P0132",
+              "P0133",
+              "P0134",
+              "P0138",
+              "P0140",
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0602",
+              "P0610",
+              "P0661",
+              "P0662",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2009",
+              "P2010",
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.379787,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
             "publisher": "Mazda Motor Corporation",
-            "section": "DTC TABLE [FN4A - EL]",
-            "page_start": 1,
-            "page_end": 1,
+            "section": "DTC P0133 [ZJ, Z6]",
+            "page_start": 3,
+            "page_end": 3,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
-              "P0011",
-              "P0012",
-              "P0031",
-              "P0032",
-              "P0037",
-              "P0038",
-              "P0101",
-              "P0102",
-              "P0103",
-              "P0107",
-              "P0108",
-              "P0111",
-              "P0112",
-              "P0113",
-              "P0117",
-              "P0118",
-              "P0121",
-              "P0122",
-              "P0123",
-              "P0125",
-              "P0132",
               "P0133"
             ]
           },
@@ -1497,7 +1243,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.319231,
+            "score": 0.372746,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1547,11 +1293,29 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001313",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.297802,
+            "score": 0.371095,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P0133 [ZJ, Z6]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0133"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001315",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.368065,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1561,8 +1325,7 @@
             "page_end": 2,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
-              "P0133",
-              "P0443"
+              "P0133"
             ]
           },
           {
@@ -1570,7 +1333,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.282064,
+            "score": 0.344062,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1660,7 +1423,7 @@
           "n_documents_retrieved": 10,
           "n_documents_applicable": 6,
           "n_distinct_sources": 1,
-          "best_retrieval_score": 0.4381,
+          "best_retrieval_score": 0.4595,
           "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
@@ -1798,11 +1561,147 @@
         ],
         "documents": [
           {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001348",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.498338,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0301",
+              "P0302"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001349",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.476638,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0303"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.475579,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P0300 [ZJ, Z6]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0300"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001388",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.470181,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001387",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.452758,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0140",
+              "P0300"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001350",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.44788,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0304",
+              "P0327",
+              "P0328"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.404605,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P0301, P0302, P0303, P0304 [ZJ, Z6]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304"
+            ]
+          },
+          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.30409,
+            "score": 0.399926,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1860,22 +1759,58 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001387",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001377",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.268419,
+            "score": 0.368495,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
             "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
-            "page_start": 3,
-            "page_end": 3,
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
+              "P0133",
+              "P0134",
+              "P0138",
               "P0140",
-              "P0300"
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0550",
+              "P0602",
+              "P0610",
+              "P0660",
+              "P0668",
+              "P0669",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2008",
+              "P2088",
+              "P2089",
+              "P2096",
+              "P2097"
             ]
           },
           {
@@ -1883,7 +1818,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.261593,
+            "score": 0.35491,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -1940,175 +1875,6 @@
               "P2228",
               "P2229"
             ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001454",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.259096,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0300 [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0300"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001350",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.258013,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
-            "page_start": 4,
-            "page_end": 4,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0304",
-              "P0327",
-              "P0328"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001349",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.254063,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
-            "page_start": 4,
-            "page_end": 4,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0303"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001348",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.250877,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
-            "page_start": 4,
-            "page_end": 4,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0301",
-              "P0302"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001377",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.248295,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
-            "page_start": 4,
-            "page_end": 4,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0133",
-              "P0134",
-              "P0138",
-              "P0140",
-              "P0300",
-              "P0301",
-              "P0302",
-              "P0303",
-              "P0304",
-              "P0327",
-              "P0328",
-              "P0335",
-              "P0340",
-              "P0403",
-              "P0420",
-              "P0443",
-              "P0480",
-              "P0500",
-              "P0505",
-              "P0506",
-              "P0507",
-              "P0511",
-              "P0550",
-              "P0602",
-              "P0610",
-              "P0660",
-              "P0668",
-              "P0669",
-              "P0703",
-              "P0704",
-              "P0850",
-              "P1260",
-              "P2006",
-              "P2008",
-              "P2088",
-              "P2089",
-              "P2096",
-              "P2097"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.24351,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P0300 [ZJ, Z6]",
-            "page_start": 1,
-            "page_end": 1,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0300"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001388",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.243057,
-            "applicability": "EXACT_MATCH",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
-            "page_start": 3,
-            "page_end": 3,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P0301",
-              "P0302",
-              "P0303",
-              "P0304"
-            ]
           }
         ],
         "claims": [
@@ -2155,8 +1921,7 @@
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
-          "LOW_RETRIEVAL_SUPPORT"
+          "LOW_MODEL_CONFIDENCE"
         ],
         "signals": {
           "confidence": 0.4621,
@@ -2166,37 +1931,18 @@
           "n_documents_retrieved": 10,
           "n_documents_applicable": 4,
           "n_distinct_sources": 1,
-          "best_retrieval_score": 0.2616,
+          "best_retrieval_score": 0.4756,
           "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.462 < 0.60",
-          "mejor puntuación 0.262 < 0.35"
+          "confianza 0.462 < 0.80"
         ]
       },
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": true,
-          "reason": "menciona la señal en contenido diagnóstico del vehículo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001454",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
-        },
-        {
-          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
           "mentions_signal": false,
           "is_diagnostic": true,
@@ -2214,22 +1960,22 @@
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
         {
-          "claim_id": "C02",
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal oxygen_sensor"
+        },
+        {
+          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "supports": true,
           "reason": "menciona la señal en contenido diagnóstico del vehículo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001454",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
         {
           "claim_id": "C02",
@@ -2250,22 +1996,22 @@
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
         {
-          "claim_id": "C03",
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal oxygen_sensor"
+        },
+        {
+          "claim_id": "C02",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "supports": true,
           "reason": "menciona la señal en contenido diagnóstico del vehículo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001454",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
         {
           "claim_id": "C03",
@@ -2284,6 +2030,24 @@
           "carries_expected_dtc": true,
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal oxygen_sensor"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
+          "mentions_signal": true,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": true,
+          "reason": "menciona la señal en contenido diagnóstico del vehículo"
         }
       ]
     },
@@ -2361,11 +2125,31 @@
         ],
         "documents": [
           {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.653171,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.587696,
+            "score": 0.612521,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2382,31 +2166,11 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.542605,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
-            "page_start": 7,
-            "page_end": 7,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P2187",
-              "P2188",
-              "P2195"
-            ]
-          },
-          {
             "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.511154,
+            "score": 0.59075,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2424,7 +2188,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.508288,
+            "score": 0.588624,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2442,7 +2206,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.464182,
+            "score": 0.517643,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2463,11 +2227,11 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001398",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.461453,
+            "score": 0.474785,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2477,18 +2241,18 @@
             "page_end": 7,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
-              "P2089",
-              "P2096",
-              "P2097",
-              "P2177"
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001358",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.450017,
+            "score": 0.468551,
             "applicability": "COMPATIBLE",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2498,28 +2262,9 @@
             "page_end": 7,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
-              "P2096",
-              "P2097",
-              "P2177",
-              "P2178"
-            ]
-          },
-          {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001854",
-            "kind": "documentary",
-            "document_id": "mazda3-bk-workshop-manual-local",
-            "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.366468,
-            "applicability": "COMPATIBLE",
-            "authority_level": "A",
-            "document_type": "WORKSHOP_MANUAL",
-            "publisher": "Mazda Motor Corporation",
-            "section": "DTC P2187 [ZJ, Z6]",
-            "page_start": 2,
-            "page_end": 2,
-            "source_url": "https://www.mazdatechinfo.com/",
-            "dtc_codes": [
-              "P2187"
+              "P2187",
+              "P2188",
+              "P2195"
             ]
           },
           {
@@ -2527,7 +2272,7 @@
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.346494,
+            "score": 0.465414,
             "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
@@ -2541,21 +2286,83 @@
             ]
           },
           {
-            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001846",
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001840",
             "kind": "documentary",
             "document_id": "mazda3-bk-workshop-manual-local",
             "vehicle_id": "mazda-3-bk-2007",
-            "score": 0.332113,
-            "applicability": "COMPATIBLE",
+            "score": 0.445876,
+            "applicability": "EXACT_MATCH",
             "authority_level": "A",
             "document_type": "WORKSHOP_MANUAL",
             "publisher": "Mazda Motor Corporation",
-            "section": "DTC P2178 [ZJ, Z6]",
+            "section": "DTC P2177 [ZJ, Z6]",
             "page_start": 2,
             "page_end": 2,
             "source_url": "https://www.mazdatechinfo.com/",
             "dtc_codes": [
               "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.43178,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "KOEO/KOER SELF - TEST [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125",
+              "P0132",
+              "P0133",
+              "P0134",
+              "P0138",
+              "P0140",
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0602",
+              "P0610",
+              "P0661",
+              "P0662",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2009",
+              "P2010",
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
             ]
           }
         ],
@@ -2612,9 +2419,9 @@
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
-          "n_documents_applicable": 4,
+          "n_documents_applicable": 5,
           "n_distinct_sources": 1,
-          "best_retrieval_score": 0.5112,
+          "best_retrieval_score": 0.5907,
           "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
@@ -2811,6 +2618,1402 @@
         ]
       },
       "support_checks": []
+    },
+    {
+      "case_id": "C07_partial",
+      "fault_id": "F01_vacuum_leak",
+      "corpus_variant": "PARTIAL",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.653171,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.612521,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.517643,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.474785,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.468551,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.43178,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "KOEO/KOER SELF - TEST [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125",
+              "P0132",
+              "P0133",
+              "P0134",
+              "P0138",
+              "P0140",
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0602",
+              "P0610",
+              "P0661",
+              "P0662",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2009",
+              "P2010",
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.421784,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2187 [LF]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.407536,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2177 [LF]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001358",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.384335,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.374603,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La señal ltft_bank1 (max) se sitúa por encima de lo esperable en la ventana observada, con valor 2.716, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "La señal stft_bank1 (mean) se sitúa por encima de lo esperable en la ventana observada, con valor 7.077, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "La señal ltft_bank1 (mean) se sitúa por encima de lo esperable en la ventana observada, con valor 1.294, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 10,
+          "n_documents_applicable": 4,
+          "n_distinct_sources": 1,
+          "best_retrieval_score": 0.5176,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": [
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        }
+      ]
+    },
+    {
+      "case_id": "C08_distractor",
+      "fault_id": "F01_vacuum_leak",
+      "corpus_variant": "DISTRACTOR",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.653171,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.612521,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.517643,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.474785,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.468551,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.43178,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "KOEO/KOER SELF - TEST [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125",
+              "P0132",
+              "P0133",
+              "P0134",
+              "P0138",
+              "P0140",
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0602",
+              "P0610",
+              "P0661",
+              "P0662",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2009",
+              "P2010",
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.421784,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2187 [LF]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.407536,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2177 [LF]",
+            "page_start": 3,
+            "page_end": 3,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001358",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.384335,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.374603,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La señal ltft_bank1 (max) se sitúa por encima de lo esperable en la ventana observada, con valor 2.716, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "La señal stft_bank1 (mean) se sitúa por encima de lo esperable en la ventana observada, con valor 7.077, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "La señal ltft_bank1 (mean) se sitúa por encima de lo esperable en la ventana observada, con valor 1.294, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 10,
+          "n_documents_applicable": 4,
+          "n_distinct_sources": 1,
+          "best_retrieval_score": 0.5176,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": [
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        }
+      ]
+    },
+    {
+      "case_id": "C09_distractor_sin_filtro",
+      "fault_id": "F01_vacuum_leak",
+      "corpus_variant": "DISTRACTOR_NO_FILTER",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.653171,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001337",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.617889,
+            "applicability": "PARTIAL_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [LF]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001811",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.613318,
+            "applicability": "PARTIAL_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2187 [LF]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.612521,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001797",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.599616,
+            "applicability": "PARTIAL_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC P2177 [LF]",
+            "page_start": 1,
+            "page_end": 1,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.517643,
+            "applicability": "EXACT_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.474785,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.468551,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]",
+            "page_start": 7,
+            "page_end": 7,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001337",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.437447,
+            "applicability": "PARTIAL_MATCH",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "DIAGNOSTIC TEST MODE [LF]",
+            "page_start": 4,
+            "page_end": 4,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195"
+            ]
+          },
+          {
+            "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+            "kind": "documentary",
+            "document_id": "mazda3-bk-workshop-manual-local",
+            "vehicle_id": "mazda-3-bk-2007",
+            "score": 0.43178,
+            "applicability": "COMPATIBLE",
+            "authority_level": "A",
+            "document_type": "WORKSHOP_MANUAL",
+            "publisher": "Mazda Motor Corporation",
+            "section": "KOEO/KOER SELF - TEST [LF]",
+            "page_start": 2,
+            "page_end": 2,
+            "source_url": "https://www.mazdatechinfo.com/",
+            "dtc_codes": [
+              "P0125",
+              "P0132",
+              "P0133",
+              "P0134",
+              "P0138",
+              "P0140",
+              "P0300",
+              "P0301",
+              "P0302",
+              "P0303",
+              "P0304",
+              "P0327",
+              "P0328",
+              "P0335",
+              "P0340",
+              "P0403",
+              "P0420",
+              "P0443",
+              "P0480",
+              "P0500",
+              "P0505",
+              "P0506",
+              "P0507",
+              "P0511",
+              "P0602",
+              "P0610",
+              "P0661",
+              "P0662",
+              "P0703",
+              "P0704",
+              "P0850",
+              "P1260",
+              "P2006",
+              "P2009",
+              "P2010",
+              "P2096",
+              "P2097",
+              "P2177",
+              "P2178",
+              "P2187",
+              "P2188",
+              "P2195",
+              "P2196",
+              "P2228",
+              "P2229"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La señal ltft_bank1 (max) se sitúa por encima de lo esperable en la ventana observada, con valor 2.716, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "La señal stft_bank1 (mean) se sitúa por encima de lo esperable en la ventana observada, con valor 7.077, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "La señal ltft_bank1 (mean) se sitúa por encima de lo esperable en la ventana observada, con valor 1.294, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "TOO_FEW_SUPPORTING_CHUNKS",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 10,
+          "n_documents_applicable": 1,
+          "n_distinct_sources": 1,
+          "best_retrieval_score": 0.5176,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "1 fragmentos aplicables < 2",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": [
+        {
+          "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal stft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        }
+      ]
     }
   ]
 }

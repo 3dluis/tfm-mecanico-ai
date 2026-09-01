@@ -53,17 +53,46 @@ abstención se provoca, no se encuentra.
 
 ## Resultados
 
-| Caso | Esperado | Decidido | | Confianza | Docs | Cobertura |
-|---|---|---|---|---|---|---|
-| C01 deriva de caudalímetro | EXPLAIN | ABSTAIN | ✗ | 0,600 | 7 | 0,00 |
-| C02 termostato | EXPLAIN | EXPLAIN | ✓ | 1,000 | 8 | 1,00 |
-| C03 sonda lenta | EXPLAIN | EXPLAIN | ✓ | 1,000 | 6 | 1,00 |
-| C04 fallo de encendido | EXPLAIN | ABSTAIN | ✗ | 0,462 | 4 | 1,00 |
-| C05 fuga de vacío | EXPLAIN | EXPLAIN | ✓ | 0,908 | 4 | 1,00 |
-| C06 evidencia retirada | ABSTAIN | ABSTAIN | ✓ | 0,908 | 0 | 0,00 |
+| Caso | Variante | Esperado | Decidido | | Confianza | Docs | Cobertura |
+|---|---|---|---|---|---|---|---|
+| C01 deriva de caudalímetro | FULL | EXPLAIN | ABSTAIN | ✗ | 0,600 | 6 | 1,00 |
+| C02 termostato | FULL | EXPLAIN | EXPLAIN | ✓ | 1,000 | 7 | 1,00 |
+| C03 sonda lenta | FULL | EXPLAIN | EXPLAIN | ✓ | 1,000 | 6 | 1,00 |
+| C04 fallo de encendido | FULL | EXPLAIN | ABSTAIN | ✗ | 0,462 | 4 | 1,00 |
+| C05 fuga de vacío | FULL | EXPLAIN | EXPLAIN | ✓ | 0,908 | 5 | 1,00 |
+| C06 evidencia retirada | ABSENT | ABSTAIN | ABSTAIN | ✓ | 0,908 | 0 | 0,00 |
+| C07 evidencia parcial | PARTIAL | ABSTAIN | ABSTAIN | ✓ | 0,908 | 4 | 0,00 |
+| C08 distractor | DISTRACTOR | ABSTAIN | ABSTAIN | ✓ | 0,908 | 4 | 0,00 |
+| C09 distractor sin filtro | DISTRACTOR | ABSTAIN | ABSTAIN | ✓ | 0,908 | 1 | 0,00 |
 
-**4 de 6.** Las dos discrepancias son informativas y no se han corregido ajustando
+**7 de 9.** Las dos discrepancias son informativas y no se han corregido ajustando
 umbrales.
+
+### Las cuatro condiciones, sobre el mismo caso
+
+Confianza **idéntica** en las cuatro: 0,908. Lo único que cambia es el corpus.
+
+| Condición | Docs aplicables | Cobertura | Decisión | Por qué |
+|---|---|---|---|---|
+| **FULL** | 5 | 1,00 | **EXPLAIN** | La evidencia está y sostiene |
+| **ABSENT** | 0 | 0,00 | ABSTAIN | No queda nada aplicable |
+| **PARTIAL** | 4 | 0,00 | ABSTAIN | Hay tablas de códigos, no procedimientos |
+| **DISTRACTOR** | 4 | 0,00 | ABSTAIN | El del otro motor no llega ni a ordenarse |
+
+**Un fallo de diseño corregido.** La condición DISTRACTOR inicial no probaba lo
+que decía: el filtro de motor bloquea el procedimiento del LF **antes de
+ordenarlo**, así que nunca alcanzaba al verificador y DISTRACTOR resultaba
+idéntica a PARTIAL.
+
+Se añadió **C09**, con el filtro de motor desactivado a propósito, que es la
+única forma de medir la última línea de defensa. Resultado: el distractor **sí
+llega** --`DTC P2187 [LF]` aparece entre lo recuperado-- y el validador de
+aplicabilidad lo degrada a `PARTIAL_MATCH`, que no cuenta como evidencia fuerte.
+Queda un solo documento aplicable, por debajo del mínimo de dos, y el agente se
+abstiene.
+
+**Dos líneas de defensa independientes:** el filtro en la recuperación y el
+validador de aplicabilidad. La segunda funciona sin la primera.
 
 ## Calibración de la confianza
 
@@ -93,9 +122,9 @@ plausible que la etiqueta esperada de C04 esté mal puesta --se definió por
 disponibilidad documental, no por fiabilidad del modelo-- y esa es una discusión
 que corresponde al diseño del conjunto, no al ajuste del criterio.
 
-## Por qué falla C01: la evidencia observacional y la documental no hablan de lo mismo
+## C01: corregido, y la corrección explica el resultado anterior
 
-Cobertura **0,00**: ninguna afirmación quedó sostenida.
+Cobertura **0,00** en la primera ejecución; **1,00** tras corregir el mapeo.
 
 La razón es el hallazgo de E4 mordiendo a nivel de verificación de soporte. El
 modelo detecta la deriva del caudalímetro **por los ajustes de combustible** --E9
@@ -111,8 +140,22 @@ la documentación describen el mismo fallo por vías distintas. La evidencia que
 sostendría esas afirmaciones es P2177 --«Fuel system too lean off idle»--, que
 está en el corpus y no se le pidió.
 
-Se anota como corrección pendiente del mapeo diagnóstico→DTC, no como ajuste de
-umbral.
+**Corregido.** Una deriva del caudalímetro deja **dos** rastros documentales y
+solo se buscaba uno: los códigos del sensor --P0101, P0102-- documentan la
+tensión de su circuito, y los de mezcla --P2177, P2178-- documentan los ajustes
+de combustible desviados, que es lo que el modelo observa.
+
+> **P2177 — «System too lean off idle»**
+> *«The PCM monitors short term fuel trim (SHRTFT) and long term fuel trim
+> (LONGFT) during closed loop fuel control during off-idle.»*
+
+Con el mapeo corregido, la cobertura de C01 pasa de 0,00 a **1,00**, y su único
+motivo de abstención pasa a ser la confianza del modelo.
+
+No es ajustar para acertar: es corregir un mapeo que describía mal la condición.
+La distinción entre P2177 --«off idle»-- y P2187 --«at idle»-- encaja además con
+la física: la fuga de vacío es peor en ralentí, la deriva del caudalímetro afecta
+a todos los regímenes.
 
 ## Verificación de soporte: citar no es sostener
 
@@ -164,12 +207,45 @@ uno inaceptablemente bajo, y aquí ningún factor es compensable: sin cobertura 
 afirmaciones no hay explicación que sostener por muy confiado que esté el modelo.
 Hay un test que lo comprueba con confianza 0,99 y cero documentación.
 
-Umbrales actuales: confianza ≥ 0,60 · puntuación ≥ 0,35 · fragmentos ≥ 2 ·
-fuentes distintas ≥ 1 · cobertura ≥ 0,80 · sin contradicciones · aplicabilidad
-`EXACT_MATCH`.
+Umbrales: confianza ≥ **0,80** · fragmentos ≥ 2 · fuentes distintas ≥ 1 ·
+cobertura ≥ 0,80 · sin contradicciones · aplicabilidad `EXACT_MATCH`.
 
-**Pendiente:** estos umbrales están puestos por criterio, no calibrados sobre
-validación. Es lo que queda por hacer en esta fase y se declara como tal.
+### Los umbrales están calibrados, no elegidos
+
+**Confianza: 0,80.** Criterio declarado: el umbral más bajo con precisión ≥ 0,93
+sobre las 98 ventanas de validación.
+
+| umbral | cobertura | precisión |
+|---|---|---|
+| 0,60 | 0,929 | 0,912 |
+| 0,75 | 0,867 | 0,929 |
+| **0,80** | **0,827** | **0,938** |
+| 0,90 | 0,612 | 0,917 |
+
+**Ningún umbral alcanza 0,95**: la precisión se estanca en 0,93-0,94. Se hace
+constar en lugar de subir el umbral hasta que la cobertura se desplome por
+alcanzar una cifra redonda.
+
+**Puntuación de recuperación: desactivada.** Se midió si discriminaba el soporte:
+
+| | fragmentos | mediana |
+|---|---|---|
+| Sostienen la afirmación | 9 | 0,459 |
+| No la sostienen | 37 | 0,443 |
+
+El **38 %** de los fragmentos que **no** sostienen puntúan por encima de la
+mediana de los que **sí**. Un umbral ahí filtraría por azar y daría apariencia
+de rigor. Se retira en lugar de calibrarlo.
+
+Es la **tercera vez** que aparece lo mismo por caminos independientes: en el
+orden de los resultados (E11), en la evaluación de la recuperación (E12) y ahora
+en el criterio de suficiencia. **La similitud no es evidencia.**
+
+### Que la calibración no cambiara las decisiones es en sí un resultado
+
+Con los umbrales calibrados, las nueve decisiones son las mismas que con los
+puestos a ojo. El resultado **no dependía** de haber acertado con unos números
+arbitrarios.
 
 ## Tests
 
