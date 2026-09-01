@@ -51,7 +51,20 @@ DIAGNOSTICO_A_DTC: dict[str, tuple[str, ...]] = {
     # su condición de detección vigila los ajustes de combustible en ralentí,
     # que es la firma de una fuga de vacío.
     "F01_vacuum_leak": ("P2187", "P2177"),
-    "F02_maf_drift": ("P0101", "P0102"),
+    # Una deriva del caudalímetro deja DOS rastros documentales, y hasta E15 solo
+    # se buscaba uno. Los códigos del sensor --P0101, P0102-- documentan la
+    # tensión de su circuito; los de mezcla --P2177, P2178-- documentan los
+    # ajustes de combustible desviados, que es lo que el modelo realmente observa
+    # (E9: `maf` no contribuye nada a la detección).
+    #
+    # Buscar solo los del sensor dejaba las afirmaciones sobre ajustes de
+    # combustible sin evidencia que las sostuviera, y la cobertura de ese caso
+    # caía a cero. No es ajustar para acertar: es corregir un mapeo que
+    # describía mal la condición.
+    #
+    # P2177/P2178 son "off idle" y P2187/P2188 "at idle". La fuga de vacío es
+    # peor en ralentí; la deriva del caudalímetro afecta a todos los regímenes.
+    "F02_maf_drift": ("P0101", "P0102", "P2177", "P2178"),
     "F03_thermostat_stuck": ("P0125",),
     "F04_o2_lag": ("P0133",),
     "F05_misfire": ("P0300", "P0301", "P0302", "P0303", "P0304"),
@@ -96,6 +109,7 @@ def recuperar(
     exclude_chunks: tuple[str, ...] = (),
     language: str = "en",
     embedding_model: str | None = None,
+    apply_engine_filter: bool = True,
 ) -> list[RetrievedChunk]:
     """Ejecuta una estrategia de recuperación sobre un caso."""
     # La consulta en el idioma pedido. El corpus es solo inglés, así que una
@@ -104,7 +118,15 @@ def recuperar(
     clave = "query" if language == "en" else f"query_{language}"
     consulta = " ".join(str(caso.get(clave) or caso["query"]).split())
     vector = provider.embed_one(consulta)
-    motores = (engine_code, "ZJ") if engine_code == "Z6" else (engine_code,)
+    # El filtro de motor se puede desactivar a propósito para medir qué hace el
+    # verificador cuando un procedimiento de otro motor le llega. Con el filtro
+    # puesto nunca llega, lo que es correcto en producción y deja sin probar
+    # la última línea de defensa.
+    motores: tuple[str, ...] | None = (
+        ((engine_code, "ZJ") if engine_code == "Z6" else (engine_code,))
+        if apply_engine_filter
+        else None
+    )
 
     if estrategia == "semantic":
         return store.search(

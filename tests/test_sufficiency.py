@@ -302,3 +302,93 @@ def test_una_observacion_se_rastrea_hasta_la_ventana_del_dato() -> None:
 def test_un_fragmento_se_cita_con_editor_y_pagina() -> None:
     traza = _doc().trace()
     assert "Mazda" in traza and "página 1" in traza and "ch1" in traza
+
+
+# ------------------------------------------- umbrales calibrados y no elegidos
+
+
+def test_el_umbral_de_confianza_esta_calibrado_sobre_validacion() -> None:
+    """0,80 es el umbral más bajo con precisión >= 0,93 en validación.
+
+    No es una cifra redonda elegida a ojo: sale de un barrido documentado en el
+    docstring de SufficiencyThresholds, donde consta además que ningún umbral
+    alcanza 0,95 --la precisión se estanca en 0,93-0,94--.
+    """
+    assert SufficiencyThresholds().min_confidence == 0.80
+
+
+def test_el_umbral_de_puntuacion_esta_desactivado_a_proposito() -> None:
+    """La puntuación de similitud NO discrimina el soporte.
+
+    Medido: los fragmentos que sostienen una afirmación tienen mediana 0,459 y
+    los que no, 0,443. El 38 % de los que no sostienen puntúan por encima de la
+    mediana de los que sí. Un umbral ahí filtraría por azar.
+    """
+    assert SufficiencyThresholds().min_retrieval_score == 0.0
+
+
+def test_una_puntuacion_baja_no_impide_explicar_por_si_sola() -> None:
+    """Con el umbral desactivado, lo que decide es el soporte verificado."""
+    bundle = _bundle(documents=[_doc(score=0.05), _doc(chunk_id="ch2", score=0.05)])
+    assert EvidenceVerifier().verify(bundle).decision is Decision.EXPLAIN
+
+
+# --------------------------------------------- las cuatro condiciones de corpus
+
+
+def test_distractor_handling() -> None:
+    """Un procedimiento de otro motor no sostiene, aunque hable de lo mismo.
+
+    Es la prueba más dura del diseño: mismo código de diagnóstico, contenido casi
+    idéntico, motor inaplicable. Un sistema guiado por similitud lo aceptaría.
+    """
+    distractor = _doc(
+        chunk_id="lf1",
+        applicability=Applicability.PARTIAL_MATCH.value,
+        section="DTC P2187 [LF]",
+    )
+    bundle = _bundle(
+        documents=[
+            distractor,
+            _doc(chunk_id="lf2", applicability=Applicability.PARTIAL_MATCH.value),
+        ],
+        claims=[],
+    )
+    veredicto = EvidenceVerifier().verify(bundle)
+    assert veredicto.decision is Decision.ABSTAIN
+    assert Reason.NO_DOCUMENTARY_EVIDENCE in veredicto.reasons
+
+
+def test_evidencia_parcial_no_basta() -> None:
+    """Que el corpus mencione el código no es que documente el diagnóstico.
+
+    Una tabla de DTC dice que ese código existe; no dice cómo se comprueba. La
+    verificación de soporte la rechaza por no ser contenido diagnóstico.
+    """
+    tabla = _doc(
+        chunk_id="tabla",
+        section="DTC TABLE [ZJ, Z6]",
+        text="P2187 Fuel system too lean at idle ON 2 Fuel system",
+        dtc_codes=("P2187",),
+    )
+    claim = Claim("C01", "el ajuste está desplazado", ("OBS001",))
+    resultado = check_support(claim, tabla, signal="stft_bank1", expected_dtc=("P2187",))
+    assert not resultado.supports
+
+
+def test_las_cuatro_condiciones_se_distinguen_por_lo_que_falta() -> None:
+    """Cada condición produce un motivo de abstención distinto, y eso importa:
+    un veredicto que dijera siempre lo mismo no permitiría saber qué faltó."""
+    sin_nada = EvidenceVerifier().verify(_bundle(documents=[], claims=[]))
+    solo_inaplicable = EvidenceVerifier().verify(
+        _bundle(
+            documents=[_doc(applicability=Applicability.PARTIAL_MATCH.value)],
+            claims=[],
+        )
+    )
+    sin_soporte = EvidenceVerifier().verify(
+        _bundle(claims=[Claim("C01", "t", ("OBS001",), (), SupportStatus.PARTIALLY_SUPPORTED)])
+    )
+    assert Reason.NO_DOCUMENTARY_EVIDENCE in sin_nada.reasons
+    assert Reason.NO_DOCUMENTARY_EVIDENCE in solo_inaplicable.reasons
+    assert Reason.LOW_CLAIM_COVERAGE in sin_soporte.reasons

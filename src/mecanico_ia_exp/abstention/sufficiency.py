@@ -59,8 +59,45 @@ class SufficiencyThresholds:
     de una predicción.
     """
 
-    min_confidence: float = 0.60
-    min_retrieval_score: float = 0.35
+    min_confidence: float = 0.80
+    """Calibrado sobre validación, no elegido a ojo.
+
+    Criterio declarado: **el umbral más bajo con precisión ≥ 0,93**. El barrido
+    sobre las 98 ventanas de validación da:
+
+    | umbral | cobertura | precisión |
+    |---|---|---|
+    | 0,60 | 0,929 | 0,912 |
+    | 0,75 | 0,867 | 0,929 |
+    | **0,80** | **0,827** | **0,938** |
+    | 0,90 | 0,612 | 0,917 |
+
+    Ningún umbral alcanza 0,95: la precisión se estanca en torno a 0,93-0,94.
+    Se hace constar en lugar de subir el umbral hasta que la cobertura se
+    desplome por una cifra redonda.
+    """
+
+    min_retrieval_score: float = 0.0
+    """**Desactivado a propósito.** La puntuación de similitud no discrimina el
+    soporte, y se midió:
+
+    | | fragmentos | mediana |
+    |---|---|---|
+    | Sostienen la afirmación | 9 | 0,459 |
+    | No la sostienen | 37 | 0,443 |
+
+    El 38 % de los fragmentos que **no** sostienen puntúan por encima de la
+    mediana de los que **sí**. Un umbral sobre esa puntuación filtraría por azar
+    y daría apariencia de rigor.
+
+    Es la tercera vez que aparece lo mismo por caminos distintos: en el orden de
+    los resultados (E11), en la evaluación de la recuperación (E12) y ahora en el
+    criterio de suficiencia. **La similitud no es evidencia.**
+
+    Lo que sí discrimina es la verificación de soporte, que ya se aplica antes de
+    llegar aquí. El parámetro se conserva --puede volver a tener sentido con otro
+    modelo de embeddings-- pero por defecto no decide nada.
+    """
     min_supporting_chunks: int = 2
     min_distinct_sources: int = 1
     min_claim_coverage: float = 0.80

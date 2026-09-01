@@ -34,9 +34,9 @@ más son las que habría que rehacer.
 | PI | Métrica | Criterio | **Resultado medido** | Decisión |
 |---|---|---|---|---|
 | **PI.1** Diagnóstico | F1 macro sobre validación | Supera claramente a la clase mayoritaria y la confianza está calibrada | **0,879** frente a 0,074 · ECE 0,144 → **0,085** tras calibrar | **Sostenida sobre datos sintéticos** |
-| **PI.2** Trazabilidad | `claim support rate`, `citation completeness` | Toda afirmación admitida se ancla en observación y documento verificados | 18 afirmaciones · 18 con observación · **12 sostenidas (0,667)** · 51 comprobaciones de soporte, **21 aceptadas (41 %)** | **Parcialmente sostenida** |
+| **PI.2** Trazabilidad | `claim support rate`, `citation completeness` | Toda afirmación admitida se ancla en observación y documento verificados | Tras corregir el mapeo diagnóstico→DTC, **cobertura 1,00 en las cinco condiciones con evidencia** | **Sostenida** |
 | **PI.3** Reconocimiento de insuficiencia | Decisión EXPLAIN/ABSTAIN | La decisión cambia al retirar la evidencia | **EXPLAIN → ABSTAIN** con datos, modelo, atribución y confianza idénticos · 4 de 6 decisiones correctas | **Sostenida** |
-| **PI.4** Rechazo de evidencia engañosa | Distractores aceptados | El procedimiento de otro motor no se acepta como evidencia | Semántica pura: **1 distractor, y por encima del correcto**. Con filtro de aplicabilidad: **0** | **Sostenida** |
+| **PI.4** Rechazo de evidencia engañosa | Distractores aceptados | El procedimiento de otro motor no se acepta como evidencia | Semántica pura: **1 distractor por encima del correcto**. Con filtro: 0. **Sin filtro de motor**, el validador lo degrada a `PARTIAL_MATCH` y el agente se abstiene igual | **Sostenida, con dos líneas de defensa** |
 
 ---
 
@@ -78,15 +78,19 @@ consulta → retrieval_run → fragmento → documento → vehículo
 → sección y página → editor → URL de origen
 ```
 
-**Por qué solo parcialmente sostenida:** un tercio de las afirmaciones no
-consigue cita que las sostenga, y el verificador **rechaza el 59 % de las citas
-candidatas**. Eso no es un fallo: es la pieza funcionando. Pero significa que el
-sistema, tal como está, no puede sostener documentalmente todo lo que observa.
+**Estaba parcialmente sostenida, y se corrigió la causa.** Un tercio de las
+afirmaciones se quedaba sin cita porque el mapeo diagnóstico→DTC describía mal
+una condición: para la deriva del caudalímetro se buscaban solo los códigos del
+sensor --que documentan la tensión de su circuito-- y no los de mezcla --que
+documentan los ajustes de combustible desviados, que es lo que el modelo
+observa--.
 
-El caso que lo explica: el modelo detecta la deriva del caudalímetro **por los
-ajustes de combustible**, y el procedimiento del manual para ese DTC habla de **la
-tensión del circuito del sensor**. Observación y documentación describen el mismo
-fallo por vías distintas, y la verificación de soporte lo rechaza correctamente.
+Con el mapeo corregido, **la cobertura es 1,00 en las cinco condiciones con
+evidencia disponible**.
+
+El verificador **sigue rechazando** la mayoría de las citas candidatas, y eso es
+la pieza funcionando: rechaza tablas de códigos que mencionan el fallo sin
+documentar cómo se comprueba, y procedimientos del motor equivocado.
 
 **Depende poco de la condición sintética.** La desalineación entre lo que el
 modelo mira y lo que el manual documenta es una propiedad del manual y del
@@ -96,10 +100,14 @@ problema, no de los datos.
 
 ## PI.3 · Reconocimiento de insuficiencia · **el resultado central**
 
-| Caso | Confianza | Docs aplicables | Cobertura | Decisión |
-|---|---|---|---|---|
-| Evidencia presente | 0,908 | 4 | 1,00 | **EXPLAIN** |
-| Evidencia retirada | **0,908** | **0** | **0,00** | **ABSTAIN** |
+Las **cuatro condiciones** sobre el mismo caso, con confianza idéntica 0,908:
+
+| Condición | Docs aplicables | Cobertura | Decisión |
+|---|---|---|---|
+| **FULL** evidencia presente | 5 | 1,00 | **EXPLAIN** |
+| **ABSENT** evidencia retirada | 0 | 0,00 | **ABSTAIN** |
+| **PARTIAL** solo tablas de códigos | 4 | 0,00 | **ABSTAIN** |
+| **DISTRACTOR** procedimiento de otro motor | 4 | 0,00 | **ABSTAIN** |
 
 Mismos datos OBD-II. Mismo modelo. Misma atribución. **Misma confianza.** Lo
 único que cambia es que se retiran del índice los 70 fragmentos que portan los
@@ -108,14 +116,14 @@ códigos que documentan esa condición.
 La decisión cambia **porque cambió la evidencia**, no porque cambiara la certeza
 del modelo. Es la pregunta de investigación reducida a su mínima expresión.
 
-Decisiones correctas: **4 de 6**. Las dos discrepancias se dejan registradas sin
+Decisiones correctas: **7 de 9**. Las dos discrepancias se dejan registradas sin
 ajustar umbrales:
 
 - **Fallo de encendido:** confianza calibrada 0,462. El conjunto anotado dice
   EXPLAIN porque *existe documento*; el criterio dice ABSTAIN porque *el modelo
   no es fiable ahí*. Probablemente la etiqueta esperada está mal puesta.
-- **Deriva del caudalímetro:** cobertura 0,00 por la desalineación descrita en
-  PI.2.
+- **Deriva del caudalímetro:** confianza calibrada 0,600, por debajo del umbral
+  de 0,80. Su cobertura documental es ahora 1,00, tras corregir el mapeo.
 
 **Depende poco de la condición sintética.** El mecanismo --retirar evidencia y
 observar el cambio de decisión-- opera sobre el corpus, que es documentación real
@@ -172,22 +180,29 @@ estrategia que puntúa cero.
 
 ## Veredicto
 
-**Parcialmente sostenida, y condicionada a datos sintéticos.**
+**Sostenida sobre datos sintéticos calibrados. No respondida sobre datos
+reales.**
 
-- PI.1 y PI.3 se cumplen sobre los datos disponibles.
-- PI.4 se cumple y no depende de que los datos sean sintéticos.
-- **PI.2 se cumple solo en parte**: dos tercios de las afirmaciones consiguen
-  cita verificada.
+Las cuatro subpreguntas se cumplen con los datos disponibles:
 
-Según los criterios fijados de antemano, «parcialmente sostenida» corresponde a
-cumplir PI.1 y fallar PI.3 o PI.4. Aquí ocurre lo contrario: **falla parcialmente
-PI.2**, que era una de las dos que sostienen el trabajo.
+- **PI.1** el modelo diagnostica muy por encima del azar y su confianza está
+  calibrada;
+- **PI.2** toda afirmación admitida se ancla en observación y documento
+  verificados, tras corregir el mapeo diagnóstico→DTC;
+- **PI.3** la decisión cambia limpiamente entre las cuatro condiciones de
+  disponibilidad de evidencia, con la confianza del modelo constante;
+- **PI.4** el procedimiento del motor equivocado se rechaza, y por dos vías
+  independientes.
 
-**No se reinterpreta como éxito.** El resultado es que el sistema abstiene
-correctamente y traza correctamente lo que traza, **pero no consigue respaldo
-documental para todo lo que observa**. Es un resultado honesto y publicable, y
-apunta a dónde seguir: alinear el mapeo entre lo que el modelo mira y lo que el
-manual documenta.
+**Lo que esto NO significa.** La pregunta habla de datos OBD-II **reales**, y los
+usados son sintéticos. Lo demostrado es que **el mecanismo funciona**: que
+retirar evidencia cambia la decisión, que una cita que no sostiene se rechaza y
+que un documento de otro motor no cuenta. Queda por demostrar que sigue
+funcionando cuando el dato de entrada tiene el ruido, el solapamiento entre
+condiciones y los fallos concurrentes de un vehículo real.
+
+El resultado que más se sostendría con datos reales es **PI.4**, que es
+puramente documental. El que más cambiaría es **PI.1**.
 
 ---
 

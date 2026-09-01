@@ -148,6 +148,7 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
             vehicle_id=VEHICULO,
             engine_code=perfil.engine_code or "Z6",
             exclude_chunks=excluidos,
+            apply_engine_filter=bool(caso.get("apply_engine_filter", True)),
         )
 
         # Los DTC que documentan esta condición: si el fragmento citado no
