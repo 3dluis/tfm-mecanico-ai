@@ -8,8 +8,8 @@ Convención de nombre: `E<n>_<tema>.md`.
 | Fase | Informe | Estado |
 |---|---|---|
 | E1 entorno | [E1_entorno.md](E1_entorno.md) | cerrada |
-| E2 datos sintéticos | — | pendiente |
-| E3 datos reales | — | pendiente |
+| E2 datos sintéticos | [E2_datos_sinteticos.md](E2_datos_sinteticos.md) | cerrada |
+| E3 datos reales | — | **bloqueada** — falta decidir la fuente |
 | E4 análisis exploratorio | — | pendiente |
 | E5 preprocesamiento | — | pendiente |
 | E6 baseline | — | pendiente |

@@ -10,6 +10,7 @@ import argparse
 import json
 import sys
 
+from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.config.environment import audit
 
 
@@ -23,6 +24,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     doctor.add_argument("--json", action="store_true", help="emitir el informe en JSON")
 
+    generar = subparsers.add_parser(
+        "generate-synthetic", help="generar el conjunto de datos sintético"
+    )
+    generar.add_argument("--dataset-id", default="synthetic_v1")
+    generar.add_argument("--seed", type=int, default=20260901)
+    generar.add_argument("--sessions-per-fault", type=int, default=6)
+    generar.add_argument("--duration-s", type=float, default=600.0)
+
     args = parser.parse_args(argv)
 
     if args.command == "doctor":
@@ -32,6 +41,23 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(report)
         return 0 if report.ok else 1
+
+    if args.command == "generate-synthetic":
+        from mecanico_ia_exp.obd.synthetic import build_balanced_specs, generate_dataset
+
+        specs = build_balanced_specs(
+            seed=args.seed,
+            sessions_per_fault=args.sessions_per_fault,
+            duration_s=args.duration_s,
+        )
+        datos, metadata = generate_dataset(
+            specs, dataset_id=args.dataset_id, seed=args.seed, notes="Plan equilibrado E2."
+        )
+        destino = paths.ensure(paths.DATA_RAW_SYNTHETIC) / f"{args.dataset_id}.parquet"
+        datos.to_parquet(destino, index=False)
+        metadata.write(destino.with_suffix(".meta.json"))
+        print(f"{len(datos)} muestras en {metadata.n_sessions} sesiones -> {destino.name}")
+        return 0
 
     return 2
 
