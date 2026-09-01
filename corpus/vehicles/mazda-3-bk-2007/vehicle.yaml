@@ -11,10 +11,10 @@ model: Mazda3
 model_year: 2007
 generation: BK
 market: null
-engine_code: null
-engine_displacement: null
+engine_code: Z6
+engine_displacement: "1.6 L"
 fuel_type: gasoline
-transmission: null
+transmission: MTX
 vin_prefix: null
 obd_protocol: null
 notes: >-

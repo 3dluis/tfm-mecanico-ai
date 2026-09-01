@@ -70,23 +70,23 @@
     "partition": "validation",
     "n": 98,
     "accuracy": 0.8776,
-    "macro_f1": 0.8758,
-    "weighted_f1": 0.8701,
+    "macro_f1": 0.8788,
+    "weighted_f1": 0.8709,
     "balanced_accuracy": 0.8571,
     "calibration": {
-      "ece": 0.1396,
+      "ece": 0.1439,
       "mean_confidence": 0.738,
       "accuracy": 0.8776,
-      "overconfidence": -0.1396
+      "overconfidence": -0.1395
     },
     "per_class": [
       {
         "label": "F00_normal",
-        "precision": 0.7179,
+        "precision": 0.7,
         "recall": 1.0,
-        "f1": 0.8358,
+        "f1": 0.8235,
         "support": 28,
-        "pr_auc": 0.8813
+        "pr_auc": 0.7781
       },
       {
         "label": "F01_vacuum_leak",
@@ -110,7 +110,7 @@
         "recall": 0.6429,
         "f1": 0.7826,
         "support": 14,
-        "pr_auc": 0.8465
+        "pr_auc": 0.8324
       },
       {
         "label": "F04_o2_lag",
@@ -122,11 +122,11 @@
       },
       {
         "label": "F05_misfire",
-        "precision": 0.875,
+        "precision": 1.0,
         "recall": 0.5,
-        "f1": 0.6364,
+        "f1": 0.6667,
         "support": 14,
-        "pr_auc": 0.8224
+        "pr_auc": 0.8335
       }
     ]
   }

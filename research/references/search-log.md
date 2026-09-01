@@ -90,3 +90,71 @@ canónica es la misma en su enunciado, pero su descomposición cambia. **Antes d
 esta revisión hay que comprobar que las cadenas de búsqueda siguen cubriendo las cuatro
 subpreguntas canónicas** — en particular la condición DISTRACTOR, que el marco anterior no
 contemplaba. Ver `research/legacy-map.md`.
+
+---
+
+## Iteración 5 — búsqueda dirigida de GAP-02 (1 de septiembre de 2026)
+
+**Motivo:** la reconstrucción de la trazabilidad detectó que PI.4 —rechazo de evidencia
+engañosa— no tenía vacío que la justificara (incidencia I-03).
+
+**Herramienta:** búsqueda web general. **No sustituye al PRISMA formal**, que sigue pendiente.
+
+| # | Cadena ejecutada | Resultados relevantes |
+|---|---|---|
+| C5.1 | `RAG distractor documents evaluation retrieval "hard negatives" LLM citation faithfulness abstain benchmark` | 4 |
+| C5.2 | `RAG negative rejection benchmark "counterfactual robustness" RGB information integration LLM retrieval evaluation` | 3 |
+| C5.3 | `automotive fault diagnosis RAG LLM abstention "insufficient evidence" claim-level attribution evaluation OBD telemetry 2025 2026` | 5 |
+
+**Verificación de identificadores:** los cuatro candidatos principales resuelven en Crossref o
+DataCite. **Lectura a texto completo: pendiente** — `[VERIFY_SOURCE]`.
+
+| Candidato | Identificador | Estado |
+|---|---|---|
+| Chen, Lin, Han & Sun (2024). *Benchmarking LLMs in RAG* (banco **RGB**). AAAI 38(16), 17754-17762 | 10.1609/aaai.v38i16.29728 · arXiv:2309.01431 | verificado (metadatos) |
+| *The Power of Noise: Redefining Retrieval for RAG Systems* (2024) | arXiv:2401.14887 | verificado (metadatos) |
+| *The Distracting Effect: Understanding Irrelevant Passages in RAG* (2025) | arXiv:2505.06914 | verificado (metadatos) |
+| *Correctness is not Faithfulness in RAG Attributions* (2024) | arXiv:2412.18004 | verificado (metadatos) |
+
+**Candidatos adicionales del dominio automotriz, sin verificar:** trabajos sobre RAG guiado por
+grafo de conocimiento para análisis de causa raíz en validación HiL de automoción, y
+clasificación de fallos por conjunto de modelos en HiL (2026, preprints).
+`[VERIFY_SOURCE]`.
+
+### Resultado: la hipótesis de vacío queda refutada
+
+**La distinción presencia/pertinencia está estudiada**, tiene banco público (RGB) y vocabulario
+establecido desde 2024: «rechazo negativo» y «robustez contrafactual».
+
+Se reformula el vacío de forma más estrecha y defendible. Detalle en
+`references/project/gaps.md`, GAP-02 revisado.
+
+**Nota de método.** Esta búsqueda se ejecutó para comprobar una hipótesis de vacío, no para
+confirmarla. Salió que no. **Se reporta que no.** Un vacío que se estrecha tras buscar es un
+vacío que sobrevivirá a la defensa.
+
+## Iteración 6 — verificación de identificadores del corpus (1 de septiembre de 2026)
+
+Consulta programática a **Crossref** y **DataCite** con el identificador de cada una de las 144
+entradas de `references.md`.
+
+| Resultado | Entradas |
+|---|---|
+| Resuelto en Crossref | 74 |
+| Resuelto en DataCite | 36 |
+| **Total verificado** | **110** |
+| Sin identificador en la lista de origen | 34 |
+| **Identificadores rotos o inexistentes** | **0** |
+
+**Dos entradas que Crossref no encontró resuelven correctamente en DataCite** (OpenProceedings
+y Borealis). No son referencias inexistentes; se hace constar para que nadie las retire por
+error.
+
+**Recuperado:** 28 títulos que la lista de origen tenía elididos, 52 venues ausentes, y
+volumen, número y páginas donde el registro los publica.
+
+**Detectado:** 7 discrepancias de año entre la lista y el registro. Ninguna es una referencia
+inventada; son ambigüedades de año de registro que APA obliga a resolver a uno solo.
+
+**Alcance de esta verificación:** confirma que el identificador resuelve y cuáles son sus
+metadatos de registro. **No confirma que el trabajo diga lo que se le atribuye.**

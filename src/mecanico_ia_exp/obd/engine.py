@@ -28,8 +28,67 @@ from random import Random
 
 from mecanico_ia_exp.obd.regimes import COLD_START_REGIMES, REGIMES
 
-_THERMOSTAT_C = 88.0
-_IDLE_RPM = 820.0
+# Constantes calibradas contra el manual de taller del Mazda 3 BK.
+# Cada valor y su cita están en configs/calibracion_mazda3_bk.yaml.
+# Los valores anteriores eran invenciones plausibles sin respaldo, y los cuatro
+# quedaban fuera de la especificación real del vehículo.
+
+#: Apertura inicial del termostato. Manual: 80-84 °C (srvc/B3E010002000T03.pdf).
+#: Antes: 88,0 °C, por encima del rango documentado.
+_THERMOSTAT_C = 82.0
+
+#: Motor al que se calibra todo el modelo: **Z6, 1,6 L, transmisión manual**.
+#:
+#: La elección no es cosmética. Los procedimientos de diagnóstico del manual son
+#: específicos de motor --sus identificadores llevan [ZJ, Z6] o [LF]-- y los DTC
+#: que corresponden a las condiciones de este experimento están documentados
+#: para [ZJ, Z6]. Anclar el generador a un motor y las citas a otro produciría
+#: evidencia inaplicable al propio dato, que es justo lo que el validador de
+#: aplicabilidad existe para impedir.
+MOTOR_CALIBRADO = "Z6"
+
+#: Ralentí. Manual: 640-740 rpm para Z6 con transmisión manual
+#: (srvc/B3E011002000W01.pdf). Antes: 820,0 rpm, un 15 % por encima.
+_IDLE_RPM = 690.0
+
+#: Régimen mínimo admitido. El manual documenta ralentí desde 640 rpm, así que el
+#: recorte anterior a 650 habría truncado valores legítimos.
+_RPM_MIN = 620.0
+
+#: Caudal másico en ralentí tras calentamiento. Manual: "Idle (after warm up):
+#: approx. 2.5 g/s" (srvc/B3E014018880W14.pdf).
+#:
+#: El caudal no es proporcional al producto régimen x carga: hay un caudal de
+#: base con el motor en ralentí. El modelo anterior era proporcional puro, y al
+#: recalibrar el coeficiente contra el máximo dejaba el ralentí en 1,2 g/s,
+#: por debajo del valor documentado y por debajo del suelo artificial del propio
+#: generador. Se pasa a desplazamiento más término proporcional, con los dos
+#: extremos anclados a valores del manual.
+_MAF_RALENTI_G_S = 2.5
+
+#: Caudal máximo admisible, por cálculo volumétrico del motor Z6 de 1,6 L:
+#:
+#:     1,6 L x (5200/2 rev/min) x 0,9 de rendimiento volumétrico
+#:            x 1,184 g/L de densidad del aire / 60 s = 73,9 g/s
+#:
+#: No sale del manual: es el límite físico del motor al que se ancla el ralentí.
+#: Se declara como deducción y no como dato documentado.
+#:
+#: Los 59,5 g/s del manual NO son un máximo: aparecen como umbral para
+#: identificar operación a carga alta dentro de la detección del DTC del sensor
+#: de mariposa (srvc/B3E010200100W08.pdf). Superarlos a plena carga es correcto.
+_MAF_MAX_G_S = 74.0
+
+#: Coeficiente del término proporcional, resuelto para que el caudal pase por sus
+#: dos anclajes: 2,5 g/s en ralentí (documentado) y 74 g/s en el pico (deducido).
+_MAF_COEF = 0.00023
+
+#: Desplazamiento deducido de anclar el ralentí. No es un parámetro libre.
+_MAF_OFFSET = 1.55
+
+#: Avance base de encendido. Manual: 9-11 BTDC° en ralentí
+#: (srvc/B3E011002000W01.pdf). Antes el generador daba 15,0.
+_TIMING_BASE = 7.7
 
 
 @dataclass
@@ -122,7 +181,7 @@ class SignalEngine:
             if s.speed_kmh < 2.0
             else s.speed_kmh * relacion * (0.95 + 0.1 * demanda) + rng.gauss(0.0, 35.0)
         )
-        rpm = min(5200.0, max(650.0, rpm))
+        rpm = min(5200.0, max(_RPM_MIN, rpm))
 
         # Carga y mariposa: la carga cubre la resistencia al avance más la
         # demanda de aceleración; la mariposa sigue a la carga.
@@ -132,7 +191,7 @@ class SignalEngine:
 
         # Aire admitido: caudal proporcional a régimen por carga; presión de
         # colector creciente con la carga.
-        maf = max(1.5, 0.00045 * rpm * carga + rng.gauss(0.0, 0.35))
+        maf = max(0.0, _MAF_OFFSET + _MAF_COEF * rpm * carga + rng.gauss(0.0, 0.35))
         map_kpa = min(105.0, max(18.0, 22.0 + 0.8 * carga + rng.gauss(0.0, 1.2)))
 
         # Térmica: primer orden hacia el equilibrio, con el termostato regulando
@@ -155,7 +214,7 @@ class SignalEngine:
         o2 = min(0.95, max(0.05, o2))
 
         # Avance de encendido: sube con el régimen, retrasa con la carga.
-        avance = 12.0 + 24.0 * (rpm / 5200.0) - 14.0 * (carga / 95.0) + rng.gauss(0.0, 0.8)
+        avance = _TIMING_BASE + 24.0 * (rpm / 5200.0) - 14.0 * (carga / 95.0) + rng.gauss(0.0, 0.8)
 
         self.t += self.dt
         s.values = {

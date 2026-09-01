@@ -1,0 +1,142 @@
+# Calibración del generador OBD-II contra el manual de taller del Mazda 3 BK.
+#
+# CADA constante lleva el fichero del manual del que sale y la cita literal que
+# la respalda. Una constante sin fuente es una constante inventada, y este
+# fichero existe para que no quede ninguna.
+#
+# Los valores anteriores eran invenciones razonables pero sin respaldo. Se
+# conservan en `valor_anterior` para que el cambio sea auditable.
+#
+# ATENCIÓN: calibrar contra el manual de un vehículo real NO convierte los datos
+# en reales. Siguen siendo sintéticos. Lo que cambia es que sus parámetros dejan
+# de ser arbitrarios y pasan a estar documentados.
+
+vehicle_id: mazda-3-bk-2007
+fuente_documental: mazda3-bk-workshop-manual-local
+extraido_el: 2026-09-01
+
+motores_documentados:
+  LF:  {ficheros: 507, descripcion: "2.0 L, mayor cobertura documental"}
+  Z6:  {ficheros: 486, descripcion: "1.6 L, comparte procedimientos con ZJ"}
+  ZJ:  {ficheros: 486, descripcion: "1.4 L, comparte procedimientos con Z6"}
+  comunes_ZJ_Z6_LF: {ficheros: 90}
+
+parametros:
+
+  ralenti_rpm:
+    valor_anterior: 820.0
+    fuente: srvc/B3E011002000W01.pdf
+    cita: "Idle speed ATX Z6: 700 - 800 rpm MTX ZJ:690 - 790 rpm Z6:640 - 740 rpm"
+    valores:
+      Z6_ATX: [700, 800]
+      ZJ_MTX: [690, 790]
+      Z6_MTX: [640, 740]
+    elegido: [640, 740]
+    justificacion: >-
+      Se toma Z6 con transmisión manual. El rango documentado es netamente
+      inferior a los 820 rpm que usaba el generador sin respaldo alguno.
+
+  termostato_apertura_c:
+    valor_anterior: 88.0
+    fuente: srvc/B3E010002000T03.pdf
+    cita: >-
+      "Thermostat Type Wax, bottom-bypass Opening temperature (°C {°F}) 80 - 84
+      {176 - 183} Full-open temperature (°C {°F}) 95 {203} 97 {207}"
+    apertura_inicial_c: [80, 84]
+    apertura_total_c: 95
+    elegido: 82.0
+    justificacion: >-
+      Punto medio del rango de apertura inicial documentado. El valor anterior
+      (88 °C) quedaba por encima del rango real de apertura.
+
+  ect_sensor_tension:
+    fuente: srvc/B3E014018880W08.pdf
+    cita: >-
+      "ECT is 20 °C {68 °F} Approx. 3.0 · ECT is 60 °C {140 °F} Approx. 1.4 ·
+      ECT is 80 °C {176 °F} Approx. 0.9"
+    curva_v_por_c: {20: 3.0, 60: 1.4, 80: 0.9}
+    uso: >-
+      Permite validar que la temperatura simulada corresponde a una tensión de
+      sensor plausible. No se simula la tensión, se simula la temperatura.
+
+  ventilador_electrico_c:
+    fuente: srvc/B3E014000140T45.pdf
+    cita: "ECT sensor malfunction - Temperature in PCM is more than 105°C {221°F}"
+    umbral_c: 105
+
+  maf_tension_v:
+    fuente: [srvc/B3E010200100W01.pdf, srvc/B3E010200100W02.pdf]
+    cita: >-
+      "If the input voltage at PCM terminal 2AU is less than 0.21 V, the PCM
+      determines that the MAF circuit has a malfunction" / "more than 4.9 V"
+    rango_valido_v: [0.21, 4.9]
+    uso: >-
+      Delimita el rango operativo del sensor. Fuera de él la centralita declara
+      avería de circuito, no una lectura.
+
+  maf_caudal_max_g_s:
+    fuente: srvc/B3E010200100W08.pdf
+    cita: "MAF sensor signal is more than 59.5 g/s {7.9 lb/min}"
+    valor: 59.5
+    justificacion: >-
+      Umbral que el manual usa como referencia alta de caudal. El generador
+      anterior alcanzaba ~90 g/s en transitorios, por encima de lo documentado.
+
+  avance_encendido_btdc:
+    fuente: srvc/B3E011002000W01.pdf
+    cita: "Ignition timing (test mode on) (BTDC°) 9 - 11"
+    ralenti_btdc: [9, 11]
+
+dtc_respaldados:
+  # Resuelve los [EVIDENCE_REQUIRED] que E2 dejó abiertos en las fichas de fallo.
+  P0101:
+    titulo: "MAF sensor circuit range/performance problem"
+    fuente: srvc/B3E010200102T02.pdf
+    motores: [ZJ, Z6]
+    condicion_fallo: F02_maf_drift
+  P0102:
+    titulo: "MAF sensor circuit low input"
+    fuente: srvc/B3E010200100W01.pdf
+    motores: [ZJ, Z6]
+    deteccion: "input voltage at PCM terminal 2AU is less than 0.21 V"
+    condicion_fallo: F02_maf_drift
+  P0125:
+    titulo: "Insufficient coolant temperature for closed loop fuel control"
+    fuente: srvc/B3E010200100W11.pdf
+    motores: [ZJ, Z6]
+    deteccion: >-
+      "The PCM monitors the ECT after cold engine start. If the ECT does not
+      reach the specification in a certain period, the PCM determines that the
+      engine coolant temperature for closed loop fuel control is insufficient."
+    condicion_fallo: F03_thermostat_stuck
+  P0133:
+    titulo: "Front HO2S circuit slow response"
+    fuente: srvc/B3E010200100W13.pdf
+    motores: [ZJ, Z6]
+    deteccion: >-
+      "The PCM monitors the inversion cycle period, lean-to-rich response time
+      and rich-to-lean response time of the sensor."
+    condicion_fallo: F04_o2_lag
+    nota: >-
+      La condición de detección documentada coincide exactamente con la firma
+      que E4 midió: la separabilidad de F04 está en la dispersión y en la
+      frecuencia de conmutación de la sonda, no en su nivel medio.
+  P0300:
+    titulo: "Random misfire detected"
+    fuente: srvc/B3E010200102T02.pdf
+    condicion_fallo: F05_misfire
+  P0301_P0304:
+    titulo: "Cylinder No.1-4 misfire detected"
+    fuente: srvc/B3E010200102T02.pdf
+    condicion_fallo: F05_misfire
+
+sin_respaldo_localizado:
+  P0171:
+    buscado_en: "2580 ficheros de srvc/"
+    resultado: NO_ENCONTRADO
+    implicacion: >-
+      La condición F01 (fuga de vacío) se apoyaba en un DTC de mezcla pobre que
+      NO aparece en este manual. Queda [EVIDENCE_REQUIRED] hasta localizar el
+      código equivalente que use Mazda para el BK, o hasta reformular la
+      condición sobre un DTC que sí esté documentado. No se le asigna un código
+      por parecido.

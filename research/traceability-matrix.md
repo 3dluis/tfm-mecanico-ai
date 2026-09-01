@@ -108,7 +108,21 @@ legacy. Hay que reexpresarlo sobre M1-M6.
 
 `[AUTHOR_DECISION_REQUIRED]` — reformular OE-M5.
 
-### I-03 — El vacío de investigación no cubre la pertinencia · **grave**
+### I-03 — El vacío de investigación no cubre la pertinencia · **RESUELTA el 1-09-2026**
+
+**Resultado: la hipótesis de vacío quedó refutada.** La búsqueda dirigida encontró que la
+distinción presencia/pertinencia **sí está estudiada**, con banco público (RGB, Chen et al.,
+AAAI 2024) y vocabulario establecido: «rechazo negativo» y «robustez contrafactual».
+
+PI.4 gana motivación y pierde novedad amplia. El vacío se reformuló más estrecho —verificación
+a nivel de afirmación, doble rama de evidencia, dominio vehicular— y queda pendiente de
+confirmar con lectura a texto completo. Detalle en `references/project/gaps.md` GAP-02.
+
+**GATE-02 pasa de `FAIL` a `PASS_WITH_OBSERVATIONS`.**
+
+<details><summary>Formulación original de la incidencia, conservada</summary>
+
+#### I-03 (original) — El vacío de investigación no cubre la pertinencia · grave
 
 El vacío vigente (V4\*, legacy) enumera cuatro elementos: diagnóstico desde OBD-II real,
 explicación por RAG, trazabilidad verificable, y comportamiento ante evidencia insuficiente.
@@ -122,6 +136,8 @@ Consecuencia: **PI.4 es una subpregunta sin vacío que la justifique.** O se amp
 
 `[EVIDENCE_REQUIRED]` — ampliar la revisión para cubrir el rechazo de distractores en
 sistemas RAG, y reformular el vacío en consecuencia.
+
+</details>
 
 ### I-04 — M3 no responde a ninguna subpregunta · **observación**
 
@@ -196,7 +212,7 @@ limitaciones.
 | Objetivo sin experimento | 0 |
 | Experimento sin objetivo | 0 |
 | **Objetivo que describe otro marco** | **2** (OE-M3, OE-M5) |
-| **Subpregunta sin vacío que la justifique** | **1** (PI.4) |
+| Subpregunta sin vacío que la justifique | **0** (era 1; resuelta) |
 | **Métrica sin subpregunta** | **2** (M3 descriptiva declarada; M6 sin declarar) |
 | **Condición experimental sin ubicar** | **1** (insuficiencia observacional de E6, I-09) |
 | Resultado sin experimento | 0 |
@@ -205,9 +221,10 @@ limitaciones.
 | Conclusión sin resultado | 0 (no hay conclusiones) |
 
 **GATE-03: FAIL** por I-01 e I-02 — hay objetivos que no describen el trabajo que se va a
-hacer.
-**GATE-02: FAIL** por I-03 — hay una subpregunta sin vacío demostrado.
+hacer. **Es el único FAIL que queda.** Propuestas de reformulación en
+`research/propuestas-objetivos.md`; la decisión es del autor.
+**GATE-02: PASS_WITH_OBSERVATIONS** — I-03 resuelta; el vacío se reformuló tras buscar.
 **GATE-04: PASS_WITH_OBSERVATIONS** — el diseño es coherente; falta cerrar I-05.
 
-Ninguno de los dos FAIL es de integridad: son de coherencia, y se corrigen reformulando, no
-experimentando. Pero se corrigen **antes** de escribir el capítulo 2 o el 4.
+El FAIL restante no es de integridad: es de coherencia, y se corrige reformulando, no
+experimentando. Pero se corrige **antes** de escribir el capítulo 2.
