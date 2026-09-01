@@ -43,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
 
     subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
+    subparsers.add_parser("sufficiency", help="verificar suficiencia de evidencia")
 
     args = parser.parse_args(argv)
 
@@ -102,6 +103,13 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         return run_retrieval_evaluation()
+
+    if args.command == "sufficiency":
+        from mecanico_ia_exp.experiments.sufficiency_runner import (
+            run_sufficiency,
+        )
+
+        return run_sufficiency()
 
     return 2
 

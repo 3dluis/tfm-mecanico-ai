@@ -43,9 +43,14 @@ ESTRATEGIAS = (
 #: DTC cuyo procedimiento documenta esa condición. Sale de la calibración
 #: (configs/calibracion_mazda3_bk.yaml), donde cada pareja lleva su cita.
 #:
-#: F01 no aparece: su DTC no existe en el corpus, y por tanto la guía por
-#: diagnóstico no puede aportarle nada. Es correcto que así sea.
+#: Una condición sin DTC conocido degrada a la mejor estrategia ciega en lugar
+#: de devolver nada.
 DIAGNOSTICO_A_DTC: dict[str, tuple[str, ...]] = {
+    # Mazda NO usa los códigos genéricos P0171/P0172 para la mezcla: usa la
+    # familia P2177/P2178/P2187/P2188. P2187 es "Fuel system too lean at idle" y
+    # su condición de detección vigila los ajustes de combustible en ralentí,
+    # que es la firma de una fuga de vacío.
+    "F01_vacuum_leak": ("P2187", "P2177"),
     "F02_maf_drift": ("P0101", "P0102"),
     "F03_thermostat_stuck": ("P0125",),
     "F04_o2_lag": ("P0133",),
@@ -88,6 +93,7 @@ def recuperar(
     vehicle_id: str,
     engine_code: str,
     top_k: int = TOP_K,
+    exclude_chunks: tuple[str, ...] = (),
 ) -> list[RetrievedChunk]:
     """Ejecuta una estrategia de recuperación sobre un caso."""
     consulta = " ".join(str(caso["query"]).split())
@@ -95,14 +101,23 @@ def recuperar(
     motores = (engine_code, "ZJ") if engine_code == "Z6" else (engine_code,)
 
     if estrategia == "semantic":
-        return store.search(vector, vehicle_id=vehicle_id, top_k=top_k)
+        return store.search(
+            vector,
+            vehicle_id=vehicle_id,
+            top_k=top_k,
+            exclude_chunks=exclude_chunks,
+        )
 
     if estrategia == "semantic+engine":
         return store.search(vector, vehicle_id=vehicle_id, top_k=top_k, engine_codes=motores)
 
     if estrategia == "semantic+authority":
         amplio = store.search(
-            vector, vehicle_id=vehicle_id, top_k=PROFUNDIDAD, engine_codes=motores
+            vector,
+            vehicle_id=vehicle_id,
+            top_k=PROFUNDIDAD,
+            engine_codes=motores,
+            exclude_chunks=exclude_chunks,
         )
         return _reordenar_por_autoridad(amplio, top_k)
 
@@ -127,6 +142,7 @@ def recuperar(
                 vehicle_id=vehicle_id,
                 engine_code=engine_code,
                 top_k=top_k,
+                exclude_chunks=exclude_chunks,
             )
         acotado = store.search(
             vector,
@@ -134,16 +150,25 @@ def recuperar(
             top_k=PROFUNDIDAD,
             engine_codes=motores,
             dtc_codes=codigos,
+            exclude_chunks=exclude_chunks,
         )
         return _reordenar_por_autoridad(acotado, top_k)
 
     if estrategia == "hybrid":
         semantica = store.search(
-            vector, vehicle_id=vehicle_id, top_k=PROFUNDIDAD, engine_codes=motores
+            vector,
+            vehicle_id=vehicle_id,
+            top_k=PROFUNDIDAD,
+            engine_codes=motores,
+            exclude_chunks=exclude_chunks,
         )
-        lexica = store.search_lexical(
-            consulta, vehicle_id=vehicle_id, top_k=PROFUNDIDAD, engine_codes=motores
-        )
+        lexica = [
+            r
+            for r in store.search_lexical(
+                consulta, vehicle_id=vehicle_id, top_k=PROFUNDIDAD, engine_codes=motores
+            )
+            if r.chunk_id not in set(exclude_chunks)
+        ]
         fusion = reciprocal_rank_fusion([semantica, lexica], top_k=PROFUNDIDAD)
         return _reordenar_por_autoridad(fusion, top_k)
 

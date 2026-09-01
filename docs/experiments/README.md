@@ -21,7 +21,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E12 evaluación de recuperación | [E12_evaluacion_recuperacion.md](E12_evaluacion_recuperacion.md) | cerrada |
 | E13 integración del agente | — | pendiente |
 | E14 trazabilidad | — | pendiente |
-| E15 suficiencia | — | pendiente |
+| E15 suficiencia | [E15_suficiencia.md](E15_suficiencia.md) | cerrada |
 | E16 abstención | — | pendiente |
 | E17 condiciones de evidencia | — | pendiente |
 | E18 ablaciones | — | pendiente |
