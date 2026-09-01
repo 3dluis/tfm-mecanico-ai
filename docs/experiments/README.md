@@ -17,7 +17,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E8 evaluación del modelo | — | pendiente |
 | E9 atribución | — | pendiente |
 | E10 corpus documental por vehículo | [E10_corpus_vehiculo.md](E10_corpus_vehiculo.md) | infraestructura cerrada, corpus vacío |
-| E11 pgvector | — | pendiente |
+| E11 pgvector | [E11_carga_rag.md](E11_carga_rag.md) | cerrada |
 | E12 evaluación de recuperación | — | pendiente |
 | E13 integración del agente | — | pendiente |
 | E14 trazabilidad | — | pendiente |
