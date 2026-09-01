@@ -41,6 +41,7 @@ def main(argv: list[str] | None = None) -> int:
         sub = subparsers.add_parser(nombre, help=ayuda)
         sub.add_argument("--dataset-id", default="synthetic_v2")
 
+    subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
 
     args = parser.parse_args(argv)
@@ -89,6 +90,11 @@ def main(argv: list[str] | None = None) -> int:
         from mecanico_ia_exp.experiments.temporal_runner import run_temporal
 
         return run_temporal(args.dataset_id)
+
+    if args.command == "xai":
+        from mecanico_ia_exp.experiments.xai_runner import run_xai
+
+        return run_xai()
 
     if args.command == "eval-retrieval":
         from mecanico_ia_exp.experiments.retrieval_runner import (
