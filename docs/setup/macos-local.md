@@ -65,7 +65,8 @@ exijan NVIDIA. El dispositivo se resuelve así:
 
 ```python
 from mecanico_ia_exp.config.environment import resolve_device
-resolve_device()   # "mps" o "cpu"
+
+resolve_device()  # "mps" o "cpu"
 ```
 
 Cuando una operación de PyTorch o de SHAP no esté implementada en MPS, se

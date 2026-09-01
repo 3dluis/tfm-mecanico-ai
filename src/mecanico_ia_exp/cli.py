@@ -33,6 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     generar.add_argument("--duration-s", type=float, default=600.0)
 
     subparsers.add_parser("eda", help="análisis exploratorio: figuras y tablas")
+    subparsers.add_parser("preprocess", help="estudio de ventana, ventanado y reparto sin fuga")
 
     args = parser.parse_args(argv)
 
@@ -65,6 +66,11 @@ def main(argv: list[str] | None = None) -> int:
         from mecanico_ia_exp.experiments.eda_runner import run_eda
 
         return run_eda()
+
+    if args.command == "preprocess":
+        from mecanico_ia_exp.experiments.preprocess_runner import run_preprocess
+
+        return run_preprocess()
 
     return 2
 
