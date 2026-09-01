@@ -80,7 +80,10 @@ src = ["src", "tests"]
 select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
 
 [tool.ruff.lint.per-file-ignores]
-"notebooks/*" = ["E402"]
+# En un notebook, importar junto al uso ayuda a leer la celda de forma aislada, y
+# el preámbulo carga cosas que no toda celda usa. Ninguna de las dos cosas es un
+# defecto aquí: los notebooks son capa de presentación, no código de librería.
+"notebooks/*" = ["E402", "I001", "F401"]
 
 [tool.mypy]
 python_version = "3.11"
