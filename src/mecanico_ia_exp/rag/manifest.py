@@ -34,10 +34,37 @@ class AuthorityLevel(StrEnum):
     """Documentación técnica secundaria contrastada. Requiere justificación."""
 
 
+class AcquisitionChannel(StrEnum):
+    """Por dónde llegó el documento, que no es lo mismo que quién lo publicó.
+
+    Un manual de taller de Mazda descargado de un agregador sigue teniendo a
+    Mazda como editor original, pero su canal de adquisición es un repositorio
+    secundario. Esa distinción determina si su procedencia es verificable y si
+    su redistribución está permitida: confundir ambas cosas convierte a un
+    intermediario en autoridad.
+    """
+
+    OEM_OFFICIAL = "OEM_OFFICIAL"
+    """Portal oficial del fabricante. Procedencia verificable."""
+
+    REGULATORY = "REGULATORY"
+    """Base pública de un organismo oficial."""
+
+    SECONDARY_REPOSITORY = "SECONDARY_REPOSITORY"
+    """Agregador de terceros. Procedencia y licencia por verificar."""
+
+    USER_PROVIDED = "USER_PROVIDED"
+    """Aportado por el autor desde una copia obtenida legítimamente."""
+
+
 class DocumentType(StrEnum):
     """Tipo de documento, que determina su lugar en la jerarquía de evidencia."""
 
     REPAIR_MANUAL = "REPAIR_MANUAL"
+    WORKSHOP_MANUAL = "WORKSHOP_MANUAL"
+    ENGINE_MANUAL = "ENGINE_MANUAL"
+    DIAGNOSTIC_MANUAL = "DIAGNOSTIC_MANUAL"
+    DTC_DOCUMENTATION = "DTC_DOCUMENTATION"
     TECHNICAL_SERVICE_BULLETIN = "TECHNICAL_SERVICE_BULLETIN"
     ELECTRICAL_WIRING_DIAGRAM = "ELECTRICAL_WIRING_DIAGRAM"
     TECHNICAL_TRAINING = "TECHNICAL_TRAINING"
@@ -52,6 +79,10 @@ class DocumentType(StrEnum):
 #: **independientemente de la puntuación de similitud**.
 JERARQUIA_EVIDENCIA: dict[DocumentType, int] = {
     DocumentType.REPAIR_MANUAL: 1,
+    DocumentType.WORKSHOP_MANUAL: 1,
+    DocumentType.DIAGNOSTIC_MANUAL: 1,
+    DocumentType.ENGINE_MANUAL: 2,
+    DocumentType.DTC_DOCUMENTATION: 2,
     DocumentType.TECHNICAL_SERVICE_BULLETIN: 2,
     DocumentType.ELECTRICAL_WIRING_DIAGRAM: 3,
     DocumentType.TECHNICAL_TRAINING: 4,
@@ -84,6 +115,8 @@ class DocumentEntry(BaseModel):
     document_type: DocumentType
     title: str
     publisher: str
+    """Editor original. Quien produjo el documento, no quien lo sirve."""
+
     source_url: str
     access_type: AccessType
     authority_level: AuthorityLevel
@@ -95,15 +128,37 @@ class DocumentEntry(BaseModel):
     redistributable: bool = False
     """Si es ``False``, el binario no entra en el repositorio."""
 
+    acquisition_source: str | None = None
+    """De dónde se obtuvo la copia. Puede no coincidir con el editor."""
+
+    acquisition_channel: AcquisitionChannel | None = None
+
     manufacturer: str | None = None
     model: str | None = None
     model_year: int | None = None
     market: str | None = None
     engine_code: str | None = None
+    engine_codes: list[str] = Field(default_factory=list)
+    """Motores que el documento declara cubrir. Vacío = no consta."""
+
     generation: str | None = None
+    model_year_start: int | None = None
+    model_year_end: int | None = None
+    """Un manual suele cubrir un rango de años, no uno solo."""
+
     publication_date: str | None = None
     revision: str | None = None
     source_portal: str | None = None
+
+    verified: bool = False
+    """¿Se ha inspeccionado el contenido para confirmar lo que declara?
+
+    Un documento sin verificar **no puede sostener evidencia científica**. El
+    nombre del fichero no es prueba de nada: hay que abrirlo y comprobar editor,
+    modelo, rango de años, revisión y cobertura diagnóstica.
+    """
+
+    verification_notes: str = ""
 
     local_file: str | None = None
     sha256: str | None = None
