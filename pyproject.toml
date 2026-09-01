@@ -26,6 +26,8 @@ dependencies = [
     "psycopg[binary]>=3.1",
     "pgvector>=0.2.5",
     "alembic>=1.13",
+    "httpx>=0.27",
+    "pypdf>=5.0",
 ]
 
 [project.optional-dependencies]
@@ -45,7 +47,6 @@ nb = [
 # Proveedores LLM y embeddings. httpx basta para hablar con cualquier endpoint
 # HTTP; los SDK concretos se añaden solo si un proveedor lo exige.
 llm = [
-    "httpx>=0.27",
     "tenacity>=8.3",
 ]
 

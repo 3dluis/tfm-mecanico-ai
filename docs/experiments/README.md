@@ -16,7 +16,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E7 modelo temporal | [E7_modelo_temporal.md](E7_modelo_temporal.md) | cerrada |
 | E8 evaluación del modelo | — | pendiente |
 | E9 atribución | — | pendiente |
-| E10 corpus | — | pendiente |
+| E10 corpus documental por vehículo | [E10_corpus_vehiculo.md](E10_corpus_vehiculo.md) | infraestructura cerrada, corpus vacío |
 | E11 pgvector | — | pendiente |
 | E12 evaluación de recuperación | — | pendiente |
 | E13 integración del agente | — | pendiente |
