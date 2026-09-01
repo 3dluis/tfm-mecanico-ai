@@ -1,0 +1,27 @@
+# Perfil del vehículo piloto documental.
+#
+# Los campos desconocidos permanecen en null y NUNCA se rellenan por inferencia.
+# Un engine_code inventado convertiría el validador de aplicabilidad en un
+# generador de coincidencias exactas falsas.
+#
+# El Corolla 2020 se ofreció con más de una motorización y en varios mercados:
+# hasta conocer el motor concreto, este perfil no puede producir EXACT_MATCH
+# frente a un documento específico de motor, y eso es correcto.
+
+vehicle_id: toyota-corolla-2020
+manufacturer: Toyota
+model: Corolla
+model_year: 2020
+generation: null
+market: North America
+engine_code: null
+engine_displacement: null
+fuel_type: gasoline
+transmission: null
+vin_prefix: null
+obd_protocol: null
+notes: >-
+  Vehículo piloto para inicializar la arquitectura documental. Si el vehículo
+  real del experimento OBD-II resulta ser otro, esta documentación no sustenta
+  sus diagnósticos: hay que registrar el vehículo real, localizar su
+  documentación, crear un vehicle_id nuevo y regenerar corpus y embeddings.

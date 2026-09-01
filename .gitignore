@@ -16,6 +16,17 @@ htmlcov/
 .idea/
 .DS_Store
 
+# Documentación del fabricante: NUNCA se redistribuye desde este repositorio.
+# El manifiesto y la metadata sí se versionan: registran que un documento existe,
+# de dónde sale y con qué huella, sin incluir el documento.
+corpus/vehicles/*/raw/**
+corpus/vehicles/*/processed/**
+corpus/vehicles/*/chunks/**
+!corpus/vehicles/*/metadata/**
+!corpus/vehicles/*/vehicle.yaml
+!corpus/vehicles/*/manifest.yaml
+results/rag_ingestion/**
+
 # Datos y artefactos pesados: se regeneran, no se versionan.
 # Se conservan los .gitkeep y los manifiestos que documentan su procedencia.
 data/raw/**

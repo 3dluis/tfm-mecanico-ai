@@ -1,0 +1,102 @@
+# Manifiesto documental del Toyota Corolla 2020.
+#
+# Este fichero es la lista blanca del descargador. Solo se descarga lo que
+# aparece aquí con download: true y access_type: public.
+
+vehicle_id: toyota-corolla-2020
+corpus_version: "1.0.0"
+
+sources:
+  - source_id: toyota-tis
+    publisher: Toyota
+    source_type: OEM_SERVICE_INFORMATION
+    authority_level: A
+    access_type: subscription
+    url: https://techinfo.toyota.com/
+    description: >-
+      Toyota Technical Information System. Contiene manuales de reparación,
+      boletines de servicio técnico, diagramas eléctricos y formación técnica.
+      Acceso por suscripción: la documentación se obtiene por ese canal y se
+      copia a mano. No se automatiza su descarga ni se evade su autenticación.
+
+  - source_id: toyota-owners
+    publisher: Toyota
+    source_type: OEM_OWNER_INFORMATION
+    authority_level: A
+    access_type: public
+    url: https://www.toyota.com/owners/warranty-owners-manuals/
+    description: >-
+      Portal público de manuales del propietario y garantía. Aporta operación
+      del vehículo, testigos de aviso, descripciones básicas de sistemas y
+      mantenimiento. No sustituye al manual de reparación cuando la explicación
+      requiere información diagnóstica de taller.
+
+documents:
+  # --- Público y descargable -------------------------------------------------
+  - document_id: toyota-corolla-2020-warranty-maintenance
+    vehicle_id: toyota-corolla-2020
+    document_type: WARRANTY_MAINTENANCE_GUIDE
+    title: 2020 Corolla Warranty and Maintenance Guide
+    publisher: Toyota
+    manufacturer: Toyota
+    model: Corolla
+    model_year: 2020
+    market: North America
+    language: en
+    source_url: https://assets.sia.toyota.com/publications/en/omms-s/T-MMS-20Corolla/pdf/T-MMS-20Corolla.pdf
+    source_portal: https://www.toyota.com/owners/warranty-owners-manuals/
+    access_type: public
+    authority_level: A
+    download: true
+    redistributable: false
+    active: true
+    notes: >-
+      Accesible públicamente desde infraestructura oficial de Toyota. El binario
+      no se versiona en el repositorio; se descarga en cada instalación y su
+      SHA-256 queda registrado.
+
+  # --- Declarados y NO descargables -----------------------------------------
+  - document_id: toyota-corolla-2020-repair-manual
+    vehicle_id: toyota-corolla-2020
+    document_type: REPAIR_MANUAL
+    title: 2020 Corolla Repair Manual
+    publisher: Toyota
+    manufacturer: Toyota
+    model: Corolla
+    model_year: 2020
+    market: North America
+    language: en
+    source_url: https://techinfo.toyota.com/
+    source_portal: Toyota TIS
+    access_type: subscription
+    authority_level: A
+    download: false
+    redistributable: false
+    active: true
+    notes: >-
+      Evidencia documental principal para procedimientos diagnósticos de taller.
+      Requiere suscripción legítima a Toyota TIS. Mientras no esté presente, el
+      corpus lo declara como MISSING_LICENSED_DOCUMENT y NO lo sustituye por
+      ninguna fuente de menor autoridad.
+
+  - document_id: toyota-corolla-2020-owners-manual
+    vehicle_id: toyota-corolla-2020
+    document_type: OWNERS_MANUAL
+    title: 2020 Corolla Owner's Manual
+    publisher: Toyota
+    manufacturer: Toyota
+    model: Corolla
+    model_year: 2020
+    market: North America
+    language: en
+    source_url: https://www.toyota.com/owners/warranty-owners-manuals/digital/
+    source_portal: https://www.toyota.com/owners/warranty-owners-manuals/
+    access_type: public
+    authority_level: A
+    download: false
+    redistributable: false
+    active: true
+    notes: >-
+      Manual digital tras portal interactivo; no hay un PDF con URL directa
+      estable. Se declara para que conste y se incorporará cuando se obtenga
+      legítimamente. download: false porque no hay recurso descargable directo.
