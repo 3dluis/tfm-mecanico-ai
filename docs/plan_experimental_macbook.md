@@ -1,12 +1,58 @@
 # Plan experimental — MacBook Apple Silicon
 
-Fecha: 1 de septiembre de 2026 · Autor: Luis Daniel Díaz · Entorno: MacBook Pro M4 Pro
+Redactado: 1 de septiembre de 2026, al cerrar E1
+**Revisado: 1 de septiembre de 2026, tras E15**
 
-Este documento fija el alcance del laboratorio, clasifica cada componente según
-si hay que escribirlo, se puede reutilizar o queda fuera, y ordena el trabajo en
-veinte fases con criterios de aceptación comprobables.
+> **Este plan ha cambiado durante la ejecución.** Los cambios se listan abajo en
+> lugar de reescribir el original: un plan que se edita para parecer que siempre
+> supo lo que iba a pasar deja de servir como registro.
+
+## Qué cambió respecto al plan original
+
+| Decisión original | Qué ocurrió | Por qué |
+|---|---|---|
+| **E10: reutilizar el corpus genérico** del proyecto de ingeniería, clasificado REUSE | **Descartado.** Se construyó un corpus condicionado por vehículo, con perfil, manifiesto, validador de aplicabilidad y descargador controlado | El autor pidió documentación específica del vehículo. Un corpus genérico no permite comprobar que la evidencia aplica al coche analizado, que es parte de la PI |
+| Vehículo sin decidir | **Mazda 3 BK 2007, motor Z6 1.6 L** | Único candidato de los tres evaluados con documentación diagnóstica disponible y verificada. El intento con Toyota falló con 403 |
+| Corpus en un idioma | **Multilingüe EN + ES** | El trabajo se escribe en español y el manual está en inglés. Medido: el modelo monolingüe encuentra 1 de 5 documentos con consultas en español |
+| Datos sintéticos con parámetros propios | **Calibrados contra el manual del vehículo** | Los cuatro parámetros comprobables estaban fuera de especificación |
+| E9 (XAI) antes que E10-E12 | **Se hizo después**, entre E12 y E15 | El corpus documental se priorizó a petición del autor. E9 se recuperó al ser prerrequisito de la evidencia observacional |
+| Un solo conjunto de datos | **Dos**: `synthetic_v2` oficial y `synthetic_v3` como análisis de sensibilidad | Comprobar si la GRU perdía por arquitectura o por volumen de datos |
+| Caso de abstención por ausencia de evidencia | **Construido retirando evidencia** | La ausencia era un error mío: busqué P0171 y Mazda usa P2187 |
+
+## Estado a día de hoy
+
+| Fase | Estado | Resultado |
+|---|---|---|
+| E1 entorno | ✅ | MPS, PostgreSQL 14.15, pgvector 0.8.0 |
+| E2 datos sintéticos | ✅ | 43 200 muestras, calibradas contra el manual |
+| E3 datos reales | 🔴 **bloqueada** | Sin fuente decidida. **Bloquea la PI literal** |
+| E4 análisis exploratorio | ✅ | La deriva del caudalímetro no se ve en el caudalímetro |
+| E5 preprocesamiento | ✅ | Ventana 120 s, reparto sin fuga, suelo de ruido medido |
+| E6 baseline | ✅ | F1 macro 0,879 |
+| E7 modelo temporal | ✅ | GRU 0,823: no supera al baseline con estos datos |
+| E8 evaluación del modelo | ⬜ | Requiere abrir el test (E19) |
+| E9 atribución | ✅ | `maf` no contribuye a detectar su propio fallo |
+| E10 corpus por vehículo | ✅ | Mazda 3 BK, manual verificado en contenido |
+| E11 pgvector | ✅ | 6 158 fragmentos, 320 DTC distintos |
+| E12 evaluación de recuperación | ✅ | Semántica pura Hit@10 = 0,00; guiada = 1,00 |
+| E13 integración del LLM | 🔴 **bloqueada** | Sin proveedor configurado |
+| E14 trazabilidad de afirmaciones | ✅ | Integrada en E15 |
+| E15 suficiencia | ✅ | EXPLAIN → ABSTAIN al retirar la evidencia |
+| E16 abstención | ✅ | Integrada en E15 |
+| E17 condiciones de corpus | 🟡 parcial | FULL y ABSENT hechas; faltan PARTIAL y DISTRACTOR completas |
+| E18 ablaciones | ⬜ | |
+| E19 evaluación final | 🔴 **bloqueada** | Depende de E3 y E13 |
+| E20 demostración | 🔴 **bloqueada** | Depende de E19 |
+
+**Guía de reproducción:** [`EXPERIMENTO_PASO_A_PASO.md`](EXPERIMENTO_PASO_A_PASO.md)
+**Respuesta a la PI:** [`matriz_validacion_pi.md`](matriz_validacion_pi.md)
 
 ---
+
+# Plan original
+
+> Lo que sigue es el plan tal como se redactó al cerrar E1. Se conserva sin
+> editar: los cambios están arriba.
 
 ## 1. Pregunta de investigación
 
@@ -106,13 +152,13 @@ modifica. Antes de copiar cualquier fichero se registra en
 
 | Componente | Clase | Justificación |
 |---|---|---|
-| Corpus documental con procedencia | REUSE | Existe un corpus con fuentes propias y externas y un fichero de procedencia. Es material sustancial y ya trazado |
+| ~~Corpus documental con procedencia~~ | ~~REUSE~~ | **OBSOLETO.** Sustituido por el corpus por vehículo del manual de Mazda. Ver la tabla de cambios |
 | Troceado conservando fuente, sección y página | ADAPT | Existe troceado; hay que garantizar que la procedencia sobrevive intacta, que es lo que la PI exige |
-| Recuperación léxica | REUSE | Existe un recuperador léxico determinista, útil como baseline y para CI sin red |
+| Recuperación léxica | ~~REUSE~~ → NEW | Se implementó sobre la búsqueda de texto completo de PostgreSQL, por idioma |
 | Recuperación densa con pgvector | NEW | El recuperador existente es léxico. La recuperación densa sobre pgvector se escribe aquí |
 | Esquema de documentos, fragmentos, embeddings y ejecuciones | NEW | Se diseña para el experimento: cada recuperación queda registrada con sus puntuaciones |
 | Migraciones | NEW | Alembic, ya inicializado en E1 |
-| Variantes controladas del corpus | REUSE | Existe el mecanismo de excluir documentos explícitamente para construir corpus con evidencia completa, parcial o ausente. Es justamente el instrumento del experimento central |
+| Variantes controladas del corpus | ~~REUSE~~ → NEW | Se implementó con exclusión por código de diagnóstico. Excluir por fichero resultó insuficiente: dejaba evidencia fuera del filtro |
 | Conjunto de referencia para evaluar recuperación | NEW | Hay que anotarlo |
 
 ### 4.4 Agente, evidencia y abstención
