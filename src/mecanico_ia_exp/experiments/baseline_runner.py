@@ -83,8 +83,8 @@ def run_baseline(dataset_id: str = DATASET) -> int:
     )
 
     tablas = paths.ensure(paths.TABLES)
-    informe.per_class.to_csv(tablas / "E6_baseline_por_clase.csv", index=False)
-    informe.confusion.to_csv(tablas / "E6_baseline_confusion.csv")
+    informe.per_class.to_csv(tablas / f"E6_baseline_por_clase_{dataset_id}.csv", index=False)
+    informe.confusion.to_csv(tablas / f"E6_baseline_confusion_{dataset_id}.csv")
 
     importancias = pd.DataFrame(
         {
@@ -92,10 +92,10 @@ def run_baseline(dataset_id: str = DATASET) -> int:
             "importance": np.asarray(modelo.feature_importances_, dtype=np.float64),
         }
     ).sort_values("importance", ascending=False)
-    importancias.to_csv(tablas / "E6_baseline_importancias.csv", index=False)
+    importancias.to_csv(tablas / f"E6_baseline_importancias_{dataset_id}.csv", index=False)
 
     experimentos = paths.ensure(paths.EXPERIMENTS)
-    (experimentos / "E6_baseline.json").write_text(
+    (experimentos / f"E6_baseline_{dataset_id}.json").write_text(
         json.dumps(
             {
                 "experiment_id": "E6_baseline",
@@ -144,5 +144,5 @@ def run_baseline(dataset_id: str = DATASET) -> int:
     print(
         "tabla   E6_baseline_por_clase.csv, E6_baseline_confusion.csv, E6_baseline_importancias.csv"
     )
-    print("registro experiments/E6_baseline.json")
+    print(f"registro experiments/E6_baseline_{dataset_id}.json")
     return 0

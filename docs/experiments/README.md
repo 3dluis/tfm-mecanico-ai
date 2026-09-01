@@ -13,7 +13,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E4 análisis exploratorio | [E4_eda_temporal.md](E4_eda_temporal.md) | cerrada |
 | E5 preprocesamiento | [E5_preprocesamiento.md](E5_preprocesamiento.md) | cerrada |
 | E6 baseline | [E6_baseline.md](E6_baseline.md) | cerrada |
-| E7 modelo temporal | — | pendiente |
+| E7 modelo temporal | [E7_modelo_temporal.md](E7_modelo_temporal.md) | cerrada |
 | E8 evaluación del modelo | — | pendiente |
 | E9 atribución | — | pendiente |
 | E10 corpus | — | pendiente |

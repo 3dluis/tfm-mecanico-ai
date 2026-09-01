@@ -2,6 +2,8 @@
 
 Un gate no se reevalúa de memoria: se vuelve a comprobar. Cada fila cita su evidencia.
 
+**Reevaluado el 1 de septiembre de 2026 a las 15:00**, tras el cierre de E4, E5 y E6.
+
 | Gate | Fecha | Estado | Evidencia | Observaciones |
 |---|---|---|---|---|
 | **GATE-01** Pregunta de investigación | 2026-09-01 | `PASS_WITH_OBSERVATIONS` | `docs/matriz_validacion_pi.md` | Clara, evaluable, con desenlaces de refutación escritos. Observación: PI.1 habla de datos reales y E3 está bloqueada (L-01, I-07) |
@@ -9,8 +11,8 @@ Un gate no se reevalúa de memoria: se vuelve a comprobar. Cada fila cita su evi
 | **GATE-03** Objetivos | 2026-09-01 | **`FAIL`** | `traceability-matrix.md` I-01, I-02; `objective-coverage.md` | OE-M3 y OE-M5 describen el marco legacy. Además el objetivo general lleva dos verbos, contra la regla UAX |
 | **GATE-04** Metodología | 2026-09-01 | `PASS_WITH_OBSERVATIONS` | `docs/methodology/`, `docs/plan_experimental_macbook.md` | Diseño coherente, con una variable manipulada y todo lo demás fijo. Pendiente: I-05 (M6 sin subpregunta) |
 | **GATE-05** Evidencia | 2026-09-01 | `BLOCKED` | `research/references/evidence-matrix.md` | No hay claims redactados que evaluar. Se evalúa al redactar |
-| **GATE-06** Integridad experimental | 2026-09-01 | `PASS_WITH_OBSERVATIONS` | `reproducibility.md`; E1, E2 | E1 y E2 reproducibles y verificadas. Observación: el pre-registro canónico no está congelado (L-07) |
-| **GATE-07** Resultados | 2026-09-01 | `BLOCKED` | `results/RESULTADOS_TFM.md` | «Estado: sin resultados». Nada que verificar |
+| **GATE-06** Integridad experimental | 2026-09-01 15:00 | `PASS_WITH_OBSERVATIONS` | `reproducibility.md`; E1-E6 | Cinco fases reproducibles. **El cierre del test es técnico, no de palabra**: `load_partition("test")` lanza excepción. E5 mide el suelo de ruido antes de interpretar tamaños de efecto, y E6 encontró un error propio por test. Observación: el pre-registro canónico no está congelado (L-07) |
+| **GATE-07** Resultados | 2026-09-01 15:00 | `PASS_WITH_OBSERVATIONS` | E6, `experiments/E6_baseline.json` | Hay cifras verificables y reproducibles (baseline F1 macro 0,876). **Todas son de validación**: el test está cerrado hasta E19 (L-17). Ninguna es todavía un resultado del TFM |
 | **GATE-08** Discusión | 2026-09-01 | `BLOCKED` | — | Sin resultados no hay discusión |
 | **GATE-09** Conclusiones | 2026-09-01 | `BLOCKED` | — | Ídem |
 | **GATE-10** Referencias | 2026-09-01 | `PASS_WITH_OBSERVATIONS` | `research/references/` | 144 entradas consolidadas, todas localizadas en el texto, 0 huérfanas. Observaciones: 31 títulos elididos, 33 sin identificador persistente, discrepancia 144 vs 153 declaradas, PRISMA formal pendiente |

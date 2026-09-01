@@ -10,7 +10,7 @@ qué resultado afecta · qué consecuencia tiene · cómo podría comprobarse.
 **Severidad:** `crítica` (invalida una conclusión) · `alta` (acota el alcance de una
 afirmación) · `media` (obliga a matizar) · `baja` (se declara y ya).
 
-Fecha: 1 de septiembre de 2026.
+Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6).
 
 ---
 
@@ -173,16 +173,66 @@ Fecha: 1 de septiembre de 2026.
 | **Cómo comprobarlo** | Comunicarlo al director en la próxima reunión y dejar constancia |
 | **Severidad** | **alta** — administrativa, no científica |
 
+## L-14 — La confianza del baseline está mal calibrada
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | El criterio de suficiencia de E15, que toma la confianza del modelo como una de sus cuatro señales |
+| **Por qué** | Error de calibración esperado **0,140**, con el modelo **infra**confiado: confianza media 0,738 frente a 0,878 de acierto. Es lo habitual en un conjunto de árboles, donde la probabilidad es una proporción de votos |
+| **Evidencia** | E6, hallazgo 3 |
+| **Afecta a** | E15, M5, y por tanto PI.3 |
+| **Consecuencia** | Un umbral sobre la confianza **se abstendría más de lo debido**. El sistema parecería prudente cuando en realidad está mal medido, y la tasa de falsa abstención mediría el defecto del instrumento, no la política |
+| **Cómo comprobarlo** | Calibrar las probabilidades **sobre validación** antes de fijar el umbral, y volver a medir el ECE |
+| **Severidad** | **alta** |
+
+## L-15 — Dos de las seis condiciones no son plenamente detectables, y por motivos distintos
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | La exhaustividad alcanzable en F03 y F05, y con ella el techo de M1 |
+| **Por qué** | **F03 (termostato bloqueado)**: límite **físico**. El fallo impone un techo de 71 °C; mientras el motor no lo habría superado por sí mismo, la señal averiada es **idéntica** a la sana. Detectadas 70,7 °C de media, no detectadas 54,3 °C; urbano 7/7, calentamiento 2/7. **F05 (fallo de encendido)**: efecto 0,734 frente a un suelo de ruido de 0,512, apenas 1,43 veces |
+| **Evidencia** | E6, hallazgos 1 y 2; E5, hallazgo 1 |
+| **Afecta a** | M1 (exhaustividad 0,643 y 0,500), y el techo de E7 |
+| **Consecuencia** | **F03 no es una debilidad del modelo: es un límite de la evidencia.** Ningún clasificador puede distinguir dos señales idénticas. F05 sí es difícil por relación señal-ruido, y estaba anticipado por escrito antes de medirlo |
+| **Cómo comprobarlo** | E7 puede ganar margen en F03 y F05 —son las dos de firma temporal—; en las otras cuatro no queda margen |
+| **Severidad** | **media** |
+| **Nota** | **No se sube la severidad de ningún fallo para mejorar el número.** Un experimento sobre suficiencia de evidencia necesita casos difíciles |
+
+## L-16 — El descriptor informado por la física no está validado con datos reales
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | La transferibilidad de `maf_over_rpm_load`, tercer descriptor más influyente del baseline |
+| **Por qué** | Se construyó para responder al hallazgo de E4 sobre la dependencia conjunta régimen × carga, y está marcado `[VERIFY_ON_REAL_DATA]` |
+| **Evidencia** | E6, descriptores más influyentes |
+| **Afecta a** | M1, y la interpretación de E9 |
+| **Consecuencia** | Un descriptor derivado del modelo generativo puede funcionar bien precisamente porque el generador lo produjo así. Con datos reales podría no aportar nada |
+| **Cómo comprobarlo** | Repetir E6 sobre el conjunto real de E3 |
+| **Severidad** | **media** |
+
+## L-17 — Todas las cifras disponibles son de validación
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | Lo que puede afirmarse hoy sobre el rendimiento del sistema |
+| **Por qué** | El conjunto de test está **cerrado hasta E19**, por diseño y con cierre técnico: `load_partition("test")` lanza excepción salvo `allow_test=True` más una razón escrita que se imprime |
+| **Evidencia** | E6, «El test, bajo llave» |
+| **Afecta a** | Toda cifra publicada antes de E19 |
+| **Consecuencia** | **Ninguna cifra actual es un resultado del TFM**: son la referencia contra la que se medirá. Reportarlas como resultado sería describir datos ya vistos |
+| **Cómo comprobarlo** | E19 |
+| **Severidad** | **baja** — es una restricción deliberada, no un defecto. Se registra para que nadie confunda validación con resultado |
+
+
 ---
 
 ## Resumen
 
 | Severidad | Entradas |
 |---|---|
-| crítica | 1 (L-01) |
-| alta | 7 (L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13) |
-| media | 3 (L-05, L-09, L-12) |
-| baja | 1 (L-04) |
+| crítica | 1 — L-01 |
+| alta | 9 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14** |
+| media | 5 — L-05, L-09, L-12, **L-15**, **L-16** |
+| baja | 2 — L-04, **L-17** |
 
 **Ninguna de estas limitaciones es ceremonial.** Todas proceden de un informe de fase, de un
 documento de método o de un documento oficial. Ninguna se ha añadido porque «suele aparecer».

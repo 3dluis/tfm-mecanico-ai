@@ -1,0 +1,91 @@
+{
+  "experiment_id": "E7_temporal",
+  "dataset_id": "synthetic_v2",
+  "model": "GRU bidireccional",
+  "device": "mps",
+  "n_parameters": 19014,
+  "training_seconds": 44.47,
+  "config": {
+    "hidden_size": 48,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "bidirectional": true,
+    "learning_rate": 0.003,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "max_epochs": 300,
+    "patience": 40,
+    "seed": 20260901
+  },
+  "best_epoch": 19,
+  "epochs_run": 60,
+  "stopped_early": true,
+  "baseline_reference": {
+    "macro_f1": 0.8758,
+    "accuracy": 0.8776
+  },
+  "metrics": {
+    "partition": "validation",
+    "n": 98,
+    "accuracy": 0.8061,
+    "macro_f1": 0.8224,
+    "weighted_f1": 0.8052,
+    "balanced_accuracy": 0.8214,
+    "calibration": {
+      "ece": 0.1595,
+      "mean_confidence": 0.7779,
+      "accuracy": 0.8061,
+      "overconfidence": -0.0282
+    },
+    "per_class": [
+      {
+        "label": "F00_normal",
+        "precision": 0.6897,
+        "recall": 0.7143,
+        "f1": 0.7018,
+        "support": 28,
+        "pr_auc": 0.582
+      },
+      {
+        "label": "F01_vacuum_leak",
+        "precision": 0.9286,
+        "recall": 0.9286,
+        "f1": 0.9286,
+        "support": 14,
+        "pr_auc": 0.9482
+      },
+      {
+        "label": "F02_maf_drift",
+        "precision": 0.9286,
+        "recall": 0.9286,
+        "f1": 0.9286,
+        "support": 14,
+        "pr_auc": 0.9634
+      },
+      {
+        "label": "F03_thermostat_stuck",
+        "precision": 0.8571,
+        "recall": 0.8571,
+        "f1": 0.8571,
+        "support": 14,
+        "pr_auc": 0.9007
+      },
+      {
+        "label": "F04_o2_lag",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 14,
+        "pr_auc": 1.0
+      },
+      {
+        "label": "F05_misfire",
+        "precision": 0.5385,
+        "recall": 0.5,
+        "f1": 0.5185,
+        "support": 14,
+        "pr_auc": 0.5136
+      }
+    ]
+  }
+}

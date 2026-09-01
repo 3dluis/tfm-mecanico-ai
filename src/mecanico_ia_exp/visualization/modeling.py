@@ -141,3 +141,56 @@ def fig_limite_de_evidencia(
         va="bottom",
     )
     return save(fig, destino)
+
+
+def fig_curvas_entrenamiento(
+    train_loss: list[float],
+    val_loss: list[float],
+    val_macro_f1: list[float],
+    best_epoch: int,
+    destino: Path,
+) -> Path:
+    """¿Convergió el entrenamiento, o se quedó memorizando?
+
+    Dos paneles y no dos escalas en un mismo eje: la pérdida y el F1 no comparten
+    unidades, y superponerlos con dos ejes verticales invita a leer cruces que no
+    significan nada.
+    """
+    apply_style()
+    fig, (arriba, abajo) = plt.subplots(2, 1, figsize=(7.0, 5.0), sharex=True)
+    epocas = range(len(train_loss))
+
+    arriba.plot(epocas, train_loss, color=CATEGORICAL[0], lw=1.4, label="entrenamiento")
+    arriba.plot(epocas, val_loss, color=CATEGORICAL[1], lw=1.4, label="validación")
+    arriba.set_ylabel("pérdida")
+    arriba.legend(loc="upper right", ncol=2)
+    arriba.set_title("Pérdida", color="#0b0b0b", pad=6)
+
+    abajo.plot(epocas, val_macro_f1, color=CATEGORICAL[2], lw=1.6)
+    abajo.set_ylabel("F1 macro en validación")
+    abajo.set_xlabel("época")
+    abajo.set_title("F1 macro en validación", color="#0b0b0b", pad=6)
+
+    for eje in (arriba, abajo):
+        eje.axvline(best_epoch, color=INK_MUTED, lw=0.9, ls=(0, (3, 3)))
+        eje.grid(visible=True, axis="both")
+    abajo.annotate(
+        f"mejor época: {best_epoch}",
+        xy=(best_epoch, val_macro_f1[best_epoch]),
+        xytext=(8, -12),
+        textcoords="offset points",
+        fontsize=7.5,
+        color=INK_SECONDARY,
+    )
+
+    fig.suptitle("Entrenamiento del modelo temporal", x=0.02, ha="left", fontsize=11, weight="bold")
+    fig.text(
+        0.02,
+        0.945,
+        "La parada temprana se decide con el F1 macro de validación, no con la "
+        "pérdida: el reparto es 2:1 y la pérdida premia la clase abundante.",
+        fontsize=7.5,
+        color=INK_SECONDARY,
+    )
+    fig.tight_layout(rect=(0, 0, 1, 0.93))
+    return save(fig, destino)

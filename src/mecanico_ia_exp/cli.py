@@ -33,8 +33,13 @@ def main(argv: list[str] | None = None) -> int:
     generar.add_argument("--duration-s", type=float, default=600.0)
 
     subparsers.add_parser("eda", help="análisis exploratorio: figuras y tablas")
-    subparsers.add_parser("preprocess", help="estudio de ventana, ventanado y reparto sin fuga")
-    subparsers.add_parser("train-baseline", help="entrenar y evaluar el baseline")
+    for nombre, ayuda in (
+        ("preprocess", "estudio de ventana, ventanado y reparto sin fuga"),
+        ("train-baseline", "entrenar y evaluar el baseline"),
+        ("train-temporal", "entrenar y evaluar el modelo temporal"),
+    ):
+        sub = subparsers.add_parser(nombre, help=ayuda)
+        sub.add_argument("--dataset-id", default="synthetic_v2")
 
     args = parser.parse_args(argv)
 
@@ -71,12 +76,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "preprocess":
         from mecanico_ia_exp.experiments.preprocess_runner import run_preprocess
 
-        return run_preprocess()
+        return run_preprocess(args.dataset_id)
 
     if args.command == "train-baseline":
         from mecanico_ia_exp.experiments.baseline_runner import run_baseline
 
-        return run_baseline()
+        return run_baseline(args.dataset_id)
+
+    if args.command == "train-temporal":
+        from mecanico_ia_exp.experiments.temporal_runner import run_temporal
+
+        return run_temporal(args.dataset_id)
 
     return 2
 
