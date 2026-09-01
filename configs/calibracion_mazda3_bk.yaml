@@ -130,13 +130,32 @@ dtc_respaldados:
     fuente: srvc/B3E010200102T02.pdf
     condicion_fallo: F05_misfire
 
-sin_respaldo_localizado:
-  P0171:
-    buscado_en: "2580 ficheros de srvc/"
-    resultado: NO_ENCONTRADO
-    implicacion: >-
-      La condición F01 (fuga de vacío) se apoyaba en un DTC de mezcla pobre que
-      NO aparece en este manual. Queda [EVIDENCE_REQUIRED] hasta localizar el
-      código equivalente que use Mazda para el BK, o hasta reformular la
-      condición sobre un DTC que sí esté documentado. No se le asigna un código
-      por parecido.
+# CORREGIDO en E15. La entrada anterior afirmaba que la fuga de vacío no tenía
+# respaldo documental porque P0171 no aparece en el corpus. Es falso: Mazda usa
+# la familia P2177/P2178/P2187/P2188 y no los códigos genéricos.
+dtc_respaldados_correccion_e15:
+  P2187:
+    titulo: "Fuel system too lean at idle"
+    fuente: srvc/B3E010202100W09.pdf
+    motores: [ZJ, Z6]
+    deteccion: >-
+      "PCM monitors short term fuel trim (SHRTFT) and long term fuel trim
+      (LONGFT) during closed loop fuel control at idle. If the LONGFT or the sum
+      total of these fuel terms exceed preprogrammed..."
+    condicion_fallo: F01_vacuum_leak
+    nota: >-
+      Es literalmente la firma que E2 modeló y E4 midió: ajustes positivos,
+      peores en ralentí. Se localizó en E15, cuando el propio sistema de
+      recuperación la devolvió sin que se le hubiera dicho qué código buscar.
+  P2177:
+    titulo: "Fuel system too lean off idle"
+    fuente: srvc/B3E010202100W07.pdf
+    motores: [ZJ, Z6]
+    condicion_fallo: F01_vacuum_leak
+
+leccion_metodologica: >-
+  Buscar un código genérico, no encontrarlo y concluir que no hay evidencia fue
+  un error de método, no de herramienta. Una afirmación de ausencia exige más
+  cuidado que una de presencia: hay que comprobar que se buscó en el vocabulario
+  del fabricante y no en el propio. El sistema, al que se le pidió evidencia
+  PARA un diagnóstico en lugar de un código concreto, la encontró.
