@@ -31,6 +31,11 @@ from mecanico_ia_exp.rag.vehicle import VehicleProfile
 
 ESQUEMA = "rag"
 
+#: Configuración de búsqueda de texto completo por idioma. Buscar texto español
+#: con la configuración inglesa lematiza mal --no reconoce «ralentí» ni
+#: «combustible» como raíces-- y la búsqueda léxica pierde justo lo que aporta.
+CONFIG_FTS: dict[str, str] = {"en": "english", "es": "spanish"}
+
 
 @dataclass(frozen=True)
 class RetrievedChunk:
@@ -50,6 +55,7 @@ class RetrievedChunk:
     vehicle_system: str | None
     engine_codes: tuple[str, ...]
     source_file: str | None
+    language: str = "en"
     document_title: str | None = None
     publisher: str | None = None
     source_url: str | None = None
@@ -92,6 +98,7 @@ class VectorStore(ABC):
         dtc_codes: tuple[str, ...] | None = None,
         exclude_documents: tuple[str, ...] = (),
         exclude_chunks: tuple[str, ...] = (),
+        embedding_model: str | None = None,
     ) -> list[RetrievedChunk]:
         """Busca fragmentos **del vehículo indicado**.
 
@@ -265,6 +272,7 @@ class PgVectorStore(VectorStore):
                 "engine_codes": list(c.engine_codes),
                 "source_file": c.source_file,
                 "n_tokens": c.n_tokens,
+                "language": c.language,
             }
             for c in fragmentos
         ]
@@ -275,11 +283,12 @@ class PgVectorStore(VectorStore):
                         chunk_id, version_id, document_id, vehicle_id, ordinal, text,
                         content_hash, chapter, section, subsection, page_start, page_end,
                         dtc_codes, vehicle_system, system_classification, engine_codes,
-                        source_file, n_tokens)
+                        source_file, n_tokens, language)
                     VALUES (:chunk_id, :version_id, :document_id, :vehicle_id, :ordinal,
                             :text, :content_hash, :chapter, :section, :subsection,
                             :page_start, :page_end, :dtc_codes, :vehicle_system,
-                            :system_classification, :engine_codes, :source_file, :n_tokens)
+                            :system_classification, :engine_codes, :source_file, :n_tokens,
+                            :language)
                     ON CONFLICT (chunk_id) DO NOTHING
                 """),
                 filas,
@@ -352,10 +361,23 @@ class PgVectorStore(VectorStore):
         dtc_codes: tuple[str, ...] | None = None,
         exclude_documents: tuple[str, ...] = (),
         exclude_chunks: tuple[str, ...] = (),
+        embedding_model: str | None = None,
     ) -> list[RetrievedChunk]:
         vector = "[" + ",".join(f"{v:.6f}" for v in np.asarray(query_vector).ravel()) + "]"
+        # El modelo de embeddings acota la búsqueda. Un índice puede contener
+        # vectores de varios modelos --conviven a propósito, para poder
+        # compararlos-- y mezclarlos en una misma consulta compararía puntos de
+        # espacios distintos: los resultados serían ruido con aspecto de orden.
         condiciones = ["e.vehicle_id = :vehicle_id"]
-        parametros: dict[str, Any] = {"vehicle_id": vehicle_id, "vector": vector, "top_k": top_k}
+        if embedding_model:
+            condiciones.append("e.embedding_model = :embedding_model")
+        parametros: dict[str, Any] = {
+            "vehicle_id": vehicle_id,
+            "vector": vector,
+            "top_k": top_k,
+        }
+        if embedding_model:
+            parametros["embedding_model"] = embedding_model
         if document_types:
             condiciones.append("d.document_type = ANY(:document_types)")
             parametros["document_types"] = list(document_types)
@@ -381,7 +403,7 @@ class PgVectorStore(VectorStore):
             SELECT c.chunk_id, c.document_id, c.vehicle_id, c.text,
                    1 - (e.vector <=> CAST(:vector AS vector)) AS score,
                    c.chapter, c.section, c.page_start, c.page_end, c.dtc_codes,
-                   c.vehicle_system, c.engine_codes, c.source_file,
+                   c.vehicle_system, c.engine_codes, c.source_file, c.language,
                    d.title, d.publisher, d.source_url, d.authority_level, d.document_type
             FROM {ESQUEMA}.embedding e
             JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id
@@ -409,6 +431,7 @@ class PgVectorStore(VectorStore):
                 vehicle_system=f["vehicle_system"],
                 engine_codes=tuple(f["engine_codes"] or ()),
                 source_file=f["source_file"],
+                language=f["language"],
                 document_title=f["title"],
                 publisher=f["publisher"],
                 source_url=f["source_url"],
@@ -484,6 +507,7 @@ class PgVectorStore(VectorStore):
         filters: dict[str, Any] | None = None,
         corpus_variant: str | None = None,
         experiment_id: str | None = None,
+        query_language: str = "en",
     ) -> str:
         """Registra una recuperación y devuelve su identificador."""
         import json
@@ -494,8 +518,9 @@ class PgVectorStore(VectorStore):
                 sa.text(f"""
                     INSERT INTO {ESQUEMA}.retrieval_run (
                         run_id, vehicle_id, query_text, executed_at, embedding_provider,
-                        embedding_model, top_k, filters, corpus_variant, experiment_id)
-                    VALUES (:r, :v, :q, :t, :p, :m, :k, :f, :cv, :e)
+                        embedding_model, top_k, filters, corpus_variant, experiment_id,
+                        query_language)
+                    VALUES (:r, :v, :q, :t, :p, :m, :k, :f, :cv, :e, :ql)
                 """),
                 {
                     "r": run_id,
@@ -508,6 +533,7 @@ class PgVectorStore(VectorStore):
                     "f": json.dumps(filters or {}, ensure_ascii=False),
                     "cv": corpus_variant,
                     "e": experiment_id,
+                    "ql": query_language,
                 },
             )
             if resultados:
@@ -542,6 +568,7 @@ class PgVectorStore(VectorStore):
         vehicle_id: str,
         top_k: int = 10,
         engine_codes: tuple[str, ...] | None = None,
+        language: str = "en",
     ) -> list[RetrievedChunk]:
         """Búsqueda de texto completo de PostgreSQL, con el mismo filtro de vehículo.
 
@@ -549,11 +576,21 @@ class PgVectorStore(VectorStore):
         referencias de pieza y terminología exacta. Un embedding coloca «P0133» y
         «P0134» prácticamente en el mismo sitio; la coincidencia exacta no.
         """
+        configuracion = CONFIG_FTS.get(language, "simple")
         condiciones = [
             "c.vehicle_id = :vehicle_id",
-            "to_tsvector('english', c.text) @@ plainto_tsquery('english', :q)",
+            f"to_tsvector('{configuracion}', c.text) @@ plainto_tsquery('{configuracion}', :q)",
+            # Solo se buscan fragmentos del idioma de la consulta: la búsqueda
+            # léxica no cruza idiomas, y fingir que sí devolvería coincidencias
+            # por accidente ortográfico.
+            "c.language = :language",
         ]
-        parametros: dict[str, Any] = {"vehicle_id": vehicle_id, "q": query_text, "top_k": top_k}
+        parametros: dict[str, Any] = {
+            "vehicle_id": vehicle_id,
+            "q": query_text,
+            "top_k": top_k,
+            "language": language,
+        }
         if engine_codes:
             condiciones.append(
                 "(cardinality(c.engine_codes) = 0 OR c.engine_codes && :engine_codes)"
@@ -562,10 +599,10 @@ class PgVectorStore(VectorStore):
 
         consulta = sa.text(f"""
             SELECT c.chunk_id, c.document_id, c.vehicle_id, c.text,
-                   ts_rank(to_tsvector('english', c.text),
-                           plainto_tsquery('english', :q)) AS score,
+                   ts_rank(to_tsvector('{configuracion}', c.text),
+                           plainto_tsquery('{configuracion}', :q)) AS score,
                    c.chapter, c.section, c.page_start, c.page_end, c.dtc_codes,
-                   c.vehicle_system, c.engine_codes, c.source_file,
+                   c.vehicle_system, c.engine_codes, c.source_file, c.language,
                    d.title, d.publisher, d.source_url, d.authority_level, d.document_type
             FROM {ESQUEMA}.document_chunk c
             JOIN {ESQUEMA}.document d ON d.document_id = c.document_id
@@ -592,6 +629,7 @@ class PgVectorStore(VectorStore):
                 vehicle_system=f["vehicle_system"],
                 engine_codes=tuple(f["engine_codes"] or ()),
                 source_file=f["source_file"],
+                language=f["language"],
                 document_title=f["title"],
                 publisher=f["publisher"],
                 source_url=f["source_url"],

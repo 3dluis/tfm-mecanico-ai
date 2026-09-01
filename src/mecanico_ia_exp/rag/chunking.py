@@ -173,6 +173,9 @@ class Chunk:
     text: str
     content_hash: str
 
+    language: str = "en"
+    """Idioma del fragmento. Lo hereda del documento; no se adivina."""
+
     chapter: str | None = None
     section: str | None = None
     subsection: str | None = None
@@ -303,6 +306,7 @@ def chunk_document(
     version_id: str,
     vehicle_id: str,
     chapter: str | None = None,
+    language: str = "en",
     config: ChunkingConfig | None = None,
     relative_to: Path | None = None,
 ) -> list[Chunk]:
@@ -332,6 +336,7 @@ def chunk_document(
                     ordinal=ordinal,
                     text=trozo,
                     content_hash=huella,
+                    language=language,
                     chapter=chapter,
                     section=seccion or None,
                     subsection=None,

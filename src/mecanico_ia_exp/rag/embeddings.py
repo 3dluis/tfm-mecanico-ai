@@ -110,6 +110,14 @@ class HashingEmbeddingProvider(EmbeddingProvider):
 class SentenceTransformerProvider(EmbeddingProvider):
     """Embeddings locales con sentence-transformers.
 
+    El modelo por defecto es **multilingüe**. La razón está medida: con el modelo
+    monolingüe inglés, una consulta en español encuentra el documento relevante
+    en 1 de 5 casos dentro de los 500 primeros resultados, con posición mediana
+    376. Con el multilingüe, 4 de 5 y mediana 54 --el mismo nivel que en inglés--.
+
+    El corpus del vehículo está en inglés y el trabajo se escribe en español, así
+    que la recuperación translingüe es el caso normal, no la excepción.
+
     Sin clave de API y sin red tras la primera descarga del modelo. Usa MPS
     cuando está disponible; el dispositivo se registra porque un resultado en CPU
     y otro en MPS no son necesariamente idénticos bit a bit.
@@ -120,7 +128,7 @@ class SentenceTransformerProvider(EmbeddingProvider):
 
     def __init__(
         self,
-        model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
+        model_name: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
         device: str | None = None,
         batch_size: int = 64,
     ) -> None:
@@ -175,6 +183,14 @@ class SentenceTransformerProvider(EmbeddingProvider):
         return np.asarray(vectores, dtype=np.float32)
 
 
+#: Modelos disponibles. Ambos de 384 dimensiones a propósito: se pueden comparar
+#: sobre el mismo esquema, sin migrar y sin reindexar por partida doble.
+MODELOS: dict[str, str] = {
+    "en": "sentence-transformers/all-MiniLM-L6-v2",
+    "multilingual": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+}
+
+
 def get_provider(nombre: str = "hashing", **kwargs: object) -> EmbeddingProvider:
     """Selecciona un proveedor por nombre.
 
@@ -185,5 +201,13 @@ def get_provider(nombre: str = "hashing", **kwargs: object) -> EmbeddingProvider
         return HashingEmbeddingProvider(**kwargs)  # type: ignore[arg-type]
     if nombre in ("sentence-transformers", "st"):
         return SentenceTransformerProvider(**kwargs)  # type: ignore[arg-type]
+    if nombre in ("multilingual", "ml"):
+        # Un modelo monolingüe coloca una consulta en español en una región del
+        # espacio que no corresponde a su traducción. Seguiría devolviendo
+        # resultados, y serían casualidad.
+        return SentenceTransformerProvider(
+            model_name=MODELOS["multilingual"],
+            **kwargs,  # type: ignore[arg-type]
+        )
     msg = f"Proveedor de embeddings desconocido: {nombre!r}"
     raise ValueError(msg)
