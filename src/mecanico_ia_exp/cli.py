@@ -32,6 +32,8 @@ def main(argv: list[str] | None = None) -> int:
     generar.add_argument("--sessions-per-fault", type=int, default=6)
     generar.add_argument("--duration-s", type=float, default=600.0)
 
+    subparsers.add_parser("eda", help="análisis exploratorio: figuras y tablas")
+
     args = parser.parse_args(argv)
 
     if args.command == "doctor":
@@ -58,6 +60,11 @@ def main(argv: list[str] | None = None) -> int:
         metadata.write(destino.with_suffix(".meta.json"))
         print(f"{len(datos)} muestras en {metadata.n_sessions} sesiones -> {destino.name}")
         return 0
+
+    if args.command == "eda":
+        from mecanico_ia_exp.experiments.eda_runner import run_eda
+
+        return run_eda()
 
     return 2
 
