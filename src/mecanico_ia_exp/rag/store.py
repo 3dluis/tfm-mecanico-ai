@@ -418,6 +418,61 @@ class PgVectorStore(VectorStore):
             for i, f in enumerate(filas)
         ]
 
+    def chunks_for_files(self, ficheros: tuple[str, ...], *, vehicle_id: str) -> tuple[str, ...]:
+        """Identificadores de los fragmentos que provienen de estos ficheros.
+
+        Sirve para construir la condición ABSENT del experimento: se retira del
+        índice la evidencia que sostenía una explicación, se repite el caso con
+        todo lo demás idéntico y se observa si el agente cambia de decisión.
+
+        La exclusión es **explícita y auditable**: queda registrada en la
+        recuperación como lista de fragmentos retirados, no como un efecto
+        lateral de haber filtrado por otra cosa.
+        """
+        if not ficheros:
+            return ()
+        with self._engine.connect() as cx:
+            filas = (
+                cx.execute(
+                    sa.text(
+                        f"SELECT chunk_id FROM {ESQUEMA}.document_chunk "
+                        "WHERE vehicle_id = :v AND source_file = ANY(:f)"
+                    ),
+                    {"v": vehicle_id, "f": list(ficheros)},
+                )
+                .scalars()
+                .all()
+            )
+        return tuple(str(f) for f in filas)
+
+    def chunks_for_dtc(self, codigos: tuple[str, ...], *, vehicle_id: str) -> tuple[str, ...]:
+        """Fragmentos que portan alguno de estos códigos de diagnóstico.
+
+        Es la forma correcta de construir la condición ABSENT. Retirar solo el
+        fichero del procedimiento principal deja fuera las tablas de códigos, la
+        lógica de detección y los procedimientos vecinos que mencionan el mismo
+        código: la evidencia seguiría ahí y la condición no sería ABSENT.
+
+        Se comprobó: excluyendo los cuatro ficheros del procedimiento de P2187,
+        el sistema seguía recuperando evidencia suficiente desde los
+        procedimientos de P2096, P2195 y P2196, que portan el mismo código.
+        """
+        if not codigos:
+            return ()
+        with self._engine.connect() as cx:
+            filas = (
+                cx.execute(
+                    sa.text(
+                        f"SELECT chunk_id FROM {ESQUEMA}.document_chunk "
+                        "WHERE vehicle_id = :v AND dtc_codes && :c"
+                    ),
+                    {"v": vehicle_id, "c": list(codigos)},
+                )
+                .scalars()
+                .all()
+            )
+        return tuple(str(f) for f in filas)
+
     def log_retrieval(
         self,
         *,
@@ -558,17 +613,31 @@ def reciprocal_rank_fusion(
 
     La constante ``k`` amortigua las primeras posiciones para que un único primer
     puesto no domine la fusión.
+
+    **La fusión decide el orden, no la puntuación.** Cada fragmento conserva su
+    mejor puntuación de origen. El peso de la fusión vive en una escala propia
+    --en torno a 1/60-- que no es comparable con una similitud coseno, y
+    sustituir una por otra rompe cualquier criterio posterior que compare
+    puntuaciones entre estrategias. Ocurrió: el verificador de suficiencia
+    rechazaba por «poco apoyo documental» un caso cuyas puntuaciones eran
+    0,016 simplemente por venir de una fusión.
     """
     puntos: dict[str, float] = {}
     fragmentos: dict[str, RetrievedChunk] = {}
+    mejor_original: dict[str, float] = {}
     for lista in listas:
         for posicion, fragmento in enumerate(lista, start=1):
             puntos[fragmento.chunk_id] = puntos.get(fragmento.chunk_id, 0.0) + 1.0 / (k + posicion)
             fragmentos.setdefault(fragmento.chunk_id, fragmento)
+            mejor_original[fragmento.chunk_id] = max(
+                mejor_original.get(fragmento.chunk_id, 0.0), fragmento.score
+            )
 
     ordenados = sorted(puntos.items(), key=lambda par: par[1], reverse=True)[:top_k]
     salida: list[RetrievedChunk] = []
-    for posicion, (chunk_id, punto) in enumerate(ordenados, start=1):
+    for posicion, (chunk_id, _peso) in enumerate(ordenados, start=1):
         base = fragmentos[chunk_id]
-        salida.append(RetrievedChunk(**{**base.__dict__, "rank": posicion, "score": punto}))
+        salida.append(
+            RetrievedChunk(**{**base.__dict__, "rank": posicion, "score": mejor_original[chunk_id]})
+        )
     return salida

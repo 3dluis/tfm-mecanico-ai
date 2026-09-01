@@ -71,10 +71,39 @@ cases:
     distractor_reason: "mismo DTC P0300, procedimiento del motor LF, no aplicable al Z6"
     expected_action: EXPLAIN
 
-  # El caso que hace honesto al conjunto: no hay documento relevante.
-  - case_id: C05_vacuum_leak_sin_respaldo
+  - case_id: C05_vacuum_leak
     fault_id: F01_vacuum_leak
-    dtc: null
+    dtc: P2187
+    query: >-
+      Fuel trims persistently positive and markedly larger at idle than at road
+      speed, with elevated intake manifold pressure at idle and unstable idle
+      speed.
+    relevant_files: [srvc/B3E010202100W09.pdf]
+    supporting_files: [srvc/B3E010202100W07.pdf, srvc/B3E010202000W10.pdf]
+    distractor_files: [srvc/B3E010202100W03.pdf]
+    distractor_reason: "mismo DTC P2187, procedimiento del motor LF, no aplicable al Z6"
+    expected_action: EXPLAIN
+    nota_correccion: >-
+      Este caso estuvo marcado como ABSTAIN por un error mío. Busqué P0171 --el
+      código genérico OBD-II de mezcla pobre-- y al no encontrarlo concluí que el
+      corpus no documentaba la condición. Mazda no usa los códigos genéricos:
+      usa la familia P2177/P2178/P2187/P2188. P2187 es "Fuel system too lean at
+      idle" y su condición de detección es literalmente la firma de esta
+      condición: la centralita vigila los ajustes de combustible a corto y largo
+      plazo en control cerrado, en ralentí. El sistema encontró esa evidencia; mi
+      búsqueda manual no. Queda anotado porque la lección importa más que el
+      error: no haber encontrado un código no es que no haya evidencia.
+
+  # El caso de abstención, ahora construido y no heredado de un descuido.
+  - case_id: C06_vacuum_leak_evidencia_retirada
+    fault_id: F01_vacuum_leak
+    dtc: P2187
+    corpus_variant: ABSENT
+    # Se retira TODO fragmento que porte estos códigos, no solo el fichero del
+    # procedimiento principal. Excluir por fichero dejaba fuera las tablas de
+    # códigos y los procedimientos vecinos que mencionan el mismo código, y la
+    # evidencia seguía disponible: la condición no era ABSENT de verdad.
+    exclude_dtc: [P2187, P2177, P2178, P2188]
     query: >-
       Fuel trims persistently positive and markedly larger at idle than at road
       speed, with elevated intake manifold pressure at idle and unstable idle
@@ -84,10 +113,7 @@ cases:
     distractor_files: []
     expected_action: ABSTAIN
     justificacion: >-
-      El modelo clasifica esta condición a la perfección --F1 1,000 en E6-- y el
-      corpus NO contiene el procedimiento que la sustentaría. Se buscó P0171
-      entre los 6158 fragmentos indexados y los 320 códigos distintos: no está.
-      La acción correcta es abstenerse, y cualquier documento que la recuperación
-      devuelva para esta consulta es, por construcción, insuficiente.
-      Es el caso que distingue «el modelo acierta» de «hay evidencia que lo
-      sostenga», que es la pregunta de investigación en una sola línea.
+      Mismos datos OBD-II, mismo modelo, misma atribución que C05. Lo único que
+      cambia es que se retira del índice la evidencia documental que sostenía la
+      explicación. Es el experimento central del TFM en un solo caso: si el
+      agente explica aquí igual que en C05, no estaba usando la evidencia.
