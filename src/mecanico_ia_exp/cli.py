@@ -34,6 +34,7 @@ def main(argv: list[str] | None = None) -> int:
 
     subparsers.add_parser("eda", help="análisis exploratorio: figuras y tablas")
     subparsers.add_parser("preprocess", help="estudio de ventana, ventanado y reparto sin fuga")
+    subparsers.add_parser("train-baseline", help="entrenar y evaluar el baseline")
 
     args = parser.parse_args(argv)
 
@@ -71,6 +72,11 @@ def main(argv: list[str] | None = None) -> int:
         from mecanico_ia_exp.experiments.preprocess_runner import run_preprocess
 
         return run_preprocess()
+
+    if args.command == "train-baseline":
+        from mecanico_ia_exp.experiments.baseline_runner import run_baseline
+
+        return run_baseline()
 
     return 2
 
