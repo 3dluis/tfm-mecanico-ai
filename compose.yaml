@@ -13,14 +13,14 @@
 # Ollama es opcional. No participa en los experimentos oficiales y sus
 # resultados no se mezclan con ellos.
 
-name: mecanico-ai-exp
+name: mecanico-ia-exp
 
 services:
   postgres:
     image: pgvector/pgvector:pg16
-    container_name: mecanico-ai-exp-postgres
+    container_name: mecanico-ia-exp-postgres
     environment:
-      POSTGRES_DB: mecanico_ai_exp
+      POSTGRES_DB: mecanico_ia_exp
       POSTGRES_USER: mecanico
       POSTGRES_PASSWORD: mecanico
     # 5433 en el anfitrión para no colisionar con un PostgreSQL local en 5432.
@@ -29,7 +29,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mecanico -d mecanico_ai_exp"]
+      test: ["CMD-SHELL", "pg_isready -U mecanico -d mecanico_ia_exp"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -37,7 +37,7 @@ services:
 
   ollama:
     image: ollama/ollama:latest
-    container_name: mecanico-ai-exp-ollama
+    container_name: mecanico-ia-exp-ollama
     profiles: ["ollama"]
     ports:
       - "11434:11434"

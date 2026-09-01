@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from mecanico_ai_exp.config.settings import DatabaseSettings, LLMSettings, get_settings
+from mecanico_ia_exp.config.settings import DatabaseSettings, LLMSettings, get_settings
 
 
 def test_url_sin_credenciales_delega_en_autenticacion_local() -> None:

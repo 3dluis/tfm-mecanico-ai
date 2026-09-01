@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from mecanico_ai_exp.config import paths
+from mecanico_ia_exp.config import paths
 
 
 def test_root_contiene_el_paquete() -> None:
-    assert (paths.ROOT / "src" / "mecanico_ai_exp" / "__init__.py").is_file()
+    assert (paths.ROOT / "src" / "mecanico_ia_exp" / "__init__.py").is_file()
 
 
 def test_root_contiene_pyproject() -> None:

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mecanico_ai_exp.config.environment import (
+from mecanico_ia_exp.config.environment import (
     audit,
     check_platform,
     check_python,

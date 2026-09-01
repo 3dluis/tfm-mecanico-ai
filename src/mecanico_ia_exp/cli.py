@@ -10,7 +10,7 @@ import argparse
 import json
 import sys
 
-from mecanico_ai_exp.config.environment import audit
+from mecanico_ia_exp.config.environment import audit
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -1095,7 +1095,7 @@ wheels = [
 ]
 
 [[package]]
-name = "mecanico-ai-exp"
+name = "mecanico-ia-exp"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

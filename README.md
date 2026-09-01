@@ -1,4 +1,4 @@
-# mecanico-ai-exp
+# mecanico-ia-exp
 
 Laboratorio experimental reproducible del Trabajo Fin de Máster en Inteligencia
 Artificial (UAX). Aquí se construye, se ejecuta y se documenta el experimento
@@ -78,7 +78,7 @@ Los resultados obtenidos con Ollama no se mezclan con los resultados oficiales.
 
 | Ruta | Contenido |
 |---|---|
-| `src/mecanico_ai_exp/` | Todo el código científico. Los notebooks importan de aquí |
+| `src/mecanico_ia_exp/` | Todo el código científico. Los notebooks importan de aquí |
 | `notebooks/` | Análisis, figuras y demostración. Sin lógica exclusiva |
 | `data/` | Datasets sintéticos y reales, con metadata de procedencia |
 | `corpus/` | Corpus documental para RAG y sus manifiestos |

@@ -59,7 +59,7 @@ diagnóstico confirmado y que el LLM sea una fuente técnica.
 
 La instalación de PostgreSQL ya existía y da servicio a otras bases del autor
 (`mgrid`, `portal_bcrd`, `visitordb`, `vmgrid`…). El laboratorio ha creado
-**únicamente** la base `mecanico_ai_exp` y ha habilitado en ella `vector` y
+**únicamente** la base `mecanico_ia_exp` y ha habilitado en ella `vector` y
 `pg_trgm`. Ninguna otra base ha sido consultada, alterada ni eliminada.
 
 Colab no interviene. Docker no es el entorno principal. Ollama no es el modelo
@@ -157,7 +157,7 @@ informe en `docs/experiments/`. No se avanza de fase sin aprobación explícita.
 - **Entradas:** ninguna.
 - **Salidas:** estructura del repositorio, `pyproject.toml` y `uv.lock`,
   configuración tipada por entorno, auditoría del entorno, base de datos
-  `mecanico_ai_exp` con `vector` 0.8.0, Alembic operativo, notebooks con su
+  `mecanico_ia_exp` con `vector` 0.8.0, Alembic operativo, notebooks con su
   estructura documental, este plan.
 - **Tests:** `test_paths`, `test_settings`, `test_environment` (16 casos).
 - **Aceptación:** `uv run mecanico-exp doctor` en verde en las cinco

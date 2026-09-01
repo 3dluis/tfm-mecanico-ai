@@ -12,7 +12,7 @@ cd "$(dirname "$0")/.."
 
 HOST="${DATABASE_HOST:-localhost}"
 PORT="${DATABASE_PORT:-5432}"
-NAME="${DATABASE_NAME:-mecanico_ai_exp}"
+NAME="${DATABASE_NAME:-mecanico_ia_exp}"
 USER_ARG=""
 [ -n "${DATABASE_USER:-}" ] && USER_ARG="-U ${DATABASE_USER}"
 

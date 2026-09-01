@@ -13,7 +13,7 @@ No hace falta instalar Python a mano: uv resuelve e instala 3.11.
 ## Instalación
 
 ```bash
-cd mecanico-ai-exp
+cd mecanico-ia-exp
 uv sync --all-extras
 ```
 
@@ -64,7 +64,7 @@ El laboratorio no asume CUDA en ningún punto y no incorpora dependencias que
 exijan NVIDIA. El dispositivo se resuelve así:
 
 ```python
-from mecanico_ai_exp.config.environment import resolve_device
+from mecanico_ia_exp.config.environment import resolve_device
 resolve_device()   # "mps" o "cpu"
 ```
 
@@ -87,10 +87,10 @@ Una fase no se considera cerrada con un gate en rojo.
 ## Análisis
 
 ```bash
-uv run python -m ipykernel install --user --name mecanico-ai-exp \
-  --display-name "Python 3 (mecanico-ai-exp)"
+uv run python -m ipykernel install --user --name mecanico-ia-exp \
+  --display-name "Python 3 (mecanico-ia-exp)"
 uv run jupyter lab
 ```
 
-Los notebooks importan de `src/mecanico_ai_exp/`. No contienen lógica científica
+Los notebooks importan de `src/mecanico_ia_exp/`. No contienen lógica científica
 que no exista también en el paquete.
