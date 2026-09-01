@@ -1,0 +1,64 @@
+vehicle_id: mazda-3-bk-2007
+corpus_version: "0.1.0"
+
+sources:
+  - source_id: mazda-techinfo
+    publisher: Mazda Motor Corporation
+    source_type: OEM_SERVICE_INFORMATION
+    authority_level: A
+    access_type: subscription
+    url: https://www.mazdatechinfo.com/
+    description: >-
+      Canal oficial de Mazda North American Operations para manuales de servicio
+      y boletines técnicos. Suscripciones por día, mes, semestre o año; cobertura
+      de manuales desde 1996 y de boletines desde 1990. Es la vía que produce una
+      cadena de procedencia verificable para el Mazda 3 BK.
+
+  - source_id: mazda-serviceinfo
+    publisher: Mazda Motor Corporation
+    source_type: OEM_SERVICE_INFORMATION
+    authority_level: A
+    access_type: subscription
+    url: https://www.mazdaserviceinfo.com/
+    description: >-
+      Acceso por suscripción para talleres independientes de EE. UU. y Canadá.
+
+documents:
+  - document_id: mazda3-bk-workshop-manual-local
+    vehicle_id: mazda-3-bk-2007
+    document_type: WORKSHOP_MANUAL
+    title: Mazda3 BK Workshop Manual (copia local, conversión de terceros)
+    publisher: Mazda Motor Corporation
+    acquisition_source: copia local del autor, origen web de terceros
+    acquisition_channel: SECONDARY_REPOSITORY
+    manufacturer: Mazda
+    model: Mazda3
+    generation: BK
+    model_year: 2007
+    model_year_start: 2003
+    model_year_end: 2009
+    engine_codes: [LF, Z6, ZJ]
+    market: null
+    language: en
+    source_url: https://www.mazdatechinfo.com/
+    source_portal: null
+    access_type: licensed
+    authority_level: A
+    download: false
+    redistributable: false
+    verified: false
+    active: true
+    verification_notes: >-
+      Contenido inspeccionado: texto auténtico de manual de taller Mazda
+      (foreword de Mazda Motor Corporation, identificadores de documento del
+      sistema ESI, 85 % de los ficheros de srvc/ con al menos un DTC, 207 códigos
+      distintos en una muestra de 250 de 2580). El CONTENIDO es genuino.
+      La PROCEDENCIA de la copia no lo es: metadata /Author "Roy" y /Producer
+      "Soda PDF", con rutas incrustadas de una conversión web de febrero de 2019.
+      No procede del canal oficial de Mazda. verified queda en false: falta
+      confirmar número de manual, revisión y rango exacto de motores contra el
+      catálogo oficial. redistributable false; los binarios no entran en Git.
+    notes: >-
+      3055 ficheros PDF, 238 MB, estructurados en introduction, engine, mission,
+      srvc y esi_common. Para una cadena de procedencia limpia conviene
+      re-adquirirlo por mazdatechinfo.com, cuyo pase corto es asequible.

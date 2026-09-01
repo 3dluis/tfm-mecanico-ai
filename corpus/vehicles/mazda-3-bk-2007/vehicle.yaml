@@ -1,0 +1,24 @@
+# Vehículo candidato del experimento.
+#
+# Los campos desconocidos permanecen en null y NUNCA se rellenan por inferencia.
+# El BK se ofreció con varias motorizaciones de gasolina (ZJ 1.4, Z6 1.6, LF 2.0,
+# L3 2.3) y en varios mercados: hasta conocer cuál es el vehículo real, el perfil
+# no puede producir EXACT_MATCH frente a un procedimiento específico de motor.
+
+vehicle_id: mazda-3-bk-2007
+manufacturer: Mazda
+model: Mazda3
+model_year: 2007
+generation: BK
+market: null
+engine_code: null
+engine_displacement: null
+fuel_type: gasoline
+transmission: null
+vin_prefix: null
+obd_protocol: null
+notes: >-
+  Candidato para RAG y OBD-II. El manual de taller local menciona motores LF, Z6
+  y ZJ. El engine_code queda en null hasta que se determine sobre el vehículo
+  real del que se tomen los datos OBD-II: la aplicabilidad de un procedimiento
+  depende del motor, no solo del modelo y el año.
