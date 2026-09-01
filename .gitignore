@@ -1,0 +1,38 @@
+# Entorno
+.venv/
+.env
+.env.local
+__pycache__/
+*.py[cod]
+.python-version.local
+
+# Herramientas
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+.idea/
+.DS_Store
+
+# Datos y artefactos pesados: se regeneran, no se versionan.
+# Se conservan los .gitkeep y los manifiestos que documentan su procedencia.
+data/raw/**
+data/interim/**
+data/processed/**
+corpus/raw/**
+corpus/processed/**
+models/**
+results/**
+figures/**
+tables/**
+experiments/runs/**
+
+# Se reincluyen los directorios para que Git descienda en ellos y encuentre
+# los .gitkeep; los ficheros de datos siguen excluidos.
+!**/
+!**/.gitkeep
+!corpus/manifests/**
+!data/**/*.md
+!results/RESULTADOS_TFM.md

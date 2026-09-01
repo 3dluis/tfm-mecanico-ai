@@ -1,0 +1,10 @@
+# Los notebooks se diferencian mal; se marcan para que Git no intente fusionarlos.
+*.ipynb -merge
+*.ipynb text eol=lf
+
+# Artefactos binarios
+*.parquet binary
+*.pt binary
+*.onnx binary
+*.png binary
+*.pdf binary

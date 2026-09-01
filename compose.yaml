@@ -1,0 +1,50 @@
+# Reproducibilidad y portabilidad, no entorno principal.
+#
+# El entorno oficial del TFM es macOS con PostgreSQL instalado localmente. Este
+# fichero existe para que un tercero pueda levantar la misma base vectorial en
+# cualquier máquina sin instalar nada más:
+#
+#   docker compose up -d postgres
+#
+# y, opcionalmente, un LLM local para ejecutar el pipeline sin proveedor remoto:
+#
+#   docker compose --profile ollama up -d
+#
+# Ollama es opcional. No participa en los experimentos oficiales y sus
+# resultados no se mezclan con ellos.
+
+name: mecanico-ai-exp
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: mecanico-ai-exp-postgres
+    environment:
+      POSTGRES_DB: mecanico_ai_exp
+      POSTGRES_USER: mecanico
+      POSTGRES_PASSWORD: mecanico
+    # 5433 en el anfitrión para no colisionar con un PostgreSQL local en 5432.
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mecanico -d mecanico_ai_exp"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: mecanico-ai-exp-ollama
+    profiles: ["ollama"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  ollama-data:
