@@ -29,12 +29,21 @@ vehículo. Es el distractor perfecto y estaba ya en el manual.
 
 ### C05 es el caso que hace honesto al conjunto
 
-El modelo clasifica la fuga de vacío a la perfección --F1 1,000 en E6-- y el
-corpus **no contiene** el procedimiento que la sustentaría. Se buscó P0171 entre
-los 6 158 fragmentos y los 320 códigos distintos: no está.
+~~El modelo clasifica la fuga de vacío a la perfección y el corpus no contiene el
+procedimiento que la sustentaría: se buscó P0171 y no está.~~
 
-Es la distinción entre «el modelo acierta» y «hay evidencia que lo sostenga»,
-que es la pregunta de investigación en una línea.
+> **Corrección posterior (E15).** Esta afirmación es **falsa**. Mazda no usa los
+> códigos genéricos de mezcla: usa la familia P2177/P2178/P2187/P2188. El corpus
+> contiene 30 fragmentos con **P2187 — «Fuel system too lean at idle»**, cuya
+> condición de detección vigila los ajustes de combustible en ralentí, que es
+> exactamente la firma de esta condición. La evidencia estaba desde el principio;
+> busqué el código equivocado. Ver `E15_suficiencia.md`.
+
+El caso se rehízo en E15. La distinción que se quería ilustrar --entre «el modelo
+acierta» y «hay evidencia que lo sostenga»-- sigue siendo válida y es la pregunta
+de investigación en una línea, pero ahora se construye **retirando** la evidencia
+del índice en lugar de darla por ausente. Es mejor diseño: la abstención se
+provoca, no se hereda de un descuido.
 
 ## Resultados
 

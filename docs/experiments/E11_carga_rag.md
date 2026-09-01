@@ -157,9 +157,14 @@ revisión contra el catálogo oficial de Mazda.
 **Los datos OBD-II siguen sin ser reales.** Están calibrados contra este mismo
 manual, lo que hace sus parámetros documentados, no medidos.
 
-**La condición F01 sigue sin respaldo.** P0171 no aparece en el corpus. Ahora se
-puede afirmar con más fuerza: se buscó en los 6 158 fragmentos indexados, entre
-320 códigos distintos, y no está.
+~~**La condición F01 sigue sin respaldo.** P0171 no aparece en el corpus.~~
+
+> **Corrección posterior (E15).** Esta afirmación es **falsa**. Mazda no usa los
+> códigos genéricos de mezcla: usa la familia P2177/P2178/P2187/P2188. El corpus
+> contiene 30 fragmentos con **P2187 — «Fuel system too lean at idle»**, cuya
+> condición de detección vigila los ajustes de combustible en ralentí, que es
+> exactamente la firma de esta condición. La evidencia estaba desde el principio;
+> busqué el código equivocado. Ver `E15_suficiencia.md`.
 
 ## Siguiente
 
