@@ -125,17 +125,18 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 | **Cómo comprobarlo** | Leerlos antes del depósito |
 | **Severidad** | **media** |
 
-## L-10 — El vacío no cubre la pertinencia de la evidencia
+## L-10 — La afirmación de novedad sobre PI.4 es más estrecha de lo que parecía · **resuelta parcialmente**
 
 | Campo | Contenido |
 |---|---|
-| **Qué limita** | La justificación de PI.4 |
-| **Por qué** | El vacío vigente enumera cuatro elementos y **no menciona la distinción presencia/pertinencia**, que es lo que mide la condición DISTRACTOR |
-| **Evidencia** | `research/traceability-matrix.md` I-03 |
-| **Afecta a** | Capítulo 3, y la defensa de PI.4 |
-| **Consecuencia** | **PI.4 es hoy una subpregunta sin vacío que la respalde** |
-| **Cómo comprobarlo** | Ampliar la revisión al rechazo de distractores en sistemas RAG y reformular el vacío con la búsqueda que lo sostenga |
-| **Severidad** | **alta** |
+| **Qué limita** | Lo que puede afirmarse como novedoso en PI.4 |
+| **Por qué** | La búsqueda del 1 de septiembre **refutó** la hipótesis de que la distinción presencia/pertinencia estuviera poco cubierta. Está estudiada, tiene banco público (RGB) y vocabulario establecido: «rechazo negativo» y «robustez contrafactual» (Chen et al., 2024) |
+| **Evidencia** | `references/project/gaps.md` GAP-02; `search-log.md` iteración 5 |
+| **Afecta a** | Capítulo 3 y la defensa de PI.4 |
+| **Consecuencia** | **PI.4 gana motivación y pierde novedad amplia.** No es «nadie lo mide»: es «no fue identificada esa medición a nivel de afirmación, con doble rama de evidencia, en diagnóstico vehicular». El proyecto debe **adoptar el vocabulario existente** en lugar de inventar el suyo |
+| **Cómo comprobarlo** | Leer a texto completo los cuatro trabajos identificados y confirmar que ninguno cubre las tres condiciones |
+| **Severidad** | **media** (era alta) |
+| **Estado** | GATE-02 pasa de `FAIL` a `PASS_WITH_OBSERVATIONS` |
 
 ## L-11 — El presupuesto de cómputo se mide sobre hardware de sobremesa
 

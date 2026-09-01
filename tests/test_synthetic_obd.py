@@ -70,7 +70,7 @@ def test_ningun_fallo_saca_una_senal_de_rango(fault_id: str) -> None:
 # pueda señalar, y el resto del experimento carecería de sentido.
 
 
-@pytest.mark.parametrize("regime", ["idle", "urban", "highway", "acceleration"])
+@pytest.mark.parametrize("regime", ["urban", "highway", "acceleration"])
 def test_el_caudal_de_aire_sigue_al_producto_regimen_por_carga(regime: str) -> None:
     """El caudal admitido depende de régimen Y carga conjuntamente, no de uno solo.
 
@@ -82,6 +82,12 @@ def test_el_caudal_de_aire_sigue_al_producto_regimen_por_carga(regime: str) -> N
     ausencia de relación. La distinción importa al interpretar la atribución en
     E9: una señal puede ser determinante sin destacar en un diagrama de
     dispersión bivariante.
+
+    El régimen de ralentí puro queda fuera de este test y tiene el suyo propio:
+    allí el producto régimen x carga apenas varía --unas 5 veces entre su mínimo
+    y su máximo, frente a las 100 o 150 de la conducción-- y el ruido del sensor
+    domina. No es un defecto del modelo; un caudalímetro real en ralentí se
+    comporta igual.
     """
     spec = SessionSpec(session_id="x", regime=regime, duration_s=600.0, seed=7, fault_id=NORMAL_ID)
     datos = generate_session(spec)
@@ -106,6 +112,73 @@ def test_velocidad_y_regimen_estan_relacionados() -> None:
     datos = generate_session(_sesion(duration_s=600.0))
     r = float(np.corrcoef(datos["vehicle_speed"], datos["rpm"])[0, 1])
     assert r > 0.5, f"correlación velocidad-régimen insuficiente: {r:.3f}"
+
+
+def test_en_ralenti_el_caudal_esta_dominado_por_el_ruido_del_sensor() -> None:
+    """En ralentí la relación existe pero es débil, y debe serlo.
+
+    El caudal en ralentí ronda los 2,5 g/s que el manual documenta, con un ruido
+    de sensor del orden del 14 %. Con tan poco recorrido, la correlación con el
+    producto régimen x carga cae muy por debajo de la que se observa conduciendo.
+
+    Se comprueba explícitamente en vez de excluirlo en silencio: es el mismo
+    fenómeno que E4 y E5 encontraron una y otra vez --una relación real puede
+    quedar enmascarada cuando el rango dinámico es pequeño-- y conviene tenerlo
+    escrito antes de interpretar la atribución de E9.
+    """
+    spec = SessionSpec(session_id="x", regime="idle", duration_s=900.0, seed=5)
+    datos = generate_session(spec)
+    producto = datos["rpm"].to_numpy() * datos["engine_load"].to_numpy()
+    r = float(np.corrcoef(producto, datos["maf"])[0, 1])
+    assert 0.4 < r < 0.85, f"correlación en ralentí fuera de lo esperable: {r:.3f}"
+
+
+def test_el_caudal_en_ralenti_coincide_con_la_especificacion_del_manual() -> None:
+    """Manual: "Idle (after warm up): approx. 2.5 g/s" (srvc/B3E014018880W14.pdf).
+
+    Es el anclaje inferior de la calibración del caudalímetro. Si se rompe, el
+    generador ha dejado de corresponder al vehículo documentado.
+    """
+    for regime in ("idle", "urban", "acceleration"):
+        spec = SessionSpec(session_id="x", regime=regime, duration_s=900.0, seed=5)
+        datos = generate_session(spec)
+        en_ralenti = datos.loc[datos["vehicle_speed"] < 2.0, "maf"]
+        if en_ralenti.empty:
+            continue
+        assert 2.0 < float(en_ralenti.mean()) < 3.0, (
+            f"{regime}: caudal en ralentí {en_ralenti.mean():.2f} g/s, "
+            "fuera del entorno de los 2,5 g/s documentados"
+        )
+
+
+def test_el_regimen_de_ralenti_respeta_la_especificacion_del_manual() -> None:
+    """Manual: 640-740 rpm para Z6 con transmisión manual (srvc/B3E011002000W01.pdf)."""
+    spec = SessionSpec(session_id="x", regime="idle", duration_s=900.0, seed=5)
+    datos = generate_session(spec)
+    en_ralenti = datos.loc[datos["vehicle_speed"] < 2.0, "rpm"]
+    assert float(en_ralenti.min()) > 620, f"ralentí demasiado bajo: {en_ralenti.min():.0f}"
+    assert float(en_ralenti.max()) < 760, f"ralentí demasiado alto: {en_ralenti.max():.0f}"
+
+
+def test_el_avance_de_encendido_en_ralenti_respeta_la_especificacion() -> None:
+    """Manual: 9-11 BTDC° en ralentí (srvc/B3E011002000W01.pdf)."""
+    spec = SessionSpec(session_id="x", regime="idle", duration_s=900.0, seed=5)
+    datos = generate_session(spec)
+    medio = float(datos.loc[datos["vehicle_speed"] < 2.0, "ignition_timing"].mean())
+    assert 8.5 < medio < 11.5, f"avance en ralentí {medio:.1f} BTDC, fuera de 9-11"
+
+
+def test_el_termostato_regula_en_el_rango_documentado() -> None:
+    """Manual: apertura inicial 80-84 °C (srvc/B3E010002000T03.pdf).
+
+    El valor anterior del generador, 88 °C, quedaba por encima del rango real.
+    """
+    spec = SessionSpec(
+        session_id="x", regime="urban", duration_s=1800.0, seed=5, ambient_temp_c=20.0
+    )
+    datos = generate_session(spec)
+    maximo = float(datos["coolant_temperature"].max())
+    assert 80.0 <= maximo <= 86.0, f"regulación en {maximo:.1f} °C, fuera de 80-84"
 
 
 def test_la_temperatura_sube_con_el_tiempo_en_arranque_frio() -> None:
