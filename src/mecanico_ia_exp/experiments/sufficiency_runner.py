@@ -95,7 +95,7 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
     umbrales = SufficiencyThresholds()
     verificador = EvidenceVerifier(umbrales)
     store = PgVectorStore()
-    provider = get_provider("sentence-transformers")
+    provider = get_provider("multilingual")
 
     from mecanico_ia_exp.experiments.retrieval_runner import recuperar
 

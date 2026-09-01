@@ -17,6 +17,16 @@ vehicle_id: mazda-3-bk-2007
 engine_code: Z6
 corpus_version: "0.1.0"
 
+# Cada caso lleva su consulta en los dos idiomas. La española es traducción
+# directa de la inglesa, con el mismo nivel de detalle: si fuera más explícita,
+# la comparación mediría la calidad de la traducción y no la recuperación
+# translingüe, que es lo que interesa.
+#
+# El corpus es SOLO inglés. Una consulta en español contra él es recuperación
+# translingüe, y es el caso realista: el TFM se escribe en español y el manual
+# del fabricante está en inglés.
+query_languages: [en, es]
+
 cases:
 
   - case_id: C01_maf_drift
@@ -26,6 +36,10 @@ cases:
       Mass airflow sensor reading lower than expected for the current engine
       speed and load. Short term and long term fuel trims elevated and rising
       over several minutes.
+    query_es: >-
+      Lectura del caudalímetro de aire por debajo de lo esperable para el
+      régimen y la carga del motor. Ajustes de combustible a corto y largo
+      plazo elevados y creciendo a lo largo de varios minutos.
     relevant_files: [srvc/B3E010200100W01.pdf]
     supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
     distractor_files: [srvc/B3E010201084W06.pdf]
@@ -39,6 +53,10 @@ cases:
       Engine coolant temperature stops rising and stabilises well below the
       normal operating range after a cold start, despite sustained load and
       sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío,
+      pese a carga sostenida y tiempo de marcha suficiente.
     relevant_files: [srvc/B3E010200100W11.pdf]
     supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
     distractor_files: [srvc/B3E010201084W18.pdf]
@@ -52,6 +70,11 @@ cases:
       Oxygen sensor voltage oscillation amplitude collapsed and switching
       frequency across the stoichiometric point reduced. Short term fuel trim
       noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada
+      y frecuencia de conmutación en torno al punto estequiométrico
+      reducida. Ajuste de combustible a corto plazo más ruidoso de lo
+      habitual.
     relevant_files: [srvc/B3E010200100W13.pdf]
     supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
     distractor_files: [srvc/B3E010201084W20.pdf]
@@ -65,6 +88,10 @@ cases:
       Brief engine speed drops of around two hundred rpm occurring in short
       episodes, with a simultaneous jump in calculated load and the oxygen
       sensor shifting towards rich.
+    query_es: >-
+      Caídas breves del régimen de motor de unas doscientas revoluciones en
+      episodios cortos, con salto simultáneo de la carga calculada y
+      desplazamiento de la sonda de oxígeno hacia mezcla rica.
     relevant_files: [srvc/B3E010200300W01.pdf]
     supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
     distractor_files: [srvc/B3E010201085W01.pdf]
@@ -78,6 +105,11 @@ cases:
       Fuel trims persistently positive and markedly larger at idle than at road
       speed, with elevated intake manifold pressure at idle and unstable idle
       speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente
+      mayores en ralentí que a velocidad de carretera, con presión del
+      colector de admisión elevada en ralentí y régimen de ralentí
+      inestable.
     relevant_files: [srvc/B3E010202100W09.pdf]
     supporting_files: [srvc/B3E010202100W07.pdf, srvc/B3E010202000W10.pdf]
     distractor_files: [srvc/B3E010202100W03.pdf]
@@ -108,6 +140,11 @@ cases:
       Fuel trims persistently positive and markedly larger at idle than at road
       speed, with elevated intake manifold pressure at idle and unstable idle
       speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente
+      mayores en ralentí que a velocidad de carretera, con presión del
+      colector de admisión elevada en ralentí y régimen de ralentí
+      inestable.
     relevant_files: []
     supporting_files: []
     distractor_files: []

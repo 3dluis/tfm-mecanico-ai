@@ -172,6 +172,9 @@ def ingest_collection(
             version_id=version_id,
             vehicle_id=entrada.vehicle_id,
             chapter=_capitulo_de(ruta, raiz),
+            # El idioma sale del manifiesto, no de detectarlo: declararlo
+            # es responsabilidad de quien registra el documento.
+            language=entrada.language,
             config=cfg,
             relative_to=raiz,
         )

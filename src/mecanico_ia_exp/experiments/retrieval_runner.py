@@ -94,9 +94,15 @@ def recuperar(
     engine_code: str,
     top_k: int = TOP_K,
     exclude_chunks: tuple[str, ...] = (),
+    language: str = "en",
+    embedding_model: str | None = None,
 ) -> list[RetrievedChunk]:
     """Ejecuta una estrategia de recuperación sobre un caso."""
-    consulta = " ".join(str(caso["query"]).split())
+    # La consulta en el idioma pedido. El corpus es solo inglés, así que una
+    # consulta en español es recuperación translingüe: el caso realista, porque
+    # el TFM se escribe en español y el manual del fabricante está en inglés.
+    clave = "query" if language == "en" else f"query_{language}"
+    consulta = " ".join(str(caso.get(clave) or caso["query"]).split())
     vector = provider.embed_one(consulta)
     motores = (engine_code, "ZJ") if engine_code == "Z6" else (engine_code,)
 
@@ -106,10 +112,18 @@ def recuperar(
             vehicle_id=vehicle_id,
             top_k=top_k,
             exclude_chunks=exclude_chunks,
+            embedding_model=embedding_model,
         )
 
     if estrategia == "semantic+engine":
-        return store.search(vector, vehicle_id=vehicle_id, top_k=top_k, engine_codes=motores)
+        return store.search(
+            vector,
+            vehicle_id=vehicle_id,
+            top_k=top_k,
+            engine_codes=motores,
+            exclude_chunks=exclude_chunks,
+            embedding_model=embedding_model,
+        )
 
     if estrategia == "semantic+authority":
         amplio = store.search(
@@ -118,6 +132,7 @@ def recuperar(
             top_k=PROFUNDIDAD,
             engine_codes=motores,
             exclude_chunks=exclude_chunks,
+            embedding_model=embedding_model,
         )
         return _reordenar_por_autoridad(amplio, top_k)
 
@@ -143,6 +158,8 @@ def recuperar(
                 engine_code=engine_code,
                 top_k=top_k,
                 exclude_chunks=exclude_chunks,
+                language=language,
+                embedding_model=embedding_model,
             )
         acotado = store.search(
             vector,
@@ -151,6 +168,7 @@ def recuperar(
             engine_codes=motores,
             dtc_codes=codigos,
             exclude_chunks=exclude_chunks,
+            embedding_model=embedding_model,
         )
         return _reordenar_por_autoridad(acotado, top_k)
 
@@ -161,11 +179,16 @@ def recuperar(
             top_k=PROFUNDIDAD,
             engine_codes=motores,
             exclude_chunks=exclude_chunks,
+            embedding_model=embedding_model,
         )
         lexica = [
             r
             for r in store.search_lexical(
-                consulta, vehicle_id=vehicle_id, top_k=PROFUNDIDAD, engine_codes=motores
+                consulta,
+                vehicle_id=vehicle_id,
+                top_k=PROFUNDIDAD,
+                engine_codes=motores,
+                language=language,
             )
             if r.chunk_id not in set(exclude_chunks)
         ]
@@ -184,7 +207,7 @@ def run_retrieval_evaluation(goldset_path: Path = GOLDSET) -> int:
     casos = gold["cases"]
 
     store = PgVectorStore()
-    provider = get_provider("sentence-transformers")
+    provider = get_provider("multilingual")
     identidad = provider.identity
     print(f"conjunto anotado: {len(casos)} casos · vehículo {vehicle_id} motor {engine_code}")
     print(f"embeddings: {identidad.model}\n")

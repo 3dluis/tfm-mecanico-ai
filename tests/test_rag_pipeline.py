@@ -268,7 +268,17 @@ def test_pgvector_extension(store) -> None:
 
 @pytest.mark.db
 def test_embedding_storage(store) -> None:
-    """Cada embedding conserva el modelo con el que se generó."""
+    """Cada embedding conserva el modelo con el que se generó.
+
+    Varios modelos conviven en el índice **a propósito**: es lo que permite
+    compararlos sobre el mismo corpus sin reindexar dos bases. Lo que no puede
+    ocurrir es que una consulta los mezcle, y de eso se encarga el filtro por
+    modelo en la búsqueda.
+
+    Sí deben compartir dimensión: el esquema declara ``vector(384)`` y un modelo
+    de otra dimensión no cabría, lo que obliga a que el cambio sea una migración
+    explícita en lugar de un efecto colateral.
+    """
     import sqlalchemy as sa
 
     with store._engine.connect() as cx:
@@ -276,6 +286,7 @@ def test_embedding_storage(store) -> None:
             cx.execute(
                 sa.text("""
                 SELECT count(*) AS n, count(DISTINCT embedding_model) AS modelos,
+                       count(DISTINCT embedding_dimension) AS dimensiones,
                        min(embedding_dimension) AS dim
                 FROM rag.embedding WHERE vehicle_id = :v
             """),
@@ -285,7 +296,7 @@ def test_embedding_storage(store) -> None:
             .one()
         )
     assert fila["n"] > 0, "no hay embeddings ingeridos"
-    assert fila["modelos"] == 1, "conviven varios modelos en el mismo índice"
+    assert fila["dimensiones"] == 1, "conviven dimensiones distintas en el mismo esquema"
     assert fila["dim"] == 384
 
 
@@ -430,3 +441,72 @@ def test_chunk_provenance_completa_en_la_base(store) -> None:
     cita = r.provenance()
     for esperado in (r.publisher, "página", r.chunk_id, r.source_url):
         assert esperado in cita
+
+
+# ------------------------------------------------------------------ idioma
+
+
+def test_el_fragmento_hereda_el_idioma_del_documento() -> None:
+    """El idioma se declara en el manifiesto; no se detecta ni se adivina."""
+    doc = _documento(["Thermostat opening temperature 80 - 84 C"])
+    fragmentos = chunk_document(
+        doc, document_id="m", version_id="v1", vehicle_id=VEHICULO, language="es"
+    )
+    assert fragmentos
+    assert all(c.language == "es" for c in fragmentos)
+
+
+def test_el_idioma_por_defecto_es_ingles() -> None:
+    doc = _documento(["Some content"])
+    fragmentos = chunk_document(doc, document_id="m", version_id="v1", vehicle_id=VEHICULO)
+    assert fragmentos[0].language == "en"
+
+
+def test_cada_idioma_tiene_su_configuracion_de_busqueda_textual() -> None:
+    """Buscar texto español con la configuración inglesa lematiza mal."""
+    from mecanico_ia_exp.rag.store import CONFIG_FTS
+
+    assert CONFIG_FTS["en"] == "english"
+    assert CONFIG_FTS["es"] == "spanish"
+
+
+def test_el_modelo_por_defecto_es_multilingue() -> None:
+    """Medido: el monolingüe encuentra 1 de 5 con consultas en español."""
+    from mecanico_ia_exp.rag.embeddings import MODELOS, SentenceTransformerProvider
+
+    assert "multilingual" in SentenceTransformerProvider()._model_name
+    assert set(MODELOS) == {"en", "multilingual"}
+
+
+@pytest.mark.db
+def test_la_busqueda_lexica_no_cruza_idiomas(store) -> None:
+    """El corpus es solo inglés: una búsqueda léxica en español debe devolver
+    cero, no coincidencias por accidente ortográfico."""
+    en = store.search_lexical("fuel trim idle", vehicle_id=VEHICULO, top_k=5, language="en")
+    es = store.search_lexical(
+        "ajuste de combustible ralentí", vehicle_id=VEHICULO, top_k=5, language="es"
+    )
+    assert en, "la búsqueda léxica en inglés debería encontrar algo"
+    assert not es, "no hay documentos en español; devolver algo sería un accidente"
+
+
+@pytest.mark.db
+def test_la_busqueda_vectorial_no_mezcla_espacios_de_modelos_distintos(store) -> None:
+    """Dos modelos conviven en el índice a propósito, para poder compararlos.
+    Mezclarlos en una consulta compararía puntos de espacios distintos."""
+    import sqlalchemy as sa
+
+    with store._engine.connect() as cx:
+        modelos = (
+            cx.execute(sa.text("SELECT DISTINCT embedding_model FROM rag.embedding"))
+            .scalars()
+            .all()
+        )
+    assert len(modelos) >= 2, "se esperaban al menos dos modelos indexados"
+
+    from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
+
+    v = HashingEmbeddingProvider().embed_one("thermostat")
+    for modelo in modelos:
+        res = store.search(v, vehicle_id=VEHICULO, top_k=5, embedding_model=str(modelo))
+        assert res

@@ -37,7 +37,10 @@ def main() -> int:
     print(f"vehículo registrado: {perfil.vehicle_id} · motor {perfil.engine_code}")
 
     run_id = str(uuid.uuid4())
-    provider = get_provider("sentence-transformers")
+    import sys
+
+    modelo = sys.argv[1] if len(sys.argv) > 1 else "multilingual"
+    provider = get_provider(modelo)
 
     resultado = ingest_collection(
         entrada=entrada,
