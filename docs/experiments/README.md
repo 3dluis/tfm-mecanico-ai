@@ -15,7 +15,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E6 baseline | [E6_baseline.md](E6_baseline.md) | cerrada |
 | E7 modelo temporal | [E7_modelo_temporal.md](E7_modelo_temporal.md) | cerrada |
 | E8 evaluación del modelo | — | pendiente |
-| E9 atribución | — | pendiente |
+| E9 atribución | [E9_atribucion.md](E9_atribucion.md) | cerrada |
 | E10 corpus documental por vehículo | [E10_corpus_vehiculo.md](E10_corpus_vehiculo.md) | infraestructura cerrada, corpus vacío |
 | E11 pgvector | [E11_carga_rag.md](E11_carga_rag.md) | cerrada |
 | E12 evaluación de recuperación | [E12_evaluacion_recuperacion.md](E12_evaluacion_recuperacion.md) | cerrada |

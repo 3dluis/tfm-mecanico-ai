@@ -1,0 +1,1744 @@
+{
+  "experiment_id": "E9_xai",
+  "dataset_id": "synthetic_v2",
+  "model_id": "rf_synthetic_v2_seed20260901",
+  "explained_function": "predict_proba[clase_predicha]",
+  "explainer": "shap.explainers.Permutation",
+  "background": {
+    "n": 100,
+    "source": "train, clase normal",
+    "hash": "8757d917835e3981",
+    "seed": 20260901
+  },
+  "n_cases": 18,
+  "cases": [
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F00_normal__urban__08@0s",
+      "case_id": "F00_normal__urban__08@0s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F00_normal",
+      "confidence": 0.5213,
+      "session_id": "F00_normal__urban__08",
+      "window_start_s": 0.0,
+      "window_end_s": 119.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": -0.123238,
+          "direction": "decreases",
+          "value": 0.914428
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": -0.087274,
+          "direction": "decreases",
+          "value": 0.864428
+        },
+        {
+          "feature": "rpm_std",
+          "signal": "rpm",
+          "statistic": "std",
+          "importance": -0.014105,
+          "direction": "decreases",
+          "value": 702.942559
+        },
+        {
+          "feature": "engine_load_delta_max",
+          "signal": "engine_load",
+          "statistic": "delta_max",
+          "importance": -0.010554,
+          "direction": "decreases",
+          "value": 92.0
+        },
+        {
+          "feature": "intake_air_temperature_min",
+          "signal": "intake_air_temperature",
+          "statistic": "min",
+          "importance": 0.009526,
+          "direction": "increases",
+          "value": 27.784765
+        },
+        {
+          "feature": "map_delta_max",
+          "signal": "map",
+          "statistic": "delta_max",
+          "importance": -0.009251,
+          "direction": "decreases",
+          "value": 73.892736
+        },
+        {
+          "feature": "oxygen_sensor_delta_max",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_max",
+          "importance": -0.007922,
+          "direction": "decreases",
+          "value": 0.809789
+        },
+        {
+          "feature": "rpm_n_events",
+          "signal": "rpm",
+          "statistic": "n_events",
+          "importance": -0.007909,
+          "direction": "decreases",
+          "value": 2.0
+        },
+        {
+          "feature": "rpm_range",
+          "signal": "rpm",
+          "statistic": "range",
+          "importance": -0.007591,
+          "direction": "decreases",
+          "value": 1814.642822
+        },
+        {
+          "feature": "vehicle_speed_delta_min",
+          "signal": "vehicle_speed",
+          "statistic": "delta_min",
+          "importance": -0.006332,
+          "direction": "decreases",
+          "value": -5.190514
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F00_normal__urban__08@60s",
+      "case_id": "F00_normal__urban__08@60s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F00_normal",
+      "confidence": 0.5706,
+      "session_id": "F00_normal__urban__08",
+      "window_start_s": 60.0,
+      "window_end_s": 179.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ignition_timing_slope",
+          "signal": "ignition_timing",
+          "statistic": "slope",
+          "importance": -0.018615,
+          "direction": "decreases",
+          "value": -0.033582
+        },
+        {
+          "feature": "intake_air_temperature_min",
+          "signal": "intake_air_temperature",
+          "statistic": "min",
+          "importance": 0.01854,
+          "direction": "increases",
+          "value": 27.784765
+        },
+        {
+          "feature": "ignition_timing_crossings",
+          "signal": "ignition_timing",
+          "statistic": "crossings",
+          "importance": -0.017038,
+          "direction": "decreases",
+          "value": 9.0
+        },
+        {
+          "feature": "rpm_n_events",
+          "signal": "rpm",
+          "statistic": "n_events",
+          "importance": -0.016649,
+          "direction": "decreases",
+          "value": 3.0
+        },
+        {
+          "feature": "ignition_timing_autocorr1",
+          "signal": "ignition_timing",
+          "statistic": "autocorr1",
+          "importance": -0.014814,
+          "direction": "decreases",
+          "value": 0.913505
+        },
+        {
+          "feature": "rpm_slope",
+          "signal": "rpm",
+          "statistic": "slope",
+          "importance": -0.013773,
+          "direction": "decreases",
+          "value": -3.795432
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": -0.012592,
+          "direction": "decreases",
+          "value": 0.62014
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": -0.011888,
+          "direction": "decreases",
+          "value": 22.408541
+        },
+        {
+          "feature": "coolant_temperature_slope",
+          "signal": "coolant_temperature",
+          "statistic": "slope",
+          "importance": -0.011059,
+          "direction": "decreases",
+          "value": -0.000211
+        },
+        {
+          "feature": "vehicle_speed_delta_min",
+          "signal": "vehicle_speed",
+          "statistic": "delta_min",
+          "importance": -0.01081,
+          "direction": "decreases",
+          "value": -5.190514
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F00_normal__urban__08@120s",
+      "case_id": "F00_normal__urban__08@120s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F00_normal",
+      "confidence": 0.5706,
+      "session_id": "F00_normal__urban__08",
+      "window_start_s": 120.0,
+      "window_end_s": 239.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "oxygen_sensor_autocorr1",
+          "signal": "oxygen_sensor",
+          "statistic": "autocorr1",
+          "importance": -0.020409,
+          "direction": "decreases",
+          "value": -0.785434
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": -0.019317,
+          "direction": "decreases",
+          "value": 0.717453
+        },
+        {
+          "feature": "intake_air_temperature_min",
+          "signal": "intake_air_temperature",
+          "statistic": "min",
+          "importance": 0.015289,
+          "direction": "increases",
+          "value": 28.280716
+        },
+        {
+          "feature": "map_delta_max",
+          "signal": "map",
+          "statistic": "delta_max",
+          "importance": -0.014577,
+          "direction": "decreases",
+          "value": 73.057831
+        },
+        {
+          "feature": "coolant_temperature_slope",
+          "signal": "coolant_temperature",
+          "statistic": "slope",
+          "importance": -0.011009,
+          "direction": "decreases",
+          "value": 0.001
+        },
+        {
+          "feature": "rpm_n_events",
+          "signal": "rpm",
+          "statistic": "n_events",
+          "importance": -0.010983,
+          "direction": "decreases",
+          "value": 3.0
+        },
+        {
+          "feature": "oxygen_sensor_crossings",
+          "signal": "oxygen_sensor",
+          "statistic": "crossings",
+          "importance": -0.00919,
+          "direction": "decreases",
+          "value": 96.0
+        },
+        {
+          "feature": "rpm_range",
+          "signal": "rpm",
+          "statistic": "range",
+          "importance": -0.008965,
+          "direction": "decreases",
+          "value": 1915.952148
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": -0.008027,
+          "direction": "decreases",
+          "value": 22.408541
+        },
+        {
+          "feature": "coolant_temperature_mean",
+          "signal": "coolant_temperature",
+          "statistic": "mean",
+          "importance": -0.007954,
+          "direction": "decreases",
+          "value": 82.01155
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F01_vacuum_leak__idle__10@120s",
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F01_vacuum_leak",
+      "confidence": 0.6851,
+      "session_id": "F01_vacuum_leak__idle__10",
+      "window_start_s": 120.0,
+      "window_end_s": 239.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ltft_bank1_max",
+          "signal": "ltft_bank1",
+          "statistic": "max",
+          "importance": 0.109096,
+          "direction": "increases",
+          "value": 2.716378
+        },
+        {
+          "feature": "stft_bank1_mean",
+          "signal": "stft_bank1",
+          "statistic": "mean",
+          "importance": 0.093491,
+          "direction": "increases",
+          "value": 7.07748
+        },
+        {
+          "feature": "ltft_bank1_mean",
+          "signal": "ltft_bank1",
+          "statistic": "mean",
+          "importance": 0.083251,
+          "direction": "increases",
+          "value": 1.294458
+        },
+        {
+          "feature": "stft_bank1_min",
+          "signal": "stft_bank1",
+          "statistic": "min",
+          "importance": 0.07083,
+          "direction": "increases",
+          "value": 2.99643
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": 0.056518,
+          "direction": "increases",
+          "value": 26.630968
+        },
+        {
+          "feature": "ltft_bank1_std",
+          "signal": "ltft_bank1",
+          "statistic": "std",
+          "importance": 0.051495,
+          "direction": "increases",
+          "value": 0.832919
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.046512,
+          "direction": "increases",
+          "value": 11.123704
+        },
+        {
+          "feature": "ltft_bank1_range",
+          "signal": "ltft_bank1",
+          "statistic": "range",
+          "importance": 0.033678,
+          "direction": "increases",
+          "value": 2.91103
+        },
+        {
+          "feature": "rpm_min",
+          "signal": "rpm",
+          "statistic": "min",
+          "importance": 0.028665,
+          "direction": "increases",
+          "value": 616.774597
+        },
+        {
+          "feature": "ltft_bank1_delta_max",
+          "signal": "ltft_bank1",
+          "statistic": "delta_max",
+          "importance": 0.023346,
+          "direction": "increases",
+          "value": 0.048111
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F01_vacuum_leak__idle__10@180s",
+      "case_id": "F01_vacuum_leak__idle__10@180s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F01_vacuum_leak",
+      "confidence": 0.7515,
+      "session_id": "F01_vacuum_leak__idle__10",
+      "window_start_s": 180.0,
+      "window_end_s": 299.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ltft_bank1_max",
+          "signal": "ltft_bank1",
+          "statistic": "max",
+          "importance": 0.111823,
+          "direction": "increases",
+          "value": 4.099644
+        },
+        {
+          "feature": "ltft_bank1_mean",
+          "signal": "ltft_bank1",
+          "statistic": "mean",
+          "importance": 0.099476,
+          "direction": "increases",
+          "value": 2.695168
+        },
+        {
+          "feature": "stft_bank1_mean",
+          "signal": "stft_bank1",
+          "statistic": "mean",
+          "importance": 0.091431,
+          "direction": "increases",
+          "value": 6.949876
+        },
+        {
+          "feature": "stft_bank1_min",
+          "signal": "stft_bank1",
+          "statistic": "min",
+          "importance": 0.075893,
+          "direction": "increases",
+          "value": 2.557398
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": 0.061633,
+          "direction": "increases",
+          "value": 26.630968
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.05213,
+          "direction": "increases",
+          "value": 11.339334
+        },
+        {
+          "feature": "ltft_bank1_std",
+          "signal": "ltft_bank1",
+          "statistic": "std",
+          "importance": 0.044068,
+          "direction": "increases",
+          "value": 0.792213
+        },
+        {
+          "feature": "rpm_min",
+          "signal": "rpm",
+          "statistic": "min",
+          "importance": 0.034032,
+          "direction": "increases",
+          "value": 601.479187
+        },
+        {
+          "feature": "ltft_bank1_range",
+          "signal": "ltft_bank1",
+          "statistic": "range",
+          "importance": 0.032103,
+          "direction": "increases",
+          "value": 2.752926
+        },
+        {
+          "feature": "ltft_bank1_min",
+          "signal": "ltft_bank1",
+          "statistic": "min",
+          "importance": 0.031466,
+          "direction": "increases",
+          "value": 1.346719
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F01_vacuum_leak__idle__10@240s",
+      "case_id": "F01_vacuum_leak__idle__10@240s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F01_vacuum_leak",
+      "confidence": 0.7278,
+      "session_id": "F01_vacuum_leak__idle__10",
+      "window_start_s": 240.0,
+      "window_end_s": 359.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ltft_bank1_max",
+          "signal": "ltft_bank1",
+          "statistic": "max",
+          "importance": 0.110519,
+          "direction": "increases",
+          "value": 5.762808
+        },
+        {
+          "feature": "ltft_bank1_mean",
+          "signal": "ltft_bank1",
+          "statistic": "mean",
+          "importance": 0.096792,
+          "direction": "increases",
+          "value": 4.163715
+        },
+        {
+          "feature": "stft_bank1_mean",
+          "signal": "stft_bank1",
+          "statistic": "mean",
+          "importance": 0.090343,
+          "direction": "increases",
+          "value": 7.127033
+        },
+        {
+          "feature": "stft_bank1_min",
+          "signal": "stft_bank1",
+          "statistic": "min",
+          "importance": 0.071644,
+          "direction": "increases",
+          "value": 2.557398
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": 0.058128,
+          "direction": "increases",
+          "value": 26.283051
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.049517,
+          "direction": "increases",
+          "value": 11.339334
+        },
+        {
+          "feature": "ltft_bank1_std",
+          "signal": "ltft_bank1",
+          "statistic": "std",
+          "importance": 0.045517,
+          "direction": "increases",
+          "value": 0.897746
+        },
+        {
+          "feature": "rpm_min",
+          "signal": "rpm",
+          "statistic": "min",
+          "importance": 0.033757,
+          "direction": "increases",
+          "value": 601.479187
+        },
+        {
+          "feature": "ltft_bank1_min",
+          "signal": "ltft_bank1",
+          "statistic": "min",
+          "importance": 0.031277,
+          "direction": "increases",
+          "value": 2.7076
+        },
+        {
+          "feature": "ltft_bank1_range",
+          "signal": "ltft_bank1",
+          "statistic": "range",
+          "importance": 0.025853,
+          "direction": "increases",
+          "value": 3.055208
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F02_maf_drift__highway__01@120s",
+      "case_id": "F02_maf_drift__highway__01@120s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F02_maf_drift",
+      "confidence": 0.5922,
+      "session_id": "F02_maf_drift__highway__01",
+      "window_start_s": 120.0,
+      "window_end_s": 239.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ltft_bank1_max",
+          "signal": "ltft_bank1",
+          "statistic": "max",
+          "importance": 0.094481,
+          "direction": "increases",
+          "value": 1.847569
+        },
+        {
+          "feature": "stft_bank1_slope",
+          "signal": "stft_bank1",
+          "statistic": "slope",
+          "importance": 0.075481,
+          "direction": "increases",
+          "value": 0.040551
+        },
+        {
+          "feature": "stft_bank1_mean",
+          "signal": "stft_bank1",
+          "statistic": "mean",
+          "importance": 0.072171,
+          "direction": "increases",
+          "value": 1.984188
+        },
+        {
+          "feature": "ltft_bank1_mean",
+          "signal": "ltft_bank1",
+          "statistic": "mean",
+          "importance": 0.054781,
+          "direction": "increases",
+          "value": 0.678208
+        },
+        {
+          "feature": "ltft_bank1_autocorr1",
+          "signal": "ltft_bank1",
+          "statistic": "autocorr1",
+          "importance": 0.050631,
+          "direction": "increases",
+          "value": 0.999792
+        },
+        {
+          "feature": "corr_stft_bank1_ltft_bank1",
+          "signal": "stft_bank1+ltft_bank1",
+          "statistic": "correlation",
+          "importance": 0.04961,
+          "direction": "increases",
+          "value": 0.635939
+        },
+        {
+          "feature": "ltft_bank1_std",
+          "signal": "ltft_bank1",
+          "statistic": "std",
+          "importance": 0.045097,
+          "direction": "increases",
+          "value": 0.55034
+        },
+        {
+          "feature": "ltft_bank1_delta_max",
+          "signal": "ltft_bank1",
+          "statistic": "delta_max",
+          "importance": 0.042434,
+          "direction": "increases",
+          "value": 0.044006
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": -0.040512,
+          "direction": "decreases",
+          "value": 35.736271
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.038395,
+          "direction": "increases",
+          "value": 8.066116
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F02_maf_drift__highway__01@180s",
+      "case_id": "F02_maf_drift__highway__01@180s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F02_maf_drift",
+      "confidence": 0.6129,
+      "session_id": "F02_maf_drift__highway__01",
+      "window_start_s": 180.0,
+      "window_end_s": 299.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ltft_bank1_max",
+          "signal": "ltft_bank1",
+          "statistic": "max",
+          "importance": 0.092847,
+          "direction": "increases",
+          "value": 3.920115
+        },
+        {
+          "feature": "stft_bank1_slope",
+          "signal": "stft_bank1",
+          "statistic": "slope",
+          "importance": 0.073781,
+          "direction": "increases",
+          "value": 0.027859
+        },
+        {
+          "feature": "stft_bank1_mean",
+          "signal": "stft_bank1",
+          "statistic": "mean",
+          "importance": 0.066346,
+          "direction": "increases",
+          "value": 4.036693
+        },
+        {
+          "feature": "ltft_bank1_mean",
+          "signal": "ltft_bank1",
+          "statistic": "mean",
+          "importance": 0.059382,
+          "direction": "increases",
+          "value": 1.975948
+        },
+        {
+          "feature": "corr_stft_bank1_ltft_bank1",
+          "signal": "stft_bank1+ltft_bank1",
+          "statistic": "correlation",
+          "importance": 0.054015,
+          "direction": "increases",
+          "value": 0.479937
+        },
+        {
+          "feature": "ltft_bank1_autocorr1",
+          "signal": "ltft_bank1",
+          "statistic": "autocorr1",
+          "importance": 0.047145,
+          "direction": "increases",
+          "value": 0.999951
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.041778,
+          "direction": "increases",
+          "value": 8.830927
+        },
+        {
+          "feature": "ltft_bank1_delta_max",
+          "signal": "ltft_bank1",
+          "statistic": "delta_max",
+          "importance": 0.039401,
+          "direction": "increases",
+          "value": 0.068602
+        },
+        {
+          "feature": "ltft_bank1_std",
+          "signal": "ltft_bank1",
+          "statistic": "std",
+          "importance": 0.037608,
+          "direction": "increases",
+          "value": 0.972186
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": -0.036127,
+          "direction": "decreases",
+          "value": 36.380192
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F02_maf_drift__highway__01@240s",
+      "case_id": "F02_maf_drift__highway__01@240s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F02_maf_drift",
+      "confidence": 0.7637,
+      "session_id": "F02_maf_drift__highway__01",
+      "window_start_s": 240.0,
+      "window_end_s": 359.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "ltft_bank1_max",
+          "signal": "ltft_bank1",
+          "statistic": "max",
+          "importance": 0.117701,
+          "direction": "increases",
+          "value": 6.764704
+        },
+        {
+          "feature": "stft_bank1_mean",
+          "signal": "stft_bank1",
+          "statistic": "mean",
+          "importance": 0.083073,
+          "direction": "increases",
+          "value": 5.813055
+        },
+        {
+          "feature": "stft_bank1_slope",
+          "signal": "stft_bank1",
+          "statistic": "slope",
+          "importance": 0.07319,
+          "direction": "increases",
+          "value": 0.035957
+        },
+        {
+          "feature": "ltft_bank1_mean",
+          "signal": "ltft_bank1",
+          "statistic": "mean",
+          "importance": 0.072402,
+          "direction": "increases",
+          "value": 4.044661
+        },
+        {
+          "feature": "corr_stft_bank1_ltft_bank1",
+          "signal": "stft_bank1+ltft_bank1",
+          "statistic": "correlation",
+          "importance": 0.054636,
+          "direction": "increases",
+          "value": 0.608973
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.053405,
+          "direction": "increases",
+          "value": 11.719481
+        },
+        {
+          "feature": "ltft_bank1_std",
+          "signal": "ltft_bank1",
+          "statistic": "std",
+          "importance": 0.042925,
+          "direction": "increases",
+          "value": 1.43351
+        },
+        {
+          "feature": "stft_bank1_min",
+          "signal": "stft_bank1",
+          "statistic": "min",
+          "importance": 0.040929,
+          "direction": "increases",
+          "value": 1.404098
+        },
+        {
+          "feature": "ltft_bank1_autocorr1",
+          "signal": "ltft_bank1",
+          "statistic": "autocorr1",
+          "importance": 0.039257,
+          "direction": "increases",
+          "value": 0.999977
+        },
+        {
+          "feature": "ltft_bank1_range",
+          "signal": "ltft_bank1",
+          "statistic": "range",
+          "importance": 0.039237,
+          "direction": "increases",
+          "value": 4.8944
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F03_thermostat_stuck__urban__08@120s",
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F03_thermostat_stuck",
+      "confidence": 0.9482,
+      "session_id": "F03_thermostat_stuck__urban__08",
+      "window_start_s": 120.0,
+      "window_end_s": 239.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "coolant_temperature_delta_max",
+          "signal": "coolant_temperature",
+          "statistic": "delta_max",
+          "importance": 0.216096,
+          "direction": "increases",
+          "value": 1.686241
+        },
+        {
+          "feature": "coolant_temperature_autocorr1",
+          "signal": "coolant_temperature",
+          "statistic": "autocorr1",
+          "importance": 0.159767,
+          "direction": "increases",
+          "value": 0.054903
+        },
+        {
+          "feature": "coolant_temperature_delta_min",
+          "signal": "coolant_temperature",
+          "statistic": "delta_min",
+          "importance": 0.158051,
+          "direction": "increases",
+          "value": -1.496284
+        },
+        {
+          "feature": "coolant_temperature_crossings",
+          "signal": "coolant_temperature",
+          "statistic": "crossings",
+          "importance": 0.13484,
+          "direction": "increases",
+          "value": 59.0
+        },
+        {
+          "feature": "coolant_temperature_max",
+          "signal": "coolant_temperature",
+          "statistic": "max",
+          "importance": 0.072189,
+          "direction": "increases",
+          "value": 72.242599
+        },
+        {
+          "feature": "coolant_temperature_mean",
+          "signal": "coolant_temperature",
+          "statistic": "mean",
+          "importance": 0.055309,
+          "direction": "increases",
+          "value": 70.988926
+        },
+        {
+          "feature": "coolant_temperature_min",
+          "signal": "coolant_temperature",
+          "statistic": "min",
+          "importance": 0.032064,
+          "direction": "increases",
+          "value": 69.929405
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": 0.021023,
+          "direction": "increases",
+          "value": 2.313194
+        },
+        {
+          "feature": "coolant_temperature_std",
+          "signal": "coolant_temperature",
+          "statistic": "std",
+          "importance": 0.012588,
+          "direction": "increases",
+          "value": 0.451722
+        },
+        {
+          "feature": "coolant_temperature_slope",
+          "signal": "coolant_temperature",
+          "statistic": "slope",
+          "importance": 0.009368,
+          "direction": "increases",
+          "value": 0.001657
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F03_thermostat_stuck__urban__08@180s",
+      "case_id": "F03_thermostat_stuck__urban__08@180s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F03_thermostat_stuck",
+      "confidence": 0.9432,
+      "session_id": "F03_thermostat_stuck__urban__08",
+      "window_start_s": 180.0,
+      "window_end_s": 299.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "coolant_temperature_delta_max",
+          "signal": "coolant_temperature",
+          "statistic": "delta_max",
+          "importance": 0.213904,
+          "direction": "increases",
+          "value": 1.686241
+        },
+        {
+          "feature": "coolant_temperature_autocorr1",
+          "signal": "coolant_temperature",
+          "statistic": "autocorr1",
+          "importance": 0.158308,
+          "direction": "increases",
+          "value": -0.101277
+        },
+        {
+          "feature": "coolant_temperature_delta_min",
+          "signal": "coolant_temperature",
+          "statistic": "delta_min",
+          "importance": 0.151378,
+          "direction": "increases",
+          "value": -1.745323
+        },
+        {
+          "feature": "coolant_temperature_crossings",
+          "signal": "coolant_temperature",
+          "statistic": "crossings",
+          "importance": 0.124395,
+          "direction": "increases",
+          "value": 75.0
+        },
+        {
+          "feature": "coolant_temperature_max",
+          "signal": "coolant_temperature",
+          "statistic": "max",
+          "importance": 0.072715,
+          "direction": "increases",
+          "value": 72.242599
+        },
+        {
+          "feature": "coolant_temperature_mean",
+          "signal": "coolant_temperature",
+          "statistic": "mean",
+          "importance": 0.055286,
+          "direction": "increases",
+          "value": 70.975083
+        },
+        {
+          "feature": "coolant_temperature_min",
+          "signal": "coolant_temperature",
+          "statistic": "min",
+          "importance": 0.030979,
+          "direction": "increases",
+          "value": 69.898552
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": 0.019636,
+          "direction": "increases",
+          "value": 2.344048
+        },
+        {
+          "feature": "coolant_temperature_std",
+          "signal": "coolant_temperature",
+          "statistic": "std",
+          "importance": 0.013092,
+          "direction": "increases",
+          "value": 0.497967
+        },
+        {
+          "feature": "coolant_temperature_slope",
+          "signal": "coolant_temperature",
+          "statistic": "slope",
+          "importance": 0.009497,
+          "direction": "increases",
+          "value": -0.000572
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F03_thermostat_stuck__urban__08@240s",
+      "case_id": "F03_thermostat_stuck__urban__08@240s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F03_thermostat_stuck",
+      "confidence": 0.9512,
+      "session_id": "F03_thermostat_stuck__urban__08",
+      "window_start_s": 240.0,
+      "window_end_s": 359.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "coolant_temperature_delta_max",
+          "signal": "coolant_temperature",
+          "statistic": "delta_max",
+          "importance": 0.215503,
+          "direction": "increases",
+          "value": 1.527336
+        },
+        {
+          "feature": "coolant_temperature_autocorr1",
+          "signal": "coolant_temperature",
+          "statistic": "autocorr1",
+          "importance": 0.160626,
+          "direction": "increases",
+          "value": -0.014801
+        },
+        {
+          "feature": "coolant_temperature_delta_min",
+          "signal": "coolant_temperature",
+          "statistic": "delta_min",
+          "importance": 0.154028,
+          "direction": "increases",
+          "value": -1.745323
+        },
+        {
+          "feature": "coolant_temperature_crossings",
+          "signal": "coolant_temperature",
+          "statistic": "crossings",
+          "importance": 0.124844,
+          "direction": "increases",
+          "value": 57.0
+        },
+        {
+          "feature": "coolant_temperature_max",
+          "signal": "coolant_temperature",
+          "statistic": "max",
+          "importance": 0.074929,
+          "direction": "increases",
+          "value": 72.247955
+        },
+        {
+          "feature": "coolant_temperature_mean",
+          "signal": "coolant_temperature",
+          "statistic": "mean",
+          "importance": 0.055593,
+          "direction": "increases",
+          "value": 71.005049
+        },
+        {
+          "feature": "coolant_temperature_min",
+          "signal": "coolant_temperature",
+          "statistic": "min",
+          "importance": 0.030951,
+          "direction": "increases",
+          "value": 69.898552
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": 0.021321,
+          "direction": "increases",
+          "value": 2.349403
+        },
+        {
+          "feature": "coolant_temperature_std",
+          "signal": "coolant_temperature",
+          "statistic": "std",
+          "importance": 0.012544,
+          "direction": "increases",
+          "value": 0.502926
+        },
+        {
+          "feature": "coolant_temperature_slope",
+          "signal": "coolant_temperature",
+          "statistic": "slope",
+          "importance": 0.008496,
+          "direction": "increases",
+          "value": 0.002514
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F04_o2_lag__idle__02@120s",
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F04_o2_lag",
+      "confidence": 0.9546,
+      "session_id": "F04_o2_lag__idle__02",
+      "window_start_s": 120.0,
+      "window_end_s": 239.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "oxygen_sensor_delta_max",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_max",
+          "importance": 0.152296,
+          "direction": "increases",
+          "value": 0.083801
+        },
+        {
+          "feature": "oxygen_sensor_std",
+          "signal": "oxygen_sensor",
+          "statistic": "std",
+          "importance": 0.132406,
+          "direction": "increases",
+          "value": 0.028741
+        },
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": 0.132105,
+          "direction": "increases",
+          "value": 0.514747
+        },
+        {
+          "feature": "oxygen_sensor_min",
+          "signal": "oxygen_sensor",
+          "statistic": "min",
+          "importance": 0.130654,
+          "direction": "increases",
+          "value": 0.371341
+        },
+        {
+          "feature": "oxygen_sensor_delta_min",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_min",
+          "importance": 0.127027,
+          "direction": "increases",
+          "value": -0.07565
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": 0.104838,
+          "direction": "increases",
+          "value": 0.143406
+        },
+        {
+          "feature": "oxygen_sensor_autocorr1",
+          "signal": "oxygen_sensor",
+          "statistic": "autocorr1",
+          "importance": 0.078923,
+          "direction": "increases",
+          "value": -0.491528
+        },
+        {
+          "feature": "stft_bank1_std",
+          "signal": "stft_bank1",
+          "statistic": "std",
+          "importance": 0.046042,
+          "direction": "increases",
+          "value": 2.420066
+        },
+        {
+          "feature": "stft_bank1_range",
+          "signal": "stft_bank1",
+          "statistic": "range",
+          "importance": 0.01652,
+          "direction": "increases",
+          "value": 11.470866
+        },
+        {
+          "feature": "stft_bank1_delta_max",
+          "signal": "stft_bank1",
+          "statistic": "delta_max",
+          "importance": 0.010407,
+          "direction": "increases",
+          "value": 11.003528
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F04_o2_lag__idle__02@180s",
+      "case_id": "F04_o2_lag__idle__02@180s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F04_o2_lag",
+      "confidence": 0.9379,
+      "session_id": "F04_o2_lag__idle__02",
+      "window_start_s": 180.0,
+      "window_end_s": 299.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "oxygen_sensor_delta_max",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_max",
+          "importance": 0.152402,
+          "direction": "increases",
+          "value": 0.083801
+        },
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": 0.133705,
+          "direction": "increases",
+          "value": 0.495669
+        },
+        {
+          "feature": "oxygen_sensor_min",
+          "signal": "oxygen_sensor",
+          "statistic": "min",
+          "importance": 0.130654,
+          "direction": "increases",
+          "value": 0.398135
+        },
+        {
+          "feature": "oxygen_sensor_std",
+          "signal": "oxygen_sensor",
+          "statistic": "std",
+          "importance": 0.129613,
+          "direction": "increases",
+          "value": 0.025968
+        },
+        {
+          "feature": "oxygen_sensor_delta_min",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_min",
+          "importance": 0.124527,
+          "direction": "increases",
+          "value": -0.078596
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": 0.104863,
+          "direction": "increases",
+          "value": 0.097533
+        },
+        {
+          "feature": "oxygen_sensor_autocorr1",
+          "signal": "oxygen_sensor",
+          "statistic": "autocorr1",
+          "importance": 0.079379,
+          "direction": "increases",
+          "value": -0.770102
+        },
+        {
+          "feature": "stft_bank1_std",
+          "signal": "stft_bank1",
+          "statistic": "std",
+          "importance": 0.046667,
+          "direction": "increases",
+          "value": 2.448865
+        },
+        {
+          "feature": "stft_bank1_range",
+          "signal": "stft_bank1",
+          "statistic": "range",
+          "importance": 0.013993,
+          "direction": "increases",
+          "value": 11.470866
+        },
+        {
+          "feature": "stft_bank1_delta_max",
+          "signal": "stft_bank1",
+          "statistic": "delta_max",
+          "importance": 0.009788,
+          "direction": "increases",
+          "value": 11.003528
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F04_o2_lag__idle__02@240s",
+      "case_id": "F04_o2_lag__idle__02@240s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F04_o2_lag",
+      "confidence": 0.8542,
+      "session_id": "F04_o2_lag__idle__02",
+      "window_start_s": 240.0,
+      "window_end_s": 359.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "oxygen_sensor_delta_max",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_max",
+          "importance": 0.150015,
+          "direction": "increases",
+          "value": 0.082206
+        },
+        {
+          "feature": "oxygen_sensor_min",
+          "signal": "oxygen_sensor",
+          "statistic": "min",
+          "importance": 0.132267,
+          "direction": "increases",
+          "value": 0.398135
+        },
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": 0.131624,
+          "direction": "increases",
+          "value": 0.490669
+        },
+        {
+          "feature": "oxygen_sensor_std",
+          "signal": "oxygen_sensor",
+          "statistic": "std",
+          "importance": 0.126306,
+          "direction": "increases",
+          "value": 0.025624
+        },
+        {
+          "feature": "oxygen_sensor_delta_min",
+          "signal": "oxygen_sensor",
+          "statistic": "delta_min",
+          "importance": 0.123925,
+          "direction": "increases",
+          "value": -0.078596
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": 0.103625,
+          "direction": "increases",
+          "value": 0.092534
+        },
+        {
+          "feature": "stft_bank1_std",
+          "signal": "stft_bank1",
+          "statistic": "std",
+          "importance": 0.04838,
+          "direction": "increases",
+          "value": 2.425615
+        },
+        {
+          "feature": "stft_bank1_range",
+          "signal": "stft_bank1",
+          "statistic": "range",
+          "importance": 0.013143,
+          "direction": "increases",
+          "value": 11.936292
+        },
+        {
+          "feature": "stft_bank1_delta_max",
+          "signal": "stft_bank1",
+          "statistic": "delta_max",
+          "importance": 0.009063,
+          "direction": "increases",
+          "value": 9.409469
+        },
+        {
+          "feature": "stft_bank1_delta_min",
+          "signal": "stft_bank1",
+          "statistic": "delta_min",
+          "importance": 0.007522,
+          "direction": "increases",
+          "value": -8.23862
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F05_misfire__highway__09@180s",
+      "case_id": "F05_misfire__highway__09@180s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F05_misfire",
+      "confidence": 0.4652,
+      "session_id": "F05_misfire__highway__09",
+      "window_start_s": 180.0,
+      "window_end_s": 299.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": 0.108803,
+          "direction": "increases",
+          "value": 0.95
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": 0.077627,
+          "direction": "increases",
+          "value": 0.9
+        },
+        {
+          "feature": "oxygen_sensor_mean",
+          "signal": "oxygen_sensor",
+          "statistic": "mean",
+          "importance": 0.058769,
+          "direction": "increases",
+          "value": 0.464677
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": -0.019768,
+          "direction": "decreases",
+          "value": 35.262032
+        },
+        {
+          "feature": "rpm_n_events",
+          "signal": "rpm",
+          "statistic": "n_events",
+          "importance": 0.014456,
+          "direction": "increases",
+          "value": 4.0
+        },
+        {
+          "feature": "oxygen_sensor_autocorr1",
+          "signal": "oxygen_sensor",
+          "statistic": "autocorr1",
+          "importance": 0.012286,
+          "direction": "increases",
+          "value": -0.857156
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": 0.011444,
+          "direction": "increases",
+          "value": 0.717567
+        },
+        {
+          "feature": "vehicle_speed_max",
+          "signal": "vehicle_speed",
+          "statistic": "max",
+          "importance": -0.009598,
+          "direction": "decreases",
+          "value": 109.02916
+        },
+        {
+          "feature": "stft_bank1_max",
+          "signal": "stft_bank1",
+          "statistic": "max",
+          "importance": 0.008345,
+          "direction": "increases",
+          "value": 5.102536
+        },
+        {
+          "feature": "ignition_timing_slope",
+          "signal": "ignition_timing",
+          "statistic": "slope",
+          "importance": 0.00784,
+          "direction": "increases",
+          "value": -0.046737
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F05_misfire__urban__00@120s",
+      "case_id": "F05_misfire__urban__00@120s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F05_misfire",
+      "confidence": 0.7365,
+      "session_id": "F05_misfire__urban__00",
+      "window_start_s": 120.0,
+      "window_end_s": 239.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "rpm_min",
+          "signal": "rpm",
+          "statistic": "min",
+          "importance": 0.216344,
+          "direction": "increases",
+          "value": 600.0
+        },
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": 0.092153,
+          "direction": "increases",
+          "value": 0.947941
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": 0.058254,
+          "direction": "increases",
+          "value": 0.891391
+        },
+        {
+          "feature": "oxygen_sensor_mean",
+          "signal": "oxygen_sensor",
+          "statistic": "mean",
+          "importance": 0.042825,
+          "direction": "increases",
+          "value": 0.457237
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": 0.01833,
+          "direction": "increases",
+          "value": 0.76033
+        },
+        {
+          "feature": "intake_air_temperature_mean",
+          "signal": "intake_air_temperature",
+          "statistic": "mean",
+          "importance": 0.014606,
+          "direction": "increases",
+          "value": 31.945967
+        },
+        {
+          "feature": "rpm_n_events",
+          "signal": "rpm",
+          "statistic": "n_events",
+          "importance": 0.012479,
+          "direction": "increases",
+          "value": 3.0
+        },
+        {
+          "feature": "coolant_temperature_mean",
+          "signal": "coolant_temperature",
+          "statistic": "mean",
+          "importance": 0.01028,
+          "direction": "increases",
+          "value": 82.039364
+        },
+        {
+          "feature": "ignition_timing_crossings",
+          "signal": "ignition_timing",
+          "statistic": "crossings",
+          "importance": 0.01021,
+          "direction": "increases",
+          "value": 9.0
+        },
+        {
+          "feature": "coolant_temperature_max",
+          "signal": "coolant_temperature",
+          "statistic": "max",
+          "importance": 0.009858,
+          "direction": "increases",
+          "value": 82.525223
+        }
+      ]
+    },
+    {
+      "explanation_id": "rf_synthetic_v2_seed20260901:F05_misfire__urban__00@180s",
+      "case_id": "F05_misfire__urban__00@180s",
+      "model_id": "rf_synthetic_v2_seed20260901",
+      "explained_function": "predict_proba[clase_predicha]",
+      "predicted_class": "F05_misfire",
+      "confidence": 0.7464,
+      "session_id": "F05_misfire__urban__00",
+      "window_start_s": 180.0,
+      "window_end_s": 299.0,
+      "explainer": "shap.explainers.Permutation",
+      "seed": 20260901,
+      "background_hash": "8757d917835e3981",
+      "attributions": [
+        {
+          "feature": "rpm_min",
+          "signal": "rpm",
+          "statistic": "min",
+          "importance": 0.236628,
+          "direction": "increases",
+          "value": 600.0
+        },
+        {
+          "feature": "oxygen_sensor_max",
+          "signal": "oxygen_sensor",
+          "statistic": "max",
+          "importance": 0.102466,
+          "direction": "increases",
+          "value": 0.947941
+        },
+        {
+          "feature": "oxygen_sensor_range",
+          "signal": "oxygen_sensor",
+          "statistic": "range",
+          "importance": 0.073846,
+          "direction": "increases",
+          "value": 0.872946
+        },
+        {
+          "feature": "intake_air_temperature_mean",
+          "signal": "intake_air_temperature",
+          "statistic": "mean",
+          "importance": 0.013486,
+          "direction": "increases",
+          "value": 31.396736
+        },
+        {
+          "feature": "rpm_n_events",
+          "signal": "rpm",
+          "statistic": "n_events",
+          "importance": 0.012206,
+          "direction": "increases",
+          "value": 2.0
+        },
+        {
+          "feature": "oxygen_sensor_autocorr1",
+          "signal": "oxygen_sensor",
+          "statistic": "autocorr1",
+          "importance": 0.012061,
+          "direction": "increases",
+          "value": -0.861723
+        },
+        {
+          "feature": "coolant_temperature_range",
+          "signal": "coolant_temperature",
+          "statistic": "range",
+          "importance": 0.011738,
+          "direction": "increases",
+          "value": 0.87973
+        },
+        {
+          "feature": "coolant_temperature_max",
+          "signal": "coolant_temperature",
+          "statistic": "max",
+          "importance": 0.010801,
+          "direction": "increases",
+          "value": 82.525223
+        },
+        {
+          "feature": "coolant_temperature_slope",
+          "signal": "coolant_temperature",
+          "statistic": "slope",
+          "importance": 0.010744,
+          "direction": "increases",
+          "value": -0.000818
+        },
+        {
+          "feature": "map_min",
+          "signal": "map",
+          "statistic": "min",
+          "importance": 0.009033,
+          "direction": "increases",
+          "value": 22.40023
+        }
+      ]
+    }
+  ]
+}
