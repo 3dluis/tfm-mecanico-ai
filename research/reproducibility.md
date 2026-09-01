@@ -32,10 +32,23 @@ parámetros · métricas. En JSON y CSV, bajo `experiments/`.
 |---|---|---|---|
 | E1 entorno | sí | `docs/experiments/E1_entorno.md`, `notebooks/00_environment_check.ipynb` | — |
 | E2 datos sintéticos | sí | `data/raw/synthetic/synthetic_v1.parquet` + `.meta.json`; `uv run mecanico-exp generate-synthetic` | **20260901** |
-| E3-E20 | `[EXPERIMENT_REQUIRED]` | — | — |
+| E3 datos reales | ⛔ bloqueada | — | — |
+| E4 análisis exploratorio | sí | `tables/E4_*.csv`, `figures/FIG-E4-*.png` | — |
+| E5 preprocesamiento | sí | `synthetic_v2`; ventana 120 s; reparto por sesión; `noise_floor_max_delta` como función reutilizable | registrada |
+| E6 baseline | sí | `experiments/E6_baseline.json`, `tables/E6_*.csv`, `figures/FIG-E6-*.png`; `uv run mecanico-exp train-baseline` | registrada |
+| E7-E20 | `[EXPERIMENT_REQUIRED]` | — | — |
 
 E2 verifica que dos ejecuciones con la misma semilla producen ficheros idénticos, y que dos
 semillas distintas no.
+
+## Cierre del conjunto de test
+
+No es una convención: es un cierre técnico. `load_partition("test")` **lanza una excepción**;
+abrirlo exige `allow_test=True` **y una razón por escrito**, que se imprime en la salida de la
+ejecución. Tres tests comprueban el cierre, incluido que el mensaje indique usar validación.
+
+La disciplina no se confía a la memoria de quien escribe el código: un descuido produce una
+excepción, no un resultado inválido que nadie note.
 
 ## Regla de honestidad
 

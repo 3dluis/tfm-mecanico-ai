@@ -1,0 +1,91 @@
+{
+  "experiment_id": "E7_temporal",
+  "dataset_id": "synthetic_v3",
+  "model": "GRU bidireccional",
+  "device": "mps",
+  "n_parameters": 19014,
+  "training_seconds": 134.63,
+  "config": {
+    "hidden_size": 48,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "bidirectional": true,
+    "learning_rate": 0.003,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "max_epochs": 300,
+    "patience": 40,
+    "seed": 20260901
+  },
+  "best_epoch": 27,
+  "epochs_run": 68,
+  "stopped_early": true,
+  "baseline_reference": {
+    "macro_f1": 0.9321,
+    "accuracy": 0.9242
+  },
+  "metrics": {
+    "partition": "validation",
+    "n": 343,
+    "accuracy": 0.9388,
+    "macro_f1": 0.9446,
+    "weighted_f1": 0.9391,
+    "balanced_accuracy": 0.9388,
+    "calibration": {
+      "ece": 0.0163,
+      "mean_confidence": 0.95,
+      "accuracy": 0.9388,
+      "overconfidence": 0.0112
+    },
+    "per_class": [
+      {
+        "label": "F00_normal",
+        "precision": 0.8762,
+        "recall": 0.9388,
+        "f1": 0.9064,
+        "support": 98,
+        "pr_auc": 0.9314
+      },
+      {
+        "label": "F01_vacuum_leak",
+        "precision": 0.98,
+        "recall": 1.0,
+        "f1": 0.9899,
+        "support": 49,
+        "pr_auc": 1.0
+      },
+      {
+        "label": "F02_maf_drift",
+        "precision": 1.0,
+        "recall": 0.9796,
+        "f1": 0.9897,
+        "support": 49,
+        "pr_auc": 1.0
+      },
+      {
+        "label": "F03_thermostat_stuck",
+        "precision": 0.8654,
+        "recall": 0.9184,
+        "f1": 0.8911,
+        "support": 49,
+        "pr_auc": 0.9642
+      },
+      {
+        "label": "F04_o2_lag",
+        "precision": 1.0,
+        "recall": 0.9592,
+        "f1": 0.9792,
+        "support": 49,
+        "pr_auc": 0.9879
+      },
+      {
+        "label": "F05_misfire",
+        "precision": 1.0,
+        "recall": 0.8367,
+        "f1": 0.9111,
+        "support": 49,
+        "pr_auc": 0.9389
+      }
+    ]
+  }
+}

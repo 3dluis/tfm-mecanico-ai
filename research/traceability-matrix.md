@@ -1,6 +1,7 @@
 # Matriz de trazabilidad — marco canónico
 
-**Marco:** `mecanico-ia-exp` (ADR-001) · **Fecha:** 1 de septiembre de 2026
+**Marco:** `mecanico-ia-exp` (ADR-001) · **Fecha:** 1 de septiembre de 2026, 15:00
+(actualizada tras el cierre de E4, E5 y E6)
 
 **Regla de lectura, vinculante:** si un elemento del proyecto no puede conectarse con una fila
 de esta matriz, no pertenece al núcleo científico — es artefacto, instrumento o ingeniería, y
@@ -25,7 +26,7 @@ esta matriz sirve para hacer **ahora** es detectar huecos, no documentar hallazg
 
 | Sub-PI | Objetivo | Hipótesis | Experimento | Métricas | RES | DISC | CONC | Evidencia |
 |---|---|---|---|---|---|---|---|---|
-| **PI.1** — diagnóstico a partir de OBD-II real | OE-M3 ⚠ | Un modelo temporal sobre ventanas OBD-II supera de forma clara al baseline y a la clase mayoritaria | **E8** (con E5, E6, E7) | M1: F1 macro, PR-AUC, calibración | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
+| **PI.1** — diagnóstico a partir de OBD-II real | OE-M3 ⚠ | Un modelo temporal sobre ventanas OBD-II supera de forma clara al baseline y a la clase mayoritaria | **E8** (con E5 ✅, E6 ✅, E7) | M1: F1 macro, PR-AUC, calibración | **parcial, en validación**: baseline F1 macro 0,876 frente a 0,074 de la clase mayoritaria (E6). **Sin test** | PENDING | PENDING | `experiments/E6_baseline.json` |
 | **PI.2** — explicación trazable | OE-M4 | Toda afirmación se ancla en una observación o en un fragmento identificable | **E14, E17** | M4: citation correctness, citation completeness, claim support rate, unsupported claim rate | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 | **PI.3** — reconocimiento de insuficiencia | OE-M4, OE-M5 ⚠ | Al retirar la evidencia relevante del corpus, el agente pasa de explicar a abstenerse sobre el mismo caso | **E16, E17** | M5: abstención correcta, abstención injustificada, cobertura | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 | **PI.4** — rechazo de evidencia engañosa | OE-M5 ⚠ | Ante evidencia parecida pero incorrecta, el agente no la acepta como soporte | **E17** | M5 sobre DISTRACTOR; M2 por condición | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
@@ -43,9 +44,9 @@ resultados anularía el propósito de la matriz.
 | E1 entorno | precondición instrumental | **cerrada** | OE-M2 |
 | E2 datos sintéticos | precondición instrumental | **cerrada** | OE-M2 |
 | E3 datos reales | precondición de PI.1 y de la PI completa | **bloqueada** — falta decidir la fuente | OE-M2 |
-| E4 análisis exploratorio | instrumental: qué señales son utilizables | en curso, sin informe | OE-M2 |
-| E5 preprocesamiento y particionado | instrumental crítico: sin partición limpia, nada posterior vale | pendiente | OE-M2 |
-| E6 baseline | **control** de PI.1 | pendiente | OE-M3 |
+| E4 análisis exploratorio | instrumental: qué señales son utilizables | **cerrada** | OE-M2 |
+| E5 preprocesamiento y particionado | instrumental crítico: sin partición limpia, nada posterior vale | **cerrada** — ventana 120 s, reparto por sesión, suelo de ruido medido | OE-M2 |
+| E6 baseline | **control** de PI.1 | **cerrada** — F1 macro 0,876 en validación; umbral para E7 | OE-M3 |
 | E7 modelo temporal | instrumental de PI.1 | pendiente | OE-M3 |
 | E8 evaluación del modelo | **PI.1** | pendiente | OE-M3 |
 | E9 atribución | instrumental: produce la evidencia observacional de PI.2 | pendiente | OE-M3 |
@@ -147,6 +148,35 @@ criterio, sobre qué hardware. Si es descriptiva, decirlo. Ver `prereg-classific
 Ablaciones y demostración están asignadas a OE-M5 por proximidad, no porque OE-M5 las nombre.
 Al reformular OE-M5 (I-02), conviene que las incluya o que se declare que son instrumentales.
 
+### I-08 — El umbral de suficiencia se apoyará en una confianza mal calibrada · **grave, nueva**
+
+E6 midió un error de calibración esperado de **0,140**, con el modelo **infra**confiado
+(confianza media 0,738 frente a 0,878 de acierto). El criterio de suficiencia de E15 toma la
+confianza del modelo como una de sus cuatro señales conjuntivas.
+
+Con estas probabilidades, un umbral sobre la confianza **se abstendría más de lo debido**, y
+el sistema parecería prudente cuando en realidad está mal medido. La calibración deja de ser
+una métrica de M1 y pasa a ser **una precondición de E15**.
+
+Registrado como limitación L-14. No requiere decisión: requiere calibrar antes de fijar
+umbral, sobre validación.
+
+### I-09 — Existe una fuente natural de casos de abstención, y no estaba prevista · **oportunidad**
+
+E6 encontró que el termostato bloqueado tiene un **límite físico de detección**: mientras el
+motor no habría superado el techo de 71 °C por sí mismo, la señal de un motor averiado es
+idéntica a la de uno sano (detectadas 70,7 °C de media, no detectadas 54,3 °C; urbano 7/7,
+calentamiento 2/7).
+
+Son ventanas donde la evidencia es **genuinamente insuficiente por física, no por
+construcción experimental**. El diseño de E17 preveía construir la insuficiencia retirando
+documentos del corpus; esto aporta insuficiencia **observacional**, que es una condición
+distinta y no está en la matriz de las cuatro condiciones.
+
+`[AUTHOR_DECISION_REQUIRED]` — ¿entra como quinta condición, como estrato dentro de las
+cuatro, o como análisis aparte? Aprovecharla es barato; no declararla sería perder el caso
+más honesto que el experimento tiene a mano.
+
 ### I-07 — La PI dice «datos reales» y E3 está bloqueada · **bloqueante**
 
 Es la incidencia de mayor impacto. La pregunta de investigación se formula sobre **datos
@@ -168,6 +198,7 @@ limitaciones.
 | **Objetivo que describe otro marco** | **2** (OE-M3, OE-M5) |
 | **Subpregunta sin vacío que la justifique** | **1** (PI.4) |
 | **Métrica sin subpregunta** | **2** (M3 descriptiva declarada; M6 sin declarar) |
+| **Condición experimental sin ubicar** | **1** (insuficiencia observacional de E6, I-09) |
 | Resultado sin experimento | 0 |
 | Hipótesis sin prueba | 0 |
 | Evidencia huérfana | 0 |
