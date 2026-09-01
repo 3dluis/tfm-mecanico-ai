@@ -17,7 +17,7 @@ sustituye ni la reconfigura**: crea únicamente su propia base de datos.
 
 ## Qué crea el laboratorio, y qué no
 
-Crea: la base `mecanico_ai_exp`, las extensiones `vector` y `pg_trgm` dentro de
+Crea: la base `mecanico_ia_exp`, las extensiones `vector` y `pg_trgm` dentro de
 ella, y los objetos de su esquema mediante migraciones.
 
 No hace: instalar otro servidor, tocar otras bases, eliminar esquemas, alterar
@@ -74,7 +74,7 @@ Alternativa sin compilar nada: el modo portable con contenedor, en
 ## Reiniciar el laboratorio desde cero
 
 ```bash
-dropdb mecanico_ai_exp && bash scripts/init_db.sh
+dropdb mecanico_ia_exp && bash scripts/init_db.sh
 ```
 
 `dropdb` afecta solo a la base del laboratorio. Antes de ejecutarlo conviene

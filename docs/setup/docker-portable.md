@@ -22,7 +22,7 @@ instalación local.
 ```dotenv
 DATABASE_HOST=localhost
 DATABASE_PORT=5433
-DATABASE_NAME=mecanico_ai_exp
+DATABASE_NAME=mecanico_ia_exp
 DATABASE_USER=mecanico
 DATABASE_PASSWORD=mecanico
 ```

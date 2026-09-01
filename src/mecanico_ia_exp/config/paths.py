@@ -7,7 +7,7 @@ mismo sitio.
 
 from pathlib import Path
 
-# src/mecanico_ai_exp/config/paths.py -> raíz del repositorio
+# src/mecanico_ia_exp/config/paths.py -> raíz del repositorio
 ROOT = Path(__file__).resolve().parents[3]
 
 DATA = ROOT / "data"

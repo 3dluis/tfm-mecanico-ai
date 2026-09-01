@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mecanico-ai-exp"
+name = "mecanico-ia-exp"
 version = "0.1.0"
 description = "Laboratorio experimental reproducible del TFM: diagnóstico OBD-II con evidencia trazable y abstención fundamentada"
 readme = "README.md"
@@ -60,10 +60,10 @@ dev = [
 ]
 
 [project.scripts]
-mecanico-exp = "mecanico_ai_exp.cli:main"
+mecanico-exp = "mecanico_ia_exp.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/mecanico_ai_exp"]
+packages = ["src/mecanico_ia_exp"]
 
 [tool.ruff]
 line-length = 100

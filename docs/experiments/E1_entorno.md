@@ -10,7 +10,7 @@ experimental antes de escribir código científico.
 ## Qué se hizo
 
 1. Auditoría del entorno existente, en modo lectura.
-2. Creación del repositorio `mecanico-ai-exp`, separado e independiente.
+2. Creación del repositorio `mecanico-ia-exp`, separado e independiente.
 3. Configuración de uv con Python 3.11 y extras por área.
 4. Configuración tipada por variables de entorno, con `.env.example`.
 5. Auditoría automatizada del entorno, expuesta como CLI y como notebook.
@@ -29,7 +29,7 @@ experimental antes de escribir código científico.
 | PyTorch | 2.13.0 · MPS compilado y disponible |
 | MPS | comprobado con una multiplicación de matrices 512×512 en dispositivo `mps` |
 | PostgreSQL | 14.15 (Homebrew), servicio activo en 5432 |
-| pgvector | 0.8.0, instalada en `mecanico_ai_exp` |
+| pgvector | 0.8.0, instalada en `mecanico_ia_exp` |
 | Docker | 29.3.1 · Compose v5.1.1 (solo portabilidad) |
 | Ollama | instalado (opcional, no oficial) |
 
@@ -44,7 +44,7 @@ La instalación de PostgreSQL ya existía y sirve a otras bases del autor
 `norla_migrate_test`). Ninguna ha sido consultada en su contenido, alterada ni
 eliminada.
 
-Se creó exclusivamente la base `mecanico_ai_exp` y se habilitaron en ella
+Se creó exclusivamente la base `mecanico_ia_exp` y se habilitaron en ella
 `vector` 0.8.0 y `pg_trgm` 1.6, mediante `scripts/init_db.sh` y la migración
 `0001_extensiones_base`.
 
@@ -75,14 +75,27 @@ $ uv run mecanico-exp doctor
 
 ## Artefactos
 
-- Repositorio `mecanico-ai-exp`, con historial propio.
+- Repositorio `mecanico-ia-exp`, con historial propio.
 - `docs/plan_experimental_macbook.md` — plan por fases y clasificación de
   componentes.
 - `docs/matriz_validacion_pi.md` — subpreguntas, criterios y desenlaces de
   refutación.
 - `docs/setup/`, `docs/methodology/`.
 - `notebooks/00_environment_check.ipynb`, ejecutado.
-- Base `mecanico_ai_exp` con `vector` y `pg_trgm`.
+- Base `mecanico_ia_exp` con `vector` y `pg_trgm`.
+
+## Nota sobre el nombre
+
+El laboratorio se creó inicialmente como `mecanico-ai-exp` y se renombró a
+`mecanico-ia-exp` el mismo día, para alinearlo con el proyecto de ingeniería
+`mecanico-ia`. El cambio se aplicó de forma completa —directorio, paquete
+Python, nombre del proyecto, base de datos, servicios de `compose.yaml` y kernel
+de Jupyter— porque una corrección parcial habría reproducido la incoherencia un
+nivel más abajo.
+
+La base de datos se renombró con `ALTER DATABASE`, conservando sus extensiones y
+el sello de Alembic; no se recreó. El proyecto de ingeniería no se tocó: conserva
+su nombre, su historial y su configuración.
 
 ## Qué queda abierto
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from mecanico_ai_exp.config.settings import get_settings
+from mecanico_ia_exp.config.settings import get_settings
 
 
 @pytest.fixture(autouse=True)

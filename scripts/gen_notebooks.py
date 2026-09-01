@@ -252,9 +252,9 @@ from pathlib import Path
 RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
 sys.path.insert(0, str(RAIZ / "src"))
 
-import mecanico_ai_exp
+import mecanico_ia_exp
 
-mecanico_ai_exp.__version__
+mecanico_ia_exp.__version__
 """
 
 
@@ -262,7 +262,7 @@ def cuerpo(nombre: str) -> list[dict[str, object]]:
     if nombre == "00_environment_check":
         return [
             code(
-                "from mecanico_ai_exp.config.environment import audit, resolve_device\n"
+                "from mecanico_ia_exp.config.environment import audit, resolve_device\n"
                 "\n"
                 "informe = audit()\n"
                 "print(informe)\n"
@@ -275,7 +275,7 @@ def cuerpo(nombre: str) -> list[dict[str, object]]:
             code("resolve_device()\n"),
             md("Rutas del laboratorio, ancladas a la raíz del repositorio."),
             code(
-                "from mecanico_ai_exp.config import paths\n"
+                "from mecanico_ia_exp.config import paths\n"
                 "\n"
                 'nombres = ("DATA_RAW_REAL", "CORPUS_PROCESSED", "RESULTS", "FIGURES")\n'
                 "for nombre in nombres:\n"
@@ -304,7 +304,7 @@ def main() -> None:
             "cells": celdas,
             "metadata": {
                 "kernelspec": {
-                    "display_name": "Python 3 (mecanico-ai-exp)",
+                    "display_name": "Python 3 (mecanico-ia-exp)",
                     "language": "python",
                     "name": "python3",
                 },

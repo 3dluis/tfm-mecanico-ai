@@ -103,7 +103,7 @@ def resolve_device() -> str:
 
 def check_database() -> Check:
     """Conectividad con PostgreSQL. Solo lee; no crea ni altera nada."""
-    from mecanico_ai_exp.config.settings import get_settings
+    from mecanico_ia_exp.config.settings import get_settings
 
     settings = get_settings().database
     try:
@@ -125,7 +125,7 @@ def check_database() -> Check:
 
 def check_pgvector() -> Check:
     """Disponibilidad de la extensión vectorial, instalada o instalable."""
-    from mecanico_ai_exp.config.settings import get_settings
+    from mecanico_ia_exp.config.settings import get_settings
 
     settings = get_settings().database
     try:

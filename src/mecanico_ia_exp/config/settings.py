@@ -11,7 +11,7 @@ from typing import Literal
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from mecanico_ai_exp.config.paths import ROOT
+from mecanico_ia_exp.config.paths import ROOT
 
 LLMProviderName = Literal["openai_compatible", "anthropic", "ollama", "echo"]
 
@@ -25,7 +25,7 @@ class DatabaseSettings(BaseSettings):
 
     host: str = "localhost"
     port: int = 5432
-    name: str = "mecanico_ai_exp"
+    name: str = "mecanico_ia_exp"
     user: str = ""
     password: str = ""
     schema_name: str = Field(default="public", alias="DATABASE_SCHEMA")
