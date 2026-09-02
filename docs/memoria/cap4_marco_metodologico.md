@@ -1,0 +1,341 @@
+# Capítulo 4: Marco Metodológico
+
+> Estado: redactado sobre el diseño ejecutado (E1–E17 sobre datos sintéticos). El apartado
+> «Población y muestra» tiene una versión final pendiente de E3. Todas las cifras proceden de
+> registros de `experiments/` o de `configs/calibracion_mazda3_bk.yaml`.
+
+El trabajo sigue el ciclo de la investigación en ciencias del diseño (Peffers et al., 2007,
+MET-16; Hevner et al., 2004, MET-17): identifica un problema, fija los objetivos de una
+solución, construye un artefacto, lo demuestra sobre casos, lo evalúa con criterios fijados
+de antemano y comunica el resultado. La elección no es de conveniencia. La pregunta de
+investigación no puede responderse observando sistemas existentes, porque ninguno de los
+revisados separa la decisión de explicar de la redacción de la explicación; hay que
+construir uno que lo haga y medir si esa separación produce el comportamiento que la
+pregunta interroga. El artefacto es el instrumento, no la contribución: la contribución es
+la evidencia experimental sobre su comportamiento bajo condiciones controladas de evidencia.
+
+Dos compromisos de método atraviesan todo el capítulo. El primero es que **el criterio de
+éxito de cada experimento se fija antes de ejecutarlo**, se escribe en el informe de fase y
+no se modifica después de ver el resultado; los resultados negativos se publican con el mismo
+detalle que los positivos. El segundo es que **toda cifra publicada procede de un registro
+de ejecución reproducible**, con su commit, semilla, versiones de datos, corpus, modelo y
+prompt. Lo que no se ha ejecutado se declara como no ejecutado.
+
+## Población y muestra
+
+### Población
+
+La población de referencia es el conjunto de ventanas de telemetría OBD-II de un vehículo de
+combustión con puerto normalizado, en condiciones de conducción ordinarias, con y sin fallo
+en los sistemas de admisión, combustible, encendido, refrigeración y emisiones. El vehículo
+de estudio es un Mazda 3 de la generación BK, año 2007, motor de gasolina de 1,6 litros con
+código Z6 y transmisión manual. Se eligió entre tres candidatos, Mazda 3, Honda Civic y
+Toyota Corolla del rango 2000–2016, por la disponibilidad de su manual de taller completo y
+porque sus procedimientos de diagnóstico son específicos del motor, lo que permite construir
+la condición con distractor con evidencia real de otro motor de la misma gama. La comparación
+está documentada en el repositorio.
+
+`[DECISIÓN DEL AUTOR]` El código de motor, la cilindrada y la transmisión son un supuesto
+de trabajo para el generador sintético, justificado porque los códigos de avería que el
+experimento usa están documentados en el manual para los motores ZJ y Z6. Cuando se
+incorporen datos reales, esos tres valores deben tomarse del vehículo real.
+
+### Muestra: telemetría
+
+La fase de incorporación de datos reales (E3) está bloqueada por una decisión pendiente
+sobre la fuente. La muestra con la que se han ejecutado los experimentos es **sintética**,
+generada por un modelo paramétrico determinista con semilla fija. Se describe con precisión
+porque su validez depende de cómo se construyó.
+
+El generador produce sesiones de conducción en tres regímenes, ralentí, urbano y carretera,
+para seis condiciones: sin fallo y cinco fallos representativos de los sistemas nombrados
+arriba. Cada fallo tiene una firma que afecta a una o varias señales con un mecanismo físico
+declarado; por ejemplo, una fuga de vacío eleva las correcciones de combustible a corto y
+largo plazo sin tocar el caudal de aire medido, y un termostato bloqueado abierto impide que
+la temperatura del refrigerante alcance su valor de régimen. Las constantes del generador,
+régimen de ralentí, temperatura de apertura del termostato, rangos de tensión de la sonda de
+oxígeno, límites de corrección de combustible que disparan cada código de avería, están
+ancladas una por una a valores del manual de taller, con la cita de la página de la que
+proceden, en un fichero de calibración versionado. La calibración se hizo después de una
+primera versión de los datos y corrigió varias constantes que no procedían de ninguna fuente;
+el proceso está documentado con cada hallazgo y su corrección.
+
+| Parámetro de la muestra sintética | Valor |
+|---|---|
+| Condiciones | 6 (sin fallo y cinco fallos) |
+| Sesiones por condición | 12; 72 en total |
+| Duración de cada sesión | 600 s |
+| Frecuencia de muestreo | 1 Hz; 43 200 muestras |
+| Señales | 12: régimen, velocidad, carga, mariposa, temperatura de refrigerante, temperatura de admisión, caudal másico, presión del colector, correcciones de combustible a corto y largo plazo, sonda de oxígeno, avance del encendido |
+| Semilla | 20260901 |
+| Ventana de análisis | 120 s, con solape |
+| Descriptores por ventana | 139 |
+| Reparto | entrenamiento, validación y test, por sesión; 392 ventanas de entrenamiento y 98 de validación |
+
+Registro: `data/raw/synthetic/synthetic_v2.meta.json`.
+
+La elección de la ventana no fue arbitraria. Se estudiaron cuatro longitudes, 10, 30, 60 y
+120 segundos, midiendo para cada fallo la separabilidad de sus descriptores respecto de la
+condición sin fallo, en nivel y en dispersión, y comparándola con el suelo de ruido que se
+obtiene al tomar el máximo entre todos los descriptores de una condición sin fallo,
+partida en dos mitades por sesión, en treinta repeticiones. Ese suelo no es despreciable, y
+crece con la ventana:
+
+| Ventana | Suelo de ruido (percentil 90 del máximo entre 139 descriptores) |
+|---|---|
+| 10 s | 0,369 |
+| 30 s | 0,399 |
+| 60 s | 0,438 |
+| 120 s | 0,512 |
+
+Con ventanas cortas, el mejor descriptor de un fallo de encendido resultaba ser una variante
+de la temperatura del refrigerante, señal que ese fallo no toca, y su tamaño de efecto
+quedaba por debajo del suelo de ruido. Es el fenómeno que el trabajo estudia, en miniatura:
+evidencia aparente que no sobrevive al escrutinio. Con 60 y 120 segundos el mejor descriptor
+de ese fallo pasa a ser la sonda de oxígeno, que sí está en su mecanismo declarado, y con
+120 segundos los mecanismos físicos declarados y los descriptores separables coinciden en
+todas las condiciones detectables. Registro: `docs/experiments/E5_preprocesamiento.md`.
+
+**Limitación declarada.** Los datos sintéticos no tienen validez externa. Se parecen a los
+reales en lo que el manual permite comprobar y en nada más; en particular, no reproducen la
+variabilidad entre conductores, el desgaste, ni los fallos que no están en el generador.
+Todos los resultados sobre ellos se presentan como condicionales.
+
+### Muestra: corpus documental
+
+El corpus es el manual de taller del vehículo, en su copia local del autor, procedente de un
+repositorio secundario en la web. No se redistribuye; se registra su huella SHA-256 para que
+un tercero que disponga del mismo documento pueda comprobar la identidad. Está compuesto por
+ficheros por procedimiento, cada uno con los códigos de motor a los que aplica.
+
+| Corpus | Valor |
+|---|---|
+| Ficheros del manual con aplicabilidad al motor LF | 507 |
+| Ficheros con aplicabilidad a los motores ZJ y Z6 | 486 |
+| Ficheros comunes a los tres motores | 90 |
+| Fragmentos indexados | 6 158, todos en inglés |
+| Modelos de embeddings indexados | dos: uno monolingüe en inglés y otro multilingüe, ambos sobre los 6 158 fragmentos, para medir el efecto del idioma de la consulta |
+| Idioma de las consultas | español e inglés; cada caso anotado lleva la consulta en ambos |
+
+El manual no se traduce. El trabajo se escribe en español y la documentación está en
+inglés, que es la situación normal de un taller en España con un vehículo de fabricante
+extranjero; la recuperación es translingüe, y el capítulo 5 muestra que no funciona sola.
+
+Cada fragmento conserva su procedencia completa: documento, versión, sección, página, códigos
+de avería que contiene, sistema del vehículo y motores a los que aplica. Esa metadata es lo
+que permite construir las variantes del corpus del diseño experimental retirando o dejando
+fragmentos por código de avería o por fichero, sin tocar nada más.
+
+### Casos de referencia
+
+La evaluación del agente se hace sobre un conjunto anotado de nueve casos, construidos a
+partir de ventanas de validación correctamente clasificadas, uno o dos por condición de
+fallo, cruzados con las condiciones de corpus. Cada caso lleva anotado, antes de ejecutar
+nada, el diagnóstico esperado, la consulta en los dos idiomas, los ficheros del manual que
+constituyen evidencia relevante, los de apoyo, los distractores, qué se retira del índice y la
+acción esperada, explicar o abstenerse. `[Pendiente: señales y ventanas relevantes,
+fragmentos a nivel de chunk, afirmaciones admisibles y evidencia mínima, previstos en el
+diseño y no anotados todavía.]`
+
+El conjunto de test de la telemetría **permanece cerrado** hasta la evaluación final. Los
+umbrales del criterio de suficiencia se calibraron únicamente sobre validación, y todas las
+cifras de esta memoria anteriores a E19 son de validación.
+
+## Objetivos de investigación
+
+Los objetivos del capítulo 2 se operacionalizan en cuatro subpreguntas, cada una con un
+desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación.
+
+| Subpregunta | Qué pregunta | Sostenida si | Refutada si |
+|---|---|---|---|
+| PI.1 | ¿Diagnostica a partir de la telemetría? | supera claramente a la clase mayoritaria y su confianza está calibrada | no supera a la referencia mínima, o la confianza no significa lo que aparenta |
+| PI.2 | ¿La explicación es trazable? | toda afirmación admitida se ancla en una observación y un documento verificados | las referencias existen pero no sostienen lo afirmado |
+| PI.3 | ¿Reconoce la insuficiencia? | la decisión cambia al retirar la evidencia, con todo lo demás idéntico | explica igual con y sin evidencia, o se abstiene siempre |
+| PI.4 | ¿Rechaza evidencia engañosa? | el procedimiento de otro motor no se acepta como soporte | acepta distractores como evidencia |
+
+La respuesta global a la pregunta admite tres valores, sostenida, parcialmente sostenida y
+no sostenida, y cuatro desenlaces la refutarían, enumerados de antemano: que el agente
+explique con la misma soltura con y sin evidencia; que se abstenga casi siempre y la
+abstención resulte trivial; que acepte distractores; y que las referencias existan pero no
+sostengan lo que se afirma con ellas.
+
+## Variables intervinientes e instrumentos de evaluación
+
+### Variable manipulada
+
+Una sola: **qué evidencia documental está disponible en el corpus**. Toma cuatro valores.
+
+| Condición | Corpus | Comportamiento esperado |
+|---|---|---|
+| FULL | contiene la evidencia correcta | EXPLAIN, con cada afirmación trazada |
+| PARTIAL | evidencia incompleta | ABSTAIN, salvo explicación limitada declarada como tal |
+| ABSENT | la evidencia relevante ha sido retirada del índice | ABSTAIN |
+| DISTRACTOR | contiene evidencia parecida pero incorrecta | rechazo del distractor; ABSTAIN si no queda otra |
+
+Las variantes se construyen sobre el mismo índice, excluyendo fragmentos por código de
+avería o por fichero en el momento de la consulta. La condición ABSENT retira todos los
+fragmentos que portan los códigos de avería de la condición, no solo los del procedimiento
+principal; una primera versión que retiraba solo estos últimos dejaba evidencia en las tablas
+de códigos y produjo un falso positivo del experimento central, detectado y corregido.
+
+### Variables controladas
+
+Los datos de telemetría, el modelo de diagnóstico, la atribución, la confianza calibrada, la
+consulta, el proveedor de lenguaje y sus parámetros, la semilla y la versión del prompt se
+mantienen idénticos entre condiciones. Es esa constancia lo que permite atribuir un cambio de
+comportamiento del agente a la disponibilidad de evidencia y no a otra cosa.
+
+### Variables medidas
+
+Se agrupan en seis familias. No todas se calculan en cada experimento; se reporta la que
+corresponde y se dice cuál.
+
+**M1, diagnóstico.** Exactitud, F1 macro y calibración del modelo especializado. La
+calibración se mide con el error esperado de calibración (Naeini, Cooper y Hauskrecht, 2015,
+MET-07) y se corrige con regresión isotónica (Zadrozny y Elkan, 2002, MET-05; Niculescu-Mizil
+y Caruana, 2005, MET-06) ajustada por validación cruzada sobre entrenamiento, para no gastar
+la validación en dos cosas.
+
+**M2, recuperación.** Tasa de acierto en los diez primeros, rango recíproco medio y nDCG
+sobre el conjunto anotado, reportados por condición de corpus y no solo en agregado, porque
+el agregado promedia condiciones diseñadas para diferir.
+
+**M3, explicación.** Adecuación al esquema de salida y tasa de salidas válidas. Es
+descriptiva y no responde a ninguna subpregunta; se declara como tal.
+
+**M4, trazabilidad.** Corrección de las citas (existen y resuelven), completitud (proporción
+de afirmaciones con cita), tasa de soporte (proporción de afirmaciones cuya cita sostiene lo
+afirmado) y su complemento. La distancia entre completitud y soporte es informativa por sí
+misma: mide cuántas afirmaciones llevan una referencia que no las respalda, el fallo más
+difícil de ver porque el texto parece impecable. Todas se calculan de forma determinista.
+
+**M5, abstención.** Abstención correcta, abstención injustificada y explicación sin
+fundamento, siempre acompañadas de la cobertura. Corrección y cobertura solo significan algo
+juntas.
+
+**M6, rendimiento.** Latencia por etapa y extremo a extremo, tamaño del modelo y coste de la
+recuperación, con el dispositivo real de cada etapa. `[DECISIÓN DEL AUTOR: criterio o
+descriptiva.]`
+
+### Instrumentos
+
+Todos los instrumentos son código versionado con tests, y ninguna métrica que responda a una
+subpregunta depende de un juicio humano ni de un modelo de lenguaje.
+
+El **modelo de diagnóstico** es un bosque aleatorio (Breiman, 2001, MET-01) sobre los 139
+descriptores de ventana, con pesos de clase, elegido como baseline por su robustez con pocos
+datos; se contrastó con una red recurrente bidireccional de unidades GRU (Cho et al., 2014,
+MET-02) sobre las secuencias crudas, que no lo superó en este volumen de datos. La
+**atribución** usa valores de Shapley (Lundberg y Lee, 2017, MET-03) en su variante por
+permutación, con un fondo de referencia de ventanas sin fallo y semilla fija, y produce para
+cada caso las señales, estadísticos, valores, dirección y ventana temporal que más
+contribuyen a la predicción. La memoria no afirma en ningún punto que esa atribución sea
+causal: indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.
+
+El **sistema de recuperación** combina búsqueda semántica con un modelo multilingüe de
+embeddings de frases (Reimers y Gurevych, 2019, MET-11) sobre una base de datos PostgreSQL
+con extensión vectorial, búsqueda léxica sobre el texto completo y fusión por rango
+recíproco (Cormack, Clarke y Buettcher, 2009, MET-12) que conserva las puntuaciones
+originales; se filtra siempre por vehículo y, cuando procede, por motor. La recuperación
+guiada por el diagnóstico añade a la consulta los códigos de avería que el manual asocia a la
+condición predicha. Un **validador de aplicabilidad** asigna a cada fragmento uno de cinco
+grados respecto del vehículo, coincidencia exacta, compatible, parcial, desconocido o
+incompatible, y solo los dos primeros pueden contar como evidencia.
+
+El **verificador de suficiencia** es determinista. Construye una afirmación por observación
+atribuida, con plantillas que enuncian lo observado sin atribuir causa; para cada una busca
+fragmentos aplicables que la sostengan, comprobando que el fragmento mencione la señal, tenga
+contenido diagnóstico y porte un código de avería de la condición; y decide con un criterio
+conjuntivo sobre la confianza calibrada, el número de fragmentos y fuentes de apoyo, la
+cobertura de las afirmaciones y la ausencia de contradicciones. La abstención es una salida
+válida del esquema, con su motivo y la evidencia que falta. El criterio sigue la lógica de la
+clasificación con opción de rechazo (Chow, 1970, MET-08; Geifman y El-Yaniv, 2017, MET-09):
+la decisión de no responder es una salida legítima cuya calidad se mide junto con su
+cobertura.
+
+El **modelo de lenguaje** es Qwen2.5 de 3 000 millones de parámetros (Qwen Team, 2024,
+MET-14), ejecutado localmente sin clave ni red tras la descarga. Recibe la decisión, las
+afirmaciones y la evidencia ya verificadas y redacta la salida en un esquema fijo; una
+barrera externa rechaza cualquier cita que no corresponda a algo entregado. Se ajustó con
+adaptadores de rango bajo (Hu et al., 2022, MET-13) sobre las proyecciones de atención, con
+ejemplos derivados de ejecuciones auténticas del propio pipeline, con la pérdida calculada
+solo sobre la respuesta y con una comprobación automática de que ningún fragmento del manual
+aparece en las salidas de entrenamiento. El ajuste enseña el formato de la tarea y no el
+contenido del vehículo: si el modelo memorizara el manual, en la condición ABSENT lo
+recordaría de sus pesos y el experimento mediría memoria en lugar de evidencia.
+
+## Diseño experimental
+
+El plan tiene veinte fases, cada una con informe, criterio de aceptación y puertas de calidad
+de código. Se agrupan en cinco bloques.
+
+| Bloque | Fases | Qué producen |
+|---|---|---|
+| Entorno y datos | E1–E5 | auditoría del entorno, datos sintéticos calibrados, análisis exploratorio, ventana y reparto sin fuga |
+| Modelo de diagnóstico | E6–E9 | baseline, modelo temporal, evaluación, atribución |
+| Corpus y recuperación | E10–E12 | corpus del vehículo, ingesta, evaluación de la recuperación |
+| Agente y suficiencia | E13–E16 | modelo de lenguaje, modelo de evidencia, verificador, abstención |
+| Evaluación | E17–E20 | experimento integrado, ablaciones, evaluación final, demostración |
+
+### Experimento central
+
+El mismo caso, dos veces. En la primera, la telemetría pasa por el modelo, la atribución y
+la recuperación, la evidencia resulta suficiente y el agente explica con cada afirmación
+trazada. En la segunda, los mismos datos, el mismo modelo, la misma atribución y la misma
+confianza, pero la evidencia relevante se ha retirado del índice: la recuperación no la
+encuentra, la evidencia resulta insuficiente y el agente se abstiene. El contraste debe
+verse sin necesidad de explicarlo. Las condiciones PARTIAL y DISTRACTOR extienden ese
+contraste: la primera prueba que la evidencia incompleta no basta; la segunda, que la
+evidencia parecida no cuenta. FULL y ABSENT prueban que el sistema responde a la *presencia*
+de evidencia; DISTRACTOR prueba que responde a su *pertinencia*, y un sistema que confunda
+similitud con soporte pasará las tres primeras y fallará esta.
+
+### Particiones y cierre del test
+
+Entrenamiento, validación y test se separan por sesión, nunca por partición aleatoria de
+ventanas consecutivas, porque dos ventanas contiguas comparten casi toda su información y
+repartirlas entre entrenamiento y test convertiría la evaluación en un espejo. El test
+permanece cerrado hasta la evaluación final y su apertura exige una declaración explícita y
+una razón escrita. Los umbrales del criterio de suficiencia se fijan sobre validación.
+
+### Ablaciones
+
+Cada ablación cambia exactamente un factor: sin atribución, sin recuperación semántica, sin
+criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para
+saber qué parte del resultado aporta cada pieza. `[Pendiente: E18.]`
+
+### Reproducibilidad
+
+Toda ejecución registra identificador de experimento, versión del dataset, versión del
+corpus, modelo de embeddings, proveedor y modelo de lenguaje, versión del prompt, semilla,
+parámetros y métricas, en JSON y CSV. `[Pendiente: commit y versiones documentales en la
+cabecera de todos los registros; hoy solo en parte.]` El entorno se fija con un gestor de
+dependencias con fichero de bloqueo; las puertas de calidad, análisis estático, tipado
+estricto y una batería de 283 tests, se ejecutan tras cada cambio.
+
+## Modelo de análisis de datos
+
+El análisis es comparativo y por caso, no inferencial en el sentido clásico: con nueve casos
+anotados, una diferencia de una unidad no separa nada, y lo que se compara es la estructura
+del comportamiento bajo condiciones diseñadas para diferir.
+
+Para PI.1 se comparan exactitud y F1 macro del modelo frente a la referencia mínima de la
+clase mayoritaria, y el error de calibración antes y después de corregir. Para PI.2 se
+calcula, para cada afirmación admitida, si su observación existe, si su fragmento existe, si
+el fragmento aplica al vehículo y si sostiene lo afirmado; el resultado es la tasa de
+soporte y su distancia a la completitud. Para PI.3 se tabula la decisión del agente por
+condición de corpus, manteniendo fija la confianza, y se comprueba que cambia entre FULL y
+ABSENT; la abstención se acompaña siempre de su cobertura. Para PI.4 se cuentan los
+distractores que superan al fragmento correcto en la recuperación semántica pura, con el
+filtro de motor y sin él, y qué grado de aplicabilidad les asigna el validador.
+
+Para el modelo de lenguaje se comparan, con el mismo motor de inferencia y las mismas nueve
+preguntas, tres configuraciones: el modelo base, el modelo con el primer adaptador y el
+modelo con el segundo. Las variables son salidas válidas, respeto del veredicto, citas
+inexistentes y fallos de esquema; el criterio de éxito del ajuste se fijó antes de la
+segunda medición y exige que el ajustado no sea peor que el base en ninguna de las dos
+últimas.
+
+Toda cifra se acompaña de la partición de la que procede y del registro que la produjo.
+Cuando un resultado contradice una expectativa escrita, se publica la expectativa, el
+resultado y la explicación, y no se ajusta la expectativa.
