@@ -342,17 +342,32 @@ enseñaría a abstenerse por costumbre. Se equilibró a propósito.
 
 ```bash
 uv run mecanico-exp finetune-slm --epochs 4
-uv run mecanico-exp sufficiency --llm ollama   # después: mismas 9 preguntas
+uv run mecanico-exp sufficiency --llm transformers        # antes: base
+uv run mecanico-exp sufficiency --llm transformers-lora   # después: base + adaptador
 ```
 
-**Produce:** adaptador LoRA en `models/slm_lora`, con su configuración e
-historial de pérdida.
+**Produce:** adaptador LoRA en `models/slm_lora` (binario fuera de Git; su
+configuración e historial de pérdida, dentro) y los registros
+`experiments/E13_agente_transformers*.json`.
 
-PyTorch + PEFT en MPS, bf16. La pérdida solo actúa sobre la completion: los
-tokens del prompt van enmascarados. Se descartó MLX por funcionar solo en Apple
-Silicon.
+PyTorch + PEFT en MPS, bf16, *gradient checkpointing*. La pérdida solo actúa
+sobre la completion: los tokens del prompt van enmascarados. Se descartó MLX
+por funcionar solo en Apple Silicon.
 
-**Estado:** pendiente de ejecutar.
+**Antes y después con el mismo motor.** La medición inicial con Ollama
+(cuantizado a 4 bits) no sirve como línea base del ajuste: cambiar el motor
+cambia el resultado. El «antes» se mide cargando el modelo base con
+`transformers`, el mismo que carga el adaptador.
+
+**Resultado del ajuste:** 88 min, 0,24 % de parámetros, pérdida de validación
+0,040 → 0,018 (mínimo 0,013 en la época 3), 28 de 55 prompts recortados.
+
+**Primera medición:** válidas 5/9 → 6/9, veredicto respetado 9/9 en ambos,
+cero citas inventadas en ambos. Los tres fallos restantes eran uno solo: el
+esquema no admitía los motivos que emite el verificador. Ver informe E13.
+
+**Estado:** ajuste ejecutado; segunda medición con el esquema corregido en
+marcha.
 
 ## Pasos pendientes, y de qué dependen
 
@@ -362,7 +377,7 @@ Silicon.
 | Corregir mapeo diagnóstico→DTC de F02 | La observación habla de ajustes y el procedimiento de tensión de circuito | Trabajo pendiente |
 | FULL / PARTIAL / ABSENT / DISTRACTOR | Extender las cuatro condiciones a todos los casos | Trabajo pendiente |
 | **Datos OBD-II reales** | **La PI dice «reales» y los actuales son sintéticos** | **Decisión del autor** |
-| Ajuste fino del SLM | Datos generados; entrenamiento pendiente | Trabajo pendiente |
+| Ajuste fino del SLM | Ejecutado; falta la medición con el esquema corregido | Trabajo pendiente |
 | Evaluación final y demostración | Dependen de las dos anteriores | **Decisión del autor** |
 
 ---
@@ -380,6 +395,8 @@ producido resultados falsos que parecían correctos.
 | La condición ABSENT no retiraba toda la evidencia | El caso seguía explicando sin ella | **Falso positivo en el experimento central** |
 | Se afirmó que faltaba evidencia buscando el código genérico P0171 | El propio sistema la encontró bajo P2187 | Un caso de abstención inventado |
 | La medición multilingüe se hizo con el filtro por DTC activo | Daba 1,00 en todo | Se habría concluido que el idioma da igual |
+| El ajuste agotó la memoria de MPS y la tubería `\| grep` ocultó el código de salida | El adaptador no existía al terminar | «Entrenado» sin haber entrenado |
+| El esquema de salida no admitía los motivos del verificador | El modelo ajustado copiaba el motivo y se le rechazaba | Se habría atribuido al modelo un fallo de diseño propio |
 
 El patrón se repite: **casi todos se detectaron mirando cifras que no cuadraban**,
 no ejecutando tests. Los tests protegen lo que ya se sabe; las cifras raras
@@ -405,6 +422,8 @@ uv run mecanico-exp sufficiency --llm ollama
 uv run mecanico-exp training-data
 uv run python scripts/prepare_finetune.py
 uv run mecanico-exp finetune-slm
+uv run mecanico-exp sufficiency --llm transformers
+uv run mecanico-exp sufficiency --llm transformers-lora
 ```
 
 Gates, tras cualquier cambio:
