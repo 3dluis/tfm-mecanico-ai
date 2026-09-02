@@ -27,10 +27,28 @@ class Decision(StrEnum):
 
 
 class AbstainReason(StrEnum):
+    """Motivos de abstención admitidos.
+
+    Incluye **literalmente** los motivos que emite el verificador de suficiencia.
+    La primera versión tenía cuatro valores genéricos que no coincidían con los
+    del verificador: el modelo veía «LOW_CLAIM_COVERAGE» en el prompt, lo
+    copiaba --que es lo razonable-- y el esquema lo rechazaba. Dos vocabularios
+    para el mismo concepto era un fallo de diseño, no del modelo.
+    """
+
+    # Genéricos.
     INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
     NO_APPLICABLE_DOCUMENTATION = "NO_APPLICABLE_DOCUMENTATION"
     CONTRADICTORY_EVIDENCE = "CONTRADICTORY_EVIDENCE"
+    # Los del verificador, tal cual los emite.
     LOW_MODEL_CONFIDENCE = "LOW_MODEL_CONFIDENCE"
+    NO_APPLICABLE_DOCUMENTARY_EVIDENCE = "NO_APPLICABLE_DOCUMENTARY_EVIDENCE"
+    LOW_RETRIEVAL_SUPPORT = "LOW_RETRIEVAL_SUPPORT"
+    TOO_FEW_SUPPORTING_CHUNKS = "TOO_FEW_SUPPORTING_CHUNKS"
+    TOO_FEW_DISTINCT_SOURCES = "TOO_FEW_DISTINCT_SOURCES"
+    LOW_CLAIM_COVERAGE = "LOW_CLAIM_COVERAGE"
+    CONTRADICTION_DETECTED = "CONTRADICTION_DETECTED"
+    NO_OBSERVATIONAL_EVIDENCE = "NO_OBSERVATIONAL_EVIDENCE"
 
 
 class GeneratedClaim(BaseModel):

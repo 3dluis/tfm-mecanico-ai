@@ -122,6 +122,8 @@ class AgentRun:
             "valid": self.valid,
             "llm": self.raw.identity.as_dict() if self.raw else None,
             "latency_s": round(self.raw.latency_s, 2) if self.raw else None,
+            # Texto literal del modelo, para poder auditar sin volver a generar.
+            "raw_text": self.raw.text[:2000] if self.raw else None,
         }
 
 
@@ -236,7 +238,9 @@ def run_agent(
             else ExplainOutput.model_validate(crudo)
         )
     except Exception as error:  # validación de Pydantic
-        ejecucion.schema_error = str(error).split("\n")[0]
+        # Error completo, no la primera línea: la primera línea dice cuántos
+        # errores hay y no cuáles.
+        ejecucion.schema_error = str(error)[:1200]
         return ejecucion
 
     ejecucion.output = salida
