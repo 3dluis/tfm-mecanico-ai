@@ -104,6 +104,9 @@ class AgentRun:
     raw: LLMResponse | None
     fake_citations: list[str] = field(default_factory=list)
     schema_error: str = ""
+    #: Identificador del caso anotado (C01…). Varias condiciones de corpus
+    #: comparten la misma ventana del pipeline; sin esto no se distinguen.
+    gold_case_id: str | None = None
     respected_verdict: bool = True
     """¿La forma de la salida coincide con la decisión del verificador?"""
 

@@ -98,13 +98,12 @@ def build_target(
     ajustar, que cuelga las cinco observaciones de cada afirmación.
     """
     if verdict.decision.value == "ABSTAIN":
-        motivo = (
-            "NO_APPLICABLE_DOCUMENTATION"
-            if any("DOCUMENTARY" in r.value for r in verdict.reasons)
-            else "LOW_MODEL_CONFIDENCE"
-            if any("CONFIDENCE" in r.value for r in verdict.reasons)
-            else "INSUFFICIENT_EVIDENCE"
-        )
+        # El motivo es **el primero que emite el verificador, literal**. La
+        # primera versión lo traducía a cuatro genéricos ("INSUFFICIENT_EVIDENCE")
+        # mientras el prompt mostraba el literal: el modelo ajustado intentaba
+        # copiar el prompt y deformaba el identificador ("LOW_CLAIM_COVERDGE").
+        # Objetivo y prompt deben decir lo mismo.
+        motivo = verdict.reasons[0].value if verdict.reasons else "INSUFFICIENT_EVIDENCE"
         return {
             "decision": "ABSTAIN",
             "reason": motivo,

@@ -51,11 +51,14 @@ def per_case(rutas: dict[str, Path]) -> pd.DataFrame:
     for etiqueta, ruta in rutas.items():
         if not ruta.is_file():
             continue
-        for r in json.loads(ruta.read_text(encoding="utf-8"))["runs"]:
+        for orden, r in enumerate(json.loads(ruta.read_text(encoding="utf-8"))["runs"], 1):
             filas.append(
                 {
                     "proveedor": etiqueta,
-                    "caso": r["case_id"],
+                    # Los registros anteriores no llevan gold_case_id; el orden de
+                    # ejecución sigue al del conjunto anotado y sí los distingue.
+                    "orden": orden,
+                    "caso": r.get("gold_case_id") or r["case_id"],
                     "veredicto": r["verdict"],
                     "redactó": (r["output"] or {}).get("decision", "—"),
                     "esquema": "ok" if not r["schema_error"] else "FALLA",

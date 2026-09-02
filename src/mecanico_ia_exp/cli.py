@@ -46,6 +46,11 @@ def main(argv: list[str] | None = None) -> int:
     subparsers.add_parser("training-data", help="generar el conjunto de ajuste del SLM")
     ft = subparsers.add_parser("finetune-slm", help="ajustar el SLM con LoRA")
     ft.add_argument("--epochs", type=int, default=4)
+    ft.add_argument(
+        "--adapter-dir",
+        default="slm_lora",
+        help="subdirectorio de models/ donde guardar el adaptador (no pisa otros)",
+    )
     suf = subparsers.add_parser(
         "sufficiency", help="verificar suficiencia y, opcionalmente, redactar"
     )
@@ -53,8 +58,9 @@ def main(argv: list[str] | None = None) -> int:
         "--llm",
         default=None,
         help=(
-            "proveedor de lenguaje: echo, ollama, transformers (base) o "
-            "transformers-lora (ajustado). Sin él, no se redacta"
+            "proveedor de lenguaje: echo, ollama, transformers (base), "
+            "transformers-lora (ajustado) o transformers-lora@<subdir de models/>. "
+            "Sin él, no se redacta"
         ),
     )
 
@@ -127,10 +133,10 @@ def main(argv: list[str] | None = None) -> int:
 
         h = finetune(
             paths.DATA_PROCESSED / "slm_finetune_prepared",
-            paths.MODELS / "slm_lora",
+            paths.MODELS / args.adapter_dir,
             FinetuneConfig(epochs=args.epochs),
         )
-        print(f"\nadaptador guardado en models/slm_lora · {h.seconds:.0f} s")
+        print(f"\nadaptador guardado en models/{args.adapter_dir} · {h.seconds:.0f} s")
         return 0
 
     if args.command == "sufficiency":
