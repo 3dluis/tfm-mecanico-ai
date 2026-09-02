@@ -54,6 +54,17 @@ llm = [
 embeddings = [
     "sentence-transformers>=3.0",
 ]
+# Ajuste fino del SLM con PyTorch + PEFT. Se descartó MLX, que es más rápido en
+# Apple Silicon, porque SOLO funciona en Apple Silicon: un tercero con Linux y
+# NVIDIA no podría reproducir el ajuste. PyTorch corre en cualquier sitio y es
+# el stack declarado, el mismo con el que se entrenó el modelo temporal.
+#
+# En MPS no hay cuantización a 4 bits, así que el modelo va en bf16.
+finetune = [
+    "peft>=0.13",
+    "accelerate>=1.0",
+    "datasets>=3.0",
+]
 
 [dependency-groups]
 dev = [

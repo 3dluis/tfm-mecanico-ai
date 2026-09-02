@@ -43,6 +43,9 @@ def main(argv: list[str] | None = None) -> int:
 
     subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
+    subparsers.add_parser("training-data", help="generar el conjunto de ajuste del SLM")
+    ft = subparsers.add_parser("finetune-slm", help="ajustar el SLM con LoRA")
+    ft.add_argument("--epochs", type=int, default=4)
     suf = subparsers.add_parser(
         "sufficiency", help="verificar suficiencia y, opcionalmente, redactar"
     )
@@ -110,6 +113,22 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         return run_retrieval_evaluation()
+
+    if args.command == "training-data":
+        from mecanico_ia_exp.experiments.training_runner import run_training_data
+
+        return run_training_data()
+
+    if args.command == "finetune-slm":
+        from mecanico_ia_exp.llm.finetune import FinetuneConfig, finetune
+
+        h = finetune(
+            paths.DATA_PROCESSED / "slm_finetune_prepared",
+            paths.MODELS / "slm_lora",
+            FinetuneConfig(epochs=args.epochs),
+        )
+        print(f"\nadaptador guardado en models/slm_lora · {h.seconds:.0f} s")
+        return 0
 
     if args.command == "sufficiency":
         from mecanico_ia_exp.experiments.sufficiency_runner import (

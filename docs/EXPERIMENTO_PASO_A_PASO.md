@@ -287,6 +287,73 @@ Detalle: [`experiments/E15_suficiencia.md`](experiments/E15_suficiencia.md) ·
 
 ---
 
+---
+
+## Paso 11 · Redactar con un modelo de lenguaje pequeño
+
+```bash
+ollama pull qwen2.5:3b-instruct-q4_K_M     # una vez; no se descarga solo
+uv run mecanico-exp sufficiency --llm echo     # referencia inferior: plantilla
+uv run mecanico-exp sufficiency --llm ollama   # SLM local sin ajustar
+```
+
+**Produce:** para cada caso, la salida redactada, si respeta el veredicto, si
+cumple el esquema y si inventó alguna cita.
+
+**El SLM solo redacta.** No diagnostica ni decide: eso ya lo hicieron el modelo
+especializado y el verificador. Es medible si respeta la decisión que se le
+comunica.
+
+**Encontrado:**
+
+| Proveedor | Válidas | Respeta veredicto | Citas inventadas |
+|---|---|---|---|
+| Plantilla | 9/9 | 4/9 | **0** |
+| Qwen2.5-3B sin ajustar | 2/9 | 7/9 | **0** |
+
+Cero citas inventadas: la barrera se comprueba **fuera** del modelo. Pero el SLM
+sin ajustar rompe el esquema en 7 de 9, ignora el veredicto de abstención y cuelga
+las cinco observaciones de cada afirmación.
+
+Detalle: [`experiments/E13_agente_slm.md`](experiments/E13_agente_slm.md)
+
+---
+
+## Paso 12 · Generar el conjunto de ajuste del SLM
+
+```bash
+uv run mecanico-exp training-data
+uv run python scripts/prepare_finetune.py
+```
+
+**Produce:** 62 ejemplos derivados de ejecuciones reales del pipeline, en tres
+variantes de corpus, **equilibrados** entre explicar y abstenerse.
+
+**Se entrena el formato de la tarea, no el contenido del manual.** El texto del
+manual va en el prompt, nunca en la salida esperada. Se comprueba buscando
+secuencias de ocho palabras compartidas: **0 fugas** en 62 ejemplos.
+
+**Encontrado:** el reparto crudo era 124 ABSTAIN frente a 32 EXPLAIN. Entrenar así
+enseñaría a abstenerse por costumbre. Se equilibró a propósito.
+
+---
+
+## Paso 13 · Ajustar el SLM con LoRA
+
+```bash
+uv run mecanico-exp finetune-slm --epochs 4
+uv run mecanico-exp sufficiency --llm ollama   # después: mismas 9 preguntas
+```
+
+**Produce:** adaptador LoRA en `models/slm_lora`, con su configuración e
+historial de pérdida.
+
+PyTorch + PEFT en MPS, bf16. La pérdida solo actúa sobre la completion: los
+tokens del prompt van enmascarados. Se descartó MLX por funcionar solo en Apple
+Silicon.
+
+**Estado:** pendiente de ejecutar.
+
 ## Pasos pendientes, y de qué dependen
 
 | Paso | Qué falta | De quién depende |
@@ -295,7 +362,7 @@ Detalle: [`experiments/E15_suficiencia.md`](experiments/E15_suficiencia.md) ·
 | Corregir mapeo diagnóstico→DTC de F02 | La observación habla de ajustes y el procedimiento de tensión de circuito | Trabajo pendiente |
 | FULL / PARTIAL / ABSENT / DISTRACTOR | Extender las cuatro condiciones a todos los casos | Trabajo pendiente |
 | **Datos OBD-II reales** | **La PI dice «reales» y los actuales son sintéticos** | **Decisión del autor** |
-| Integración del LLM | Sin proveedor configurado | **Decisión del autor** |
+| Ajuste fino del SLM | Datos generados; entrenamiento pendiente | Trabajo pendiente |
 | Evaluación final y demostración | Dependen de las dos anteriores | **Decisión del autor** |
 
 ---
@@ -334,6 +401,10 @@ uv run mecanico-exp xai
 uv run python scripts/ingest_mazda.py multilingual
 uv run mecanico-exp eval-retrieval
 uv run mecanico-exp sufficiency
+uv run mecanico-exp sufficiency --llm ollama
+uv run mecanico-exp training-data
+uv run python scripts/prepare_finetune.py
+uv run mecanico-exp finetune-slm
 ```
 
 Gates, tras cualquier cambio:
