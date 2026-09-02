@@ -1,0 +1,376 @@
+{
+  "experiment_id": "E13_agent",
+  "llm": "ollama",
+  "identity": {
+    "llm_provider": "ollama",
+    "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "prompt_version": "p1",
+    "endpoint_type": "local"
+  },
+  "runs": [
+    {
+      "case_id": "F02_maf_drift__highway__01@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "El vehículo presenta un problema de combustible que puede ser tanto demasiado rico como demasiado pobre durante el encendido en marcha, según la evidencia encontrada en el manual de taller.",
+        "confidence": 0.8,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El vehículo tiene un código de diagnóstico P2178 [ZJ, Z6] que indica un problema de combustible demasiado rico durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843"
+            ]
+          },
+          {
+            "claim_id": "C02",
+            "text": "El vehículo tiene un código de diagnóstico P2177 [ZJ, Z6] que indica un problema de combustible demasiado pobre durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ]
+          },
+          {
+            "claim_id": "C03",
+            "text": "El vehículo tiene un código de diagnóstico P2178 [LF] que indica un problema de presión de combustible demasiado alta.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001809"
+            ]
+          },
+          {
+            "claim_id": "C04",
+            "text": "El vehículo tiene un código de diagnóstico P2177 [LF] que indica un problema de presión de combustible demasiado baja.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001809"
+            ]
+          },
+          {
+            "claim_id": "C05",
+            "text": "El vehículo tiene un código de diagnóstico P2178 [ZJ, Z6] que indica un problema de combustible demasiado rico durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001841"
+            ]
+          },
+          {
+            "claim_id": "C06",
+            "text": "El vehículo tiene un código de diagnóstico P2177 [ZJ, Z6] que indica un problema de combustible demasiado pobre durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001841"
+            ]
+          },
+          {
+            "claim_id": "C07",
+            "text": "El vehículo tiene un código de diagnóstico P2178 [ZJ, Z6] que indica un problema de combustible demasiado rico durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          },
+          {
+            "claim_id": "C08",
+            "text": "El vehículo tiene un código de diagnóstico P2177 [ZJ, Z6] que indica un problema de combustible demasiado pobre durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          },
+          {
+            "claim_id": "C09",
+            "text": "El vehículo tiene un código de diagnóstico P2178 [ZJ, Z6] que indica un problema de combustible demasiado rico durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265"
+            ]
+          },
+          {
+            "claim_id": "C10",
+            "text": "El vehículo tiene un código de diagnóstico P2177 [ZJ, Z6] que indica un problema de combustible demasiado pobre durante el encendido en marcha.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265"
+            ]
+          }
+        ],
+        "limitations": [
+          "El manual de taller no proporciona información sobre el sensor de MAF (P0102) ni sobre el sistema de barrido de combustible (P2187, P2188, P2195, P2196, P2228, P2229)."
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 22.63
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "verdict": "EXPLAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "2 validation errors for ExplainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 10.96
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "verdict": "EXPLAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "sin JSON en la respuesta: el objeto JSON de la respuesta está incompleto",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 33.18
+    },
+    {
+      "case_id": "F05_misfire__highway__09@180s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 892 (char 891)",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 8.29
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "EXPLAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for ExplainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 7.92
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for AbstainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 1.12
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 721 (char 720)",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 6.41
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 721 (char 720)",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.12
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "El código de diagnóstico F01_vacuum_leak coincide con P2187, que indica un problema de combustible en el sistema de inyección de combustible al encendido.",
+        "confidence": 0.908,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El sistema de inyección de combustible al encendido está desequilibrado (P2187).",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          },
+          {
+            "claim_id": "C02",
+            "text": "El sistema de inyección de combustible al encendido está demasiado rico (P2187).",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          },
+          {
+            "claim_id": "C03",
+            "text": "El sistema de inyección de combustible al encendido está demasiado pobre (P2187).",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          }
+        ],
+        "limitations": [
+          "El manual de taller no proporciona información sobre las causas de P2187, solo indica que se trata de un problema de combustible."
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "ollama",
+        "llm_model": "qwen2.5:3b-instruct-q4_K_M",
+        "temperature": 0.0,
+        "max_tokens": 2048,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 7.7
+    }
+  ]
+}
