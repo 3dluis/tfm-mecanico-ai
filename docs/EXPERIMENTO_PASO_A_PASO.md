@@ -362,12 +362,23 @@ cambia el resultado. El «antes» se mide cargando el modelo base con
 **Resultado del ajuste:** 88 min, 0,24 % de parámetros, pérdida de validación
 0,040 → 0,018 (mínimo 0,013 en la época 3), 28 de 55 prompts recortados.
 
-**Primera medición:** válidas 5/9 → 6/9, veredicto respetado 9/9 en ambos,
-cero citas inventadas en ambos. Los tres fallos restantes eran uno solo: el
-esquema no admitía los motivos que emite el verificador. Ver informe E13.
+**Primera medición** (esquema v1): válidas 5/9 → 6/9. Tres de los fallos eran
+míos: el esquema no admitía los motivos que emite el verificador.
 
-**Estado:** ajuste ejecutado; segunda medición con el esquema corregido en
-marcha.
+**Segunda medición** (esquema unificado): base 7/9, ajustado 7/9, veredicto
+respetado 9/9 en ambos, cero citas inventadas en ambos. Mismo recuento, fallos
+distintos: el base rompe el JSON en los EXPLAIN largos y cuelga cinco
+observaciones de una afirmación; el ajustado escribe los EXPLAIN con una
+observación y dos fragmentos por afirmación, y deforma el motivo en dos ABSTAIN
+(«LOW_CLAIM_COVERDGE»). Causas, en los datos: objetivo y prompt usaban
+vocabularios distintos, y esa clase de abstención tiene **un** ejemplo de 26.
+Ver informe E13.
+
+**Iteración 2** (en marcha): objetivo con el motivo literal, todo lo demás
+igual. `--adapter-dir slm_lora_v2`, se mide con
+`--llm transformers-lora@slm_lora_v2`.
+
+**Estado:** iteración 1 medida y cerrada; iteración 2 entrenándose.
 
 ## Pasos pendientes, y de qué dependen
 
@@ -377,7 +388,7 @@ marcha.
 | Corregir mapeo diagnóstico→DTC de F02 | La observación habla de ajustes y el procedimiento de tensión de circuito | Trabajo pendiente |
 | FULL / PARTIAL / ABSENT / DISTRACTOR | Extender las cuatro condiciones a todos los casos | Trabajo pendiente |
 | **Datos OBD-II reales** | **La PI dice «reales» y los actuales son sintéticos** | **Decisión del autor** |
-| Ajuste fino del SLM | Ejecutado; falta la medición con el esquema corregido | Trabajo pendiente |
+| Ajuste fino del SLM | Iteración 1 medida (7/9 = base, fallos distintos); iteración 2 en marcha | Trabajo pendiente |
 | Evaluación final y demostración | Dependen de las dos anteriores | **Decisión del autor** |
 
 ---
@@ -397,6 +408,8 @@ producido resultados falsos que parecían correctos.
 | La medición multilingüe se hizo con el filtro por DTC activo | Daba 1,00 en todo | Se habría concluido que el idioma da igual |
 | El ajuste agotó la memoria de MPS y la tubería `\| grep` ocultó el código de salida | El adaptador no existía al terminar | «Entrenado» sin haber entrenado |
 | El esquema de salida no admitía los motivos del verificador | El modelo ajustado copiaba el motivo y se le rechazaba | Se habría atribuido al modelo un fallo de diseño propio |
+| El objetivo de entrenamiento traducía el motivo y el prompt mostraba el literal | El ajustado escribía «LOW_CLAIM_COVERDGE» | Un modelo entrenado contra dos vocabularios |
+| Los ABSTAIN se equilibraron por variante de corpus, no por motivo | Un solo ejemplo de abstención por cobertura, la del experimento central | El ajuste no podía aprender el caso que más importa |
 
 El patrón se repite: **casi todos se detectaron mirando cifras que no cuadraban**,
 no ejecutando tests. Los tests protegen lo que ya se sabe; las cifras raras

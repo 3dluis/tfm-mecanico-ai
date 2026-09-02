@@ -279,10 +279,28 @@ def get_llm(nombre: str = "echo", **kwargs: Any) -> LLMProvider:
         return OllamaProvider(**kwargs)
     if nombre == "transformers":
         return TransformersProvider(**kwargs)
-    if nombre == "transformers-lora":
-        return TransformersProvider(adapter_dir="models/slm_lora", **kwargs)
+    adaptador = adapter_dir_from_name(nombre)
+    if adaptador is not None:
+        return TransformersProvider(adapter_dir=adaptador, **kwargs)
     msg = f"Proveedor de LLM desconocido: {nombre!r}"
     raise ValueError(msg)
+
+
+def adapter_dir_from_name(nombre: str) -> str | None:
+    """``transformers-lora`` -> ``models/slm_lora``; ``transformers-lora@X`` -> ``models/X``.
+
+    Varias iteraciones del ajuste tienen que poder medirse una contra otra sin
+    que la última pise a la anterior.
+    """
+    if nombre == "transformers-lora":
+        return "models/slm_lora"
+    if nombre.startswith("transformers-lora@"):
+        sub = nombre.split("@", 1)[1].strip("/")
+        if not sub or "/" in sub or sub.startswith("."):
+            msg = f"Nombre de adaptador no válido: {sub!r}"
+            raise ValueError(msg)
+        return f"models/{sub}"
+    return None
 
 
 class TransformersProvider(LLMProvider):

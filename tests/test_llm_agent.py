@@ -399,3 +399,28 @@ def test_el_resumen_cuenta_lo_que_se_mide(tmp_path: Path) -> None:
     tabla = compare_records({"p": ruta, "ausente": tmp_path / "no.json"})
     # El registro que no existe se omite, no rompe el cuaderno.
     assert list(tabla["proveedor"]) == ["p"]
+
+
+# ------------------------------------------------------ varias iteraciones
+
+
+def test_cada_iteracion_del_ajuste_se_dirige_a_su_propio_directorio() -> None:
+    from mecanico_ia_exp.llm.provider import adapter_dir_from_name
+
+    assert adapter_dir_from_name("transformers-lora") == "models/slm_lora"
+    assert adapter_dir_from_name("transformers-lora@slm_lora_v2") == "models/slm_lora_v2"
+    assert adapter_dir_from_name("transformers") is None
+    with pytest.raises(ValueError):
+        adapter_dir_from_name("transformers-lora@../fuera")
+
+
+def test_el_objetivo_de_abstencion_dice_el_mismo_motivo_que_el_prompt() -> None:
+    """Si el objetivo tradujera el motivo y el prompt mostrara el literal, el
+    modelo aprendería dos vocabularios y no acertaría ninguno."""
+    from mecanico_ia_exp.abstention.sufficiency import Reason
+
+    veredicto = _veredicto("ABSTAIN")
+    veredicto.reasons = [Reason.LOW_CLAIM_COVERAGE]
+    objetivo = build_target(_bundle(True), veredicto, random.Random(0))
+    assert objetivo["reason"] == "LOW_CLAIM_COVERAGE"
+    AbstainOutput.model_validate(objetivo)

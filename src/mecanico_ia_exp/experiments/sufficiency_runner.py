@@ -173,6 +173,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
             from mecanico_ia_exp.llm.provider import get_llm
 
             ejecucion = run_agent(get_llm(llm), bundle, veredicto)
+            ejecucion.gold_case_id = str(caso["case_id"])
 
         veredictos.append((caso, bundle, veredicto, comprobaciones, ejecucion))
 

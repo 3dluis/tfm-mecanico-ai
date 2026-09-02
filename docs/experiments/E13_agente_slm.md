@@ -1,6 +1,6 @@
 # E13 — Agente con modelo de lenguaje pequeño
 
-Fecha: 1–2 de septiembre de 2026 · Estado: **en curso** — ajuste ejecutado; segunda medición antes/después en marcha
+Fecha: 1–2 de septiembre de 2026 · Estado: **en curso** — iteración 1 medida y cerrada; iteración 2 (vocabulario alineado) entrenándose
 Modelo: Qwen2.5-3B-Instruct, local, sin clave de API
 
 ## Reparto de responsabilidades
@@ -239,10 +239,86 @@ tokens que no tiene, y un normalizador los ocultaría en lugar de medirlos.
 
 ## Medición antes/después: segunda pasada (esquema unificado)
 
-Pendiente: en ejecución. Se repiten **ambas** mediciones, base y ajustado, con
-el esquema corregido, porque el cambio afecta a los dos. No se edita el
-resultado a mano.
+Se repitieron **ambas** mediciones con el esquema corregido, porque el cambio
+afecta a los dos. Registros: `experiments/E13_agente_transformers.json` y
+`..._transformers-lora.json`.
+
+| | Salidas válidas | Respeta veredicto | Citas inventadas | Esquema roto | Latencia media · máx |
+|---|---|---|---|---|---|
+| Base (`transformers`) | 7/9 | 9/9 | 0 | 2 (C02, C05) | 20,4 s · 100,7 s |
+| Base + LoRA v1 | 7/9 | 9/9 | 0 | 2 (C07, C08) | 14,7 s · 38,0 s |
+
+**El base pasa de 5/9 a 7/9 sin tocar el modelo.** Sus dos fallos en C07 y C08
+de la primera pasada eran también el fallo de vocabulario. Conviene decirlo:
+dos de los cuatro «fallos del modelo base» eran míos.
+
+**Contra el criterio fijado** (después ≥ antes en válidas, cero citas
+inventadas, veredicto no peor): se cumple, **en el límite**. Mismo recuento.
+Presentarlo como mejora sería inflarlo; presentarlo como fracaso ignoraría lo
+que cambió, que el recuento no ve.
+
+### Qué cambió, más allá del recuento
+
+Los dos modelos fallan en cosas distintas:
+
+- **El base falla cuando tiene que escribir mucho.** Sus dos fallos son EXPLAIN
+  con el JSON roto: objeto truncado (C02), delimitador perdido en el carácter
+  960 (C05). En su único EXPLAIN válido (C03), tardó 100 s, produjo dos
+  afirmaciones, y la segunda **cuelga las cinco observaciones** y dice «el
+  manual de servicio indica que P0133 se detecta cuando…»: parafrasea el manual
+  como si fuera una afirmación propia, y llama al sensor de oxígeno «sensor de
+  óxidos de hidrógeno».
+- **El ajustado escribe los tres EXPLAIN bien.** Tres afirmaciones por caso,
+  **cada una con exactamente una observación y dos fragmentos**, las tres
+  distintas, ninguna parafrasea el manual, ninguna afirma causa. Es
+  literalmente la forma que se entrenó. Latencia máxima de 100,7 s a 38 s.
+- **El ajustado falla en dos ABSTAIN con documentos en contexto**, escribiendo
+  `LOW_CLAIM_COVERDGE`. Copia el motivo que ve en el prompt y deforma el token.
+  Cita y cifra correctas esta vez (`cobertura 0.00 < 0.80`).
+
+En la tarea que el ajuste apuntaba --anclar cada afirmación a su observación y
+sus fragmentos, sin parafrasear el manual-- el cambio es de calidad, y se ve
+caso a caso en el cuaderno 10. En el recuento global no se ve porque el ajuste
+trajo un fallo nuevo, y ese fallo tiene dos causas que sí se identificaron.
+
+### Por qué deforma el motivo: dos causas, las dos en los datos
+
+1. **Objetivo y prompt no decían lo mismo.** `build_target` traducía los ocho
+   motivos del verificador a cuatro genéricos: `LOW_CLAIM_COVERAGE` se convertía
+   en `INSUFFICIENT_EVIDENCE`. El prompt, en cambio, mostraba el literal. El
+   modelo aprendió dos vocabularios para lo mismo y en inferencia intentó copiar
+   el del prompt, que no había entrenado a escribir.
+2. **Esa clase tiene un ejemplo.** De los 26 ABSTAIN de entrenamiento, 19 son por
+   baja confianza, 6 por falta de evidencia documental y **1** por cobertura de
+   afirmaciones. Los casos centrales del experimento --PARTIAL y DISTRACTOR-- se
+   abstienen justamente por cobertura, con confianza 0,908. El modelo vio esa
+   situación una vez. El equilibrado del conjunto se hizo por variante de
+   corpus, no por motivo de abstención, y esto es lo que se le escapó.
+
+## Iteración 2: una sola variable
+
+Se corrige la causa 1 y solo esa: el objetivo dice **el motivo literal del
+verificador**, que el esquema ya admite. El resto --datos, reparto, semilla,
+hiperparámetros, longitud-- es idéntico, para que la diferencia con la v1 se
+deba a una cosa. El adaptador se guarda en `models/slm_lora_v2` y se mide con
+`--llm transformers-lora@slm_lora_v2`; la v1 no se pisa.
+
+Distribución de motivos en los objetivos ABSTAIN de entrenamiento:
+
+| Motivo | v1 (traducido) | v2 (literal) |
+|---|---|---|
+| Baja confianza del modelo | 13 | 19 |
+| Sin evidencia documental aplicable | 12 | 6 |
+| Cobertura de afirmaciones | 1 | 1 |
+
+La distribución cambia porque la v1 daba prioridad al motivo documental si
+aparecía en cualquier posición de la lista, y la v2 toma el primero, que es el
+que el verificador considera principal. La cobertura sigue con un ejemplo: la
+causa 2 no se toca en esta iteración a propósito.
+
+**Si la v2 sigue fallando en C07 y C08**, la iteración 3 será equilibrar los
+ABSTAIN por motivo, no solo por variante. Se decide después de medir, no antes.
 
 ## Pendiente
 
-Rellenar `10_llm_agent.ipynb` con la segunda pasada y cerrar el informe.
+Medir la v2 con las mismas nueve preguntas; según el resultado, iteración 3.
