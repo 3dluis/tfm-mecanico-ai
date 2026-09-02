@@ -18,7 +18,15 @@ PyTorch corre en cualquier sitio, es el stack declarado del proyecto y es el
 mismo con el que se entrenó el modelo temporal.
 
 **Limitación de MPS.** No hay cuantización a 4 bits: el modelo va en bf16, unos
-6 GB de pesos. Cabe en 24 GB y entrena en minutos con 55 ejemplos.
+6 GB de pesos. Los pesos caben; lo que no cabe sin más son las **activaciones**
+de una secuencia de 4 096 tokens con gradientes a través de 36 capas. El primer
+intento agotó los 30 GiB que MPS permite. Dos medidas lo resuelven:
+
+- *gradient checkpointing*: recomputa las activaciones en la pasada hacia atrás
+  en lugar de guardarlas, a cambio de más cómputo;
+- longitud máxima de 3 072 tokens en lugar de 4 096. Se cuenta cuántos ejemplos
+  se recortan, porque recortar en silencio ocultaría que el modelo no vio parte
+  de la evidencia.
 """
 
 from __future__ import annotations
@@ -48,7 +56,7 @@ class FinetuneConfig:
 
     epochs: int = 4
     learning_rate: float = 2e-4
-    max_seq_length: int = 4096
+    max_seq_length: int = 3072
     seed: int = 20260901
     device: str = "mps"
 
@@ -134,6 +142,13 @@ def finetune(
         task_type="CAUSAL_LM",
     )
     modelo: Any = get_peft_model(base, lora)
+    # Sin esto, una secuencia de 3 000 tokens con gradientes a través de 36 capas
+    # agota la memoria de MPS: recomputar en la pasada hacia atrás cambia memoria
+    # por cómputo. enable_input_require_grads es necesario para que el
+    # checkpointing funcione con adaptadores PEFT, cuyos pesos base van congelados.
+    modelo.gradient_checkpointing_enable()
+    modelo.enable_input_require_grads()
+    modelo.config.use_cache = False
 
     historia = FinetuneHistory()
     historia.n_trainable_params = sum(p.numel() for p in modelo.parameters() if p.requires_grad)

@@ -277,5 +277,107 @@ def get_llm(nombre: str = "echo", **kwargs: Any) -> LLMProvider:
         return EchoProvider()
     if nombre == "ollama":
         return OllamaProvider(**kwargs)
+    if nombre == "transformers":
+        return TransformersProvider(**kwargs)
+    if nombre == "transformers-lora":
+        return TransformersProvider(adapter_dir="models/slm_lora", **kwargs)
     msg = f"Proveedor de LLM desconocido: {nombre!r}"
     raise ValueError(msg)
+
+
+class TransformersProvider(LLMProvider):
+    """SLM local por PyTorch, con o sin adaptador LoRA.
+
+    Es la vía de inferencia del modelo **ajustado**: Ollama no puede servir un
+    adaptador PEFT, así que el modelo ajustado se ejecuta con el mismo stack con
+    el que se entrenó. Con ``adapter_dir=None`` sirve el modelo base, lo que
+    permite medir antes y después con exactamente el mismo código de inferencia
+    --si se comparara Ollama contra transformers, parte de la diferencia sería
+    del motor y no del ajuste--.
+
+    Generación determinista: sin muestreo, semilla fija. Dos ejecuciones del
+    mismo caso deben dar la misma respuesta.
+    """
+
+    def __init__(
+        self,
+        base_model: str = "Qwen/Qwen2.5-3B-Instruct",
+        adapter_dir: str | None = None,
+        max_tokens: int = 1024,
+        device: str | None = None,
+    ) -> None:
+        self._base_model = base_model
+        self._adapter_dir = adapter_dir
+        self._max_tokens = max_tokens
+        self._device = device
+        self._modelo: Any = None
+        self._tok: Any = None
+
+    def _cargar(self) -> None:
+        if self._modelo is not None:
+            return
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        if self._device is None:
+            self._device = "mps" if torch.backends.mps.is_available() else "cpu"
+        self._tok = AutoTokenizer.from_pretrained(self._base_model)
+        modelo: Any = AutoModelForCausalLM.from_pretrained(self._base_model, dtype=torch.bfloat16)
+        if self._adapter_dir:
+            from peft import PeftModel
+
+            modelo = PeftModel.from_pretrained(modelo, self._adapter_dir)
+            # Fusionar el adaptador en los pesos evita el sobrecoste de la doble
+            # proyección en cada token durante la generación.
+            modelo = modelo.merge_and_unload()
+        modelo.to(self._device)
+        modelo.eval()
+        self._modelo = modelo
+
+    @property
+    def identity(self) -> LLMIdentity:
+        etiqueta = self._base_model + (f"+lora:{self._adapter_dir}" if self._adapter_dir else "")
+        return LLMIdentity(
+            provider="transformers",
+            model=etiqueta,
+            temperature=0.0,
+            max_tokens=self._max_tokens,
+            prompt_version=PROMPT_VERSION,
+            endpoint_type="local",
+        )
+
+    def complete(
+        self,
+        messages: list[dict[str, Any]],
+        *,
+        tools: list[dict[str, Any]] | None = None,
+        json_schema: dict[str, Any] | None = None,
+    ) -> LLMResponse:
+        import time
+
+        import torch
+
+        self._cargar()
+        # Se renderiza con la MISMA plantilla que se usó en el ajuste, para que lo
+        # que ve al inferir sea lo que vio al entrenar.
+        prompt = self._tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        entrada = self._tok(prompt, return_tensors="pt").to(self._device)
+
+        torch.manual_seed(20260901)
+        inicio = time.perf_counter()
+        with torch.no_grad():
+            salida = self._modelo.generate(
+                **entrada,
+                max_new_tokens=self._max_tokens,
+                do_sample=False,
+                pad_token_id=self._tok.eos_token_id,
+            )
+        latencia = time.perf_counter() - inicio
+        nuevos = salida[0, entrada["input_ids"].shape[1] :]
+        texto = self._tok.decode(nuevos, skip_special_tokens=True)
+        return LLMResponse(
+            text=texto,
+            identity=self.identity,
+            finish_reason="stop" if nuevos.shape[0] < self._max_tokens else "length",
+            latency_s=latencia,
+        )

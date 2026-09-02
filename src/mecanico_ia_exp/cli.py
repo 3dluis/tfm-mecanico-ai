@@ -52,7 +52,10 @@ def main(argv: list[str] | None = None) -> int:
     suf.add_argument(
         "--llm",
         default=None,
-        help="proveedor de lenguaje: echo, ollama. Sin él, no se redacta",
+        help=(
+            "proveedor de lenguaje: echo, ollama, transformers (base) o "
+            "transformers-lora (ajustado). Sin él, no se redacta"
+        ),
     )
 
     args = parser.parse_args(argv)

@@ -311,3 +311,17 @@ def test_la_deteccion_de_fuga_atrapa_una_copia_literal() -> None:
     trozo = " ".join(json.loads(herramienta["content"])[0]["text"].split()[:10])
     ejemplo.messages[-1]["content"] += " " + trozo
     assert verify_no_manual_content_in_targets([ejemplo])
+
+
+def test_los_proveedores_de_transformers_se_registran_sin_cargar_el_modelo() -> None:
+    """La fábrica devuelve el proveedor; el modelo se carga en la primera llamada.
+    Importar o construir no puede disparar una descarga ni ocupar memoria."""
+    from mecanico_ia_exp.llm.provider import TransformersProvider
+
+    base = get_llm("transformers")
+    ajustado = get_llm("transformers-lora")
+    assert isinstance(base, TransformersProvider)
+    assert isinstance(ajustado, TransformersProvider)
+    assert base._modelo is None and ajustado._modelo is None
+    assert "lora" in ajustado.identity.model
+    assert "lora" not in base.identity.model
