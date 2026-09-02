@@ -1,0 +1,39 @@
+{
+  "config": {
+    "base_model": "Qwen/Qwen2.5-3B-Instruct",
+    "lora_rank": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "epochs": 4,
+    "learning_rate": 0.0002,
+    "max_seq_length": 3072,
+    "seed": 20260901,
+    "device": "mps"
+  },
+  "history": {
+    "train_loss": [
+      0.47621654429557647,
+      0.05033214232640933,
+      0.03048313686079134,
+      0.03208190995210316
+    ],
+    "val_loss": [
+      0.03598856906007443,
+      0.01951196146131094,
+      0.011834544557911744,
+      0.017980952379210585
+    ],
+    "n_train": 55,
+    "n_valid": 7,
+    "n_trainable_params": 7372800,
+    "n_total_params": 3093311488,
+    "seconds": 4472.327330375001,
+    "n_truncated": 28
+  }
+}

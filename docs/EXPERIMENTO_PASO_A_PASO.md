@@ -374,11 +374,15 @@ observación y dos fragmentos por afirmación, y deforma el motivo en dos ABSTAI
 vocabularios distintos, y esa clase de abstención tiene **un** ejemplo de 26.
 Ver informe E13.
 
-**Iteración 2** (en marcha): objetivo con el motivo literal, todo lo demás
-igual. `--adapter-dir slm_lora_v2`, se mide con
-`--llm transformers-lora@slm_lora_v2`.
+**Iteración 2:** objetivo con el motivo literal, todo lo demás igual
+(`--adapter-dir slm_lora_v2`, medido con `--llm transformers-lora@slm_lora_v2`).
+Resultado: **9/9 válidas, 9/9 veredicto, 0 citas inventadas, 0 fallos de
+esquema**, latencia media 13,1 s. Los seis ABSTAIN con motivo y cifra
+correctos; los tres EXPLAIN con una observación y dos fragmentos por afirmación.
+Una sola variable cambiada, de 7/9 a 9/9. La iteración 3 (equilibrar por
+motivo) no hizo falta y queda declarada como limitación.
 
-**Estado:** iteración 1 medida y cerrada; iteración 2 entrenándose.
+**Estado:** cerrado. El redactor del sistema es `models/slm_lora_v2`.
 
 ## Pasos pendientes, y de qué dependen
 
@@ -388,7 +392,6 @@ igual. `--adapter-dir slm_lora_v2`, se mide con
 | Corregir mapeo diagnóstico→DTC de F02 | La observación habla de ajustes y el procedimiento de tensión de circuito | Trabajo pendiente |
 | FULL / PARTIAL / ABSENT / DISTRACTOR | Extender las cuatro condiciones a todos los casos | Trabajo pendiente |
 | **Datos OBD-II reales** | **La PI dice «reales» y los actuales son sintéticos** | **Decisión del autor** |
-| Ajuste fino del SLM | Iteración 1 medida (7/9 = base, fallos distintos); iteración 2 en marcha | Trabajo pendiente |
 | Evaluación final y demostración | Dependen de las dos anteriores | **Decisión del autor** |
 
 ---
@@ -436,7 +439,9 @@ uv run mecanico-exp training-data
 uv run python scripts/prepare_finetune.py
 uv run mecanico-exp finetune-slm
 uv run mecanico-exp sufficiency --llm transformers
-uv run mecanico-exp sufficiency --llm transformers-lora
+uv run mecanico-exp sufficiency --llm transformers-lora                # iteración 1
+uv run mecanico-exp finetune-slm --adapter-dir slm_lora_v2             # iteración 2
+uv run mecanico-exp sufficiency --llm transformers-lora@slm_lora_v2
 ```
 
 Gates, tras cualquier cambio:

@@ -48,6 +48,8 @@ experiments/runs/**
 # pérdida sí, porque son el registro que hace reproducible el ajuste.
 !models/slm_lora/adapter_config.json
 !models/slm_lora/finetune_config.json
+!models/slm_lora_v2/adapter_config.json
+!models/slm_lora_v2/finetune_config.json
 !corpus/manifests/**
 !data/**/*.md
 !results/RESULTADOS_TFM.md

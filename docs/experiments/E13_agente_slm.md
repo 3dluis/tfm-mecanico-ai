@@ -1,6 +1,6 @@
 # E13 — Agente con modelo de lenguaje pequeño
 
-Fecha: 1–2 de septiembre de 2026 · Estado: **en curso** — iteración 1 medida y cerrada; iteración 2 (vocabulario alineado) entrenándose
+Fecha: 1–2 de septiembre de 2026 · Estado: **cerrada** — dos iteraciones del ajuste, la segunda 9/9 sobre el conjunto anotado
 Modelo: Qwen2.5-3B-Instruct, local, sin clave de API
 
 ## Reparto de responsabilidades
@@ -319,6 +319,82 @@ causa 2 no se toca en esta iteración a propósito.
 **Si la v2 sigue fallando en C07 y C08**, la iteración 3 será equilibrar los
 ABSTAIN por motivo, no solo por variante. Se decide después de medir, no antes.
 
-## Pendiente
+### Ajuste v2 ejecutado
 
-Medir la v2 con las mismas nueve preguntas; según el resultado, iteración 3.
+75 min, mismos 0,24 % de parámetros, mismos 28 de 55 prompts recortados. Curva
+de validación 0,036 → 0,020 → 0,012 → 0,018: indistinguible de la v1. Cambiar
+la etiqueta del motivo en 26 objetivos no mueve la pérdida agregada; lo que
+mueve es lo que el modelo escribe en el campo `reason`, que la pérdida media
+apenas ve. Registro: `models/slm_lora_v2/finetune_config.json`.
+
+## Iteración 2: resultado
+
+Mismo motor, mismas nueve preguntas, mismo esquema unificado. Registro:
+`experiments/E13_agente_transformers-lora@slm_lora_v2.json`.
+
+| | Salidas válidas | Respeta veredicto | Citas inventadas | Esquema roto | Latencia media · máx |
+|---|---|---|---|---|---|
+| Base (`transformers`) | 7/9 | 9/9 | 0 | 2 | 20,4 s · 100,7 s |
+| Base + LoRA v1 | 7/9 | 9/9 | 0 | 2 | 14,7 s · 38,0 s |
+| **Base + LoRA v2** | **9/9** | 9/9 | 0 | **0** | 13,1 s · 31,3 s |
+
+Caso a caso:
+
+- Los tres EXPLAIN (C02, C03, C05): tres afirmaciones, **cada una con una
+  observación y dos fragmentos**, las tres distintas, ninguna parafrasea el
+  manual, ninguna afirma causa. Las limitaciones son las dos de rigor: «la
+  atribución indica de qué depende la predicción, no qué le ocurre al
+  vehículo» y «la evidencia sostiene lo observado, no demuestra la causa».
+- Los seis ABSTAIN: motivo **literal y correcto** en todos, incluidos C07 y C08
+  (`LOW_CLAIM_COVERAGE`, `cobertura 0.00 < 0.80`), C06
+  (`NO_APPLICABLE_DOCUMENTARY_EVIDENCE`) y C09 (`TOO_FEW_SUPPORTING_CHUNKS`).
+  Las cifras del campo `missing_evidence` coinciden con las del verificador.
+
+**Contra el criterio fijado**: se cumple con margen. De 7/9 a 9/9 cambiando
+una sola cosa, y esa cosa estaba en los datos de ajuste, no en el modelo.
+
+### Lo que dice la comparación v1 → v2
+
+La causa 2 --un solo ejemplo de abstención por cobertura entre 26-- **no hizo
+falta corregirla**. Con el objetivo y el prompt diciendo lo mismo, el modelo
+copia bien el motivo aunque lo haya visto una vez: no tiene que *recordarlo*,
+tiene que *transcribirlo* de un contexto que lo contiene. Es coherente con lo
+que el ajuste pretendía desde el principio: enseñar la forma de la tarea, no
+su contenido. La desproporción sigue existiendo y se declara como limitación,
+porque un motivo que no esté en el prompt sí exigiría haberlo aprendido.
+
+Lo que el recuento no mide, y conviene dejar escrito: **ninguna de las tres
+mediciones produjo una cita inventada**, ni antes ni después de ajustar, ni con
+el esquema viejo ni con el nuevo. Eso no lo consiguió el ajuste: lo garantiza
+`verify_citations`, que se comprueba fuera del modelo. El ajuste consiguió que
+el modelo *cumpliera el contrato*; la barrera es la que hace que incumplirlo
+no cueste una cita falsa.
+
+## Limitaciones
+
+- **Nueve casos.** Una unidad no separa nada; lo que separa es la estructura
+  caso a caso y que el fallo de la v1 tuviera causa identificada y corregible.
+- **Datos sintéticos** calibrados con el manual. La PI habla de datos reales.
+- **28 de 55 prompts recortados** por la izquierda en ambas iteraciones.
+- **Siete ejemplos de validación**: la subida de la pérdida en la época 4 no
+  es concluyente en ninguna de las dos curvas.
+- **Un motivo de abstención con un ejemplo**; funciona porque el prompt lo
+  contiene.
+- **Las plantillas describen dirección de contribución, no signo**: «delta_min
+  de −1,496, por encima de lo esperable» es correcto como contribución SHAP y
+  confuso como frase. Es herencia de las plantillas deterministas de E9, no del
+  modelo; corregirlo es trabajo de redacción de plantillas, no de ajuste.
+- **Decodificación determinista en un motor** (MPS, bf16). Otro motor daría
+  otro «antes».
+
+## Conclusión
+
+Un modelo de 3B local, con la evidencia entregada hecha y la decisión ya
+tomada, **redacta respetando el veredicto y citando solo lo que existe** en 9
+de 9 casos anotados tras un ajuste del 0,24 % de sus parámetros que no contiene
+una palabra del manual. El ajuste no le enseñó qué le pasa a un Mazda; le
+enseñó cómo se contesta en esta tarea. Y las dos veces que falló --antes y
+entre iteraciones-- el fallo estaba en el instrumento, no en el modelo.
+
+Cierra el paso 13 del experimento. E18 (ablaciones) puede usar la v2 como
+redactor. E19 y E20 siguen bloqueadas por los datos reales.
