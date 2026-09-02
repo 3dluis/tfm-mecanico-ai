@@ -19,7 +19,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 | E10 corpus documental por vehículo | [E10_corpus_vehiculo.md](E10_corpus_vehiculo.md) | infraestructura cerrada, corpus vacío |
 | E11 pgvector | [E11_carga_rag.md](E11_carga_rag.md) | cerrada |
 | E12 evaluación de recuperación | [E12_evaluacion_recuperacion.md](E12_evaluacion_recuperacion.md) | cerrada |
-| E13 integración del agente | — | pendiente |
+| E13 integración del agente | [E13_agente_slm.md](E13_agente_slm.md) | en curso |
 | E14 trazabilidad | — | pendiente |
 | E15 suficiencia | [E15_suficiencia.md](E15_suficiencia.md) | cerrada |
 | E16 abstención | — | pendiente |
