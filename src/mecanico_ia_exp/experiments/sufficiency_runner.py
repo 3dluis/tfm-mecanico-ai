@@ -61,7 +61,8 @@ def _calibrar(entrenamiento: Any, validacion: Any, configuracion: BaselineConfig
     return calibrado
 
 
-def run_sufficiency(dataset_id: str = DATASET) -> int:
+def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
+    """Verifica la suficiencia y, si se pide un proveedor, redacta con él."""
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
     perfil = load_vehicle(VEHICULO)
@@ -165,7 +166,15 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
             expected_dtc=DIAGNOSTICO_A_DTC.get(fault_id, ()),
         )
         veredicto = verificador.verify(bundle)
-        veredictos.append((caso, bundle, veredicto, comprobaciones))
+
+        ejecucion = None
+        if llm:
+            from mecanico_ia_exp.llm.agent import run_agent
+            from mecanico_ia_exp.llm.provider import get_llm
+
+            ejecucion = run_agent(get_llm(llm), bundle, veredicto)
+
+        veredictos.append((caso, bundle, veredicto, comprobaciones, ejecucion))
 
         esperado = str(caso["expected_action"])
         correcto = veredicto.decision.value == esperado
@@ -190,7 +199,7 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
         f"{'conf':>7}{'docs':>6}{'cob.':>7}  motivos"
     )
     print("-" * 118)
-    for caso, _bundle, v, _comp in veredictos:
+    for caso, _bundle, v, _comp, _e in veredictos:
         esperado = str(caso["expected_action"])
         marca = "OK" if v.decision.value == esperado else "!!"
         s = v.signals
@@ -202,7 +211,7 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
         )
 
     aciertos_decision = sum(
-        1 for c, _b, v, _cc in veredictos if v.decision.value == str(c["expected_action"])
+        1 for c, _b, v, _cc, _e in veredictos if v.decision.value == str(c["expected_action"])
     )
     print(f"\ndecisiones correctas: {aciertos_decision}/{len(veredictos)}")
 
@@ -228,7 +237,7 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
                         # Sin él la decisión no sería auditable.
                         "support_checks": [c.to_dict() for c in comp],
                     }
-                    for c, b, v, comp in veredictos
+                    for c, b, v, comp, _e in veredictos
                 ],
             },
             indent=2,
@@ -237,6 +246,51 @@ def run_sufficiency(dataset_id: str = DATASET) -> int:
         + "\n",
         encoding="utf-8",
     )
+    if llm:
+        print("\n=== redacción con el modelo de lenguaje ===")
+        cab = (
+            f"{'caso':<38}{'veredicto':>10}{'redactó':>10}{'respeta':>9}"
+            f"{'citas falsas':>14}{'esquema':>9}{'seg':>7}"
+        )
+        print(cab)
+        print("-" * len(cab))
+        agentes = []
+        for caso, _b, v, _c, e in veredictos:
+            if e is None:
+                continue
+            agentes.append(e)
+            forma = e.output.decision.value if e.output else "—"
+            print(
+                f"{caso['case_id']!s:<38}{v.decision.value:>10}{forma:>10}"
+                f"{('sí' if e.respected_verdict else 'NO'):>9}"
+                f"{len(e.fake_citations):>14}"
+                f"{('ok' if not e.schema_error else 'FALLA'):>9}"
+                f"{(e.raw.latency_s if e.raw else 0):>7.1f}"
+            )
+        if agentes:
+            n = len(agentes)
+            print(
+                f"\n  salidas válidas    {sum(1 for a in agentes if a.valid)}/{n}"
+                f"\n  respetan veredicto {sum(1 for a in agentes if a.respected_verdict)}/{n}"
+                f"\n  citas inventadas   {sum(len(a.fake_citations) for a in agentes)}"
+                f"\n  fallos de esquema  {sum(1 for a in agentes if a.schema_error)}"
+            )
+            (experimentos / f"E13_agente_{llm}.json").write_text(
+                json.dumps(
+                    {
+                        "experiment_id": "E13_agent",
+                        "llm": llm,
+                        "identity": agentes[0].raw.identity.as_dict() if agentes[0].raw else None,
+                        "runs": [a.to_dict() for a in agentes],
+                    },
+                    indent=2,
+                    ensure_ascii=False,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            print(f"\nregistro experiments/E13_agente_{llm}.json")
+
     print("tabla   E15_suficiencia.csv")
     print("registro experiments/E15_suficiencia.json")
     store.dispose()

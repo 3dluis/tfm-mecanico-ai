@@ -43,7 +43,14 @@ def main(argv: list[str] | None = None) -> int:
 
     subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
-    subparsers.add_parser("sufficiency", help="verificar suficiencia de evidencia")
+    suf = subparsers.add_parser(
+        "sufficiency", help="verificar suficiencia y, opcionalmente, redactar"
+    )
+    suf.add_argument(
+        "--llm",
+        default=None,
+        help="proveedor de lenguaje: echo, ollama. Sin él, no se redacta",
+    )
 
     args = parser.parse_args(argv)
 
@@ -109,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
             run_sufficiency,
         )
 
-        return run_sufficiency()
+        return run_sufficiency(llm=args.llm)
 
     return 2
 

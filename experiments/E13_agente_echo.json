@@ -1,0 +1,335 @@
+{
+  "experiment_id": "E13_agent",
+  "llm": "echo",
+  "identity": {
+    "llm_provider": "echo",
+    "llm_model": "deterministic-template",
+    "temperature": 0.0,
+    "max_tokens": 0,
+    "prompt_version": "p1",
+    "endpoint_type": "local"
+  },
+  "runs": [
+    {
+      "case_id": "F02_maf_drift__highway__01@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F05_misfire__highway__09@180s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "NO_APPLICABLE_DOCUMENTATION",
+        "missing_evidence": [
+          "no se recuperó ningún fragmento aplicable"
+        ],
+        "notes": "plantilla determinista"
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "condición compatible con la evidencia recuperada",
+        "confidence": 0.5,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La evidencia recuperada describe la condición observada en las señales del vehículo.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378"
+            ]
+          }
+        ],
+        "limitations": [
+          "salida generada por plantilla, sin razonamiento"
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": false,
+      "valid": true,
+      "llm": {
+        "llm_provider": "echo",
+        "llm_model": "deterministic-template",
+        "temperature": 0.0,
+        "max_tokens": 0,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 0.0
+    }
+  ]
+}
