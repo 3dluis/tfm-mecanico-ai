@@ -325,3 +325,56 @@ def test_los_proveedores_de_transformers_se_registran_sin_cargar_el_modelo() -> 
     assert base._modelo is None and ajustado._modelo is None
     assert "lora" in ajustado.identity.model
     assert "lora" not in base.identity.model
+
+
+# ---------------------------------------------------------------- adaptador
+
+
+def test_el_adaptador_registra_lo_que_hace_reproducible_el_ajuste() -> None:
+    """Sin este registro, «se ajustó el modelo» no es una afirmación comprobable."""
+    from pathlib import Path
+
+    ruta = Path("models/slm_lora/finetune_config.json")
+    if not ruta.is_file():
+        pytest.skip("el adaptador no está entrenado en esta máquina")
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    cfg, hist = datos["config"], datos["history"]
+    # Solo atención: las capas de alimentación, donde reside más conocimiento
+    # factual, quedan intactas. Es una de las garantías de que el manual no
+    # acaba en los pesos.
+    assert set(cfg["target_modules"]) == {"q_proj", "k_proj", "v_proj", "o_proj"}
+    assert cfg["seed"] == 20260901
+    # Menos del 1 % de los parámetros: es un ajuste de formato, no un reentrenamiento.
+    assert hist["n_trainable_params"] / hist["n_total_params"] < 0.01
+    assert len(hist["train_loss"]) == cfg["epochs"]
+    assert hist["val_loss"][-1] < hist["val_loss"][0]
+    # El recorte se cuenta, no se oculta.
+    assert "n_truncated" in hist
+
+
+# ------------------------------------------------------- un solo vocabulario
+
+
+def test_todo_motivo_del_verificador_es_un_motivo_de_abstencion_valido() -> None:
+    """El modelo copia el motivo que ve en el prompt. Si el esquema no lo admite,
+    se rechaza una respuesta correcta por un desacuerdo de vocabulario mío."""
+    from mecanico_ia_exp.abstention.sufficiency import Reason
+    from mecanico_ia_exp.llm.schema import AbstainReason
+
+    admitidos = {r.value for r in AbstainReason}
+    for motivo in Reason:
+        assert motivo.value in admitidos, f"{motivo.value} no es un AbstainReason"
+        AbstainOutput.model_validate({"decision": "ABSTAIN", "reason": motivo.value})
+
+
+def test_un_motivo_deformado_por_el_modelo_sigue_rechazandose() -> None:
+    """«LOW_CLAIM_COVERGENCE» no es un motivo. No se normaliza de forma tolerante:
+    hacerlo enmascararía un defecto real del modelo que hay que medir."""
+    with pytest.raises(ValueError):
+        AbstainOutput.model_validate({"decision": "ABSTAIN", "reason": "LOW_CLAIM_COVERGENCE"})
+
+
+def test_el_registro_conserva_el_texto_crudo_y_el_error_completo() -> None:
+    ejecucion = run_agent(EchoProvider(), _bundle(True), _veredicto("EXPLAIN"))
+    datos = ejecucion.to_dict()
+    assert datos.get("raw_text")

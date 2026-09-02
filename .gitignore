@@ -44,6 +44,10 @@ experiments/runs/**
 # los .gitkeep; los ficheros de datos siguen excluidos.
 !**/
 !**/.gitkeep
+# El adaptador LoRA (29 MB) no entra en Git; su configuración e historial de
+# pérdida sí, porque son el registro que hace reproducible el ajuste.
+!models/slm_lora/adapter_config.json
+!models/slm_lora/finetune_config.json
 !corpus/manifests/**
 !data/**/*.md
 !results/RESULTADOS_TFM.md
