@@ -1,0 +1,241 @@
+{
+  "experiment_id": "E13_agent",
+  "llm": "transformers",
+  "identity": {
+    "llm_provider": "transformers",
+    "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "prompt_version": "p1",
+    "endpoint_type": "local"
+  },
+  "runs": [
+    {
+      "case_id": "F02_maf_drift__highway__01@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "foreign materials or stain inside fuel filter (low-pressure)"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 6.56
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "verdict": "EXPLAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "sin JSON en la respuesta: el objeto JSON de la respuesta está incompleto",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 19.59
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "La detección de DTC P0133 sugiere un problema con el sensor de óxidos de hidrógeno frontal, lo que puede indicar una respuesta lenta o inactividad del sensor.",
+        "confidence": 1.0,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "Se observó que el valor máximo del sensor de óxidos de hidrógeno frontal aumenta (OBS003), lo que sugiere una respuesta lenta o inactividad del sensor.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001315",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311"
+            ]
+          },
+          {
+            "claim_id": "C02",
+            "text": "El manual de servicio indica que P0133 se detecta cuando el PCM monitorea la respuesta del sensor de óxidos de hidrógeno frontal, incluyendo el ciclo de inversión, la respuesta de pobre a rico y la respuesta de rico a pobre, y si alguno de estos excede el umbral, el PCM determina que hay un problema con el sensor de óxidos de hidrógeno frontal.",
+            "observational_evidence": [
+              "OBS001",
+              "OBS002",
+              "OBS003",
+              "OBS004",
+              "OBS005"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311"
+            ]
+          }
+        ],
+        "limitations": [
+          "No se han observado señales de fuga de combustible o problemas relacionados con el filtro de combustible."
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 27.39
+    },
+    {
+      "case_id": "F05_misfire__highway__09@180s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "engine_compression_inspection",
+          "fuel_injector_operation_test"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.43
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "EXPLAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 961 (char 960)",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 21.48
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "Documentary evidence related to F01_vacuum_leak"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 2.85
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for AbstainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.06
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for AbstainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 3.97
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "CHUNKS_RELEVANT_TO_VACUUM_LEAK"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 3.37
+    }
+  ]
+}

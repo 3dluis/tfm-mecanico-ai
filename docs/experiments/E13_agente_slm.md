@@ -1,6 +1,6 @@
 # E13 — Agente con modelo de lenguaje pequeño
 
-Fecha: 1 de septiembre de 2026 · Estado: **en curso** — ajuste fino pendiente de ejecutar
+Fecha: 1–2 de septiembre de 2026 · Estado: **en curso** — ajuste ejecutado; segunda medición antes/después en marcha
 Modelo: Qwen2.5-3B-Instruct, local, sin clave de API
 
 ## Reparto de responsabilidades
@@ -141,7 +141,7 @@ Coste asumido: en MPS no hay cuantización a 4 bits, así que el modelo va en bf
 | Módulos | `q_proj`, `k_proj`, `v_proj`, `o_proj` — solo atención |
 | Épocas | 4 |
 | Tasa de aprendizaje | 2e-4 |
-| Longitud máxima | 4 096 tokens; el prompt se recorta por la izquierda |
+| Longitud máxima | 3 072 tokens; el prompt se recorta por la izquierda |
 | Semilla | 20260901 |
 
 **Solo las proyecciones de atención.** Es lo que decide a qué atiende el modelo
@@ -154,7 +154,95 @@ pesos.
 principio del sistema y del contexto, nunca la evidencia recuperada ni la
 completion, que están al final. Se cuenta cuántos se recortan.
 
+**Por qué 3 072 y no 4 096.** El primer intento, a 4 096 tokens y sin
+*gradient checkpointing*, agotó los 30 GiB de MPS (29,72 GiB ocupados). Se
+activó el checkpointing, que recalcula activaciones en lugar de guardarlas, y se
+bajó la longitud. El fallo pasó desapercibido en la primera ejecución porque
+la salida iba por una tubería (`| grep`) que enmascaraba el código de salida:
+se corrigió con `pipefail` y se anotó en la tabla de errores del paso a paso.
+
+## Ajuste ejecutado
+
+| | |
+|---|---|
+| Duración | 88 min (5 283 s) en MPS, bf16 |
+| Parámetros entrenables | 7 372 800 de 3 093 311 488 — **0,24 %** |
+| Ejemplos | 55 entrenamiento · 7 validación |
+| Prompts recortados | **28 de 55** (por la izquierda) |
+
+Pérdida por época, solo sobre tokens de la completion:
+
+| Época | Entrenamiento | Validación |
+|---|---|---|
+| 1 | 0,480 | 0,040 |
+| 2 | 0,058 | 0,020 |
+| 3 | 0,031 | **0,013** |
+| 4 | 0,027 | 0,018 |
+
+**Lectura.** La pérdida cae un orden de magnitud en la primera época: el
+formato es fácil de aprender. En la cuarta la de validación sube ligeramente
+(0,013 → 0,018): con siete ejemplos de validación esa diferencia no es
+concluyente, pero indica que una época menos habría bastado. Se conserva el
+adaptador de la cuarta porque fue el que se midió; no se eligió a posteriori.
+
+**28 de 55 prompts recortados** es mucho. Lo que se pierde es el principio del
+prompt de sistema y de la lista de observaciones, no la evidencia recuperada ni
+la salida esperada. Es una limitación conocida del hardware y se declara.
+
+## Medición antes/después: primera pasada
+
+Mismo motor (`transformers`, MPS, bf16, decodificación determinista), mismas
+nueve preguntas. Eso es lo que hace comparable el antes y el después: la
+medición inicial con Ollama usaba un modelo cuantizado a 4 bits y otro motor,
+y no serviría de línea base.
+
+| | Salidas válidas | Respeta veredicto | Citas inventadas | Esquema roto |
+|---|---|---|---|---|
+| Base (`transformers`) | 5/9 | 9/9 | 0 | 4 |
+| Base + LoRA | **6/9** | 9/9 | 0 | 3 |
+
+Registros: `experiments/E13_agente_transformers_esquema_v1.json` y
+`..._transformers-lora_esquema_v1.json`.
+
+Dos cosas que la tabla no dice:
+
+- **El base con `transformers` respeta el veredicto 9/9**, frente a 7/9 con
+  Ollama. La cuantización y el motor cambiaban el resultado más que el modelo.
+- **El ajuste arregló los tres EXPLAIN y rompió un ABSTAIN.** El base rompía el
+  JSON en los casos con explicación (C02, C05: objeto truncado, delimitador
+  perdido a los 960 caracteres). El ajustado los produce bien y cita solo lo
+  que existe. Los tres fallos restantes son los ABSTAIN *con documentos en el
+  contexto* (C07, C08, C09), y son todos el mismo fallo.
+
+### El fallo era de diseño, y lo encontró el modelo
+
+Salida literal del modelo ajustado en un ABSTAIN por cobertura:
+
+```json
+{"decision": "ABSTAIN", "reason": "LOW_CLAIM_COVERGENCE",
+ "missing_evidence": ["0.9 < 0.80"], "notes": "..."}
+```
+
+El verificador había emitido `LOW_CLAIM_COVERAGE` y el modelo lo vio en el
+prompt. Pero el esquema de salida solo admitía cuatro motivos genéricos
+(`INSUFFICIENT_EVIDENCE`, `NO_APPLICABLE_DOCUMENTATION`, …) que **no
+coincidían con los ocho que emite el verificador**. Incluso una copia perfecta
+habría sido rechazada. Dos vocabularios para el mismo concepto: fallo mío.
+
+Se unificó el esquema para admitir literalmente los motivos del verificador
+(commit `e2d7c59`), con un test que recorre los ocho.
+
+Lo que **no** se hizo: un normalizador tolerante que acepte «COVERGENCE» como
+«COVERAGE». El modelo también deforma el identificador y mangla la cifra
+(`0.9` donde la cobertura era `0.00`). Son defectos reales de un 3B copiando
+tokens que no tiene, y un normalizador los ocultaría en lugar de medirlos.
+
+## Medición antes/después: segunda pasada (esquema unificado)
+
+Pendiente: en ejecución. Se repiten **ambas** mediciones, base y ajustado, con
+el esquema corregido, porque el cambio afecta a los dos. No se edita el
+resultado a mano.
+
 ## Pendiente
 
-Ejecutar el ajuste, medir el después con las mismas nueve preguntas del antes, y
-rellenar `10_llm_agent.ipynb`.
+Rellenar `10_llm_agent.ipynb` con la segunda pasada y cerrar el informe.

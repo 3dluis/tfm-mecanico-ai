@@ -1,0 +1,327 @@
+{
+  "experiment_id": "E13_agent",
+  "llm": "transformers-lora",
+  "identity": {
+    "llm_provider": "transformers",
+    "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "prompt_version": "p1",
+    "endpoint_type": "local"
+  },
+  "runs": [
+    {
+      "case_id": "F02_maf_drift__highway__01@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_MODEL_CONFIDENCE",
+        "missing_evidence": [
+          "confianza 0.6 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 6.26
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "Condición compatible con F03_thermostat_stuck",
+        "confidence": 0.82,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La señal coolant_temperature presenta un delta_max de 1.686, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404"
+            ]
+          },
+          {
+            "claim_id": "C02",
+            "text": "Se observa coolant_temperature con autocorr1 de 0.0549, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404"
+            ]
+          },
+          {
+            "claim_id": "C03",
+            "text": "La señal coolant_temperature presenta un delta_min de -1.496, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404"
+            ]
+          }
+        ],
+        "limitations": [
+          "La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.",
+          "La atribución sostiene lo observado en las señales; no demuestra la causa."
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 30.44
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "Condición compatible con F04_o2_lag",
+        "confidence": 0.89,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "La señal oxygen_sensor presenta un delta_max de 0.0838, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405"
+            ]
+          },
+          {
+            "claim_id": "C02",
+            "text": "El std de oxygen_sensor alcanza 0.0287, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405"
+            ]
+          },
+          {
+            "claim_id": "C03",
+            "text": "La señal oxygen_sensor presenta un max de 0.5147, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405"
+            ]
+          }
+        ],
+        "limitations": [
+          "La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.",
+          "La atribución sostiene lo observado en las señales; no demuestra la causa."
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 33.55
+    },
+    {
+      "case_id": "F05_misfire__highway__09@180s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_MODEL_CONFIDENCE",
+        "missing_evidence": [
+          "confianza 0.462 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.4
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "EXPLAIN",
+      "output": {
+        "decision": "EXPLAIN",
+        "diagnosis": "Condición compatible con F01_vacuum_leak",
+        "confidence": 0.91,
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "Se observa ltft_bank1 con max de 2.716, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ]
+          },
+          {
+            "claim_id": "C02",
+            "text": "La señal stft_bank1 presenta un mean de 7.077, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ]
+          },
+          {
+            "claim_id": "C03",
+            "text": "La señal ltft_bank1 presenta un mean de 1.294, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ]
+          }
+        ],
+        "limitations": [
+          "La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.",
+          "La atribución sostiene de qué condición de funcionamiento se ha observado, no qué le ocurre al motor."
+        ]
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 32.01
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "NO_APPLICABLE_DOCUMENTATION",
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.15
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for AbstainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.33
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for AbstainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.09
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "verdict": "ABSTAIN",
+      "output": null,
+      "fake_citations": [],
+      "schema_error": "1 validation error for AbstainOutput",
+      "respected_verdict": true,
+      "valid": false,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.27
+    }
+  ]
+}
