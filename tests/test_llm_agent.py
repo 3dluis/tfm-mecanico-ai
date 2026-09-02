@@ -424,3 +424,11 @@ def test_el_objetivo_de_abstencion_dice_el_mismo_motivo_que_el_prompt() -> None:
     objetivo = build_target(_bundle(True), veredicto, random.Random(0))
     assert objetivo["reason"] == "LOW_CLAIM_COVERAGE"
     AbstainOutput.model_validate(objetivo)
+
+
+def test_el_registro_lleva_el_identificador_del_caso_anotado() -> None:
+    """Cinco condiciones de corpus nacen de la misma ventana; sin este campo el
+    registro no distingue C05 de C09."""
+    ejecucion = run_agent(EchoProvider(), _bundle(True), _veredicto("EXPLAIN"))
+    ejecucion.gold_case_id = "C07_partial"
+    assert ejecucion.to_dict()["gold_case_id"] == "C07_partial"

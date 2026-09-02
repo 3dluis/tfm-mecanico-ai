@@ -117,6 +117,7 @@ class AgentRun:
     def to_dict(self) -> dict[str, Any]:
         return {
             "case_id": self.case_id,
+            "gold_case_id": self.gold_case_id,
             "verdict": self.verdict.decision.value,
             "output": self.output.model_dump(mode="json") if self.output else None,
             "fake_citations": self.fake_citations,
