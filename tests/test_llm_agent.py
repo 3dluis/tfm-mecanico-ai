@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import random
+from pathlib import Path
 
 import pytest
 
@@ -378,3 +379,23 @@ def test_el_registro_conserva_el_texto_crudo_y_el_error_completo() -> None:
     ejecucion = run_agent(EchoProvider(), _bundle(True), _veredicto("EXPLAIN"))
     datos = ejecucion.to_dict()
     assert datos.get("raw_text")
+
+
+# ------------------------------------------------------------------ resumen
+
+
+def test_el_resumen_cuenta_lo_que_se_mide(tmp_path: Path) -> None:
+    from mecanico_ia_exp.llm.report import compare_records, summarize_runs
+
+    runs = [
+        {"valid": True, "respected_verdict": True, "fake_citations": [], "schema_error": None},
+        {"valid": False, "respected_verdict": True, "fake_citations": ["x"], "schema_error": "e"},
+    ]
+    resumen = summarize_runs(runs, proveedor="p")
+    assert (resumen["válidas"], resumen["esquema roto"], resumen["citas inventadas"]) == (1, 1, 1)
+
+    ruta = tmp_path / "r.json"
+    ruta.write_text(json.dumps({"runs": runs}), encoding="utf-8")
+    tabla = compare_records({"p": ruta, "ausente": tmp_path / "no.json"})
+    # El registro que no existe se omite, no rompe el cuaderno.
+    assert list(tabla["proveedor"]) == ["p"]
