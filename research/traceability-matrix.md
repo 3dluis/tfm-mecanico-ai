@@ -1,7 +1,7 @@
 # Matriz de trazabilidad — marco canónico
 
 **Marco:** `mecanico-ia-exp` (ADR-001) · **Fecha:** 1 de septiembre de 2026, 15:00
-(actualizada tras el cierre de E4, E5 y E6)
+(actualizada tras el cierre de E4, E5 y E6; **PI enmendada el 3 de septiembre de 2026, ADR-003**)
 
 **Regla de lectura, vinculante:** si un elemento del proyecto no puede conectarse con una fila
 de esta matriz, no pertenece al núcleo científico — es artefacto, instrumento o ingeniería, y
@@ -26,12 +26,17 @@ esta matriz sirve para hacer **ahora** es detectar huecos, no documentar hallazg
 
 | Sub-PI | Objetivo | Hipótesis | Experimento | Métricas | RES | DISC | CONC | Evidencia |
 |---|---|---|---|---|---|---|---|---|
-| **PI.1** — diagnóstico a partir de OBD-II real | OE-M3 ⚠ | Un modelo temporal sobre ventanas OBD-II supera de forma clara al baseline y a la clase mayoritaria | **E8** (con E5 ✅, E6 ✅, E7) | M1: F1 macro, PR-AUC, calibración | **parcial, en validación**: baseline F1 macro 0,876 frente a 0,074 de la clase mayoritaria (E6). **Sin test** | PENDING | PENDING | `experiments/E6_baseline.json` |
+| **PI.1** — diagnóstico a partir de OBD-II | OE-M3 ⚠ | Un modelo temporal sobre ventanas OBD-II supera de forma clara al baseline y a la clase mayoritaria | **E8** (con E5 ✅, E6 ✅, E7) | M1: F1 macro, PR-AUC, calibración | **parcial, en validación**: baseline F1 macro 0,876 frente a 0,074 de la clase mayoritaria (E6). **Sin test** | PENDING | PENDING | `experiments/E6_baseline.json` |
 | **PI.2** — explicación trazable | OE-M4 | Toda afirmación se ancla en una observación o en un fragmento identificable | **E14, E17** | M4: citation correctness, citation completeness, claim support rate, unsupported claim rate | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 | **PI.3** — reconocimiento de insuficiencia | OE-M4, OE-M5 ⚠ | Al retirar la evidencia relevante del corpus, el agente pasa de explicar a abstenerse sobre el mismo caso | **E16, E17** | M5: abstención correcta, abstención injustificada, cobertura | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 | **PI.4** — rechazo de evidencia engañosa | OE-M5 ⚠ | Ante evidencia parecida pero incorrecta, el agente no la acepta como soporte | **E17** | M5 sobre DISTRACTOR; M2 por condición | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 
 ⚠ = incidencia detectada, ver §5.
+
+**Procedencia de los datos** de todas las filas a fecha de hoy: `synthetic_v2`,
+`dataset_type: synthetic`, calibrado contra el manual del vehículo. La PI no exige datos
+reales (ADR-003); cada resultado se reporta con la procedencia del dato y la validez
+externa se trata en L-01.
 
 **Umbrales:** deliberadamente en blanco. Se fijan al cerrar **E15** sobre validación y quedan
 registrados antes de tocar el conjunto de test. Escribir aquí un número después de ver
@@ -43,7 +48,7 @@ resultados anularía el propósito de la matriz.
 |---|---|---|---|
 | E1 entorno | precondición instrumental | **cerrada** | OE-M2 |
 | E2 datos sintéticos | precondición instrumental | **cerrada** | OE-M2 |
-| E3 datos reales | precondición de PI.1 y de la PI completa | **bloqueada** — falta decidir la fuente | OE-M2 |
+| E3 datos reales | validación externa (ADR-003); ya no es precondición de la PI | pendiente — falta decidir la fuente | OE-M2 |
 | E4 análisis exploratorio | instrumental: qué señales son utilizables | **cerrada** | OE-M2 |
 | E5 preprocesamiento y particionado | instrumental crítico: sin partición limpia, nada posterior vale | **cerrada** — ventana 120 s, reparto por sesión, suelo de ruido medido | OE-M2 |
 | E6 baseline | **control** de PI.1 | **cerrada** — F1 macro 0,876 en validación; umbral para E7 | OE-M3 |
@@ -193,7 +198,14 @@ distinta y no está en la matriz de las cuatro condiciones.
 cuatro, o como análisis aparte? Aprovecharla es barato; no declararla sería perder el caso
 más honesto que el experimento tiene a mano.
 
-### I-07 — La PI dice «datos reales» y E3 está bloqueada · **bloqueante**
+### I-07 — La PI dice «datos reales» y E3 está bloqueada · **RESUELTA el 3-09-2026 (ADR-003)**
+
+**Resolución.** El autor enmendó la pregunta de investigación: «datos OBD-II» sin «reales».
+La procedencia del dato pasa a ser una variable declarada (`dataset_type`) y la validez
+externa, la limitación L-01. E3 deja de ser precondición y pasa a validación externa. El
+texto original se conserva a continuación.
+
+#### I-07 (original) — La PI dice «datos reales» y E3 está bloqueada · bloqueante
 
 Es la incidencia de mayor impacto. La pregunta de investigación se formula sobre **datos
 OBD-II reales**. E2 lo declara sin ambages: los datos sintéticos «no aportan validez externa

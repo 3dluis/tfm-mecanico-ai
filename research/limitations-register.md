@@ -22,7 +22,7 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 | **Por qué** | El generador de E2 es paramétrico y **no está calibrado contra datos reales**. Lo declara el propio informe: «no aporta validez externa […] ninguna conclusión sobre datos reales puede apoyarse en estos datos» |
 | **Evidencia** | `mecanico-ia-exp/docs/experiments/E2_datos_sinteticos.md` |
 | **Afecta a** | PI.1 directamente; a PI.2-PI.4 en cuanto a generalización |
-| **Consecuencia** | La pregunta de investigación habla de **datos OBD-II reales**. Con solo sintéticos, el trabajo responde a una pregunta más estrecha que la enunciada |
+| **Consecuencia** | La pregunta de investigación no exige datos reales (ADR-003, 3-09-2026), pero un resultado sobre sintéticos caracteriza el comportamiento ante los mecanismos representados, no ante un vehículo real. Toda conclusión se acota a la procedencia declarada del dato |
 | **Cómo comprobarlo** | Cerrar E3 con una fuente real y repetir al menos E8 y E17 sobre ella |
 | **Severidad** | **crítica** |
 | **Mitigación** | Si el dato real es escaso, reservarlo íntegro para validación y demostración (previsto en el plan, §6) |

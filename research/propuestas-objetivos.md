@@ -61,6 +61,9 @@ Las tres opciones escriben «datos OBD-II» sin «reales», **a la espera de E3*
 resuelve con datos reales, se repone la palabra. Si no, el objetivo general no debe prometer
 lo que el trabajo no hará. Ver L-01.
 
+**Resuelto el 3 de septiembre de 2026 (ADR-003):** la PI ya no lleva «reales». El objetivo
+general escribe «datos OBD-II» de forma definitiva, no a la espera de E3.
+
 ---
 
 ## 2. OE-M3 — describe un marco que ya no se usa
