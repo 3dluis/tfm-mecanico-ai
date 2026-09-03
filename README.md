@@ -7,7 +7,7 @@ científico principal.
 ## Pregunta de investigación
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de
-> datos OBD-II reales, rastreando cada explicación hasta su evidencia de origen,
+> datos OBD-II, rastreando cada explicación hasta su evidencia de origen,
 > y reconocer cuándo la evidencia disponible no es suficiente para sostener una
 > explicación en lugar de generar una hipótesis sin fundamento?
 
