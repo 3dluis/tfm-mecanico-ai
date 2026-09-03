@@ -4,11 +4,14 @@ Un dataset sin procedencia no es utilizable en un experimento: no se puede decir
 de dónde salió, con qué semilla, ni si mezcla datos sintéticos con reales. Este
 módulo obliga a declararlo.
 
-La separación entre sintético y real no es una etiqueta administrativa. Los
-sintéticos sirven para control experimental; los reales, para validar. Mezclarlos
-sin conservar la marca haría imposible saber sobre qué se está midiendo, y
-convertiría cualquier conclusión sobre datos reales en una afirmación sin
-respaldo.
+La procedencia no es una etiqueta administrativa. Los sintéticos sirven para
+control experimental; los reales, para validar. Mezclarlos sin conservar la marca
+haría imposible saber sobre qué se está midiendo, y convertiría cualquier
+conclusión sobre datos reales en una afirmación sin respaldo.
+
+La pregunta de investigación no exige que los datos sean reales (ADR-003); exige
+que cada resultado diga sobre qué datos se obtuvo. Por eso la taxonomía es
+cerrada y obligatoria.
 """
 
 from __future__ import annotations
@@ -20,7 +23,19 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-DatasetType = Literal["synthetic", "real"]
+#: Procedencia del dato. Cerrada a propósito: un valor fuera de esta lista es un
+#: error, no una categoría nueva.
+#:
+#: - ``real``: registrado en un vehículo físico por el autor o por un tercero
+#:   identificado, con procedimiento de adquisición declarado.
+#: - ``synthetic``: generado por un modelo paramétrico propio, con semilla y
+#:   fichas de fallo; puede estar calibrado contra documentación, nunca contra
+#:   el propio resultado.
+#: - ``simulated``: producido por un simulador externo del vehículo o del motor,
+#:   no por el generador de este laboratorio.
+#: - ``public_dataset``: conjunto publicado por terceros, citado con su
+#:   identificador; su realismo es el que su publicación declare.
+DatasetType = Literal["synthetic", "real", "simulated", "public_dataset"]
 
 
 class DatasetMetadata(BaseModel):
