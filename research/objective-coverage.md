@@ -8,7 +8,7 @@ ellos describen el marco legacy** y deben reformularse: ver `traceability-matrix
 | Objetivo | Fases | Métricas | Resultado | Capítulo | Estado |
 |---|---|---|---|---|---|
 | **OE-M1** — revisar críticamente el estado del conocimiento | (documental) | — | 144 referencias verificadas | 3 | **PASS_WITH_OBSERVATIONS** — falta cubrir la pertinencia de la evidencia (I-03) y el PRISMA formal |
-| **OE-M2** — entorno reproducible de telemetría y corpus con variantes congeladas | E1 ✅, E2 ✅, **E3 ⛔**, E4 ✅, E5 ✅, E10 | — | 4 fases cerradas de 6 | 4 | **BLOCKED** — E3 sin fuente de datos |
+| **OE-M2** — entorno reproducible de telemetría y corpus con variantes congeladas | E1 ✅, E2 ✅, E3 (validación externa, pendiente), E4 ✅, E5 ✅, E10 ✅ | — | 5 fases cerradas de 6 | 4 | **PASS_WITH_OBSERVATIONS** — desde ADR-003 E3 no bloquea; queda como validación externa sin fuente |
 | **OE-M3** ⚠ — implementar y comparar técnicas **no supervisadas** de detección, evaluando explicabilidad | **E6 ✅**, E7, E8, E9 | M1 | baseline en validación: F1 macro 0,876 | 4, 5 | **FAIL de coherencia** — el marco canónico usa modelo supervisado. Reformular |
 | **OE-M4** — implementar el agente que recupera, explica con afirmaciones referenciadas, verifica y decide | E11, E12, E13, E14, E15, E16 | M2, M4, M5 | ninguno | 4, 5 | **PENDING** |
 | **OE-M5** ⚠ — evaluar el agente bajo **dos escenarios**, y documentar el trabajo | E17, E18, E19, E20 | M1-M6 | ninguno | 5, 6 | **FAIL de coherencia** — son cuatro condiciones. Reformular |

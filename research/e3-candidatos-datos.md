@@ -6,6 +6,8 @@ aportan validez externa (L-01).
 
 **Esto es un informe de candidatos, no una decisión.** `[AUTHOR_DECISION_REQUIRED]`.
 
+> **3 de septiembre de 2026 (ADR-003).** La PI ya no exige datos reales. E3 deja de ser bloqueo de la pregunta y pasa a validación externa. Este informe se conserva como análisis de candidatos; su recomendación de reformular la PI antes de seguir quedó atendida por ADR-003, y la formulación alternativa que proponía coincide en lo esencial con la adoptada.
+
 ## El criterio que ningún candidato puede incumplir
 
 Antes de comparar candidatos hay que fijar qué hace que un dataset sirva **a este trabajo en

@@ -3,10 +3,12 @@
 Un gate no se reevalúa de memoria: se vuelve a comprobar. Cada fila cita su evidencia.
 
 **Reevaluado el 1 de septiembre de 2026 a las 15:00**, tras el cierre de E4, E5 y E6.
+**GATE-01 reevaluado el 3 de septiembre de 2026** tras la enmienda de la PI (ADR-003); el
+resto de filas conserva la fecha de su última comprobación.
 
 | Gate | Fecha | Estado | Evidencia | Observaciones |
 |---|---|---|---|---|
-| **GATE-01** Pregunta de investigación | 2026-09-01 | `PASS_WITH_OBSERVATIONS` | `docs/matriz_validacion_pi.md` | Clara, evaluable, con desenlaces de refutación escritos. Observación: PI.1 habla de datos reales y E3 está bloqueada (L-01, I-07) |
+| **GATE-01** Pregunta de investigación | 2026-09-03 | `PASS` | `research/decisions/ADR-003-pi-sin-requisito-de-datos-reales.md`; `docs/matriz_validacion_pi.md` | Reevaluado tras la enmienda ADR-003: la PI ya no exige datos reales; I-07 resuelta. La validez externa sigue registrada como L-01 (crítica) y no como observación de la PI. Anterior: `PASS_WITH_OBSERVATIONS` (2026-09-01) |
 | **GATE-02** Vacío | 2026-09-01 16:00 | `PASS_WITH_OBSERVATIONS` | `references/project/gaps.md` GAP-02 revisado; `search-log.md` iteración 5 | Era `FAIL`. La búsqueda dirigida **refutó la hipótesis de vacío**: la distinción presencia/pertinencia está estudiada (RGB, Chen et al. 2024). Vacío reformulado más estrecho y respaldado. Observación: pendiente de lectura a texto completo |
 | **GATE-03** Objetivos | 2026-09-01 | **`FAIL`** | `traceability-matrix.md` I-01, I-02; `objective-coverage.md` | OE-M3 y OE-M5 describen el marco legacy. Además el objetivo general lleva dos verbos, contra la regla UAX |
 | **GATE-04** Metodología | 2026-09-01 | `PASS_WITH_OBSERVATIONS` | `docs/methodology/`, `docs/plan_experimental_macbook.md` | Diseño coherente, con una variable manipulada y todo lo demás fijo. Pendiente: I-05 (M6 sin subpregunta) |
