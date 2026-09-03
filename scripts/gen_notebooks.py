@@ -37,10 +37,10 @@ SPEC: list[tuple[str, str, str, str, str]] = [
         "02_real_obd_ingestion",
         "Ingesta de OBD-II real",
         "E3",
-        "Incorporar registros OBD-II reales, normalizar sus señales al catálogo "
-        "del laboratorio y conservar la metadata de procedencia.",
-        "La PI se formula sobre datos reales: este notebook aporta el dato sobre "
-        "el que se responde.",
+        "Incorporar registros OBD-II reales, si se obtienen, normalizar sus señales "
+        "al catálogo del laboratorio y conservar la metadata de procedencia.",
+        "La PI no exige datos reales (ADR-003): este notebook aporta validación "
+        "externa cuando exista una fuente, con la procedencia declarada.",
     ),
     (
         "03_timeseries_eda",
@@ -151,7 +151,7 @@ SPEC: list[tuple[str, str, str, str, str]] = [
         "15_tfm_demo",
         "Demostración",
         "E20",
-        "Mostrar el mismo caso real con y sin la evidencia relevante en el "
+        "Mostrar el mismo caso con y sin la evidencia relevante en el "
         "corpus, y contrastar explicación trazable frente a abstención.",
         "Es la escenificación directa de la PI ante el tribunal.",
     ),
@@ -167,7 +167,7 @@ SPEC: list[tuple[str, str, str, str, str]] = [
 
 PI = (
     "¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de "
-    "datos OBD-II reales, rastreando cada explicación hasta su evidencia de "
+    "datos OBD-II, rastreando cada explicación hasta su evidencia de "
     "origen, y reconocer cuándo la evidencia disponible no es suficiente para "
     "sostener una explicación en lugar de generar una hipótesis sin fundamento?"
 )
