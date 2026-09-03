@@ -25,7 +25,7 @@ Redactado: 1 de septiembre de 2026, al cerrar E1
 |---|---|---|
 | E1 entorno | ✅ | MPS, PostgreSQL 14.15, pgvector 0.8.0 |
 | E2 datos sintéticos | ✅ | 43 200 muestras, calibradas contra el manual |
-| E3 datos reales | 🔴 **bloqueada** | Sin fuente decidida. **Bloquea la PI literal** |
+| E3 datos reales | 🟡 pendiente | Sin fuente decidida. Desde ADR-003 es validación externa, no precondición de la PI |
 | E4 análisis exploratorio | ✅ | La deriva del caudalímetro no se ve en el caudalímetro |
 | E5 preprocesamiento | ✅ | Ventana 120 s, reparto sin fuga, suelo de ruido medido |
 | E6 baseline | ✅ | F1 macro 0,879 |
@@ -57,14 +57,14 @@ Redactado: 1 de septiembre de 2026, al cerrar E1
 ## 1. Pregunta de investigación
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de
-> datos OBD-II reales, rastreando cada explicación hasta su evidencia de origen,
+> datos OBD-II, rastreando cada explicación hasta su evidencia de origen,
 > y reconocer cuándo la evidencia disponible no es suficiente para sostener una
 > explicación en lugar de generar una hipótesis sin fundamento?
 
 La pregunta tiene tres exigencias separables, y el experimento debe poder
 responder que sí o que no a cada una por separado:
 
-1. **Explicación**: producir una explicación diagnóstica a partir de OBD-II real.
+1. **Explicación**: producir una explicación diagnóstica a partir de OBD-II, con la procedencia del dato declarada.
 2. **Trazabilidad**: que cada afirmación de esa explicación se pueda seguir hasta
    una observación concreta o un fragmento documental concreto.
 3. **Reconocimiento de insuficiencia**: que el agente se abstenga cuando la
@@ -364,7 +364,7 @@ informe en `docs/experiments/`. No se avanza de fase sin aprobación explícita.
 
 ### E20 — Demostración
 
-- **Objetivo:** el caso real doble —con y sin evidencia relevante— y la ejecución
+- **Objetivo:** el mismo caso, doble —con y sin evidencia relevante— y la ejecución
   completa de extremo a extremo.
 - **Aceptación:** el contraste entre explicación trazable y abstención se ve sin
   necesidad de explicarlo.
@@ -373,7 +373,7 @@ informe en `docs/experiments/`. No se avanza de fase sin aprobación explícita.
 
 | Riesgo | Impacto | Mitigación |
 |---|---|---|
-| No conseguir OBD-II real suficiente o con fallos etiquetados | Alto: la PI se formula sobre datos reales | Resolver la fuente en E3, antes de invertir en E5-E9; si el dato real es escaso, reservarlo íntegro para validación y demostración |
+| No conseguir OBD-II real suficiente o con fallos etiquetados | Medio: la PI no exige datos reales (ADR-003); sin ellos la validez externa queda como limitación declarada | Buscar la fuente para E3 como validación externa; si el dato real es escaso, reservarlo íntegro para validación y demostración |
 | Fuga temporal no detectada | Alto: invalida todo lo posterior | Test explícito en E5, partición por origen, revisión antes de E6 |
 | Umbrales de suficiencia ajustados sobre test | Alto: el resultado dejaría de ser evidencia | Test aislado hasta E19; la calibración solo ve validación |
 | Que la abstención resulte trivial (el sistema se abstiene casi siempre) | Medio: el resultado sería vacío | Reportar cobertura junto a corrección; la condición FULL debe producir explicaciones |
@@ -382,7 +382,7 @@ informe en `docs/experiments/`. No se avanza de fase sin aprobación explícita.
 
 ## 7. Decisiones abiertas
 
-1. **Fuente de datos OBD-II reales** (E3): pendiente.
+1. **Fuente de datos OBD-II reales** (E3): pendiente; desde ADR-003, validación externa y no precondición.
 2. **Arquitectura del modelo temporal** (E7): GRU, LSTM o CNN-1D; se elige una.
 3. **Proveedor LLM oficial** (E13): pendiente; el pipeline no depende de cuál sea.
 4. **Modelo de embeddings y dimensión** (E11): condiciona el esquema de pgvector.

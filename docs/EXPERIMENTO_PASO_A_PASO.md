@@ -5,9 +5,11 @@ produce** y **qué se encontró al ejecutarlo**.
 
 Todo lo que aparece aquí se ha ejecutado. Ninguna cifra está estimada.
 
-> **Estado:** pasos 0 a 9 ejecutados. Los pasos 10 y siguientes requieren
-> decisiones del autor que están abiertas: la fuente de datos OBD-II reales y el
-> proveedor de modelo de lenguaje.
+> **Estado:** pasos 0 a 13 ejecutados sobre `synthetic_v2` (`dataset_type:
+> synthetic`). Quedan abiertas dos decisiones del autor: el dataset de la
+> evaluación final (E19) y, como validación externa, la fuente de datos OBD-II
+> reales. Desde el 3 de septiembre de 2026 (ADR-003) la pregunta de investigación
+> no exige que los datos sean reales; exige declarar su procedencia.
 
 ---
 
@@ -391,7 +393,7 @@ motivo) no hizo falta y queda declarada como limitación.
 | Calibrar umbrales de suficiencia | Se pusieron por criterio, no sobre validación | Trabajo pendiente |
 | Corregir mapeo diagnóstico→DTC de F02 | La observación habla de ajustes y el procedimiento de tensión de circuito | Trabajo pendiente |
 | FULL / PARTIAL / ABSENT / DISTRACTOR | Extender las cuatro condiciones a todos los casos | Trabajo pendiente |
-| **Datos OBD-II reales** | **La PI dice «reales» y los actuales son sintéticos** | **Decisión del autor** |
+| **Datos OBD-II reales** (validación externa) | La PI ya no los exige (ADR-003); sin ellos, la validez externa queda como limitación L-01 | **Decisión del autor** |
 | Evaluación final y demostración | Dependen de las dos anteriores | **Decisión del autor** |
 
 ---

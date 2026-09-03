@@ -19,6 +19,8 @@ datos reales**. No sustituye a E3, y ninguna conclusión sobre datos reales pued
 apoyarse en estos datos. Se hace constar porque la pregunta de investigación
 habla de datos reales.
 
+> **Nota del 3 de septiembre de 2026 (ADR-003).** La pregunta de investigación ya no exige datos reales; exige declarar la procedencia, y la de este conjunto es `synthetic`. La ausencia de validez externa sigue siendo cierta y sigue siendo la limitación L-01.
+
 ## Componentes
 
 | Módulo | Contenido | Procedencia |
@@ -163,3 +165,6 @@ explicación**, y eso será un resultado, no un defecto.
 
 E3 queda **bloqueada**: requiere decidir la fuente de datos OBD-II reales.
 Se continúa por E4 (análisis exploratorio temporal) sobre los datos sintéticos.
+
+
+> **Nota del 3 de septiembre de 2026 (ADR-003).** E3 deja de ser precondición de la PI y pasa a validación externa, pendiente de fuente.

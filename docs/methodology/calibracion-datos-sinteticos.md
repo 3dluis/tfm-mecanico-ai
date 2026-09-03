@@ -9,8 +9,9 @@ taller del vehículo, con su cita literal y el fichero del que sale.
 
 **No se hizo:** convertir los datos en reales. Siguen siendo sintéticos. La
 calibración hace que sus parámetros dejen de ser arbitrarios y pasen a estar
-documentados; no los convierte en una medición. La pregunta de investigación
-habla de datos OBD-II **reales**, y eso exige registros de un vehículo real.
+documentados; no los convierte en una medición. La pregunta de investigación no
+exige que los datos sean reales (ADR-003), pero la validez externa sí exige
+registros de un vehículo real, y sin ellos se declara como limitación.
 
 Esta limitación va en la memoria como tal, no como nota al pie.
 

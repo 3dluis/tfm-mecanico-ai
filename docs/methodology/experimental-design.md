@@ -26,9 +26,9 @@ primeras y fallará esta.
 
 ## Experimento central de defensa
 
-El mismo caso real, dos veces.
+El mismo caso, dos veces.
 
-**Condición 1.** OBD-II real → modelo → atribución → recuperación → la evidencia
+**Condición 1.** OBD-II → modelo → atribución → recuperación → la evidencia
 resulta suficiente → EXPLAIN → explicación trazable hasta su origen.
 
 **Condición 2.** Los mismos datos, el mismo modelo, la misma atribución. Se
@@ -57,6 +57,29 @@ expected_action          # EXPLAIN | ABSTAIN
 `allowed_claims` delimita qué se puede afirmar legítimamente con la evidencia
 disponible. Una afirmación fuera de esa lista es una afirmación sin soporte,
 aunque resulte ser cierta.
+
+## Procedencia de los datos
+
+La pregunta de investigación no exige que los datos OBD-II sean reales (ADR-003,
+3 de septiembre de 2026). Exige que **cada dataset declare su procedencia** y que
+ningún resultado se publique sin ella. La taxonomía es cerrada:
+
+| `dataset_type` | Qué es | Para qué sirve | Qué no sostiene |
+|---|---|---|---|
+| `real` | registrado en un vehículo físico, con procedimiento de adquisición declarado | validación externa, demostración | — |
+| `synthetic` | generado por el modelo paramétrico propio, con semilla y fichas de fallo, calibrado contra documentación | desarrollo, inyección controlada de fallos, equilibrio de escenarios, ablaciones, FULL / PARTIAL / ABSENT / DISTRACTOR | comportamiento equivalente en vehículo real |
+| `simulated` | producido por un simulador externo del vehículo o del motor | ídem, con el realismo que el simulador declare | ídem |
+| `public_dataset` | publicado por terceros, citado con identificador | validación externa parcial, comparación | más de lo que su publicación declare |
+
+Cada ficha de dataset registra como mínimo `dataset_id`, `dataset_type`, `source`,
+`version`, vehículo o simulador, frecuencia de muestreo, `created_at` y `notes`
+(`src/mecanico_ia_exp/data/metadata.py`). Los resultados se reportan siempre con la
+procedencia del dato sobre el que se obtuvieron y nunca se agregan entre
+procedencias distintas sin decirlo.
+
+Los datos reales siguen siendo valiosos: si se obtienen, se usan como evidencia
+adicional y se describen con vehículo, sesión, señales, frecuencia, condiciones,
+procedimiento de adquisición y limitaciones.
 
 ## Particiones
 
