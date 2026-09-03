@@ -255,40 +255,40 @@ TUTOR_HANDOFF:
   findings:
     - id: TUTOR-MAJ-001
       severity: MAJOR
-      status: OPEN
+      status: FIXED
       file: research/traceability-matrix.md
       lines: "20-21"
       action: "sustituir la PI de §1 por la vigente"
       verify: "grep 'OBD-II reales, rastreando' sin resultados vivos fuera de ADR e I-07 original"
     - id: TUTOR-MIN-001
       severity: MINOR
-      status: OPEN
+      status: FIXED
       file: docs/matriz_validacion_pi.md
       lines: "184-185"
       action: "reformular el veredicto como acotación de validez externa"
       verify: "sin 'no respondida'; nombra dataset y validación externa"
     - id: TUTOR-MIN-002
       severity: MINOR
-      status: OPEN
+      status: FIXED
       file: research/reproducibility.md
       lines: "35"
       action: "E3: pendiente — validación externa (ADR-003)"
       verify: "fila actualizada"
     - id: TUTOR-MIN-003
       severity: MINOR
-      status: OPEN
+      status: FIXED
       file: docs/memoria/cap5_resultados.md
       lines: "237-238"
       action: "marcador: E19 sobre el dataset de evaluación final"
       verify: "sin 'datos reales' como condición de E19"
     - id: TUTOR-INF-001
       severity: INFO
-      status: OPEN
+      status: FIXED
       file: "TFM/.claude/skills/uax-tfm-ai-researcher/references/project/{experiments,results}.md"
       action: "actualizar estado de E3 o nota fechada"
     - id: TUTOR-INF-002
       severity: INFO
-      status: OPEN
+      status: FIXED
       file: docs/matriz_validacion_pi.md
       lines: "37"
       action: "retirar 'claramente'"
