@@ -9,7 +9,7 @@ Convención de nombre: `E<n>_<tema>.md`.
 |---|---|---|
 | E1 entorno | [E1_entorno.md](E1_entorno.md) | cerrada |
 | E2 datos sintéticos | [E2_datos_sinteticos.md](E2_datos_sinteticos.md) | cerrada |
-| E3 datos reales | — | **bloqueada** — falta decidir la fuente |
+| E3 datos reales | — | pendiente — validación externa desde ADR-003; falta decidir la fuente |
 | E4 análisis exploratorio | [E4_eda_temporal.md](E4_eda_temporal.md) | cerrada |
 | E5 preprocesamiento | [E5_preprocesamiento.md](E5_preprocesamiento.md) | cerrada |
 | E6 baseline | [E6_baseline.md](E6_baseline.md) | cerrada |

@@ -34,8 +34,8 @@ Propuesta de título, a consensuar:
 
 ## 2. Pregunta de investigación
 
-> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II
-> reales, rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
+> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la
 > evidencia disponible no es suficiente para sostener una explicación en lugar de generar una
 > hipótesis sin fundamento?
 
@@ -103,7 +103,7 @@ gates de calidad de código en verde.
 |---|---|
 | E1 entorno | cerrada |
 | E2 generación de datos sintéticos | cerrada |
-| **E3 datos reales** | **bloqueada** — decisión de fuente pendiente |
+| **E3 datos reales** | pendiente — desde ADR-003 es validación externa, no precondición de la pregunta |
 | E4 análisis exploratorio | cerrada |
 | E5 preprocesamiento y particionado | cerrada |
 | E6 baseline | cerrada |
@@ -174,9 +174,12 @@ Toda decisión científica relevante queda documentada en un registro de decisio
 
 ## 5. Dificultades encontradas
 
-1. **Fuente de datos reales sin resolver.** Es el bloqueo principal. La pregunta se formula
-   sobre datos OBD-II reales y hoy solo hay datos sintéticos, que aportan control experimental
-   pero **ninguna validez externa**.
+1. **Fuente de datos reales sin resolver.** Fue el bloqueo principal mientras la pregunta
+   exigía datos reales. El 3 de septiembre de 2026 la pregunta se enmendó (ADR-003): ya no
+   los exige; exige que cada dataset declare su procedencia. Los datos sintéticos, calibrados
+   contra el manual del vehículo, aportan control experimental pero **ninguna validez
+   externa**, que se declara como limitación. Los datos reales siguen buscándose como
+   validación adicional.
 
 2. **Reorientación del marco experimental.** El trabajo mantiene la pregunta pero ha sustituido
    su diseño experimental por otro más directo y con una condición adicional —el rechazo de
@@ -190,7 +193,7 @@ Toda decisión científica relevante queda documentada en un registro de decisio
 
 ## 6. Trabajo previsto hasta el informe 2
 
-1. Resolver la fuente de datos reales y cerrar la fase correspondiente.
+1. Decidir el dataset de la evaluación final y, si hay fuente, incorporar datos reales como validación externa.
 2. Cerrar modelo temporal, evaluación y atribución.
 3. Construir el corpus documental e indexarlo.
 4. Integrar el agente y la verificación de trazabilidad.

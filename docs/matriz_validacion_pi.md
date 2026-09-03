@@ -1,31 +1,32 @@
 # Matriz de validación de la pregunta de investigación
 
-Última actualización: 1 de septiembre de 2026 · Datos: `synthetic_v2` ·
+Última actualización: 3 de septiembre de 2026 · Datos: `synthetic_v2` (`dataset_type: synthetic`, calibrado contra el manual; ADR-003) ·
 Corpus: manual de taller Mazda 3 BK, 6 158 fragmentos
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de
-> datos OBD-II **reales**, rastreando cada explicación hasta su evidencia de
+> datos OBD-II, rastreando cada explicación hasta su evidencia de
 > origen, y reconocer cuándo la evidencia disponible no es suficiente para
 > sostener una explicación en lugar de generar una hipótesis sin fundamento?
 
 ---
 
-## Advertencia que condiciona toda la matriz
+## Procedencia de los datos, y lo que condiciona
 
-**Los datos no son reales.** Son sintéticos, generados por un modelo paramétrico
-calibrado contra el manual del Mazda 3 BK. La calibración documenta sus
-parámetros; **no los convierte en una medición**.
+**Los datos son sintéticos** (`dataset_type: synthetic`), generados por un modelo
+paramétrico calibrado contra el manual del Mazda 3 BK. La calibración documenta
+sus parámetros; **no los convierte en una medición**.
 
-La pregunta, tal como está formulada, **no puede responderse todavía**. Lo que
-esta matriz responde es su versión condicional:
+Desde el 3 de septiembre de 2026 (ADR-003) la pregunta de investigación no exige
+que los datos sean reales: exige que cada resultado declare sobre qué datos se
+obtuvo. Esta matriz responde, por tanto, a la pregunta tal como está formulada,
+**sobre el dataset declarado**. Lo que un resultado sobre sintéticos sostiene es el
+comportamiento del agente ante los mecanismos de fallo representados; no
+sostiene comportamiento equivalente en un vehículo real, y esa validez externa se
+declara como limitación (L-01), no se presume.
 
-> *Con datos OBD-II sintéticos calibrados contra la documentación del vehículo,
-> ¿puede el agente explicar rastreando la evidencia y abstenerse cuando no la
-> hay?*
-
-Cada fila indica qué parte del resultado depende de esa condición. Las que
+Cada fila indica cuánto depende el resultado del realismo del dato. Las que
 dependen menos son las que menos cambiarían con datos reales; las que dependen
-más son las que habría que rehacer.
+más son las que habría que repetir sobre ellos.
 
 ---
 
@@ -194,8 +195,8 @@ Las cuatro subpreguntas se cumplen con los datos disponibles:
 - **PI.4** el procedimiento del motor equivocado se rechaza, y por dos vías
   independientes.
 
-**Lo que esto NO significa.** La pregunta habla de datos OBD-II **reales**, y los
-usados son sintéticos. Lo demostrado es que **el mecanismo funciona**: que
+**Lo que esto NO significa.** Los datos usados son sintéticos, y la pregunta se
+responde sobre ellos. Lo mostrado es que **el mecanismo funciona**: que
 retirar evidencia cambia la decisión, que una cita que no sostiene se rechaza y
 que un documento de otro motor no cuenta. Queda por demostrar que sigue
 funcionando cuando el dato de entrada tiene el ruido, el solapamiento entre
@@ -206,17 +207,17 @@ puramente documental. El que más cambiaría es **PI.1**.
 
 ---
 
-## Lo que falta para responder a la pregunta como está formulada
+## Lo que falta para ampliar la validez de la respuesta
 
 | Requisito | Estado |
 |---|---|
-| Datos OBD-II **reales** del Mazda 3 BK con motor Z6 | **Pendiente — decisión del autor** |
+| Datos OBD-II reales del Mazda 3 BK con motor Z6, como validación externa (ya no precondición de la PI; ADR-003) | **Pendiente — decisión del autor** |
 | Proveedor de modelo de lenguaje | **Pendiente — decisión del autor** |
 | Umbrales de suficiencia calibrados sobre validación | Pendiente |
 | Mapeo diagnóstico→DTC corregido para la deriva del caudalímetro | Pendiente |
 | Condiciones PARTIAL y DISTRACTOR extendidas a todos los casos | Pendiente |
 
-El primero es el que bloquea la pregunta literal. Los demás afinarían un
+El primero es el que ampliaría la validez externa. Los demás afinarían un
 resultado que ya existe.
 
 ---

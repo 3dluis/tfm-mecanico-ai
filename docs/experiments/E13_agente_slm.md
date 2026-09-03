@@ -387,6 +387,8 @@ no cueste una cita falsa.
 - **Decodificación determinista en un motor** (MPS, bf16). Otro motor daría
   otro «antes».
 
+> **Nota del 3 de septiembre de 2026 (ADR-003).** La PI ya no exige datos reales; la procedencia de estos es `synthetic` y la validez externa queda fuera de lo medido.
+
 ## Conclusión
 
 Un modelo de 3B local, con la evidencia entregada hecha y la decisión ya
@@ -397,4 +399,4 @@ enseñó cómo se contesta en esta tarea. Y las dos veces que falló --antes y
 entre iteraciones-- el fallo estaba en el instrumento, no en el modelo.
 
 Cierra el paso 13 del experimento. E18 (ablaciones) puede usar la v2 como
-redactor. E19 y E20 siguen bloqueadas por los datos reales.
+redactor. E19 y E20 dependen de la decisión del autor sobre el dataset de evaluación final (ADR-003).
