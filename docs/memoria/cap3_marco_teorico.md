@@ -30,6 +30,10 @@ el 2 de septiembre de 2026 por la misma vía; su registro está en el repositori
 
 ## Diagnóstico vehicular a partir de OBD-II
 
+Este apartado recorre tres cosas: qué señales expone el puerto de diagnóstico y qué
+normas las fijan, qué datos existen para trabajar con ellas, y qué modelos se han usado
+para diagnosticar a partir de esa telemetría.
+
 ### El puerto de diagnóstico y sus señales
 
 El diagnóstico a bordo de segunda generación, OBD-II, es obligatorio en turismos de gasolina
@@ -42,9 +46,9 @@ colector, correcciones de combustible a corto y largo plazo, tensión de las son
 y avance del encendido. Los códigos de avería, con formato de una letra y cuatro dígitos,
 tienen una parte normalizada, común a todos los fabricantes, y una parte específica de cada
 uno. Ese detalle importa para este trabajo: el manual de un fabricante documenta sus propios
-códigos, que pueden no coincidir con el código genérico que la literatura asocia a un
-síntoma, y buscar el genérico en el manual puede dar la impresión falsa de que la
-documentación no existe.
+códigos, que pueden no coincidir con el código genérico que los repertorios habituales
+asocian a un síntoma, y buscar el genérico en el manual puede dar la impresión falsa de que
+el manual no documenta la avería.
 
 Rimpas, Papadakis y Samarakou (2020, REF-098) caracterizan las señales accesibles por OBD-II
 y su uso para monitorizar operación y consumo; Michailidis, Panagiotopoulou y Papadakis
@@ -76,8 +80,8 @@ de fallos múltiples en electrónica de automoción. El bosque aleatorio (Breima
 MET-01) es un baseline recurrente por su robustez con pocos datos y clases desbalanceadas;
 las redes recurrentes con unidades GRU (Cho et al., 2014, MET-02) son la alternativa
 secuencial habitual. Este trabajo compara ambas y, sobre su volumen de datos, el modelo
-tabular no fue superado por el secuencial, un resultado que el capítulo 5 detalla y que la
-literatura sobre series cortas hace esperable.
+tabular no fue superado por el secuencial, un resultado que el capítulo 5 detalla y que los
+resultados publicados sobre series cortas hacen esperable.
 
 Un aspecto que la mayoría de los trabajos revisados no trata, y que para este es central, es
 la **calibración** de la confianza del modelo. Guo et al. (2017, MET-04) mostraron que los
@@ -91,7 +95,7 @@ significa lo que aparenta. El capítulo 4 lo trata como precondición y no como 
 ## Explicabilidad de los modelos de diagnóstico
 
 Los valores de Shapley aplicados a modelos de aprendizaje (Lundberg y Lee, 2017, MET-03) son
-el método de atribución dominante en la literatura de diagnóstico de fallos revisada. Brusa
+el método de atribución dominante en los trabajos de diagnóstico de fallos revisados. Brusa
 et al. (2023, REF-014) los usan para entender la contribución de cada descriptor en
 monitorización de condición industrial; Haque, Zabin y Uddin (2025, REF-044) los combinan con
 selección de descriptores y ensamblado para clasificar fallos en motores de vehículo
@@ -103,12 +107,16 @@ Lo que estos trabajos hacen con la atribución es explicar el modelo al analista
 trabajo hace es distinto y conviene subrayarlo: convierte la atribución en **evidencia
 observacional citable**, con señal, estadístico, valor, dirección y ventana temporal, para
 que una afirmación de la explicación final pueda referirse a ella igual que se refiere a una
-página del manual. Esa conversión impone una restricción que la literatura de explicabilidad
-enuncia y que el trabajo asume como regla: la atribución indica de qué depende la predicción
+página del manual. Esa conversión impone una restricción que los trabajos de explicabilidad
+enuncian y que el trabajo asume como regla: la atribución indica de qué depende la predicción
 del modelo, no qué le ocurre al vehículo. Ninguna afirmación del sistema atribuye causa a
 partir de una atribución, y el esquema de salida rechaza las que lo hacen.
 
 ## Modelos de lenguaje y recuperación aumentada sobre documentación técnica
+
+El apartado parte del problema que motiva el trabajo, revisa las aplicaciones a
+documentación de vehículos, describe cómo se ajusta un modelo pequeño sin que aprenda el
+contenido del corpus, y termina en la recuperación semántica, léxica y filtrada.
 
 ### El problema
 

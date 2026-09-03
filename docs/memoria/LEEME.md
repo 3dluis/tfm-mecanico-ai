@@ -31,9 +31,10 @@ documento Word queda fuera del control de versiones.
    verificadas en fuente primaria) y las de método verificadas en Crossref o arXiv el 2 de
    septiembre de 2026 (`research/references/referencias-metodo.md`). La sesión informativa
    25-26 advierte de que una fuente inexistente puede suponer un *no apto*.
-3. **Los datos son sintéticos y se dice en cada capítulo.** La pregunta de investigación
-   habla de datos reales; mientras E3 siga bloqueada, cada resultado se presenta como
-   condicional. No se suaviza.
+3. **Los datos son sintéticos y se dice en cada capítulo.** La pregunta de investigación no
+   exige datos reales (ADR-003, 3 de septiembre de 2026); cada resultado declara la
+   procedencia de su dato (`dataset_type`) y la validez externa se trata como limitación.
+   No se suaviza y no se presenta un resultado sintético como comportamiento real.
 4. **Un solo verbo en el objetivo general**, en infinitivo, verificable al terminar.
 5. **Vocabulario canónico** (ADR-001): PI.1–PI.4, E1–E20, M1–M6, condiciones FULL /
    PARTIAL / ABSENT / DISTRACTOR. No se mezcla con la nomenclatura del repositorio heredado.
@@ -44,7 +45,7 @@ documento Word queda fuera del control de versiones.
 
 | Depende de | Afecta a |
 |---|---|
-| E3, datos OBD-II reales | Cap. 4 «Población y muestra» (versión final), Cap. 5 completo, Cap. 6 conclusiones |
+| Dataset de la evaluación final (E19) y, si la hay, fuente de datos reales (E3) | Cap. 4 «Población y muestra» (versión final), Cap. 5 apartados finales, Cap. 6 conclusiones |
 | Reunión con el director | Título definitivo, objetivos reformulados, extensión (tres cifras oficiales incompatibles), estilo de cita, convocatoria |
 | E18, ablaciones | Cap. 5 «Discusión» (contribución de cada componente) |
 | Reconciliación de la lista maestra de referencias (144 frente a 153 declaradas) | Bibliografía |

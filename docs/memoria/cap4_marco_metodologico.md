@@ -1,8 +1,10 @@
 # Capítulo 4: Marco Metodológico
 
-> Estado: redactado sobre el diseño ejecutado (E1–E17 sobre datos sintéticos). El apartado
-> «Población y muestra» tiene una versión final pendiente de E3. Todas las cifras proceden de
-> registros de `experiments/` o de `configs/calibracion_mazda3_bk.yaml`.
+> Estado: redactado sobre el diseño ejecutado (E1–E17 sobre datos sintéticos). Actualizado el
+> 3 de septiembre de 2026 a la PI sin requisito de datos reales (ADR-003). El apartado
+> «Población y muestra» tiene una versión final pendiente del dataset de evaluación final.
+> Todas las cifras proceden de registros de `experiments/` o de
+> `configs/calibracion_mazda3_bk.yaml`.
 
 El trabajo sigue el ciclo de la investigación en ciencias del diseño (Peffers et al., 2007,
 MET-16; Hevner et al., 2004, MET-17): identifica un problema, fija los objetivos de una
@@ -23,6 +25,10 @@ prompt. Lo que no se ha ejecutado se declara como no ejecutado.
 
 ## Población y muestra
 
+Se describen, por este orden, la población a la que se pretende generalizar, la muestra de
+telemetría con su procedencia, la muestra documental que constituye el corpus y los casos
+de referencia sobre los que se evalúa el agente.
+
 ### Población
 
 La población de referencia es el conjunto de ventanas de telemetría OBD-II de un vehículo de
@@ -42,9 +48,13 @@ incorporen datos reales, esos tres valores deben tomarse del vehículo real.
 
 ### Muestra: telemetría
 
-La fase de incorporación de datos reales (E3) está bloqueada por una decisión pendiente
-sobre la fuente. La muestra con la que se han ejecutado los experimentos es **sintética**,
-generada por un modelo paramétrico determinista con semilla fija. Se describe con precisión
+La pregunta de investigación no exige que los datos sean reales; exige que cada resultado
+declare sobre qué datos se obtuvo. La fase de incorporación de datos reales (E3) queda como
+validación externa, pendiente de una fuente. La muestra con la que se han ejecutado los
+experimentos es **sintética** (`dataset_type: synthetic`), generada por un modelo
+paramétrico determinista con semilla fija. La taxonomía de procedencia que rige todo el
+trabajo tiene cuatro valores, real, sintético, simulado y conjunto público, y ningún
+resultado se agrega entre procedencias distintas sin decirlo. Se describe con precisión
 porque su validez depende de cómo se construyó.
 
 El generador produce sesiones de conducción en tres regímenes, ralentí, urbano y carretera,
@@ -62,6 +72,7 @@ el proceso está documentado con cada hallazgo y su corrección.
 
 | Parámetro de la muestra sintética | Valor |
 |---|---|
+| Procedencia (`dataset_type`) | `synthetic`; identificador `synthetic_v2` |
 | Condiciones | 6 (sin fallo y cinco fallos) |
 | Sesiones por condición | 12; 72 en total |
 | Duración de cada sesión | 600 s |
@@ -99,7 +110,8 @@ todas las condiciones detectables. Registro: `docs/experiments/E5_preprocesamien
 **Limitación declarada.** Los datos sintéticos no tienen validez externa. Se parecen a los
 reales en lo que el manual permite comprobar y en nada más; en particular, no reproducen la
 variabilidad entre conductores, el desgaste, ni los fallos que no están en el generador.
-Todos los resultados sobre ellos se presentan como condicionales.
+Todos los resultados sobre ellos se presentan con su procedencia declarada y acotados a
+ella.
 
 ### Muestra: corpus documental
 
@@ -148,7 +160,7 @@ desenlace que la sostendría y otro que la refutaría, fijados antes de la evalu
 
 | Subpregunta | Qué pregunta | Sostenida si | Refutada si |
 |---|---|---|---|
-| PI.1 | ¿Diagnostica a partir de la telemetría? | supera claramente a la clase mayoritaria y su confianza está calibrada | no supera a la referencia mínima, o la confianza no significa lo que aparenta |
+| PI.1 | ¿Diagnostica a partir de la telemetría? | supera a la clase mayoritaria con margen amplio y su confianza está calibrada | no supera a la referencia mínima, o la confianza no significa lo que aparenta |
 | PI.2 | ¿La explicación es trazable? | toda afirmación admitida se ancla en una observación y un documento verificados | las referencias existen pero no sostienen lo afirmado |
 | PI.3 | ¿Reconoce la insuficiencia? | la decisión cambia al retirar la evidencia, con todo lo demás idéntico | explica igual con y sin evidencia, o se abstiene siempre |
 | PI.4 | ¿Rechaza evidencia engañosa? | el procedimiento de otro motor no se acepta como soporte | acepta distractores como evidencia |
@@ -160,6 +172,9 @@ abstención resulte trivial; que acepte distractores; y que las referencias exis
 sostengan lo que se afirma con ellas.
 
 ## Variables intervinientes e instrumentos de evaluación
+
+El apartado declara la única variable manipulada, las que se mantienen controladas, las
+seis familias de variables medidas y los instrumentos con que se miden.
 
 ### Variable manipulada
 

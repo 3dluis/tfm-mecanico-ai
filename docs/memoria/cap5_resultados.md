@@ -2,8 +2,9 @@
 
 > Estado: **borrador sobre datos sintéticos.** Todas las cifras son de la partición de
 > validación de `synthetic_v2`; el test sigue cerrado. Cada tabla cita su registro. Cuando
-> E19 se ejecute sobre datos reales, este capítulo se reescribe; hasta entonces responde a la
-> versión condicional de la pregunta de investigación. Dos discrepancias entre informes de
+> E19 se ejecute sobre el dataset de evaluación final, este capítulo se reescribe. La
+> procedencia de todo dato de este capítulo es `synthetic` (ADR-003); la validez externa se
+> trata en el capítulo 6. Dos discrepancias entre informes de
 > fase y registros están marcadas `[RECONCILIAR]` y no se han resuelto eligiendo una cifra.
 
 ## Análisis descriptivo de la muestra
@@ -30,6 +31,10 @@ afirmar legítimamente el agente: «el caudalímetro deriva porque el caudal es 
 falso, y las plantillas de afirmación del verificador no permiten formularlo.
 
 ## Resultados obtenidos
+
+Los resultados se presentan por subpregunta, PI.1 a PI.4, y se cierran con la medición del
+modelo de lenguaje. En este apartado se describe lo observado; su interpretación va en el
+siguiente.
 
 ### PI.1 · Diagnóstico y calibración
 
@@ -190,10 +195,13 @@ y pasa de 7 a 9.
 
 ## Discusión y análisis de los resultados
 
+La discusión separa lo que los resultados sostienen de lo que no sostienen, y termina con
+el patrón que atraviesa el trabajo.
+
 ### Lo que los resultados sostienen
 
 Sobre datos sintéticos calibrados contra el manual del vehículo, las cuatro subpreguntas
-quedan sostenidas, con matices que conviene no perder. El modelo diagnostica claramente por
+quedan sostenidas, con matices que conviene no perder. El modelo diagnostica muy por
 encima de la referencia mínima y su confianza, una vez calibrada, significa lo que aparenta
 (PI.1). Toda afirmación admitida es trazable hasta una observación y un fragmento que la
 sostienen, y la distancia entre completitud y soporte es cero (PI.2). La decisión de explicar
@@ -205,8 +213,8 @@ ninguno.
 
 ### Lo que no sostienen
 
-No sostienen nada sobre datos reales. Es la primera limitación del capítulo 6 y la única
-que no puede resolverse sin una decisión externa al laboratorio. Tampoco sostienen que la
+No sostienen nada sobre el comportamiento en un vehículo real: caracterizan el mecanismo
+ante los fallos representados en el generador. Es la primera limitación del capítulo 6. Tampoco sostienen que la
 abstención sea barata: dos de cinco casos con evidencia completa terminan en abstención por
 falta de confianza del modelo, y esa cobertura, 3 de 5, es el precio de que las dos
 abstenciones sean honestas. Un criterio más laxo habría explicado los cinco y habría

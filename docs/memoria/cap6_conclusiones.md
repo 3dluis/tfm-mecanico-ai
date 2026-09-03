@@ -7,11 +7,12 @@
 
 ## Conclusiones sobre la pregunta de investigación
 
-`[Borrador condicionado a datos sintéticos; se reescribe con E19.]`
+`[Borrador sobre datos sintéticos (dataset_type: synthetic); se reescribe con E19.]`
 
 La pregunta preguntaba si un agente con recuperación aumentada puede explicar un diagnóstico
 rastreando cada afirmación hasta su evidencia y abstenerse cuando la evidencia no basta. La
-respuesta que este trabajo puede dar hoy es condicional y tiene dos partes.
+respuesta que este trabajo puede dar hoy está acotada a la procedencia de sus datos y tiene
+dos partes.
 
 La primera es que **sí puede, cuando el agente está construido para que la decisión no
 dependa del modelo de lenguaje**. La separación entre quien diagnostica, quien decide y quien
@@ -22,10 +23,11 @@ parecido pero no sostiene lo afirmado. El modelo de lenguaje respeta la decisió
 casos y no produce una sola cita inexistente, porque una barrera fuera de él lo impide.
 
 La segunda es que **la respuesta vale para datos sintéticos calibrados contra la
-documentación del vehículo y no para datos reales**, que es lo que la pregunta enuncia. La
+documentación del vehículo y no está validada en un vehículo real**. La pregunta no exige
+datos reales; exige declarar la procedencia, y esta memoria la declara en cada cifra. La
 calibración documenta cada constante del generador con su página del manual; eso hace los
 datos verosímiles en lo que el manual permite comprobar, y en nada más. Un tribunal, y el
-propio autor, debe leer cada cifra del capítulo 5 con esa condición delante.
+propio autor, debe leer cada cifra del capítulo 5 con esa procedencia delante.
 
 ## Limitaciones
 
@@ -34,9 +36,11 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 
 **Crítica.**
 
-- **Los datos sintéticos no tienen validez externa** (L-01). La pregunta habla de datos
-  reales; todos los experimentos se han ejecutado sobre datos generados. Afecta a las cuatro
-  subpreguntas y a toda conclusión. Se resuelve solo con la fase E3.
+- **Los datos sintéticos no tienen validez externa** (L-01). Todos los experimentos se han
+  ejecutado sobre datos generados, y así se declara en cada cifra; la pregunta no exige datos
+  reales, pero un resultado sobre sintéticos no demuestra comportamiento equivalente en un
+  vehículo real. Afecta sobre todo a PI.1 y, en cuanto a generalización, a las demás. Solo la
+  validación externa con datos reales lo resolvería.
 
 **Altas.**
 
@@ -98,8 +102,8 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 
 ## Prospectiva
 
-Lo primero, y lo único que cambia la naturaleza de las conclusiones, es **incorporar datos
-OBD-II reales** del vehículo de estudio o de uno cuya documentación de taller esté disponible
+Lo primero, y lo que más ampliaría la validez de las conclusiones, es **incorporar datos
+OBD-II reales** como validación externa, del vehículo de estudio o de uno cuya documentación de taller esté disponible
 con el mismo nivel de detalle. El laboratorio está preparado para ello: el generador
 sintético se sustituye por un cargador, el reparto por sesión y el estudio de ventana se
 repiten, y todo lo demás, modelo, atribución, corpus, verificador y agente, se ejecuta sin
@@ -109,7 +113,7 @@ conjuntos de datos OBD-II candidatos.
 Después, en el orden en que el plan las prevé: las **ablaciones** de E18, que atribuyen el
 resultado a cada componente cambiando uno a la vez; la **evaluación final** de E19 con
 apertura declarada del test y congelación previa del pre-registro del marco canónico; y la
-**demostración** de E20, que escenifica el experimento central sobre un caso real.
+**demostración** de E20, que escenifica el experimento central sobre un caso del dataset de evaluación final.
 
 Tres líneas quedan fuera de este trabajo y se dejan enunciadas. El **despliegue en una
 plataforma embarcada**, con la medición de M6 como criterio y no como descriptiva. La

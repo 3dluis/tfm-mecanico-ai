@@ -1,7 +1,7 @@
 # Capítulo 1: Introducción al Trabajo Fin de Máster
 
-> Estado: redactado. No depende de los datos reales salvo en la última frase del apartado
-> segundo, que declara la limitación. Referencias: lista maestra (`REF-nnn`) y de método
+> Estado: redactado. Actualizado el 3 de septiembre de 2026 a la PI sin requisito de datos
+> reales (ADR-003). Referencias: lista maestra (`REF-nnn`) y de método
 > (`MET-nn`), todas verificadas.
 
 ## Justificación del proyecto realizado
@@ -10,8 +10,8 @@ Un vehículo moderno informa de su estado a través del puerto de diagnóstico a
 normalizado por SAE J1979 e ISO 15031-5 (MET-18; MET-19). Por él circulan decenas de señales
 en tiempo real, régimen de giro, carga, temperaturas, caudal de aire, correcciones de
 combustible, tensión de las sondas de oxígeno, y los códigos de avería que la centralita
-registra cuando una de esas señales sale de lo que espera. La literatura sobre aprendizaje
-automático aplicado a esa telemetría es abundante y reciente: se ha usado para clasificar
+registra cuando una de esas señales sale de lo que espera. Los trabajos revisados sobre aprendizaje
+automático aplicado a esa telemetría son abundantes y recientes: se ha usado para clasificar
 estilos de conducción, estimar consumo, predecir averías y detectar anomalías (Michailidis,
 Panagiotopoulou y Papadakis, 2025, REF-078; Rimpas, Papadakis y Samarakou, 2020, REF-098;
 Hossain et al., 2024, REF-049). Los modelos alcanzan buenos resultados de clasificación. Lo
@@ -24,7 +24,7 @@ documentación técnica, redactan con soltura y responden preguntas. Los trabajo
 combinan con recuperación de información sobre manuales de taller, con grafos de
 conocimiento o con modelos de diagnóstico son ya varios (Lin y Miao, 2025, REF-072; Mahale,
 Kolhar y More, 2025, REF-077; Nam et al., 2025, REF-086; Khan et al., 2024, REF-062). Y
-comparten un problema que la literatura general de modelos de lenguaje tiene bien
+comparten un problema que los estudios generales sobre modelos de lenguaje tienen bien
 caracterizado: producen texto plausible cuando no tienen base para producirlo (Ji et al.,
 2023, MET-15). La recuperación de documentos reduce ese comportamiento, pero no lo elimina
 (Shuster et al., 2021, REF-106; Béchard y Ayala, 2024, REF-016). En un dominio donde la
@@ -43,8 +43,8 @@ medirlo hay que poder retirar la evidencia y observar qué cambia.
 
 La pregunta de investigación que gobierna el trabajo se enuncia así:
 
-> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II
-> reales, rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
+> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la
 > evidencia disponible no es suficiente para sostener una explicación en lugar de generar
 > una hipótesis sin fundamento?
 
@@ -99,15 +99,16 @@ medida, el diseño experimental con sus cuatro condiciones y el modelo de análi
 limitaciones, la prospectiva y las consideraciones finales.
 
 Una advertencia recorre toda la memoria y se hace explícita aquí para no tener que
-repetirla en cada capítulo. La pregunta de investigación habla de datos OBD-II *reales*. En
-el momento de redactar este texto, los datos con que se han ejecutado los experimentos son
-sintéticos: los genera un modelo paramétrico cuyas constantes están ancladas, una por una, a
-valores del manual de taller del vehículo. Esa calibración está documentada y hace que los
-datos se parezcan a los reales en lo que el manual permite comprobar; no los convierte en
-una medición. Los resultados de los capítulos 5 y 6 se presentan, por tanto, como respuesta a
-la versión condicional de la pregunta, y la incorporación de datos reales es la primera
-limitación que se declara y el primer trabajo que queda por hacer. `[Si E3 se resuelve antes
-del depósito, este párrafo se reescribe.]`
+repetirla en cada capítulo. La pregunta de investigación no exige que los datos OBD-II sean
+reales; exige que cada resultado declare sobre qué datos se obtuvo. Los datos con que se han
+ejecutado los experimentos son sintéticos: los genera un modelo paramétrico cuyas constantes
+están ancladas, una por una, a valores del manual de taller del vehículo. Esa calibración está
+documentada y hace que los datos se parezcan a los reales en lo que el manual permite
+comprobar; no los convierte en una medición. Lo que un resultado sobre ellos sostiene es el
+comportamiento del agente ante los mecanismos de fallo representados; no sostiene
+comportamiento equivalente en un vehículo real. Esa distinción se mantiene visible en los
+capítulos 4, 5 y 6, y la incorporación de datos reales, como validación externa, es la
+primera limitación que se declara y el primer trabajo que queda por hacer.
 
 Todo el código, la documentación, los registros de experimentos y este texto están
 versionados en un repositorio Git y son reproducibles con las instrucciones que contiene. El

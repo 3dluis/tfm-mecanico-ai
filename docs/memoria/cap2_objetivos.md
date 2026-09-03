@@ -24,9 +24,9 @@ objetivo específico. Se incorpora «o no pertinente» porque la pregunta de inv
 solo interroga si el agente reconoce la ausencia de evidencia, sino también si distingue la
 evidencia parecida de la evidencia que de verdad sostiene una afirmación, y esa distinción es
 la que mide la condición con distractor del diseño experimental. Y se escribe «datos OBD-II»
-sin el adjetivo «reales» de la pregunta: el objetivo no debe prometer lo que el trabajo todavía
-no ha podido hacer. Si la fase de incorporación de datos reales se resuelve, el adjetivo se
-repone; si no, la limitación se declara en el capítulo 6 y el objetivo sigue siendo cierto.
+sin adjetivo, igual que la propia pregunta desde su enmienda del 3 de septiembre de 2026: la
+procedencia de cada dataset se declara en el capítulo 4 y su validez externa se trata en el
+capítulo 6, sin condicionar el objetivo a que los datos sean reales.
 
 `[CONSENSUAR CON EL DIRECTOR]` El enunciado aprobado en julio llevaba dos verbos, «diseñar y
 evaluar», y una cláusula final sobre restricciones de cómputo de plataforma embarcada. La
@@ -51,7 +51,7 @@ revisión con procedimiento inspirado en PRISMA descrita en el capítulo 4.
 particionada sin fuga temporal y un corpus documental del vehículo con variantes congeladas
 de disponibilidad de evidencia, de modo que cualquier tercero pueda repetir cada experimento
 a partir de su registro. Lo cumplen las fases E1, E2, E4, E5 y E10; la fase E3, incorporación
-de datos reales, está bloqueada por una decisión pendiente sobre la fuente de datos.
+de datos reales, queda como validación externa, pendiente de una fuente.
 
 **OE3. Construir y evaluar un modelo de diagnóstico** sobre ventanas de telemetría,
 contrastado frente a una referencia mínima y a un baseline tabular, con su confianza
@@ -90,10 +90,10 @@ cubiertas.
 | Objetivo | Fases | Métricas | Estado a 2 de septiembre de 2026 |
 |---|---|---|---|
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
-| OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; **E3 bloqueada** |
+| OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
 | OE4 | E11, E12, E13, E14, E15, E16 | M2, M4, M5 | cerradas sobre datos sintéticos |
-| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada sobre datos sintéticos; E18 pendiente; **E19 y E20 bloqueadas por E3** |
+| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada sobre datos sintéticos; E18 pendiente; E19 y E20 pendientes de la decisión sobre el dataset de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo. Ninguna subpregunta de investigación queda
 sin fase que la responda.

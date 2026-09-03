@@ -27,8 +27,9 @@ cuatro condiciones: completa, parcial, ausente y con distractor. Sobre datos OBD
 sintéticos calibrados contra el manual del vehículo, el agente explica cuando la evidencia
 está y se abstiene cuando se retira, con datos, modelo, atribución y confianza idénticos; el
 modelo de lenguaje respeta esa decisión y no produce citas inexistentes. El trabajo declara
-que sus datos no son reales y presenta sus resultados como condicionales a esa limitación,
-que es la primera de las que enumera.
+la procedencia sintética de sus datos y acota sus resultados a ella: caracterizan el
+mecanismo ante los fallos representados, no el comportamiento en un vehículo real, que queda
+como primera limitación.
 
 **Palabras clave:** diagnóstico vehicular, OBD-II, recuperación aumentada, explicabilidad,
 trazabilidad de evidencia, abstención, modelos de lenguaje.
