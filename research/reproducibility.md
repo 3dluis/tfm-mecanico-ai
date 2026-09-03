@@ -32,7 +32,7 @@ parámetros · métricas. En JSON y CSV, bajo `experiments/`.
 |---|---|---|---|
 | E1 entorno | sí | `docs/experiments/E1_entorno.md`, `notebooks/00_environment_check.ipynb` | — |
 | E2 datos sintéticos | sí | `data/raw/synthetic/synthetic_v1.parquet` + `.meta.json`; `uv run mecanico-exp generate-synthetic` | **20260901** |
-| E3 datos reales | ⛔ bloqueada | — | — |
+| E3 datos reales | pendiente — validación externa (ADR-003), sin fuente | — | — |
 | E4 análisis exploratorio | sí | `tables/E4_*.csv`, `figures/FIG-E4-*.png` | — |
 | E5 preprocesamiento | sí | `synthetic_v2`; ventana 120 s; reparto por sesión; `noise_floor_max_delta` como función reutilizable | registrada |
 | E6 baseline | sí | `experiments/E6_baseline.json`, `tables/E6_*.csv`, `figures/FIG-E6-*.png`; `uv run mecanico-exp train-baseline` | registrada |
