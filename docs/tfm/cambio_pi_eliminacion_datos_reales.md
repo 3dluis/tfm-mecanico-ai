@@ -212,7 +212,11 @@ Cada fila: fichero · sección · concepto anterior · concepto actualizado · r
 | `docs/memoria/cap1`, `cap3`, `cap4`, `cap5`, `cap6` | vocabulario | «la literatura» ×6, «claramente» ×2, «no existe» ×1, «condicional» ×3 | vocabulario admitido por el skill | revisión académica (§20.1) |
 | `docs/memoria/cap3`, `cap4`, `cap5` | títulos consecutivos | seis pares sin texto | párrafo de anuncio | plantilla UAX |
 | `docs/experiments/E2`, `E13`; `research/e3-candidatos-datos.md`; `research/propuestas-objetivos.md` | notas | — | nota fechada de resolución | informes cerrados no se reescriben |
-| Espejo del skill (7 ficheros) | PI, GATE-01, hipótesis, datasets, decisiones, vacío, objetivos | requisito de datos reales | procedencia declarada | coherencia del índice de lectura |
+| Espejo del skill (9 ficheros) | PI, GATE-01, hipótesis, datasets, decisiones, vacío, objetivos, experimentos, resultados | requisito de datos reales; E3 «bloqueada» | procedencia declarada; E3 validación externa | coherencia del índice de lectura |
+| `research/traceability-matrix.md` | §1 PI | PI antigua (resto no sustituido) | PI vigente | auditoría del tutor, TUTOR-MAJ-001 |
+| `docs/matriz_validacion_pi.md` | veredicto; fila PI.1 | «No respondida sobre datos reales»; «claramente» | «Sostenida sobre `synthetic_v2` (…). Sin validación externa en vehículo real (L-01)»; «con margen amplio» | TUTOR-MIN-001, TUTOR-INF-002 |
+| `research/reproducibility.md` | fila E3 | «bloqueada» | «pendiente — validación externa (ADR-003)» | TUTOR-MIN-002 |
+| `docs/memoria/cap5_resultados.md` | marcador de pendientes | «E19 sobre datos reales» | «E19 sobre el dataset de evaluación final» | TUTOR-MIN-003 |
 
 ## 16. Quality gates
 
@@ -226,6 +230,12 @@ Cada fila: fichero · sección · concepto anterior · concepto actualizado · r
 | `validate_traceability.py` | cabecera no reconocida | la matriz usa `Sub-PI / Objetivo / Hipótesis / Experimento / Métricas / RES / DISC / CONC`; no se reestructura por el script |
 | `word_count.py` | 12 336 palabras netas (≈ 30 páginas) | extensión pendiente de decisión con el director |
 | `ruff`, `mypy --strict`, `pytest` | verde; 4 tests nuevos | — |
+
+**Auditoría independiente (`uax-tfm-ai-tutor`, `tutor-reports/TUTOR-REPORT-20260903.md`):**
+primera evaluación `FAIL` por un `MAJOR` (la matriz de trazabilidad conservaba la PI antigua
+en su §1) y tres `MINOR`; corregidos y reevaluados el mismo día: `PASS_WITH_OBSERVATIONS`,
+45/47 en los bloques evaluables. Queda a decisión del autor completar el skill de tutor, que
+carece de flujos, plantillas, rúbricas y scripts.
 
 **Gates del skill afectados:** GATE-01 `PASS` (era `PASS_WITH_OBSERVATIONS`). GATE-03 sigue
 `FAIL` por los objetivos pendientes de consenso, ajeno a este cambio. GATE-05, 08, 09

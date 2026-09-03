@@ -4,7 +4,8 @@ Un gate no se reevalúa de memoria: se vuelve a comprobar. Cada fila cita su evi
 
 **Reevaluado el 1 de septiembre de 2026 a las 15:00**, tras el cierre de E4, E5 y E6.
 **GATE-01 reevaluado el 3 de septiembre de 2026** tras la enmienda de la PI (ADR-003); el
-resto de filas conserva la fecha de su última comprobación.
+resto de filas conserva la fecha de su última comprobación. Auditoría independiente del cambio:
+`tutor-reports/TUTOR-REPORT-20260903.md` (`PASS_WITH_OBSERVATIONS` tras reevaluación).
 
 | Gate | Fecha | Estado | Evidencia | Observaciones |
 |---|---|---|---|---|
