@@ -34,7 +34,7 @@ más son las que habría que repetir sobre ellos.
 
 | PI | Métrica | Criterio | **Resultado medido** | Decisión |
 |---|---|---|---|---|
-| **PI.1** Diagnóstico | F1 macro sobre validación | Supera claramente a la clase mayoritaria y la confianza está calibrada | **0,879** frente a 0,074 · ECE 0,144 → **0,085** tras calibrar | **Sostenida sobre datos sintéticos** |
+| **PI.1** Diagnóstico | F1 macro sobre validación | Supera a la clase mayoritaria con margen amplio y la confianza está calibrada | **0,879** frente a 0,074 · ECE 0,144 → **0,085** tras calibrar | **Sostenida sobre datos sintéticos** |
 | **PI.2** Trazabilidad | `claim support rate`, `citation completeness` | Toda afirmación admitida se ancla en observación y documento verificados | Tras corregir el mapeo diagnóstico→DTC, **cobertura 1,00 en las cinco condiciones con evidencia** | **Sostenida** |
 | **PI.3** Reconocimiento de insuficiencia | Decisión EXPLAIN/ABSTAIN | La decisión cambia al retirar la evidencia | **EXPLAIN → ABSTAIN** con datos, modelo, atribución y confianza idénticos · 4 de 6 decisiones correctas | **Sostenida** |
 | **PI.4** Rechazo de evidencia engañosa | Distractores aceptados | El procedimiento de otro motor no se acepta como evidencia | Semántica pura: **1 distractor por encima del correcto**. Con filtro: 0. **Sin filtro de motor**, el validador lo degrada a `PARTIAL_MATCH` y el agente se abstiene igual | **Sostenida, con dos líneas de defensa** |
@@ -181,8 +181,8 @@ estrategia que puntúa cero.
 
 ## Veredicto
 
-**Sostenida sobre datos sintéticos calibrados. No respondida sobre datos
-reales.**
+**Sostenida sobre `synthetic_v2` (`dataset_type: synthetic`, calibrado contra el
+manual). Sin validación externa en vehículo real (L-01).**
 
 Las cuatro subpreguntas se cumplen con los datos disponibles:
 

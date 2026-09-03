@@ -234,5 +234,6 @@ investigación, aplicada al propio proceso de investigarla: la evidencia aparent
 sobrevive siempre al escrutinio, y un sistema, o un investigador, que no distinga entre
 tener una referencia y tener soporte producirá texto impecable y falso.
 
-`[Pendiente: E18, ablaciones, para atribuir el resultado a cada componente; E19 sobre datos
-reales; comparación con los trabajos del capítulo 3 una vez haya resultados finales.]`
+`[Pendiente: E18, ablaciones, para atribuir el resultado a cada componente; E19 sobre el
+dataset de evaluación final; comparación con los trabajos del capítulo 3 una vez haya
+resultados finales.]`
