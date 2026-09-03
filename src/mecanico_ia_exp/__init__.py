@@ -1,7 +1,7 @@
 """Laboratorio experimental del TFM.
 
 Responde a la pregunta de investigación: si un agente con RAG puede explicar el
-diagnóstico de un vehículo a partir de datos OBD-II reales rastreando cada
+diagnóstico de un vehículo a partir de datos OBD-II rastreando cada
 explicación hasta su evidencia de origen, y abstenerse cuando esa evidencia no
 basta en lugar de producir una hipótesis sin fundamento.
 
