@@ -1,7 +1,7 @@
 # Plan de reejecución canónica
 
 **Fecha:** 4 de septiembre de 2026 · **Motivado por:** `MIXED-EMBEDDING-SPACE` ·
-**Estado:** propuesto, **pendiente del quality gate de diseño**. No se ejecuta nada hasta que
+**Estado:** corregido el 4 de septiembre de 2026 tras tres gates en `FAIL`. El pre-registro está en `docs/methodology/preregistro-rerun-a.md`, congelado antes de toda medición. No se ejecuta nada hasta que
 las cinco auditorías se pronuncien sobre este plan.
 
 **Commit de la corrección:** `43e2e87`. **Commit de las pruebas en rojo:** `c6a95be`.
@@ -15,14 +15,27 @@ cifras que van a cambiar.
 
 | # | Paso | Depende de |
 |---|---|---|
-| 1 | Suficiencia E15/E17, modo oracular | la corrección |
-| 2 | Suficiencia, modo no oracular | 1 |
-| 3 | Suficiencia, modo adverso | 1 |
-| 4 | Recuperación E12, las cuatro estrategias | la corrección |
-| 5 | Agente E13 | 1 |
-| 6 | Generación de datos de ajuste | la corrección |
-| 7 | Líneas base y unidad inferencial, recalculadas | 1 |
-| 8 | v2.2 medido, si el gate lo autoriza | 1, 7 |
+| A | Reconstruir y validar el índice canónico | la corrección |
+| B | Recuperación E12, las **cinco** estrategias | A |
+| C | Medición translingüe, **evaluación nueva y pre-registrada** | A |
+| D | Suficiencia E15/E17, modo oracular, **verificador v2.1** | A |
+| E | Diagnóstico de la condición de distractor, **no puntuado** | D |
+| F | Suficiencia, modo no oracular | D |
+| G | Generación del conjunto de ajuste | A |
+| H | Linaje del conjunto: anterior frente a regenerado | G |
+| I | Agente E13 | D, G |
+| J | Líneas base y control de invariantes | D |
+
+**Cambios respecto de la versión anterior, todos por hallazgo de auditoría:**
+
+- **Se retira el modo adverso.** Reejecutarlo contradice la decisión ya tomada de no medirlo
+  mientras sus canales de información sigan abiertos. Estaba en el plan por inercia.
+- **Se añade la medición translingüe**, que no estaba y es la que justifica el modelo de
+  embeddings de todo el sistema.
+- **El conjunto de ajuste se regenera antes que el agente**, y con su delta medido: es la única
+  evidencia sobre la que decidir el reentrenamiento.
+- **La recuperación tiene cinco estrategias, no cuatro.**
+- **v2.2 sale del plan**: es RERUN-B, posterior y sobre recuperación ya canónica.
 
 El paso 6 es el más incómodo: el adaptador del modelo de lenguaje **ya está entrenado** sobre
 datos generados con recuperación de procedencia indeterminada. Regenerar los datos no
@@ -49,7 +62,7 @@ nunca solos.
 
 | Magnitud | Antes | Después |
 |---|---|---|
-| Decisiones correctas, recuento descriptivo | 15/17 | por medir |
+| Decisiones correctas, recuento descriptivo | 15 de 17 ejecuciones | por medir |
 | Línea base `ALWAYS_ABSTAIN`, **obligatoria** | 12/17 | por medir |
 | Techo alcanzable | 15/17 | por medir |
 | Cobertura de explicación con evidencia completa | 3/5 | por medir |
@@ -59,7 +72,15 @@ nunca solos.
 
 ## 4. Condiciones del experimento tras las decisiones
 
-La condición de distractor **queda eliminada** del experimento principal. Las condiciones que
+La condición de distractor queda en `PENDING_CANONICAL_RETRIEVAL_DIAGNOSIS`. **No se elimina
+todavía**: la evidencia que la invalidaba se produjo con la recuperación que este mismo trabajo
+declara no canónica, y decidir con ella sería circular. Se reejecuta como diagnóstico no
+puntuado y se clasifica después.
+
+Queda igualmente pendiente una contradicción entre documentos propios: el plan afirmaba que la
+variante sin filtro de motor no cumple el requisito de entrada del distractor, mientras el
+artefacto muestra que sus fragmentos **sí** llegan al verificador. Se resuelve con recuperación
+limpia, no antes. Las condiciones que
 manipulan una variable observable son: evidencia completa, evidencia retirada y evidencia
 parcial. La variante sin filtro de motor se conserva **declarada como no verificada**: no
 cumple el requisito de que el distractor entre en el conjunto recuperable.
