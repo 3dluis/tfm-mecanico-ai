@@ -370,7 +370,7 @@ def run_sufficiency(
             )
             print(f"\nregistro experiments/E13_agente_{llm}.json")
 
-    print("tabla   E15_suficiencia.csv")
-    print("registro experiments/E15_suficiencia.json")
+    print(f"tabla   E15_suficiencia{sufijo}.csv")
+    print(f"registro experiments/E15_suficiencia{sufijo}.json")
     store.dispose()
     return 0
