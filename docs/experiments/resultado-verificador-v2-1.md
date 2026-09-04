@@ -99,3 +99,28 @@ reporta como límite de utilidad, no como acierto.
 **Sigue sin sostenerse** que el sistema distinga presencia de pertinencia *en general*: se ha
 comprobado en tres fallos de un vehículo, con un corpus, y con un instrumento corregido dos
 veces después de observar sus fallos. La secuencia v1 → v2 → v2.1 se publica entera por eso.
+
+## 7. Impacto sobre lo ya escrito, antes de continuar
+
+El resultado canónico vigente del experimento central **cambia** de 7 de 9 casos, medidos
+sobre un solo fallo, a **15 de 17 sobre tres fallos**, con el verificador v2.1. Las
+afirmaciones que citan el resultado anterior quedan desfasadas y se enumeran aquí; **no se
+reescriben en este paso**, porque la regeneración desde una única fuente derivada de los
+artefactos es una tarea del grupo siguiente del plan de corrección.
+
+| Localización | Qué dice | Estado |
+|---|---|---|
+| `docs/matriz_validacion_pi.md` l. 120 | «Decisiones correctas: 7 de 9» | desfasado |
+| `docs/matriz_validacion_pi.md` l. 39 | «4 de 6 decisiones correctas» | desfasado y ya incoherente con la línea 120 antes de este cambio |
+| `docs/matriz_validacion_pi.md` l. 232 | «Explica en 3 de 5 casos con evidencia» | sigue siendo cierto, ahora sobre tres fallos |
+| `docs/experiments/E15_suficiencia.md` l. 68 | «7 de 9. Las dos discrepancias…» | desfasado; las discrepancias siguen siendo dos, y son otras |
+| `docs/memoria/cap5_resultados.md` l. 156, 219 | cobertura de explicación «3 de 5» | sigue siendo cierto |
+| `docs/tfm/cambio_pi_eliminacion_datos_reales.md` l. 167 | «sobre el mismo caso (7/9)» | desfasado |
+
+Los informes de `docs/tfm/revision/` **conservan sus cifras**: son auditorías fechadas y
+describen el estado del trabajo en su momento. Reescribirlas borraría la razón por la que
+existe esta corrección.
+
+Las menciones a «7/9» en `docs/experiments/E13_agente_slm.md` y en
+`docs/EXPERIMENTO_PASO_A_PASO.md` **no se refieren a este experimento**: miden validez de
+esquema y respeto del veredicto del modelo de lenguaje sobre nueve casos, y no cambian aquí.
