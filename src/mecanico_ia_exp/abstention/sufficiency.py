@@ -25,6 +25,12 @@ from mecanico_ia_exp.evidence.model import (
 )
 from mecanico_ia_exp.rag.vehicle import Applicability
 
+#: Versión de la política de suficiencia. Cambia cuando cambia **qué cuenta como
+#: soporte**, no cuando cambia un umbral. Va al registro: sin ella, dos
+#: ejecuciones con políticas distintas son indistinguibles desde el artefacto, y
+#: la comparación entre versiones deja de ser posible.
+VERIFIER_VERSION = "v1"
+
 
 class Sufficiency(StrEnum):
     SUPPORTED = "SUPPORTED"
