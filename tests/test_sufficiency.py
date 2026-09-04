@@ -304,17 +304,36 @@ def test_un_fragmento_se_cita_con_editor_y_pagina() -> None:
     assert "Mazda" in traza and "página 1" in traza and "ch1" in traza
 
 
-# ------------------------------------------- umbrales calibrados y no elegidos
+# --------------------------- punto de operación, con su procedencia registrada
 
 
-def test_el_umbral_de_confianza_esta_calibrado_sobre_validacion() -> None:
-    """0,80 es el umbral más bajo con precisión >= 0,93 en validación.
+def test_el_umbral_de_confianza_es_el_que_selecciona_la_regla_enmendada() -> None:
+    """0,79 sale de la regla de estabilidad ENM-U01 sobre el barrido registrado.
 
-    No es una cifra redonda elegida a ojo: sale de un barrido documentado en el
-    docstring de SufficiencyThresholds, donde consta además que ningún umbral
-    alcanza 0,95 --la precisión se estanca en 0,93-0,94--.
+    El valor anterior era 0,80 y no procedía de ningún criterio: venía de una
+    tabla de cuatro puntos sin registro. El criterio original seleccionaba 0,72,
+    que cumplía por una ventana entre 86; la enmienda exige que el punto y los
+    umbrales hasta t+0,05 cumplan el objetivo, y eso da 0,79.
     """
-    assert SufficiencyThresholds().min_confidence == 0.80
+    assert SufficiencyThresholds().min_confidence == 0.79
+
+
+def test_la_regla_de_estabilidad_no_depende_del_valor_que_se_quiere_obtener() -> None:
+    """La regla se aplica a una curva sintética sin relación con este proyecto.
+
+    Si la regla solo funcionara sobre la curva real, sería una racionalización
+    del resultado y no un criterio.
+    """
+    import numpy as np
+
+    from mecanico_ia_exp.experiments.threshold_runner import ANCHURA_ESTABLE, PASO
+
+    # Curva inventada: un punto aislado que cumple y una meseta más arriba.
+    cumple = np.array([False] * 10 + [True] + [False] * 4 + [True] * 12 + [False] * 5)
+    n = round(ANCHURA_ESTABLE / PASO) + 1
+    estable = [bool(cumple[i : i + n].all()) and i + n <= len(cumple) for i in range(len(cumple))]
+    primero = int(np.flatnonzero(estable)[0])
+    assert primero == 15, "debe descartar el punto aislado y tomar el inicio de la meseta"
 
 
 def test_el_umbral_de_puntuacion_esta_desactivado_a_proposito() -> None:

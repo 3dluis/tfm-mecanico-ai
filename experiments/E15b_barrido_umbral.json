@@ -1,8 +1,8 @@
 {
   "experiment_id": "E15b_threshold_sweep",
-  "commit": "081c309cbff1285490d9b9f512936d8adcea8fdb",
+  "commit": "35d23606feb01f4faa0336a8bffb14c8076986f7",
   "dirty": true,
-  "executed_at": "2026-09-04T04:09:08.983502+00:00",
+  "executed_at": "2026-09-04T04:16:39.755997+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -18,7 +18,50 @@
   "n_windows": 98,
   "n_sessions": 12,
   "accuracy_without_abstention": 0.877551,
-  "selected_threshold": 0.72,
+  "original_criterion_threshold": 0.72,
+  "amended_criterion_threshold": 0.79,
+  "amendment": {
+    "id": "ENM-U01",
+    "document": "docs/methodology/criterio-umbral-enmienda-01.md",
+    "rule": "estable si [t, t+w] cumple el objetivo en toda la rejilla",
+    "w": 0.05,
+    "written_after_first_sweep": true
+  },
+  "eligible_runs": [
+    {
+      "from": 0.72,
+      "to": 0.73,
+      "width": 0.01
+    },
+    {
+      "from": 0.79,
+      "to": 0.86,
+      "width": 0.07
+    },
+    {
+      "from": 0.93,
+      "to": 1.0,
+      "width": 0.07
+    }
+  ],
+  "sensitivity": {
+    "0.72": {
+      "precision_median": 0.930233,
+      "precision_p05": 0.846154,
+      "precision_p95": 1.0,
+      "coverage_median": 0.877551,
+      "share_meeting_target": 0.565,
+      "n_resamples": 1000.0
+    },
+    "0.79": {
+      "precision_median": 0.939024,
+      "precision_p05": 0.847222,
+      "precision_p95": 1.0,
+      "coverage_median": 0.826531,
+      "share_meeting_target": 0.599,
+      "n_resamples": 1000.0
+    }
+  },
   "distinct_confidences": 72,
   "curve": [
     {

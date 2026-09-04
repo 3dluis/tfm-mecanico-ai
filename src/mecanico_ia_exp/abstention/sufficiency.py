@@ -59,22 +59,37 @@ class SufficiencyThresholds:
     de una predicción.
     """
 
-    min_confidence: float = 0.80
-    """Calibrado sobre validación, no elegido a ojo.
+    min_confidence: float = 0.79
+    """Punto de operación seleccionado sobre validación con criterio registrado.
 
-    Criterio declarado: **el umbral más bajo con precisión ≥ 0,93**. El barrido
-    sobre las 98 ventanas de validación da:
+    **No es una calibración ciega, y la versión anterior de este texto lo
+    presentaba como si lo fuera.** La secuencia real, con sus artefactos:
 
-    | umbral | cobertura | precisión |
-    |---|---|---|
-    | 0,60 | 0,929 | 0,912 |
-    | 0,75 | 0,867 | 0,929 |
-    | **0,80** | **0,827** | **0,938** |
-    | 0,90 | 0,612 | 0,917 |
+    1. `docs/methodology/criterio-umbral.md`, escrito y comiteado **antes** del
+       barrido: el umbral más bajo cuya precisión de decisión sobre validación
+       alcance 0,93. La cifra 0,93 es una política declarada —como máximo siete
+       errores por cada cien explicaciones emitidas—, no un hallazgo.
+    2. Barrido completo en pasos de 0,01 sobre las 98 ventanas de validación
+       (12 sesiones), registrado en `experiments/E15b_barrido_umbral.json` y
+       `tables/E15b_barrido_umbral.csv`. **El conjunto de test no interviene.**
+    3. El criterio original seleccionó **0,72**, con precisión 0,930233, es decir
+       80 aciertos de 86: cumplía por **una ventana**, y los umbrales de 0,74 a
+       0,78 dejaban de cumplir. Un punto aislado, no una meseta.
+    4. `docs/methodology/criterio-umbral-enmienda-01.md` (ENM-U01) añade una
+       exigencia de estabilidad definida de forma general: un umbral es estable
+       si él y todos los de la rejilla hasta `t + 0,05` alcanzan el objetivo.
+    5. La regla enmendada selecciona **0,79**, primer punto del tramo
+       [0,79 · 0,86], de anchura 0,07. Precisión 0,938272 (76 de 81), cobertura
+       0,8265 por ventana y 0,8252 por sesión.
 
-    Ningún umbral alcanza 0,95: la precisión se estanca en torno a 0,93-0,94.
-    Se hace constar en lugar de subir el umbral hasta que la cobertura se
-    desplome por una cifra redonda.
+    El valor anterior era 0,80, y **no procedía de ninguno de los dos criterios**:
+    procedía de una tabla de cuatro puntos sin registro. Que 0,79 y 0,80 estén
+    contiguos es una coincidencia de la curva, no una confirmación.
+
+    Sensibilidad por remuestreo de las 12 sesiones (1 000 réplicas): en 0,79 la
+    precisión mediana es 0,939 con intervalo [0,847 · 1,000], y alcanza el
+    objetivo en el 60 % de las réplicas. Con doce sesiones la incertidumbre es
+    grande y se declara; el remuestreo describe el punto elegido, no lo elige.
     """
 
     min_retrieval_score: float = 0.0
