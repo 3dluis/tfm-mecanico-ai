@@ -1,7 +1,7 @@
 {
   "manifest_id": "RERUN-A",
-  "version": "1.2.0",
-  "frozen_at_commit": "7ff9949",
+  "version": "1.3.0",
+  "frozen_at_commit": "aed6fe2",
   "note": "Enumeración completa del estado experimental. Tres intentos previos descubrieron tres variables derivadas --versión del verificador, conjunto de casos y mapa de códigos-- que la frase «todo lo demás idéntico» no cubría. Este manifiesto sustituye a esa frase.",
   "MANIPULATED_VARIABLE": {
     "name": "embedding_space_enforcement",
@@ -50,10 +50,33 @@
       "note": "sin cambios desde la ingesta; el corpus no se reindexa"
     },
     "embedding": {
-      "provider": "sentence-transformers",
+      "provider_identity_string": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "space_id_source": "EmbeddingIdentity del proveedor, no escrito a mano",
       "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
       "dimension": 384,
-      "space_id": "sentence-transformers/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1",
+      "version": "1.0.0",
+      "device": {
+        "value": "mps",
+        "autodetected": true,
+        "why_it_matters": "El dispositivo forma parte de la identidad del proveedor y queda registrado en rag.embedding.embedding_provider. La búsqueda filtra por embedding_model, NO por la identidad completa: vectores calculados en dispositivos distintos conviven bajo el mismo nombre de modelo y el filtro de espacio no los separa. Los resultados no son idénticos bit a bit entre dispositivos.",
+        "requirement": "RERUN-A debe ejecutarse en el mismo dispositivo que produjo los vectores indexados. Se comprueba antes de medir, no se supone."
+      },
+      "index_contents": [
+        {
+          "provider": "sentence-transformers[mps]",
+          "model": "sentence-transformers/all-MiniLM-L6-v2",
+          "version": "1.0.0",
+          "dimension": 384,
+          "n_vectors": 6158
+        },
+        {
+          "provider": "sentence-transformers[mps]",
+          "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+          "version": "1.0.0",
+          "dimension": 384,
+          "n_vectors": 6158
+        }
+      ],
       "index_must_contain": {
         "per_space_vectors": 6158,
         "spaces": 2

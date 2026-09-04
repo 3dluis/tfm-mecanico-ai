@@ -365,3 +365,85 @@ cuantitativa: no tiene el mismo nivel de procedencia. Se publican por separado, 
 
 Para el contraste causal se usan **únicamente** magnitudes antiguas con artefacto congelado y
 reconstruible.
+
+---
+
+# Enmienda ENM-S03
+
+**Fecha:** 4 de septiembre de 2026 · **Anterior a toda medición** · **Motivada por:**
+`STAT-MAJ-027` y `STAT-MAJ-028`, más la lección de fidelidad de `STAT-MIN-019/020`.
+
+## S-11 · El caso mixto, y qué bloques entran en N
+
+`S-7` cubría `m = 1` y `m > 1`, y dejaba fuera el caso realmente frecuente: **bloques mezclados,
+unos con una explicación y otros con ninguna**.
+
+| Bloque | Trato |
+|---|---|
+| `m_b = 1` | entra en `N` y aporta al estadístico |
+| `m_b = 0`, ninguna explicación en ninguna condición | **degenerado: sale de `N`** |
+| `m_b > 1` | el estadístico no aplica; se reporta descriptivo |
+
+**Por qué sale y no cuenta como fallo.** Un bloque sin ninguna explicación no informa sobre
+*dónde* se concentran las explicaciones, que es lo que la hipótesis nula afirma. Contarlo en el
+denominador mediría otra cosa.
+
+**Consecuencia que se declara ahora, con la aritmética a la vista.** Con `K = 5`, incluir o
+excluir un bloque degenerado mueve el valor entre **0,040 y 0,104**: cruza el umbral
+convencional. Por eso la regla se fija **antes** y no después de contar los bloques.
+
+**Homogeneidad exigida.** La binomial requiere el mismo `K` en todos los bloques. Si un bloque
+tuviera menos condiciones evaluables que otro, el estadístico **no aplica** y se reporta
+descriptivo. Se comprueba antes de calcular.
+
+## S-12 · `K_scored = K_valid`, sin holgura
+
+`S-8` ordenaba los tres conceptos y no fijaba su relación. Queda:
+
+> **`K_scored = K_valid`.** El estadístico usa **todas** las condiciones que el diagnóstico
+> declara válidas, ni una menos.
+
+**El riesgo que cierra.** Retirar una condición *después* de ver decisiones puede sacar un
+bloque de `N` —si su única explicación estaba en la condición retirada— y **subir** el cociente
+que sostiene el estadístico. Hoy no cruza el umbral por aritmética, no por regla; y una
+protección que depende de los números concretos no es una protección.
+
+La única vía por la que `K_valid` cambia es el diagnóstico canónico del distractor, cuyos
+criterios y artefacto están fijados en `S-5` y se congelan antes de puntuar.
+
+## S-13 · D-2 para la variante sin filtro
+
+`S-5` no decía contra qué condición se compara la variante sin filtro de motor: un `K` de
+diferencia por ambigüedad de redacción.
+
+> **D-2 compara siempre contra la condición de evidencia parcial de la misma ventana**, tanto
+> para la condición de distractor como para la variante sin filtro. Son dos evaluaciones
+> independientes con la misma pareja de referencia.
+
+## S-14 · El manifiesto exige fidelidad, no solo integridad
+
+Lección del quinto pase, y la más útil de todas: **el mapa congelado tenía una huella válida y
+le faltaba una entrada**. La huella demostraba que el valor declarado no había cambiado, no que
+fuera el valor correcto.
+
+| Propiedad | Qué demuestra | Cómo se comprueba |
+|---|---|---|
+| **Integridad** | el valor declarado no ha cambiado | recalcular la huella desde el contenido |
+| **Fidelidad** | el valor declarado **es** el de su fuente | comparar con el módulo, el fichero o el índice de origen |
+
+Toda pieza del manifiesto necesita **las dos**. Las pruebas de fidelidad viven en
+`tests/test_contrato_rerun_a.py` y comparan contra el commit de origen, el conjunto anotado, el
+identificador que produce el código y el contenido real del índice.
+
+## S-15 · El dispositivo de cálculo, quinta variable
+
+El dispositivo forma parte de la identidad del proveedor —`sentence-transformers[mps]`— y queda
+registrado en el índice. Pero **la búsqueda filtra por nombre de modelo, no por la identidad
+completa**: vectores calculados en dispositivos distintos convivirían bajo el mismo espacio y el
+filtro no los separaría. Y no son idénticos bit a bit.
+
+**Los 12 316 vectores del índice se produjeron en `mps`.** `RERUN-A` debe ejecutarse en el mismo
+dispositivo, y una prueba lo comprueba antes de medir en lugar de suponerlo.
+
+Es la quinta variable derivada, y viene de la misma familia que las cuatro anteriores: **estado
+que influye en la salida y que nadie había declarado**.
