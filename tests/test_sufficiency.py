@@ -129,11 +129,31 @@ def test_un_fragmento_sin_el_codigo_esperado_no_sostiene_la_afirmacion() -> None
     assert resultado.carries_expected_dtc is False
 
 
-def test_un_fragmento_pertinente_si_sostiene_la_afirmacion() -> None:
+def test_un_procedimiento_pertinente_si_sostiene_la_afirmacion() -> None:
+    """Un procedimiento, con pasos y bifurcación, sí sostiene."""
     claim = Claim("C01", "texto", ("OBS001",))
-    resultado = check_support(claim, _doc(), signal="stft_bank1", expected_dtc=("P2187",))
+    procedimiento = _doc(
+        text="DTC P2187 Fuel system too lean at idle. Diagnostic procedure. "
+        "Inspect the intake manifold for air leakage. Measure the short term fuel trim "
+        "at idle. Is the value within specification?\nYes Go to the next step.\n"
+        "No Repair or replace the intake manifold gasket.",
+    )
+    resultado = check_support(claim, procedimiento, signal="stft_bank1", expected_dtc=("P2187",))
     assert resultado.supports
     assert resultado.mentions_signal and resultado.is_diagnostic
+    assert resultado.chunk_role == "PROCEDURAL_DIAGNOSTIC_EVIDENCE"
+
+
+def test_una_condicion_de_deteccion_no_sostiene_por_si_sola() -> None:
+    """El fixture original de estos tests era una condición de detección, y v1 la
+    aceptaba como soporte. El propio test unitario codificaba el defecto que el
+    experimento ampliado destapó: describe qué vigila la centralita, no cómo se
+    comprueba desde fuera."""
+    claim = Claim("C01", "texto", ("OBS001",))
+    resultado = check_support(claim, _doc(), signal="stft_bank1", expected_dtc=("P2187",))
+    assert resultado.mentions_signal and resultado.carries_expected_dtc
+    assert not resultado.supports
+    assert resultado.chunk_role == "SUPPORTING_DIAGNOSTIC_REFERENCE"
 
 
 # ------------------------------------------------------------- cobertura
