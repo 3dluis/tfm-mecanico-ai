@@ -1,0 +1,29 @@
+{
+  "config_id": "E12_LEGACY_DTC_MAP",
+  "version": "1.0.0",
+  "source_commit": "4437d07",
+  "source_note": "Mapa de códigos vigente cuando se produjo experiments/E12_retrieval.json (2026-09-01T21:32:01Z). El commit 7fb2255, posterior, amplió F02_maf_drift de dos códigos a cuatro. Reejecutar E12 con el mapa actual cambiaría dos variables a la vez: el espacio de embeddings y el conjunto de códigos que acota la búsqueda.",
+  "applies_to": "RERUN-A / E12-CANONICAL",
+  "not_applies_to": "E12-EXTENDED y cualquier experimento posterior, que usan el mapa vigente",
+  "map_sha256_16": "04088d9f0435c7f0",
+  "map": {
+    "F01_vacuum_leak": [
+      "P2187",
+      "P2177"
+    ],
+    "F02_maf_drift": [
+      "P0101",
+      "P0102"
+    ],
+    "F03_thermostat_stuck": [
+      "P0125"
+    ],
+    "F05_misfire": [
+      "P0300",
+      "P0301",
+      "P0302",
+      "P0303",
+      "P0304"
+    ]
+  }
+}

@@ -171,6 +171,16 @@ class StrategyReport:
         return {
             "strategy": self.strategy,
             "k": self.k,
+            # Evaluados frente a puntuados. Un caso sin ficheros relevantes en la
+            # verdad de referencia --la condición de evidencia retirada-- **forma
+            # parte del experimento** pero no puede contribuir a una métrica que
+            # divide por relevantes. Excluirlo en silencio publicaba una media
+            # sobre cinco casos bajo un rótulo que decía seis.
+            "n_evaluated": len(self.cases),
+            "n_scored": sum(1 for c in self.cases if c.n_relevant > 0),
+            "n_excluded_from_metric": sum(1 for c in self.cases if c.n_relevant == 0),
+            "exclusion_reason": "no relevant files in ground truth",
+            "excluded_case_ids": [c.case_id for c in self.cases if c.n_relevant == 0],
             "n_cases": len(self.cases),
             "precision_at_k": round(self.mean_precision, 4),
             "recall_at_k": round(self.mean_recall, 4),

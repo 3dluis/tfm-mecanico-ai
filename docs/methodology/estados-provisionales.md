@@ -77,3 +77,33 @@ propios:
 recorrido completo del fragmento —consulta, conjunto de candidatos, corte por posición, filtro
 posterior, entrada al verificador— y determinando en qué punto entra o desaparece. Queda
 registrada hasta entonces.
+
+## Aprendizaje metodológico de esta revisión
+
+Tres intentos consecutivos de fijar «una sola variable» revelaron **tres variables derivadas**
+distintas, ninguna de las cuales estaba en la lista de lo que creíamos controlar:
+
+| Intento | Variable descubierta | Cómo se descubrió |
+|---|---|---|
+| 1 | versión del verificador, v2.1 frente a v2.2 | auditoría de recuperación |
+| 2 | conjunto de casos, 6 frente a 17 | auditoría de recuperación |
+| 3 | mapa de códigos de avería | auditoría de recuperación |
+
+Las tres son del mismo tipo: **estado del proyecto que derivó después de producirse el
+artefacto** con el que se quiere comparar. Ninguna se detectó leyendo el código; las tres
+aparecieron al intentar reproducir una ejecución antigua.
+
+> **Principio que sustituye a «todo lo demás permanece idéntico».**
+>
+> Todo estado experimental capaz de modificar una salida debe estar **enumerado, versionado o
+> con huella** antes de la ejecución. Una comparación no es de una variable porque el autor lo
+> afirme, sino porque el resto del estado esté fijado y comprobable.
+
+De ahí nace `configs/manifest_rerun_a.json`, que separa el estado controlado de la variable
+manipulada y da huella a cada pieza. La frase deja de ser una declaración de intenciones y pasa
+a ser una lista verificable.
+
+Este aprendizaje pertenece a la contribución metodológica del trabajo, junto al patrón de
+«ausencia de información tratada como ausencia de restricción». Son dos caras de lo mismo: en un
+caso el sistema no declaraba lo que no sabía; en el otro, el experimento no declaraba lo que
+había cambiado.

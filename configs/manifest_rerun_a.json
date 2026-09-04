@@ -1,0 +1,109 @@
+{
+  "manifest_id": "RERUN-A",
+  "version": "1.0.0",
+  "frozen_at_commit": "7ff9949",
+  "note": "Enumeración completa del estado experimental. Tres intentos previos descubrieron tres variables derivadas --versión del verificador, conjunto de casos y mapa de códigos-- que la frase «todo lo demás idéntico» no cubría. Este manifiesto sustituye a esa frase.",
+  "MANIPULATED_VARIABLE": {
+    "name": "embedding_space_enforcement",
+    "before": "ninguna búsqueda declaraba el espacio: dos modelos mezclados en una ordenación",
+    "after": "el espacio se deriva del proveedor que vectoriza la consulta, por construcción"
+  },
+  "CONTROLLED_STATE": {
+    "case_set": {
+      "value": [
+        "C01_maf_drift",
+        "C02_thermostat_stuck",
+        "C03_o2_slow_response",
+        "C04_misfire",
+        "C05_vacuum_leak",
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
+      "n": 6,
+      "hash": "1af2a473ed85a4d7"
+    },
+    "dtc_map": {
+      "config_id": "E12_LEGACY_DTC_MAP",
+      "version": "1.0.0",
+      "hash": "04088d9f0435c7f0",
+      "file": "configs/e12_legacy_dtc_map.json"
+    },
+    "annotated_set": {
+      "file": "configs/goldset_mazda3_bk.yaml",
+      "hash": "7fadc49fc7daaad1"
+    },
+    "corpus": {
+      "version": "0.1.0",
+      "n_chunks": 6158,
+      "n_source_files": 3055
+    },
+    "chunking": {
+      "note": "sin cambios desde la ingesta; el corpus no se reindexa"
+    },
+    "embedding": {
+      "provider": "sentence-transformers",
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "dimension": 384,
+      "space_id": "sentence-transformers/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1",
+      "index_must_contain": {
+        "per_space_vectors": 6158,
+        "spaces": 2
+      }
+    },
+    "retrieval": {
+      "strategies": [
+        "semantic",
+        "semantic+engine",
+        "semantic+authority",
+        "hybrid",
+        "diagnosis-guided"
+      ],
+      "top_k": 10,
+      "retrieval_depth": 60,
+      "filters": [
+        "vehicle_id",
+        "engine_codes",
+        "dtc_codes",
+        "exclude_chunks"
+      ]
+    },
+    "verifier": {
+      "version": "v2.1",
+      "support_policy": "papel por sección (v2.1)",
+      "note": "v2.2 implementada, probada y SIN MEDIR: es RERUN-B"
+    },
+    "thresholds": {
+      "min_confidence": 0.79,
+      "min_claim_coverage": 0.8,
+      "min_supporting_chunks": 2,
+      "min_distinct_sources": 1,
+      "accepted_applicability": [
+        "EXACT_MATCH"
+      ]
+    },
+    "classifier": {
+      "model": "random forest",
+      "calibration": "isotonic cv=5",
+      "dataset_id": "synthetic_v2",
+      "prediction_uses": "modelo sin calibrar"
+    },
+    "seed": 20260901,
+    "baseline_vector": [
+      "ALWAYS_ABSTAIN",
+      "ALWAYS_EXPLAIN",
+      "ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT",
+      "CEILING"
+    ]
+  },
+  "DENOMINATORS": {
+    "E12": {
+      "n_evaluated": 6,
+      "n_scored": 5,
+      "n_excluded_from_metric": 1,
+      "excluded": [
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
+      "reason": "no relevant files in ground truth"
+    }
+  },
+  "EXPECTED_DIRECTION": "NONE"
+}
