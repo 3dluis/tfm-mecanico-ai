@@ -1,8 +1,8 @@
 {
   "experiment_id": "E15_sufficiency_adverse",
-  "commit": "3b02cf88d7162d3773daa86d9c8f98da0cb97817",
+  "commit": "c502f9a9a10efb5360ffa201e738b036450aaca0",
   "dirty": false,
-  "executed_at": "2026-09-04T11:12:58.428094+00:00",
+  "executed_at": "2026-09-04T11:15:12.980868+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -53,71 +53,71 @@
       "diagnosis_used": "F00_normal",
       "corpus_variant": "FULL",
       "bundle": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "vehicle_id": "mazda-3-bk-2007",
         "predicted_class": "F00_normal",
-        "model_confidence": 0.4174,
-        "calibrated_confidence": 0.3603,
+        "model_confidence": 0.6904,
+        "calibrated_confidence": 0.9293,
         "observations": [
           {
             "observation_id": "OBS001",
             "kind": "observational",
-            "signal": "stft_bank1",
+            "signal": "coolant_temperature",
             "statistic": "max",
-            "value": 6.744052,
+            "value": 65.316437,
             "direction": "decreases",
-            "importance": -0.040535,
+            "importance": -0.032917,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS002",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "range",
-            "value": 11.162532,
+            "signal": "coolant_temperature",
+            "statistic": "mean",
+            "value": 60.018905,
             "direction": "decreases",
-            "importance": -0.035645,
+            "importance": -0.020201,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS003",
             "kind": "observational",
-            "signal": "coolant_temperature",
-            "statistic": "max",
-            "value": 48.858978,
+            "signal": "ltft_bank1",
+            "statistic": "crossings",
+            "value": 2.0,
             "direction": "decreases",
-            "importance": -0.032242,
+            "importance": -0.017295,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS004",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "delta_min",
-            "value": -7.755926,
+            "signal": "map",
+            "statistic": "delta_max",
+            "value": 74.801582,
             "direction": "decreases",
-            "importance": -0.025924,
+            "importance": -0.012606,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS005",
             "kind": "observational",
-            "signal": "ignition_timing",
-            "statistic": "slope",
-            "value": -0.081201,
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 0.215385,
             "direction": "decreases",
-            "importance": -0.025075,
+            "importance": -0.012366,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           }
         ],
         "documents": [
@@ -414,111 +414,67 @@
         "claims": [
           {
             "claim_id": "C01",
-            "text": "El descriptor stft_bank1 (max) toma el valor 6.744 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (max) toma el valor 65.32 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS001"
-            ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
-          },
-          {
-            "claim_id": "C02",
-            "text": "El descriptor stft_bank1 (range) toma el valor 11.16 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
-            "observational_evidence": [
-              "OBS002"
-            ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
-          },
-          {
-            "claim_id": "C03",
-            "text": "El descriptor coolant_temperature (max) toma el valor 48.86 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
-            "observational_evidence": [
-              "OBS003"
             ],
             "documentary_evidence": [
               "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304"
             ],
             "support_status": "SUPPORTED",
             "notes": ""
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor coolant_temperature (mean) toma el valor 60.02 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor ltft_bank1 (crossings) toma el valor 2 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
           }
         ]
       },
       "verdict": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
           "LOW_CLAIM_COVERAGE"
         ],
         "signals": {
-          "confidence": 0.3603,
-          "model_confidence": 0.4174,
+          "confidence": 0.9293,
+          "model_confidence": 0.6904,
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
           "n_documents_applicable": 2,
           "n_distinct_sources": 1,
           "best_retrieval_score": 0.5607,
-          "claim_coverage": 0.3333,
+          "claim_coverage": 0.6667,
           "n_claims": 3,
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.360 < 0.79",
-          "cobertura 0.33 < 0.80"
+          "cobertura 0.67 < 0.80"
         ]
       },
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "UNCLASSIFIED",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "UNCLASSIFIED",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
           "mentions_signal": true,
           "is_diagnostic": true,
@@ -529,7 +485,7 @@
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
-          "claim_id": "C03",
+          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
           "mentions_signal": true,
           "is_diagnostic": true,
@@ -538,6 +494,50 @@
           "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+          "mentions_signal": true,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
+        },
+        {
+          "claim_id": "C02",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "mentions_signal": true,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "UNCLASSIFIED",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "UNCLASSIFIED",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
         }
       ]
     },
@@ -547,71 +547,71 @@
       "diagnosis_used": "F00_normal",
       "corpus_variant": "FULL",
       "bundle": {
-        "case_id": "F05_misfire__highway__09@120s",
+        "case_id": "F05_misfire__highway__09@480s",
         "vehicle_id": "mazda-3-bk-2007",
         "predicted_class": "F00_normal",
-        "model_confidence": 0.4569,
-        "calibrated_confidence": 0.4451,
+        "model_confidence": 0.81,
+        "calibrated_confidence": 0.9842,
         "observations": [
           {
             "observation_id": "OBS001",
             "kind": "observational",
-            "signal": "oxygen_sensor",
-            "statistic": "max",
-            "value": 0.937115,
+            "signal": "coolant_temperature",
+            "statistic": "slope",
+            "value": 6e-06,
             "direction": "decreases",
-            "importance": -0.105992,
+            "importance": -0.010219,
             "session_id": "F05_misfire__highway__09",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 480.0,
+            "window_end_s": 599.0
           },
           {
             "observation_id": "OBS002",
             "kind": "observational",
-            "signal": "oxygen_sensor",
-            "statistic": "range",
-            "value": 0.887115,
-            "direction": "decreases",
-            "importance": -0.07672,
+            "signal": "map",
+            "statistic": "min",
+            "value": 34.715672,
+            "direction": "increases",
+            "importance": 0.008566,
             "session_id": "F05_misfire__highway__09",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 480.0,
+            "window_end_s": 599.0
           },
           {
             "observation_id": "OBS003",
             "kind": "observational",
-            "signal": "oxygen_sensor",
-            "statistic": "mean",
-            "value": 0.459259,
+            "signal": "coolant_temperature",
+            "statistic": "range",
+            "value": 0.788666,
             "direction": "decreases",
-            "importance": -0.053691,
+            "importance": -0.007752,
             "session_id": "F05_misfire__highway__09",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 480.0,
+            "window_end_s": 599.0
           },
           {
             "observation_id": "OBS004",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "std",
-            "value": 1.874288,
-            "direction": "decreases",
-            "importance": -0.01985,
+            "signal": "rpm",
+            "statistic": "n_events",
+            "value": 1.0,
+            "direction": "increases",
+            "importance": 0.007093,
             "session_id": "F05_misfire__highway__09",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 480.0,
+            "window_end_s": 599.0
           },
           {
             "observation_id": "OBS005",
             "kind": "observational",
-            "signal": "rpm",
-            "statistic": "n_events",
-            "value": 2.0,
+            "signal": "coolant_temperature",
+            "statistic": "autocorr1",
+            "value": 0.378156,
             "direction": "decreases",
-            "importance": -0.016085,
+            "importance": -0.006992,
             "session_id": "F05_misfire__highway__09",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 480.0,
+            "window_end_s": 599.0
           }
         ],
         "documents": [
@@ -863,17 +863,20 @@
         "claims": [
           {
             "claim_id": "C01",
-            "text": "El descriptor oxygen_sensor (max) toma el valor 0.9371 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (slope) toma el valor 6.025e-06 entre los segundos 480 y 599 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS001"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C02",
-            "text": "El descriptor oxygen_sensor (range) toma el valor 0.8871 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor map (min) toma el valor 34.72 entre los segundos 480 y 599 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
             "observational_evidence": [
               "OBS002"
             ],
@@ -883,64 +886,65 @@
           },
           {
             "claim_id": "C03",
-            "text": "El descriptor oxygen_sensor (mean) toma el valor 0.4593 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (range) toma el valor 0.7887 entre los segundos 480 y 599 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS003"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           }
         ]
       },
       "verdict": {
-        "case_id": "F05_misfire__highway__09@120s",
+        "case_id": "F05_misfire__highway__09@480s",
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
           "LOW_CLAIM_COVERAGE"
         ],
         "signals": {
-          "confidence": 0.4451,
-          "model_confidence": 0.4569,
+          "confidence": 0.9842,
+          "model_confidence": 0.81,
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
           "n_documents_applicable": 2,
           "n_distinct_sources": 1,
           "best_retrieval_score": 0.6178,
-          "claim_coverage": 0.0,
+          "claim_coverage": 0.6667,
           "n_claims": 3,
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.445 < 0.79",
-          "cobertura 0.00 < 0.80"
+          "cobertura 0.67 < 0.80"
         ]
       },
       "support_checks": [
         {
           "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -951,7 +955,7 @@
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "signal_mapping": "MAPPED",
           "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
+          "reason": "el fragmento no menciona la señal map"
         },
         {
           "claim_id": "C02",
@@ -962,29 +966,29 @@
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "signal_mapping": "MAPPED",
           "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
+          "reason": "el fragmento no menciona la señal map"
         },
         {
           "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
       ]
     },
@@ -994,71 +998,71 @@
       "diagnosis_used": "F00_normal",
       "corpus_variant": "ABSENT",
       "bundle": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "vehicle_id": "mazda-3-bk-2007",
         "predicted_class": "F00_normal",
-        "model_confidence": 0.4174,
-        "calibrated_confidence": 0.3603,
+        "model_confidence": 0.6904,
+        "calibrated_confidence": 0.9293,
         "observations": [
           {
             "observation_id": "OBS001",
             "kind": "observational",
-            "signal": "stft_bank1",
+            "signal": "coolant_temperature",
             "statistic": "max",
-            "value": 6.744052,
+            "value": 65.316437,
             "direction": "decreases",
-            "importance": -0.040535,
+            "importance": -0.032917,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS002",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "range",
-            "value": 11.162532,
+            "signal": "coolant_temperature",
+            "statistic": "mean",
+            "value": 60.018905,
             "direction": "decreases",
-            "importance": -0.035645,
+            "importance": -0.020201,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS003",
             "kind": "observational",
-            "signal": "coolant_temperature",
-            "statistic": "max",
-            "value": 48.858978,
+            "signal": "ltft_bank1",
+            "statistic": "crossings",
+            "value": 2.0,
             "direction": "decreases",
-            "importance": -0.032242,
+            "importance": -0.017295,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS004",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "delta_min",
-            "value": -7.755926,
+            "signal": "map",
+            "statistic": "delta_max",
+            "value": 74.801582,
             "direction": "decreases",
-            "importance": -0.025924,
+            "importance": -0.012606,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS005",
             "kind": "observational",
-            "signal": "ignition_timing",
-            "statistic": "slope",
-            "value": -0.081201,
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 0.215385,
             "direction": "decreases",
-            "importance": -0.025075,
+            "importance": -0.012366,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           }
         ],
         "documents": [
@@ -1355,7 +1359,7 @@
         "claims": [
           {
             "claim_id": "C01",
-            "text": "El descriptor stft_bank1 (max) toma el valor 6.744 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (max) toma el valor 65.32 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS001"
             ],
@@ -1365,7 +1369,7 @@
           },
           {
             "claim_id": "C02",
-            "text": "El descriptor stft_bank1 (range) toma el valor 11.16 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (mean) toma el valor 60.02 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS002"
             ],
@@ -1375,7 +1379,7 @@
           },
           {
             "claim_id": "C03",
-            "text": "El descriptor coolant_temperature (max) toma el valor 48.86 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor ltft_bank1 (crossings) toma el valor 2 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS003"
             ],
@@ -1386,17 +1390,16 @@
         ]
       },
       "verdict": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
           "TOO_FEW_SUPPORTING_CHUNKS",
           "LOW_CLAIM_COVERAGE"
         ],
         "signals": {
-          "confidence": 0.3603,
-          "model_confidence": 0.4174,
+          "confidence": 0.9293,
+          "model_confidence": 0.6904,
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
@@ -1408,7 +1411,6 @@
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.360 < 0.79",
           "1 fragmentos aplicables < 2",
           "cobertura 0.00 < 0.80"
         ]
@@ -1417,27 +1419,16 @@
         {
           "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "UNCLASSIFIED",
           "signal_mapping": "MAPPED",
           "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "UNCLASSIFIED",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
           "mentions_signal": true,
           "is_diagnostic": true,
@@ -1446,6 +1437,17 @@
           "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "UNCLASSIFIED",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
         }
       ]
     },
@@ -1455,71 +1457,71 @@
       "diagnosis_used": "F00_normal",
       "corpus_variant": "PARTIAL",
       "bundle": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "vehicle_id": "mazda-3-bk-2007",
         "predicted_class": "F00_normal",
-        "model_confidence": 0.4174,
-        "calibrated_confidence": 0.3603,
+        "model_confidence": 0.6904,
+        "calibrated_confidence": 0.9293,
         "observations": [
           {
             "observation_id": "OBS001",
             "kind": "observational",
-            "signal": "stft_bank1",
+            "signal": "coolant_temperature",
             "statistic": "max",
-            "value": 6.744052,
+            "value": 65.316437,
             "direction": "decreases",
-            "importance": -0.040535,
+            "importance": -0.032917,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS002",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "range",
-            "value": 11.162532,
+            "signal": "coolant_temperature",
+            "statistic": "mean",
+            "value": 60.018905,
             "direction": "decreases",
-            "importance": -0.035645,
+            "importance": -0.020201,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS003",
             "kind": "observational",
-            "signal": "coolant_temperature",
-            "statistic": "max",
-            "value": 48.858978,
+            "signal": "ltft_bank1",
+            "statistic": "crossings",
+            "value": 2.0,
             "direction": "decreases",
-            "importance": -0.032242,
+            "importance": -0.017295,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS004",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "delta_min",
-            "value": -7.755926,
+            "signal": "map",
+            "statistic": "delta_max",
+            "value": 74.801582,
             "direction": "decreases",
-            "importance": -0.025924,
+            "importance": -0.012606,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS005",
             "kind": "observational",
-            "signal": "ignition_timing",
-            "statistic": "slope",
-            "value": -0.081201,
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 0.215385,
             "direction": "decreases",
-            "importance": -0.025075,
+            "importance": -0.012366,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           }
         ],
         "documents": [
@@ -1816,7 +1818,7 @@
         "claims": [
           {
             "claim_id": "C01",
-            "text": "El descriptor stft_bank1 (max) toma el valor 6.744 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (max) toma el valor 65.32 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS001"
             ],
@@ -1826,7 +1828,7 @@
           },
           {
             "claim_id": "C02",
-            "text": "El descriptor stft_bank1 (range) toma el valor 11.16 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (mean) toma el valor 60.02 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS002"
             ],
@@ -1836,7 +1838,7 @@
           },
           {
             "claim_id": "C03",
-            "text": "El descriptor coolant_temperature (max) toma el valor 48.86 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor ltft_bank1 (crossings) toma el valor 2 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS003"
             ],
@@ -1847,17 +1849,16 @@
         ]
       },
       "verdict": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
           "TOO_FEW_SUPPORTING_CHUNKS",
           "LOW_CLAIM_COVERAGE"
         ],
         "signals": {
-          "confidence": 0.3603,
-          "model_confidence": 0.4174,
+          "confidence": 0.9293,
+          "model_confidence": 0.6904,
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
@@ -1869,7 +1870,6 @@
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.360 < 0.79",
           "1 fragmentos aplicables < 2",
           "cobertura 0.00 < 0.80"
         ]
@@ -1878,27 +1878,16 @@
         {
           "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "UNCLASSIFIED",
           "signal_mapping": "MAPPED",
           "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "UNCLASSIFIED",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
           "mentions_signal": true,
           "is_diagnostic": true,
@@ -1907,6 +1896,17 @@
           "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "UNCLASSIFIED",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
         }
       ]
     },
@@ -1916,71 +1916,71 @@
       "diagnosis_used": "F00_normal",
       "corpus_variant": "DISTRACTOR",
       "bundle": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "vehicle_id": "mazda-3-bk-2007",
         "predicted_class": "F00_normal",
-        "model_confidence": 0.4174,
-        "calibrated_confidence": 0.3603,
+        "model_confidence": 0.6904,
+        "calibrated_confidence": 0.9293,
         "observations": [
           {
             "observation_id": "OBS001",
             "kind": "observational",
-            "signal": "stft_bank1",
+            "signal": "coolant_temperature",
             "statistic": "max",
-            "value": 6.744052,
+            "value": 65.316437,
             "direction": "decreases",
-            "importance": -0.040535,
+            "importance": -0.032917,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS002",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "range",
-            "value": 11.162532,
+            "signal": "coolant_temperature",
+            "statistic": "mean",
+            "value": 60.018905,
             "direction": "decreases",
-            "importance": -0.035645,
+            "importance": -0.020201,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS003",
             "kind": "observational",
-            "signal": "coolant_temperature",
-            "statistic": "max",
-            "value": 48.858978,
+            "signal": "ltft_bank1",
+            "statistic": "crossings",
+            "value": 2.0,
             "direction": "decreases",
-            "importance": -0.032242,
+            "importance": -0.017295,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS004",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "delta_min",
-            "value": -7.755926,
+            "signal": "map",
+            "statistic": "delta_max",
+            "value": 74.801582,
             "direction": "decreases",
-            "importance": -0.025924,
+            "importance": -0.012606,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS005",
             "kind": "observational",
-            "signal": "ignition_timing",
-            "statistic": "slope",
-            "value": -0.081201,
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 0.215385,
             "direction": "decreases",
-            "importance": -0.025075,
+            "importance": -0.012366,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           }
         ],
         "documents": [
@@ -2277,7 +2277,7 @@
         "claims": [
           {
             "claim_id": "C01",
-            "text": "El descriptor stft_bank1 (max) toma el valor 6.744 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (max) toma el valor 65.32 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS001"
             ],
@@ -2287,7 +2287,7 @@
           },
           {
             "claim_id": "C02",
-            "text": "El descriptor stft_bank1 (range) toma el valor 11.16 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (mean) toma el valor 60.02 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS002"
             ],
@@ -2297,7 +2297,7 @@
           },
           {
             "claim_id": "C03",
-            "text": "El descriptor coolant_temperature (max) toma el valor 48.86 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor ltft_bank1 (crossings) toma el valor 2 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS003"
             ],
@@ -2308,17 +2308,16 @@
         ]
       },
       "verdict": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
           "TOO_FEW_SUPPORTING_CHUNKS",
           "LOW_CLAIM_COVERAGE"
         ],
         "signals": {
-          "confidence": 0.3603,
-          "model_confidence": 0.4174,
+          "confidence": 0.9293,
+          "model_confidence": 0.6904,
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
@@ -2330,7 +2329,6 @@
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.360 < 0.79",
           "1 fragmentos aplicables < 2",
           "cobertura 0.00 < 0.80"
         ]
@@ -2339,27 +2337,16 @@
         {
           "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "UNCLASSIFIED",
           "signal_mapping": "MAPPED",
           "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "UNCLASSIFIED",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
           "mentions_signal": true,
           "is_diagnostic": true,
@@ -2368,6 +2355,17 @@
           "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "UNCLASSIFIED",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
         }
       ]
     },
@@ -2377,71 +2375,71 @@
       "diagnosis_used": "F00_normal",
       "corpus_variant": "DISTRACTOR_NO_FILTER",
       "bundle": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "vehicle_id": "mazda-3-bk-2007",
         "predicted_class": "F00_normal",
-        "model_confidence": 0.4174,
-        "calibrated_confidence": 0.3603,
+        "model_confidence": 0.6904,
+        "calibrated_confidence": 0.9293,
         "observations": [
           {
             "observation_id": "OBS001",
             "kind": "observational",
-            "signal": "stft_bank1",
+            "signal": "coolant_temperature",
             "statistic": "max",
-            "value": 6.744052,
+            "value": 65.316437,
             "direction": "decreases",
-            "importance": -0.040535,
+            "importance": -0.032917,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS002",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "range",
-            "value": 11.162532,
+            "signal": "coolant_temperature",
+            "statistic": "mean",
+            "value": 60.018905,
             "direction": "decreases",
-            "importance": -0.035645,
+            "importance": -0.020201,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS003",
             "kind": "observational",
-            "signal": "coolant_temperature",
-            "statistic": "max",
-            "value": 48.858978,
+            "signal": "ltft_bank1",
+            "statistic": "crossings",
+            "value": 2.0,
             "direction": "decreases",
-            "importance": -0.032242,
+            "importance": -0.017295,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS004",
             "kind": "observational",
-            "signal": "stft_bank1",
-            "statistic": "delta_min",
-            "value": -7.755926,
+            "signal": "map",
+            "statistic": "delta_max",
+            "value": 74.801582,
             "direction": "decreases",
-            "importance": -0.025924,
+            "importance": -0.012606,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           },
           {
             "observation_id": "OBS005",
             "kind": "observational",
-            "signal": "ignition_timing",
-            "statistic": "slope",
-            "value": -0.081201,
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 0.215385,
             "direction": "decreases",
-            "importance": -0.025075,
+            "importance": -0.012366,
             "session_id": "F03_thermostat_stuck__warmup__03",
-            "window_start_s": 120.0,
-            "window_end_s": 239.0
+            "window_start_s": 300.0,
+            "window_end_s": 419.0
           }
         ],
         "documents": [
@@ -2738,7 +2736,7 @@
         "claims": [
           {
             "claim_id": "C01",
-            "text": "El descriptor stft_bank1 (max) toma el valor 6.744 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (max) toma el valor 65.32 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS001"
             ],
@@ -2748,7 +2746,7 @@
           },
           {
             "claim_id": "C02",
-            "text": "El descriptor stft_bank1 (range) toma el valor 11.16 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor coolant_temperature (mean) toma el valor 60.02 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS002"
             ],
@@ -2758,7 +2756,7 @@
           },
           {
             "claim_id": "C03",
-            "text": "El descriptor coolant_temperature (max) toma el valor 48.86 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
+            "text": "El descriptor ltft_bank1 (crossings) toma el valor 2 entre los segundos 300 y 419 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, a la baja.",
             "observational_evidence": [
               "OBS003"
             ],
@@ -2769,17 +2767,16 @@
         ]
       },
       "verdict": {
-        "case_id": "F03_thermostat_stuck__warmup__03@120s",
+        "case_id": "F03_thermostat_stuck__warmup__03@300s",
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
           "TOO_FEW_SUPPORTING_CHUNKS",
           "LOW_CLAIM_COVERAGE"
         ],
         "signals": {
-          "confidence": 0.3603,
-          "model_confidence": 0.4174,
+          "confidence": 0.9293,
+          "model_confidence": 0.6904,
           "calibrated": true,
           "n_observations": 5,
           "n_documents_retrieved": 10,
@@ -2791,7 +2788,6 @@
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.360 < 0.79",
           "1 fragmentos aplicables < 2",
           "cobertura 0.00 < 0.80"
         ]
@@ -2800,27 +2796,16 @@
         {
           "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
+          "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": null,
           "chunk_role": "UNCLASSIFIED",
           "signal_mapping": "MAPPED",
           "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": null,
-          "chunk_role": "UNCLASSIFIED",
-          "signal_mapping": "MAPPED",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
           "mentions_signal": true,
           "is_diagnostic": true,
@@ -2829,8 +2814,43 @@
           "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es UNCLASSIFIED: no es un procedimiento diagnóstico y no sostiene por sí solo"
+        },
+        {
+          "claim_id": "C03",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "mentions_signal": false,
+          "is_diagnostic": true,
+          "carries_expected_dtc": null,
+          "chunk_role": "UNCLASSIFIED",
+          "signal_mapping": "MAPPED",
+          "supports": false,
+          "reason": "el fragmento no menciona la señal ltft_bank1"
         }
       ]
     }
-  ]
+  ],
+  "frozen": {
+    "note": "Escenario adverso NX-02 con la regla ENM-A01: entre los errores del modelo se elige el más confiado. Congelado el 4 de septiembre de 2026. La ejecución anterior, que elegía por orden de índice, se conserva en E15_suficiencia_adverse_seleccion_por_indice.json y no se sobrescribe.",
+    "verifier_version": "v2.1",
+    "selection_rule": "ventana mal clasificada con mayor confianza calibrada (ENM-A01)",
+    "cases_evaluated": 6,
+    "conditions_without_misclassified_windows": 11,
+    "outcome_distribution": {
+      "D-2": 2,
+      "D-4": 4
+    },
+    "confidence_range": [
+      0.9293,
+      0.9842
+    ],
+    "all_predictions_were": [
+      "F00_normal"
+    ],
+    "finding": "EMPTY-DTC-GATE-BYPASS",
+    "caveat": "Los seis diagnósticos incorrectos son F00_normal: el modelo no ve el fallo. El escenario NO contiene ningún caso de un fallo confundido con otro fallo por encima del umbral, porque en validación no existe: el único fallo-por-fallo tiene confianza 0,579. Lo que aquí se prueba es el error por omisión, no el error por sustitución.",
+    "policy": [
+      "docs/methodology/politica-evaluacion-no-oracular.md",
+      "docs/methodology/politica-evaluacion-no-oracular-enmienda-01.md"
+    ]
+  }
 }

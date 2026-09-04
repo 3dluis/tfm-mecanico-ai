@@ -8569,5 +8569,15 @@
         }
       ]
     }
-  ]
+  ],
+  "frozen": {
+    "note": "Variante no oracular NX-01, congelada el 4 de septiembre de 2026. Los códigos que acotan la búsqueda y los que exige el verificador se derivan del diagnóstico del modelo, no de la etiqueta anotada. Canal O-1 todavía abierto: solo se evalúan ventanas que el modelo clasifica bien.",
+    "verifier_version": "v2.1",
+    "accuracy": "15/17",
+    "identical_to_oracle_run": true,
+    "prediction_declared_before_running": "sobre ventanas donde el modelo acierta, diagnóstico y etiqueta coinciden y las decisiones deben ser idénticas",
+    "prediction_held": true,
+    "conclusion": "O-2 y O-3 no aportan información que el sistema no posea en ejecución. El oráculo del experimento se reduce a O-1, la selección de ventana.",
+    "policy": "docs/methodology/politica-evaluacion-no-oracular.md"
+  }
 }
