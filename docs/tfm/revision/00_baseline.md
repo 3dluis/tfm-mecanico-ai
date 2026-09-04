@@ -40,19 +40,23 @@ identificadores, como prescriben los propios skills.
 
 ### 2.1 Inventario real en el sistema de ficheros
 
+Las rutas `skills/…` corresponden al directorio de skills del entorno de trabajo, en la raíz
+del escritorio del TFM. Son localizaciones del sistema de ficheros, no parte del trabajo
+académico.
+
 | Skill pedido | Encontrado | Ruta | Contenido |
 |---|---|---|---|
 | `Tfm-tutor` (orquestador) | **no existe** como skill | — | El rol de coordinación transversal lo asume esta revisión; la evaluación académica independiente, `uax-tfm-ai-tutor` |
-| `uax-tfm-ai-tutor` | sí | `.claude/skills/uax-tfm-ai-tutor/` | SKILL, 18 workflows, 7 templates, 23 references (evaluation + rubrics), 2 scripts, 15 fixtures. Completado hoy: a las 13:30 carecía de workflows, templates, rúbricas y scripts (TUTOR-INF-003 queda resuelto) |
-| `tfm-rag-evaluator` | sí | `.claude/skills/tfm-rag-evaluator/` | 11 workflows, 6 templates, 13 references, rúbrica, `validate_skill.py` |
-| `tfm-experiment-auditor` | sí | `.claude/skills/tfm-experiment-auditor/` | 11 workflows, 7 templates, 13 references, rúbrica, `validate_skill.py` |
-| `tfm-evidence-verifier` | sí | `.claude/skills/tfm-evidence-verifier/` | 10 workflows, 7 templates, 12 references, rúbrica, `validate_skill.py` |
-| `tfm-statistical-reviewer` | sí | `.claude/skills/tfm-statistical-reviewer/` | 11 workflows, 7 templates, 14 references, rúbrica, `validate_skill.py` |
-| `tfm-reference-auditor` | sí | `.claude/skills/tfm-reference-auditor/` | 10 workflows, 7 templates, 11 references, 8 scripts (inventario, citas, bib, duplicados, comparación, identificadores) |
-| `tfm-writing-authenticity-auditor` | sí | `.claude/skills/tfm-writing-authenticity-auditor/` | 14 workflows, 9 templates, 11 references, 11 scripts (estadísticas de texto, n-gramas, similitud interna, snapshot de integridad, limpieza de marcas) |
-| `uax-tfm-ai-jury` | sí | `.claude/skills/uax-tfm-ai-jury/` | 12 workflows, 9 templates, 12 references, `question_bank.py` |
-| `tfm-defense-coach` | sí (instalado durante esta revisión, 3-09-2026) | `.claude/skills/tfm-defense-coach/` | SKILL, workflows, references, rubrics, templates, scripts, tests. Entrena la defensa oral (ANSWER → EVIDENCE → LIMITATION), consume los handoffs del jurado, del tutor y de los auditores, y emite NOT_READY / LEARNING / READY_WITH_GAPS / DEFENSE_READY |
-| `uax-tfm-ai-researcher` | sí (productor) | `.claude/skills/uax-tfm-ai-researcher/` | 15 workflows, 12 templates, 35 references, 7 scripts. Es el único que **escribe**; los demás son read-only |
+| `uax-tfm-ai-tutor` | sí | `skills/uax-tfm-ai-tutor/` | SKILL, 18 workflows, 7 templates, 23 references (evaluation + rubrics), 2 scripts, 15 fixtures. Completado hoy: a las 13:30 carecía de workflows, templates, rúbricas y scripts (TUTOR-INF-003 queda resuelto) |
+| `tfm-rag-evaluator` | sí | `skills/tfm-rag-evaluator/` | 11 workflows, 6 templates, 13 references, rúbrica, `validate_skill.py` |
+| `tfm-experiment-auditor` | sí | `skills/tfm-experiment-auditor/` | 11 workflows, 7 templates, 13 references, rúbrica, `validate_skill.py` |
+| `tfm-evidence-verifier` | sí | `skills/tfm-evidence-verifier/` | 10 workflows, 7 templates, 12 references, rúbrica, `validate_skill.py` |
+| `tfm-statistical-reviewer` | sí | `skills/tfm-statistical-reviewer/` | 11 workflows, 7 templates, 14 references, rúbrica, `validate_skill.py` |
+| `tfm-reference-auditor` | sí | `skills/tfm-reference-auditor/` | 10 workflows, 7 templates, 11 references, 8 scripts (inventario, citas, bib, duplicados, comparación, identificadores) |
+| `tfm-writing-authenticity-auditor` | sí | `skills/tfm-writing-authenticity-auditor/` | 14 workflows, 9 templates, 11 references, 11 scripts (estadísticas de texto, n-gramas, similitud interna, snapshot de integridad, limpieza de marcas) |
+| `uax-tfm-ai-jury` | sí | `skills/uax-tfm-ai-jury/` | 12 workflows, 9 templates, 12 references, `question_bank.py` |
+| `tfm-defense-coach` | sí (instalado durante esta revisión, 3-09-2026) | `skills/tfm-defense-coach/` | SKILL, workflows, references, rubrics, templates, scripts, tests. Entrena la defensa oral (ANSWER → EVIDENCE → LIMITATION), consume los handoffs del jurado, del tutor y de los auditores, y emite NOT_READY / LEARNING / READY_WITH_GAPS / DEFENSE_READY |
+| `uax-tfm-ai-researcher` | sí (productor) | `skills/uax-tfm-ai-researcher/` | 15 workflows, 12 templates, 35 references, 7 scripts. Es el único que **escribe**; los demás son read-only |
 
 Todos los SKILL.md se leyeron íntegros; los workflows y referencias de cada skill los lee el
 agente que lo ejecuta antes de empezar.
@@ -104,7 +108,7 @@ conclusiones; ninguna requiere decisión humana antes de la fase de auditoría.
 
 **Plantilla vigente:** `24-25 Plantilla TFM MUIA.docx` (raíz del TFM; la copia «2» es idéntica
 byte a byte). Estructura real extraída en
-`.claude/skills/uax-tfm-ai-researcher/references/uax/plantilla-oficial.md`: seis capítulos
+`skills/uax-tfm-ai-researcher/references/uax/plantilla-oficial.md`: seis capítulos
 fijos, resumen IMRyD de 300 palabras con cinco palabras clave, abstract, bibliografía APA 6.ª,
 anexos ≤ 20 %. Conflictos oficiales registrados y no resueltos: extensión (tres cifras),
 formato, APA 6.ª/IEEE, calendario, alcance aprobado (`conflictos-uax.md`).
