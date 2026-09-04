@@ -1,340 +1,568 @@
 # 07 · Plan de corrección consolidado
 
-**Fecha:** 3 de septiembre de 2026 · **Instantánea:** `mecanico-ia-exp` en `1162d1e`
-(las auditorías fijaron su veredicto entre `8d55def` y `a6a5f40`; los avances intermedios
-solo añaden ficheros de revisión y no tocan las unidades evaluadas) · **Estado:** STOP
-GATE 1, pendiente de aprobación del autor. **No se ha corregido nada.**
+**Fecha:** 3 de septiembre de 2026 · **Instantánea:** `mecanico-ia-exp` en `af008f9` ·
+**Estado:** `CORRECTIONS READY FOR REVIEW`. **No se ha corregido nada.**
+**Documentos asociados:** `07a_human_decisions.md` (doce decisiones),
+`07b_reexecution_plan.md` (qué se reejecuta y con qué), `07c_claim_impact_matrix.md`
+(afirmaciones afectadas y fortalezas en riesgo).
 
-## 1. Veredicto agregado
+**Pregunta de investigación, bloqueada y sin modificar:**
 
-| Auditoría | Veredicto | CRITICAL | MAJOR | MINOR | INFO | Score |
-|---|---|---|---|---|---|---|
-| Académica (tutor UAX) | `FAIL` | 0 | 13 | 17 | 12 | 55/99 |
-| RAG, evidencia y abstención | `FAIL` | 0 | 11 | 10 | 9 | 56/100 |
-| Experimentos | `FAIL` | 0 | 12 | 11 | 14 | 60/100 |
-| Evidencia (78 claims) | `FAIL` | 0 | 11 | 7 | 13 | 62/100 |
-| Estadística | `BLOCKED` | 0 | 5 | 7 | 8 | — |
-| Referencias (179 fichas) | `BLOCKED` | 0 | 4 | 13 | 5 | — |
-| **Total** | — | **0** | **56** | **65** | **61** | — |
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
+> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+> disponible no es suficiente para sostener una explicación en lugar de generar una
+> hipótesis sin fundamento?
 
-**Ningún BLOCKER.** Los 56 `MAJOR` se reducen a **trece problemas raíz**: la mayoría de los
-identificadores son el mismo defecto visto por seis instrumentos distintos.
+Cada corrección de este plan sirve a uno de sus tres ejes: **explicación**, **trazabilidad**,
+**abstención**. Ninguna la reformula.
 
-**Ninguna corrección exige reejecutar E5, E6, E7, E9 ni E15**, salvo dos reejecuciones de
-registro que no cambian resultados (escribir la calibración; registrar el barrido de
-umbrales).
+---
 
-## 2. Los trece problemas raíz
+## 1. Reclasificación de severidad
 
-Ordenados por prioridad de corrección (§35 del encargo: evidencia → diseño → estadística →
-referencias → coherencia → estructura UAX). `AD` = decisión del autor requerida.
+La formulación anterior, «ningún hallazgo bloqueante», era correcta para una sola pregunta
+—¿puede el proyecto seguir adelante?— y engañosa para otra. Se sustituye por tres niveles.
 
-### P-01 · Cifras publicadas que el artefacto vigente no reproduce · **evidencia**
-
-**Identificadores:** TUTOR-MAJ-001, TUTOR-MAJ-003, TUTOR-MAJ-006 · RAG-MAJ-001, RAG-MAJ-002,
-RAG-MAJ-004 · EXP-MAJ-001, EXP-MAJ-012, EXP-MAJ-017, EXP-MAJ-030 · EVID-MAJ-004,
-EVID-MAJ-013, EVID-MAJ-014, EVID-MAJ-018, EVID-MAJ-019 · STAT-MAJ-001, STAT-MAJ-006,
-STAT-MAJ-008, STAT-MIN-013.
-
-Cinco bloques de cifras vivas en la memoria no proceden de ningún registro vigente:
-
-| Cifra | Dónde se publica | Qué dice el artefacto |
+| Nivel | Definición | Cómo se levanta |
 |---|---|---|
-| Suelo de ruido 0,369 / 0,399 / 0,438 / 0,512 y el ejemplo de la ventana | `cap4:95-108`, `E5:51-56` | `tables/E5_estudio_ventana.csv`: 0,326 / 0,365 / 0,426 / 0,513; a 30 s el mejor descriptor de F05 es la sonda de oxígeno, **declarada**, no la temperatura |
-| Tabla de recuperación (nDCG 0,224 / 0,312 / 0,531 / 0,658) | `cap5:82-89`, `E12:50-56` | `experiments/E12_retrieval.json`: 0,0 / 0,149 / 0,468 / 0,642, sobre 6 casos, no 5; ocho celdas difieren |
-| Tabla translingüe (5/5, 1/5, 4/5, 4/5) | `cap5:94-105` | sin registro en `experiments/`, `results/`, `scripts/` ni `notebooks/` |
-| ECE calibrado 0,085 · confianza 0,886 · sesgo +0,009 | `cap5:64-71`, citando `E15_suficiencia.json` | el runner lo imprime en consola y **no lo escribe** en el JSON |
-| PI.2: 18 afirmaciones / 12 con cita / 0,667 / 51 / 21 | `matriz:67-73` | recuento sobre `E15_suficiencia.json`: **27 / 15 / 0,556 / 63 / 27** |
+| `BLOQUEA_DESARROLLO` | Impide seguir construyendo el artefacto o ejecutar las fases siguientes | corrigiendo el defecto |
+| `BLOQUEA_AFIRMACIÓN` | Una afirmación concreta del documento **no puede sostenerse tal como está escrita** con la evidencia disponible | acotando la afirmación **o** aportando la evidencia que falta |
+| `BLOQUEA_DEPÓSITO` | Impide depositar aunque las afirmaciones se acoten, por normativa de la titulación | cumpliendo el requisito |
 
-El último es el más delicado: las cifras publicadas **favorecen a la subpregunta que la
-propia matriz llama «la más débil»**. No hay indicio de manipulación (proceden de una
-ejecución anterior), pero la corrección debe hacerse con la cifra del artefacto sea cual sea.
+**Resultado de la reclasificación:**
 
-**Causa raíz técnica:** EXP-MAJ-013 — ninguno de los quince registros de `experiments/`
-contiene `commit`; catorce carecen de `executed_at`; faltan semilla en E12, E13 y E15 y
-versión de corpus en E15. Por eso las sobrescrituras fueron indetectables desde el artefacto,
-pese a que la regla está escrita en tres documentos del propio proyecto.
+- `BLOQUEA_DESARROLLO`: **ninguno**. El artefacto funciona, los experimentos se ejecutan y
+  las fases siguientes no dependen de ninguna corrección.
+- `BLOQUEA_AFIRMACIÓN`: **nueve problemas** (P-01, P-02, P-03, P-04, P-05, P-06, P-08, P-10,
+  P-13). Entre ellos están los tres que el autor señaló.
+- `BLOQUEA_DEPÓSITO`: **dos** (P-12 por estructura y extensión; P-10 por la norma de fuentes).
+- `MAJOR` sin bloqueo de afirmación: **dos** (P-07, P-09) y P-11.
 
-**Corrección:** (a) `AD` fijar la ejecución canónica de E5, E6, E7 y E12; (b) regenerar las
-tablas de `cap4`, `cap5`, la matriz y los informes de fase desde el registro elegido, citando
-el JSON y no el Markdown; (c) registrar la medición translingüe o retirarla del capítulo;
-(d) reejecutar E15 escribiendo el bloque de calibración en su registro; (e) añadir `commit`,
-`executed_at`, semilla y versiones a la cabecera de todos los registros. **Riesgo:** medio.
-Cambian cifras publicadas; la lectura cualitativa se mantiene en los cinco casos.
+### 1.1 Los tres problemas señalados por el autor
 
-### P-02 · El código de avería procede de la etiqueta anotada, no del diagnóstico · **diseño**
+**P-03 · experimento central sobre un solo caso → `BLOQUEA_AFIRMACIÓN`.** Verificado en
+`experiments/E15_suficiencia.json`: C05, C06, C07, C08 y C09 comparten `bundle.case_id`
+`F01_vacuum_leak__idle__10@120s`. Las condiciones ABSENT, PARTIAL y las dos DISTRACTOR
+existen **para un solo fallo**. Impide sostener, tal como están escritas: «PI.3 sostenida»,
+«PI.4 sostenida» (`matriz:37-40, 187-196`), «el agente se abstiene cuando se retira la
+evidencia y también cuando lo que queda es parecido» (`cap6:17-23`) y la frase equivalente del
+resumen. **No impide** sostener el contraste como demostración de mecanismo sobre el caso
+evaluado, que es lo que la evidencia sí permite.
 
-**Identificadores:** TUTOR-MAJ-002 · RAG-MAJ-003 · EXP-MAJ-014 · EVID-MAJ-003.
+**P-06 · defectos de instrumento que alteran cifras → `BLOQUEA_AFIRMACIÓN`.** Tres cifras
+publicadas se calculan con código defectuoso. La cobertura de soporte 1,00 incluye al menos
+una afirmación cuyo texto contradice el dato que cita; el «9 de 9 respeta el veredicto» se
+computa sobre siete salidas. Ambas sostienen conclusiones de PI.2 y de la sección del modelo
+de lenguaje. **No impide** el desarrollo: los defectos son locales y con corrección conocida.
 
-`retrieval_runner.py:170` y `sufficiency_runner.py:166` resuelven los códigos con
-`caso["fault_id"]`, la etiqueta del conjunto anotado. Con ellos se acota la búsqueda **y** se
-decide si un fragmento sostiene una afirmación. `cap4:255` dice «la condición predicha» y
-`E12:93-99` niega expresamente que sea un oráculo. En E12 no interviene ningún modelo.
+**P-08 · solo ventanas correctamente clasificadas → `BLOQUEA_AFIRMACIÓN`.** Verificado en
+`sufficiency_runner.py:112`: `np.flatnonzero((validacion.y == fault_id) & aciertos)`. Impide
+sostener cualquier afirmación sobre el comportamiento del sistema **cuando el diagnóstico de
+entrada es incorrecto**, que es exactamente el escenario que la pregunta teme. La memoria no
+hace hoy esa afirmación de forma explícita, pero `cap6:17-23` y el resumen se leen como si el
+resultado fuera incondicional. **No impide** el desarrollo.
 
-Consecuencia: el salto de Hit@10 de 0,00 a 1,00 es una **cota superior** condicionada a un
-diagnóstico correcto, y la cobertura de soporte 1,00 de PI.2 lo es también.
+Ninguna severidad se ha reducido. Dos han subido respecto del informe anterior: P-01 y P-05,
+que estaban descritos como problemas de trazabilidad y son también bloqueos de afirmación.
 
-**Matiz que sostiene el diseño:** la verificación de soporte **discrimina sin el oráculo**;
-en C07 rechaza las doce comprobaciones por falta de mención de la señal aunque los fragmentos
-llevan el código esperado. El oráculo no es lo que separa las condiciones.
+---
 
-**Corrección:** declarar el oráculo en `cap4`, `E12`, `E15` y en el registro de limitaciones,
-corrigiendo la frase que lo niega; `AD` decidir si además se mide la recuperación guiada con
-las predicciones del modelo en E18 o E19. **Riesgo:** bajo si se declara; alto si se deja como
-está y lo encuentra el tribunal.
+## 2. Matriz de problemas por tipo de acción
 
-### P-03 · El experimento central se evalúa sobre un solo caso · **diseño**
+Tipos: **A** documental · **B** instrumento · **C** experimental · **D** estadístico ·
+**E** evidencia y procedencia · **F** estructura UAX · **G** claim e interpretación ·
+**H** decisión humana.
 
-**Identificadores:** TUTOR-MAJ-010 · EXP-MAJ-018 · EVID-MAJ-002 · STAT-MIN-010.
+| ID | Problema | Severidad | Tipo | ¿Cambia cifras? | ¿Requiere reejecución? | ¿Cambia claims? | Acción propuesta |
+|---|---|---|---|---|---|---|---|
+| **P-01** | Cinco bloques de cifras sin registro vigente | `BLOQUEA_AFIRMACIÓN` + `BLOQUEA_DEPÓSITO` | A · D · E · H | **Sí**, las cinco | Parcial: `RX-01`, `RX-03`; el resto no | Sí: los que citan esas cifras | Fijar ejecución canónica, regenerar tablas desde el registro, registrar lo no registrado |
+| **P-02** | Código de avería tomado de la etiqueta anotada | `BLOQUEA_AFIRMACIÓN` | B · C · G · H | No | No para declarar; `NEW_EXPERIMENT` para la versión no oracular | Sí: el claim de recuperación y el de cobertura de soporte | Etiquetar como cota superior asistida por oráculo; corregir la frase que lo niega |
+| **P-03** | Cuatro condiciones sobre un solo fallo | `BLOQUEA_AFIRMACIÓN` | C · G · H | No | No (opción B) / `NEW_EXPERIMENT` (opción A) | Sí: PI.3, PI.4, conclusión y resumen | Acotar el alcance **o** ampliar E17. Ambas opciones en §5 |
+| **P-04** | Corrección de E7 no propagada a la memoria | `BLOQUEA_AFIRMACIÓN` | A · G | **Sí** | No: los dos registros existen | Sí: el claim sobre el modelo temporal y sobre F05 | Publicar el resultado canónico vigente y retirar el anterior |
+| **P-05** | Métricas verdaderas por construcción | `BLOQUEA_AFIRMACIÓN` | B · G | No | No para reclasificar; `NEW_EXPERIMENT` para el brazo con citas generadas | Sí: la distancia cero como resultado de PI.2 | Reclasificar como invariante o comprobación de implementación |
+| **P-06** | Tres defectos de instrumento | `BLOQUEA_AFIRMACIÓN` | B · G | **Sí**, tres cifras | Sí: `RX-01` (A), `RX-02` (B); C no | Sí: cobertura de soporte, respeto al veredicto, comparación de modelos | Corregir código, reejecutar, republicar; declarar la asimetría de selección |
+| **P-07** | Umbral sin procedencia registrada | MAJOR | B · D · H | No (verificado: decisiones invariantes en (0,5999, 0,9078]) | No para declarar; `RX-04` opcional | Sí: solo la frase «calibrados, no elegidos» | Declarar heurístico **o** registrar el barrido |
+| **P-08** | Solo ventanas bien clasificadas | `BLOQUEA_AFIRMACIÓN` | C · G · H | No | No (opción A) / `NEW_EXPERIMENT` (opción B) | Sí: el alcance de toda conclusión sobre el agente | Declarar la condición **o** experimento adverso. Ambas en §10 |
+| **P-09** | Cuatro fuentes de verdad del estado de fases | MAJOR | A · F | No | No | No | Fuente única derivada de artefactos; los demás pasan a vistas generadas |
+| **P-10** | Vacío afirmado sin cita; referencias del vacío incompletas | `BLOQUEA_AFIRMACIÓN` + `BLOQUEA_DEPÓSITO` | A · E · G · H | No | No | Sí: la afirmación del vacío de PI.4 | Incorporar y citar las cuatro fuentes; completar metadatos |
+| **P-11** | Cadena de procedencia incompleta y canal incorrecto | MAJOR | B · E | No | Sí: `RX-01` (reserializa) | No directamente | Añadir `source_file`, exportar fragmentos, separar editor de canal |
+| **P-12** | Estructura y extensión UAX | `BLOQUEA_DEPÓSITO` | F · H | No | No | No | Completar contenido académico faltante; proyección honesta en §16 |
+| **P-13** | Novedad del capítulo 1 contradicha por el registro propio | `BLOQUEA_AFIRMACIÓN` | A · G | No | No | Sí: la afirmación de novedad | Propagar a `cap1` la formulación estrecha que `cap3` ya usa |
 
-C05 a C09 comparten `case_id` (`F01_vacuum_leak__idle__10@120s`): ABSENT, PARTIAL y las dos
-variantes de DISTRACTOR existen para **un único fallo**. «Nueve casos» son cinco ventanas
-distintas. La matriz declara PI.3 y PI.4 «Sostenidas» y `cap6:17-23` concluye «sí puede» sin
-declarar ese tamaño.
+---
 
-El trabajo acota la procedencia sintética en cinco documentos y **no acota el n en ninguno**.
+## 3. Corrección frente a reejecución
 
-**Corrección:** acotar el alcance en resumen, `cap5`, `cap6` y matriz («en el caso evaluado
-bajo las cuatro condiciones»; «en tres de los cinco casos con evidencia»), o `AD` extender
-E17 a más fallos por condición. **Riesgo:** bajo. Es la corrección más barata y la de mayor
-efecto en defensa.
+Clasificación exigida, por problema. El detalle de cada reejecución (script, entrada, semilla,
+dataset, modelo, configuración, resultado esperado y artefactos) está en
+`07b_reexecution_plan.md`.
 
-### P-04 · Una corrección registrada por el proyecto no llega a la memoria · **evidencia**
-
-**Identificadores:** TUTOR-MAJ-004 · EVID-MAJ-015 · STAT-MAJ-005.
-
-`E7_modelo_temporal.md:88-101` registra que con `synthetic_v3` el F1 del fallo de encendido
-pasa de 0,518 a 0,911 y la red recurrente deja de ser inferior (0,9446 frente a 0,9321 del
-bosque), y declara «corregida» la conclusión anterior. `cap5:52-62`, `cap3:82-84`, `cap6:47-49`
-y L-15 conservan la lectura antigua. Clasificado `CONTRADICTION_HIDDEN`.
-
-**Corrección:** reescribir la lectura de E7 como inconcluso con las dos cifras y la
-sensibilidad, o `AD` ejecutar el reanálisis apareado por sesión con varias semillas.
-**Riesgo:** bajo; mejora la honestidad del capítulo. Ninguna conclusión de la PI depende de
-esto: el bosque sigue siendo el modelo del experimento por decisión declarada.
-
-### P-05 · Métricas que no pueden tomar otro valor · **evidencia y diseño**
-
-**Identificadores:** RAG-MAJ-011 · EVID-MAJ-001 · RAG-MAJ-017.
-
-(a) «La distancia entre completitud y soporte es cero» (`cap5:207`) es cero **por
-construcción**: `assembly.py:176-185` da cita a una afirmación solo si pasa la verificación,
-y la marca sostenida si y solo si tiene cita. La métrica central de PI.2 no puede dar otra
-cosa. Además M4 se describe en `cap4` como calculada y no está implementada (E14 pendiente).
-
-(b) La condición ABSENT retira los fragmentos con los mismos códigos con que la búsqueda va
-acotada: «0 documentos aplicables» está garantizado por construcción.
-
-**Corrección:** reformular ambas como propiedades del diseño, no como resultados medidos, o
-`AD` introducir un brazo con citas generadas por el modelo para que la distancia pueda ser
-distinta de cero. **Riesgo:** medio. Afecta a cómo se presenta PI.2, no a que la trazabilidad
-funcione.
-
-### P-06 · Tres defectos de instrumento que alteran cifras publicadas · **evidencia**
-
-**Identificadores:** RAG-MAJ-012 · RAG-MAJ-013 · EXP-MAJ-003.
-
-| Defecto | Dónde | Efecto |
+| ID | Clasificación | Justificación |
 |---|---|---|
-| La plantilla de afirmación traduce el **signo del valor SHAP** en una aserción sobre el vehículo | `assembly.py:156-160` con `attribution.py:51-52` | Contraejemplo en el registro: C02/`OBS003`, valor −1,496 con `direction: increases`, redactado «se sitúa **por encima** de lo esperable, con valor −1,496», contado como sostenido y sumado a la cobertura 1,00. Contradice `evidence-model.md:42-45`, escrito por el propio proyecto |
-| `respected_verdict` se inicializa a `True` y no se actualiza si la salida falla el esquema | `agent.py:110, 231-248` | «9/9 respeta el veredicto» se calcula sobre 7 salidas; en los dos casos sin salida la lectura real es 0/2 |
-| La red recurrente elige la mejor época por F1 de **validación** y se reporta sobre esa misma validación; el bosque no selecciona nada | `training.py:150-176` | Comparación asimétrica. El sesgo favorece a la red y aun así pierde en v2: el negativo es conservador |
+| P-01 | `HUMAN_DECISION_REQUIRED` + `RX-01` + `RX-03` | La ejecución canónica es decisión del autor. Dos bloques exigen reejecución: la calibración, que hoy no se escribe en ningún registro, y la medición translingüe, que no tiene artefacto. Los otros tres se corrigen regenerando tablas desde registros existentes: `NO_REEXECUTION` |
+| P-02 | `NO_REEXECUTION` (declarar) · `NEW_EXPERIMENT` (versión no oracular) | Declarar el oráculo es documental. Medir sin él exige un experimento nuevo, descrito en §6 |
+| P-03 | `NO_REEXECUTION` (opción B) · `NEW_EXPERIMENT` (opción A) | Acotar es documental. Ampliar exige anotar y ejecutar casos nuevos |
+| P-04 | `NO_REEXECUTION` | Los dos registros existen y están verificados: `E7_temporal_synthetic_v{2,3}.json` |
+| P-05 | `NO_REEXECUTION` (reclasificar) · `NEW_EXPERIMENT` (brazo con citas generadas) | |
+| P-06 | `RX-01` (defecto A) · `RX-02` (defecto B) · `NO_REEXECUTION` (defecto C) | A y B cambian la salida del pipeline; C se declara |
+| P-07 | `NO_REEXECUTION` (declarar heurístico) · `RX-04` (registrar el barrido) | |
+| P-08 | `NO_REEXECUTION` (opción A) · `NEW_EXPERIMENT` (opción B) | |
+| P-09 | `NO_REEXECUTION` | Cambio de herramienta, no de resultado |
+| P-10 | `NO_REEXECUTION` | Documental y bibliográfico |
+| P-11 | `RX-01` | Añadir `source_file` obliga a reserializar los paquetes de evidencia |
+| P-12 | `NO_REEXECUTION` | Redacción |
+| P-13 | `NO_REEXECUTION` | Documental |
 
-**Corrección:** corregir la plantilla para que el texto respete el signo; corregir el cálculo
-del respeto al veredicto y republicar la cifra; declarar la asimetría de selección de época.
-**Riesgo:** bajo en esfuerzo, alto si no se corrige: son tres cifras o frases que un tribunal
-puede refutar abriendo un fichero.
+**Cuatro reejecuciones identificadas**, ninguna de ellas un experimento nuevo:
+`RX-01` (E15 con instrumento corregido y calibración registrada), `RX-02` (E13 con el respeto
+al veredicto corregido), `RX-03` (medición translingüe con registro), `RX-04` (barrido de
+umbrales como artefacto, opcional). **Ninguna presupone que el resultado será igual**: cada
+una declara qué se espera y qué haría si no coincide.
 
-### P-07 · El umbral 0,80 no tiene procedencia registrada · **estadística**
+---
 
-**Identificadores:** TUTOR-MAJ-005 · EXP-MAJ-016 · STAT-MAJ-007.
+## 4. P-01 · Las cinco cifras, una por una
 
-El criterio «precisión ≥ 0,93» no consta en ningún documento anterior al barrido; el barrido
-corre sobre la misma partición de la que salen los nueve casos; no existe script ni registro:
-la tabla vive en un docstring. Además «los umbrales están calibrados, no elegidos» es cierto
-para uno de seis: cuatro no tienen calibración.
+| # | Documento y línea | Valor publicado | Supuesto origen | Registro canónico disponible | Estado |
+|---|---|---|---|---|---|
+| 1 | `cap4:95-108`, `E5:51-56` | Suelo de ruido 0,369 / 0,399 / 0,438 / 0,512; a 30 s el mejor descriptor de F05 es la temperatura, **no declarada** | Ejecución de E5 anterior a la recalibración del generador | `tables/E5_estudio_ventana.csv`: 0,326 / 0,365 / 0,426 / 0,513; a 30 s el mejor descriptor es la sonda de oxígeno, **declarada** | **STALE** — el dataset que produjo la cifra fue regenerado y no se conserva bajo ese identificador |
+| 2 | `cap5:82-89`, `E12:50-56` | nDCG 0,224 / 0,312 / 0,531 / 0,658; «cinco casos»; Hit 0,25 | Ejecución de E12 sobre 5 casos, sustituida | `experiments/E12_retrieval.json` (`executed_at` 2026-09-01T21:32:01Z, 6 casos): nDCG 0,000 / 0,149 / 0,468 / 0,468 / 0,642; Hit 0,000 / 0,200 / 0,400 / 0,400 / 1,000 | **STALE** — existe registro vigente con otras cifras y otro número de casos |
+| 3 | `cap5:94-105` | Translingüe 5/5, 1/5, 4/5, 4/5; medianas 47, 376, 58, 54 | Medición adyacente a E12 | **Ninguno** en `experiments/`, `results/`, `scripts/` ni `notebooks/` | **UNTRACEABLE** |
+| 4 | `cap5:64-71` | ECE calibrado 0,085 · confianza 0,886 · acierto 0,878 · sesgo +0,009 | Salida de consola de `sufficiency_runner.py` | El registro citado, `experiments/E15_suficiencia.json`, **no contiene** el bloque | **UNTRACEABLE** |
+| 5 | `matriz:67-73` | PI.2: 18 afirmaciones / 12 con cita / 0,667 / 51 comprobaciones / 21 aceptadas | Ejecución anterior de E15 | Recuento sobre `experiments/E15_suficiencia.json`: **27 / 15 / 0,556 / 63 / 27** | **INCORRECT** — el registro vigente da cifras peores para la subpregunta que la propia matriz llama «la más débil» |
 
-**Dato que reduce el riesgo:** las nueve decisiones son **idénticas para cualquier umbral en
-(0,5999, 0,9078]**, verificado. El resultado no depende del umbral; lo que no se sostiene es
-la frase.
+**Regla aplicada:** ninguna cifra se sustituye por una parecida. Las `STALE` se regeneran desde
+el registro que el autor declare canónico. Las `UNTRACEABLE` se registran (`RX-01`, `RX-03`) o
+se retiran del documento hasta tenerlo. La `INCORRECT` se corrige con la cifra del artefacto,
+sea cual sea, y se declara el cambio.
 
-**Corrección:** `AD` registrar el barrido como artefacto con criterio fechado, **o** declarar
-0,80 como elección de política y retirar «calibrados, no elegidos». **Riesgo:** bajo.
+**Causa raíz:** ninguno de los quince registros de `experiments/` contiene `commit`; catorce
+carecen de `executed_at`; faltan semilla en E12, E13 y E15 y versión de corpus en E15. La
+regla está escrita en tres documentos del proyecto y no se cumple. Sin cabecera de
+identificación, una sobrescritura es indetectable desde el artefacto. **La corrección de la
+causa raíz precede a la de los síntomas.**
 
-### P-08 · Solo se evalúan ventanas bien clasificadas · **diseño**
+---
 
-**Identificadores:** RAG-MAJ-010 · EXP-MAJ-015.
+## 5. P-02 · El oráculo, con precisión
 
-`sufficiency_runner.py:112` selecciona, por fallo, la primera ventana que el modelo clasifica
-correctamente. El escenario que la PI teme —diagnóstico erróneo, evidencia recuperada para el
-diagnóstico erróneo, explicación bien citada y falsa— **nunca se pone a prueba**. `cap4:143-147`
-declara la selección; ningún documento declara su consecuencia.
+### 5.1 Tres cosas que hay que distinguir
 
-**Corrección:** declarar la consecuencia en `cap4`, `cap5` y limitaciones; `AD` incluir en E19
-al menos un caso con diagnóstico incorrecto. **Riesgo:** medio; es una pregunta previsible del
-tribunal.
+| Concepto | Qué es | Dónde vive en este proyecto |
+|---|---|---|
+| `GROUND_TRUTH_LABEL` | La condición de fallo con que se generó la sesión y con que se anotó el caso | `fault_id` en `configs/goldset_mazda3_bk.yaml` y en la partición de validación |
+| `MODEL_OUTPUT` | La clase que el modelo de diagnóstico predice para la ventana | `modelo.predict(...)` en `sufficiency_runner.py`; **no interviene en E12** |
+| `RETRIEVAL_QUERY_INPUT` | Lo que se introduce en la consulta de recuperación | Texto de la consulta **más** los códigos de avería de `DIAGNOSTICO_A_DTC[...]` |
 
-### P-09 · Estado de las fases incoherente entre artefactos · **coherencia**
+### 5.2 Qué ocurre hoy
 
-**Identificadores:** TUTOR-MAJ-007 · TUTOR-MAJ-011 · EXP-MAJ-019.
+`retrieval_runner.py:170` resuelve los códigos con `DIAGNOSTICO_A_DTC.get(str(caso["fault_id"]))`.
+El `fault_id` es `GROUND_TRUTH_LABEL`. Por tanto **el `RETRIEVAL_QUERY_INPUT` contiene
+información derivada del ground truth**, y en E12 no interviene ningún `MODEL_OUTPUT`.
 
-`cap2:93-96` declara cerradas E8, E14 y E16 y ejecutada E17; ninguna tiene informe ni
-registro propio, y cuatro artefactos dan cuatro estados distintos. La matriz de trazabilidad y
-la cobertura de objetivos están congeladas el 1 de septiembre: doce fases figuran «pendiente»
-teniendo informe, y las columnas de resultados dicen «PENDING por diseño: no hay resultados».
+Lo mismo ocurre aguas abajo: `sufficiency_runner.py:166` pasa `expected_dtc` derivado del
+mismo `fault_id` a la verificación de soporte, de modo que la comprobación de si un fragmento
+sostiene una afirmación también consume la etiqueta.
 
-**Corrección:** unificar el estado de fases en un solo sitio y derivar los demás; regenerar
-matriz y cobertura; escribir el informe de E17 o declararlo integrado en E15. **Riesgo:** bajo.
+`cap4:255` dice «la condición predicha». `E12:93-99` niega expresamente que sea un oráculo.
+**Ambas afirmaciones son incorrectas y deben corregirse.**
 
-### P-10 · Referencias del vacío incompletas y afirmación sin cita · **referencias**
+### 5.3 Qué conclusión permite realmente el experimento
 
-**Identificadores:** TUTOR-MAJ-013 · REF-MAJ-001, REF-MAJ-002, REF-MAJ-011, REF-MAJ-012.
+Permitido: *«condicionada a un diagnóstico correcto, la recuperación guiada por los códigos
+que el manual asocia a ese diagnóstico encuentra el procedimiento relevante en el 100 % de los
+casos anotados, frente al 0 % de la recuperación semántica pura»*. Es un resultado real y
+fuerte sobre el **mecanismo de recuperación**: dice que en documentación técnica lo que une
+consulta y procedimiento es un identificador exacto, no la similitud semántica.
 
-- `cap3:213-218` afirma que existen trabajos sobre robustez de la recuperación a documentos
-  irrelevantes —el pasaje que estrecha el vacío de PI.4— **sin citar ninguno**, cuando las
-  cuatro obras que lo documentan están verificadas en el registro de búsqueda del proyecto y
-  no figuran en la bibliografía.
-- REF-049 y REF-106, las dos referencias del vacío, existen y el registro devuelve sus
-  metadatos completos, pero las entradas las identifican con título parafraseado o truncado,
-  «et al.» en el campo de autor y sin identificador.
-- REF-051 es la única de las 144 cuya existencia no se ha podido confirmar (actas no
-  consultadas). Queda `UNVERIFIED`, **no** «inventada».
-- Siete entradas de la bibliografía de depósito llevan marcadores pendientes.
+No permitido: cualquier lectura como rendimiento del sistema extremo a extremo, porque la
+cadena diagnóstico → consulta no está cerrada.
 
-**Contexto que conviene no perder:** cero referencias inexistentes, cero identificadores
-rotos, cero que resuelvan a otra obra y cero discrepancias de título, autor o publicación en
-las 137 fichas con registro externo. La norma con sanción de no apto no está incumplida.
+**Etiqueta propuesta:** `ORACLE-ASSISTED UPPER BOUND`, declarada en `cap4`, `cap5`, `E12`,
+`E15` y en el registro de limitaciones. Con esa etiqueta el experimento **se conserva**: mide
+lo que dice medir.
 
-**Corrección:** incorporar y citar las cuatro fuentes del vacío; completar REF-049 y REF-106;
-consultar las actas de REF-051 o retirarla; resolver los marcadores. `AD` APA 6.ª frente a
-7.ª. **Riesgo:** bajo en esfuerzo, alto en consecuencia normativa si no se cierra.
+**Matiz verificado que conviene conservar:** la verificación de soporte **discrimina sin el
+oráculo**. En C07, con los códigos esperados presentes en los fragmentos, rechaza las doce
+comprobaciones por falta de mención de la señal. El oráculo no es lo que separa las
+condiciones del experimento central.
 
-### P-11 · Trazabilidad documental incompleta y canal de procedencia incorrecto · **evidencia**
+### 5.4 Versión no oracular metodológicamente correcta (propuesta, no ejecutada)
 
-**Identificadores:** RAG-MAJ-014 · RAG-MAJ-015.
+```
+Para cada ventana de validación:
+  1. dtc_predicho = DIAGNOSTICO_A_DTC[ modelo.predict(ventana) ]      # MODEL_OUTPUT
+  2. consulta = texto_del_caso + dtc_predicho
+  3. recuperar; medir contra los documentos relevantes del fault_id REAL
+Reportar por separado:
+  - subconjunto con diagnóstico correcto  → debe reproducir la cota superior
+  - subconjunto con diagnóstico incorrecto → mide el coste del error aguas arriba
+  - agregado                               → rendimiento del sistema extremo a extremo
+```
 
-La evidencia serializada no conserva `source_file`, los fragmentos no están exportados y las
-ingestas viven solo en la base de datos no versionada: la cadena hasta el fichero de origen no
-se puede reconstruir desde los artefactos. Y toda cita lleva un `source_url` que apunta a un
-canal que el propio proyecto documenta como **no siendo** el de adquisición.
+Condición necesaria: el `GROUND_TRUTH_LABEL` solo puede usarse para **evaluar**, nunca para
+construir la consulta. Coste estimado: bajo, reutiliza el pipeline. Se enlaza con la opción B
+de P-08, con la que comparte casi toda la implementación.
 
-**Corrección:** añadir `source_file` a la serialización; exportar los fragmentos citados o
-versionar el registro de ingesta; corregir el `source_url` del manifiesto; `AD` decidir si se
-readquiere el manual por el canal oficial antes del depósito. **Riesgo:** medio.
+---
 
-### P-12 · Estructura UAX incompleta · **estructura**
+## 6. P-03 · Cobertura de la pregunta con la evidencia actual
 
-**Identificadores:** TUTOR-MAJ-008, TUTOR-MAJ-009, TUTOR-MAJ-012.
+| Dimensión de la PI | Evidencia actual | Cobertura |
+|---|---|---|
+| **Explicación** | E13: tres configuraciones sobre 9 casos; la ajustada produce 9/9 salidas válidas, 3 explicaciones con una observación y dos fragmentos por afirmación | 5 ventanas distintas, 4 fallos con condición completa; **suficiente para el mecanismo**, escasa para variabilidad |
+| **Trazabilidad** | E15: 27 afirmaciones, 63 comprobaciones, cobertura de soporte 1,00 en las cinco condiciones con evidencia; doble rama reconstruible a nivel de afirmación | Condicionada a diagnóstico correcto (P-08) y a códigos del ground truth (P-02); métrica de distancia invariante (P-05) |
+| **Abstención** | E15: 7 de 9 decisiones correctas; cobertura de explicación 3 de 5; contraste completo → ausente con confianza idéntica 0,9078 | **Un solo fallo** con las cuatro condiciones |
+| **Variabilidad entre fallos** | 4 fallos en condición completa (C01–C04) y 1 en las cuatro condiciones (C05–C09) | **Insuficiente** para afirmar propiedad general |
+| **Variabilidad entre ventanas** | 1 ventana por fallo, elegida como la primera bien clasificada | **Nula**: no hay réplica intra-fallo |
 
-El capítulo 6 no recorre OE1 → … → OE5 → OG con grado de cumplimiento, como exige la
-plantilla; no existe abstract ni palabras clave en inglés y hay siete palabras clave donde se
-piden cinco; el capítulo 4 no etiqueta paradigma, tipo ni alcance temporal, que la plantilla
-pide con esas palabras, y el ciclo de investigación en ciencias del diseño se usa sin decisión
-registrada que lo fije.
+### Opción A · Ampliar los experimentos
 
-**Corrección:** reescribir el capítulo 6 en el orden de la plantilla tras cerrar resultados;
-escribir abstract y recortar palabras clave; etiquetar el marco metodológico; registrar la
-decisión sobre el método. **Riesgo:** bajo, pero condiciona el gate de cumplimiento.
+Extender E17 a **tres fallos más** con las cuatro condiciones, y a **dos ventanas por fallo**.
 
-### P-13 · Afirmación de novedad contradicha por el propio registro · **evidencia**
+- Coste de implementación: anotar entre 12 y 24 casos nuevos en el conjunto anotado
+  (`relevant_files`, `exclude_dtc`, `distractor_files`, `expected_action`); el pipeline no
+  cambia. Estimación: media jornada de anotación más una ejecución.
+- Coste científico: ninguno negativo. Convierte «demostración de mecanismo» en «resultado con
+  variabilidad», que es lo que PI.3 y PI.4 necesitan para sostenerse como están escritas.
+- Riesgo: los casos nuevos pueden no reproducir el contraste. **Eso sería un resultado**, y
+  habría que publicarlo.
 
-**Identificador:** EVID-MAJ-016.
+### Opción B · Acotar las conclusiones
 
-`cap1:54-57` mantiene la afirmación de novedad sobre PI.4 que el registro de búsqueda y la
-limitación L-10 del propio proyecto declaran refutada. `cap3:214-219` sí lleva la corrección;
-`cap1` no.
+Reescribir cuatro pasajes (resumen, `cap5:203-212`, `cap6:17-23`, `matriz:187-196`) para decir
+lo que la evidencia sostiene: *«en el caso evaluado bajo las cuatro condiciones, la decisión
+cambia con la evidencia disponible; en tres de los cinco casos con evidencia completa el
+agente explica»*.
 
-**Corrección:** propagar a `cap1` la formulación estrecha que `cap3` ya usa. **Riesgo:** bajo.
+- Coste de implementación: bajo, cuatro pasajes.
+- Coste científico: la contribución pasa de «propiedad del sistema» a «demostración de
+  mecanismo sobre un caso». Sigue respondiendo a la PI, con alcance menor y honesto.
+- Riesgo: el tribunal puede preguntar por qué no se amplió, teniendo el pipeline hecho.
 
-## 3. Decisiones que corresponden al autor
+**No se decide aquí.** Recomendación en `07a_human_decisions.md`, decisión D-04.
 
-Ninguna la toma esta revisión. Ordenadas por lo que bloquean.
+---
 
-| # | Decisión | Bloquea | Origen |
+## 7. P-04 · El resultado canónico vigente
+
+| | Resultado antiguo (publicado) | Resultado corregido (registrado) |
+|---|---|---|
+| Experimento | E7, modelo temporal | E7, sensibilidad del propio informe |
+| Dataset | `synthetic_v2` | `synthetic_v3` |
+| Muestras de validación | 98 ventanas (12 sesiones, 2 por clase) | 343 ventanas (36 sesiones) |
+| Métrica | F1 macro | F1 macro |
+| Red recurrente | **0,823** | **0,9446** |
+| Bosque aleatorio | 0,8788 | 0,9321 |
+| Diferencia | −0,056 a favor del bosque | **+0,0125 a favor de la red** |
+| F1 del fallo de encendido, red | 0,500 | **0,9111** |
+| F1 del fallo de encendido, bosque | 0,6667 | 0,8602 |
+| Registro | `experiments/E7_temporal_synthetic_v2.json` | `experiments/E7_temporal_synthetic_v3.json` |
+
+`E7_modelo_temporal.md:88-101` declara «corregida» la conclusión anterior. `cap5:52-62`,
+`cap3:82-84`, `cap6:47-49` y la limitación L-15 conservan la lectura antigua.
+
+**Acción:** el documento final usa **únicamente el resultado canónico vigente**, que el autor
+debe declarar (decisión D-02). La afirmación anterior no se conserva por razones narrativas;
+si se conserva la comparación entre volúmenes de datos, se presenta como lo que es: el orden
+entre los dos modelos depende del número de sesiones, y con la evidencia disponible ninguna de
+las dos diferencias se ha establecido con réplicas. Estado estadístico: `INCONCLUSIVE`.
+
+---
+
+## 8. P-05 · Métricas verdaderas por construcción
+
+| Métrica | Por qué es invariante | Clasificación propuesta | Destino |
 |---|---|---|---|
-| 1 | **Extensión del TFM**: 12 550 palabras ≈ 31 páginas frente al mínimo de 60 páginas del curso vigente, con «no apto» aparejado; tres cifras oficiales incompatibles | el cronograma completo | tutor, `conflictos-uax.md` |
-| 2 | **Ejecución canónica** de E5, E6, E7 y E12; qué se hace con `synthetic_v1` y `synthetic_v3` | P-01, P-04 | los seis |
-| 3 | **Oráculo del código de avería**: declararlo como cota superior o sustituirlo y reejecutar E12 | P-02 | RAG, experimentos, tutor, evidencia |
-| 4 | **Alcance de PI.3 y PI.4**: acotar el n o extender E17 | P-03 | tutor, experimentos, evidencia |
-| 5 | **Umbral 0,80**: registrar el barrido con criterio fechado o declararlo política | P-07 | estadística, experimentos, tutor |
-| 6 | **Objetivos y título** con el director; los tres `[CONSENSUAR]` abiertos y el Anexo A | GATE-03, capítulo 2 | tutor |
-| 7 | **APA 6.ª frente a 7.ª**; metadatos de REF-049 y REF-106; consultar o retirar REF-051 | P-10, GATE-10 | referencias |
-| 8 | **Caso adverso con diagnóstico incorrecto** en E19 | P-08 | RAG, experimentos |
-| 9 | **M6**: criterio o descriptiva; **congelación del pre-registro** canónico | GATE-04 | tutor, experimentos |
-| 10 | **Convocatoria** y **declaración del uso de herramientas de asistencia** registradas en `research/available-skills.md` | depósito | tutor |
-| 11 | **Re-adquisición del manual** por el canal oficial antes del depósito | P-11 | RAG |
-| 12 | **Distancia completitud/soporte**: propiedad de diseño o brazo con citas generadas | P-05 | RAG, evidencia |
+| «Distancia entre completitud de citación y tasa de soporte = 0» (`cap5:207`) | `assembly.py:176-185`: una afirmación recibe cita solo si pasa la verificación, y se marca sostenida si y solo si tiene cita. La diferencia no puede ser distinta de cero | `INVARIANT` | **Sale de resultados principales.** Pasa a `cap4` como propiedad del diseño del verificador |
+| «0 documentos aplicables» en la condición sin evidencia (`cap5:144-145`) | La condición retira los fragmentos con los mismos códigos con que la búsqueda va acotada | `SANITY_CHECK` | **Permanece como control**, declarado como tal: prueba que la exclusión funciona, no que el sistema reaccione |
+| Cobertura de soporte 1,00 en las condiciones con evidencia | **No** es invariante: en C07, C08 y C09 la cobertura es 0,00 con documentos aplicables delante | resultado real | **Permanece en resultados** |
+| M4 descrita en `cap4:222-225` como calculada de forma determinista | No está implementada; E14 no se ha ejecutado | `PENDING` | **Validación de implementación**: o se implementa y se ejecuta, o `cap4` deja de describirla como calculada |
 
-## 4. Conflictos entre auditorías
+La lectura que sí sobrevive, y que conviene conservar: el sistema **responde a la pertinencia
+y no a la presencia**, porque en PARTIAL y DISTRACTOR hay cuatro documentos aplicables delante
+y la cobertura es 0,00. Eso no es invariante: es el resultado.
 
-| ID | Skill A | Skill B | Discrepancia | Decisión |
+---
+
+## 9. P-06 · Radio de impacto de los tres defectos
+
+### Defecto A · El signo de la atribución se convierte en aserción sobre el vehículo
+
+| Campo | Contenido |
+|---|---|
+| **Bug** | `assembly.py:155-160` construye el texto con `sentido = "por encima" if obs.direction == "increases" else "por debajo"`, y `obs.direction` procede del **signo del valor SHAP** (`attribution.py`: «Su signo es la dirección»). El texto resultante afirma que la señal está por encima o por debajo de lo esperable, e imprime a continuación `obs.value`, que es el valor del descriptor y puede tener el signo contrario |
+| **Impacto** | Confunde «contribuye positivamente a la predicción» con «la señal es alta». Contradice `docs/methodology/evidence-model.md:42-45`, escrito por el propio proyecto |
+| **Artefactos afectados** | `experiments/E15_suficiencia.json` (textos de afirmación), `experiments/E13_agente_*.json` (los textos entran en el prompt y en la salida), `tables/E15_suficiencia.csv` |
+| **Métricas afectadas** | Cobertura de soporte y tasa de aceptación de citas: una afirmación con texto incorrecto se contabiliza como sostenida |
+| **Resultados publicados afectados** | `cap5:109-113` y `cap5:206-207` (cobertura 1,00 y la lectura de PI.2); los ejemplos de texto de `cap5:164-194` |
+| **Ejemplo verificado** | C02, `OBS003`: `value: -1.496284`, `direction: "increases"` → «se sitúa **por encima** de lo esperable, con valor **−1,496**» |
+| **Corrección** | Separar las dos nociones: el texto debe decir que el descriptor **contribuye** al diagnóstico en una dirección, y reservar «por encima/por debajo» para cuando se compare con un valor de referencia que el sistema tenga. Alternativa mínima: usar el signo de `obs.value` para el sentido y el signo SHAP para la contribución, en dos frases distintas |
+| **Tests de regresión** | Uno que construya una observación con `value` negativo y `direction: increases` y compruebe que el texto no afirma «por encima»; uno que compruebe que el texto de la afirmación no contradice el signo del valor que cita |
+| **Experimentos a reejecutar** | `RX-01` (E15) y, en cascada, `RX-02` (E13, porque los textos entran en el prompt) |
+
+### Defecto B · El respeto al veredicto se computa sobre salidas que no existen
+
+| Campo | Contenido |
+|---|---|
+| **Bug** | `agent.py:110` inicializa `respected_verdict: bool = True`; `agent.py:251` lo actualiza **solo** cuando la salida se ha podido interpretar. Si el esquema falla, el campo conserva `True` |
+| **Impacto** | El recuento publicado «respeta el veredicto 9/9» se calcula sobre 7 salidas reales en dos de las tres configuraciones; en los dos casos sin salida no hay veredicto que respetar y se cuentan como respetados |
+| **Artefactos afectados** | `experiments/E13_agente_transformers.json`, `..._transformers-lora.json`, `..._transformers-lora@slm_lora_v2.json` y los dos `*_esquema_v1.json` |
+| **Métricas afectadas** | «Respeta el veredicto» en las tres configuraciones |
+| **Resultados publicados afectados** | `cap5:172-176` (tabla de las tres configuraciones), `E13_agente_slm.md:199-209` y `:246-249` |
+| **Corrección** | El campo pasa a tres estados —respetado, no respetado, sin salida— o se inicializa a `False` y se reporta el denominador real. La tabla publica «respeta el veredicto: n de m salidas válidas» |
+| **Tests de regresión** | Uno que fuerce un fallo de esquema y compruebe que el campo no queda en `True`; uno que compruebe que el denominador publicado coincide con el número de salidas válidas |
+| **Experimentos a reejecutar** | `RX-02` (E13). No exige reentrenar: los adaptadores no cambian |
+
+### Defecto C · Selección de época sobre la partición que se reporta
+
+| Campo | Contenido |
+|---|---|
+| **Bug** | No es un error de código: `training.py:156-166` restaura la época con mejor F1 macro **de validación**, y la cifra reportada es la F1 macro sobre esa misma validación. El bosque no selecciona nada. La comparación es asimétrica y no está declarada |
+| **Impacto** | La cifra de la red recurrente es el máximo de entre 60 a 74 evaluaciones sobre el conjunto que se reporta |
+| **Artefactos afectados** | `experiments/E7_temporal_synthetic_v{2,3}.json` (`best_epoch` 19 y 33) |
+| **Métricas afectadas** | F1 macro de la red recurrente en validación |
+| **Resultados publicados afectados** | `cap5:52-62`; se cruza con P-04 |
+| **Dirección del sesgo** | Favorece a la red recurrente. En `synthetic_v2` pierde **a pesar** del sesgo: el resultado negativo es conservador. En `synthetic_v3` gana por 0,0125, margen inferior al sesgo plausible: `INCONCLUSIVE` |
+| **Corrección** | Declarar el mecanismo y su dirección en `cap4` y en `E7`. Para sostener cualquier orden entre modelos: selección de época sobre partición interna de entrenamiento y evaluación final sobre test |
+| **Tests de regresión** | Ninguno necesario: no es un defecto de implementación |
+| **Experimentos a reejecutar** | Ninguno para declarar. Si el autor quiere sostener un orden: reanálisis descrito en `07b`, `RX-05` (opcional) |
+
+---
+
+## 10. P-07 · El umbral, con precisión
+
+| Pregunta | Respuesta verificada |
+|---|---|
+| ¿Qué umbral existe? | `min_confidence = 0.80` en `src/mecanico_ia_exp/abstention/sufficiency.py:62`. Los otros cinco umbrales del criterio no tienen calibración |
+| ¿Dónde se definió? | En el propio valor por defecto de la clase, con un docstring que contiene la tabla del barrido |
+| ¿Con qué datos? | 98 ventanas de la partición de **validación** de `synthetic_v2` |
+| ¿En qué partición? | Validación. **El test no se usó**: `load_partition("test")` lanza excepción y ningún ejecutor la abre. Verificado |
+| ¿Con qué criterio? | «El umbral más bajo con precisión ≥ 0,93». El criterio **no consta en ningún documento anterior al barrido** |
+| ¿Registro del barrido? | **No existe.** La tabla vive en el docstring y en el informe de fase; no hay script ni artefacto |
+| ¿Acoplamiento? | El barrido corre sobre la misma partición de la que `sufficiency_runner.py:110-116` extrae los nueve casos evaluados |
+
+**Conclusión honesta:** con la evidencia disponible, el umbral está **definido
+heurísticamente**, no calibrado. La frase «los umbrales están calibrados, no elegidos»
+(`cap5:123-125`, `E15:213-227`) no puede mantenerse tal como está.
+
+**Dato que acota el riesgo, verificado:** las nueve decisiones de E15 son idénticas para
+cualquier umbral en el intervalo (0,5999, 0,9078]. El resultado del experimento **no depende
+del umbral**. Lo que no se sostiene es la palabra «calibrado».
+
+**Procedimiento correcto si se quiere calibrar (propuesto, no ejecutado):** `RX-04` en `07b`.
+Condiciones innegociables: criterio escrito y fechado **antes** de leer la tabla; barrido
+registrado como artefacto con precisión y cobertura por ventana **y por sesión**; **nunca usar
+el conjunto de test** para seleccionar el umbral.
+
+---
+
+## 11. P-08 · El escenario adverso
+
+`sufficiency_runner.py:110-119` selecciona, por fallo, la primera ventana de validación que el
+modelo clasifica correctamente. Lo mismo hacen `xai_runner.py:50-56` y `training_runner.py:71-78`.
+
+La pregunta que la evidencia actual responde es: *¿puede explicar y abstenerse **cuando el
+diagnóstico de entrada es correcto**?* La que no responde: *¿qué ocurre cuando el modelo se
+equivoca y el sistema recupera evidencia coherente con el diagnóstico equivocado?* Ese es el
+caso que produce una explicación bien citada y falsa, que es el fallo que el trabajo estudia.
+
+### Opción A · Alcance acotado
+
+Declarar que el trabajo estudia **explicación y abstención condicionadas a un diagnóstico
+especializado correcto**, en `cap4`, `cap5`, `cap6` y en el registro de limitaciones.
+
+- Esfuerzo: bajo. Cuatro declaraciones.
+- Valor científico: conserva lo demostrado y delimita honestamente. La contribución sigue
+  siendo válida: la trazabilidad y la abstención se miden sobre la evidencia documental, que
+  es donde se manipula la variable.
+- Efecto sobre la PI: la respuesta queda condicionada; PI.2, PI.3 y PI.4 se responden dentro
+  de esa condición.
+
+### Opción B · Experimento adverso
+
+Seleccionar ventanas **mal clasificadas** por el modelo y comprobar si la recuperación y el
+verificador impiden construir una explicación aparentemente respaldada alrededor del
+diagnóstico equivocado.
+
+- Esfuerzo: medio. La selección se invierte en una línea; hay que anotar qué se espera para
+  cada caso adverso (probablemente abstención por baja confianza o por cobertura) y decidir el
+  criterio de éxito **antes** de ejecutar.
+- Valor científico: **alto**. Es el experimento que convierte la pregunta en falsable en su
+  parte más difícil, y el que un tribunal pedirá.
+- Efecto sobre la PI: responde a la pregunta en su formulación completa, sin condición.
+- Riesgo declarado: es plausible que el sistema **falle** en ese escenario. Sería un resultado
+  publicable y coherente con el trabajo.
+- Sinergia: comparte casi toda la implementación con la versión no oracular de P-02 (§5.4).
+
+**No se decide aquí.** Decisión D-08.
+
+---
+
+## 12. P-09 · Fuente única de verdad del estado de fases
+
+Hoy conviven cuatro: `docs/experiments/README.md`, `docs/plan_experimental_macbook.md`,
+`research/traceability-matrix.md` y `research/objective-coverage.md`, más lo que declara
+`cap2:93-96`. Dan hasta cuatro estados distintos para la misma fase.
+
+**Propuesta:** el estado se **deriva de los artefactos**, no se mantiene a mano.
+
+```
+estado(fase) = f(informe en docs/experiments/, registro en experiments/, tests que la cubren)
+  cerrada    : informe + registro + tests en verde
+  ejecutada  : registro sin informe propio         → se declara dónde se documenta
+  pendiente  : ni informe ni registro
+  bloqueada  : declarada así en un ADR o en una decisión abierta
+```
+
+Un script en `scripts/` genera una tabla y la escribe en un fichero marcado como **vista
+generada, no editable a mano**. `README.md`, el plan, la matriz y la cobertura pasan a
+incluir esa vista en lugar de mantener su propia copia. El gate de calidad comprueba que la
+vista está al día.
+
+Coste: bajo. Evita que las cuatro fuentes vuelvan a divergir mañana, que es la objeción
+correcta del autor a una corrección manual.
+
+---
+
+## 13. P-10 y P-13 · Vacío y novedad, tratados juntos
+
+**Regla que se adopta:** ninguna afirmación de novedad absoluta. La forma admitida es
+*«en los trabajos analizados no se identificó…»*, y **cada afirmación del vacío debe llevar la
+evidencia de la revisión que la sostiene**. La integración tecnológica no cuenta como novedad
+científica: que el sistema combine recuperación, verificación y abstención no es, por sí
+mismo, una contribución.
+
+| Dónde | Qué dice hoy | Qué dice el registro propio | Acción |
+|---|---|---|---|
+| `cap1:54-57` | Afirmación de novedad sobre PI.4 | L-10 y el registro de búsqueda declaran la hipótesis de vacío **refutada**: la capacidad está estudiada, con banco público y vocabulario establecido | Propagar a `cap1` la formulación estrecha que `cap3:214-219` ya usa |
+| `cap3:213-218` | «Existen trabajos sobre robustez de la recuperación a documentos irrelevantes en dominios generales» | Cuatro obras verificadas en el registro de búsqueda, **ninguna citada ni en la bibliografía** | Incorporarlas a la lista maestra y a la bibliografía, y citarlas en ese pasaje |
+| Bibliografía | REF-049 y REF-106, las dos referencias del vacío, con título parafraseado o truncado, «et al.» por autores y sin identificador | Los registros externos devuelven los metadatos completos | Completar; decisión D-07 |
+| Lista maestra | REF-051 sin título de obra ni identificador; no localizada en los registros consultados | Actas no consultadas | Consultar la fuente o retirarla. **No se declara inventada** |
+
+La formulación del vacío que sí se sostiene, y que conviene conservar, es la estrecha: en los
+trabajos analizados no se identificó una evaluación del rechazo de evidencia no pertinente en
+diagnóstico vehicular a partir de telemetría, con verificación a nivel de afirmación
+individual, doble rama de evidencia y la abstención tratada como salida medida.
+
+---
+
+## 14. P-11 · Cadena de procedencia
+
+**Cadena esperada:**
+
+```
+claim → chunk → document → document_version → source file → hash → acquisition source
+```
+
+**Dónde termina hoy:** la serialización de la evidencia documental
+(`evidence/model.py:127-140`) conserva `chunk_id`, `document_id`, `vehicle_id`, `score`,
+`applicability`, `authority_level`, `document_type`, `publisher`, `section`, `page_start` y
+`page_end`. **No conserva `source_file`.** Los fragmentos no están exportados
+(`corpus/vehicles/mazda-3-bk-2007/chunks/` está vacío) y los registros de ingesta viven en la
+base de datos, que no está versionada. La cadena se corta en `document`.
+
+**Modificación propuesta:** añadir `source_file` y `document_version_id` a la serialización;
+exportar los fragmentos citados por los casos anotados, o versionar el registro de ingesta con
+su hash; declarar en `cap4` dónde termina la cadena y por qué (el binario del manual no se
+redistribuye).
+
+**Editor frente a canal de adquisición.** El manifiesto ya los distingue:
+`publisher: Mazda Motor Corporation`, `acquisition_source: copia local del autor, origen web
+de terceros`, `acquisition_channel: SECONDARY_REPOSITORY`. Pero el mismo bloque declara
+`source_url: https://www.mazdatechinfo.com/`, el portal oficial del fabricante, que **no es**
+el canal por el que se adquirió. Toda cita hereda esa URL.
+
+**Corrección:** `source_url` debe describir el canal real de adquisición o quedar vacío con la
+razón; el portal oficial puede figurar como `publisher_url`, claramente separado. No se
+atribuye al fabricante una URL que no es la de origen del ejemplar utilizado.
+
+---
+
+## 15. P-12 · Estructura y extensión, sin relleno
+
+**Regla:** no se escribe texto para alcanzar una cifra. Primero se identifica qué contenido
+académico falta, y la extensión es su consecuencia.
+
+### Contenido académico que falta de verdad
+
+| Elemento | Estado | Por qué falta |
+|---|---|---|
+| Abstract y palabras clave en inglés | **ausente** | La plantilla lo exige |
+| Palabras clave en español | 7 donde se piden 5 | |
+| Justificación **personal** (cap. 1) | ausente | La plantilla la pide expresamente |
+| Recorrido OE1 → … → OE5 → OG en conclusiones | ausente | La plantilla fija ese orden y el grado de cumplimiento por objetivo |
+| Etiquetado de paradigma, tipo y alcance temporal (cap. 4) | ausente | La plantilla lo pide con esas palabras |
+| Decisión registrada sobre el método de investigación | ausente | Se usa el ciclo de ciencias del diseño sin ADR que lo fije |
+| Detalle experimental por fase en la memoria | disperso en `docs/experiments/` | El capítulo 4 resume; el detalle reproducible debería estar en anexo |
+| Discusión frente a los trabajos revisados | mínima | El capítulo 5 discute resultados propios, no los compara con los trabajos del capítulo 3 |
+| Anexo A: objetivos aprobados ↔ reformulados | ausente | Comprometido por el propio proyecto |
+| Anexo de reproducibilidad | ausente | Permitido y útil |
+
+### Proyección honesta de extensión
+
+| Capítulo | Palabras hoy | Falta por incorporar | Proyección | Recomendado por la plantilla |
 |---|---|---|---|---|
-| CONFLICT-01 | estadística (`STAT-MAJ-007`, MAJOR) | RAG (mismo hecho, MINOR) | Severidad del umbral sin procedencia. El evaluador RAG lo baja porque `cap5:3-5` declara que todas las cifras son de validación | Se conserva **MAJOR**: la frase «calibrados, no elegidos» es la que no se sostiene, y vive en la memoria. Ambas lecturas quedan registradas |
-| CONFLICT-02 | evidencia (`STAT-MIN-013` elevado a MAJOR) | estadística (MINOR) | Gravedad de las cifras obsoletas de la matriz | Se trata dentro de **P-01**, con la severidad más alta |
-| CONFLICT-03 | encargo §3 | sistema de ficheros | `Tfm-tutor` no existe; `tfm-defense-coach` sí (instalado durante la revisión) | Orquestación asumida por esta revisión; la fase 5 usará el coach |
+| Resumen y abstract | 331 | abstract, keywords, recorte a 300 | ≈ 700 | — |
+| 1 Introducción | 1 278 | justificación personal, contexto | 2 000–2 500 | 5–10 pág. |
+| 2 Objetivos | 924 | correspondencia con lo aprobado | 1 000–1 200 | 1–3 pág. |
+| 3 Marco teórico | 2 365 | dos apartados marcados, cuatro fuentes del vacío, síntesis comparativa | 5 000–6 500 | 10–20 pág. |
+| 4 Marco metodológico | 2 984 | etiquetado, procedencia, declaraciones de condición, análisis | 4 500–5 500 | 5–15 pág. |
+| 5 Resultados y discusión | 1 948 | cifras corregidas, discusión frente a los trabajos revisados | 4 000–5 000 | 5–15 pág. |
+| 6 Conclusiones | 1 284 | recorrido por objetivos, consideraciones finales | 2 500–3 000 | 5–10 pág. |
+| Bibliografía | 1 076 | referencias nuevas | 1 400 | — |
+| Anexos | 0 | A objetivos, B reproducibilidad, C fichas de experimento | 3 000–5 000 | ≤ 20 % |
+| **Total** | **12 550** | | **24 000–31 000** | ≈ 60–78 páginas |
 
-Ninguno afecta a la pregunta de investigación, la metodología, las hipótesis, los resultados
-ni las conclusiones. Ninguno requiere decisión humana previa a la corrección.
+Con contenido real, el documento llega a unas 60–78 páginas sin relleno. **Queda por debajo de
+las 50 000 palabras** que la nota al pie de la plantilla menciona, y esa contradicción entre
+documentos oficiales es la decisión D-01. La proyección no incluye ninguna página escrita para
+cubrir expediente.
 
-## 5. Lo que se conserva sin tocar (PRESERVE)
+---
 
-Con motivo, según el tutor y las auditorías especializadas:
+## 16. Prioridad del plan
 
-- `cap4:26-114` población y muestra, `cap4:116-139` corpus, `cap4:174-201` variables e
-  instrumentos: coinciden con sus registros y con el diseño ejecutado.
-- `cap5:121-162` y `cap5:164-194` (suficiencia y modelo de lenguaje): coinciden con
-  `E15_suficiencia.json` y `E13_agente_*.json` campo a campo.
-- `cap1:101-111`: la advertencia de procedencia sintética, repetida y correcta.
-- `cap5:47-50`: el marcador `[RECONCILIAR]`, que es el proyecto detectando su propio problema.
-- `cap6:32-101`: las diecisiete limitaciones, todas con evidencia y ninguna ceremonial.
-- `docs/methodology/` completo.
-- `configs/goldset_mazda3_bk.yaml` con `tests/test_retrieval_eval.py:195-207`.
+Se adopta el orden propuesto por el autor, con una precisión dentro del grupo 1.
 
-## 6. Fortalezas verificadas que la corrección no debe dañar
+| Grupo | Contenido | Justificación |
+|---|---|---|
+| **1 · Integridad del instrumento** | **P-06**, P-05, P-07 | Ninguna cifra debe regenerarse antes de que el instrumento que la produce sea correcto: si se regeneran las tablas y luego se corrige la plantilla de afirmaciones, hay que regenerarlas dos veces. **Precisión:** dentro del grupo 1, la causa raíz de P-01 —la cabecera de identificación de los registros— se implementa **aquí**, no en el grupo 3, porque `RX-01` y `RX-02` deben escribir ya registros identificables |
+| **2 · Validez experimental** | P-02, P-03, P-08 | Declarar condiciones y decidir alcance antes de tocar la redacción de resultados |
+| **3 · Integridad de resultados** | P-01, P-04, P-09 | Ya con el instrumento corregido y las condiciones declaradas, se regeneran las cifras desde los registros canónicos |
+| **4 · Evidencia científica** | P-10, P-11, P-13 | |
+| **5 · Documento UAX** | P-12 | Al final, cuando el contenido está fijado |
 
-Sesenta y cinco entre las seis auditorías. Las que un tribunal reconocería:
+Justificación del único cambio: mover la cabecera de identificación de registros del grupo 3 al
+grupo 1 evita reejecutar dos veces y hace auditable cada reejecución desde la primera.
 
-- **El contraste central funciona y está bien construido.** En `tables/E15_suficiencia.csv`,
-  C05 a C09 comparten caso, ventana y confianza calibrada 0,9078, y solo cambia el corpus. En
-  PARTIAL y DISTRACTOR hay cuatro documentos aplicables delante y la cobertura es 0,00: el
-  sistema responde a la **pertinencia**, no a la presencia.
-- **La verificación de soporte discrimina sin el oráculo:** en C07 rechaza las doce
-  comprobaciones por falta de mención de la señal aunque los fragmentos llevan el código
-  esperado.
-- **Cero citas inexistentes** en 63 ejecuciones verificadas contra el contexto entregado, y la
-  barrera se comprueba fuera del modelo.
-- **El auditor de particiones se prueba provocando la fuga**; el test está cerrado por código
-  y ningún ejecutor lo abre.
-- **La condición ABSENT se auditó y estaba mal construida** (16 fragmentos frente a 70): se
-  rehízo por código y la lectura correcta está escrita.
-- **Trece resultados negativos conservados** con su consecuencia; una afirmación falsa tachada
-  en cuatro informes en lugar de borrada; una fase cerrada con el corpus vacío y declarada así.
-- **Ninguna afirmación de significación estadística en todo el corpus documental**, y ninguna
-  prueba ritual: los doce análisis obtienen `NO_TEST_NEEDED` con razón.
-- **Cero referencias inexistentes y cero identificadores rotos** en las 137 fichas con registro
-  externo.
-- **PostgreSQL con pgvector se presenta como instrumento**, no como contribución (`cap4:16`,
-  `cap4:249-253`).
-- **Ningún resultado sintético se presenta como comportamiento en vehículo real**: declarado
-  en `cap5:3-8`, `cap6:25-30` y `matriz:199-206`.
-- **De los doce claims críticos, cinco sostenidos y siete parcialmente sostenidos**; ninguno
-  sin sostener, contradicho ni inverificable.
+---
 
-## 7. Orden de ejecución propuesto para la segunda pasada
+## 17. Protección de las fortalezas
 
-Si el autor aprueba, y respetando `PRESERVE > PATCH > REWRITE`:
+Las 65 fortalezas verificadas quedan protegidas. Se aplica `PRESERVE > PATCH > REWRITE`. La
+lista de qué fortaleza podría verse afectada por cada corrección está en
+`07c_claim_impact_matrix.md` §3. Resumen de las que exigen cuidado:
 
-1. **Registros y ejecución canónica** (P-01, causa raíz EXP-MAJ-013): cabecera de tracking,
-   decisión de ejecución canónica, regeneración de tablas desde los registros.
-2. **Defectos de instrumento** (P-06): signo en la plantilla, respeto al veredicto,
-   asimetría de selección de época.
-3. **Declaraciones de diseño** (P-02, P-05, P-08): oráculo, métricas por construcción,
-   selección de ventanas correctas.
-4. **Alcance de las afirmaciones** (P-03, P-04, P-13): n de las condiciones, corrección de
-   E7, novedad de PI.4.
-5. **Estadística** (P-07): umbral.
-6. **Referencias** (P-10).
-7. **Coherencia de estado** (P-09) y **estructura UAX** (P-12).
+| Corrección | Fortaleza en riesgo | Cómo se protege |
+|---|---|---|
+| P-06A, plantilla de afirmaciones | «Las afirmaciones no atribuyen causa» y el rechazo de frases causales | El cambio afecta al sentido de la magnitud, no a la prohibición de causalidad. El test de frases causales se conserva intacto |
+| P-01, regeneración de tablas | «Trece resultados negativos conservados» | Se regeneran también los negativos; ninguno se retira |
+| P-03 opción B, acotar | «Refutadores enumerados de antemano» | Acotar el alcance no toca la lista de desenlaces que refutarían la pregunta |
+| P-05, sacar la distancia de resultados | «Doble trazabilidad verificada a nivel de afirmación» | La doble trazabilidad se sostiene con la cobertura, que no es invariante |
+| P-12, ampliar capítulos | «Ninguna afirmación de significación estadística» y «cero adjetivación vacía» | El texto nuevo pasa por las mismas reglas; la autenticidad se audita después |
 
-Después: STOP GATE 2 con las seis auditorías repetidas, y solo entonces autenticidad, jurado
-y defensa.
+Ninguna corrección exige reescritura general. Las secciones marcadas `PRESERVE` en
+`01_tutor_findings.md` no se tocan.
+
+---
+
+## 18. Lo que no se hace en esta fase
+
+No se modifica la memoria, no se cambian resultados ni umbrales, no se reentrena, no se
+reescriben capítulos, no se ejecutan experimentos, no se humaniza, no se ejecuta el jurado
+final ni el entrenamiento de defensa. Nada de lo anterior está en marcha.
+
+---
+
+`CORRECTIONS READY FOR REVIEW`
