@@ -51,7 +51,7 @@ identificadores, como prescriben los propios skills.
 | `tfm-reference-auditor` | sí | `.claude/skills/tfm-reference-auditor/` | 10 workflows, 7 templates, 11 references, 8 scripts (inventario, citas, bib, duplicados, comparación, identificadores) |
 | `tfm-writing-authenticity-auditor` | sí | `.claude/skills/tfm-writing-authenticity-auditor/` | 14 workflows, 9 templates, 11 references, 11 scripts (estadísticas de texto, n-gramas, similitud interna, snapshot de integridad, limpieza de marcas) |
 | `uax-tfm-ai-jury` | sí | `.claude/skills/uax-tfm-ai-jury/` | 12 workflows, 9 templates, 12 references, `question_bank.py` |
-| `tfm-defense-coach` | **no existe** | — | `uax-tfm-ai-jury` declara que «no entrena (eso es `tfm-defense-coach`)» pero produce el banco, las diez letales y el pack de preparación. La fase de defensa se cubrirá con el jurado y se declarará la ausencia del coach. `[AUTHOR_DECISION_REQUIRED]` |
+| `tfm-defense-coach` | sí (instalado durante esta revisión, 3-09-2026) | `.claude/skills/tfm-defense-coach/` | SKILL, workflows, references, rubrics, templates, scripts, tests. Entrena la defensa oral (ANSWER → EVIDENCE → LIMITATION), consume los handoffs del jurado, del tutor y de los auditores, y emite NOT_READY / LEARNING / READY_WITH_GAPS / DEFENSE_READY |
 | `uax-tfm-ai-researcher` | sí (productor) | `.claude/skills/uax-tfm-ai-researcher/` | 15 workflows, 12 templates, 35 references, 7 scripts. Es el único que **escribe**; los demás son read-only |
 
 Todos los SKILL.md se leyeron íntegros; los workflows y referencias de cada skill los lee el
@@ -90,12 +90,12 @@ agente que lo ejecuta antes de empezar.
 
 | ID | Skill A | Skill B | Contradicción | Impacto | Decisión propuesta |
 |---|---|---|---|---|---|
-| CONFLICT-SK-01 | encargo (§3) | filesystem | Pide `Tfm-tutor` y `tfm-defense-coach`; no existen | orquestación y fase de defensa | orquestación asumida por esta revisión; defensa con `uax-tfm-ai-jury` (banco, letales, pack). `[AUTHOR_DECISION_REQUIRED]` |
+| CONFLICT-SK-01 | encargo (§3) | filesystem | Pide `Tfm-tutor`, que no existe como skill. `tfm-defense-coach` sí existe (instalado el 3-09-2026, después de la fase 1) | orquestación | la orquestación transversal la asume esta revisión; la fase 5 usará `tfm-defense-coach` tal como pide el encargo |
 | CONFLICT-SK-02 | tutor `TUTOR-DRY-RUN-01` | tutor `TUTOR-REPORT-20260903` | Ambos usan `TUTOR-MAJ-001`, `TUTOR-MIN-00x` para hallazgos distintos (colisión de IDs) | conciliación con `finding_ledger.py` | el tutor en revisión completa declara la colisión y numera a partir del último ID global; no se renumera el pasado |
 | CONFLICT-SK-03 | encargo (§28) | suite | Escalas de severidad: BLOCKER/MAJOR/MODERATE/MINOR/COSMETIC frente a CRITICAL/MAJOR/MINOR/INFO | consolidación | mapeo fijo CRITICAL→BLOCKER, MAJOR→MAJOR, MINOR→MODERATE, INFO→MINOR (COSMETIC si es puro formato); se conserva la severidad original en cada informe |
 | CONFLICT-SK-04 | encargo (§24, voz Philip K. Dick) | researcher `voice-philip-k-moderate.md` | Coinciden en rasgos; el researcher además impone intensidad por sección (cap. 2, 4 y 5 en 0–1) y precondición de gate académico | humanización | se sigue el researcher: solo tras el gate académico y con intensidad por sección |
 | CONFLICT-SK-05 | researcher `academic-writing.md` | encargo (§21) | Ambos prohíben «la literatura»; el researcher además prohíbe «no existe» y las siglas del máster | redacción | sin conflicto real; se aplican ambas |
-| CONFLICT-SK-06 | jury SKILL.md | filesystem | El jury remite el entrenamiento a `tfm-defense-coach`, inexistente | fase 5 (defensa) | ver CONFLICT-SK-01 |
+| CONFLICT-SK-06 | jury SKILL.md | filesystem | *Resuelto*: el jury remite el entrenamiento a `tfm-defense-coach`, que ya está instalado | fase 5 (defensa) | sin conflicto |
 
 Ninguna contradicción afecta a la PI, la metodología, las hipótesis, los resultados ni las
 conclusiones; ninguna requiere decisión humana antes de la fase de auditoría.
@@ -147,9 +147,19 @@ falsos positivos por citas compuestas; `word_count.py` 12 336 palabras.
 | `02_rag_findings.md` | RAG, evidencia documental, abstención | `tfm-rag-evaluator` |
 | `03_experiment_findings.md` | diseño, datos, fugas, reproducibilidad, clasificación de experimentos | `tfm-experiment-auditor` |
 | `04_evidence_findings.md` | claims ↔ evidencia, cifras, conclusiones | `tfm-evidence-verifier` |
-| `05_statistics_findings.md` | unidades, N, incertidumbre, umbrales | `tfm-statistical-reviewer` |
+| `05_statistics_findings.md` | unidades, N, incertidumbre, umbrales | `tfm-statistical-reviewer` — **entregado**: `BLOCKED`, 5 MAJOR, 0 CRITICAL |
 | `06_reference_findings.md` | existencia, metadatos, citas, APA | `tfm-reference-auditor` |
 | `07_correction_plan.md` | plan consolidado por prioridad, conflictos entre skills | orquestador |
 | `08_authenticity_findings.md`, `09_jury_report.md`, `10_defense_report.md`, `11_final_quality_report.md` | **no se producen en esta pasada** (STOP GATE 1) | — |
 
 Informes completos de cada skill en `TFM/<skill>-reports/`, fuera del repositorio.
+
+
+## 5. Nota de ejecución
+
+La primera tanda de auditorías (6 en paralelo) se interrumpió por agotamiento de cuota del
+servicio de inferencia antes de escribir sus informes. Sobrevivieron dos productos completos:
+`statistical-reports/STATISTICAL-REVIEW-20260903.md` y la actualización de
+`reference-reports/verification-register.json` (172 entradas). Las auditorías restantes se
+relanzaron en tandas de tres. Este incidente no afecta a la evidencia: cada auditoría vuelve
+a leer los artefactos del repositorio.
