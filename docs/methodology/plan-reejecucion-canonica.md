@@ -60,15 +60,24 @@ Sobre la **unidad primaria fijada: la ventana de origen, N = 5, y N = 3 para con
 condiciones.** Los recuentos de 17 decisiones y 14 configuraciones acompañan como descriptivos,
 nunca solos.
 
-| Magnitud | Antes | Después |
+**Solo entran en la columna «antes» magnitudes con artefacto congelado y reconstruible**, como
+exige `ENM-S02` §S-10.
+
+| Magnitud | Antes, con artefacto congelado | Después |
 |---|---|---|
 | Decisiones correctas, recuento descriptivo | 15 de 17 ejecuciones, de 5 ventanas | por medir |
-| Línea base `ALWAYS_ABSTAIN`, **obligatoria** | 12/17 | por medir |
-| Techo alcanzable | 15/17 | por medir |
-| Cobertura de explicación con evidencia completa | 3/5 | por medir |
+| Línea base `ALWAYS_ABSTAIN`, **obligatoria** | 12 de 17 | por medir |
+| Techo alcanzable | 15 de 17 | por medir |
+| Cobertura de explicación con evidencia completa | 3 de 5 | por medir |
 | Explicaciones sin soporte suficiente | 0 | por medir |
 | Posiciones duplicadas por mezcla de espacios | **27 de 140** en 10 de 14 | **0 esperado** |
-| Recuperación E12, las cuatro estrategias | tabla vigente | por medir |
+| Recuperación, cinco estrategias | `experiments/pre_mixed_embedding_fix/E12_retrieval.json` | por medir |
+
+**Fuera de la comparación, y se publica aparte con su estado.** La tabla de recuperación del
+capítulo 5 es `LEGACY_RESULT_WITHOUT_CANONICAL_ARTIFACT`: sus cinco filas no corresponden al
+artefacto y su ejecución fue sobrescrita. **No puede ocupar la columna «antes»**, porque no
+tiene el mismo nivel de procedencia. Este documento la usaba así hasta el 4 de septiembre de
+2026, contradiciendo a `S-10` en el mismo commit que la introdujo.
 
 ## 4. Condiciones del experimento tras las decisiones
 
