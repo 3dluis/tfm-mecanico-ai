@@ -144,13 +144,43 @@ def test_un_procedimiento_pertinente_si_sostiene_la_afirmacion() -> None:
     assert resultado.chunk_role == "PROCEDURAL_DIAGNOSTIC_EVIDENCE"
 
 
-def test_una_condicion_de_deteccion_no_sostiene_por_si_sola() -> None:
-    """El fixture original de estos tests era una condición de detección, y v1 la
-    aceptaba como soporte. El propio test unitario codificaba el defecto que el
-    experimento ampliado destapó: describe qué vigila la centralita, no cómo se
-    comprueba desde fuera."""
+def test_el_fixture_historico_y_lo_que_cada_version_hizo_con_el() -> None:
+    """Historia de un fixture, conservada porque enseña más que el fixture.
+
+    El texto de `_doc()` es la condición de detección con que **abre** el
+    procedimiento del código P2187 en el manual, y su sección es «DTC P2187».
+    Las tres versiones de la política hicieron con él tres cosas distintas:
+
+    - **v1** lo aceptaba como soporte porque llevaba un código de avería. Era el
+      defecto: cualquier fragmento con un código pasaba por diagnóstico, y las
+      tablas llevan decenas. Este test unitario **codificaba ese defecto como
+      comportamiento correcto**, y ningún gate lo detectó: hizo falta ampliar el
+      experimento de un fallo a tres.
+    - **v2** lo rechazaba, al clasificar cada fragmento en aislamiento por sus
+      rasgos léxicos. Corregía el defecto y rompía la unidad del manual: el
+      procedimiento troceado perdía la parte que nombra la señal.
+    - **v2.1** lo acepta, porque pertenece a una sección titulada por un único
+      código, que es como el manual encabeza sus procedimientos diagnósticos.
+
+    Aceptar y volver a aceptar no es volver al principio: v1 lo aceptaba por
+    llevar un código, v2.1 lo acepta por pertenecer a un procedimiento. Lo que
+    cambia es la razón, y la razón es lo que se estaba midiendo mal.
+    """
     claim = Claim("C01", "texto", ("OBS001",))
     resultado = check_support(claim, _doc(), signal="stft_bank1", expected_dtc=("P2187",))
+    assert resultado.supports
+    assert resultado.chunk_role == "PROCEDURAL_DIAGNOSTIC_EVIDENCE"
+
+
+def test_el_mismo_texto_en_una_seccion_de_referencia_no_sostiene() -> None:
+    """Aísla la variable: mismo contenido, distinta sección, distinto papel.
+
+    Si el papel dependiera del texto, este test y el anterior darían lo mismo.
+    Dan distinto, que es lo que significa clasificar por la unidad del manual.
+    """
+    claim = Claim("C01", "texto", ("OBS001",))
+    como_referencia = _doc(section="DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]")
+    resultado = check_support(claim, como_referencia, signal="stft_bank1", expected_dtc=("P2187",))
     assert resultado.mentions_signal and resultado.carries_expected_dtc
     assert not resultado.supports
     assert resultado.chunk_role == "SUPPORTING_DIAGNOSTIC_REFERENCE"
