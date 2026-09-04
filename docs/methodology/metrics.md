@@ -43,10 +43,26 @@ submuestra.
 | `unsupported claim rate` | complemento de la anterior |
 | profundidad de traza | cuántos eslabones de la cadena se reconstruyen |
 
-La distancia entre `citation completeness` y `claim support rate` es informativa
-por sí misma: mide cuántas afirmaciones vienen acompañadas de una referencia que
-no las respalda. Es el fallo más difícil de detectar a simple vista, porque el
-texto resultante parece impecable.
+### Clasificación: qué es medida y qué es invariante del diseño
+
+Una métrica que no puede tomar más de un valor no informa de nada. Distinguirlas
+es obligatorio, y en este grupo hay de las dos clases.
+
+| Métrica | Clase | Motivo |
+|---|---|---|
+| `claim support rate` por condición de corpus | **medida** | Toma valores distintos entre condiciones: 1,00 con evidencia completa y 0,00 con evidencia parcial o con distractor, teniendo cuatro documentos aplicables delante |
+| `citation correctness` | **medida** | La barrera de citas se comprueba fuera del generador y puede fallar |
+| Profundidad de traza | **medida** | Depende de qué conserve cada fragmento |
+| **Distancia entre `citation completeness` y `claim support rate`** | **`INVARIANT`** | **Es cero por construcción.** El ensamblador da cita a una afirmación solo si la comprobación de soporte la acepta, y la marca sostenida si y solo si tiene cita. La diferencia no puede ser distinta de cero mientras las afirmaciones las construya el verificador |
+
+**Consecuencia.** La distancia **no es un resultado del experimento** y no se
+reporta como tal. Es una **comprobación de implementación**: si alguna vez dejara
+de ser cero, habría un defecto en el ensamblador. Se conserva con esa función y
+con ese nombre.
+
+La distancia recuperaría su valor informativo si las citas las generara el modelo
+de lenguaje en lugar del verificador. Ese brazo no está implementado y se declara
+como trabajo pendiente, no como medición hecha.
 
 Todas se calculan de forma determinista, sin juez.
 
@@ -58,6 +74,14 @@ fundamento, y la matriz completa de
 
 Siempre acompañadas de **cobertura**. Corrección y cobertura solo significan algo
 juntas.
+
+**Comprobación de implementación, no resultado.** El «cero documentos aplicables»
+de la condición sin evidencia está garantizado por construcción: la condición
+retira del índice los mismos códigos con que la búsqueda va acotada. Sirve como
+`SANITY_CHECK` de que la exclusión funciona, y así se reporta. Lo que **sí** es
+resultado es la condición con evidencia parcial y la de distractor, donde hay
+cuatro documentos aplicables delante y la cobertura de soporte es 0,00: ahí el
+sistema responde a la pertinencia y no a la presencia, y podría no hacerlo.
 
 ## M6 — Rendimiento
 

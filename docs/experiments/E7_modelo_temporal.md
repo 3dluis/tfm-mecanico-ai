@@ -3,6 +3,19 @@
 Fecha: 1 de septiembre de 2026 · Estado: **cerrada**
 Dispositivo: **MPS** (Apple M4 Pro) · 19 014 parámetros
 
+> **Nota del 4 de septiembre de 2026 (P-06C).** La GRU restaura la época con
+> mejor F1 macro **de validación** y la cifra que se reporta es la F1 macro sobre
+> esa misma validación: es el máximo de entre sesenta y setenta y cuatro
+> evaluaciones sobre el conjunto que se publica. El bosque no selecciona nada
+> sobre validación, de modo que la comparación es **asimétrica** y el sesgo
+> favorece a la GRU.
+>
+> Sobre `synthetic_v2` la GRU pierde **a pesar** del sesgo, así que el resultado
+> negativo es conservador. Sobre `synthetic_v3` gana por 0,0125, margen inferior
+> al sesgo plausible: ese resultado es **inconcluso**, no favorable. Para
+> sostener cualquier orden entre los dos modelos haría falta seleccionar la época
+> sobre una partición interna de entrenamiento y evaluar con réplicas.
+
 ## Elección de arquitectura: GRU
 
 El plan pide elegir **una** arquitectura y justificarla. Se elige GRU

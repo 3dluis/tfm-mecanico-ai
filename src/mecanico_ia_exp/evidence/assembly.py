@@ -143,6 +143,15 @@ def build_claims(
     documento que la sostenga queda ``PARTIALLY_SUPPORTED``: describe sin
     interpretar.
 
+    **Invariante que esto impone, y que no es un resultado.** Una afirmación
+    recibe cita solo si la comprobación la acepta, y se marca sostenida si y solo
+    si tiene cita. La distancia entre «proporción de afirmaciones con cita» y
+    «proporción de afirmaciones cuya cita las sostiene» es, por tanto, cero por
+    construcción, y no puede tomar otro valor mientras las afirmaciones las
+    construya este módulo. Sirve como comprobación de implementación; presentarla
+    como hallazgo experimental sería presentar una propiedad del código como una
+    propiedad del sistema. Ver ``docs/methodology/metrics.md``.
+
     El texto es una plantilla neutra que enuncia lo observado **sin afirmar
     causa**. Decir «el ajuste está desplazado» es lo que la observación sostiene;
     decir «hay una fuga» sería atribuir causalidad a una atribución, que E9 dejó
