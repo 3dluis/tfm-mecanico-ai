@@ -10,6 +10,7 @@ Pre-registro: `docs/methodology/preregistro-rerun-a.md`.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -89,9 +90,11 @@ def test_el_conjunto_de_recuperacion_es_el_original_de_seis() -> None:
     from mecanico_ia_exp.experiments.retrieval_runner import CONJUNTO_E12_ORIGINAL
 
     assert len(CONJUNTO_E12_ORIGINAL) == 6
-    artefacto = json.loads(
-        (RAIZ / "experiments" / "E12_retrieval.json").read_text(encoding="utf-8")
-    )
+    # Se lee la **copia congelada**, no el artefacto vivo: la reejecución
+    # sobrescribe el vivo, y entonces esta prueba compararía el conjunto consigo
+    # mismo y dejaría de comprobar nada.
+    congelado = RAIZ / "experiments" / "pre_mixed_embedding_fix" / "E12_retrieval.json"
+    artefacto = json.loads(congelado.read_text(encoding="utf-8"))
     del_artefacto = tuple(c["case_id"] for c in artefacto["strategies"][0]["cases"])
     assert del_artefacto == CONJUNTO_E12_ORIGINAL, (
         "el conjunto declarado no coincide con el del artefacto que se quiere replicar"
@@ -157,7 +160,84 @@ def test_rerun_a_usa_el_mapa_de_codigos_congelado() -> None:
         "el mapa vigente y el congelado coinciden: si es a propósito, actualiza el "
         "manifiesto; si no, alguien editó uno de los dos"
     )
-    assert huella == "04088d9f0435c7f0"
+    # La huella se **recalcula** desde el contenido con la forma canónica que el
+    # propio fichero declara. La primera versión copiaba un literal que ningún
+    # código comprobaba, y por ese hueco se coló una entrada ausente.
+    doc = json.loads((RAIZ / "configs" / "e12_legacy_dtc_map.json").read_text(encoding="utf-8"))
+    cuerpo = json.dumps(doc["map"], ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    assert hashlib.sha256(cuerpo.encode()).hexdigest()[:16] == doc["map_sha256_16"], (
+        "la huella declarada no corresponde al contenido del mapa"
+    )
+    assert huella == doc["map_sha256_16"]
+
+
+def test_el_mapa_congelado_cubre_todos_los_fallos_de_los_seis_casos() -> None:
+    """La prueba estructural que faltaba, y que habría evitado `RAG-MAJ-074`.
+
+    Mi primera versión del mapa congelado **omitía** `F04_o2_lag`, porque la
+    construí desde una extracción por expresión regular que se saltó esa entrada.
+    Con esa omisión, el caso de la sonda habría recibido lista vacía y **degradado
+    a la estrategia mixta**: su recuperación habría cambiado por una causa ajena a
+    la variable manipulada, y la caída se habría leído como efecto del espacio
+    vectorial.
+
+    Comprueba la propiedad, no el contenido: **todo fallo de los seis casos tiene
+    entrada en el mapa**. Falla ante cualquier omisión futura, no solo ante esta.
+    """
+    import yaml
+
+    from mecanico_ia_exp.experiments.retrieval_runner import (
+        CONJUNTO_E12_ORIGINAL,
+        cargar_mapa_legacy,
+    )
+
+    gold = yaml.safe_load((RAIZ / "configs" / "goldset_mazda3_bk.yaml").read_text(encoding="utf-8"))
+    por_id = {c["case_id"]: c for c in gold["cases"]}
+    legacy, _ = cargar_mapa_legacy()
+    sin_entrada = [
+        (c, por_id[c]["fault_id"])
+        for c in CONJUNTO_E12_ORIGINAL
+        if por_id[c]["fault_id"] not in legacy
+    ]
+    assert not sin_entrada, (
+        f"casos cuyo fallo no está en el mapa congelado: {sin_entrada}. "
+        "Degradarían a `hybrid` y su recuperación cambiaría por una causa ajena "
+        "a la variable manipulada"
+    )
+
+
+def test_el_mapa_congelado_reproduce_el_del_commit_de_la_ejecucion() -> None:
+    """Contra el módulo real del commit, extraído por AST.
+
+    Es la comprobación que no hice y que dejó pasar la omisión: verificar el
+    congelado contra su fuente en lugar de contra mi propia extracción.
+    """
+    import ast
+    import subprocess
+
+    from mecanico_ia_exp.experiments.retrieval_runner import cargar_mapa_legacy
+
+    doc = json.loads((RAIZ / "configs" / "e12_legacy_dtc_map.json").read_text(encoding="utf-8"))
+    fuente = subprocess.run(
+        [
+            "git",
+            "show",
+            f"{doc['source_commit']}:src/mecanico_ia_exp/experiments/retrieval_runner.py",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=RAIZ,
+    ).stdout
+    if not fuente:
+        pytest.skip("el commit de origen no está disponible en este clon")
+    original = None
+    for n in ast.walk(ast.parse(fuente)):
+        if isinstance(n, ast.AnnAssign) and getattr(n.target, "id", "") == "DIAGNOSTICO_A_DTC":
+            original = {k: tuple(v) for k, v in ast.literal_eval(n.value).items()}
+    legacy, _ = cargar_mapa_legacy()
+    assert legacy == original, (
+        "el mapa congelado no coincide con el del commit que produjo el artefacto"
+    )
 
 
 def test_la_busqueda_acotada_usa_el_mapa_que_se_le_pasa() -> None:
@@ -302,7 +382,11 @@ def test_el_manifiesto_enumera_el_estado_y_la_variable_manipulada() -> None:
     ):
         assert clave in estado, f"el manifiesto no fija {clave}"
     assert estado["verifier"]["version"] == "v2.1"
-    assert estado["dtc_map"]["hash"] == "04088d9f0435c7f0"
+    # El mapa se declara **por experimento**: E12 usa el congelado y la suficiencia
+    # el vigente. Un solo valor invitaría a «corregir» E15 e introducir allí la
+    # misma variable que se está eliminando de E12.
+    assert set(estado["dtc_map"]) == {"E12_CANONICAL", "E15_E17"}
+    assert estado["dtc_map"]["E12_CANONICAL"]["n_entries"] == 5
     assert m["DENOMINATORS"]["E12"] == {
         "n_evaluated": 6,
         "n_scored": 5,
