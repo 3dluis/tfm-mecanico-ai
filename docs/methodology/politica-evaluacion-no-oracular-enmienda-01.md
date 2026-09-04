@@ -2,7 +2,7 @@
 
 **Fecha:** 4 de septiembre de 2026 · **Enmienda a:**
 `docs/methodology/politica-evaluacion-no-oracular.md`, commit `f290263` ·
-**Posterior a:** la primera ejecución adversa, commit `e1a4f7c` ·
+**Posterior a:** la primera ejecución adversa, commit `3b02cf8` ·
 **Estado:** aceptada, y aplicada **antes** de interpretar ningún resultado adverso.
 
 Esta enmienda es posterior a la primera ejecución. No la oculta: aquel resultado y el defecto
