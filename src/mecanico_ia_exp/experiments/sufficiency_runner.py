@@ -163,7 +163,17 @@ def run_sufficiency(
             cual = "mal clasificados" if adverse else "correctamente clasificados"
             print(f"{caso['case_id']}: sin casos {cual}")
             continue
-        i = int(indices[0])
+        if adverse:
+            # Regla A-1 de `politica-evaluacion-no-oracular-enmienda-01.md`: entre
+            # los errores del modelo se elige el **más confiado**, que es el único
+            # que supera la puerta de confianza y llega al verificador. Elegir el
+            # primero por índice escogía el caso menos adverso disponible.
+            confianzas = np.asarray(calibrado.predict_proba(validacion.features[indices])).max(
+                axis=1
+            )
+            i = int(indices[int(np.argmax(confianzas))])
+        else:
+            i = int(indices[0])
         case_id = (
             f"{validacion.meta.iloc[i]['session_id']}@{validacion.meta.iloc[i]['t_start']:.0f}s"
         )
