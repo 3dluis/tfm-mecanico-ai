@@ -1,6 +1,6 @@
 {
   "manifest_id": "RERUN-A",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "frozen_at_commit": "7ff9949",
   "note": "Enumeración completa del estado experimental. Tres intentos previos descubrieron tres variables derivadas --versión del verificador, conjunto de casos y mapa de códigos-- que la frase «todo lo demás idéntico» no cubría. Este manifiesto sustituye a esa frase.",
   "MANIPULATED_VARIABLE": {
@@ -36,7 +36,10 @@
     },
     "annotated_set": {
       "file": "configs/goldset_mazda3_bk.yaml",
-      "hash": "7fadc49fc7daaad1"
+      "scope": "solo los seis casos de RERUN-A",
+      "note": "La huella del fichero entero cambia al añadir casos que RERUN-A no usa. Se acota a los seis, que es lo que debe permanecer constante.",
+      "six_cases_hash": "f117f7b68127d032",
+      "n_cases": 6
     },
     "corpus": {
       "version": "0.1.0",
@@ -73,7 +76,9 @@
         "exclude_chunks"
       ],
       "rrf_k": 60,
-      "authority_reranking": "JERARQUIA_EVIDENCIA, desempate con_dtc"
+      "authority_reranking": "JERARQUIA_EVIDENCIA, desempate con_dtc",
+      "apply_engine_filter": true,
+      "query_language": "en"
     },
     "verifier": {
       "version": "v2.1",
@@ -105,6 +110,14 @@
     "synthetic_dataset": {
       "dataset_id": "synthetic_v2",
       "seed": 20260901
+    },
+    "evidence_assembly": {
+      "max_claims": 3,
+      "candidate_order": "por papel documental antes que por puntuación"
+    },
+    "agent": {
+      "prompt_version": "agent-2026-09-04",
+      "note": "no interviene en E12-CANONICAL; se fija por si se ejecuta el paso I"
     }
   },
   "DENOMINATORS": {
