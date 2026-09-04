@@ -1,15 +1,15 @@
 {
   "experiment_id": "E15_sufficiency",
-  "commit": "100082d0382972f94c56ac8ad908b8037a38c8c5",
+  "commit": "a34bab25372f2467c36b4337f59c28407f216037",
   "dirty": false,
-  "executed_at": "2026-09-04T10:11:46.003939+00:00",
+  "executed_at": "2026-09-04T10:38:34.248092+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
   "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "goldset": "goldset_mazda3_bk.yaml",
   "vehicle_id": "mazda-3-bk-2007",
-  "verifier_version": "v2",
+  "verifier_version": "v2.1",
   "thresholds": {
     "min_confidence": 0.79,
     "min_retrieval_score": 0.0,
@@ -371,9 +371,12 @@
             "observational_evidence": [
               "OBS001"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C02",
@@ -381,9 +384,12 @@
             "observational_evidence": [
               "OBS002"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C03",
@@ -391,9 +397,12 @@
             "observational_evidence": [
               "OBS003"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           }
         ]
       },
@@ -402,8 +411,7 @@
         "sufficiency": "INSUFFICIENT_EVIDENCE",
         "decision": "ABSTAIN",
         "reasons": [
-          "LOW_MODEL_CONFIDENCE",
-          "LOW_CLAIM_COVERAGE"
+          "LOW_MODEL_CONFIDENCE"
         ],
         "signals": {
           "confidence": 0.5999,
@@ -414,45 +422,24 @@
           "n_documents_applicable": 6,
           "n_distinct_sources": 1,
           "best_retrieval_score": 0.6012,
-          "claim_coverage": 0.0,
+          "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
         },
         "missing_evidence": [
-          "confianza 0.600 < 0.79",
-          "cobertura 0.00 < 0.80"
+          "confianza 0.600 < 0.79"
         ]
       },
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001841",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001809",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C01",
@@ -460,49 +447,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001841",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001809",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -510,9 +457,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -520,49 +467,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001841",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001809",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
@@ -570,9 +477,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
@@ -580,29 +487,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
       ]
     },
@@ -983,6 +870,7 @@
               "OBS001"
             ],
             "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
               "mazda3-bk-workshop-manual-local@9a90d2f6a951:001307"
             ],
             "support_status": "SUPPORTED",
@@ -995,6 +883,7 @@
               "OBS002"
             ],
             "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
               "mazda3-bk-workshop-manual-local@9a90d2f6a951:001307"
             ],
             "support_status": "SUPPORTED",
@@ -1007,6 +896,7 @@
               "OBS003"
             ],
             "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
               "mazda3-bk-workshop-manual-local@9a90d2f6a951:001307"
             ],
             "support_status": "SUPPORTED",
@@ -1037,6 +927,16 @@
       "support_checks": [
         {
           "claim_id": "C01",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+          "mentions_signal": true,
+          "is_diagnostic": true,
+          "carries_expected_dtc": true,
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
+        },
+        {
+          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001306",
           "mentions_signal": false,
           "is_diagnostic": true,
@@ -1056,54 +956,14 @@
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
-          "claim_id": "C01",
+          "claim_id": "C02",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -1126,54 +986,14 @@
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
-          "claim_id": "C02",
+          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
@@ -1194,56 +1014,6 @@
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
       ]
     },
@@ -1703,7 +1473,8 @@
               "OBS001"
             ],
             "documentary_evidence": [
-              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316"
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311"
             ],
             "support_status": "SUPPORTED",
             "notes": ""
@@ -1715,7 +1486,8 @@
               "OBS002"
             ],
             "documentary_evidence": [
-              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316"
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311"
             ],
             "support_status": "SUPPORTED",
             "notes": ""
@@ -1727,7 +1499,8 @@
               "OBS003"
             ],
             "documentary_evidence": [
-              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316"
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311"
             ],
             "support_status": "SUPPORTED",
             "notes": ""
@@ -1767,53 +1540,13 @@
         },
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001315",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -1827,53 +1560,13 @@
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001315",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
@@ -1887,53 +1580,13 @@
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001315",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal oxygen_sensor"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
-          "mentions_signal": true,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
       ]
     },
@@ -2399,7 +2052,7 @@
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -2409,11 +2062,11 @@
         },
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2439,7 +2092,7 @@
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -2449,11 +2102,11 @@
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2479,7 +2132,7 @@
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -2489,11 +2142,11 @@
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2851,9 +2504,12 @@
             "observational_evidence": [
               "OBS001"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C02",
@@ -2861,9 +2517,12 @@
             "observational_evidence": [
               "OBS002"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           },
           {
             "claim_id": "C03",
@@ -2871,19 +2530,20 @@
             "observational_evidence": [
               "OBS003"
             ],
-            "documentary_evidence": [],
-            "support_status": "PARTIALLY_SUPPORTED",
-            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+            "documentary_evidence": [
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+              "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835"
+            ],
+            "support_status": "SUPPORTED",
+            "notes": ""
           }
         ]
       },
       "verdict": {
         "case_id": "F01_vacuum_leak__idle__10@120s",
-        "sufficiency": "INSUFFICIENT_EVIDENCE",
-        "decision": "ABSTAIN",
-        "reasons": [
-          "LOW_CLAIM_COVERAGE"
-        ],
+        "sufficiency": "SUPPORTED",
+        "decision": "EXPLAIN",
+        "reasons": [],
         "signals": {
           "confidence": 0.9078,
           "model_confidence": 0.6851,
@@ -2893,44 +2553,22 @@
           "n_documents_applicable": 5,
           "n_distinct_sources": 1,
           "best_retrieval_score": 0.5907,
-          "claim_coverage": 0.0,
+          "claim_coverage": 1.0,
           "n_claims": 3,
           "contradictions": []
         },
-        "missing_evidence": [
-          "cobertura 0.00 < 0.80"
-        ]
+        "missing_evidence": []
       },
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001856",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001840",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C01",
           "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C01",
@@ -2938,39 +2576,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001856",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001840",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -2978,9 +2586,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C02",
@@ -2988,39 +2596,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal stft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001856",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001840",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
@@ -3028,9 +2606,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
         {
           "claim_id": "C03",
@@ -3038,19 +2616,9 @@
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
-          "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
-        },
-        {
-          "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
-          "mentions_signal": false,
-          "is_diagnostic": true,
-          "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
-          "supports": false,
-          "reason": "el fragmento no menciona la señal ltft_bank1"
+          "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "supports": true,
+          "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
       ]
     },
@@ -3607,7 +3175,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3617,7 +3185,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3647,7 +3215,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3657,7 +3225,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3687,7 +3255,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3697,7 +3265,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         }
@@ -4122,7 +3690,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -4132,7 +3700,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -4162,7 +3730,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -4172,7 +3740,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -4202,7 +3770,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -4212,7 +3780,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         }
@@ -4615,7 +4183,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -4625,7 +4193,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -4635,7 +4203,7 @@
           "mentions_signal": false,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         }
@@ -5307,17 +4875,17 @@
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -5367,17 +4935,17 @@
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -5427,17 +4995,17 @@
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -6019,17 +5587,17 @@
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -6079,17 +5647,17 @@
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -6139,17 +5707,17 @@
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -6645,17 +6213,17 @@
       "support_checks": [
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C01",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -6675,17 +6243,17 @@
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C02",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
@@ -6705,17 +6273,17 @@
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
-          "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
           "supports": false,
-          "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
+          "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
         {
           "claim_id": "C03",
-          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
           "mentions_signal": true,
           "is_diagnostic": true,
           "carries_expected_dtc": true,
