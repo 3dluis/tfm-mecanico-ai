@@ -1,14 +1,15 @@
 {
   "experiment_id": "E15_sufficiency",
-  "commit": "ed27aadb8d056a0f36e463dcccec3297cd77fdda",
-  "dirty": true,
-  "executed_at": "2026-09-04T04:50:26.189766+00:00",
+  "commit": "8c3ec98b169fa714d13fbd1477bdda06887d0f1f",
+  "dirty": false,
+  "executed_at": "2026-09-04T10:06:30.252561+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
   "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "goldset": "goldset_mazda3_bk.yaml",
   "vehicle_id": "mazda-3-bk-2007",
+  "verifier_version": "v1",
   "thresholds": {
     "min_confidence": 0.79,
     "min_retrieval_score": 0.0,
