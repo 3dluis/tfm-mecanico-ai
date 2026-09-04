@@ -1,11 +1,26 @@
 {
   "config_id": "E12_LEGACY_DTC_MAP",
-  "version": "1.0.0",
-  "source_commit": "4437d07",
-  "source_note": "Mapa de códigos vigente cuando se produjo experiments/E12_retrieval.json (2026-09-01T21:32:01Z). El commit 7fb2255, posterior, amplió F02_maf_drift de dos códigos a cuatro. Reejecutar E12 con el mapa actual cambiaría dos variables a la vez: el espacio de embeddings y el conjunto de códigos que acota la búsqueda.",
+  "version": "1.1.0",
+  "source_commit": "7a0d714",
+  "source_symbol": "DIAGNOSTICO_A_DTC",
+  "extraction": "ast.literal_eval sobre el módulo del commit; NO expresión regular",
+  "source_note": "Mapa vigente cuando se produjo experiments/E12_retrieval.json (2026-09-01T21:32:01Z). El commit 7fb2255, posterior, amplió F02_maf_drift de dos códigos a cuatro, y más tarde se añadió F00_normal con lista vacía. Reejecutar con el mapa actual cambiaría dos variables: el espacio de embeddings y los códigos que acotan la búsqueda.",
+  "version_history": [
+    {
+      "version": "1.0.0",
+      "status": "SUPERSEDED",
+      "defect": "omitía F04_o2_lag: ('P0133',). Se construyó desde una extracción por expresión regular que se saltó esa entrada, y no se verificó contra el módulo. Con ese mapa, C03_o2_slow_response --fault_id F04_o2_lag-- habría recibido lista vacía y degradado a `hybrid`, cambiando su recuperación por una causa ajena a la variable manipulada. Detectado por RAG-MAJ-074 antes de medir."
+    },
+    {
+      "version": "1.1.0",
+      "status": "CANONICAL",
+      "note": "extraído por AST y verificado por prueba"
+    }
+  ],
   "applies_to": "RERUN-A / E12-CANONICAL",
-  "not_applies_to": "E12-EXTENDED y cualquier experimento posterior, que usan el mapa vigente",
-  "map_sha256_16": "04088d9f0435c7f0",
+  "not_applies_to": "E15/E17 y E12-EXTENDED, que usan el mapa vigente",
+  "canonical_form": "json.dumps(map, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
+  "map_sha256_16": "742a0a4134cde836",
   "map": {
     "F01_vacuum_leak": [
       "P2187",
@@ -17,6 +32,9 @@
     ],
     "F03_thermostat_stuck": [
       "P0125"
+    ],
+    "F04_o2_lag": [
+      "P0133"
     ],
     "F05_misfire": [
       "P0300",

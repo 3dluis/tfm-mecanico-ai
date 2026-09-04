@@ -107,3 +107,38 @@ Este aprendizaje pertenece a la contribución metodológica del trabajo, junto a
 «ausencia de información tratada como ausencia de restricción». Son dos caras de lo mismo: en un
 caso el sistema no declaraba lo que no sabía; en el otro, el experimento no declaraba lo que
 había cambiado.
+
+## Cuarta variable, y la introdujo el propio remedio
+
+**Fecha:** 4 de septiembre de 2026 · **Hallazgo:** `RAG-MAJ-074`, detectado **antes** de medir.
+
+La configuración que creé para congelar el mapa de códigos **omitía una entrada**:
+`F04_o2_lag: ("P0133",)`. La construí desde una extracción por expresión regular que se saltó
+esa línea, y **no la verifiqué contra el módulo**.
+
+Consecuencia si se hubiera medido: el caso de la sonda de oxígeno tiene ese fallo, así que
+habría recibido una lista de códigos vacía y **degradado a la estrategia mixta**. Su
+recuperación habría cambiado por una causa ajena a la variable manipulada, y la caída se habría
+leído como efecto del espacio vectorial.
+
+> **La maniobra de control introdujo la variable que pretendía eliminar.** Es la cuarta variable
+> derivada en cuatro intentos, y la primera causada por el propio remedio.
+
+**Qué falló, y no es la expresión regular.** Falló verificar el artefacto de control contra su
+fuente en lugar de contra mi propia extracción, y publicar una huella como **literal copiado**
+que ningún código recalculaba: por ese hueco pasó la omisión sin que nada fallara.
+
+**Correcciones aplicadas:**
+
+| | |
+|---|---|
+| Extracción | por análisis sintáctico del módulo, no por expresión regular |
+| Huella | se **recalcula** desde el contenido con la forma canónica declarada en el propio fichero |
+| Prueba estructural | todo fallo de los seis casos debe tener entrada en el mapa: falla ante cualquier omisión futura, no solo ante esta |
+| Prueba de fuente | el mapa congelado se compara con el del commit que produjo el artefacto |
+| Commit de origen | `7a0d714`, no `4437d07`: el artefacto registra el modelo multilingüe, que no existía en el segundo |
+| Manifiesto | el mapa se declara **por experimento**: la suficiencia usa el vigente, y aplicarle el congelado introduciría allí la variable que se está eliminando de la recuperación |
+
+**Refuerzo del principio.** No basta enumerar el estado: **cada pieza de ese inventario debe ser
+verificable contra su fuente y recomputable**. Un inventario copiado a mano es una cuarta
+variable esperando su turno.

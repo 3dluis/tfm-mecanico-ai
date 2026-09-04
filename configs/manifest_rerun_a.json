@@ -1,6 +1,6 @@
 {
   "manifest_id": "RERUN-A",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "frozen_at_commit": "7ff9949",
   "note": "Enumeración completa del estado experimental. Tres intentos previos descubrieron tres variables derivadas --versión del verificador, conjunto de casos y mapa de códigos-- que la frase «todo lo demás idéntico» no cubría. Este manifiesto sustituye a esa frase.",
   "MANIPULATED_VARIABLE": {
@@ -22,10 +22,17 @@
       "hash": "1af2a473ed85a4d7"
     },
     "dtc_map": {
-      "config_id": "E12_LEGACY_DTC_MAP",
-      "version": "1.0.0",
-      "hash": "04088d9f0435c7f0",
-      "file": "configs/e12_legacy_dtc_map.json"
+      "E12_CANONICAL": {
+        "config_id": "E12_LEGACY_DTC_MAP",
+        "version": "1.1.0",
+        "hash": "742a0a4134cde836",
+        "file": "configs/e12_legacy_dtc_map.json",
+        "n_entries": 5
+      },
+      "E15_E17": {
+        "source": "DIAGNOSTICO_A_DTC vigente en el módulo",
+        "note": "El artefacto de suficiencia se produjo con el mapa vigente, no con el congelado. Usar aquí el congelado introduciría en E15 la misma variable que se está eliminando de E12."
+      }
     },
     "annotated_set": {
       "file": "configs/goldset_mazda3_bk.yaml",
@@ -64,7 +71,9 @@
         "engine_codes",
         "dtc_codes",
         "exclude_chunks"
-      ]
+      ],
+      "rrf_k": 60,
+      "authority_reranking": "JERARQUIA_EVIDENCIA, desempate con_dtc"
     },
     "verifier": {
       "version": "v2.1",
@@ -92,7 +101,11 @@
       "ALWAYS_EXPLAIN",
       "ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT",
       "CEILING"
-    ]
+    ],
+    "synthetic_dataset": {
+      "dataset_id": "synthetic_v2",
+      "seed": 20260901
+    }
   },
   "DENOMINATORS": {
     "E12": {
