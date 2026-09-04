@@ -19,21 +19,22 @@ import pytest
 
 from mecanico_ia_exp.evidence.model import Claim, DocumentaryEvidence
 from mecanico_ia_exp.evidence.support import (
+    SIN_CORRESPONDENCIA,
     ChunkRole,
     check_support,
     classify_chunk,
     classify_section,
 )
 
-CLAIM = Claim(claim_id="C01", text="El descriptor brake_pressure (mean) toma el valor 3,2.")
+CLAIM = Claim(claim_id="C01", text="El descriptor throttle_position (mean) toma el valor 3,2.")
 
 TEXTO_PROCEDIMIENTO = (
-    "Turn the ignition switch off. Disconnect the brake pressure sensor connector. "
+    "Turn the ignition switch off. Disconnect the throttle position sensor connector. "
     "Measure the voltage at terminal A. Is the voltage within specification?\n"
     "Yes Go to the next step.\nNo Repair or replace the harness."
 )
 TEXTO_DETECCION = (
-    "The PCM monitors the brake pressure sensor signal while the vehicle is moving. "
+    "The PCM monitors the throttle position sensor signal while the vehicle is moving. "
     "The PCM determines that the circuit is malfunctioning when the value remains "
     "below the standard value."
 )
@@ -77,10 +78,10 @@ def _fragmento(
 )
 def test_las_secciones_que_v2_rechazo_siguen_sin_sostener(seccion: str) -> None:
     fragmento = _fragmento(
-        f"B1234 brake pressure sensor circuit.\n{TEXTO_DETECCION}\n{TEXTO_PROCEDIMIENTO}",
+        f"B1234 throttle position sensor circuit.\n{TEXTO_DETECCION}\n{TEXTO_PROCEDIMIENTO}",
         seccion,
     )
-    resultado = check_support(CLAIM, fragmento, signal="brake_pressure", expected_dtc=("B1234",))
+    resultado = check_support(CLAIM, fragmento, signal="throttle_position", expected_dtc=("B1234",))
     assert resultado.mentions_signal and resultado.carries_expected_dtc
     assert not resultado.supports
     assert resultado.chunk_role != ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE.value
@@ -105,13 +106,21 @@ def test_ni_siquiera_con_pasos_de_inspeccion_una_seccion_de_listado_sostiene() -
 @pytest.mark.parametrize(
     ("codigo", "senal"),
     [
-        ("B1234", "brake_pressure"),
-        ("C1500", "steering_angle"),
-        ("U0100", "can_bus_load"),
-        ("B2AAA", "airbag_resistance"),
+        ("B1234", "throttle_position"),
+        ("C1500", "vehicle_speed"),
+        ("U0100", "engine_load"),
+        ("B2AAA", "ignition_timing"),
     ],
 )
 def test_la_regla_opera_sobre_codigos_y_senales_ajenos_al_banco(codigo: str, senal: str) -> None:
+    """Códigos de frenos, dirección, red y `airbag`, y señales que ningún caso usa.
+
+    Las cuatro señales están en el diccionario de vocabulario pero **fuera** de
+    los tres fallos del banco, que usan ajuste de combustible, temperatura de
+    refrigerante, presión de colector, sonda y régimen. Para señales fuera del
+    diccionario la generalidad se comprueba en el test siguiente, al nivel donde
+    la regla opera.
+    """
     procedimiento = _fragmento(
         f"{codigo} {senal.replace('_', ' ')} circuit.\n{TEXTO_PROCEDIMIENTO}",
         f"DTC {codigo} [ZJ, Z6]",
@@ -127,6 +136,26 @@ def test_la_regla_opera_sobre_codigos_y_senales_ajenos_al_banco(codigo: str, sen
         (codigo,),
     )
     assert not check_support(CLAIM, tabla, signal=senal, expected_dtc=(codigo,)).supports
+
+
+def test_la_clasificacion_generaliza_a_senales_fuera_del_diccionario() -> None:
+    """La regla de papel es independiente del vocabulario de señales.
+
+    Con una señal que el verificador no sabe traducir, la **clasificación** sigue
+    siendo correcta y el soporte se deniega por la puerta de vocabulario, con su
+    motivo propio. Separar las dos cosas es lo que permite decir que la regla
+    estructural generaliza aunque el instrumento completo no pueda pronunciarse.
+    """
+    procedimiento = _fragmento(
+        f"B1234 transmission fluid temperature sensor.\n{TEXTO_PROCEDIMIENTO}",
+        "DTC B1234 [ZJ, Z6]",
+    )
+    assert classify_chunk(procedimiento) == ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE
+    resultado = check_support(
+        CLAIM, procedimiento, signal="transmission_fluid_temperature", expected_dtc=("B1234",)
+    )
+    assert not resultado.supports
+    assert resultado.signal_mapping == SIN_CORRESPONDENCIA
 
 
 # --- Grupo 3 · Ausencia de lógica específica de caso ----------------------------
@@ -153,7 +182,7 @@ def test_ningun_termino_del_banco_cambia_la_clasificacion(termino: str) -> None:
     """
     neutro = _fragmento(TEXTO_PROCEDIMIENTO, "DTC B1234 [ZJ, Z6]")
     con_termino = _fragmento(
-        TEXTO_PROCEDIMIENTO.replace("brake pressure sensor", termino),
+        TEXTO_PROCEDIMIENTO.replace("throttle position sensor", termino),
         "DTC B1234 [ZJ, Z6]",
     )
     assert classify_chunk(con_termino) == classify_chunk(neutro)
@@ -172,7 +201,7 @@ def test_el_codigo_de_la_seccion_no_tiene_que_coincidir_con_el_esperado() -> Non
     comprueba `carries_expected_dtc`, que es una condición aparte.
     """
     ajeno = _fragmento(TEXTO_PROCEDIMIENTO, "DTC U0100 [ZJ, Z6]", ("U0100",))
-    resultado = check_support(CLAIM, ajeno, signal="brake_pressure", expected_dtc=("B1234",))
+    resultado = check_support(CLAIM, ajeno, signal="throttle_position", expected_dtc=("B1234",))
     assert resultado.chunk_role == ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE.value
     assert not resultado.carries_expected_dtc
     assert not resultado.supports
