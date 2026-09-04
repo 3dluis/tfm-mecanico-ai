@@ -17,6 +17,7 @@ import pandas as pd
 import yaml
 
 from mecanico_ia_exp.abstention.sufficiency import (
+    VERIFIER_VERSION,
     EvidenceVerifier,
     SufficiencyThresholds,
 )
@@ -245,6 +246,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
             "experiment_id": "E15_sufficiency",
             "dataset_id": dataset_id,
             "vehicle_id": VEHICULO,
+            "verifier_version": VERIFIER_VERSION,
             "thresholds": umbrales.to_dict(),
             "calibration": calibracion,
             "cases": [
