@@ -217,7 +217,7 @@ def run_sufficiency(
 
         # Los DTC que documentan la condición **diagnosticada**: si el fragmento
         # citado no porta ninguno, no está hablando de ese fallo.
-        from mecanico_ia_exp.evidence.support import dtc_requirement
+        from mecanico_ia_exp.evidence.support import DtcRequirement, dtc_requirement
         from mecanico_ia_exp.experiments.retrieval_runner import DIAGNOSTICO_A_DTC
 
         # MODEL PREDICTION frente a GROUND TRUTH. En modo no oracular todo lo que
@@ -227,7 +227,14 @@ def run_sufficiency(
         codigos_esperados = DIAGNOSTICO_A_DTC.get(diagnostico, ())
         # El requisito de la puerta de códigos sale de cómo esté **declarado** el
         # diagnóstico, no de su nombre: `docs/methodology/politica-puerta-dtc.md`.
-        requisito = dtc_requirement(diagnostico, DIAGNOSTICO_A_DTC)
+        # Bajo la política canónica v2.1 la puerta se comporta como en su
+        # artefacto congelado: `DTC_REQUIRED` siempre. El requisito explícito es
+        # lo único que v2.2 añade, y se activa solo cuando esa es la política.
+        requisito = (
+            dtc_requirement(diagnostico, DIAGNOSTICO_A_DTC)
+            if VERIFIER_VERSION == "v2.2"
+            else DtcRequirement.DTC_REQUIRED
+        )
 
         bundle, comprobaciones = assemble(
             case_id=case_id,

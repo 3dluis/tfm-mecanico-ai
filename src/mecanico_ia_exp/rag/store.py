@@ -17,6 +17,7 @@ import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from functools import lru_cache
 from typing import Any
 
 import numpy as np
@@ -350,6 +351,23 @@ class PgVectorStore(VectorStore):
 
     # ----------------------------------------------------------- búsqueda
 
+    @lru_cache(maxsize=1)  # noqa: B019
+    def embedding_models(self) -> frozenset[str]:
+        """Espacios vectoriales realmente indexados, en todo el índice.
+
+        Un índice puede contener varios a propósito, para compararlos. Saber
+        cuáles hay es lo que permite rechazar una búsqueda en un espacio que no
+        existe en lugar de devolver cero filas en silencio.
+
+        **Alcance deliberado: el índice entero, no un vehículo.** Que un vehículo
+        concreto no tenga fragmentos es un resultado legítimo --devuelve vacío--;
+        que el espacio no exista en ninguna parte es un error de configuración.
+        Confundirlos convertiría el blindaje en un fallo espurio.
+        """
+        with self._engine.connect() as conexion:
+            filas = conexion.execute(sa.text("SELECT DISTINCT embedding_model FROM rag.embedding"))
+            return frozenset(str(f[0]) for f in filas)
+
     def search(
         self,
         query_vector: npt.NDArray[np.float32],
@@ -363,6 +381,16 @@ class PgVectorStore(VectorStore):
         exclude_chunks: tuple[str, ...] = (),
         embedding_model: str,
     ) -> list[RetrievedChunk]:
+        # Un espacio que no existe en el índice devolvería cero filas, y cero
+        # filas se confunde con «no hay evidencia»: una abstención con aspecto
+        # legítimo por un error de configuración. Se comprueba y se declara.
+        if embedding_model not in self.embedding_models():
+            raise ValueError(
+                f"el espacio {embedding_model!r} no está indexado; buscar en él "
+                "devolvería cero resultados, indistinguibles de la ausencia de "
+                "evidencia. Espacios disponibles: "
+                f"{sorted(self.embedding_models())}"
+            )
         vector = "[" + ",".join(f"{v:.6f}" for v in np.asarray(query_vector).ravel()) + "]"
         # El modelo de embeddings acota la búsqueda. Un índice puede contener
         # vectores de varios modelos --conviven a propósito, para poder

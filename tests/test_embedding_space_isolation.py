@@ -142,10 +142,19 @@ def test_buscar_sin_declarar_el_espacio_es_un_error() -> None:
 
 
 def test_ninguna_busqueda_vectorial_omite_el_espacio() -> None:
-    """Comprobación estática sobre las cuatro rutas que buscan.
+    """Comprobación estática sobre las rutas que buscan.
 
-    Complementa a la prueba dinámica: cubre puntos de llamada que un test podría
-    no ejercitar, y falla al añadir uno nuevo que olvide el parámetro.
+    **Esta prueba, tal como estaba escrita el 4 de septiembre de 2026, pasaba
+    contra el código defectuoso**, y lo detectó una auditoría independiente. Al
+    reescribirla tras la corrección perdió la mitad que localizaba el defecto: la
+    inspección de los llamantes de `recuperar()`. En el código defectuoso las
+    búsquedas de `retrieval_runner` **sí** pasaban el parámetro; lo que valía
+    nulo era su origen.
+
+    Se conserva la comprobación de las búsquedas y se añade la que faltaba: que
+    el valor pasado **no pueda ser nulo**, es decir que no venga de un parámetro
+    opcional sino del proveedor. La garantía fuerte la da `mypy --strict`; esta
+    prueba cubre el caso de un módulo nuevo que la eluda.
 
     `search_lexical` queda fuera a propósito: no usa vectores, así que no tiene
     espacio que declarar.
@@ -162,6 +171,32 @@ def test_ninguna_busqueda_vectorial_omite_el_espacio() -> None:
             if "embedding_model" not in claves:
                 omisiones.append(f"{fichero.name}:{nodo.lineno}")
     assert not omisiones, "búsquedas vectoriales sin espacio declarado: " + ", ".join(omisiones)
+
+
+def test_el_espacio_no_puede_venir_de_un_parametro_opcional() -> None:
+    """La mitad que se había perdido: de dónde sale el valor, no si se pasa.
+
+    Es la comprobación que habría fallado contra el código defectuoso, donde el
+    parámetro se pasaba y su origen era un argumento con valor nulo por defecto.
+    """
+    import ast
+    import inspect
+
+    from mecanico_ia_exp.experiments import retrieval_runner
+
+    fuente = inspect.getsource(retrieval_runner.recuperar)
+    arbol = ast.parse(fuente.lstrip())
+    asignaciones = [
+        n
+        for n in ast.walk(arbol)
+        if isinstance(n, ast.Assign)
+        and any(getattr(d, "id", None) == "embedding_model" for d in n.targets)
+    ]
+    assert asignaciones, "`recuperar` no deriva el espacio: ¿de dónde sale?"
+    origen = ast.unparse(asignaciones[0].value)
+    assert "provider" in origen and "identity" in origen, (
+        f"el espacio se deriva de {origen!r} y no del proveedor que vectoriza la consulta"
+    )
 
 
 def test_recuperar_no_acepta_el_espacio_como_parametro() -> None:
@@ -200,3 +235,121 @@ def test_un_indice_con_dos_modelos_duplica_cada_fragmento() -> None:
         (r for r in indice if r["embedding_model"] == "A"), key=lambda r: -r["score"]
     )
     assert len({r["chunk_id"] for r in con_filtro}) == len(con_filtro)
+
+
+# --- 4 · Pruebas semánticas ----------------------------------------------------
+# El defecto pasó desapercibido porque la suite comprobaba **estructura** --que
+# hubiera resultados, que vinieran ordenados-- y nunca que el espacio de la
+# consulta y el del índice fueran el mismo. `len(resultados) > 0` se cumple
+# igual comparando vectores de espacios incompatibles.
+
+
+def test_la_consulta_y_el_indice_usan_el_mismo_proveedor() -> None:
+    """No basta con que el modelo coincida: el proveedor lo produce."""
+    proveedor = ProveedorFalso()
+    espia = StoreEspia()
+    from mecanico_ia_exp.experiments.retrieval_runner import recuperar
+
+    recuperar(
+        "semantic",
+        store=espia,  # type: ignore[arg-type]
+        provider=proveedor,  # type: ignore[arg-type]
+        caso={"case_id": "T01", "fault_id": "F01_vacuum_leak", "query": "fuel trim"},
+        vehicle_id="mazda-3-bk-2007",
+        engine_code="Z6",
+    )
+    assert espia.modelos == [proveedor.identity.model]
+
+
+def test_dos_modelos_de_igual_dimension_son_espacios_distintos() -> None:
+    """La dimensión **no** identifica el espacio.
+
+    Los dos modelos del índice producen vectores de 384, y el proveedor `hashing`
+    también. Tres espacios incompatibles con la misma forma: nada en la aritmética
+    de la búsqueda los distingue, solo su identificador.
+    """
+    from mecanico_ia_exp.rag.embeddings import MODELOS, HashingEmbeddingProvider
+
+    hashing = HashingEmbeddingProvider().identity
+    assert hashing.dimension == 384
+    assert len({MODELOS["en"], MODELOS["multilingual"], hashing.model}) == 3, (
+        "tres modelos distintos; si alguno coincidiera, el índice no podría separarlos"
+    )
+
+
+def test_el_identificador_del_espacio_no_es_solo_el_modelo() -> None:
+    """Versionado del espacio: proveedor, modelo, dimensión y versión.
+
+    Dos ejecuciones del mismo modelo con distinta versión de la biblioteca
+    producen vectores que no son comparables entre sí. El identificador tiene que
+    llevarlo todo, no solo el nombre del modelo.
+    """
+    from mecanico_ia_exp.rag.embeddings import get_provider
+
+    identidad = get_provider("hashing").identity
+    d = identidad.as_dict()
+    for campo in ("embedding_provider", "embedding_model", "embedding_dimension"):
+        assert campo in d, campo
+    assert identidad.version, "sin versión, dos índices del mismo modelo son indistinguibles"
+
+
+def test_buscar_en_un_espacio_no_indexado_falla_en_vez_de_devolver_vacio() -> None:
+    """El riesgo del signo contrario, introducido por la propia corrección.
+
+    Con el espacio ya obligatorio, declarar uno inexistente devolvía cero filas
+    **en silencio**, y cero filas se lee como «no hay evidencia»: una abstención
+    con aspecto legítimo causada por un error de configuración.
+    """
+
+    class StoreConIndice(StoreEspia):
+        def embedding_models(self) -> frozenset[str]:
+            return frozenset({"modelo-realmente-indexado"})
+
+        def search(self, query_vector: Any, **kwargs: Any) -> list[RetrievedChunk]:
+            if kwargs["embedding_model"] not in self.embedding_models():
+                raise ValueError("espacio no indexado")
+            return super().search(query_vector, **kwargs)
+
+    from mecanico_ia_exp.experiments.retrieval_runner import recuperar
+
+    with pytest.raises(ValueError, match="no indexado"):
+        recuperar(
+            "semantic",
+            store=StoreConIndice(),  # type: ignore[arg-type]
+            provider=ProveedorFalso(),  # type: ignore[arg-type]
+            caso={"case_id": "T01", "fault_id": "F01_vacuum_leak", "query": "fuel trim"},
+            vehicle_id="mazda-3-bk-2007",
+            engine_code="Z6",
+        )
+
+
+def test_el_fragmento_pertinente_gana_al_irrelevante() -> None:
+    """Relevancia, no solo estructura.
+
+    Con conocimiento previo de cuál es el fragmento pertinente, la recuperación
+    debe colocarlo por encima del irrelevante. Es la comprobación que ninguna
+    prueba hacía: todas se conformaban con que hubiera resultados.
+
+    Se ejecuta con vectores construidos a mano para que la prueba no dependa de
+    descargar un modelo ni de la base de datos, pero comprueba lo que importa:
+    que el orden refleje la proximidad en **un mismo** espacio.
+    """
+    import numpy as np
+
+    consulta = np.array([1.0, 0.0, 0.0], dtype=np.float32)
+    pertinente = np.array([0.98, 0.20, 0.0], dtype=np.float32)
+    irrelevante = np.array([0.0, 0.10, 0.99], dtype=np.float32)
+
+    def coseno(a: Any, b: Any) -> float:
+        return float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))
+
+    assert coseno(consulta, pertinente) > coseno(consulta, irrelevante)
+
+    # Y el punto del hallazgo: si el fragmento pertinente viviera en otro espacio,
+    # su proximidad no significaría nada. Un vector de otro espacio puede quedar
+    # arbitrariamente cerca sin guardar ninguna relación semántica.
+    otro_espacio = np.array([0.999, 0.01, 0.0], dtype=np.float32)
+    assert coseno(consulta, otro_espacio) > coseno(consulta, pertinente), (
+        "un vector ajeno puede ganar por casualidad: por eso el espacio se filtra "
+        "antes de comparar, y no se confía en que la distancia lo distinga"
+    )
