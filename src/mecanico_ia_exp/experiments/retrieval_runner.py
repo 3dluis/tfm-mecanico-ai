@@ -8,6 +8,7 @@ metadata y la jerarquía de autoridad sobre la similitud desnuda.
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 from typing import Any
 
@@ -115,6 +116,7 @@ def recuperar(
     exclude_chunks: tuple[str, ...] = (),
     language: str = "en",
     apply_engine_filter: bool = True,
+    dtc_map: dict[str, tuple[str, ...]] | None = None,
 ) -> list[RetrievedChunk]:
     """Ejecuta una estrategia de recuperación sobre un caso.
 
@@ -181,7 +183,7 @@ def recuperar(
         # No es hacer trampa con la respuesta: es la arquitectura que la
         # pregunta de investigación describe, donde el modelo diagnostica y el
         # RAG busca evidencia PARA ese diagnóstico.
-        codigos = DIAGNOSTICO_A_DTC.get(str(caso.get("fault_id", "")))
+        codigos = (dtc_map or DIAGNOSTICO_A_DTC).get(str(caso.get("fault_id", "")))
         if not codigos:
             # Sin DTC conocido para la condición, se degrada a la mejor
             # estrategia ciega en lugar de devolver nada.
@@ -195,6 +197,7 @@ def recuperar(
                 top_k=top_k,
                 exclude_chunks=exclude_chunks,
                 language=language,
+                dtc_map=dtc_map,
                 # Se propaga: al degradar se perdía y la condición declarada
                 # «sin filtro» corría **con** el filtro puesto. Es el mismo
                 # patrón que `MIXED-EMBEDDING-SPACE`, un nivel más abajo.
@@ -256,13 +259,29 @@ CONJUNTO_E12_ORIGINAL: tuple[str, ...] = (
 )
 
 
+#: Configuración versionada del mapa de códigos con que se produjo el artefacto
+#: original. **No se edita el mapa vigente hasta que coincida**: el mapa actual
+#: pertenece al estado posterior del proyecto y se usa en `E12-EXTENDED`. Aquí se
+#: carga el congelado, con su huella, para que `RERUN-A` manipule una variable.
+MAPA_LEGACY = Path(__file__).resolve().parents[3] / "configs" / "e12_legacy_dtc_map.json"
+
+
+def cargar_mapa_legacy() -> tuple[dict[str, tuple[str, ...]], str]:
+    """Mapa congelado de E12 y su huella, para que ambos vayan al registro."""
+    doc = json.loads(MAPA_LEGACY.read_text(encoding="utf-8"))
+    return {k: tuple(v) for k, v in doc["map"].items()}, str(doc["map_sha256_16"])
+
+
 def _huella(texto: str) -> str:
     """Huella del conjunto de casos, para que quede en el registro."""
     return hashlib.sha256(texto.encode("utf-8")).hexdigest()[:16]
 
 
 def run_retrieval_evaluation(
-    goldset_path: Path = GOLDSET, *, case_set: tuple[str, ...] = CONJUNTO_E12_ORIGINAL
+    goldset_path: Path = GOLDSET,
+    *,
+    case_set: tuple[str, ...] = CONJUNTO_E12_ORIGINAL,
+    dtc_map: dict[str, tuple[str, ...]] | None = None,
 ) -> int:
     """Evalúa todas las estrategias y guarda los resultados.
 
@@ -279,6 +298,11 @@ def run_retrieval_evaluation(
         msg = f"casos ausentes del conjunto anotado: {faltan}"
         raise ValueError(msg)
     casos = [por_id[c] for c in case_set]
+
+    # El mapa congelado por omisión: `RERUN-A` reproduce el estado del artefacto.
+    mapa, mapa_hash = cargar_mapa_legacy()
+    if dtc_map is not None:
+        mapa, mapa_hash = dtc_map, _huella(repr(sorted(dtc_map.items())))
 
     store = PgVectorStore()
     provider = get_provider("multilingual")
@@ -301,6 +325,7 @@ def run_retrieval_evaluation(
                 caso=caso,
                 vehicle_id=vehicle_id,
                 engine_code=engine_code,
+                dtc_map=mapa,
             )
             ficheros = [r.source_file or "" for r in resultados]
             metricas: RetrievalMetrics = evaluate_case(
@@ -394,6 +419,8 @@ def run_retrieval_evaluation(
             "case_set_id": "E12_ORIGINAL_6" if case_set == CONJUNTO_E12_ORIGINAL else "CUSTOM",
             "case_set": list(case_set),
             "case_set_hash": _huella("|".join(case_set)),
+            "dtc_map_id": "E12_LEGACY_DTC_MAP" if dtc_map is None else "CUSTOM",
+            "dtc_map_hash": mapa_hash,
             "goldset_hash": _huella(goldset_path.read_text(encoding="utf-8")),
             "top_k": TOP_K,
             "retrieval_depth": PROFUNDIDAD,

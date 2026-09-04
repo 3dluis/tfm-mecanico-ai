@@ -37,7 +37,7 @@ cifras que van a cambiar.
 - **La recuperación tiene cinco estrategias, no cuatro.**
 - **v2.2 sale del plan**: es RERUN-B, posterior y sobre recuperación ya canónica.
 
-El paso 6 es el más incómodo: el adaptador del modelo de lenguaje **ya está entrenado** sobre
+El paso G es el más incómodo: el adaptador del modelo de lenguaje **ya está entrenado** sobre
 datos generados con recuperación de procedencia indeterminada. Regenerar los datos no
 reentrena el adaptador; decidir si se reentrena es una decisión aparte y posterior, con su
 coste declarado.
@@ -62,12 +62,12 @@ nunca solos.
 
 | Magnitud | Antes | Después |
 |---|---|---|
-| Decisiones correctas, recuento descriptivo | 15 de 17 ejecuciones | por medir |
+| Decisiones correctas, recuento descriptivo | 15 de 17 ejecuciones, de 5 ventanas | por medir |
 | Línea base `ALWAYS_ABSTAIN`, **obligatoria** | 12/17 | por medir |
 | Techo alcanzable | 15/17 | por medir |
 | Cobertura de explicación con evidencia completa | 3/5 | por medir |
 | Explicaciones sin soporte suficiente | 0 | por medir |
-| Posiciones duplicadas por mezcla de espacios | 24 de 150 | **0 esperado** |
+| Posiciones duplicadas por mezcla de espacios | **27 de 140** en 10 de 14 | **0 esperado** |
 | Recuperación E12, las cuatro estrategias | tabla vigente | por medir |
 
 ## 4. Condiciones del experimento tras las decisiones

@@ -28,7 +28,8 @@ sostiene ninguna de sus subpreguntas.
 | **Modelos comparados** | `all-MiniLM-L6-v2` frente a `paraphrase-multilingual-MiniLM-L12-v2` |
 | **Espacios** | uno por modelo, **filtrados**: es justamente lo que el defecto impedía |
 | **Métricas** | tasa de acierto, precisión y ganancia acumulada descontada en la posición 10, y posición del primer relevante |
-| **Unidad** | consulta; **N = 6** consultas por idioma y modelo |
+| **Unidad** | consulta |
+| **Denominadores, propios de este experimento** | `n_evaluated = 6` consultas por idioma y modelo · `n_scored` = las que tienen ficheros relevantes en la verdad de referencia, **por determinar antes de ejecutar** · `n_excluded_from_metric` con su motivo |
 | **Condición** | sin filtro por código ni por motor, para que solo compita la semántica |
 
 ## 4. Criterio de interpretación, fijado antes
@@ -41,6 +42,11 @@ sostiene ninguna de sus subpreguntas.
 
 **Consecuencia aceptada de antemano:** si la evaluación no reproduce la ventaja, **el modelo por
 defecto del sistema queda sin justificación empírica**, y eso se escribe.
+
+**No hereda el denominador de la recuperación.** Es otro experimento: fija su propia unidad,
+sus propios evaluados y puntuados, y sus propias exclusiones. Compartir «N = 6» por comodidad
+fue el error que arrastró este documento en su primera versión, y viene de la misma familia que
+confundir evaluados con puntuados.
 
 ## 5. Precondición
 

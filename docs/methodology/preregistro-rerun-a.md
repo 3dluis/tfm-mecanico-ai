@@ -255,3 +255,113 @@ Sobre identificadores de fragmento, comprobables **antes** de mirar ninguna deci
 Ambos se evalúan sobre el campo `retrieved` del artefacto de recuperación y se **congelan antes
 de puntuar nada**. La clasificación resultante —válida, redundante o inválida— se registra
 antes de calcular ninguna métrica que dependa de ella.
+
+---
+
+# Enmienda ENM-S02
+
+**Fecha:** 4 de septiembre de 2026 · **Anterior a toda medición** · **Motivada por:**
+`RAG-MAJ-070` y `EXP-MAJ-148`, encontrados **por separado** por dos auditorías.
+
+## S-5 · De dónde se evalúan D-1 y D-2
+
+El defecto: los definí «sobre el campo `retrieved` del artefacto de recuperación», y al acotar
+ese experimento a sus seis casos originales ese campo **no contiene ninguna condición de
+distractor**. El criterio apuntaba a un artefacto donde no existe lo que quiere medir.
+
+Y lo señalado por la segunda auditoría es lo que obliga a fijarlo **ahora**: elegir la otra
+fuente después de ver el artefacto sería exactamente el grado de libertad que `ENM-S01` venía a
+cerrar.
+
+| | |
+|---|---|
+| **Experimento fuente** | suficiencia, `E15`/`E17` |
+| **Artefacto** | `experiments/E15_suficiencia.json`, ejecución canónica de `RERUN-A` |
+| **Campo** | `bundle.documents`, los fragmentos aplicables que llegaron al ensamblador |
+| **Unidad** | `chunk_id`, por caso |
+| **D-1** | existe al menos un `chunk_id` procedente de los ficheros declarados distractores en el caso |
+| **D-2** | la diferencia simétrica entre los `chunk_id` de la condición de distractor y los de la condición parcial, **misma ventana**, no es vacía |
+| **Regla de decisión** | ambos se cumplen → `VALID_CONDITION`; D-2 falla → `REDUNDANT_WITH_PARTIAL`; D-1 falla → `INVALID_CONDITION` |
+
+**No se cambiará de artefacto ni de campo después de ver el resultado.** La condición sigue en
+`PENDING_CANONICAL_DIAGNOSIS`: ni válida, ni redundante, ni inválida.
+
+## S-6 · El diseño inferencial retirado, no el número
+
+`STAT-MAJ-025` mostró que mi cláusula era insuficiente por dos motivos: escribí que con el
+estadístico en 2 «ningún K alcanza 0,05», y es **falso para K = 5**, donde 5⁻² = **0,040**; y la
+prohibición recaía sobre el **valor** 0,008, no sobre el **diseño**.
+
+Lo que queda prohibido es el diseño:
+
+```
+RETRACTED_TEST_DESIGN
+  unidad de permutación : condición dentro de la ventana
+  K                     : 5
+  condiciones           : FULL, ABSENT, PARTIAL, DISTRACTOR, DISTRACTOR_NO_FILTER
+  estadístico           : bloques cuya única decisión de explicar recae en FULL
+  permutación           : exacta dentro de bloque
+  hipótesis             : independencia decisión ↔ condición
+```
+
+Ninguna ruta puede: **reutilizar** esa combinación; **conservar** una condición redundante para
+elevar K; **reasignar** un valor ya calculado a otra hipótesis; **cambiar la lateralidad** tras
+el resultado; **cambiar la unidad de permutación** tras el resultado.
+
+Los números son consecuencia del diseño. Prohibir `0,008` y dejar viva la combinación que lo
+produce no prohibía nada.
+
+## S-7 · El estadístico, definido sobre todo su espacio
+
+`STAT-MAJ-024`: `T-PRINCIPAL` solo estaba definido para el caso en que **todos** los bloques
+explican en evidencia completa y con una sola explicación por bloque.
+
+| Caso | Valor p |
+|---|---|
+| `m = 1` explicación por bloque, `T` bloques de `N` a favor | cola superior de la binomial exacta: `P(T' ≥ T)` con `p₀ = 1/K` |
+| `m > 1` explicaciones en algún bloque | **el estadístico no aplica**; se reporta descriptivo y se declara |
+
+La cola se calcula **siempre** como probabilidad de igualar o superar el observado, nunca como
+`K⁻ᵀ`, que solo coincide cuando `T = N`.
+
+## S-8 · Una sola regla de K
+
+`STAT-MAJ-026` y `RAG`: dos reglas vivas, una que conservaba la variante sin filtro y otra que
+la retiraba en prosa.
+
+| Concepto | Qué es |
+|---|---|
+| `K_planned` | condiciones pre-registradas, antes del diagnóstico |
+| `K_valid` | las que el diagnóstico canónico declara que manipulan una variable observable |
+| `K_scored` | las que entran en el estadístico principal |
+
+> **Regla, sin excepción.** Una condición que el diagnóstico declare redundante o inválida sale
+> de `K_valid` **aunque eso haga imposible alcanzar significación**. No se conserva por
+> potencia. `K_scored ≤ K_valid ≤ K_planned`.
+
+Con `K_valid = 2` no hay inferencia confirmatoria posible y se reportan descriptivos, la
+comparación por ventana, el efecto observado y la limitación de potencia. **El trabajo no
+necesita un valor p por debajo de 0,05.**
+
+## S-9 · Evaluados, puntuados y excluidos
+
+Toda cifra declara los tres, nunca uno solo:
+
+```
+n_evaluated · n_scored · n_excluded_from_metric · reason
+```
+
+Para recuperación: **6 evaluados, 5 puntuados, 1 excluido**, por no tener ficheros relevantes en
+la verdad de referencia. El caso excluido —evidencia retirada— **forma parte del experimento**
+aunque no contribuya a una métrica que divide por relevantes. Decir «N = 5» a secas lo borraría
+del experimento; decir «N = 6» atribuiría a seis una media de cinco.
+
+La medición translingüe **no hereda** este denominador: es otro experimento y fija el suyo.
+
+## S-10 · La tabla histórica no es columna «antes»
+
+`LEGACY_RESULT_WITHOUT_CANONICAL_ARTIFACT` no puede ocupar la columna «antes» de una comparación
+cuantitativa: no tiene el mismo nivel de procedencia. Se publican por separado, con su estado.
+
+Para el contraste causal se usan **únicamente** magnitudes antiguas con artefacto congelado y
+reconstruible.
