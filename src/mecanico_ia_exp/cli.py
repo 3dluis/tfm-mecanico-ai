@@ -59,6 +59,17 @@ def main(argv: list[str] | None = None) -> int:
         "sufficiency", help="verificar suficiencia y, opcionalmente, redactar"
     )
     suf.add_argument(
+        "--mode",
+        choices=("oracle", "non-oracle", "adverse"),
+        default="oracle",
+        help=(
+            "oracle: los códigos que acotan la búsqueda y exige el verificador salen de la "
+            "etiqueta anotada (cota superior asistida por oráculo). non-oracle: salen del "
+            "diagnóstico del modelo. adverse: además, ventanas que el modelo clasifica mal. "
+            "Política congelada en docs/methodology/politica-evaluacion-no-oracular.md"
+        ),
+    )
+    suf.add_argument(
         "--llm",
         default=None,
         help=(
@@ -153,7 +164,11 @@ def main(argv: list[str] | None = None) -> int:
             run_sufficiency,
         )
 
-        return run_sufficiency(llm=args.llm)
+        return run_sufficiency(
+            llm=args.llm,
+            oracle=args.mode == "oracle",
+            adverse=args.mode == "adverse",
+        )
 
     return 2
 

@@ -64,7 +64,29 @@ def _calibrar(entrenamiento: Any, validacion: Any, configuracion: BaselineConfig
     return calibrado
 
 
-def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
+def run_sufficiency(
+    dataset_id: str = DATASET,
+    llm: str | None = None,
+    *,
+    oracle: bool = True,
+    adverse: bool = False,
+) -> int:
+    """Ejecuta el experimento de suficiencia sobre el conjunto anotado.
+
+    Los tres modos están definidos y congelados en
+    `docs/methodology/politica-evaluacion-no-oracular.md`.
+
+    - `oracle=True`: modo vigente. Los códigos que acotan la búsqueda y los que
+      exige el verificador se derivan de la **etiqueta anotada**. Es una **cota
+      superior asistida por oráculo**, no una estimación del comportamiento.
+    - `oracle=False`: se derivan del **diagnóstico del modelo**, que es lo único
+      que el sistema posee en ejecución.
+    - `adverse=True`: además, se seleccionan ventanas que el modelo **clasifica
+      mal**. El sistema busca evidencia para un diagnóstico incorrecto.
+
+    En los tres modos la etiqueta y la decisión anotada se usan **solo para
+    puntuar**, nunca para recuperar ni para verificar.
+    """
     """Verifica la suficiencia y, si se pide un proveedor, redacta con él."""
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
@@ -129,10 +151,17 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
     veredictos: list[Any] = []
 
     for caso in casos_gold:
+        # GROUND TRUTH. A partir de aquí solo puede usarse para puntuar.
         fault_id = str(caso["fault_id"])
-        indices = np.flatnonzero((validacion.y == fault_id) & aciertos)
+        # En el modo adverso se buscan ventanas de esta condición que el modelo
+        # clasifica **mal**: es el escenario que el modo vigente excluye por
+        # construcción, y donde se comprueba si una explicación trazable puede
+        # respaldar un diagnóstico falso.
+        seleccion = (validacion.y == fault_id) & (~aciertos if adverse else aciertos)
+        indices = np.flatnonzero(seleccion)
         if indices.size == 0:
-            print(f"{caso['case_id']}: sin casos correctamente clasificados")
+            cual = "mal clasificados" if adverse else "correctamente clasificados"
+            print(f"{caso['case_id']}: sin casos {cual}")
             continue
         i = int(indices[0])
         case_id = (
@@ -162,20 +191,29 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
         excluidos = store.chunks_for_dtc(
             tuple(caso.get("exclude_dtc") or ()), vehicle_id=VEHICULO
         ) + store.chunks_for_files(tuple(caso.get("exclude_files") or ()), vehicle_id=VEHICULO)
+        # RAG QUERY INPUT. El texto de consulta es el del caso, que describe
+        # síntomas; lo que cambia entre modos es qué códigos acotan la búsqueda.
+        caso_consulta = caso if oracle else {**caso, "fault_id": str(atribucion.predicted_class)}
         recuperados = recuperar(
             "diagnosis-guided",
             store=store,
             provider=provider,
-            caso=caso,
+            caso=caso_consulta,
             vehicle_id=VEHICULO,
             engine_code=perfil.engine_code or "Z6",
             exclude_chunks=excluidos,
             apply_engine_filter=bool(caso.get("apply_engine_filter", True)),
         )
 
-        # Los DTC que documentan esta condición: si el fragmento citado no
-        # porta ninguno, no está hablando de este fallo.
+        # Los DTC que documentan la condición **diagnosticada**: si el fragmento
+        # citado no porta ninguno, no está hablando de ese fallo.
         from mecanico_ia_exp.experiments.retrieval_runner import DIAGNOSTICO_A_DTC
+
+        # MODEL PREDICTION frente a GROUND TRUTH. En modo no oracular todo lo que
+        # sigue se deriva del diagnóstico del modelo, que es lo único que el
+        # sistema posee cuando se ejecuta de verdad.
+        diagnostico = fault_id if oracle else str(atribucion.predicted_class)
+        codigos_esperados = DIAGNOSTICO_A_DTC.get(diagnostico, ())
 
         bundle, comprobaciones = assemble(
             case_id=case_id,
@@ -184,7 +222,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
             recuperados=recuperados,
             calibrated_confidence=confianza_calibrada,
             accepted_applicability=umbrales.accepted_applicability,
-            expected_dtc=DIAGNOSTICO_A_DTC.get(fault_id, ()),
+            expected_dtc=codigos_esperados,
         )
         veredicto = verificador.verify(bundle)
 
@@ -196,7 +234,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
             ejecucion = run_agent(get_llm(llm), bundle, veredicto)
             ejecucion.gold_case_id = str(caso["case_id"])
 
-        veredictos.append((caso, bundle, veredicto, comprobaciones, ejecucion))
+        veredictos.append((caso, bundle, veredicto, comprobaciones, ejecucion, diagnostico))
 
         esperado = str(caso["expected_action"])
         correcto = veredicto.decision.value == esperado
@@ -204,6 +242,8 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
             {
                 "case_id_gold": caso["case_id"],
                 "fault_id": fault_id,
+                "predicted_class": str(atribucion.predicted_class),
+                "prediction_correct": str(atribucion.predicted_class) == fault_id,
                 "case_id": case_id,
                 "corpus_variant": caso.get("corpus_variant", "FULL"),
                 "n_excluded_chunks": len(excluidos),
@@ -221,7 +261,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
         f"{'conf':>7}{'docs':>6}{'cob.':>7}  motivos"
     )
     print("-" * 118)
-    for caso, _bundle, v, _comp, _e in veredictos:
+    for caso, _bundle, v, _comp, _e, _d in veredictos:
         esperado = str(caso["expected_action"])
         marca = "OK" if v.decision.value == esperado else "!!"
         s = v.signals
@@ -233,17 +273,27 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
         )
 
     aciertos_decision = sum(
-        1 for c, _b, v, _cc, _e in veredictos if v.decision.value == str(c["expected_action"])
+        1 for c, _b, v, _cc, _e, _d in veredictos if v.decision.value == str(c["expected_action"])
     )
     print(f"\ndecisiones correctas: {aciertos_decision}/{len(veredictos)}")
 
+    modo = "adverse" if adverse else ("oracle" if oracle else "non_oracle")
+    sufijo = "" if modo == "oracle" else f"_{modo}"
     tablas = paths.ensure(paths.TABLES)
-    pd.DataFrame(filas).to_csv(tablas / "E15_suficiencia.csv", index=False)
+    pd.DataFrame(filas).to_csv(tablas / f"E15_suficiencia{sufijo}.csv", index=False)
     experimentos = paths.ensure(paths.EXPERIMENTS)
     escribir(
-        experimentos / "E15_suficiencia.json",
+        experimentos / f"E15_suficiencia{sufijo}.json",
         {
-            "experiment_id": "E15_sufficiency",
+            "experiment_id": f"E15_sufficiency{sufijo}",
+            "mode": modo,
+            "oracle_channels_open": {
+                # Los tres canales de `docs/methodology/politica-evaluacion-no-oracular.md`.
+                "O1_window_selection_requires_correct_prediction": not adverse,
+                "O2_retrieval_scoped_by_annotated_label": oracle,
+                "O3_support_dtc_from_annotated_label": oracle,
+            },
+            "evaluation_policy": "docs/methodology/politica-evaluacion-no-oracular.md",
             "dataset_id": dataset_id,
             "vehicle_id": VEHICULO,
             "verifier_version": VERIFIER_VERSION,
@@ -253,6 +303,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
                 {
                     "case_id": c["case_id"],
                     "fault_id": c["fault_id"],
+                    "diagnosis_used": d,
                     "corpus_variant": c.get("corpus_variant", "FULL"),
                     "bundle": b.to_dict(),
                     "verdict": v.to_dict(),
@@ -260,7 +311,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
                     # Sin él la decisión no sería auditable.
                     "support_checks": [c.to_dict() for c in comp],
                 }
-                for c, b, v, comp, _e in veredictos
+                for c, b, v, comp, _e, d in veredictos
             ],
         },
         seed=configuracion.seed,
@@ -278,7 +329,7 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
         print(cab)
         print("-" * len(cab))
         agentes = []
-        for caso, _b, v, _c, e in veredictos:
+        for caso, _b, v, _c, e, _d in veredictos:
             if e is None:
                 continue
             agentes.append(e)
