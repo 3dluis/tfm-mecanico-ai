@@ -421,7 +421,10 @@ def check_support(
             f"{requisito.value}: no está declarado qué códigos documentan este diagnóstico; "
             "el verificador no puede comprobarlo, y eso no es haber comprobado sin encontrar",
         )
-    if lleva_dtc is False:
+    # Solo `DTC_REQUIRED` descalifica por no portar el código. Con `DTC_OPTIONAL`
+    # el código refuerza y su ausencia no invalida, que es lo que significa que
+    # sea opcional; los otros dos requisitos ya han devuelto arriba.
+    if lleva_dtc is False and requisito is DtcRequirement.DTC_REQUIRED:
         return resultado(
             False, f"el fragmento no porta ninguno de los códigos esperados {list(expected_dtc)}"
         )
