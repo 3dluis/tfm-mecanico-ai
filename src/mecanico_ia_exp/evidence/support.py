@@ -122,8 +122,28 @@ _ENCABEZADO_TABLA = re.compile(
     re.IGNORECASE,
 )
 
-#: Encabezado de procedimiento: nombra un único código como asunto.
+#: Encabezado de procedimiento: nombra un único código como asunto. Es el título
+#: con que el manual encabeza cada procedimiento diagnóstico: 272 secciones así,
+#: con 921 fragmentos, en el corpus del vehículo.
 _ENCABEZADO_PROCEDIMIENTO = re.compile(r"^\s*DTC\s+[PBCU]\d{4}\b", re.IGNORECASE)
+
+#: Encabezado de listado, a nivel de sección (v2.1). Se define aparte de
+#: `_ENCABEZADO_TABLA`, que sigue sirviendo a la clasificación por fragmento de v2
+#: sin cambios: aquel patrón mezclaba listados con lógica de detección, y la regla
+#: documentada para v2.1 las separa, porque una tabla y una condición de detección
+#: son cosas distintas del manual. Ninguna de las dos sostiene, así que la
+#: separación no cambia ninguna decisión: cambia el papel que se registra.
+_SECCION_TABLA = re.compile(
+    r"(\bDTC TABLE\b|\bSELF\s*-?\s*TEST\b|\bLIST\b|\bINDEX\b)", re.IGNORECASE
+)
+
+#: Encabezado de material de referencia: habla del código con contenido técnico
+#: pero no dice cómo se comprueba nada desde fuera.
+_ENCABEZADO_REFERENCIA = re.compile(
+    r"(DETECTION LOGIC|DETECTION CONDITIONS?|TEST MODE|SPECIFICATIONS?|"
+    r"\bFUNCTION\b|DESCRIPTION|MONITORING)",
+    re.IGNORECASE,
+)
 
 #: A partir de cuántos códigos distintos un fragmento se comporta como listado.
 #: En este manual un procedimiento trata uno, a veces una familia pequeña; de
@@ -132,12 +152,41 @@ _ENCABEZADO_PROCEDIMIENTO = re.compile(r"^\s*DTC\s+[PBCU]\d{4}\b", re.IGNORECASE
 MAX_CODIGOS_PROCEDIMIENTO = 3
 
 
+def classify_section(section: str | None) -> ChunkRole | None:
+    """Papel declarado por el encabezado de sección (política v2.1).
+
+    La sección es la unidad semántica del manual: un procedimiento diagnóstico es
+    una sección titulada por el código que diagnostica, y el troceado la parte en
+    varios fragmentos. Clasificar cada fragmento en aislamiento hacía que las
+    partes de un mismo procedimiento recibieran papeles distintos, que es medir
+    una decisión del sistema de recuperación como si fuera una propiedad del
+    documento.
+
+    Devuelve ``None`` cuando el encabezado no declara nada; entonces decide la
+    clasificación por rasgos del fragmento, que es la de v2.
+    """
+    if not section:
+        return None
+    if _ENCABEZADO_PROCEDIMIENTO.search(section):
+        return ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE
+    if _SECCION_TABLA.search(section):
+        return ChunkRole.CODE_DEFINITION_OR_TABLE
+    if _ENCABEZADO_REFERENCIA.search(section):
+        return ChunkRole.SUPPORTING_DIAGNOSTIC_REFERENCE
+    return None
+
+
 def classify_chunk(evidencia: DocumentaryEvidence) -> ChunkRole:
     """Clasifica el fragmento por lo que hace.
 
-    Reglas en orden, todas generales: ninguna menciona una señal, un código ni un
-    fallo concretos.
+    Dos pasos: primero el encabezado de sección, que es la taxonomía del propio
+    manual; si no declara nada, los rasgos del fragmento. Todas las reglas son
+    generales: ninguna menciona una señal, un código ni un fallo concretos.
     """
+    por_seccion = classify_section(evidencia.section)
+    if por_seccion is not None:
+        return por_seccion
+
     encabezado = evidencia.section or ""
     cuerpo = f"{encabezado}\n{evidencia.text}"
     n_dtc = len(set(evidencia.dtc_codes))
