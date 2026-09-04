@@ -114,10 +114,18 @@ def recuperar(
     top_k: int = TOP_K,
     exclude_chunks: tuple[str, ...] = (),
     language: str = "en",
-    embedding_model: str | None = None,
     apply_engine_filter: bool = True,
 ) -> list[RetrievedChunk]:
-    """Ejecuta una estrategia de recuperación sobre un caso."""
+    """Ejecuta una estrategia de recuperación sobre un caso.
+
+    El espacio vectorial **no es un parámetro**: se deriva del proveedor que
+    vectoriza la consulta. Consulta e índice quedan en el mismo espacio por
+    construcción, y no hay nada que un llamante pueda olvidar.
+
+    Antes era un parámetro opcional y ninguno de los tres ejecutores lo pasaba:
+    `docs/methodology/politica-espacio-de-embeddings.md`.
+    """
+    embedding_model = provider.identity.model
     # La consulta en el idioma pedido. El corpus es solo inglés, así que una
     # consulta en español es recuperación translingüe: el caso realista, porque
     # el TFM se escribe en español y el manual del fabricante está en inglés.
@@ -187,7 +195,6 @@ def recuperar(
                 top_k=top_k,
                 exclude_chunks=exclude_chunks,
                 language=language,
-                embedding_model=embedding_model,
             )
         acotado = store.search(
             vector,

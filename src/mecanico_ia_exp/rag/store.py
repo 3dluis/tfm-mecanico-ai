@@ -98,7 +98,7 @@ class VectorStore(ABC):
         dtc_codes: tuple[str, ...] | None = None,
         exclude_documents: tuple[str, ...] = (),
         exclude_chunks: tuple[str, ...] = (),
-        embedding_model: str | None = None,
+        embedding_model: str,
     ) -> list[RetrievedChunk]:
         """Busca fragmentos **del vehículo indicado**.
 
@@ -361,23 +361,30 @@ class PgVectorStore(VectorStore):
         dtc_codes: tuple[str, ...] | None = None,
         exclude_documents: tuple[str, ...] = (),
         exclude_chunks: tuple[str, ...] = (),
-        embedding_model: str | None = None,
+        embedding_model: str,
     ) -> list[RetrievedChunk]:
         vector = "[" + ",".join(f"{v:.6f}" for v in np.asarray(query_vector).ravel()) + "]"
         # El modelo de embeddings acota la búsqueda. Un índice puede contener
         # vectores de varios modelos --conviven a propósito, para poder
         # compararlos-- y mezclarlos en una misma consulta compararía puntos de
         # espacios distintos: los resultados serían ruido con aspecto de orden.
-        condiciones = ["e.vehicle_id = :vehicle_id"]
-        if embedding_model:
-            condiciones.append("e.embedding_model = :embedding_model")
+        #
+        # Hasta el 4 de septiembre de 2026 este razonamiento estaba escrito aquí
+        # y la línea siguiente hacía el filtro **opcional**, con el parámetro a
+        # nulo por defecto. Ninguno de los tres ejecutores lo pasaba, así que
+        # cada consulta ordenó 12 316 vectores de dos espacios a la vez. El
+        # parámetro es ahora obligatorio: `MIXED-EMBEDDING-SPACE`,
+        # `docs/methodology/politica-espacio-de-embeddings.md`.
+        condiciones = [
+            "e.vehicle_id = :vehicle_id",
+            "e.embedding_model = :embedding_model",
+        ]
         parametros: dict[str, Any] = {
             "vehicle_id": vehicle_id,
             "vector": vector,
             "top_k": top_k,
+            "embedding_model": embedding_model,
         }
-        if embedding_model:
-            parametros["embedding_model"] = embedding_model
         if document_types:
             condiciones.append("d.document_type = ANY(:document_types)")
             parametros["document_types"] = list(document_types)

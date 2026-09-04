@@ -41,6 +41,10 @@ class StoreEspia:
         self.modelos.append(kwargs.get("embedding_model"))
         return []
 
+    def search_lexical(self, *a: Any, **k: Any) -> list[RetrievedChunk]:
+        """La rama léxica de la fusión híbrida no usa vectores: no lleva espacio."""
+        return []
+
     def chunks_for_dtc(self, *a: Any, **k: Any) -> tuple[str, ...]:
         return ()
 
@@ -61,6 +65,9 @@ class ProveedorFalso:
 
     def embed(self, textos: list[str]) -> np.ndarray:
         return np.zeros((len(textos), 384), dtype=np.float32)
+
+    def embed_one(self, texto: str) -> np.ndarray:
+        return np.zeros(384, dtype=np.float32)
 
 
 # --- 1 · La ruta real declara el espacio ---------------------------------------
@@ -134,25 +141,40 @@ def test_buscar_sin_declarar_el_espacio_es_un_error() -> None:
         )
 
 
-def test_ningun_punto_de_llamada_omite_el_espacio() -> None:
-    """Comprobación estática de las tres rutas: suficiencia, recuperación, ajuste.
+def test_ninguna_busqueda_vectorial_omite_el_espacio() -> None:
+    """Comprobación estática sobre las cuatro rutas que buscan.
 
     Complementa a la prueba dinámica: cubre puntos de llamada que un test podría
     no ejercitar, y falla al añadir uno nuevo que olvide el parámetro.
+
+    `search_lexical` queda fuera a propósito: no usa vectores, así que no tiene
+    espacio que declarar.
     """
     omisiones: list[str] = []
-    for fichero in LLAMANTES:
+    for fichero in (*LLAMANTES, RAIZ / "experiments" / "retrieval_runner.py"):
         arbol = ast.parse(fichero.read_text(encoding="utf-8"))
         for nodo in ast.walk(arbol):
             if not isinstance(nodo, ast.Call):
                 continue
-            nombre = getattr(nodo.func, "attr", None) or getattr(nodo.func, "id", None)
-            if nombre not in ("search", "recuperar"):
+            if getattr(nodo.func, "attr", None) != "search":
                 continue
             claves = {k.arg for k in nodo.keywords if k.arg}
-            if "embedding_model" not in claves and not any(k.arg is None for k in nodo.keywords):
-                omisiones.append(f"{fichero.name}:{nodo.lineno} {nombre}()")
-    assert not omisiones, "puntos de llamada sin espacio declarado: " + ", ".join(omisiones)
+            if "embedding_model" not in claves:
+                omisiones.append(f"{fichero.name}:{nodo.lineno}")
+    assert not omisiones, "búsquedas vectoriales sin espacio declarado: " + ", ".join(omisiones)
+
+
+def test_recuperar_no_acepta_el_espacio_como_parametro() -> None:
+    """Lo deriva del proveedor, que es lo que impide que diverja.
+
+    Un parámetro que hay que acordarse de pasar es el defecto que esto corrige:
+    volver a añadirlo reabriría la puerta.
+    """
+    import inspect
+
+    from mecanico_ia_exp.experiments.retrieval_runner import recuperar
+
+    assert "embedding_model" not in inspect.signature(recuperar).parameters
 
 
 # --- 3 · Efecto observable del defecto -----------------------------------------

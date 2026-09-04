@@ -28,6 +28,16 @@ from mecanico_ia_exp.rag.loaders import (
     load_document,
 )
 
+#: Espacio vectorial en que buscan estas pruebas. Declararlo es obligatorio
+#: desde `MIXED-EMBEDDING-SPACE`: el índice contiene dos modelos y una búsqueda
+#: sin espacio los mezclaba en una misma ordenación.
+#:
+#: Estas pruebas comprueban **propiedades estructurales** de la búsqueda --orden,
+#: filtros por vehículo y motor, exclusiones-- y no relevancia semántica, así que
+#: su vector de consulta puede venir de otro proveedor. Lo que no puede es dejar
+#: el espacio del índice sin declarar.
+ESPACIO = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+
 VEHICULO = "mazda-3-bk-2007"
 
 
@@ -305,7 +315,7 @@ def test_vector_search(store) -> None:
     from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
 
     v = HashingEmbeddingProvider().embed_one("oxygen sensor slow response")
-    res = store.search(v, vehicle_id=VEHICULO, top_k=5)
+    res = store.search(v, vehicle_id=VEHICULO, top_k=5, embedding_model=ESPACIO)
     assert res
     assert [r.rank for r in res] == list(range(1, len(res) + 1))
     # Las puntuaciones llegan ordenadas de mayor a menor.
@@ -322,9 +332,11 @@ def test_no_cross_vehicle_retrieval(store) -> None:
     from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
 
     v = HashingEmbeddingProvider().embed_one("oxygen sensor slow response")
-    assert store.search(v, vehicle_id="vehiculo-inexistente", top_k=10) == []
+    assert (
+        store.search(v, vehicle_id="vehiculo-inexistente", top_k=10, embedding_model=ESPACIO) == []
+    )
 
-    propios = store.search(v, vehicle_id=VEHICULO, top_k=10)
+    propios = store.search(v, vehicle_id=VEHICULO, top_k=10, embedding_model=ESPACIO)
     assert propios
     assert all(r.vehicle_id == VEHICULO for r in propios)
 
@@ -335,7 +347,9 @@ def test_vehicle_metadata_filter(store) -> None:
     from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
 
     v = HashingEmbeddingProvider().embed_one("engine inspection procedure")
-    filtrados = store.search(v, vehicle_id=VEHICULO, top_k=100, engine_codes=("Z6", "ZJ"))
+    filtrados = store.search(
+        v, vehicle_id=VEHICULO, top_k=100, engine_codes=("Z6", "ZJ"), embedding_model=ESPACIO
+    )
     ajenos = [
         r
         for r in filtrados
@@ -349,7 +363,9 @@ def test_el_filtro_por_dtc_devuelve_solo_fragmentos_con_ese_codigo(store) -> Non
     from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
 
     v = HashingEmbeddingProvider().embed_one("slow response")
-    res = store.search(v, vehicle_id=VEHICULO, top_k=10, dtc_codes=("P0133",))
+    res = store.search(
+        v, vehicle_id=VEHICULO, top_k=10, dtc_codes=("P0133",), embedding_model=ESPACIO
+    )
     assert res, "el corpus debería contener el procedimiento de P0133"
     assert all("P0133" in r.dtc_codes for r in res)
 
@@ -360,10 +376,12 @@ def test_la_exclusion_de_documentos_construye_las_variantes_del_corpus(store) ->
     from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
 
     v = HashingEmbeddingProvider().embed_one("oxygen sensor")
-    completo = store.search(v, vehicle_id=VEHICULO, top_k=5)
+    completo = store.search(v, vehicle_id=VEHICULO, top_k=5, embedding_model=ESPACIO)
     assert completo
     excluidos = tuple({r.chunk_id for r in completo})
-    reducido = store.search(v, vehicle_id=VEHICULO, top_k=5, exclude_chunks=excluidos)
+    reducido = store.search(
+        v, vehicle_id=VEHICULO, top_k=5, exclude_chunks=excluidos, embedding_model=ESPACIO
+    )
     assert not ({r.chunk_id for r in reducido} & set(excluidos))
 
 
@@ -376,7 +394,7 @@ def test_retrieval_logging(store) -> None:
 
     proveedor = HashingEmbeddingProvider()
     v = proveedor.embed_one("thermostat")
-    res = store.search(v, vehicle_id=VEHICULO, top_k=3)
+    res = store.search(v, vehicle_id=VEHICULO, top_k=3, embedding_model=ESPACIO)
     run_id = store.log_retrieval(
         vehicle_id=VEHICULO,
         query_text="thermostat",
@@ -428,7 +446,7 @@ def test_chunk_provenance_completa_en_la_base(store) -> None:
     from mecanico_ia_exp.rag.embeddings import HashingEmbeddingProvider
 
     v = HashingEmbeddingProvider().embed_one("HO2S inspection")
-    res = store.search(v, vehicle_id=VEHICULO, top_k=1)
+    res = store.search(v, vehicle_id=VEHICULO, top_k=1, embedding_model=ESPACIO)
     assert res
     r = res[0]
     assert r.chunk_id and r.document_id and r.vehicle_id
