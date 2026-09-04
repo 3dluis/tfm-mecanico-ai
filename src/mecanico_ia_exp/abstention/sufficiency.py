@@ -29,7 +29,16 @@ from mecanico_ia_exp.rag.vehicle import Applicability
 #: soporte**, no cuando cambia un umbral. Va al registro: sin ella, dos
 #: ejecuciones con políticas distintas son indistinguibles desde el artefacto, y
 #: la comparación entre versiones deja de ser posible.
-VERIFIER_VERSION = "v2.2"
+#: Política **canónica** vigente. `v2.2` está implementada y probada pero **no
+#: medida**: introducirla a la vez que la corrección del espacio de embeddings
+#: haría cambiar dos variables en la misma ejecución y perdería la atribución
+#: causal. Se mide después, sobre recuperación ya canónica (RERUN-B).
+VERIFIER_VERSION = "v2.1"
+
+#: Políticas disponibles. `check_support` aplica la puerta de códigos con
+#: requisito explícito solo cuando la política activa es `v2.2`; con `v2.1` se
+#: comporta como el artefacto congelado de esa versión.
+POLITICAS = ("v2.1", "v2.2")
 
 
 class Sufficiency(StrEnum):

@@ -195,6 +195,10 @@ def recuperar(
                 top_k=top_k,
                 exclude_chunks=exclude_chunks,
                 language=language,
+                # Se propaga: al degradar se perdía y la condición declarada
+                # «sin filtro» corría **con** el filtro puesto. Es el mismo
+                # patrón que `MIXED-EMBEDDING-SPACE`, un nivel más abajo.
+                apply_engine_filter=apply_engine_filter,
             )
         acotado = store.search(
             vector,
