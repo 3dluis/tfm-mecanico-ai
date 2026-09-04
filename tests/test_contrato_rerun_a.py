@@ -394,3 +394,66 @@ def test_el_manifiesto_enumera_el_estado_y_la_variable_manipulada() -> None:
         "excluded": ["C06_vacuum_leak_evidencia_retirada"],
         "reason": "no relevant files in ground truth",
     }
+
+
+# --- Fidelidad, no solo integridad --------------------------------------------
+# Lección del quinto pase: una huella demuestra que el valor declarado no ha
+# cambiado, no que sea el valor correcto. El mapa congelado tenía huella válida y
+# le faltaba una entrada. Estas pruebas comparan cada pieza del manifiesto con su
+# **fuente**, no consigo misma.
+
+
+def _manifiesto() -> dict[str, object]:
+    return json.loads((RAIZ / "configs" / "manifest_rerun_a.json").read_text(encoding="utf-8"))
+
+
+def test_el_identificador_de_espacio_es_el_que_produce_el_codigo() -> None:
+    """Lo escribí a mano y no coincidía: sobraba el dispositivo y la versión era
+    otra. Un identificador inventado no identifica nada."""
+    from mecanico_ia_exp.rag.embeddings import get_provider
+
+    ident = get_provider("multilingual").identity
+    real = f"{ident.provider}/{ident.model}/d{ident.dimension}/v{ident.version}"
+    emb = _manifiesto()["CONTROLLED_STATE"]["embedding"]  # type: ignore[index]
+    assert emb["provider_identity_string"] == real, (
+        f"el manifiesto declara {emb['provider_identity_string']!r} y el código produce {real!r}"
+    )
+
+
+def test_el_dispositivo_de_embeddings_esta_declarado_como_estado_controlado() -> None:
+    """Quinta variable derivada, detectada antes de medir.
+
+    El dispositivo forma parte de la identidad del proveedor y queda en el índice,
+    pero la búsqueda filtra por **nombre de modelo**, no por la identidad completa:
+    vectores calculados en dispositivos distintos conviven bajo el mismo espacio y
+    el filtro no los separa. No son idénticos bit a bit.
+    """
+    from mecanico_ia_exp.rag.embeddings import get_provider
+
+    emb = _manifiesto()["CONTROLLED_STATE"]["embedding"]  # type: ignore[index]
+    assert "device" in emb, "el dispositivo no está en el manifiesto"
+    declarado = emb["device"]["value"]  # type: ignore[index]
+    actual = get_provider("multilingual").identity.provider.split("[")[1].rstrip("]")
+    assert declarado == actual, (
+        f"el manifiesto fija el dispositivo {declarado!r} y esta máquina usa {actual!r}: "
+        "los vectores no serían bit a bit los del índice"
+    )
+
+
+def test_el_conjunto_anotado_del_manifiesto_reproduce_su_huella() -> None:
+    """Fidelidad del conjunto: se recalcula desde el fichero, no se copia."""
+    import yaml
+
+    m = _manifiesto()
+    casos = m["CONTROLLED_STATE"]["case_set"]["value"]  # type: ignore[index]
+    gold = yaml.safe_load((RAIZ / "configs" / "goldset_mazda3_bk.yaml").read_text(encoding="utf-8"))
+    seis = [c for c in gold["cases"] if c["case_id"] in casos]
+    cuerpo = json.dumps(
+        seis, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str
+    )
+    esperado = hashlib.sha256(cuerpo.encode()).hexdigest()[:16]
+    anotado = m["CONTROLLED_STATE"]["annotated_set"]  # type: ignore[index]
+    assert anotado["six_cases_hash"] == esperado, (
+        "la huella del conjunto anotado no reproduce el contenido de los seis casos"
+    )
+    assert anotado["n_cases"] == 6
