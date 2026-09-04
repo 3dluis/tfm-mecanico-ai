@@ -7,7 +7,7 @@ descripción de lógica de detección— pero **no reproducen ningún caso del
 conjunto anotado**: la política debe funcionar sobre cualquier fragmento.
 
 **Única edición posterior a la congelación de v2**, 4 de septiembre de 2026: la
-señal de los fixtures pasó de `throttle_position` a `throttle_position`. Ninguna
+señal de los fixtures pasó de `brake_pressure` a `throttle_position`. Ninguna
 aserción cambió. El motivo es un hallazgo, no una limpieza: `throttle_position` no
 está en el diccionario de vocabulario del verificador, y estos tests pasaban
 gracias a que una señal sin correspondencia caía a una comparación literal del
