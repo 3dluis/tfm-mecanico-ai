@@ -22,6 +22,13 @@ No es una pregunta sobre si el sistema es bueno. Es sobre si el defecto era inoc
 |---|---|---|
 | Recuperación | espacio de embeddings **sin control**: dos modelos mezclados | espacio **derivado del proveedor** que vectoriza la consulta |
 
+**Un segundo cambio de código, con su alcance verificado.** Se corrigió además la propagación
+del filtro de motor en la degradación a la estrategia mixta. Verificado en los artefactos: la
+degradación **solo ocurre cuando el diagnóstico no tiene códigos asociados**, y en los modos
+oracular y no oracular las 17 predicciones aciertan, de modo que **nunca degrada**. La
+corrección no altera ninguna celda de `RERUN-A`; su efecto se limita a los artefactos adversos,
+que quedan fuera del plan. Se declara aquí en vez de omitirse.
+
 **Todo lo demás idéntico**, y se declara para que la comparación sea limpia: política de
 suficiencia **v2.1** (v2.2 queda implementada, probada y **sin medir**, para RERUN-B) · umbral
 0,79 · conjunto `synthetic_v2` · semilla 20260901 · corpus 0.1.0 · bosque aleatorio con
@@ -159,3 +166,92 @@ declarada no canónica**, que es lo que el plan anterior hacía.
 
 Ninguno de estos criterios se modifica tras observar resultados sin registrar una **enmienda
 explícita, fechada y con commit**, en la línea de `ENM-U01`, `ENM-A01` y `ENM-E01`.
+
+---
+
+# Enmienda ENM-S01
+
+**Fecha:** 4 de septiembre de 2026 · **Anterior a toda medición** · **Motivada por:**
+`STAT-MAJ-022` y `STAT-MAJ-023`, que encontraron tres grados de libertad que este mismo
+pre-registro dejaba abiertos.
+
+## S-1 · La prueba principal, designada
+
+Faltaba, y sin ella el pre-registro no cubría la inferencia.
+
+| | |
+|---|---|
+| **Prueba principal** | permutación exacta **dentro de bloque** |
+| **Bloque** | ventana de origen con varias condiciones |
+| **Unidad de permutación** | la asignación de condición dentro de una misma ventana |
+| **H₀** | la decisión del sistema es **independiente** de la condición de disponibilidad de evidencia dentro de la ventana |
+| **H₁** | la decisión depende de la condición |
+| **Lateralidad** | **una cola**: solo cuenta a favor que las explicaciones se concentren en la condición con evidencia completa |
+| **Estadístico** | número de bloques cuya única decisión de explicar recae sobre evidencia completa |
+| **Nombre** | `T-PRINCIPAL`. Cualquier otra prueba es secundaria y se rotula como tal |
+
+**Ningún otro contraste puede heredar el rótulo de principal después de ver resultados.**
+
+## S-2 · Potencia completa, incluido K = 5
+
+La tabla anterior omitía K = 5, que es precisamente el que devuelve el valor retirado.
+
+| K | p mínimo alcanzable | Nota |
+|---|---|---|
+| 5 | **0,008** | **`RETRACTED_INVALID_INFERENCE`.** Este K solo existe contando la condición de distractor, que está bajo diagnóstico. **Prohibido** mientras no se resuelva |
+| 4 | 0,016 | |
+| 3 | 0,037 | |
+| 2 | **0,125** | sin resolución para inferencia confirmatoria |
+
+**Fragilidad por margen, declarada:** si **un solo fallo** deja de explicar en la condición de
+evidencia completa, el estadístico baja a 2 y **ningún K alcanza 0,05**. El resultado
+inferencial pende de una decisión.
+
+**Cláusula que faltaba.** El compromiso anterior decía «no se añadirán condiciones para
+conseguir significación», y eso no cerraba la puerta real. Se añade:
+
+> Tampoco se **conservará** una condición cuyo diagnóstico la declare redundante o inválida
+> para sostener un K mayor, ni se **redesignará** qué prueba lleva un valor p ya calculado.
+> El valor `0,008` queda `RETRACTED_INVALID_INFERENCE` y no puede reaparecer por ninguna vía,
+> incluida la de que K vuelva a ser 5.
+
+**No se realizará inferencia confirmatoria si el diseño efectivo no proporciona resolución
+suficiente.** Se reportarán resultados descriptivos, comparación por ventana, efecto observado
+y limitación de potencia. El trabajo no necesita un valor p por debajo de 0,05.
+
+## S-3 · Líneas base como vector, no como razones
+
+El defecto: expresadas como razones sobre 17 ejecuciones, y 17 depende de K. Si el diagnóstico
+retira una condición, las cuatro cambian **por construcción** y la regla de parada salta sin
+que nada vaya mal.
+
+Se declaran como **vector ordenado de decisiones por (fallo, condición)** sobre el conjunto
+común de ejecuciones presentes antes y después:
+
+```
+B = [
+  b1 = decisiones de ALWAYS_ABSTAIN,                      por (fallo, condición)
+  b2 = decisiones de ALWAYS_EXPLAIN,                      por (fallo, condición)
+  b3 = decisiones de ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT, por (fallo, condición)
+  b4 = decisiones del TECHO alcanzable,                   por (fallo, condición)
+]
+```
+
+> **Regla de parada.** `B_antes == B_después`, elemento a elemento, sobre el conjunto común.
+> Si cualquier elemento cambia: **PARADA**, porque se modificó algo más que la recuperación.
+>
+> Un cambio de K **no** dispara la parada: reduce el conjunto común, y la comparación se hace
+> sobre lo que queda en ambos.
+
+## S-4 · Los dos requisitos del distractor, operacionalizados
+
+Sobre identificadores de fragmento, comprobables **antes** de mirar ninguna decisión:
+
+| | |
+|---|---|
+| **D-1** | existe al menos un `chunk_id` de los ficheros del distractor en el conjunto recuperado de la condición |
+| **D-2** | la diferencia simétrica entre los `chunk_id` de la condición de distractor y los de la condición parcial, para la misma ventana, **no es vacía** |
+
+Ambos se evalúan sobre el campo `retrieved` del artefacto de recuperación y se **congelan antes
+de puntuar nada**. La clasificación resultante —válida, redundante o inválida— se registra
+antes de calcular ninguna métrica que dependa de ella.

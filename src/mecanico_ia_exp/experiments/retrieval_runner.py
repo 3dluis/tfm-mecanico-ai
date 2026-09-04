@@ -7,8 +7,7 @@ metadata y la jerarquía de autoridad sobre la similitud desnuda.
 
 from __future__ import annotations
 
-import json
-from datetime import UTC, datetime
+import hashlib
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +19,7 @@ from mecanico_ia_exp.evaluation.retrieval import (
     StrategyReport,
     evaluate_case,
 )
+from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.rag.embeddings import EmbeddingProvider, get_provider
 from mecanico_ia_exp.rag.manifest import JERARQUIA_EVIDENCIA, DocumentType
 from mecanico_ia_exp.rag.store import PgVectorStore, RetrievedChunk, reciprocal_rank_fusion
@@ -238,16 +238,53 @@ def recuperar(
     raise ValueError(msg)
 
 
-def run_retrieval_evaluation(goldset_path: Path = GOLDSET) -> int:
-    """Evalúa todas las estrategias y guarda los resultados."""
+#: Los seis casos con que se ejecutó E12 la primera vez, leídos de su propio
+#: artefacto. El conjunto anotado creció después a diecisiete: reejecutar sobre
+#: los diecisiete cambiaría **dos** variables a la vez --el espacio de embeddings
+#: y el conjunto-- y el contraste dejaría de ser atribuible.
+#:
+#: La ampliación es un experimento **distinto**, con su propio identificador y su
+#: propio pre-registro: responde a si el comportamiento se mantiene al ampliar la
+#: cobertura, que no es la misma pregunta.
+CONJUNTO_E12_ORIGINAL: tuple[str, ...] = (
+    "C01_maf_drift",
+    "C02_thermostat_stuck",
+    "C03_o2_slow_response",
+    "C04_misfire",
+    "C05_vacuum_leak",
+    "C06_vacuum_leak_evidencia_retirada",
+)
+
+
+def _huella(texto: str) -> str:
+    """Huella del conjunto de casos, para que quede en el registro."""
+    return hashlib.sha256(texto.encode("utf-8")).hexdigest()[:16]
+
+
+def run_retrieval_evaluation(
+    goldset_path: Path = GOLDSET, *, case_set: tuple[str, ...] = CONJUNTO_E12_ORIGINAL
+) -> int:
+    """Evalúa todas las estrategias y guarda los resultados.
+
+    Por omisión usa el conjunto de seis casos del E12 original. Pasar otro
+    conjunto convierte la ejecución en un experimento distinto y debe declararse
+    como tal.
+    """
     gold = yaml.safe_load(goldset_path.read_text(encoding="utf-8"))
     vehicle_id = gold["vehicle_id"]
     engine_code = gold["engine_code"]
-    casos = gold["cases"]
+    por_id = {c["case_id"]: c for c in gold["cases"]}
+    faltan = [c for c in case_set if c not in por_id]
+    if faltan:
+        msg = f"casos ausentes del conjunto anotado: {faltan}"
+        raise ValueError(msg)
+    casos = [por_id[c] for c in case_set]
 
     store = PgVectorStore()
     provider = get_provider("multilingual")
     identidad = provider.identity
+    espacio = f"{identidad.provider}/{identidad.model}/d{identidad.dimension}/v{identidad.version}"
+    recuperado_por_caso: list[dict[str, Any]] = []
     print(f"conjunto anotado: {len(casos)} casos · vehículo {vehicle_id} motor {engine_code}")
     print(f"embeddings: {identidad.model}\n")
 
@@ -285,6 +322,34 @@ def run_retrieval_evaluation(goldset_path: Path = GOLDSET) -> int:
                 corpus_variant="FULL",
                 experiment_id="E12_retrieval",
             )
+            # Qué fragmentos estuvieron delante del verificador, en qué orden y
+            # en qué espacio. Sin esto, reconstruirlo después exige la tabla de
+            # registro de la base, que no está versionada: el criterio de
+            # verificación de este experimento no sería comprobable.
+            recuperado_por_caso.append(
+                {
+                    "case_id": str(caso["case_id"]),
+                    "retrieval_strategy": estrategia,
+                    "embedding_space_id": espacio,
+                    "top_k": TOP_K,
+                    "filters": {
+                        "vehicle_id": vehicle_id,
+                        "engine_code": engine_code,
+                        "corpus_variant": "FULL",
+                    },
+                    "results": [
+                        {
+                            "rank": r.rank,
+                            "chunk_id": r.chunk_id,
+                            "document_id": r.document_id,
+                            "source_file": r.source_file,
+                            "score": round(float(r.score), 6),
+                            "section": getattr(r, "section", None),
+                        }
+                        for r in resultados
+                    ],
+                }
+            )
             detalle.append({"strategy": estrategia, **metricas.to_dict()})
         informes.append(informe)
 
@@ -320,24 +385,25 @@ def run_retrieval_evaluation(goldset_path: Path = GOLDSET) -> int:
     )
 
     experimentos = paths.ensure(paths.EXPERIMENTS)
-    (experimentos / "E12_retrieval.json").write_text(
-        json.dumps(
-            {
-                "experiment_id": "E12_retrieval",
-                "executed_at": datetime.now(UTC).isoformat(),
-                "vehicle_id": vehicle_id,
-                "engine_code": engine_code,
-                "goldset": str(goldset_path.name),
-                "top_k": TOP_K,
-                "retrieval_depth": PROFUNDIDAD,
-                "embedding": identidad.as_dict(),
-                "strategies": [i.to_dict() for i in informes],
-            },
-            indent=2,
-            ensure_ascii=False,
-        )
-        + "\n",
-        encoding="utf-8",
+    escribir(
+        experimentos / "E12_retrieval.json",
+        {
+            "experiment_id": "E12_retrieval",
+            "vehicle_id": vehicle_id,
+            "engine_code": engine_code,
+            "case_set_id": "E12_ORIGINAL_6" if case_set == CONJUNTO_E12_ORIGINAL else "CUSTOM",
+            "case_set": list(case_set),
+            "case_set_hash": _huella("|".join(case_set)),
+            "goldset_hash": _huella(goldset_path.read_text(encoding="utf-8")),
+            "top_k": TOP_K,
+            "retrieval_depth": PROFUNDIDAD,
+            "embedding": identidad.as_dict(),
+            "embedding_space_id": espacio,
+            "strategies": [i.to_dict() for i in informes],
+            "retrieved": recuperado_por_caso,
+        },
+        goldset=str(goldset_path.name),
+        embedding_model=identidad.model,
     )
     print("\ntabla   E12_retrieval_por_caso.csv, E12_retrieval_por_estrategia.csv")
     print("registro experiments/E12_retrieval.json")

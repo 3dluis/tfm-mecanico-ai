@@ -16,8 +16,8 @@ cifras que van a cambiar.
 | # | Paso | Depende de |
 |---|---|---|
 | A | Reconstruir y validar el índice canónico | la corrección |
-| B | Recuperación E12, las **cinco** estrategias | A |
-| C | Medición translingüe, **evaluación nueva y pre-registrada** | A |
+| B | Recuperación E12, **seis casos originales**, cinco estrategias | A |
+| C | `E-EMBED-MULTILINGUAL`, evaluación nueva (`preregistro-embed-multilingual.md`) | A |
 | D | Suficiencia E15/E17, modo oracular, **verificador v2.1** | A |
 | E | Diagnóstico de la condición de distractor, **no puntuado** | D |
 | F | Suficiencia, modo no oracular | D |
@@ -94,3 +94,20 @@ Umbral 0,79 · conjunto `synthetic_v2` · semilla 20260901 · corpus · calibrac
 y cuya política de sustitución **no se implementa** por convertir el sistema en abstencionista.
 
 **Una sola variable cambia: el espacio de embeddings deja de mezclarse.**
+
+## 6. Lo que **no** forma parte de esta reejecución
+
+**La ampliación del conjunto de recuperación de seis a diecisiete casos es un experimento
+distinto**, no una reejecución. Cambiar el espacio de embeddings y el conjunto a la vez haría
+inatribuible el contraste, que es el mismo error que separar v2.1 de v2.2 evita.
+
+| | |
+|---|---|
+| Identificador | `E12-EXTENDED` |
+| Pregunta | ¿se mantiene el comportamiento observado en el conjunto original al ampliar la cobertura? |
+| Pre-registro | propio, posterior a cerrar `E12-CANONICAL` |
+| Artefacto | propio |
+| Tablas | **no se mezclan** con las de `E12-CANONICAL` |
+
+Tampoco forman parte: el escenario adverso, la política v2.2 (`RERUN-B`), la puntuación de la
+condición de distractor, ni el reentrenamiento del adaptador.

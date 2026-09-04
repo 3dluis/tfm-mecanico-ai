@@ -52,16 +52,23 @@ prueba un test que pasa el parámetro a mano: una garantía que no cubría la ru
 
 Posiciones del resultado ocupadas por un fragmento ya presente, por artefacto:
 
-| Artefacto | Posiciones | Repetidas | Casos afectados |
-|---|---|---|---|
-| `E15_suficiencia.json` (oracular, vigente) | 150 | **24 (16,0 %)** | 6 de 17 |
-| `E15_suficiencia_non_oracle.json` | 150 | 24 (16,0 %) | 6 de 17 |
-| `E15_suficiencia_verifier_v1.json` | 99 | 6 (6,1 %) | 2 de 17 |
-| `E15_suficiencia_verifier_v2.json` | 195 | 27 (13,8 %) | 7 de 17 |
-| `E15_suficiencia_verifier_v2_1.json` | 150 | 24 (16,0 %) | 6 de 17 |
-| `E15_suficiencia_adverse.json` | 24 | 0 | 0 de 6 |
+**Cifra canónica, con la unidad definida en `preregistro-rerun-a.md` §7:**
 
-El escenario adverso queda libre porque usa otra estrategia de recuperación.
+> **27 posiciones duplicadas de 140 posiciones recuperadas, en 10 de 14 ejecuciones con
+> conjunto no vacío.**
+
+Es **idéntica en los cinco artefactos no adversos**, como debe ser: mide el índice, no el
+verificador. Verificada de forma independiente por dos auditorías y por recuento propio desde
+la definición.
+
+**Reconstrucciones históricas, conservadas y no comparables entre sí.** La primera versión de
+este documento publicaba «24 de 150» sin declarar la unidad, y distintas reconstrucciones daban
+24/150, 27/195, 6/99 y 8/50 **para la misma recuperación**. No eran prevalencias distintas:
+eran unidades distintas, y algunas medían el verificador en lugar del índice. Se marcan
+`UNIT_UNDEFINED_IN_LEGACY_RESULT` y **no se comparan** con la cifra canónica ni entre ellas.
+
+El escenario adverso queda aparte porque usa otra estrategia de recuperación, cuya fusión
+colapsa los duplicados en lugar de eliminarlos: su cero **no significa que estuviera libre**.
 
 ## 4. Las tres rutas afectadas
 

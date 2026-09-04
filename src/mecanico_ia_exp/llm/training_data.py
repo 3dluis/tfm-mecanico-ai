@@ -70,7 +70,27 @@ class TrainingExample:
     messages: list[dict[str, Any]]
 
     def to_jsonl(self) -> str:
-        return json.dumps({"messages": self.messages}, ensure_ascii=False)
+        """Serializa el ejemplo **con su procedencia**.
+
+        Hasta el 4 de septiembre de 2026 solo se escribían los mensajes, y el
+        fichero de ajuste no permitía reconstruir de qué ventana ni de qué
+        variante de corpus salía cada ejemplo. Sin eso no se puede comparar un
+        conjunto regenerado contra el anterior ejemplo a ejemplo, que es
+        exactamente lo que exige decidir sobre el adaptador.
+
+        Las claves de procedencia van fuera de `messages`, así que un consumidor
+        que solo lea `messages` no cambia de comportamiento.
+        """
+        return json.dumps(
+            {
+                "messages": self.messages,
+                "example_id": f"{self.case_id}::{self.corpus_variant}",
+                "case_id": self.case_id,
+                "corpus_variant": self.corpus_variant,
+                "decision": self.decision,
+            },
+            ensure_ascii=False,
+        )
 
 
 def _texto_de_afirmacion(observacion: Any, rng: random.Random) -> str:
