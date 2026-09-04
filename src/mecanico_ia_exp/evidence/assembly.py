@@ -147,23 +147,41 @@ def build_claims(
     causa**. Decir «el ajuste está desplazado» es lo que la observación sostiene;
     decir «hay una fuga» sería atribuir causalidad a una atribución, que E9 dejó
     prohibido.
+
+    **Dos hechos distintos, dos frases distintas.** ``value`` es el valor del
+    descriptor en la ventana; ``direction`` es el signo de su contribución a la
+    predicción del modelo. La primera versión de esta plantilla los mezclaba: de
+    ``direction == "increases"`` deducía «la señal se sitúa por encima de lo
+    esperable» y a continuación imprimía un ``value`` que podía ser negativo. Un
+    descriptor con valor -1,496 aparecía descrito como situado «por encima», y esa
+    afirmación se contabilizaba como sostenida.
+
+    El error no era de redacción sino de tipo: afirmar que una señal está alta
+    exige un valor de referencia que el sistema no tiene, mientras que el signo
+    SHAP solo dice hacia dónde empuja el descriptor la salida del modelo. Decir lo
+    segundo con las palabras de lo primero es exactamente la confusión entre
+    atribución y estado del vehículo que `evidence-model.md` prohíbe.
     """
     aplicables = [d for d in documentos if d.applicability in accepted_applicability]
     claims: list[Claim] = []
     comprobaciones: list[SupportCheck] = []
 
     for i, obs in enumerate(observaciones[:max_claims], start=1):
-        sentido = "por encima" if obs.direction == "increases" else "por debajo"
-        texto = (
-            f"La señal {obs.signal} ({obs.statistic}) se sitúa {sentido} de lo "
-            f"esperable en la ventana observada, con valor {obs.value:.4g}"
-        )
+        # Hecho observacional: el valor medido. Sin juicio sobre si es alto o bajo.
+        texto = f"El descriptor {obs.signal} ({obs.statistic}) toma el valor {obs.value:.4g}"
         if obs.window_start_s is not None and obs.window_end_s is not None:
             texto += (
-                f", entre los segundos {obs.window_start_s:.0f} y "
+                f" entre los segundos {obs.window_start_s:.0f} y "
                 f"{obs.window_end_s:.0f} de la sesión"
             )
-        texto += "."
+        else:
+            texto += " en la ventana observada"
+        # Hecho sobre el modelo: hacia dónde empuja este descriptor su salida.
+        aporte = "al alza" if obs.direction == "increases" else "a la baja"
+        texto += (
+            f", y es uno de los descriptores que más contribuyen a la predicción "
+            f"del modelo, {aporte}."
+        )
 
         claim = Claim(claim_id=f"C{i:02d}", text=texto, observation_ids=(obs.observation_id,))
 

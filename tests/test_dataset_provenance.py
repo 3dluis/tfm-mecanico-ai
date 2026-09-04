@@ -7,6 +7,7 @@ error, no una categoría nueva.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import get_args
 
 import pytest
@@ -52,3 +53,35 @@ def test_el_dataset_del_laboratorio_declara_su_procedencia() -> None:
     assert meta.dataset_type == "synthetic"
     assert meta.seed == 20260901
     assert meta.source and meta.version and meta.created_at
+
+
+# ------------------------------------------- cabecera de registro (RX-00)
+
+
+def test_todo_registro_declara_de_qué_ejecución_habla() -> None:
+    """Sin commit ni fecha, dos ejecuciones son indistinguibles desde el registro.
+
+    Es lo que hizo invisibles las sobrescrituras de tres fases: el informe
+    publicaba una ejecución y el árbol contenía otra, y nada en el fichero lo
+    delataba.
+    """
+    from mecanico_ia_exp.experiments.registro import CAMPOS_OBLIGATORIOS, cabecera
+
+    datos = cabecera("E15_sufficiency", seed=20260901, dataset_id="synthetic_v2")
+    assert set(datos) >= CAMPOS_OBLIGATORIOS
+    assert datos["experiment_id"] == "E15_sufficiency"
+    assert datos["seed"] == 20260901
+    # El estado del árbol se declara: un registro escrito con cambios sin
+    # confirmar no es reproducible desde el commit que dice.
+    assert "dirty" in datos
+
+
+def test_el_registro_se_escribe_con_la_cabecera_delante(tmp_path: Path) -> None:
+    import json
+
+    from mecanico_ia_exp.experiments.registro import escribir
+
+    destino = escribir(tmp_path / "r.json", {"experiment_id": "E99", "metrics": {"f1": 0.5}})
+    datos = json.loads(destino.read_text(encoding="utf-8"))
+    assert next(iter(datos)) == "experiment_id"
+    assert datos["metrics"] == {"f1": 0.5}
