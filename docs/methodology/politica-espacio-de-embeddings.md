@@ -116,3 +116,41 @@ Se declara antes de medir, para que el resultado sea interpretable:
 puede subir o bajar cualquier cifra. Lo único que se afirma de antemano es que el resultado
 nuevo **será interpretable** y el anterior no lo era, porque hasta ahora la procedencia de cada
 fragmento recuperado era indeterminada.
+
+---
+
+## 9. Enmienda ENM-E01, durante la implementación
+
+**Fecha:** 4 de septiembre de 2026, posterior a la §5 y anterior a reejecutar.
+
+Al implementar E-2 el verificador de tipos destapó que **el defecto estaba un nivel más
+arriba**: `recuperar()` también declaraba `embedding_model` como parámetro opcional con valor
+nulo. Hacer obligatorio el parámetro en la capa de almacenamiento y seguir pasándolo a mano
+desde tres sitios dejaba viva la misma clase de error, un escalón por encima.
+
+**E-2 se sustituye por:**
+
+> **E-2'.** `recuperar()` **no acepta** el espacio como parámetro: lo **deriva** de
+> `provider.identity.model`, el mismo proveedor que vectoriza la consulta. Consulta e índice
+> quedan en el mismo espacio por construcción, y no hay nada que un llamante pueda olvidar.
+
+Es estrictamente más fuerte que lo documentado en §5 y sirve mejor a su intención. Se registra
+como enmienda en lugar de corregir §5 en silencio.
+
+## 10. Lo que la corrección destapó en las propias pruebas
+
+Al hacer obligatorio el parámetro, **nueve búsquedas de la suite de integración dejaron de
+compilar**: ninguna declaraba el espacio. Dos consecuencias:
+
+**Primera.** El patrón defectuoso no estaba en tres sitios sino en doce, y la suite lo
+reproducía en lugar de detectarlo. La única búsqueda que sí declaraba el espacio era la del
+test que sostenía la garantía documentada, y era la única que no pasaba por la ruta real.
+
+**Segunda, y peor:** esas pruebas construyen su vector de consulta con el proveedor `hashing` y
+buscan contra un índice de vectores de `sentence-transformers`. Coinciden en dimensión y no en
+espacio. Pasaban porque comprueban **propiedades estructurales** —orden, filtros, exclusiones—
+que se cumplen con cualquier vector, y porque sin filtro la búsqueda siempre devolvía algo.
+
+Quedan corregidas declarando el espacio del índice, con la salvedad escrita en el fichero: son
+pruebas de estructura y no de relevancia. La observación se registra porque **una prueba que
+consulta en un espacio ajeno no puede detectar un defecto de espacios**.
