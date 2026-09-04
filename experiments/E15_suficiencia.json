@@ -1,8 +1,8 @@
 {
   "experiment_id": "E15_sufficiency",
-  "commit": "f1d76d71f42c2f054c4801725aad1cbfc5a8bee2",
-  "dirty": false,
-  "executed_at": "2026-09-04T04:18:27.860090+00:00",
+  "commit": "68cb5f5192f431c0885fe70b1cfae22fd30fa52c",
+  "dirty": true,
+  "executed_at": "2026-09-04T04:46:05.625952+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",

@@ -1,5 +1,14 @@
 {
   "experiment_id": "E13_agent",
+  "commit": "68cb5f5192f431c0885fe70b1cfae22fd30fa52c",
+  "dirty": true,
+  "executed_at": "2026-09-04T04:46:05.784127+00:00",
+  "seed": 20260901,
+  "dataset_id": "synthetic_v2",
+  "dataset_type": "synthetic",
+  "model": "transformers-lora@slm_lora_v2",
+  "prompt_version": "agent-2026-09-04",
+  "goldset": "goldset_mazda3_bk.yaml",
   "llm": "transformers-lora@slm_lora_v2",
   "identity": {
     "llm_provider": "transformers",
@@ -25,6 +34,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -34,7 +44,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.21,
+      "latency_s": 6.63,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_MODEL_CONFIDENCE\", \"missing_evidence\": [\"confianza 0.60 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -88,6 +98,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -97,7 +108,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 26.3,
+      "latency_s": 33.54,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F03_thermostat_stuck\", \"confidence\": 1.0, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal coolant_temperature presenta un delta_max de 1.686, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C02\", \"text\": \"Se observa coolant_temperature con autocorr1 de 0.0549, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal coolant_temperature presenta un delta_min de -1.496, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
@@ -151,6 +162,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -160,7 +172,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 31.31,
+      "latency_s": 96.31,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F04_o2_lag\", \"confidence\": 1.0, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal oxygen_sensor presenta un delta_max de 0.08381, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}, {\"claim_id\": \"C02\", \"text\": \"El std de oxygen_sensor alcanza 0.02871, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal oxygen_sensor presenta un max de 0.5147, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
@@ -178,6 +190,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -187,7 +200,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.72,
+      "latency_s": 8.27,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_MODEL_CONFIDENCE\", \"missing_evidence\": [\"confianza 0.462 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -241,6 +254,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -250,7 +264,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 29.06,
+      "latency_s": 48.88,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F01_vacuum_leak\", \"confidence\": 0.91, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"Se observa ltft_bank1 con max de 2.716, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}, {\"claim_id\": \"C02\", \"text\": \"El mean de stft_bank1 alcanza 7.077, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal ltft_bank1 presenta un mean de 1.294, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
@@ -269,6 +283,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -278,7 +293,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 4.3,
+      "latency_s": 11.55,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"NO_APPLICABLE_DOCUMENTARY_EVIDENCE\", \"missing_evidence\": [\"ningún fragmento documental aplicable a este vehículo\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -296,6 +311,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -305,7 +321,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.38,
+      "latency_s": 8.73,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -323,6 +339,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -332,7 +349,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.2,
+      "latency_s": 8.66,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -351,6 +368,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -360,7 +378,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.04,
+      "latency_s": 18.14,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"TOO_FEW_SUPPORTING_CHUNKS\", \"missing_evidence\": [\"ningún fragmento de evidencia sostiene la explicación\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     }
   ]
