@@ -248,3 +248,188 @@ cases:
       fragmento debería bastar para rechazarlo. Si el agente explica aquí, la
       trazabilidad es aparente: la cita existiría, resolvería, y sería del
       vehículo equivocado.
+
+  # --- Ampliación del 4 de septiembre de 2026 (P-03) -------------------------
+  #
+  # Hasta aquí, las cuatro condiciones de disponibilidad existían para UN solo
+  # fallo, el F01. Sostener sobre un único caso que el agente responde a la
+  # evidencia es sostenerlo sobre una anécdota, por muy limpio que sea el
+  # contraste.
+  #
+  # Se extienden a F03 y F04 con los MISMOS ficheros que este conjunto ya tenía
+  # anotados: el procedimiento del motor Z6 como evidencia relevante, las tablas
+  # de códigos como evidencia de apoyo, y el procedimiento del motor LF del mismo
+  # código como distractor. No se inventa ningún caso ni se anota ningún fichero
+  # nuevo: se aplica a otros dos fallos la construcción que ya se aplicaba a uno.
+  #
+  # POR QUÉ NO SE EXTIENDEN F02 NI F05. Sus casos con evidencia completa (C01 y
+  # C04) se abstienen por confianza baja del modelo --0,600 y 0,462, ambas por
+  # debajo del punto de operación 0,79--, no por falta de evidencia. Retirarles
+  # la evidencia produciría abstención igualmente, y la abstención estaría
+  # sobredeterminada: el contraste no mediría nada. Se declara en lugar de
+  # engordar el recuento con casos que no discriminan.
+
+  - case_id: C10_thermostat_absent
+    fault_id: F03_thermostat_stuck
+    dtc: P0125
+    corpus_variant: ABSENT
+    exclude_dtc: [P0125]
+    query: >-
+      Engine coolant temperature stops rising and stabilises well below the
+      normal operating range after a cold start, despite sustained load and
+      sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío,
+      pese a carga sostenida y tiempo de marcha suficiente.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: []
+    expected_action: ABSTAIN
+    justificacion: >-
+      Mismos datos, mismo modelo, misma atribución que C02, que explica con
+      confianza 1,000. Lo único que cambia es que se retira del índice todo
+      fragmento que porte P0125.
+
+  - case_id: C11_thermostat_partial
+    fault_id: F03_thermostat_stuck
+    dtc: P0125
+    corpus_variant: PARTIAL
+    # Se retira el procedimiento diagnóstico del motor Z6 y se dejan las tablas
+    # de códigos: el corpus sigue diciendo que P0125 existe y qué lo dispara,
+    # pero no cómo se diagnostica.
+    exclude_files: [srvc/B3E010200100W11.pdf]
+    query: >-
+      Engine coolant temperature stops rising and stabilises well below the
+      normal operating range after a cold start, despite sustained load and
+      sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío,
+      pese a carga sostenida y tiempo de marcha suficiente.
+    relevant_files: []
+    supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
+    distractor_files: []
+    expected_action: ABSTAIN
+
+  - case_id: C12_thermostat_distractor
+    fault_id: F03_thermostat_stuck
+    dtc: P0125
+    corpus_variant: DISTRACTOR
+    exclude_files: [srvc/B3E010200100W11.pdf]
+    query: >-
+      Engine coolant temperature stops rising and stabilises well below the
+      normal operating range after a cold start, despite sustained load and
+      sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío,
+      pese a carga sostenida y tiempo de marcha suficiente.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/B3E010201084W18.pdf]
+    expected_action: ABSTAIN
+    justificacion: >-
+      El procedimiento de P0125 para el motor LF describe la misma condición y no
+      aplica a un Z6. Con el filtro de motor activo no debería llegar siquiera al
+      verificador.
+
+  - case_id: C13_thermostat_distractor_sin_filtro
+    fault_id: F03_thermostat_stuck
+    dtc: P0125
+    corpus_variant: DISTRACTOR_NO_FILTER
+    apply_engine_filter: false
+    exclude_files: [srvc/B3E010200100W11.pdf]
+    query: >-
+      Engine coolant temperature stops rising and stabilises well below the
+      normal operating range after a cold start, despite sustained load and
+      sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío,
+      pese a carga sostenida y tiempo de marcha suficiente.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/B3E010201084W18.pdf]
+    expected_action: ABSTAIN
+    justificacion: >-
+      Sin el filtro de motor, el distractor llega al verificador y la
+      aplicabilidad del fragmento debe bastar para rechazarlo. Es la última línea
+      de defensa, medida sobre un segundo fallo.
+
+  - case_id: C14_o2_absent
+    fault_id: F04_o2_lag
+    dtc: P0133
+    corpus_variant: ABSENT
+    exclude_dtc: [P0133]
+    query: >-
+      Oxygen sensor voltage oscillation amplitude collapsed and switching
+      frequency across the stoichiometric point reduced. Short term fuel trim
+      noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada
+      y frecuencia de conmutación en torno al punto estequiométrico
+      reducida. Ajuste de combustible a corto plazo más ruidoso de lo
+      habitual.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: []
+    expected_action: ABSTAIN
+
+  - case_id: C15_o2_partial
+    fault_id: F04_o2_lag
+    dtc: P0133
+    corpus_variant: PARTIAL
+    exclude_files: [srvc/B3E010200100W13.pdf]
+    query: >-
+      Oxygen sensor voltage oscillation amplitude collapsed and switching
+      frequency across the stoichiometric point reduced. Short term fuel trim
+      noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada
+      y frecuencia de conmutación en torno al punto estequiométrico
+      reducida. Ajuste de combustible a corto plazo más ruidoso de lo
+      habitual.
+    relevant_files: []
+    supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
+    distractor_files: []
+    expected_action: ABSTAIN
+
+  - case_id: C16_o2_distractor
+    fault_id: F04_o2_lag
+    dtc: P0133
+    corpus_variant: DISTRACTOR
+    exclude_files: [srvc/B3E010200100W13.pdf]
+    query: >-
+      Oxygen sensor voltage oscillation amplitude collapsed and switching
+      frequency across the stoichiometric point reduced. Short term fuel trim
+      noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada
+      y frecuencia de conmutación en torno al punto estequiométrico
+      reducida. Ajuste de combustible a corto plazo más ruidoso de lo
+      habitual.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/B3E010201084W20.pdf]
+    expected_action: ABSTAIN
+
+  - case_id: C17_o2_distractor_sin_filtro
+    fault_id: F04_o2_lag
+    dtc: P0133
+    corpus_variant: DISTRACTOR_NO_FILTER
+    apply_engine_filter: false
+    exclude_files: [srvc/B3E010200100W13.pdf]
+    query: >-
+      Oxygen sensor voltage oscillation amplitude collapsed and switching
+      frequency across the stoichiometric point reduced. Short term fuel trim
+      noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada
+      y frecuencia de conmutación en torno al punto estequiométrico
+      reducida. Ajuste de combustible a corto plazo más ruidoso de lo
+      habitual.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/B3E010201084W20.pdf]
+    expected_action: ABSTAIN
