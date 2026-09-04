@@ -47,6 +47,30 @@ TERMINOS_SENAL: dict[str, tuple[str, ...]] = {
     "ignition_timing": ("ignition timing", "spark advance", "timing advance"),
 }
 
+#: Estado de la correspondencia entre el identificador de una señal y el
+#: vocabulario del manual. Se declara explícitamente porque **no saber traducir
+#: una señal no es lo mismo que no encontrar evidencia sobre ella**, y sin esta
+#: distinción las dos cosas producían la misma salida: ninguna cita.
+MAPEADA = "MAPPED"
+SIN_CORRESPONDENCIA = "SIGNAL_MAPPING_UNAVAILABLE"
+
+
+def signal_mapping(senal: str) -> str:
+    """¿Sabe el verificador con qué palabras nombra el manual esta señal?
+
+    `TERMINOS_SENAL` está construido a mano leyendo el corpus, y cubre las doce
+    señales del conjunto experimental. Para cualquier otra, el verificador no
+    tiene vocabulario: puede intentar una coincidencia literal del identificador,
+    pero un fallo de esa coincidencia **no es prueba de que el manual calle sobre
+    la señal**, sino de que el instrumento no sabe buscarla.
+
+    Devuelve `SIGNAL_MAPPING_UNAVAILABLE` en ese caso, y el llamante decide. Es
+    una limitación declarada del instrumento, no un defecto oculto: ampliar el
+    diccionario automáticamente introduciría una variable experimental nueva.
+    """
+    return MAPEADA if all(p in TERMINOS_SENAL for p in senal.split("+")) else SIN_CORRESPONDENCIA
+
+
 #: Tipos de documento que pueden sostener un diagnóstico. Una descripción de
 #: funcionamiento explica cómo trabaja un componente; no sostiene que esté
 #: averiado.
@@ -239,6 +263,9 @@ class SupportCheck:
     supports: bool
     reason: str
     chunk_role: str = ChunkRole.UNCLASSIFIED.value
+    #: `MAPPED` o `SIGNAL_MAPPING_UNAVAILABLE`. Distingue «no hay evidencia» de
+    #: «el verificador no sabe traducir esta señal al vocabulario del manual».
+    signal_mapping: str = MAPEADA
     """Papel del fragmento. Solo el procedimiento sostiene por sí solo."""
 
     def to_dict(self) -> dict[str, object]:
@@ -249,6 +276,7 @@ class SupportCheck:
             "is_diagnostic": self.is_diagnostic,
             "carries_expected_dtc": self.carries_expected_dtc,
             "chunk_role": self.chunk_role,
+            "signal_mapping": self.signal_mapping,
             "supports": self.supports,
             "reason": self.reason,
         }
@@ -300,6 +328,7 @@ def check_support(
     códigos y nombra la señal pasaba las tres primeras y sostenía una afirmación
     que no sostiene: `docs/experiments/hallazgo-lexical-support-confound.md`.
     """
+    correspondencia = signal_mapping(signal)
     menciona = mentions_signal(evidencia.text, signal)
     diagnostico = is_diagnostic_content(evidencia)
     papel = classify_chunk(evidencia).value
@@ -317,8 +346,18 @@ def check_support(
             sostiene,
             motivo,
             papel,
+            correspondencia,
         )
 
+    if correspondencia == SIN_CORRESPONDENCIA:
+        # No se degrada a «no menciona la señal». El verificador no sabe con qué
+        # palabras buscar, y decirlo es distinto de decir que no hay nada.
+        return resultado(
+            False,
+            f"{SIN_CORRESPONDENCIA}: el verificador no tiene vocabulario del manual "
+            f"para la señal {signal}; la ausencia de cita no es prueba de ausencia "
+            "de evidencia",
+        )
     if not menciona:
         return resultado(False, f"el fragmento no menciona la señal {signal}")
     if not diagnostico:

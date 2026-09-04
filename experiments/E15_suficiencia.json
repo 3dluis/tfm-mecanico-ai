@@ -1,8 +1,8 @@
 {
   "experiment_id": "E15_sufficiency",
-  "commit": "a34bab25372f2467c36b4337f59c28407f216037",
-  "dirty": false,
-  "executed_at": "2026-09-04T10:38:34.248092+00:00",
+  "commit": "478ebe09c9e79ee53217df41e16ba21b88a7cec5",
+  "dirty": true,
+  "executed_at": "2026-09-04T11:07:54.925298+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -438,6 +438,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -448,6 +449,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -458,6 +460,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -468,6 +471,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -478,6 +482,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -488,6 +493,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
@@ -932,6 +938,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -942,6 +949,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal coolant_temperature"
         },
@@ -952,6 +960,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -962,6 +971,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -972,6 +982,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal coolant_temperature"
         },
@@ -982,6 +993,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -992,6 +1004,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -1002,6 +1015,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal coolant_temperature"
         },
@@ -1012,6 +1026,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
@@ -1535,6 +1550,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -1545,6 +1561,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -1555,6 +1572,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -1565,6 +1583,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -1575,6 +1594,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -1585,6 +1605,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
@@ -2057,6 +2078,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2067,6 +2089,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2077,6 +2100,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2087,6 +2111,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -2097,6 +2122,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2107,6 +2133,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2117,6 +2144,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2127,6 +2155,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -2137,6 +2166,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2147,6 +2177,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2157,6 +2188,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal oxygen_sensor"
         },
@@ -2167,6 +2199,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
@@ -2567,6 +2600,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -2577,6 +2611,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -2587,6 +2622,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -2597,6 +2633,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -2607,6 +2644,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         },
@@ -2617,6 +2655,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": true,
           "reason": "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
         }
@@ -3156,6 +3195,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3166,6 +3206,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3176,6 +3217,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3186,6 +3228,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3196,6 +3239,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3206,6 +3250,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3216,6 +3261,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3226,6 +3272,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3236,6 +3283,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3246,6 +3294,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3256,6 +3305,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3266,6 +3316,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         }
@@ -3671,6 +3722,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3681,6 +3733,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3691,6 +3744,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3701,6 +3755,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3711,6 +3766,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3721,6 +3777,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3731,6 +3788,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3741,6 +3799,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -3751,6 +3810,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3761,6 +3821,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "PROCEDURAL_DIAGNOSTIC_EVIDENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3771,6 +3832,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -3781,6 +3843,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         }
@@ -4184,6 +4247,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         },
@@ -4194,6 +4258,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal stft_bank1"
         },
@@ -4204,6 +4269,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento no menciona la señal ltft_bank1"
         }
@@ -4880,6 +4946,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4890,6 +4957,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4900,6 +4968,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4910,6 +4979,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4920,6 +4990,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4930,6 +5001,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4940,6 +5012,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4950,6 +5023,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4960,6 +5034,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4970,6 +5045,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4980,6 +5056,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -4990,6 +5067,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5000,6 +5078,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5010,6 +5089,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5020,6 +5100,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5030,6 +5111,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5040,6 +5122,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5050,6 +5133,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
@@ -5592,6 +5676,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5602,6 +5687,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5612,6 +5698,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5622,6 +5709,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5632,6 +5720,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5642,6 +5731,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5652,6 +5742,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5662,6 +5753,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5672,6 +5764,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5682,6 +5775,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5692,6 +5786,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5702,6 +5797,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5712,6 +5808,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5722,6 +5819,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5732,6 +5830,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5742,6 +5841,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5752,6 +5852,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -5762,6 +5863,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
@@ -6218,6 +6320,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6228,6 +6331,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6238,6 +6342,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6248,6 +6353,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6258,6 +6364,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6268,6 +6375,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6278,6 +6386,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6288,6 +6397,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6298,6 +6408,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
@@ -6972,6 +7083,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6982,6 +7094,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -6992,6 +7105,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7002,6 +7116,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7012,6 +7127,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7022,6 +7138,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7032,6 +7149,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7042,6 +7160,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7052,6 +7171,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7062,6 +7182,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7072,6 +7193,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7082,6 +7204,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7092,6 +7215,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7102,6 +7226,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7112,6 +7237,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
@@ -7652,6 +7778,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7662,6 +7789,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7672,6 +7800,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7682,6 +7811,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7692,6 +7822,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7702,6 +7833,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7712,6 +7844,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7722,6 +7855,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7732,6 +7866,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7742,6 +7877,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7752,6 +7888,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7762,6 +7899,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7772,6 +7910,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7782,6 +7921,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -7792,6 +7932,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
@@ -8310,6 +8451,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8320,6 +8462,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8330,6 +8473,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8340,6 +8484,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8350,6 +8495,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8360,6 +8506,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8370,6 +8517,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "SUPPORTING_DIAGNOSTIC_REFERENCE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es SUPPORTING_DIAGNOSTIC_REFERENCE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8380,6 +8528,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         },
@@ -8390,6 +8539,7 @@
           "is_diagnostic": true,
           "carries_expected_dtc": true,
           "chunk_role": "CODE_DEFINITION_OR_TABLE",
+          "signal_mapping": "MAPPED",
           "supports": false,
           "reason": "el fragmento porta el código y nombra la señal, pero su papel es CODE_DEFINITION_OR_TABLE: no es un procedimiento diagnóstico y no sostiene por sí solo"
         }
