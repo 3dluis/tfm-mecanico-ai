@@ -217,6 +217,7 @@ def run_sufficiency(
 
         # Los DTC que documentan la condición **diagnosticada**: si el fragmento
         # citado no porta ninguno, no está hablando de ese fallo.
+        from mecanico_ia_exp.evidence.support import dtc_requirement
         from mecanico_ia_exp.experiments.retrieval_runner import DIAGNOSTICO_A_DTC
 
         # MODEL PREDICTION frente a GROUND TRUTH. En modo no oracular todo lo que
@@ -224,6 +225,9 @@ def run_sufficiency(
         # sistema posee cuando se ejecuta de verdad.
         diagnostico = fault_id if oracle else str(atribucion.predicted_class)
         codigos_esperados = DIAGNOSTICO_A_DTC.get(diagnostico, ())
+        # El requisito de la puerta de códigos sale de cómo esté **declarado** el
+        # diagnóstico, no de su nombre: `docs/methodology/politica-puerta-dtc.md`.
+        requisito = dtc_requirement(diagnostico, DIAGNOSTICO_A_DTC)
 
         bundle, comprobaciones = assemble(
             case_id=case_id,
@@ -233,6 +237,7 @@ def run_sufficiency(
             calibrated_confidence=confianza_calibrada,
             accepted_applicability=umbrales.accepted_applicability,
             expected_dtc=codigos_esperados,
+            dtc_requirement=requisito,
         )
         veredicto = verificador.verify(bundle)
 
@@ -244,7 +249,9 @@ def run_sufficiency(
             ejecucion = run_agent(get_llm(llm), bundle, veredicto)
             ejecucion.gold_case_id = str(caso["case_id"])
 
-        veredictos.append((caso, bundle, veredicto, comprobaciones, ejecucion, diagnostico))
+        veredictos.append(
+            (caso, bundle, veredicto, comprobaciones, ejecucion, diagnostico, requisito.value)
+        )
 
         esperado = str(caso["expected_action"])
         correcto = veredicto.decision.value == esperado
@@ -271,7 +278,7 @@ def run_sufficiency(
         f"{'conf':>7}{'docs':>6}{'cob.':>7}  motivos"
     )
     print("-" * 118)
-    for caso, _bundle, v, _comp, _e, _d in veredictos:
+    for caso, _bundle, v, _comp, _e, _d, _r in veredictos:
         esperado = str(caso["expected_action"])
         marca = "OK" if v.decision.value == esperado else "!!"
         s = v.signals
@@ -283,7 +290,9 @@ def run_sufficiency(
         )
 
     aciertos_decision = sum(
-        1 for c, _b, v, _cc, _e, _d in veredictos if v.decision.value == str(c["expected_action"])
+        1
+        for c, _b, v, _cc, _e, _d, _r in veredictos
+        if v.decision.value == str(c["expected_action"])
     )
     print(f"\ndecisiones correctas: {aciertos_decision}/{len(veredictos)}")
 
@@ -314,6 +323,7 @@ def run_sufficiency(
                     "case_id": c["case_id"],
                     "fault_id": c["fault_id"],
                     "diagnosis_used": d,
+                    "dtc_requirement": r,
                     "corpus_variant": c.get("corpus_variant", "FULL"),
                     "bundle": b.to_dict(),
                     "verdict": v.to_dict(),
@@ -321,7 +331,7 @@ def run_sufficiency(
                     # Sin él la decisión no sería auditable.
                     "support_checks": [c.to_dict() for c in comp],
                 }
-                for c, b, v, comp, _e, d in veredictos
+                for c, b, v, comp, _e, d, r in veredictos
             ],
         },
         seed=configuracion.seed,
@@ -339,7 +349,7 @@ def run_sufficiency(
         print(cab)
         print("-" * len(cab))
         agentes = []
-        for caso, _b, v, _c, e, _d in veredictos:
+        for caso, _b, v, _c, e, _d, _r in veredictos:
             if e is None:
                 continue
             agentes.append(e)

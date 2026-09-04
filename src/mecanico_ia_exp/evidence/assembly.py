@@ -19,7 +19,12 @@ from mecanico_ia_exp.evidence.model import (
     Observation,
     SupportStatus,
 )
-from mecanico_ia_exp.evidence.support import SupportCheck, check_support, role_priority
+from mecanico_ia_exp.evidence.support import (
+    DtcRequirement,
+    SupportCheck,
+    check_support,
+    role_priority,
+)
 from mecanico_ia_exp.rag.store import RetrievedChunk
 from mecanico_ia_exp.rag.vehicle import (
     Applicability,
@@ -129,6 +134,7 @@ def build_claims(
     *,
     accepted_applicability: frozenset[str],
     expected_dtc: tuple[str, ...] = (),
+    dtc_requirement: DtcRequirement = DtcRequirement.DTC_REQUIRED,
     max_claims: int = 3,
 ) -> tuple[list[Claim], list[SupportCheck]]:
     """Construye afirmaciones y **comprueba que la evidencia citada las sostiene**.
@@ -205,7 +211,11 @@ def build_claims(
         sostienen: list[str] = []
         for candidato in aplicables:
             comprobacion = check_support(
-                claim, candidato, signal=obs.signal, expected_dtc=expected_dtc
+                claim,
+                candidato,
+                signal=obs.signal,
+                expected_dtc=expected_dtc,
+                requisito=dtc_requirement,
             )
             comprobaciones.append(comprobacion)
             if comprobacion.supports:
@@ -237,6 +247,7 @@ def assemble(
     calibrated_confidence: float | None = None,
     accepted_applicability: frozenset[str],
     expected_dtc: tuple[str, ...] = (),
+    dtc_requirement: DtcRequirement = DtcRequirement.DTC_REQUIRED,
 ) -> tuple[EvidenceBundle, list[SupportCheck]]:
     """Reúne toda la evidencia de un caso y verifica que la sostiene.
 
@@ -250,6 +261,7 @@ def assemble(
         documentos,
         accepted_applicability=accepted_applicability,
         expected_dtc=expected_dtc,
+        dtc_requirement=dtc_requirement,
     )
     bundle = EvidenceBundle(
         case_id=case_id,
