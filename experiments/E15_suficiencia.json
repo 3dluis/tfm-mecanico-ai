@@ -1,13 +1,20 @@
 {
   "experiment_id": "E15_sufficiency",
-  "commit": "478ebe09c9e79ee53217df41e16ba21b88a7cec5",
-  "dirty": true,
-  "executed_at": "2026-09-04T11:07:54.925298+00:00",
+  "commit": "43f56dc7c944634bf4a83e53f3b20977b0bda39e",
+  "dirty": false,
+  "executed_at": "2026-09-04T11:11:45.690454+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
   "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "goldset": "goldset_mazda3_bk.yaml",
+  "mode": "oracle",
+  "oracle_channels_open": {
+    "O1_window_selection_requires_correct_prediction": true,
+    "O2_retrieval_scoped_by_annotated_label": true,
+    "O3_support_dtc_from_annotated_label": true
+  },
+  "evaluation_policy": "docs/methodology/politica-evaluacion-no-oracular.md",
   "vehicle_id": "mazda-3-bk-2007",
   "verifier_version": "v2.1",
   "thresholds": {
@@ -43,6 +50,7 @@
     {
       "case_id": "C01_maf_drift",
       "fault_id": "F02_maf_drift",
+      "diagnosis_used": "F02_maf_drift",
       "corpus_variant": "FULL",
       "bundle": {
         "case_id": "F02_maf_drift__highway__01@120s",
@@ -502,6 +510,7 @@
     {
       "case_id": "C02_thermostat_stuck",
       "fault_id": "F03_thermostat_stuck",
+      "diagnosis_used": "F03_thermostat_stuck",
       "corpus_variant": "FULL",
       "bundle": {
         "case_id": "F03_thermostat_stuck__urban__08@120s",
@@ -1035,6 +1044,7 @@
     {
       "case_id": "C03_o2_slow_response",
       "fault_id": "F04_o2_lag",
+      "diagnosis_used": "F04_o2_lag",
       "corpus_variant": "FULL",
       "bundle": {
         "case_id": "F04_o2_lag__idle__02@120s",
@@ -1614,6 +1624,7 @@
     {
       "case_id": "C04_misfire",
       "fault_id": "F05_misfire",
+      "diagnosis_used": "F05_misfire",
       "corpus_variant": "FULL",
       "bundle": {
         "case_id": "F05_misfire__highway__09@180s",
@@ -2208,6 +2219,7 @@
     {
       "case_id": "C05_vacuum_leak",
       "fault_id": "F01_vacuum_leak",
+      "diagnosis_used": "F01_vacuum_leak",
       "corpus_variant": "FULL",
       "bundle": {
         "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -2664,6 +2676,7 @@
     {
       "case_id": "C06_vacuum_leak_evidencia_retirada",
       "fault_id": "F01_vacuum_leak",
+      "diagnosis_used": "F01_vacuum_leak",
       "corpus_variant": "ABSENT",
       "bundle": {
         "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -2798,6 +2811,7 @@
     {
       "case_id": "C07_partial",
       "fault_id": "F01_vacuum_leak",
+      "diagnosis_used": "F01_vacuum_leak",
       "corpus_variant": "PARTIAL",
       "bundle": {
         "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -3325,6 +3339,7 @@
     {
       "case_id": "C08_distractor",
       "fault_id": "F01_vacuum_leak",
+      "diagnosis_used": "F01_vacuum_leak",
       "corpus_variant": "DISTRACTOR",
       "bundle": {
         "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -3852,6 +3867,7 @@
     {
       "case_id": "C09_distractor_sin_filtro",
       "fault_id": "F01_vacuum_leak",
+      "diagnosis_used": "F01_vacuum_leak",
       "corpus_variant": "DISTRACTOR_NO_FILTER",
       "bundle": {
         "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -4278,6 +4294,7 @@
     {
       "case_id": "C10_thermostat_absent",
       "fault_id": "F03_thermostat_stuck",
+      "diagnosis_used": "F03_thermostat_stuck",
       "corpus_variant": "ABSENT",
       "bundle": {
         "case_id": "F03_thermostat_stuck__urban__08@120s",
@@ -4412,6 +4429,7 @@
     {
       "case_id": "C11_thermostat_partial",
       "fault_id": "F03_thermostat_stuck",
+      "diagnosis_used": "F03_thermostat_stuck",
       "corpus_variant": "PARTIAL",
       "bundle": {
         "case_id": "F03_thermostat_stuck__urban__08@120s",
@@ -5142,6 +5160,7 @@
     {
       "case_id": "C12_thermostat_distractor",
       "fault_id": "F03_thermostat_stuck",
+      "diagnosis_used": "F03_thermostat_stuck",
       "corpus_variant": "DISTRACTOR",
       "bundle": {
         "case_id": "F03_thermostat_stuck__urban__08@120s",
@@ -5872,6 +5891,7 @@
     {
       "case_id": "C13_thermostat_distractor_sin_filtro",
       "fault_id": "F03_thermostat_stuck",
+      "diagnosis_used": "F03_thermostat_stuck",
       "corpus_variant": "DISTRACTOR_NO_FILTER",
       "bundle": {
         "case_id": "F03_thermostat_stuck__urban__08@120s",
@@ -6417,6 +6437,7 @@
     {
       "case_id": "C14_o2_absent",
       "fault_id": "F04_o2_lag",
+      "diagnosis_used": "F04_o2_lag",
       "corpus_variant": "ABSENT",
       "bundle": {
         "case_id": "F04_o2_lag__idle__02@120s",
@@ -6551,6 +6572,7 @@
     {
       "case_id": "C15_o2_partial",
       "fault_id": "F04_o2_lag",
+      "diagnosis_used": "F04_o2_lag",
       "corpus_variant": "PARTIAL",
       "bundle": {
         "case_id": "F04_o2_lag__idle__02@120s",
@@ -7246,6 +7268,7 @@
     {
       "case_id": "C16_o2_distractor",
       "fault_id": "F04_o2_lag",
+      "diagnosis_used": "F04_o2_lag",
       "corpus_variant": "DISTRACTOR",
       "bundle": {
         "case_id": "F04_o2_lag__idle__02@120s",
@@ -7941,6 +7964,7 @@
     {
       "case_id": "C17_o2_distractor_sin_filtro",
       "fault_id": "F04_o2_lag",
+      "diagnosis_used": "F04_o2_lag",
       "corpus_variant": "DISTRACTOR_NO_FILTER",
       "bundle": {
         "case_id": "F04_o2_lag__idle__02@120s",
