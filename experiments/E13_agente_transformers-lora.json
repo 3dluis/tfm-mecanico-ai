@@ -1,5 +1,14 @@
 {
   "experiment_id": "E13_agent",
+  "commit": "68cb5f5192f431c0885fe70b1cfae22fd30fa52c",
+  "dirty": true,
+  "executed_at": "2026-09-04T04:37:06.635075+00:00",
+  "seed": 20260901,
+  "dataset_id": "synthetic_v2",
+  "dataset_type": "synthetic",
+  "model": "transformers-lora",
+  "prompt_version": "agent-2026-09-04",
+  "goldset": "goldset_mazda3_bk.yaml",
   "llm": "transformers-lora",
   "identity": {
     "llm_provider": "transformers",
@@ -12,6 +21,7 @@
   "runs": [
     {
       "case_id": "F02_maf_drift__highway__01@120s",
+      "gold_case_id": "C01_maf_drift",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -24,6 +34,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -33,11 +44,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.4,
+      "latency_s": 7.29,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_MODEL_CONFIDENCE\", \"missing_evidence\": [\"confianza 0.6 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
       "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C02_thermostat_stuck",
       "verdict": "EXPLAIN",
       "output": {
         "decision": "EXPLAIN",
@@ -86,6 +98,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -95,11 +108,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 27.58,
+      "latency_s": 35.11,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F03_thermostat_stuck\", \"confidence\": 0.82, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal coolant_temperature presenta un delta_max de 1.686, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C02\", \"text\": \"Se observa coolant_temperature con autocorr1 de 0.0549, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal coolant_temperature presenta un delta_min de -1.496, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La atribución sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
       "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C03_o2_slow_response",
       "verdict": "EXPLAIN",
       "output": {
         "decision": "EXPLAIN",
@@ -148,6 +162,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -157,11 +172,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 37.99,
+      "latency_s": 58.61,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F04_o2_lag\", \"confidence\": 0.89, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal oxygen_sensor presenta un delta_max de 0.0838, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}, {\"claim_id\": \"C02\", \"text\": \"El std de oxygen_sensor alcanza 0.0287, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal oxygen_sensor presenta un max de 0.5147, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La atribución sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
       "case_id": "F05_misfire__highway__09@180s",
+      "gold_case_id": "C04_misfire",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -174,6 +190,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -183,11 +200,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.99,
+      "latency_s": 7.24,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_MODEL_CONFIDENCE\", \"missing_evidence\": [\"confianza 0.462 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C05_vacuum_leak",
       "verdict": "EXPLAIN",
       "output": {
         "decision": "EXPLAIN",
@@ -236,6 +254,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -245,11 +264,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 34.57,
+      "latency_s": 45.53,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F01_vacuum_leak\", \"confidence\": 0.91, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"Se observa ltft_bank1 con max de 2.716, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}, {\"claim_id\": \"C02\", \"text\": \"La señal stft_bank1 presenta un mean de 7.077, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal ltft_bank1 presenta un mean de 1.294, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La atribución sostiene de qué condición de funcionamiento se ha observado, no qué le ocurre al motor.\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C06_vacuum_leak_evidencia_retirada",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -263,6 +283,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -272,16 +293,18 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 4.46,
+      "latency_s": 6.9,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"NO_APPLICABLE_DOCUMENTATION\", \"missing_evidence\": [\"ningún fragmento documental aplicable a este vehículo\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C07_partial",
       "verdict": "ABSTAIN",
       "output": null,
       "fake_citations": [],
       "schema_error": "1 validation error for AbstainOutput\nreason\n  Input should be 'INSUFFICIENT_EVIDENCE', 'NO_APPLICABLE_DOCUMENTATION', 'CONTRADICTORY_EVIDENCE', 'LOW_MODEL_CONFIDENCE', 'NO_APPLICABLE_DOCUMENTARY_EVIDENCE', 'LOW_RETRIEVAL_SUPPORT', 'TOO_FEW_SUPPORTING_CHUNKS', 'TOO_FEW_DISTINCT_SOURCES', 'LOW_CLAIM_COVERAGE', 'CONTRADICTION_DETECTED' or 'NO_OBSERVATIONAL_EVIDENCE' [type=enum, input_value='LOW_CLAIM_COVERDGE', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/enum",
-      "respected_verdict": true,
+      "respected_verdict": null,
+      "verdict_evaluable": false,
       "valid": false,
       "llm": {
         "llm_provider": "transformers",
@@ -291,16 +314,18 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 6.28,
+      "latency_s": 6.76,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERDGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C08_distractor",
       "verdict": "ABSTAIN",
       "output": null,
       "fake_citations": [],
       "schema_error": "1 validation error for AbstainOutput\nreason\n  Input should be 'INSUFFICIENT_EVIDENCE', 'NO_APPLICABLE_DOCUMENTATION', 'CONTRADICTORY_EVIDENCE', 'LOW_MODEL_CONFIDENCE', 'NO_APPLICABLE_DOCUMENTARY_EVIDENCE', 'LOW_RETRIEVAL_SUPPORT', 'TOO_FEW_SUPPORTING_CHUNKS', 'TOO_FEW_DISTINCT_SOURCES', 'LOW_CLAIM_COVERAGE', 'CONTRADICTION_DETECTED' or 'NO_OBSERVATIONAL_EVIDENCE' [type=enum, input_value='LOW_CLAIM_COVERDGE', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/enum",
-      "respected_verdict": true,
+      "respected_verdict": null,
+      "verdict_evaluable": false,
       "valid": false,
       "llm": {
         "llm_provider": "transformers",
@@ -310,11 +335,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.19,
+      "latency_s": 7.19,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERDGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C09_distractor_sin_filtro",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -327,6 +353,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -336,7 +363,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 4.57,
+      "latency_s": 12.01,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"TOO_FEW_SUPPORTING_CHUNKS\", \"missing_evidence\": [\"ningún fragmento documental de confianza > 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     }
   ]

@@ -1,5 +1,14 @@
 {
   "experiment_id": "E13_agent",
+  "commit": "68cb5f5192f431c0885fe70b1cfae22fd30fa52c",
+  "dirty": true,
+  "executed_at": "2026-09-04T04:30:38.671600+00:00",
+  "seed": 20260901,
+  "dataset_id": "synthetic_v2",
+  "dataset_type": "synthetic",
+  "model": "transformers",
+  "prompt_version": "agent-2026-09-04",
+  "goldset": "goldset_mazda3_bk.yaml",
   "llm": "transformers",
   "identity": {
     "llm_provider": "transformers",
@@ -12,6 +21,7 @@
   "runs": [
     {
       "case_id": "F02_maf_drift__highway__01@120s",
+      "gold_case_id": "C01_maf_drift",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -24,6 +34,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -33,16 +44,18 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 4.88,
+      "latency_s": 5.65,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"foreign materials or stain inside fuel filter (low-pressure)\"]}"
     },
     {
       "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C02_thermostat_stuck",
       "verdict": "EXPLAIN",
       "output": null,
       "fake_citations": [],
       "schema_error": "sin JSON en la respuesta: el objeto JSON de la respuesta está incompleto",
-      "respected_verdict": true,
+      "respected_verdict": null,
+      "verdict_evaluable": false,
       "valid": false,
       "llm": {
         "llm_provider": "transformers",
@@ -52,11 +65,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 21.74,
+      "latency_s": 38.87,
       "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"Insufficient coolant temperature detected.\",\"confidence\":1.0,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"La temperatura del líquido de enfriamiento no alcanza el valor especificado durante el arranque frío del motor, lo que hace que el PCM determine que la temperatura del líquido de enfriamiento para el control de combustible en ciclo cerrado es insuficiente, según la evidencia proporcionada.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001306\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001376\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001446\"]},{\"limitations\":[\"No se han observado señales de otros problemas relacionados con el sistema de control de combustible o de enfriamiento del motor.\"]}"
     },
     {
       "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C03_o2_slow_response",
       "verdict": "EXPLAIN",
       "output": {
         "decision": "EXPLAIN",
@@ -98,6 +112,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -107,11 +122,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 100.7,
+      "latency_s": 98.01,
       "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"La detección de DTC P0133 sugiere un problema con el sensor de óxidos de hidrógeno frontal, lo que puede indicar una respuesta lenta o inactividad del sensor.\",\"confidence\":1.0,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"Se observó que el valor máximo del sensor de óxidos de hidrógeno frontal aumenta (OBS003), lo que sugiere una respuesta lenta o inactividad del sensor.\",\"observational_evidence\":[\"OBS003\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001315\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001311\"]},{\"claim_id\":\"C02\",\"text\":\"El manual de servicio indica que P0133 se detecta cuando el PCM monitorea la respuesta del sensor de óxidos de hidrógeno frontal, incluyendo el ciclo de inversión, la respuesta de pobre a rico y la respuesta de rico a pobre, y si alguno de estos excede el umbral, el PCM determina que hay un problema con el sensor de óxidos de hidrógeno frontal.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001311\"]}], \"limitations\":[\"No se han observado señales de fuga de combustible o problemas relacionados con el filtro de combustible.\"]}"
     },
     {
       "case_id": "F05_misfire__highway__09@180s",
+      "gold_case_id": "C04_misfire",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -125,6 +141,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -134,16 +151,18 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.28,
+      "latency_s": 16.19,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"engine_compression_inspection\",\"fuel_injector_operation_test\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C05_vacuum_leak",
       "verdict": "EXPLAIN",
       "output": null,
       "fake_citations": [],
       "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 961 (char 960)",
-      "respected_verdict": true,
+      "respected_verdict": null,
+      "verdict_evaluable": false,
       "valid": false,
       "llm": {
         "llm_provider": "transformers",
@@ -153,11 +172,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 36.18,
+      "latency_s": 32.75,
       "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"Vacuum leak detected, investigate fuel line pressure.\",\"confidence\":0.908,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"Observation OBS001 muestra un aumento en el valor máximo de ltft_bank1 durante el intervalo 120-239 s. Observación OBS002 indica un aumento en la media de stft_bank1 durante el mismo intervalo. Observación OBS003 muestra un aumento en la media de ltft_bank1 durante el intervalo 120-239 s. Observación OBS004 revela un aumento en el valor mínimo de stft_bank1 durante el intervalo 120-239 s. Observación OBS005 indica un aumento en el valor mínimo de map durante el intervalo 120-239 s.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001856\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001840\"]},\"limitations\":[\"The evidence does not provide information about the fuel pump unit or the BARO sensor circuit.\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C06_vacuum_leak_evidencia_retirada",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -170,6 +190,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -179,11 +200,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 2.96,
+      "latency_s": 6.02,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"Documentary evidence related to F01_vacuum_leak\"],\"notes\":\"\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C07_partial",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -197,6 +219,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -206,11 +229,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 4.09,
+      "latency_s": 11.04,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"engine_compression_inspection\",\"fuel_injector_inspection\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C08_distractor",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -224,6 +248,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -233,11 +258,12 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 4.01,
+      "latency_s": 8.44,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"engine_compression_inspection\",\"fuel_injector_inspection\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C09_distractor_sin_filtro",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -250,6 +276,7 @@
       "fake_citations": [],
       "schema_error": "",
       "respected_verdict": true,
+      "verdict_evaluable": true,
       "valid": true,
       "llm": {
         "llm_provider": "transformers",
@@ -259,7 +286,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 3.34,
+      "latency_s": 23.78,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"CHUNKS_RELEVANT_TO_VACUUM_LEAK\"],\"notes\":\"\"}"
     }
   ]
