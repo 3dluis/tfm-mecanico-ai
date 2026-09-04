@@ -19,7 +19,7 @@ from mecanico_ia_exp.evidence.model import (
     Observation,
     SupportStatus,
 )
-from mecanico_ia_exp.evidence.support import SupportCheck, check_support
+from mecanico_ia_exp.evidence.support import SupportCheck, check_support, role_priority
 from mecanico_ia_exp.rag.store import RetrievedChunk
 from mecanico_ia_exp.rag.vehicle import (
     Applicability,
@@ -171,7 +171,15 @@ def build_claims(
     segundo con las palabras de lo primero es exactamente la confusión entre
     atribución y estado del vehículo que `evidence-model.md` prohíbe.
     """
-    aplicables = [d for d in documentos if d.applicability in accepted_applicability]
+    # Orden por papel antes que por puntuación de recuperación: primero los
+    # procedimientos, después las referencias, después las tablas. En v1 el orden
+    # era el de la recuperación y el bucle paraba tras aceptar dos, de modo que
+    # una tabla bien puntuada podía ocupar las dos plazas y el procedimiento
+    # correcto no llegaba a examinarse (`hallazgo-lexical-support-confound.md`).
+    aplicables = sorted(
+        (d for d in documentos if d.applicability in accepted_applicability),
+        key=role_priority,
+    )
     claims: list[Claim] = []
     comprobaciones: list[SupportCheck] = []
 

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from enum import StrEnum
 
 from mecanico_ia_exp.evidence.model import Claim, DocumentaryEvidence
 from mecanico_ia_exp.rag.manifest import DocumentType
@@ -65,6 +66,115 @@ _PATRON_DIAGNOSTICO = re.compile(
     r"Diagnostic procedure|INSPECTION|TROUBLESHOOTING|POSSIBLE CAUSE)\b"
 )
 
+# --------------------------------------------------------------------------
+# Papel del fragmento (política v2, `docs/methodology/politica-suficiencia-v2.md`)
+#
+# La unidad de decisión era el documento y tiene que ser el fragmento: todo el
+# corpus es un manual de taller, así que el tipo de documento no discrimina, y
+# llevar un código de avería no prueba que el fragmento diagnostique --las tablas
+# llevan decenas--. Ninguno de los rasgos de abajo nombra una señal, un código ni
+# una condición de fallo: se aplican igual a un fragmento sobre frenos.
+
+
+class ChunkRole(StrEnum):
+    """Qué hace el fragmento, no de qué fichero viene."""
+
+    PROCEDURAL_DIAGNOSTIC_EVIDENCE = "PROCEDURAL_DIAGNOSTIC_EVIDENCE"
+    """Pasos de inspección y criterios de decisión: dice cómo se comprueba."""
+
+    SUPPORTING_DIAGNOSTIC_REFERENCE = "SUPPORTING_DIAGNOSTIC_REFERENCE"
+    """Lógica de detección o especificaciones: dice qué vigila la centralita."""
+
+    CODE_DEFINITION_OR_TABLE = "CODE_DEFINITION_OR_TABLE"
+    """Enumera códigos. Dice que existen, no cómo se diagnostican."""
+
+    UNCLASSIFIED = "UNCLASSIFIED"
+    """No encaja. Se trata como incapaz de sostener: la ausencia de prueba no es
+    prueba."""
+
+
+#: Acciones que solo aparecen en un procedimiento: alguien tiene que hacer algo.
+_PASOS_INSPECCION = re.compile(
+    r"\b(inspect|measure|disconnect|reconnect|remove|install|replace|repair|"
+    r"turn the ignition|connect the|check for|verify)\b",
+    re.IGNORECASE,
+)
+
+#: Marcas de decisión: el procedimiento bifurca según lo observado.
+_CRITERIOS_DECISION = re.compile(
+    r"(\bgo to the next step\b|\bgo to step\b|\bIs the\b.{0,80}\?|\bAre the\b.{0,80}\?|"
+    r"^\s*(yes|no)\b|\bspecification\b|\bstandard value\b)",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+#: Marcas de lógica de detección: describe qué vigila el sistema, sin decir cómo
+#: se comprueba desde fuera.
+_LOGICA_DETECCION = re.compile(
+    r"(\bthe PCM (monitors|determines|detects)\b|\bdetection condition\b|"
+    r"\bmonitoring condition\b)",
+    re.IGNORECASE,
+)
+
+#: Encabezados que anuncian un listado.
+_ENCABEZADO_TABLA = re.compile(
+    r"(\bDTC TABLE\b|\bSELF\s*-?\s*TEST\b|\bDETECTION LOGIC AND CONDITIONS\b|"
+    r"\bLIST\b|\bINDEX\b)",
+    re.IGNORECASE,
+)
+
+#: Encabezado de procedimiento: nombra un único código como asunto.
+_ENCABEZADO_PROCEDIMIENTO = re.compile(r"^\s*DTC\s+[PBCU]\d{4}\b", re.IGNORECASE)
+
+#: A partir de cuántos códigos distintos un fragmento se comporta como listado.
+#: En este manual un procedimiento trata uno, a veces una familia pequeña; de
+#: 6 105 fragmentos, 657 portan uno y 71 portan dos, y la cola llega a más de
+#: cuarenta. **Nunca decide solo**: siempre se combina con las marcas de arriba.
+MAX_CODIGOS_PROCEDIMIENTO = 3
+
+
+def classify_chunk(evidencia: DocumentaryEvidence) -> ChunkRole:
+    """Clasifica el fragmento por lo que hace.
+
+    Reglas en orden, todas generales: ninguna menciona una señal, un código ni un
+    fallo concretos.
+    """
+    encabezado = evidencia.section or ""
+    cuerpo = f"{encabezado}\n{evidencia.text}"
+    n_dtc = len(set(evidencia.dtc_codes))
+    es_listado = n_dtc >= MAX_CODIGOS_PROCEDIMIENTO or bool(_ENCABEZADO_TABLA.search(encabezado))
+    encabeza_procedimiento = bool(_ENCABEZADO_PROCEDIMIENTO.search(encabezado))
+
+    tiene_pasos = bool(_PASOS_INSPECCION.search(cuerpo))
+    tiene_decision = bool(_CRITERIOS_DECISION.search(cuerpo))
+    if tiene_pasos and tiene_decision and (not es_listado or encabeza_procedimiento):
+        return ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE
+    if _LOGICA_DETECCION.search(cuerpo):
+        return ChunkRole.SUPPORTING_DIAGNOSTIC_REFERENCE
+    if es_listado:
+        return ChunkRole.CODE_DEFINITION_OR_TABLE
+    return ChunkRole.UNCLASSIFIED
+
+
+#: Papeles que pueden sostener una afirmación por sí solos. Solo uno.
+PAPELES_QUE_SOSTIENEN: frozenset[str] = frozenset({ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE.value})
+
+
+def role_priority(evidencia: DocumentaryEvidence) -> int:
+    """Orden de examen: por papel antes que por puntuación de recuperación.
+
+    En v1 los candidatos se examinaban por puntuación y el bucle se detenía tras
+    aceptar dos: una tabla bien puntuada podía ocupar las dos plazas y el
+    procedimiento correcto no llegaba a examinarse. Eso era un artefacto de la
+    implementación, no una decisión de diseño.
+    """
+    orden = {
+        ChunkRole.PROCEDURAL_DIAGNOSTIC_EVIDENCE: 0,
+        ChunkRole.SUPPORTING_DIAGNOSTIC_REFERENCE: 1,
+        ChunkRole.CODE_DEFINITION_OR_TABLE: 2,
+        ChunkRole.UNCLASSIFIED: 3,
+    }
+    return orden[classify_chunk(evidencia)]
+
 
 @dataclass(frozen=True)
 class SupportCheck:
@@ -79,6 +189,8 @@ class SupportCheck:
 
     supports: bool
     reason: str
+    chunk_role: str = ChunkRole.UNCLASSIFIED.value
+    """Papel del fragmento. Solo el procedimiento sostiene por sí solo."""
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -87,6 +199,7 @@ class SupportCheck:
             "mentions_signal": self.mentions_signal,
             "is_diagnostic": self.is_diagnostic,
             "carries_expected_dtc": self.carries_expected_dtc,
+            "chunk_role": self.chunk_role,
             "supports": self.supports,
             "reason": self.reason,
         }
@@ -128,49 +241,51 @@ def check_support(
     signal: str,
     expected_dtc: tuple[str, ...] = (),
 ) -> SupportCheck:
-    """Comprueba si un fragmento concreto sostiene una afirmación concreta."""
+    """Comprueba si un fragmento concreto sostiene una afirmación concreta.
+
+    Cuatro condiciones, todas necesarias: que el fragmento **mencione la señal**,
+    que sea **contenido diagnóstico**, que **porte el código esperado** y que su
+    **papel** sea el de procedimiento.
+
+    La cuarta es la que añade la política v2. Sin ella, una tabla que enumera
+    códigos y nombra la señal pasaba las tres primeras y sostenía una afirmación
+    que no sostiene: `docs/experiments/hallazgo-lexical-support-confound.md`.
+    """
     menciona = mentions_signal(evidencia.text, signal)
     diagnostico = is_diagnostic_content(evidencia)
+    papel = classify_chunk(evidencia).value
     lleva_dtc: bool | None = None
     if expected_dtc:
         lleva_dtc = bool(set(evidencia.dtc_codes) & set(expected_dtc))
 
-    if not menciona:
+    def resultado(sostiene: bool, motivo: str) -> SupportCheck:
         return SupportCheck(
             claim.claim_id,
             evidencia.chunk_id,
             menciona,
             diagnostico,
             lleva_dtc,
-            False,
-            f"el fragmento no menciona la señal {signal}",
+            sostiene,
+            motivo,
+            papel,
         )
+
+    if not menciona:
+        return resultado(False, f"el fragmento no menciona la señal {signal}")
     if not diagnostico:
-        return SupportCheck(
-            claim.claim_id,
-            evidencia.chunk_id,
-            menciona,
-            diagnostico,
-            lleva_dtc,
-            False,
-            "el fragmento describe el componente pero no es contenido diagnóstico",
+        return resultado(
+            False, "el fragmento describe el componente pero no es contenido diagnóstico"
         )
     if lleva_dtc is False:
-        return SupportCheck(
-            claim.claim_id,
-            evidencia.chunk_id,
-            menciona,
-            diagnostico,
-            lleva_dtc,
-            False,
-            f"el fragmento no porta ninguno de los códigos esperados {list(expected_dtc)}",
+        return resultado(
+            False, f"el fragmento no porta ninguno de los códigos esperados {list(expected_dtc)}"
         )
-    return SupportCheck(
-        claim.claim_id,
-        evidencia.chunk_id,
-        menciona,
-        diagnostico,
-        lleva_dtc,
-        True,
-        "menciona la señal en contenido diagnóstico del vehículo",
+    if papel not in PAPELES_QUE_SOSTIENEN:
+        return resultado(
+            False,
+            f"el fragmento porta el código y nombra la señal, pero su papel es {papel}: "
+            "no es un procedimiento diagnóstico y no sostiene por sí solo",
+        )
+    return resultado(
+        True, "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
     )
