@@ -43,6 +43,10 @@ def main(argv: list[str] | None = None) -> int:
 
     subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
+    umbral = subparsers.add_parser(
+        "threshold-sweep", help="barrido del umbral de confianza sobre validación"
+    )
+    umbral.add_argument("--dataset-id", default="synthetic_v2")
     subparsers.add_parser("training-data", help="generar el conjunto de ajuste del SLM")
     ft = subparsers.add_parser("finetune-slm", help="ajustar el SLM con LoRA")
     ft.add_argument("--epochs", type=int, default=4)
@@ -122,6 +126,11 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         return run_retrieval_evaluation()
+
+    if args.command == "threshold-sweep":
+        from mecanico_ia_exp.experiments.threshold_runner import run_threshold_sweep
+
+        return run_threshold_sweep(args.dataset_id)
 
     if args.command == "training-data":
         from mecanico_ia_exp.experiments.training_runner import run_training_data

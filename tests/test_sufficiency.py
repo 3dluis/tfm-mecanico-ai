@@ -392,3 +392,33 @@ def test_las_cuatro_condiciones_se_distinguen_por_lo_que_falta() -> None:
     assert Reason.NO_DOCUMENTARY_EVIDENCE in sin_nada.reasons
     assert Reason.NO_DOCUMENTARY_EVIDENCE in solo_inaplicable.reasons
     assert Reason.LOW_CLAIM_COVERAGE in sin_soporte.reasons
+
+
+# ------------------------------------------ barrido del umbral (E15b, RX-04)
+
+
+def test_el_barrido_del_umbral_no_puede_tocar_el_conjunto_de_test() -> None:
+    """Un umbral seleccionado con el test convierte la evaluación final en una
+    descripción de lo ya visto. La garantía se comprueba en el código, no se
+    confía a la disciplina de quien lo ejecuta."""
+    from pathlib import Path
+
+    fuente = Path("src/mecanico_ia_exp/experiments/threshold_runner.py").read_text(encoding="utf-8")
+    assert 'load_partition("test"' not in fuente
+    assert 'load_partition("validation"' in fuente
+
+
+def test_el_registro_del_barrido_declara_que_no_uso_el_test() -> None:
+    import json
+    from pathlib import Path
+
+    ruta = Path("experiments/E15b_barrido_umbral.json")
+    if not ruta.is_file():
+        pytest.skip("el barrido no se ha ejecutado en esta máquina")
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    assert datos["test_used"] is False
+    assert datos["partition"] == "validation"
+    # El criterio declara que no es un pre-registro ciego. Ocultarlo sería peor
+    # que la propia limitación.
+    assert datos["criterion"]["blind_preregistration"] is False
+    assert datos["n_sessions"] == 12
