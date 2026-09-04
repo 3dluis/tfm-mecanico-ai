@@ -19,6 +19,7 @@ y deja constancia de sus límites en lugar de fingir que decide más.
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -46,6 +47,44 @@ TERMINOS_SENAL: dict[str, tuple[str, ...]] = {
     "throttle_position": ("throttle position", "tp sensor", "throttle valve"),
     "ignition_timing": ("ignition timing", "spark advance", "timing advance"),
 }
+
+
+class DtcRequirement(StrEnum):
+    """Qué exige la puerta de códigos para un diagnóstico dado.
+
+    Es una propiedad del **diagnóstico**, no del fragmento, y se determina antes
+    de mirar ninguna evidencia. Definida en
+    `docs/methodology/politica-puerta-dtc.md`.
+    """
+
+    #: El diagnóstico está declarado con códigos que lo documentan: el fragmento
+    #: debe portar alguno.
+    DTC_REQUIRED = "DTC_REQUIRED"
+    #: Declarado **sin** códigos: por su naturaleza ninguno lo documenta. La
+    #: evidencia de este corpus está anclada en códigos, así que no hay soporte
+    #: documental que comprobar.
+    DTC_NOT_APPLICABLE = "DTC_NOT_APPLICABLE"
+    #: No declarado: nadie ha establecido qué códigos lo documentan. El
+    #: instrumento no sabe comprobarlo, que no es haber comprobado sin encontrar.
+    DTC_MAPPING_UNAVAILABLE = "DTC_MAPPING_UNAVAILABLE"
+    #: Declarado con códigos que lo documentan en parte: portarlos refuerza, no
+    #: portarlos no descalifica. **Sin uso hoy**; requiere declaración expresa.
+    DTC_OPTIONAL = "DTC_OPTIONAL"
+
+
+def dtc_requirement(diagnostico: str, mapa: Mapping[str, tuple[str, ...]]) -> DtcRequirement:
+    """Lee el requisito de la **declaración**, no del nombre del diagnóstico.
+
+    Un diagnóstico nuevo cae en una de las tres categorías por cómo se le declare
+    en el mapa de códigos. La regla no conoce ningún diagnóstico concreto.
+
+    `DTC_OPTIONAL` no se deriva: exige declararlo aparte, precisamente para que
+    no se convierta en la salida cómoda de un caso incómodo.
+    """
+    if diagnostico not in mapa:
+        return DtcRequirement.DTC_MAPPING_UNAVAILABLE
+    return DtcRequirement.DTC_REQUIRED if mapa[diagnostico] else DtcRequirement.DTC_NOT_APPLICABLE
+
 
 #: Estado de la correspondencia entre el identificador de una señal y el
 #: vocabulario del manual. Se declara explícitamente porque **no saber traducir
@@ -266,6 +305,9 @@ class SupportCheck:
     #: `MAPPED` o `SIGNAL_MAPPING_UNAVAILABLE`. Distingue «no hay evidencia» de
     #: «el verificador no sabe traducir esta señal al vocabulario del manual».
     signal_mapping: str = MAPEADA
+    #: Requisito de la puerta de códigos que se aplicó a esta comprobación.
+    #: Sin él, «no se comprobó» y «se comprobó y pasó» eran indistinguibles.
+    dtc_requirement: str = DtcRequirement.DTC_REQUIRED.value
     """Papel del fragmento. Solo el procedimiento sostiene por sí solo."""
 
     def to_dict(self) -> dict[str, object]:
@@ -277,6 +319,7 @@ class SupportCheck:
             "carries_expected_dtc": self.carries_expected_dtc,
             "chunk_role": self.chunk_role,
             "signal_mapping": self.signal_mapping,
+            "dtc_requirement": self.dtc_requirement,
             "supports": self.supports,
             "reason": self.reason,
         }
@@ -317,6 +360,7 @@ def check_support(
     *,
     signal: str,
     expected_dtc: tuple[str, ...] = (),
+    requisito: DtcRequirement = DtcRequirement.DTC_REQUIRED,
 ) -> SupportCheck:
     """Comprueba si un fragmento concreto sostiene una afirmación concreta.
 
@@ -347,6 +391,7 @@ def check_support(
             motivo,
             papel,
             correspondencia,
+            requisito.value,
         )
 
     if correspondencia == SIN_CORRESPONDENCIA:
@@ -364,6 +409,18 @@ def check_support(
         return resultado(
             False, "el fragmento describe el componente pero no es contenido diagnóstico"
         )
+    if requisito is DtcRequirement.DTC_NOT_APPLICABLE:
+        return resultado(
+            False,
+            f"{requisito.value}: ninguna avería documentada corresponde a este diagnóstico, "
+            "de modo que no hay evidencia documental anclada en un código que comprobar",
+        )
+    if requisito is DtcRequirement.DTC_MAPPING_UNAVAILABLE:
+        return resultado(
+            False,
+            f"{requisito.value}: no está declarado qué códigos documentan este diagnóstico; "
+            "el verificador no puede comprobarlo, y eso no es haber comprobado sin encontrar",
+        )
     if lleva_dtc is False:
         return resultado(
             False, f"el fragmento no porta ninguno de los códigos esperados {list(expected_dtc)}"
@@ -374,6 +431,8 @@ def check_support(
             f"el fragmento porta el código y nombra la señal, pero su papel es {papel}: "
             "no es un procedimiento diagnóstico y no sostiene por sí solo",
         )
-    return resultado(
-        True, "procedimiento diagnóstico del vehículo que menciona la señal y porta el código"
-    )
+    if requisito is DtcRequirement.DTC_OPTIONAL:
+        matiz = "y porta el código" if lleva_dtc else "sin exigirle código, que aquí es opcional"
+    else:
+        matiz = "y porta el código"
+    return resultado(True, f"procedimiento diagnóstico del vehículo que menciona la señal {matiz}")

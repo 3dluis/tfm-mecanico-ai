@@ -29,7 +29,7 @@ from mecanico_ia_exp.rag.vehicle import Applicability
 #: soporte**, no cuando cambia un umbral. Va al registro: sin ella, dos
 #: ejecuciones con políticas distintas son indistinguibles desde el artefacto, y
 #: la comparación entre versiones deja de ser posible.
-VERIFIER_VERSION = "v2.1"
+VERIFIER_VERSION = "v2.2"
 
 
 class Sufficiency(StrEnum):

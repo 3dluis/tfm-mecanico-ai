@@ -46,6 +46,12 @@ ESTRATEGIAS = (
 #: Una condición sin DTC conocido degrada a la mejor estrategia ciega en lugar
 #: de devolver nada.
 DIAGNOSTICO_A_DTC: dict[str, tuple[str, ...]] = {
+    # Declaración explícita, con lista vacía: **no existe un código de avería para
+    # la ausencia de avería**. Es un hecho del dominio, y declararlo aquí es lo que
+    # permite a `dtc_requirement` distinguir «esta condición no se documenta con
+    # códigos» de «nadie ha declarado sus códigos». Sin esta línea, las dos cosas
+    # eran la misma lista vacía. Ver `docs/methodology/politica-puerta-dtc.md`.
+    "F00_normal": (),
     # Mazda NO usa los códigos genéricos P0171/P0172 para la mezcla: usa la
     # familia P2177/P2178/P2187/P2188. P2187 es "Fuel system too lean at idle" y
     # su condición de detección vigila los ajustes de combustible en ralentí,
