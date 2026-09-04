@@ -13,16 +13,30 @@ from typing import Any
 
 import pandas as pd
 
-COLUMNAS = ("proveedor", "válidas", "respetan veredicto", "citas inventadas", "esquema roto", "n")
+COLUMNAS = (
+    "proveedor",
+    "válidas",
+    "respetan veredicto",
+    "evaluables",
+    "citas inventadas",
+    "esquema roto",
+    "n",
+)
 
 
 def summarize_runs(runs: list[dict[str, Any]], *, proveedor: str) -> dict[str, Any]:
     """Cuenta lo que se mide en E13 a partir de los registros serializados."""
     n = len(runs)
+    # Sin salida interpretable no hay veredicto que respetar: esas ejecuciones no
+    # entran en el numerador ni en el denominador. Los registros anteriores a la
+    # corrección no llevan `verdict_evaluable`; para ellos se deduce de que exista
+    # salida, que es lo que el campo significa.
+    evaluables = [r for r in runs if r.get("verdict_evaluable", r.get("output") is not None)]
     return {
         "proveedor": proveedor,
         "válidas": sum(1 for r in runs if r["valid"]),
-        "respetan veredicto": sum(1 for r in runs if r["respected_verdict"]),
+        "respetan veredicto": sum(1 for r in evaluables if r["respected_verdict"]),
+        "evaluables": len(evaluables),
         "citas inventadas": sum(len(r["fake_citations"]) for r in runs),
         "esquema roto": sum(1 for r in runs if r["schema_error"]),
         "n": n,

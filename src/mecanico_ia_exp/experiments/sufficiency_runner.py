@@ -24,6 +24,8 @@ from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
 from mecanico_ia_exp.evaluation.metrics import expected_calibration_error
 from mecanico_ia_exp.evidence.assembly import assemble
+from mecanico_ia_exp.experiments.registro import escribir
+from mecanico_ia_exp.llm.agent import PROMPT_VERSION
 from mecanico_ia_exp.models.baseline import BaselineConfig, train_baseline
 from mecanico_ia_exp.rag.embeddings import get_provider
 from mecanico_ia_exp.rag.ingest import load_vehicle
@@ -73,14 +75,32 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
     modelo = train_baseline(entrenamiento.features, entrenamiento.y, configuracion)
     calibrado = _calibrar(entrenamiento, validacion, configuracion)
 
-    # Efecto de la calibración, medido sobre validación.
-    for nombre, m in (("sin calibrar", modelo), ("calibrado", calibrado)):
+    # Efecto de la calibración, medido sobre validación. Se **registra**, no solo
+    # se imprime: la cifra sostiene la mitad del criterio de PI.1 y una
+    # transcripción de consola no es un artefacto verificable.
+    calibracion: dict[str, Any] = {
+        "method": "isotonic, cv=5 sobre entrenamiento",
+        "partition": "validation",
+        "n_windows": len(validacion.y),
+        "n_bins": 10,
+    }
+    for clave, nombre, m in (
+        ("uncalibrated", "sin calibrar", modelo),
+        ("calibrated", "calibrado", calibrado),
+    ):
         prob = np.asarray(m.predict_proba(validacion.features), dtype=np.float64)
-        pred = np.asarray(m.predict(validacion.features), dtype=np.str_)
+        pred = np.asarray(m.predict(validacion.features), dtype=validacion.y.dtype)
         conf = prob.max(axis=1)
         aciertos = (pred == validacion.y).astype(bool)
+        ece = float(expected_calibration_error(conf, aciertos))
+        calibracion[clave] = {
+            "ece": round(ece, 6),
+            "mean_confidence": round(float(conf.mean()), 6),
+            "accuracy": round(float(aciertos.mean()), 6),
+            "bias": round(float(conf.mean() - aciertos.mean()), 6),
+        }
         print(
-            f"{nombre:<14} ECE {expected_calibration_error(conf, aciertos):.3f} · "
+            f"{nombre:<14} ECE {ece:.3f} · "
             f"confianza media {conf.mean():.3f} · acierto {aciertos.mean():.3f} · "
             f"sesgo {conf.mean() - aciertos.mean():+.3f}"
         )
@@ -219,33 +239,33 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
     tablas = paths.ensure(paths.TABLES)
     pd.DataFrame(filas).to_csv(tablas / "E15_suficiencia.csv", index=False)
     experimentos = paths.ensure(paths.EXPERIMENTS)
-    (experimentos / "E15_suficiencia.json").write_text(
-        json.dumps(
-            {
-                "experiment_id": "E15_sufficiency",
-                "dataset_id": dataset_id,
-                "vehicle_id": VEHICULO,
-                "thresholds": umbrales.to_dict(),
-                "calibration": "isotonic, cv=5 sobre entrenamiento",
-                "cases": [
-                    {
-                        "case_id": c["case_id"],
-                        "fault_id": c["fault_id"],
-                        "corpus_variant": c.get("corpus_variant", "FULL"),
-                        "bundle": b.to_dict(),
-                        "verdict": v.to_dict(),
-                        # Rastro de por qué cada cita se aceptó o se descartó.
-                        # Sin él la decisión no sería auditable.
-                        "support_checks": [c.to_dict() for c in comp],
-                    }
-                    for c, b, v, comp, _e in veredictos
-                ],
-            },
-            indent=2,
-            ensure_ascii=False,
-        )
-        + "\n",
-        encoding="utf-8",
+    escribir(
+        experimentos / "E15_suficiencia.json",
+        {
+            "experiment_id": "E15_sufficiency",
+            "dataset_id": dataset_id,
+            "vehicle_id": VEHICULO,
+            "thresholds": umbrales.to_dict(),
+            "calibration": calibracion,
+            "cases": [
+                {
+                    "case_id": c["case_id"],
+                    "fault_id": c["fault_id"],
+                    "corpus_variant": c.get("corpus_variant", "FULL"),
+                    "bundle": b.to_dict(),
+                    "verdict": v.to_dict(),
+                    # Rastro de por qué cada cita se aceptó o se descartó.
+                    # Sin él la decisión no sería auditable.
+                    "support_checks": [c.to_dict() for c in comp],
+                }
+                for c, b, v, comp, _e in veredictos
+            ],
+        },
+        seed=configuracion.seed,
+        dataset_id=dataset_id,
+        dataset_type="synthetic",
+        embedding_model=provider.identity.model,
+        goldset=GOLDSET.name,
     )
     if llm:
         print("\n=== redacción con el modelo de lenguaje ===")
@@ -261,9 +281,11 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
                 continue
             agentes.append(e)
             forma = e.output.decision.value if e.output else "—"
+            # Sin salida no hay veredicto que juzgar: se marca, no se cuenta.
+            respeta = "—" if e.respected_verdict is None else "sí" if e.respected_verdict else "NO"
             print(
                 f"{caso['case_id']!s:<38}{v.decision.value:>10}{forma:>10}"
-                f"{('sí' if e.respected_verdict else 'NO'):>9}"
+                f"{respeta:>9}"
                 f"{len(e.fake_citations):>14}"
                 f"{('ok' if not e.schema_error else 'FALLA'):>9}"
                 f"{(e.raw.latency_s if e.raw else 0):>7.1f}"
@@ -272,23 +294,26 @@ def run_sufficiency(dataset_id: str = DATASET, llm: str | None = None) -> int:
             n = len(agentes)
             print(
                 f"\n  salidas válidas    {sum(1 for a in agentes if a.valid)}/{n}"
-                f"\n  respetan veredicto {sum(1 for a in agentes if a.respected_verdict)}/{n}"
+                f"\n  respetan veredicto {sum(1 for a in agentes if a.respected_verdict)}"
+                f"/{sum(1 for a in agentes if a.respected_verdict is not None)}"
+                " (sobre salidas evaluables)"
                 f"\n  citas inventadas   {sum(len(a.fake_citations) for a in agentes)}"
                 f"\n  fallos de esquema  {sum(1 for a in agentes if a.schema_error)}"
             )
-            (experimentos / f"E13_agente_{llm}.json").write_text(
-                json.dumps(
-                    {
-                        "experiment_id": "E13_agent",
-                        "llm": llm,
-                        "identity": agentes[0].raw.identity.as_dict() if agentes[0].raw else None,
-                        "runs": [a.to_dict() for a in agentes],
-                    },
-                    indent=2,
-                    ensure_ascii=False,
-                )
-                + "\n",
-                encoding="utf-8",
+            escribir(
+                experimentos / f"E13_agente_{llm}.json",
+                {
+                    "experiment_id": "E13_agent",
+                    "llm": llm,
+                    "identity": agentes[0].raw.identity.as_dict() if agentes[0].raw else None,
+                    "runs": [a.to_dict() for a in agentes],
+                },
+                seed=configuracion.seed,
+                dataset_id=dataset_id,
+                dataset_type="synthetic",
+                model=llm,
+                prompt_version=PROMPT_VERSION,
+                goldset=GOLDSET.name,
             )
             print(f"\nregistro experiments/E13_agente_{llm}.json")
 

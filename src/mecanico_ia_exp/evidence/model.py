@@ -137,6 +137,12 @@ class DocumentaryEvidence:
             "page_start": self.page_start,
             "page_end": self.page_end,
             "source_url": self.source_url,
+            # Sin el fichero de origen la cadena de procedencia se corta en el
+            # documento: quien audita puede llegar al manual, no al ejemplar. Y
+            # el canal de adquisición se declara aparte del editor, porque no
+            # coinciden: el manual es de Mazda y el ejemplar viene de un
+            # repositorio secundario.
+            "source_file": self.source_file,
             "dtc_codes": list(self.dtc_codes),
         }
 

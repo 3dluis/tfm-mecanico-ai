@@ -62,6 +62,10 @@ HERRAMIENTA_RECUPERAR: dict[str, Any] = {
     },
 }
 
+#: Versión del prompt. Cambia cuando cambia SISTEMA o la forma de la herramienta:
+#: sin ella, dos ejecuciones con prompts distintos son indistinguibles en el registro.
+PROMPT_VERSION = "agent-2026-09-04"
+
 SISTEMA = """Eres el módulo de redacción de un sistema de diagnóstico de vehículos.
 
 NO diagnosticas: el diagnóstico ya lo ha emitido un modelo especializado.
@@ -107,8 +111,15 @@ class AgentRun:
     #: Identificador del caso anotado (C01…). Varias condiciones de corpus
     #: comparten la misma ventana del pipeline; sin esto no se distinguen.
     gold_case_id: str | None = None
-    respected_verdict: bool = True
-    """¿La forma de la salida coincide con la decisión del verificador?"""
+    respected_verdict: bool | None = None
+    """¿La forma de la salida coincide con la decisión del verificador?
+
+    ``None`` mientras no haya salida interpretable: sin salida no hay veredicto
+    que respetar ni que incumplir. La primera versión lo inicializaba a ``True``
+    y solo lo actualizaba tras validar el esquema, de modo que una ejecución sin
+    salida se contaba como respetuosa: el «9 de 9» publicado se calculaba sobre
+    siete salidas reales. Contar una ausencia como acierto favorece al sistema
+    justo donde falla."""
 
     @property
     def valid(self) -> bool:
@@ -123,6 +134,8 @@ class AgentRun:
             "fake_citations": self.fake_citations,
             "schema_error": self.schema_error,
             "respected_verdict": self.respected_verdict,
+            # Denominador explícito: sin salida no hay veredicto que juzgar.
+            "verdict_evaluable": self.respected_verdict is not None,
             "valid": self.valid,
             "llm": self.raw.identity.as_dict() if self.raw else None,
             "latency_s": round(self.raw.latency_s, 2) if self.raw else None,

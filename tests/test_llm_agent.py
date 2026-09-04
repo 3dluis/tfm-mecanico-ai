@@ -432,3 +432,50 @@ def test_el_registro_lleva_el_identificador_del_caso_anotado() -> None:
     ejecucion = run_agent(EchoProvider(), _bundle(True), _veredicto("EXPLAIN"))
     ejecucion.gold_case_id = "C07_partial"
     assert ejecucion.to_dict()["gold_case_id"] == "C07_partial"
+
+
+def test_un_fallo_de_esquema_no_cuenta_como_veredicto_respetado() -> None:
+    """Sin salida no hay veredicto que respetar.
+
+    El campo se inicializaba a `True` y solo se actualizaba tras validar el
+    esquema: una ejecución sin salida se contabilizaba como respetuosa, y el
+    «9 de 9» publicado se calculaba sobre siete salidas reales.
+    """
+
+    class RotoProvider(EchoProvider):
+        """Devuelve algo que no es JSON, como hizo el modelo base en dos casos."""
+
+        def complete(self, mensajes, **kwargs):  # type: ignore[no-untyped-def]
+            respuesta = super().complete(mensajes, **kwargs)
+            respuesta.text = "esto no es JSON"
+            return respuesta
+
+    ejecucion = run_agent(RotoProvider(), _bundle(True), _veredicto("EXPLAIN"))
+    assert ejecucion.schema_error
+    assert ejecucion.respected_verdict is None, "una ausencia no es un acierto"
+    assert ejecucion.to_dict()["verdict_evaluable"] is False
+
+
+def test_el_resumen_no_cuenta_las_ausencias_en_el_denominador() -> None:
+    from mecanico_ia_exp.llm.report import summarize_runs
+
+    runs = [
+        {
+            "valid": True,
+            "respected_verdict": True,
+            "fake_citations": [],
+            "schema_error": None,
+            "verdict_evaluable": True,
+        },
+        {
+            "valid": False,
+            "respected_verdict": None,
+            "fake_citations": [],
+            "schema_error": "e",
+            "verdict_evaluable": False,
+        },
+    ]
+    resumen = summarize_runs(runs, proveedor="p")
+    assert resumen["respetan veredicto"] == 1
+    assert resumen["evaluables"] == 1, "la ejecución sin salida no entra en el denominador"
+    assert resumen["n"] == 2
