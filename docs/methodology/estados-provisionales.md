@@ -51,3 +51,29 @@ Nada más. Ninguna anticipación.
 > rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
 > disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis
 > sin fundamento?
+
+## Resultados sin artefacto canónico
+
+| Elemento | Estado |
+|---|---|
+| Tabla de recuperación del capítulo 5, cinco filas | `LEGACY_RESULT_WITHOUT_CANONICAL_ARTIFACT` |
+
+Las cinco filas publicadas **no corresponden** al único artefacto de recuperación del
+repositorio: aquella ejecución fue sobrescrita y no existe. **No se reconstruyen para hacerlas
+coincidir.** Su afirmación queda `NOT_VERIFIABLE` hasta la ejecución canónica, y la tabla futura
+se generará **exclusivamente** desde ella. Ninguna cifra antigua se reutiliza por parecerse.
+
+## Contradicción registrada, sin resolver
+
+Dos afirmaciones incompatibles sobre la condición sin filtro de motor, ambas de documentos
+propios:
+
+| | Afirmación |
+|---|---|
+| **A** | el distractor no llega al verificador; la condición no cumple su requisito de entrada |
+| **B** | el artefacto muestra que sus fragmentos **sí** llegan al verificador |
+
+**No se elige redacción.** La contradicción se resuelve con recuperación canónica, siguiendo el
+recorrido completo del fragmento —consulta, conjunto de candidatos, corte por posición, filtro
+posterior, entrada al verificador— y determinando en qué punto entra o desaparece. Queda
+registrada hasta entonces.

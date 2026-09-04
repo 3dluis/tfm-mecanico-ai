@@ -385,7 +385,17 @@ def run_sufficiency(
                 {
                     "experiment_id": "E13_agent",
                     "llm": llm,
+                    "llm_provider": llm.split("-")[0] if "-" in llm else llm,
                     "identity": agentes[0].raw.identity.as_dict() if agentes[0].raw else None,
+                    # El agente consume los paquetes de evidencia de esta misma
+                    # ejecución: sin declarar de qué recuperación salen, su
+                    # resultado no es rastreable hasta el índice.
+                    "retrieval_run_id": f"{modo}@{VERIFIER_VERSION}",
+                    "verifier_version": VERIFIER_VERSION,
+                    "embedding_space_id": (
+                        f"{provider.identity.provider}/{provider.identity.model}/"
+                        f"d{provider.identity.dimension}/v{provider.identity.version}"
+                    ),
                     "runs": [a.to_dict() for a in agentes],
                 },
                 seed=configuracion.seed,
@@ -393,6 +403,7 @@ def run_sufficiency(
                 dataset_type="synthetic",
                 model=llm,
                 prompt_version=PROMPT_VERSION,
+                embedding_model=provider.identity.model,
                 goldset=GOLDSET.name,
             )
             print(f"\nregistro experiments/E13_agente_{llm}.json")

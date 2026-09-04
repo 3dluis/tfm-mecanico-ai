@@ -299,57 +299,49 @@ def test_buscar_en_un_espacio_no_indexado_falla_en_vez_de_devolver_vacio() -> No
     Con el espacio ya obligatorio, declarar uno inexistente devolvía cero filas
     **en silencio**, y cero filas se lee como «no hay evidencia»: una abstención
     con aspecto legítimo causada por un error de configuración.
+
+    **Ejercita el guardián real de `PgVectorStore.search`**, no una
+    reimplementación en una subclase de prueba: una auditoría señaló que la
+    versión anterior comprobaba el doble y no el contrato. Se sustituye solo la
+    consulta de espacios indexados, que es lo que necesita la base de datos.
     """
+    from mecanico_ia_exp.rag.store import PgVectorStore
 
-    class StoreConIndice(StoreEspia):
-        def embedding_models(self) -> frozenset[str]:
-            return frozenset({"modelo-realmente-indexado"})
-
-        def search(self, query_vector: Any, **kwargs: Any) -> list[RetrievedChunk]:
-            if kwargs["embedding_model"] not in self.embedding_models():
-                raise ValueError("espacio no indexado")
-            return super().search(query_vector, **kwargs)
-
-    from mecanico_ia_exp.experiments.retrieval_runner import recuperar
-
-    with pytest.raises(ValueError, match="no indexado"):
-        recuperar(
-            "semantic",
-            store=StoreConIndice(),  # type: ignore[arg-type]
-            provider=ProveedorFalso(),  # type: ignore[arg-type]
-            caso={"case_id": "T01", "fault_id": "F01_vacuum_leak", "query": "fuel trim"},
+    real = PgVectorStore.__new__(PgVectorStore)  # sin conexión: no hace falta
+    object.__setattr__(real, "embedding_models", lambda: frozenset({"modelo-realmente-indexado"}))
+    with pytest.raises(ValueError, match="no está indexado"):
+        PgVectorStore.search(
+            real,
+            np.zeros(384, dtype=np.float32),
             vehicle_id="mazda-3-bk-2007",
-            engine_code="Z6",
+            embedding_model="espacio-que-no-existe",
         )
 
 
 def test_el_fragmento_pertinente_gana_al_irrelevante() -> None:
-    """Relevancia, no solo estructura.
+    """Relevancia, no solo estructura, **con el proveedor real del proyecto**.
 
-    Con conocimiento previo de cuál es el fragmento pertinente, la recuperación
-    debe colocarlo por encima del irrelevante. Es la comprobación que ninguna
-    prueba hacía: todas se conformaban con que hubiera resultados.
+    Ninguna prueba comprobaba que la recuperación ordene por pertinencia: todas
+    se conformaban con que hubiera resultados. Una auditoría señaló además que la
+    versión anterior de esta prueba no ejecutaba ninguna línea del proyecto.
 
-    Se ejecuta con vectores construidos a mano para que la prueba no dependa de
-    descargar un modelo ni de la base de datos, pero comprueba lo que importa:
-    que el orden refleje la proximidad en **un mismo** espacio.
+    Usa el proveedor `hashing`, que es determinista y no descarga nada, y su
+    propia métrica de similitud. Con conocimiento previo de cuál es el fragmento
+    pertinente, debe quedar por encima del irrelevante.
     """
-    import numpy as np
+    from mecanico_ia_exp.rag.embeddings import get_provider
 
-    consulta = np.array([1.0, 0.0, 0.0], dtype=np.float32)
-    pertinente = np.array([0.98, 0.20, 0.0], dtype=np.float32)
-    irrelevante = np.array([0.0, 0.10, 0.99], dtype=np.float32)
+    proveedor = get_provider("hashing")
+    consulta = "engine coolant temperature sensor circuit malfunction"
+    pertinente = (
+        "Engine coolant temperature sensor circuit. Measure the resistance of the "
+        "coolant temperature sensor and compare with the standard value."
+    )
+    irrelevante = "Seat belt pretensioner deployment and airbag module replacement."
 
-    def coseno(a: Any, b: Any) -> float:
-        return float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))
-
-    assert coseno(consulta, pertinente) > coseno(consulta, irrelevante)
-
-    # Y el punto del hallazgo: si el fragmento pertinente viviera en otro espacio,
-    # su proximidad no significaría nada. Un vector de otro espacio puede quedar
-    # arbitrariamente cerca sin guardar ninguna relación semántica.
-    otro_espacio = np.array([0.999, 0.01, 0.0], dtype=np.float32)
-    assert coseno(consulta, otro_espacio) > coseno(consulta, pertinente), (
-        "un vector ajeno puede ganar por casualidad: por eso el espacio se filtra "
-        "antes de comparar, y no se confía en que la distancia lo distinga"
+    vectores = proveedor.embed([consulta, pertinente, irrelevante])
+    q, p_, i = (v / np.linalg.norm(v) for v in vectores)
+    assert float(q @ p_) > float(q @ i), (
+        "el fragmento pertinente no gana al irrelevante: la recuperación no ordena "
+        "por proximidad semántica en este espacio"
     )

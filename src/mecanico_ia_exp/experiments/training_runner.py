@@ -10,17 +10,21 @@ ha escrito a mano ni generado con otro modelo.
 
 from __future__ import annotations
 
-import json
+import hashlib
 import random
-from typing import Any
 
 import numpy as np
 import yaml
 
-from mecanico_ia_exp.abstention.sufficiency import EvidenceVerifier, SufficiencyThresholds
+from mecanico_ia_exp.abstention.sufficiency import (
+    VERIFIER_VERSION,
+    EvidenceVerifier,
+    SufficiencyThresholds,
+)
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
 from mecanico_ia_exp.evidence.assembly import assemble
+from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.llm.training_data import (
     TrainingExample,
     build_example,
@@ -192,6 +196,9 @@ def run_training_data(dataset_id: str = DATASET, ventanas_por_condicion: int = 1
     # Reparto en entrenamiento y validación del ajuste, POR CASO: dos variantes
     # del mismo caso comparten observaciones, y separarlas al azar filtraría
     # información entre particiones igual que ocurriría con las ventanas.
+    # Partición por **ventana de origen**, que es la unidad independiente. Las
+    # variantes de corpus de una misma ventana comparten `case_id` y caen juntas:
+    # repartirlas entre particiones sería fuga, aunque los prompts difieran.
     casos = sorted({e.case_id for e in ejemplos})
     corte = int(len(casos) * 0.85)
     casos_train = set(casos[:corte])
@@ -205,17 +212,38 @@ def run_training_data(dataset_id: str = DATASET, ventanas_por_condicion: int = 1
         ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
         print(f"  {ruta.name:<12} {len(seleccion)} ejemplos")
 
-    resumen: dict[str, Any] = {
-        "experiment_id": "E13b_training_data",
-        "dataset_id": dataset_id,
-        "n_examples": len(ejemplos),
-        "n_cases": len(casos),
-        "split_by": "case_id",
-        "distribution": reparto,
-        "leakage_check": "sin texto del manual en las salidas esperadas",
+    huellas = {
+        n: hashlib.sha256((destino / f"{n}.jsonl").read_bytes()).hexdigest()[:16]
+        for n in ("train", "valid")
     }
-    (paths.ensure(paths.EXPERIMENTS) / "E13b_training_data.json").write_text(
-        json.dumps(resumen, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    identidad = embeddings.identity
+    escribir(
+        paths.ensure(paths.EXPERIMENTS) / "E13b_training_data.json",
+        {
+            "experiment_id": "E13b_training_data",
+            "n_examples": len(ejemplos),
+            "n_cases": len(casos),
+            "split_by": "source_window",
+            "split_unit_note": (
+                "las variantes de corpus de una misma ventana comparten case_id y "
+                "caen en la misma partición"
+            ),
+            "split_seed": 20260901,
+            "distribution": reparto,
+            "leakage_check": "sin texto del manual en las salidas esperadas",
+            # Linaje: sin esto no se puede decidir sobre el adaptador.
+            "source_verifier_version": VERIFIER_VERSION,
+            "source_case_set": sorted({e.case_id for e in ejemplos}),
+            "source_embedding_space_id": (
+                f"{identidad.provider}/{identidad.model}/"
+                f"d{identidad.dimension}/v{identidad.version}"
+            ),
+            "dataset_hash": huellas,
+        },
+        dataset_id=dataset_id,
+        dataset_type="synthetic",
+        embedding_model=identidad.model,
+        seed=20260901,
     )
     print("\nregistro experiments/E13b_training_data.json")
     return 0
