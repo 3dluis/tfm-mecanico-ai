@@ -4,41 +4,52 @@
 
 La construcción del marco teórico comenzó con una primera revisión realizada entre julio y
 agosto de 2026, cuando la pregunta de investigación todavía contemplaba elementos que
-posteriormente fueron reformulados. Aquel trabajo permitió establecer una primera
-caracterización del estado del conocimiento, definir el procedimiento de búsqueda y reunir un
-conjunto inicial de referencias verificadas. La evolución posterior de la pregunta hizo
-necesario revisar ese material y reevaluar su pertinencia respecto del problema finalmente
-abordado. Por esa razón, las referencias procedentes de aquella revisión se conservaron
-únicamente cuando mantenían una relación justificable con la formulación actual y su fuente
-primaria podía verificarse.
+posteriormente fueron reformulados. Aquel trabajo permitió obtener una primera caracterización
+del estado del conocimiento, definir el procedimiento de búsqueda y reunir un conjunto inicial
+de referencias verificadas. La evolución posterior de la pregunta hizo necesario revisar ese
+material y reevaluar su pertinencia respecto del problema finalmente abordado en este TFM. Las
+referencias procedentes de aquella revisión se conservaron cuando mantenían una relación
+justificable con la formulación actual y su contenido podía comprobarse en la fuente primaria.
 
 A partir de esta depuración, el marco teórico se organiza en cuatro frentes directamente
 relacionados con la pregunta de investigación: el diagnóstico vehicular mediante telemetría
 OBD-II, la explicabilidad de los modelos utilizados para analizarla, la recuperación de
 información sobre documentación técnica mediante modelos de lenguaje y la abstención ante
-evidencia insuficiente. Estos cuatro frentes no se examinan como líneas independientes, sino por
-la función que desempeñan dentro del problema estudiado: identificar y caracterizar patrones
-observados en la telemetría, disponer de información que permita interpretar el diagnóstico,
-contrastar las hipótesis formuladas con documentación aplicable y determinar cuándo la evidencia
-disponible resulta insuficiente para validarlas.
+evidencia insuficiente. Estos frentes se examinan atendiendo a la función que desempeñan dentro
+del problema estudiado: identificar y caracterizar patrones observados en la telemetría,
+determinar cuándo un patrón no está representado en el conocimiento disponible, aportar
+información para la formulación de hipótesis diagnósticas, contrastarlas con documentación
+aplicable y establecer cuándo la evidencia disponible resulta suficiente para validarlas.
 
 La revisión se desarrolló mediante un procedimiento inspirado en PRISMA y organizado en cuatro
-iteraciones realizadas entre julio y agosto de 2026. En conjunto se efectuaron unas 170
-consultas, se examinaron unos 1 350 registros y se evaluaron alrededor de 250 trabajos
+iteraciones realizadas entre julio y agosto de 2026. En conjunto se efectuaron aproximadamente
+170 consultas, se examinaron unos 1 350 registros y se evaluaron alrededor de 250 trabajos
 candidatos mediante sus fuentes primarias. El proceso dio lugar a 144 referencias consolidadas,
 de las cuales 110 cuentan con un identificador persistente comprobado mediante Crossref o
-DataCite. Cuando una referencia no pudo verificarse de forma suficiente, se descartó en lugar de
-utilizarla como soporte de una afirmación.
+DataCite; las 34 restantes carecen de identificador en su fuente de origen. Las referencias que
+no pudieron verificarse con suficiente precisión se descartaron como soporte de las afirmaciones
+formuladas en la memoria.
 
 La búsqueda combinó buscadores académicos y web con la comprobación posterior en las páginas de
 los editores y otras fuentes primarias. El acceso automatizado a dos de las principales bases
-consultadas estuvo parcialmente restringido, por lo que no fue posible completar para ellas los
-recuentos desagregados necesarios para presentar el proceso como una revisión sistemática PRISMA
-completa. En consecuencia, el procedimiento se describe como inspirado en PRISMA, conservando
-sus principios de trazabilidad, selección y verificación sin atribuirle un alcance que el
-proceso realizado no permite sostener. Las referencias metodológicas necesarias para completar
-el diseño del TFM y que no formaban parte del barrido inicial se verificaron después mediante el
-mismo criterio de comprobación en fuente primaria.
+consultadas estuvo parcialmente restringido, lo que impidió completar los recuentos desagregados
+necesarios para caracterizar el proceso como una revisión sistemática PRISMA completa. Por este
+motivo se adopta la expresión *procedimiento inspirado en PRISMA*, conservando sus principios de
+identificación, selección, trazabilidad y verificación. Las referencias metodológicas necesarias
+para completar el diseño del TFM que no formaban parte del barrido inicial se incorporaron
+después aplicando el mismo criterio de comprobación en fuente primaria.
+
+Conviene precisar qué se aplicó de ese marco y qué no. Se aplicaron la formulación previa de las
+consultas y su registro por iteración; el cribado en dos pasos, primero por título y resumen y
+después en fuente primaria; unos criterios de inclusión y exclusión escritos antes de decidir
+—alcance, acceso al texto completo, calidad metodológica, duplicidad y evaluabilidad—; el
+registro de cada descarte con su motivo, sobre el principio de que un descarte sin motivo
+escrito es un sesgo de selección invisible; y la verificación del identificador de cada
+referencia incluida. No se aplicaron el protocolo registrado antes de comenzar, el cribado por
+duplicado con resolución de discrepancias entre revisores y el diagrama de flujo con recuentos
+desagregados por base de datos, que es precisamente lo que el acceso restringido impidió
+construir. El registro completo, con las consultas, los recuentos y las exclusiones, está en
+`research/references/`.
 
 ## Diagnóstico vehicular a partir de OBD-II
 
