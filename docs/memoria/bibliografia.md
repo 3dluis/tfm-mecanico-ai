@@ -32,21 +32,21 @@ Hossain, M. N., Rahman, M. M., & Ramasamy, D. (2024). Artificial intelligence-dr
 
 Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W. (2022). LoRA: Low-rank adaptation of large language models. En *International Conference on Learning Representations*. arXiv:2106.09685
 
-International Organization for Standardization. *ISO 15031-5: Road vehicles — Communication between vehicle and external equipment for emissions-related diagnostics — Part 5: Emissions-related diagnostic services*. `[VERIFY_SOURCE: edición]`
+International Organization for Standardization. *ISO 15031-5: Road vehicles — Communication between vehicle and external equipment for emissions-related diagnostics — Part 5: Emissions-related diagnostic services*. https://doi.org/10.3403/30301556 `[Edición pendiente de confirmar: 2015 o posterior]`
 
 Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y. J., Madotto, A., & Fung, P. (2023). Survey of hallucination in natural language generation. *ACM Computing Surveys, 55*(12), 1–38. https://doi.org/10.1145/3571730
 
-Jun, H., Jung, S., Kim, H., Jang, M., Park, B., & Sung, H. (2025). A case study on the DTC prediction of commercial vehicles using machine learning approaches. `[VERIFY_SOURCE: revista, volumen, DOI — tomar de la lista maestra REF-059]`
+Jun, H., Jung, S., Kim, H., Jang, M., Park, B., & Sung, H. (2025). A case study on the DTC prediction of commercial vehicles using machine learning approach. *International Journal of Automotive Technology, 26*(6), 1327–1341. https://doi.org/10.1007/s12239-025-00223-x
 
 Khan, A., Nahar, R., Chen, H., Flores, G. E. C., & Li, C. (2024). *FaultExplainer: Leveraging large language models for interpretable fault detection and diagnosis*. arXiv:2412.14492. https://arxiv.org/abs/2412.14492
 
 Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., Küttler, H., Lewis, M., Yih, W., Rocktäschel, T., Riedel, S., & Kiela, D. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. En *Advances in Neural Information Processing Systems 33*. arXiv:2005.11401
 
-Li, Z., & van Leeuwen, M. (2023). Explainable contextual anomaly detection using quantile regression forests. *Data Mining and Knowledge Discovery*. `[VERIFY_SOURCE: volumen, páginas, DOI — tomar de REF-071]`
+Li, Z., & van Leeuwen, M. (2023). Explainable contextual anomaly detection using quantile regression forests. *Data Mining and Knowledge Discovery, 37*(6), 2517–2563. https://doi.org/10.1007/s10618-023-00967-z
 
 Lin, W., & Miao, K. (2025). An automotive fault diagnosis framework based on knowledge graphs and large language models. *Electronics, 14*(21), 4180. https://doi.org/10.3390/electronics14214180
 
-Liu, J., Zhang, C., Qian, J., Ma, M., Qin, S., Bansal, C., Lin, Q., Rajmohan, S., & Zhang, D. (2025). Large language models can deliver accurate and interpretable time series anomaly detection. En *Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2*. `[VERIFY_SOURCE: DOI — tomar de REF-074]`
+Liu, J., Zhang, C., Qian, J., Ma, M., Qin, S., Bansal, C., Lin, Q., Rajmohan, S., & Zhang, D. (2025). Large language models can deliver accurate and interpretable time series anomaly detection. En *Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2* (pp. 4623–4634). https://doi.org/10.1145/3711896.3737239
 
 Lu, C., Hsu, H., Chen, B., Huang, W., & Ho, W. (2025). Development and validation of an explainable hybrid deep learning model for multiple-fault diagnosis in intelligent automotive electronic systems. *Electronics, 14*(22), 4488. https://doi.org/10.3390/electronics14224488
 
@@ -68,7 +68,7 @@ Prytz, R., Nowaczyk, S., Rögnvaldsson, T., & Byttner, S. (2015). Predicting the
 
 Qwen Team. (2024). *Qwen2.5 technical report*. arXiv:2412.15115. https://arxiv.org/abs/2412.15115
 
-Ramai, C., Ramnarine, V., Ramharack, S., Bahadoorsingh, S., & Sharma, C. (2022). Framework for building low-cost OBD-II data-logging systems for battery electric vehicles. `[VERIFY_SOURCE: revista, volumen, DOI — tomar de REF-097]`
+Ramai, C., Ramnarine, V., Ramharack, S., Bahadoorsingh, S., & Sharma, C. (2022). Framework for building low-cost OBD-II data-logging systems for battery electric vehicles. *Vehicles, 4*(4), 1209–1222. https://doi.org/10.3390/vehicles4040064
 
 Reimers, N., & Gurevych, I. (2019). Sentence-BERT: Sentence embeddings using Siamese BERT-networks. En *Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing*. https://doi.org/10.18653/v1/d19-1410
 
