@@ -337,10 +337,10 @@ trazada. En la segunda, los mismos datos, el mismo modelo, la misma atribución 
 confianza, pero la evidencia relevante se ha retirado del índice: la recuperación no la
 encuentra, la evidencia resulta insuficiente y el agente se abstiene. El contraste debe
 verse sin necesidad de explicarlo. Las condiciones PARTIAL y DISTRACTOR extienden ese
-contraste: la primera prueba que la evidencia incompleta no basta; la segunda, que la
-evidencia parecida no cuenta. FULL y ABSENT prueban que el sistema responde a la *presencia*
-de evidencia; DISTRACTOR prueba que responde a su *pertinencia*, y un sistema que confunda
-similitud con soporte pasará las tres primeras y fallará esta.
+contraste: la primera examina si la evidencia incompleta basta; la segunda, si la evidencia
+parecida cuenta. FULL y ABSENT interrogan la respuesta del sistema a la *presencia* de
+evidencia; DISTRACTOR, su respuesta a la *pertinencia*, y un sistema que confunda similitud
+con soporte pasaría las tres primeras y fallaría esta.
 
 ### Particiones y cierre del test
 
