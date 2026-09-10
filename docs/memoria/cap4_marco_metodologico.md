@@ -56,6 +56,16 @@ validación externa, esos tres valores deberán tomarse del vehículo del que pr
 correspondencia con el corpus dejará de estar garantizada por construcción para convertirse en
 una comprobación previa.
 
+Conviene distinguir los niveles de agregación, porque el diseño los usa para cosas distintas y
+confundirlos produciría pseudorreplicación. La **unidad de análisis** del modelo de diagnóstico
+es la ventana de telemetría; las ventanas proceden de **sesiones** de conducción, y las de una
+misma sesión no son independientes entre sí, de modo que el reparto entre entrenamiento,
+validación y test se hace por sesión y no por ventana. La **unidad de análisis del agente** no es
+la ventana sino el **caso**: un diagnóstico concreto evaluado bajo una condición de evidencia
+concreta. El número de filas de una tabla de resultados no equivale, por tanto, al número de
+observaciones independientes que la sostienen; la Tabla 4.11 separa ambas cifras para cada
+métrica.
+
 Esta elección, recogida en la Tabla 4.1, encadena el resto del entorno experimental. De ella
 dependen la calibración del generador, cuyas constantes proceden de páginas concretas del manual
 y conservan su cita; el corpus sobre el que recupera el agente; los códigos de avería que
