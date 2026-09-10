@@ -50,6 +50,15 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 - **Las fichas de fallo del generador no tienen respaldo documental completo** (L-03): la
   calibración ancla las constantes al manual, pero el mecanismo de cada fallo es una
   simplificación declarada.
+- **Los resultados describen un solo vehículo** (L-17). Todo el trabajo se apoya en un Mazda 3
+  BK de 2007 con motor Z6 y en su manual de taller, elección justificada en el capítulo 4. Esa
+  decisión garantiza por construcción la coherencia entre telemetría, códigos de avería y
+  procedimientos documentales, que es exactamente lo que no puede darse por supuesto en otro
+  vehículo: otro fabricante puede usar códigos distintos para la misma condición, estructurar
+  sus procedimientos de otra forma o no publicar un manual accesible. Los resultados no se
+  generalizan a otros modelos, a otras generaciones del mismo modelo ni a los otros dos motores
+  documentados en el corpus, y comprobarlo exigiría repetir el trabajo sobre un vehículo con
+  documentación equivalente.
 - **La atribución no es causalidad** (L-06). El sistema no lo afirma en ningún punto, y el
   esquema de salida rechaza afirmaciones causales; la limitación es de interpretación por
   parte del lector.
