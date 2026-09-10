@@ -1,13 +1,10 @@
 # Capítulo 2: Objetivos del TFM
 
-> Estado: redactado sobre `research/propuestas-objetivos.md` (1 de septiembre de 2026),
-> opción A en los tres casos. **Los enunciados reformulados están pendientes de consenso con
-> el director**, junto con el título definitivo. La versión aprobada en la propuesta temática
-> de julio de 2026 se conserva en el Anexo A con su correspondencia.
-
 Los objetivos traducen la pregunta del capítulo 1 en compromisos verificables al terminar:
-cada uno nombra las fases que lo cumplen y las métricas con que se comprueba. Ninguno promete
-algo que el diseño no pueda medir.
+cada uno nombra las fases que lo cumplen y, cuando procede, las métricas con que se comprueba.
+Se ha procurado que ninguno prometa algo que el diseño experimental no pueda medir. Dos de
+ellos, la revisión del conocimiento previo y la construcción del entorno, se verifican por sus
+artefactos y no por una métrica.
 
 ## Objetivo general
 
@@ -29,18 +26,19 @@ con una cláusula sobre cómputo embarcado que ya no describe el trabajo ejecuta
 
 ## Objetivos específicos
 
-Son cinco. El primero delimita el vacío que la
-pregunta aborda; el segundo y el tercero construyen el entorno experimental y el modelo de
-diagnóstico; el cuarto implementa el agente que recupera, verifica y decide; y el quinto lo
-evalúa bajo las cuatro condiciones de evidencia y documenta el trabajo. La evaluación no está
-reservada al último: el tercero también evalúa lo que construye.
+Son cinco. El primero revisa el conocimiento previo para delimitar el vacío que la pregunta
+aborda; el segundo y el tercero construyen el entorno experimental y el modelo de diagnóstico;
+el cuarto implementa el agente que recupera evidencia, construye afirmaciones, verifica su
+soporte y decide; y el quinto evalúa ese agente bajo las cuatro condiciones de evidencia y
+documenta el trabajo. La evaluación no está reservada al último: el tercero también evalúa lo
+que construye.
 
 **OE1. Revisar críticamente el estado del conocimiento** sobre diagnóstico vehicular a partir
 de OBD-II, explicabilidad de modelos de diagnóstico, recuperación aumentada aplicada a
 documentación técnica y abstención ante evidencia insuficiente, de modo que quede delimitado
 el vacío que la pregunta de investigación aborda y las decisiones de diseño puedan
-justificarse frente a trabajos previos. Se cumple en el capítulo 3; su instrumento es la
-revisión con procedimiento inspirado en PRISMA descrita en el capítulo 4.
+justificarse frente a trabajos previos. Se cumple en el capítulo 3, que describe también el
+procedimiento de revisión inspirado en PRISMA con que se llevó a cabo.
 
 **OE2. Construir un entorno experimental reproducible** que comprenda telemetría OBD-II
 particionada sin fuga temporal y un corpus documental del vehículo con variantes congeladas
@@ -99,8 +97,8 @@ final. La dirección validó expresamente el diseño de cuatro condiciones en se
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
-| OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 medidas; **M4 implementada y no medida**; ninguna validada |
-| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+| OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 medidas **sobre datos sintéticos**; **M4 implementada y no medida**; ninguna validada |
+| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada **sobre datos sintéticos**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo, y ninguna subpregunta sin fase que la responda.
 

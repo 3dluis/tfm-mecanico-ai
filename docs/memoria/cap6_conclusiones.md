@@ -1,10 +1,5 @@
 # Capítulo 6: Conclusiones
 
-> Estado: **limitaciones y prospectiva redactadas**; las conclusiones y las consideraciones
-> finales dependen de E19 y se dejan como borrador condicionado. Fuente de las limitaciones:
-> `research/limitations-register.md`, 17 entradas, todas procedentes de un informe de fase o
-> un documento de método.
-
 ## Conclusiones sobre la pregunta de investigación
 
 `[Borrador sobre datos sintéticos (dataset_type: synthetic); se reescribe con E19.]`

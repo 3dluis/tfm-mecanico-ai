@@ -1,15 +1,12 @@
 # Capítulo 3: Marco Teórico
 
-> Estado: **estructura realineada al marco canónico** y apartados redactados solo con
-> referencias verificadas (`REF-nnn` de la lista maestra; `MET-nn` de método). El capítulo de
-> estado del arte v2.0 del 18 de agosto de 2026 responde a la pregunta de investigación
-> anterior (memoria evolutiva, multiagente, edge) y **no se reutiliza como texto**; sí se
-> reutilizan su procedimiento de revisión y sus 144 referencias verificadas, previa
-> comprobación de pertinencia. Cada frente cierra declarando qué **no** permite afirmar la
-> evidencia revisada, porque ese límite es lo que justifica el diseño experimental del
-> capítulo 4.
-
 ## Propósito y procedimiento de la revisión
+
+Conviene advertir de entrada que este capítulo no reutiliza el texto de la revisión de agosto
+de 2026. Aquella respondía a una formulación anterior de la pregunta de investigación, centrada
+en memoria evolutiva y arquitecturas multiagente, y su texto habría arrastrado un encuadre que
+ya no corresponde. Sí se reutilizan su procedimiento de revisión y sus referencias verificadas,
+previa comprobación de pertinencia una a una.
 
 Este capítulo delimita el conocimiento previo en los cuatro frentes que la pregunta de
 investigación toca: el diagnóstico de vehículos a partir de la telemetría OBD-II, la

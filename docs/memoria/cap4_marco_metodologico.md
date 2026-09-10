@@ -1,11 +1,5 @@
 # Capítulo 4: Marco Metodológico
 
-> Estado: redactado sobre el diseño ejecutado (E1–E17 sobre datos sintéticos). Actualizado el
-> 3 de septiembre de 2026 a la PI sin requisito de datos reales (ADR-003). El apartado
-> «Población y muestra» tiene una versión final pendiente del dataset de evaluación final.
-> Todas las cifras proceden de registros de `experiments/` o de
-> `configs/calibracion_mazda3_bk.yaml`.
-
 El trabajo sigue el ciclo de la investigación en ciencias del diseño (Peffers et al., 2007,
 MET-16; Hevner et al., 2004, MET-17): identifica un problema, fija los objetivos de una
 solución, construye un artefacto, lo demuestra sobre casos, lo evalúa con criterios fijados
@@ -22,6 +16,9 @@ no se modifica después de ver el resultado; los resultados negativos se publica
 detalle que los positivos. El segundo es que **toda cifra publicada procede de un registro
 de ejecución reproducible**, con su commit, semilla, versiones de datos, corpus, modelo y
 prompt. Lo que no se ha ejecutado se declara como no ejecutado.
+
+Todas las cifras de este capítulo proceden de registros versionados del repositorio o de la
+ficha de calibración del vehículo, y el diseño que describe se ejecutó sobre datos sintéticos.
 
 ## Población y muestra
 

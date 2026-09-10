@@ -1,9 +1,5 @@
 # Capítulo 1: Introducción al Trabajo Fin de Máster
 
-> Estado: redactado. Actualizado el 3 de septiembre de 2026 a la PI sin requisito de datos
-> reales (ADR-003). Referencias: lista maestra (`REF-nnn`) y de método
-> (`MET-nn`), todas verificadas.
-
 ## Justificación del proyecto realizado
 
 Un vehículo moderno deja un rastro continuo de su funcionamiento. A través del puerto de diagnóstico a bordo OBD-II, normalizado por SAE J1979 e ISO 15031-5 (MET-18; MET-19), es posible observar parámetros como el régimen del motor, la carga, distintas temperaturas, el caudal de aire, las correcciones de combustible, la respuesta de las sondas de oxígeno y los códigos de avería registrados por la unidad de control. Son señales que, leídas de forma aislada, dicen poco; observadas en el tiempo y en conjunto, describen parte del comportamiento del vehículo.

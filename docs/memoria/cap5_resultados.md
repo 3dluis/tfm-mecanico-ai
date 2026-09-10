@@ -1,15 +1,17 @@
 # Capítulo 5: Presentación de análisis, resultados y discusión
 
-> Estado: **borrador sobre datos sintéticos.** Todas las cifras son de la partición de
-> validación de `synthetic_v2`; el test sigue cerrado. Cada tabla cita su registro. Cuando
-> E19 se ejecute sobre el dataset de evaluación final, este capítulo se reescribe. La
-> procedencia de todo dato de este capítulo es `synthetic` (ADR-003); la validez externa se
-> trata en el capítulo 6. Dos discrepancias entre informes de
-> fase y registros están marcadas `[RECONCILIAR]` y no se han resuelto eligiendo una cifra.
-
 Todos los resultados de este capítulo proceden del vehículo de referencia definido en el
 capítulo 4, un Mazda 3 BK de 2007 con motor Z6, y de su corpus documental. No se han evaluado
 otros vehículos ni otras generaciones.
+
+Todas las cifras de este capítulo proceden de la partición de **validación** del conjunto
+`synthetic_v2`; el conjunto de test permanece cerrado y no se ha consultado. La procedencia del
+dato es sintética, y su validez externa se discute en el capítulo 6. Cada tabla cita el registro
+del que sale.
+
+Dos magnitudes discrepan entre el informe de fase y su registro, y **no se han resuelto
+eligiendo una de las dos**: quedan señaladas donde aparecen, porque la discrepancia es en sí un
+resultado sobre la trazabilidad del trabajo.
 
 ## Análisis descriptivo de la muestra
 

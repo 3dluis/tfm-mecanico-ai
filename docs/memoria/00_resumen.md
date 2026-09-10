@@ -1,8 +1,5 @@
 # Resumen
 
-> Estado: redactado sobre resultados de datos sintéticos. Cuando E19 se ejecute, se
-> reescriben las cifras y la última frase. Extensión orientativa: 250–300 palabras.
-
 Los modelos de lenguaje producen explicaciones fluidas incluso cuando no disponen de
 evidencia que las sostenga. En el diagnóstico de vehículos, donde una explicación se traduce
 en una intervención mecánica, ese comportamiento no es una molestia sino un riesgo. Este

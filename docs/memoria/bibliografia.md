@@ -1,12 +1,5 @@
 # Bibliografía
 
-> Estado: contiene **solo** las referencias citadas en los capítulos redactados, todas
-> verificadas en fuente primaria (lista maestra `research/references/references.md` o
-> `research/references/referencias-metodo.md`). Formato APA 6.ª según la plantilla;
-> La plantilla de la titulación fija estilo APA; la edición aplicable está pendiente de confirmación (P-04). Cuando un capítulo cite una referencia nueva,
-> se añade aquí en el mismo cambio. Las marcadas `[VERIFY_SOURCE]` tienen datos
-> bibliográficos incompletos en la lista maestra y deben completarse antes del depósito.
-
 Abboush, M., Dzoupet Yimtchi, F. A., Tan, Ö., Ouarrad, H., & Rausch, A. (2026). Robust and interpretable anomaly detection in automotive test recordings using denoising autoencoders with adaptive thresholding. *Electronics, 15*(12), 2723. https://doi.org/10.3390/electronics15122723
 
 Béchard, P., & Marquez Ayala, O. (2024). Reducing hallucination in structured outputs via retrieval-augmented generation. En *Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Industry Track)*. Preimpresión: arXiv:2404.08189. https://arxiv.org/abs/2404.08189
