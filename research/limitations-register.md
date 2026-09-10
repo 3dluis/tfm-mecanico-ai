@@ -226,14 +226,47 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 
 ---
 
+---
+
+## L-18 — Dos ejecuciones con resultado negativo no llegaron al capítulo de resultados
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | La cobertura de lo publicado respecto de lo ejecutado |
+| **Por qué** | El experimento de suficiencia se ejecutó también en una variante que retira el conocimiento de la etiqueta anotada (NX-01) y en un escenario adverso donde el modelo especializado se equivoca (NX-02). El capítulo 5 quedó congelado antes de que ninguna de las dos se incorporase |
+| **Evidencia** | `experiments/E15_suficiencia_non_oracle.json`, `docs/experiments/resultado-no-oracular-y-adverso.md`, `docs/methodology/politica-evaluacion-no-oracular.md` |
+| **Afecta a** | El quinto objetivo, que se compromete expresamente a documentar los resultados negativos |
+| **Consecuencia** | La variante no oracular acota de dónde procede el auxilio del oráculo y el escenario adverso contiene evidencia de comportamiento ante un diagnóstico incorrecto; ninguna de las dos cosas puede leerse en el capítulo de resultados |
+| **Cómo comprobarlo** | Incorporarlas cuando el capítulo 5 deje de estar congelado |
+| **Severidad** | **alta** — omite evidencia negativa que el propio objetivo obliga a publicar |
+
+---
+
+## L-19 — Los resultados describen un solo vehículo
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | El alcance de generalización de toda cifra publicada |
+| **Por qué** | El trabajo se apoya en un Mazda 3 BK de 2007 con motor Z6 y en su manual de taller. La elección garantiza por construcción la coherencia entre telemetría, códigos de avería y procedimientos documentales, que es exactamente lo que no puede darse por supuesto en otro vehículo |
+| **Evidencia** | Capítulo 4, selección del vehículo entre tres candidatos; ficha de calibración |
+| **Afecta a** | Todos los resultados del capítulo 5 |
+| **Consecuencia** | Los resultados no se generalizan a otros modelos, a otras generaciones del mismo modelo ni a los otros dos motores documentados en el corpus: otro fabricante puede usar códigos distintos para la misma condición, estructurar sus procedimientos de otra forma o no publicar un manual accesible |
+| **Cómo comprobarlo** | Repetir el trabajo sobre un vehículo con documentación equivalente |
+| **Severidad** | **alta** — acota el alcance de toda afirmación del trabajo |
+
+---
+
 ## Resumen
 
 | Severidad | Entradas |
 |---|---|
-| crítica | 1 — L-01 |
-| alta | 9 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14** |
+| crítica | 2 — L-01, **L-20** |
+| alta | 11 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14**, **L-18**, **L-19** |
 | media | 5 — L-05, L-09, L-12, **L-15**, **L-16** |
 | baja | 2 — L-04, **L-17** |
+
+Veinte entradas. La numeración no tiene huecos: L-18 y L-19 se dieron de alta el 10 de
+septiembre de 2026, al redactarse el apartado 6.1, y L-20 el 4 de septiembre.
 
 **Ninguna de estas limitaciones es ceremonial.** Todas proceden de un informe de fase, de un
 documento de método o de un documento oficial. Ninguna se ha añadido porque «suele aparecer».
@@ -243,6 +276,8 @@ documento de método o de un documento oficial. Ninguna se ha añadido porque «
 `[EXPERIMENT_REQUIRED]` — las limitaciones que se descubran al ejecutar: comportamiento del
 modelo por clase, calidad real de la recuperación, tasa de falsa abstención, coste de la
 política. Se añaden aquí cuando existan, no antes.
+
+---
 
 ## L-20 · Espacios de embeddings mezclados en toda la recuperación
 

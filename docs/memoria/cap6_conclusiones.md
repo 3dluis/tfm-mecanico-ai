@@ -13,8 +13,9 @@ La primera es que **sí puede, con un alcance que conviene delimitar antes de en
 separación entre quien diagnostica, quien decide y quien redacta no es un detalle de
 ingeniería: es lo que hace medible la pregunta. Con esa separación, sobre la misma ventana y
 con todo idéntico salvo el índice documental, el agente explica cuando la evidencia está y se
-abstiene cuando se retira. El modelo de lenguaje respeta la decisión en las siete ejecuciones
-cuya salida pudo evaluarse, de nueve, y no produce una sola cita inexistente, porque una
+abstiene cuando se retira. El modelo de lenguaje respeta la decisión en todas las ejecuciones
+cuya salida pudo evaluarse —nueve de nueve en la configuración desplegada, y siete de siete
+evaluables en las dos anteriores—, y no produce una sola cita inexistente, porque una
 barrera fuera de él lo impide.
 
 Cuatro precisiones acompañan a esa afirmación, y sin ellas resultaría más fuerte de lo que la
@@ -34,8 +35,9 @@ donde falla dos de cada cinco veces por confianza insuficiente del modelo especi
 
 La tercera afecta a la **mitad de la pregunta que habla de trazabilidad**. Cada comprobación de
 soporte queda registrada por separado —qué afirmación, qué fragmento, si lo sostiene y por
-qué—, de modo que la cadena es auditable caso a caso, y en cuarenta y cinco ejecuciones del
-redactor no aparece una sola cita inexistente. Lo que **no** se ha calculado son las magnitudes
+qué—, de modo que la cadena es auditable caso a caso, y en las cuarenta y cinco ejecuciones del
+redactor sobre el motor de inferencia local —cinco configuraciones por nueve preguntas— no
+aparece una sola cita inexistente. Lo que **no** se ha calculado son las magnitudes
 agregadas de esa trazabilidad: la proporción de afirmaciones con cita y la proporción cuya cita
 las sostiene existen como comprobaciones individuales en el registro, y no como cifra publicada.
 Mientras eso siga así, la trazabilidad se sostiene como propiedad verificable de cada caso, no
@@ -85,6 +87,14 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
   generalizan a otros modelos, a otras generaciones del mismo modelo ni a los otros dos motores
   documentados en el corpus, y comprobarlo exigiría repetir el trabajo sobre un vehículo con
   documentación equivalente.
+- **Dos ejecuciones con resultado negativo no llegaron al capítulo de resultados** (L-18). El
+  experimento de suficiencia se ejecutó también en una variante que retira el conocimiento de
+  la etiqueta anotada y en un escenario adverso donde el modelo especializado se equivoca. La
+  primera reproduce la ejecución de referencia decisión a decisión, lo que acota de dónde viene
+  el auxilio del oráculo; la segunda contiene evidencia de comportamiento ante un diagnóstico
+  incorrecto. Ambas están registradas en el repositorio y ninguna se reporta en el capítulo 5.
+  Como el quinto objetivo se compromete expresamente a documentar los resultados negativos, la
+  omisión se declara aquí y se corrige cuando ese capítulo deje de estar congelado.
 - **Toda cifra de recuperación está pendiente de reejecución** (L-20). Se detectó que el índice
   documental contiene dos representaciones vectoriales de cada fragmento, procedentes de dos
   modelos distintos, y que ninguna búsqueda declaraba en cuál de los dos buscaba. Las consultas
@@ -95,16 +105,6 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
   concluirse sobre las dos subpreguntas que exigen evidencia documental. Mientras esa
   reejecución no termine, las cifras de recuperación de esta memoria son **reproducibles pero no
   canónicas**.
-
-- **Dos ejecuciones con resultado negativo no llegaron al capítulo de resultados** (L-18). El
-  experimento de suficiencia se ejecutó también en una variante que retira el conocimiento de
-  la etiqueta anotada y en un escenario adverso donde el modelo especializado se equivoca. La
-  primera reproduce la ejecución de referencia decisión a decisión, lo que acota de dónde viene
-  el auxilio del oráculo; la segunda contiene evidencia de comportamiento ante un diagnóstico
-  incorrecto. Ambas están registradas en el repositorio y ninguna se reporta en el capítulo 5.
-  Como el quinto objetivo se compromete expresamente a documentar los resultados negativos, la
-  omisión se declara aquí y se corrige cuando ese capítulo deje de estar congelado.
-
 - **La atribución no es causalidad** (L-06). El sistema no lo afirma en ningún punto, y el
   esquema de salida rechaza afirmaciones causales; la limitación es de interpretación por
   parte del lector.

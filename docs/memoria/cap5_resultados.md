@@ -159,7 +159,6 @@ Ninguna de esas cifras se corrige en esta versión, por la congelación ya decla
 para que la tabla no se lea como el resultado vigente del experimento, sino como el estado en
 que quedó antes de las dos revisiones del instrumento.
 
-
 Nueve casos anotados, con el criterio de suficiencia calibrado sobre validación (umbral de
 confianza calibrada 0,80, elegido como el más bajo con precisión de decisión igual o superior
 a 0,93; umbral de puntuación de recuperación desactivado porque no discrimina):

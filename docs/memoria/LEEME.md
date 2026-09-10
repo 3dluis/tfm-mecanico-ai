@@ -92,5 +92,5 @@ director. Lo sustantivo de aquellos bloques se reescribió como texto académico
 | `cap3_marco_teorico.md` | estructura realineada al marco canónico; solo referencias verificadas | — |
 | `cap4_marco_metodologico.md` | redactado sobre el diseño ejecutado, E1–E17 sobre datos sintéticos | «Población y muestra» espera el conjunto de evaluación final |
 | `cap5_resultados.md` | **borrador congelado**; cifras de la partición de validación, test cerrado | reejecución canónica de la recuperación y sus auditorías; después E19 |
-| `cap6_conclusiones.md` | limitaciones y prospectiva redactadas; conclusiones en borrador condicionado | E19. Fuente: `research/limitations-register.md`, 17 entradas |
-| `bibliografia.md` | solo las referencias citadas, verificadas en fuente primaria | edición de APA (P-04); cinco marcas `[VERIFY_SOURCE]` antes del depósito |
+| `cap6_conclusiones.md` | limitaciones y prospectiva redactadas; conclusiones en borrador condicionado | E19. Fuente: `research/limitations-register.md`, 20 entradas |
+| `bibliografia.md` | solo las referencias citadas, verificadas en fuente primaria | edición de APA (P-04); sin marcas `[VERIFY_SOURCE]` pendientes |
