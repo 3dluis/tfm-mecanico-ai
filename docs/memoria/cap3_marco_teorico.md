@@ -170,9 +170,18 @@ multimodal para responder preguntas sobre el manual de un vehículo concreto; Li
 (2025, REF-072) construyen un marco de diagnóstico sobre grafos de conocimiento y modelos de
 lenguaje; Mahale, Kolhar y More (2025, REF-077) generan informes de diagnóstico con
 aprendizaje automático híbrido y recuperación en varios pasos; Khan et al. (2024, REF-062)
-usan modelos de lenguaje para interpretar detecciones de fallo; Das, Griffith y Rathore
-(2025, REF-024) y Liu et al. (2025, REF-074) exploran el modelo de lenguaje como detector
-sobre series temporales, con resultados que aconsejan no confiarle la detección.
+usan modelos de lenguaje para interpretar detecciones de fallo. Y dos trabajos van más lejos:
+Das, Griffith y Rathore (2025, REF-024) y Liu et al. (2025, REF-074) emplean el modelo de
+lenguaje **como detector** sobre series temporales, los primeros con ganancias notables de F1
+al congelar el modelo sobre representaciones de la serie, y los segundos con un rendimiento de
+detección comparable al de los métodos profundos de referencia y con explicaciones asociadas.
+
+Este trabajo no sigue esa vía, y la razón no está en esos resultados sino en lo que la pregunta
+de investigación exige. La detección aquí debe producir una atribución de descriptores
+verificable y una confianza calibrada que alimente el criterio de suficiencia, y ambas cosas se
+obtienen de un modelo especializado sobre la ventana de telemetría. El modelo de lenguaje queda
+así como redactor, no como detector: una decisión de diseño propia, que los trabajos revisados
+no respaldan ni desmienten porque no evalúan esa separación.
 
 Estos trabajos comparten una forma de evaluar: miden si la respuesta es correcta. Ninguno de
 los revisados mide si cada afirmación de la respuesta puede seguirse hasta el fragmento

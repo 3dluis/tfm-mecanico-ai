@@ -33,6 +33,8 @@ Haque, M. E., Zabin, M., & Uddin, J. (2025). EnsembleXAI-Motor: A lightweight fr
 
 Hevner, A. R., March, S. T., Park, J., & Ram, S. (2004). Design science in information systems research. *MIS Quarterly, 28*(1), 75–105. https://doi.org/10.2307/25148625
 
+Hojjati, H., Roth, C., Woods, R., Sills, K., & Armanfard, N. (2026). *EngineAD: A real-world vehicle engine anomaly detection dataset* [Conjunto de datos]. Borealis. https://doi.org/10.5683/SP3/TX13P1
+
 Hossain, M. N., Rahman, M. M., & Ramasamy, D. (2024). Artificial intelligence-driven vehicle fault diagnosis to revolutionize automotive maintenance: A review. *Computer Modeling in Engineering & Sciences, 141*(2), 951–996. https://doi.org/10.32604/cmes.2024.056022
 
 Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W. (2022). LoRA: Low-rank adaptation of large language models. En *International Conference on Learning Representations*. arXiv:2106.09685
