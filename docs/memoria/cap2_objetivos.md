@@ -90,10 +90,10 @@ que la siguiente consume.
 | **Salida** | conjunto de fragmentos recuperados, cada uno con su identificador, su documento, su sección y su puntuación |
 | **Artefactos** | `experiments/E12_retrieval.json`, índice `rag.document_chunk` con procedencia por fragmento |
 | **Métrica** | M2, recuperación: acierto en los diez primeros, rango recíproco medio y ganancia acumulada descontada, **reportados por condición** y no en agregado |
-| **Criterio de aceptación** | que la evidencia relevante anotada aparezca entre los fragmentos recuperados cuando el corpus la contenga, y que no aparezca cuando la variante de corpus la haya retirado |
+| **Criterio de aceptación** | que la evidencia relevante desaparezca de los fragmentos recuperados cuando la variante de corpus la retire. **La mitad afirmativa no es un criterio**: la búsqueda se acota por los códigos que documentan la condición diagnosticada, de modo que encontrar el documento correcto está garantizado por construcción y no puede fallar |
 | **Responde a** | PI.2 |
 
-#### Fase 4.2 · Construcción de la explicación (E13, E14)
+#### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
 
 | | |
 |---|---|
@@ -103,7 +103,7 @@ que la siguiente consume.
 | **Artefactos** | `experiments/E13_agente_*.json` para cada configuración de redactor |
 | **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **Es descriptiva y no responde a ninguna subpregunta**, y así se declara |
 | **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
-| **Responde a** | PI.2, en su parte de construcción: sin afirmaciones ancladas no hay nada que rastrear |
+| **Responde a** | **ninguna subpregunta**, en coherencia con M3, que se declara descriptiva. La fase es condición necesaria de PI.2 —sin afirmaciones ancladas no hay nada que rastrear— pero no la mide |
 
 La separación entre observación, evidencia, inferencia y explicación es deliberada y está en la
 forma del dato, no solo en la redacción: la observación es el valor medido del descriptor, la
@@ -118,7 +118,7 @@ el registro lo delate.
 | **Entrada** | las afirmaciones de la fase anterior y los fragmentos citados |
 | **Proceso** | comprobación determinista, **fuera del modelo de lenguaje**, de que cada fragmento citado menciona la señal observada, constituye contenido diagnóstico, porta el código de avería que documenta la condición y desempeña el papel documental de procedimiento |
 | **Salida** | una comprobación por pareja de afirmación y fragmento, con su resultado y el motivo |
-| **Artefactos** | `experiments/E15_suficiencia.json`, campo `support_checks` |
+| **Artefactos** | `experiments/E15_suficiencia.json`, campo `support_checks`. **Es la corrida en modo oracular**, con los tres canales de información abiertos, que la metodología etiqueta como **cota superior asistida por oráculo** y no como estimación del comportamiento. Existen además las variantes no oracular y adversa |
 | **Métrica** | M4, trazabilidad: corrección de las citas, completitud y tasa de soporte. La distancia entre completitud y soporte mide cuántas afirmaciones llevan una referencia que no las respalda |
 | **Criterio de aceptación** | que ninguna afirmación quede marcada como sostenida por un fragmento que no la sostiene |
 | **Responde a** | PI.2 y PI.4 |
@@ -127,14 +127,14 @@ Que la verificación sea determinista y externa al modelo de lenguaje es lo que 
 inferencia del propio modelo se presente como evidencia documental: el verificador no lee lo que
 el modelo escribió, sino lo que el manual dice.
 
-#### Fase 4.4 · Decisión de explicar o abstenerse (E16)
+#### Fase 4.4 · Decisión de explicar o abstenerse (dentro de E15; E16 pendiente)
 
 | | |
 |---|---|
 | **Entrada** | el veredicto de soporte, la confianza calibrada del modelo especializado y el recuento de evidencia aplicable |
-| **Proceso** | aplicación de un criterio de suficiencia con umbrales declarados y calibrados sobre validación, independiente del modelo de lenguaje |
+| **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados y calibrados sobre validación. El registro del barrido declara que **no fue un pre-registro ciego**: el criterio se fijó tras ver una tabla previa, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
 | **Salida** | decisión **EXPLICA** o **ABSTIENE**, con los motivos concretos de la abstención cuando la haya |
-| **Artefactos** | `experiments/E15_suficiencia.json`, campo `verdict`; barrido del umbral en `E15b_barrido_umbral.json` |
+| **Artefactos** | `experiments/E15_suficiencia.json`, campo `verdict`, **corrida oracular**; barrido del umbral en `E15b_barrido_umbral.json` |
 | **Métrica** | M5, abstención: abstención correcta, abstención injustificada y explicación sin fundamento, **siempre con su cobertura** |
 | **Criterio de aceptación** | que la decisión cambie al manipular la evidencia disponible manteniendo constantes los datos, el modelo, la atribución y la confianza |
 | **Responde a** | PI.3 y PI.4 |
@@ -145,6 +145,22 @@ reportarla junto a su cobertura. Un sistema que se abstuviera siempre obtendría
 perfecta y utilidad nula, y ese desenlace figura desde el diseño entre los que refutarían el
 trabajo.
 
+#### Tamaño de la evidencia que sostiene OE4
+
+Ninguna de las magnitudes anteriores significa nada sin su denominador, y el denominador no es
+el número de filas de la tabla.
+
+| Métrica | Filas ejecutadas | Observaciones independientes |
+|---|---|---|
+| M2, recuperación | 6 casos | 6 consultas |
+| M3, explicación | 9 ejecuciones | 9 |
+| M4 y M5, trazabilidad y abstención | 17 filas | **5 ventanas de origen** |
+
+Las diecisiete filas del experimento de suficiencia proceden de cinco ventanas de telemetría
+evaluadas bajo varias variantes de corpus. Tratarlas como diecisiete observaciones
+independientes sería pseudorreplicación: la unidad de independencia es la ventana, y las
+variantes de una misma ventana comparten datos, atribución y confianza.
+
 #### Estado de las métricas de OE4
 
 La distinción entre definir, implementar, medir y validar evita que una métrica se dé por
@@ -154,12 +170,15 @@ obtenida porque esté descrita.
 |---|---|---|---|---|
 | M2, recuperación | sí | sí | sí, sobre datos sintéticos | **no**: la ejecución vigente está bajo reejecución canónica |
 | M3, explicación | sí | sí | sí, sobre datos sintéticos | descriptiva; no valida ninguna subpregunta |
-| M4, trazabilidad | sí | sí | sí, sobre datos sintéticos | **no**: depende de la recuperación bajo reejecución |
+| M4, trazabilidad | sí | sí | **no**: el registro guarda las comprobaciones de soporte en crudo, pero las magnitudes agregadas —corrección de citas, completitud, tasa de soporte— no se han calculado ni escrito en ningún artefacto | no |
 | M5, abstención | sí | sí | sí, sobre datos sintéticos | **no**: misma dependencia |
-| M6, rendimiento | sí | sí | parcial | descriptiva; sin criterio de aceptación |
 
-Ninguna cifra de estas métricas debe leerse como validada mientras la reejecución canónica de la
-recuperación siga pendiente. Las magnitudes ya medidas son reproducibles desde sus registros y
+M6, rendimiento, pertenece a OE5 y no a este objetivo; se menciona aquí solo para evitar la
+confusión que provocaba incluirla.
+
+Ninguna cifra de estas métricas debe leerse como validada, y son **dos** las razones, no una:
+la recuperación que las alimentó está bajo reejecución canónica, y la condición con distractor
+está bajo diagnóstico porque su manipulación no se ha comprobado. Las magnitudes ya medidas son reproducibles desde sus registros y
 se conservan; lo que está en revisión es si la recuperación que las alimentó aislaba
 correctamente el espacio vectorial en que buscaba.
 
