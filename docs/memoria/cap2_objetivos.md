@@ -14,21 +14,12 @@ las métricas y los criterios definidos para cada caso.
 
 ## Objetivo general
 
-Evaluar experimentalmente un agente de recuperación aumentada por evidencia, diseñado a tal
-efecto, en su capacidad de explicar diagnósticos vehiculares obtenidos a partir de datos
-OBD-II manteniendo una correspondencia verificable entre cada afirmación y la evidencia que la
-sostiene, y de abstenerse cuando la evidencia disponible resulta insuficiente o no pertinente.
-
-Tres decisiones sostienen este enunciado. El verbo es uno solo, *evaluar*, porque el artefacto
-es aquí el medio y no el fin. Se añade «o no pertinente» porque la pregunta no solo interroga si
-el agente reconoce la ausencia de evidencia, sino si distingue la evidencia parecida de la que
-de verdad sostiene una afirmación. Y se escribe «datos OBD-II» sin adjetivo, como la pregunta
-desde su enmienda del 3 de septiembre de 2026: la procedencia de cada conjunto se declara en el
-capítulo 4.
-
-El enunciado difiere del aprobado en julio en dos puntos: aquel llevaba dos verbos y cerraba con
-una cláusula sobre cómputo embarcado que ya no describe el trabajo ejecutado. Ambos ajustes están
-pendientes de consulta con la dirección (`preguntas-abiertas-al-director.md`, P-01).
+Evaluar experimentalmente la capacidad de un sistema inteligente híbrido para identificar
+patrones de fallo no representados en su conocimiento disponible, generar hipótesis diagnósticas
+mediante el análisis contextual y longitudinal de datos OBD-II, contrastarlas con evidencia
+suficiente y pertinente, abstenerse cuando dicha evidencia no permita validarlas e incorporar
+como conocimiento reutilizable únicamente aquellas hipótesis que superen el proceso de validación
+establecido.
 
 ## Objetivos específicos
 
@@ -52,13 +43,13 @@ datos reales, queda como validación externa pendiente de fuente.
 **OE3. Construir y evaluar un modelo de diagnóstico** sobre ventanas de telemetría,
 contrastado frente a una referencia mínima y a un baseline tabular, con su confianza calibrada
 y con atribución de descriptores, de modo que el sistema disponga de un contexto diagnóstico
-verificable y caracterizado. Lo cumplen las fases E5 a E9 y se mide con M1. La calibración se
-nombra expresamente porque la confianza alimenta el criterio de suficiencia: sin calibrar, ese
-criterio decidiría sobre un número que no significa lo que aparenta.
+verificable y caracterizado. Lo cumplen las fases E5 a E9 y se mide con M1. La confianza
+alimenta el criterio de suficiencia, de modo que sin calibrar decidiría sobre un número que no
+significa lo que aparenta.
 
-El enunciado aprobado hablaba de técnicas no supervisadas; el diseño ejecutado usa un modelo
-supervisado con atribución, lo que condiciona lo que puede afirmarse sobre fallos no vistos.
-La divergencia está planteada a la dirección y sin resolver (P-02).
+El diseño ejecutado emplea un modelo supervisado con atribución en lugar de las técnicas no
+supervisadas del enunciado aprobado, lo que condiciona lo que puede afirmarse sobre fallos no
+vistos y sobre la identificación de patrones no representados (P-02).
 
 **OE4. Implementar un agente** capaz de recuperar evidencia documental del vehículo, construir
 afirmaciones sustentadas a la vez en la evidencia observacional y en la documental, verificar de
@@ -85,11 +76,8 @@ midiendo exactitud diagnóstica, calidad de la recuperación, trazabilidad de la
 calidad de la abstención con su cobertura, aislando la contribución de cada componente
 mediante ablaciones, y documentar el trabajo conforme a la normativa de la titulación,
 incluidos de forma explícita los resultados negativos y las limitaciones de validez. Lo
-cumplen las fases E17 a E20. «Con su cobertura» es deliberado: un sistema que se abstuviera
-siempre tendría abstención perfecta y utilidad nula, como desarrolla el capítulo 4.
-
-La dirección validó el diseño de cuatro condiciones en septiembre de 2026; el enunciado de julio
-hablaba de dos escenarios y no cubría las ablaciones ni la demostración final.
+cumplen las fases E17 a E20. La abstención se mide junto a su cobertura porque un sistema que se
+abstuviera siempre tendría abstención perfecta y utilidad nula, como desarrolla el capítulo 4.
 
 ## Correspondencia entre objetivos, fases y métricas
 
@@ -101,7 +89,12 @@ hablaba de dos escenarios y no cubría las ablaciones ni la demostración final.
 | OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
 | OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
-Ninguna de las veinte fases queda sin objetivo, y ninguna subpregunta sin fase que la responda.
+Ninguna de las veinte fases queda sin objetivo. La correspondencia inversa no es completa: el
+contraste con evidencia y la abstención tienen fases y métricas asignadas, mientras que la
+identificación de patrones no representados y la incorporación de conocimiento reutilizable no
+cuentan todavía con fase ni instrumentación, y el análisis longitudinal está construido en E7
+sin alimentar el diagnóstico que el agente explica. El capítulo 4 detalla el estado de esa
+correspondencia.
 
 Los cinco se persiguen sobre un único vehículo de referencia, el Mazda 3 BK de 2007 con motor
 Z6, elección justificada en el capítulo 4 que acota cuanto pueda afirmarse. El alcance ejecutado
