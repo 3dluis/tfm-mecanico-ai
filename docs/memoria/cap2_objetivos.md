@@ -1,14 +1,16 @@
 # Capítulo 2: Objetivos del TFM
 
-Los objetivos del TFM transforman la pregunta de investigación en aspectos concretos que pueden
-desarrollarse y evaluarse a lo largo del trabajo. Cada objetivo específico se relaciona con las
-fases que permiten abordarlo y, cuando su naturaleza lo requiere, con las métricas utilizadas
-para analizar los resultados obtenidos. De este modo, se conserva una relación explícita entre
-la pregunta de investigación, las decisiones metodológicas y la evidencia experimental. No todos
-los objetivos requieren una medida cuantitativa: la revisión del conocimiento previo y la
-construcción del entorno experimental se justifican mediante los artefactos y evidencias que
-producen, mientras que los objetivos asociados al comportamiento del sistema se someten a
-evaluación experimental.
+Los objetivos del TFM concretan la pregunta de investigación en aspectos que pueden abordarse y
+evaluarse a lo largo del trabajo. Cada objetivo específico se vincula con las fases necesarias
+para su desarrollo y, cuando su naturaleza lo requiere, con las métricas empleadas para evaluar
+los resultados obtenidos. Esta correspondencia mantiene una relación explícita entre la pregunta
+de investigación, las decisiones metodológicas y la evidencia obtenida.
+
+No todos los objetivos requieren una medida cuantitativa. En aquellos relacionados con la
+revisión del conocimiento previo y la construcción del entorno experimental, su cumplimiento se
+verifica mediante los artefactos y evidencias generados durante su desarrollo. Los objetivos
+asociados al comportamiento del sistema, en cambio, se someten a evaluación experimental mediante
+las métricas y los criterios definidos para cada caso.
 
 ## Objetivo general
 
