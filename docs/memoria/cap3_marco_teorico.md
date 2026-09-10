@@ -211,7 +211,7 @@ afirmación se sostenga en la evidencia citada ni mide qué ocurre cuando la evi
 disponible es parecida pero incorrecta. Y la abstención, cuando aparece, es una propiedad
 del modelo y no de la evidencia.
 
-`[CONSENSUAR CON EL DIRECTOR]` La afirmación de novedad sobre la cuarta subpregunta, el
+Conviene acotar el alcance de esta afirmación. La novedad sobre la cuarta subpregunta, el
 rechazo de evidencia engañosa, es más estrecha de lo que parecía al inicio: existen trabajos
 sobre robustez de la recuperación a documentos irrelevantes en dominios generales. Lo que no
 se ha encontrado es su medición sobre documentación técnica de vehículo con evidencia

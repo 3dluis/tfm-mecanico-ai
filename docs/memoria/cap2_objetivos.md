@@ -28,11 +28,13 @@ sin adjetivo, igual que la propia pregunta desde su enmienda del 3 de septiembre
 procedencia de cada dataset se declara en el capítulo 4 y su validez externa se trata en el
 capítulo 6, sin condicionar el objetivo a que los datos sean reales.
 
-`[CONSENSUAR CON EL DIRECTOR]` El enunciado aprobado en julio llevaba dos verbos, «diseñar y
-evaluar», y una cláusula final sobre restricciones de cómputo de plataforma embarcada. La
-primera contraviene la indicación de la plantilla de un único verbo; la segunda ya no describe
-el trabajo, porque las mediciones de rendimiento se realizan sobre un ordenador de sobremesa y
-el despliegue embarcado ha pasado a trabajo futuro.
+Este enunciado difiere del aprobado en julio en dos puntos, ambos documentados. Aquel llevaba
+dos verbos, «diseñar y evaluar», mientras la plantilla de la titulación indica uno solo; y
+cerraba con una cláusula sobre restricciones de cómputo en plataforma embarcada que ya no
+describe el trabajo ejecutado, porque las mediciones de rendimiento se realizan sobre un
+ordenador de sobremesa y el despliegue embarcado figura en la prospectiva del capítulo 6. La
+confirmación de ambos ajustes está pendiente de consulta con la dirección
+(`preguntas-abiertas-al-director.md`, P-01).
 
 ## Objetivos específicos
 
@@ -61,9 +63,12 @@ de métricas M1. La calibración se nombra expresamente porque la confianza del 
 el criterio de suficiencia: una confianza sin calibrar haría que ese criterio decidiera sobre
 un número que no significa lo que aparenta.
 
-`[CONSENSUAR CON EL DIRECTOR]` El enunciado aprobado hablaba de técnicas no supervisadas de
-detección de anomalías. El diseño ejecutado usa un modelo supervisado con atribución; la parte
-sobre explicabilidad del enunciado original se conserva.
+El enunciado aprobado hablaba de técnicas no supervisadas de detección de anomalías. El diseño
+ejecutado usa un modelo supervisado con atribución de descriptores, y conserva íntegra la parte
+del enunciado original relativa a explicabilidad. El cambio condiciona lo que puede afirmarse
+sobre fallos no vistos durante el entrenamiento, y por eso se declara aquí en lugar de quedar
+implícito; su confirmación está pendiente de consulta con la dirección (P-01 y P-02 del registro
+de preguntas abiertas).
 
 **OE4. Implementar un agente** que recupere evidencia documental del vehículo, construya
 afirmaciones ancladas simultáneamente en la evidencia observacional y en la documental,
@@ -81,9 +86,10 @@ cumplen las fases E17 a E20. «Con su cobertura» es deliberado: la corrección 
 y su cobertura solo significan algo juntas, porque un sistema que se abstuviera siempre
 tendría abstención perfecta y utilidad nula.
 
-`[CONSENSUAR CON EL DIRECTOR]` El enunciado aprobado hablaba de dos escenarios; el diseño
-ejecutado tiene cuatro condiciones, y las ablaciones y la demostración final no estaban
-cubiertas.
+El enunciado aprobado en julio hablaba de dos escenarios de evaluación. El diseño ejecutado
+tiene **cuatro condiciones** de disponibilidad y pertinencia de la evidencia, y añade las
+ablaciones y la demostración final, que aquel enunciado no cubría. La dirección validó
+expresamente este diseño de cuatro condiciones en su revisión de septiembre de 2026.
 
 ## Correspondencia entre objetivos, fases y métricas
 
@@ -104,4 +110,5 @@ La propuesta temática de julio de 2026 contemplaba además el despliegue sobre 
 embarcada, una aplicación móvil y una plataforma en la nube. Esos tres elementos no forman
 parte de los objetivos de este trabajo: no aportan evidencia a la pregunta de investigación y
 su coste habría desplazado el esfuerzo del experimento central. Pasan a la prospectiva del
-capítulo 6. `[CONSENSUAR CON EL DIRECTOR]` La acotación no consta comunicada formalmente.
+capítulo 6. Esta acotación del alcance respecto de la propuesta inicial está pendiente de
+constancia formal ante la dirección (P-03 del registro de preguntas abiertas).

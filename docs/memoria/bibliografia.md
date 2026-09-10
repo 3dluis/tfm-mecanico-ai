@@ -3,7 +3,7 @@
 > Estado: contiene **solo** las referencias citadas en los capítulos redactados, todas
 > verificadas en fuente primaria (lista maestra `research/references/references.md` o
 > `research/references/referencias-metodo.md`). Formato APA 6.ª según la plantilla;
-> `[CONSENSUAR CON EL DIRECTOR]` si rige IEEE. Cuando un capítulo cite una referencia nueva,
+> La plantilla de la titulación fija estilo APA; la edición aplicable está pendiente de confirmación (P-04). Cuando un capítulo cite una referencia nueva,
 > se añade aquí en el mismo cambio. Las marcadas `[VERIFY_SOURCE]` tienen datos
 > bibliográficos incompletos en la lista maestra y deben completarse antes del depósito.
 

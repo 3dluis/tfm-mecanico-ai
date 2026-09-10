@@ -41,10 +41,13 @@ porque sus procedimientos de diagnóstico son específicos del motor, lo que per
 la condición con distractor con evidencia real de otro motor de la misma gama. La comparación
 está documentada en el repositorio.
 
-`[DECISIÓN DEL AUTOR]` El código de motor, la cilindrada y la transmisión son un supuesto
-de trabajo para el generador sintético, justificado porque los códigos de avería que el
-experimento usa están documentados en el manual para los motores ZJ y Z6. Cuando se
-incorporen datos reales, esos tres valores deben tomarse del vehículo real.
+El código de motor, la cilindrada y la transmisión son un **supuesto de trabajo** del generador
+sintético, no una lectura tomada de un vehículo. El supuesto se justifica porque los códigos de
+avería que el experimento utiliza están documentados en el manual para los motores ZJ y Z6, de
+modo que la telemetría generada y la documentación consultada se refieren a la misma
+configuración mecánica. Si se incorpora telemetría real como validación externa, esos tres
+valores deben tomarse del vehículo del que proceda, y la coincidencia con el corpus documental
+deja de estar garantizada por construcción y pasa a ser una comprobación previa.
 
 ### Muestra: telemetría
 
@@ -229,8 +232,9 @@ fundamento, siempre acompañadas de la cobertura. Corrección y cobertura solo s
 juntas.
 
 **M6, rendimiento.** Latencia por etapa y extremo a extremo, tamaño del modelo y coste de la
-recuperación, con el dispositivo real de cada etapa. `[DECISIÓN DEL AUTOR: criterio o
-descriptiva.]`
+recuperación, con el dispositivo real de cada etapa. Se reporta como **métrica descriptiva** y
+no como criterio de aceptación: el trabajo no fija un presupuesto de latencia, porque el
+despliegue embarcado que lo habría justificado quedó fuera del alcance ejecutado.
 
 ### Instrumentos
 

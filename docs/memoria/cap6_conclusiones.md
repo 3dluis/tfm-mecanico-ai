@@ -65,8 +65,8 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 - **El coste de cómputo se mide sobre un ordenador de sobremesa** (L-11), no sobre la
   plataforma embarcada que la propuesta inicial contemplaba.
 - **El alcance ejecutado es más estrecho que el aprobado** (L-13): despliegue embarcado,
-  aplicación móvil y plataforma en la nube han pasado a prospectiva.
-  `[CONSENSUAR CON EL DIRECTOR]`
+  aplicación móvil y plataforma en la nube han pasado a prospectiva. La constancia formal de
+  esta acotación ante la dirección está pendiente.
 - **La confianza del modelo estaba mal calibrada** (L-14), y aunque se corrigió, la
   corrección se ajustó sobre entrenamiento con validación cruzada y no se ha comprobado sobre
   test.

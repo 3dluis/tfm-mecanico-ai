@@ -6,112 +6,51 @@
 
 ## Justificación del proyecto realizado
 
-Un vehículo moderno informa de su estado a través del puerto de diagnóstico a bordo, OBD-II,
-normalizado por SAE J1979 e ISO 15031-5 (MET-18; MET-19). Por él circulan decenas de señales
-en tiempo real, régimen de giro, carga, temperaturas, caudal de aire, correcciones de
-combustible, tensión de las sondas de oxígeno, y los códigos de avería que la centralita
-registra cuando una de esas señales sale de lo que espera. Los trabajos revisados sobre aprendizaje
-automático aplicado a esa telemetría son abundantes y recientes: se ha usado para clasificar
-estilos de conducción, estimar consumo, predecir averías y detectar anomalías (Michailidis,
-Panagiotopoulou y Papadakis, 2025, REF-078; Rimpas, Papadakis y Samarakou, 2020, REF-098;
-Hossain et al., 2024, REF-049). Los modelos alcanzan buenos resultados de clasificación. Lo
-que producen, sin embargo, es una etiqueta.
+Un vehículo moderno deja un rastro continuo de su funcionamiento. A través del puerto de diagnóstico a bordo OBD-II, normalizado por SAE J1979 e ISO 15031-5 (MET-18; MET-19), es posible observar parámetros como el régimen del motor, la carga, distintas temperaturas, el caudal de aire, las correcciones de combustible, la respuesta de las sondas de oxígeno y los códigos de avería registrados por la unidad de control. Son señales que, leídas de forma aislada, dicen poco; observadas en el tiempo y en conjunto, describen parte del comportamiento del vehículo.
 
-Una etiqueta no es un diagnóstico. El mecánico que la recibe necesita saber qué señales la
-motivan, en qué tramo del trayecto, y qué dice la documentación del fabricante sobre esa
-situación en ese motor concreto. Los modelos de lenguaje parecen la pieza que falta: leen
-documentación técnica, redactan con soltura y responden preguntas. Los trabajos que los
-combinan con recuperación de información sobre manuales de taller, con grafos de
-conocimiento o con modelos de diagnóstico son ya varios (Lin y Miao, 2025, REF-072; Mahale,
-Kolhar y More, 2025, REF-077; Nam et al., 2025, REF-086; Khan et al., 2024, REF-062). Y
-comparten un problema que los estudios generales sobre modelos de lenguaje tienen bien
-caracterizado: producen texto plausible cuando no tienen base para producirlo (Ji et al.,
-2023, MET-15). La recuperación de documentos reduce ese comportamiento, pero no lo elimina
-(Shuster et al., 2021, REF-106; Béchard y Ayala, 2024, REF-016). En un dominio donde la
-explicación termina en una intervención sobre el vehículo, una explicación fluida y sin
-fundamento es peor que ninguna explicación, porque no se distingue a simple vista de una
-explicación correcta.
+Los trabajos revisados han utilizado esta telemetría para clasificar estilos de conducción, estimar consumo, anticipar averías y detectar anomalías (Michailidis, Panagiotopoulou y Papadakis, 2025, REF-078; Rimpas, Papadakis y Samarakou, 2020, REF-098; Hossain et al., 2024, REF-049). Muchos de estos modelos consiguen buenos resultados de clasificación. Sin embargo, entre reconocer un patrón y explicar por qué ese patrón sostiene un diagnóstico existe todavía una distancia importante. Una etiqueta puede ser correcta y, aun así, decir muy poco sobre aquello que la produjo.
 
-Ese es el vacío que este trabajo aborda. No pregunta si un modelo de lenguaje puede redactar
-un diagnóstico, que puede. Pregunta si un agente puede hacerlo de manera que **cada afirmación
-sea rastreable hasta la evidencia que la sostiene**, tanto la observación en la telemetría
-como el pasaje del manual, y si puede **reconocer cuándo esa evidencia no basta** y
-abstenerse. La segunda parte es la más exigente. Un sistema que explica siempre no está
-usando la evidencia, la está decorando; un sistema que se abstiene siempre es inútil. Lo que
-se quiere medir es si la decisión de explicar o no responde a la evidencia disponible, y para
-medirlo hay que poder retirar la evidencia y observar qué cambia.
+Para quien debe intervenir sobre el vehículo, esa diferencia importa. No basta con recibir el nombre de una avería. Es necesario saber qué señales la sostienen, en qué intervalo temporal apareció el comportamiento relevante y qué establece la documentación técnica aplicable al vehículo y al motor analizados. El problema deja entonces de ser únicamente predictivo: pasa a ser también un problema de evidencia.
 
-La pregunta de investigación que gobierna el trabajo se enuncia así:
+Los modelos de lenguaje parecen útiles en ese punto. Pueden leer documentación técnica, organizar información y convertir resultados especializados en explicaciones comprensibles. Los trabajos que los combinan con recuperación aumentada por generación, grafos de conocimiento o sistemas diagnósticos muestran que esta integración ya se está explorando (Lin y Miao, 2025, REF-072; Mahale, Kolhar y More, 2025, REF-077; Nam et al., 2025, REF-086; Khan et al., 2024, REF-062). Pero la capacidad de redactar una explicación introduce otro problema: un texto puede resultar convincente incluso cuando la evidencia que debería sostenerlo es débil, incompleta o inexistente.
+
+Ese comportamiento está bien documentado en los modelos de lenguaje (Ji et al., 2023, MET-15). La recuperación de información puede reducirlo, pero no lo elimina por sí sola (Shuster et al., 2021, REF-106; Béchard y Ayala, 2024, REF-016). Recuperar un fragmento relacionado con una consulta no equivale a demostrar una afirmación. En diagnóstico vehicular, esa distinción adquiere un peso especial: una explicación plausible puede terminar influyendo en una intervención real sobre el vehículo. Cuando no existe evidencia suficiente, una respuesta fluida no es necesariamente mejor que el silencio; puede ser más peligrosa precisamente porque se parece demasiado a una respuesta correcta.
+
+Ahí se sitúa el problema que aborda este trabajo. No se pregunta simplemente si un modelo de lenguaje puede redactar una explicación diagnóstica. La cuestión es más exigente: si cada afirmación producida puede rastrearse hasta aquello que realmente la sostiene —la observación OBD-II y la documentación técnica recuperada— y si el sistema puede reconocer el punto en que esa evidencia deja de ser suficiente.
+
+Esta segunda parte es esencial. Un sistema que siempre explica puede terminar utilizando la evidencia como decoración. Uno que siempre se abstiene evita el error, pero deja de ser útil. Lo que interesa observar es si la decisión de explicar o abstenerse cambia cuando cambia la evidencia disponible. Para poder medirlo, el experimento debe permitir retirar, limitar o modificar controladamente esa evidencia y observar qué hace el sistema.
+
+La pregunta de investigación que gobierna el trabajo se formula así:
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
 > rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la
 > evidencia disponible no es suficiente para sostener una explicación en lugar de generar
 > una hipótesis sin fundamento?
 
-Se descompone en cuatro subpreguntas, cada una con un experimento y una métrica asignados
-antes de ejecutar nada: si el sistema diagnostica a partir de la telemetría (PI.1); si la
-explicación es trazable hasta su evidencia (PI.2); si reconoce la insuficiencia de la
-evidencia (PI.3); y si rechaza evidencia parecida pero incorrecta (PI.4). La cuarta es la
-que distingue este diseño de los trabajos previos revisados: la mayoría comprueba que el
-sistema responde mejor cuando hay documentos, y ninguno de los revisados comprueba que
-responda peor, y lo sepa, cuando los documentos disponibles son los equivocados.
+La pregunta se descompone en cuatro subpreguntas experimentales. La primera examina si el sistema obtiene un diagnóstico a partir de la telemetría (PI.1). La segunda estudia si las afirmaciones de la explicación pueden rastrearse hasta la evidencia que las sostiene (PI.2). La tercera evalúa si el sistema reconoce situaciones en las que la evidencia disponible resulta insuficiente (PI.3). La cuarta analiza su comportamiento frente a evidencia aparentemente pertinente pero inadecuada para sostener el diagnóstico (PI.4).
 
-Tres decisiones de diseño se derivan directamente de la pregunta y conviene enunciarlas
-desde el principio, porque explican la arquitectura del artefacto. Primera: el modelo de
-lenguaje no diagnostica. Diagnostica un modelo especializado sobre la telemetría, con su
-confianza calibrada (Guo et al., 2017, MET-04), y la explicabilidad de ese modelo (Lundberg y
-Lee, 2017, MET-03) es la que produce la evidencia observacional. Segunda: la decisión de
-explicar o abstenerse no la toma el modelo de lenguaje. La toma un componente determinista,
-fuera de él, que aplica un criterio de suficiencia inspirado en la predicción con opción de
-rechazo (Chow, 1970, MET-08; Geifman y El-Yaniv, 2017, MET-09). Si la tomara el modelo, la
-respuesta a la pregunta dependería de su disposición a admitir que no sabe algo, que es
-justamente lo que no puede darse por supuesto. Tercera: el modelo de lenguaje redacta la
-decisión ya tomada, con las afirmaciones ya construidas y las citas ya verificadas, y una
-barrera externa rechaza cualquier cita que no corresponda a algo que se le entregó.
+Esta última dimensión requiere especial cautela. No basta con comprobar que el sistema responde cuando dispone de documentación relevante; también interesa determinar qué ocurre cuando recupera información cercana en términos semánticos pero insuficiente, incompatible o no aplicable. En los trabajos analizados, este comportamiento no aparece evaluado con el mismo grado de control que la disponibilidad de evidencia correcta, por lo que constituye una de las dimensiones que este diseño experimental pretende examinar.
 
-El trabajo se realiza sobre un vehículo concreto, un Mazda 3 de la generación BK de 2007,
-elegido entre tres candidatos por la cobertura de su documentación de taller y por la
-especificidad de sus procedimientos de diagnóstico respecto del motor. La documentación del
-vehículo es el corpus del sistema de recuperación, y el vehículo es también el objeto de la
-telemetría. Esa coherencia importa: un manual de otro motor de la misma gama es evidencia
-parecida pero incorrecta, y es precisamente lo que la cuarta subpregunta necesita.
+De la pregunta se derivan tres decisiones de arquitectura. La primera es separar diagnóstico y generación de lenguaje. El modelo de lenguaje no diagnostica directamente el vehículo: el diagnóstico procede de un modelo especializado que trabaja sobre la telemetría y produce además una medida de confianza. La explicación del comportamiento de ese modelo aporta la evidencia observacional correspondiente (Guo et al., 2017, MET-04; Lundberg y Lee, 2017, MET-03).
+
+La segunda decisión consiste en separar también la suficiencia de evidencia de la voluntad del modelo de lenguaje de responder. La decisión de explicar o abstenerse la toma un componente externo y determinista, inspirado en enfoques de predicción con opción de rechazo (Chow, 1970, MET-08; Geifman y El-Yaniv, 2017, MET-09). Dejar esa decisión en manos del propio modelo supondría asumir precisamente aquello que se quiere evaluar: que sabe reconocer por sí mismo cuándo no dispone de fundamento suficiente.
+
+La tercera decisión limita el papel del modelo de lenguaje a aquello para lo que resulta más adecuado: redactar una explicación a partir de una decisión ya tomada y de afirmaciones cuya evidencia ha sido previamente delimitada. Las citas que acompañan la respuesta también quedan sujetas a una barrera externa que impide referenciar fragmentos que no hayan sido entregados al modelo.
+
+El trabajo se desarrolla sobre un vehículo concreto, un Mazda 3 de la generación BK de 2007, seleccionado entre los candidatos estudiados por la disponibilidad y especificidad de su documentación de taller. La documentación aplicable al vehículo constituye el corpus del sistema de recuperación, mientras que el mismo vehículo define el contexto de las señales OBD-II utilizadas en el experimento. Esta correspondencia es importante: un documento técnicamente correcto para otro motor puede parecer pertinente y, sin embargo, no constituir evidencia válida para el caso analizado.
 
 ## Presentación del proyecto y sus contenidos
 
-El proyecto es un laboratorio experimental reproducible, construido de cero para responder
-a la pregunta, con veinte fases documentadas, criterios de aceptación fijados antes de
-ejecutar cada una y un registro por experimento con su commit, semilla, versiones y métricas.
-El artefacto que evalúa es un agente compuesto por un modelo de diagnóstico, un módulo de
-atribución, un sistema de recuperación sobre base de datos con extensión vectorial, un
-verificador de suficiencia y un modelo de lenguaje pequeño ejecutado localmente. El trabajo
-sigue el ciclo de la investigación en ciencias del diseño (Peffers et al., 2007, MET-16;
-Hevner et al., 2004, MET-17): el artefacto se construye para poder evaluarlo, y la evaluación
-es la contribución.
+El proyecto se plantea como un laboratorio experimental reproducible construido específicamente para responder a la pregunta de investigación. Su desarrollo se organiza en veinte fases documentadas, cada una con criterios de aceptación definidos antes de la ejecución y con un registro asociado que conserva, entre otros elementos, el commit, la semilla, las versiones utilizadas y las métricas obtenidas. La intención es que cada resultado pueda reconstruirse hasta el estado técnico que lo produjo, y no únicamente hasta una descripción posterior de lo ocurrido.
 
-La memoria se organiza conforme a la plantilla de la titulación. El **capítulo 2** enuncia el
-objetivo general y los cinco objetivos específicos, cada uno con las fases y métricas que lo
-cumplen. El **capítulo 3** revisa el estado del conocimiento en cuatro frentes, diagnóstico
-sobre OBD-II, explicabilidad de modelos de diagnóstico, recuperación aumentada sobre
-documentación técnica y abstención ante evidencia insuficiente, y delimita el vacío. El
-**capítulo 4** describe la población y la muestra, los datos, las variables e instrumentos de
-medida, el diseño experimental con sus cuatro condiciones y el modelo de análisis. El
-**capítulo 5** presenta los resultados obtenidos y los discute. El **capítulo 6** recoge las
-limitaciones, la prospectiva y las consideraciones finales.
+El artefacto evaluado es un agente compuesto por varias piezas con responsabilidades separadas: un modelo especializado de diagnóstico, un módulo de atribución, un sistema de recuperación sobre una base de datos con extensión vectorial, un verificador de suficiencia de evidencia y un modelo de lenguaje pequeño ejecutado localmente. Esta separación no responde solo a una decisión de arquitectura. También permite observar qué componente interviene cuando el sistema explica, se abstiene o falla. El trabajo sigue el ciclo de investigación en ciencias del diseño propuesto por Peffers et al. (2007, MET-16) y Hevner et al. (2004, MET-17): el artefacto se construye para ser evaluado, y es esa evaluación —no la mera existencia del sistema— la que permite responder a la pregunta planteada.
 
-Una advertencia recorre toda la memoria y se hace explícita aquí para no tener que
-repetirla en cada capítulo. La pregunta de investigación no exige que los datos OBD-II sean
-reales; exige que cada resultado declare sobre qué datos se obtuvo. Los datos con que se han
-ejecutado los experimentos son sintéticos: los genera un modelo paramétrico cuyas constantes
-están ancladas, una por una, a valores del manual de taller del vehículo. Esa calibración está
-documentada y hace que los datos se parezcan a los reales en lo que el manual permite
-comprobar; no los convierte en una medición. Lo que un resultado sobre ellos sostiene es el
-comportamiento del agente ante los mecanismos de fallo representados; no sostiene
-comportamiento equivalente en un vehículo real. Esa distinción se mantiene visible en los
-capítulos 4, 5 y 6, y la incorporación de datos reales, como validación externa, es la
-primera limitación que se declara y el primer trabajo que queda por hacer.
+La memoria se organiza conforme a la plantilla de la titulación. El **capítulo 2** presenta el objetivo general y los cinco objetivos específicos, vinculados a las fases y métricas con las que se evalúa su cumplimiento. El **capítulo 3** revisa el estado del conocimiento en cuatro frentes: diagnóstico a partir de OBD-II, explicabilidad de modelos de diagnóstico, recuperación aumentada sobre documentación técnica y abstención ante evidencia insuficiente; a partir de esa revisión se delimita el vacío que da lugar al trabajo. El **capítulo 4** describe la población y la muestra, los datos utilizados, las variables e instrumentos de medida, el diseño experimental y el modelo de análisis. El **capítulo 5** presenta los resultados obtenidos y discute qué permiten sostener. El **capítulo 6** recoge las limitaciones, la prospectiva y las consideraciones finales.
 
-Todo el código, la documentación, los registros de experimentos y este texto están
-versionados en un repositorio Git y son reproducibles con las instrucciones que contiene. El
-manual de taller del vehículo, sujeto a derechos de su fabricante, no se redistribuye; se
-registra su huella criptográfica para que un tercero que disponga de él pueda comprobar que
-utiliza el mismo documento.
+Hay una distinción que atraviesa toda la memoria y conviene fijar desde el principio. La pregunta de investigación no exige que los datos OBD-II sean reales; exige que cada resultado declare con precisión sobre qué datos se obtuvo. Los experimentos realizados hasta esta fase utilizan datos sintéticos generados mediante un modelo paramétrico cuyas constantes se anclan, una por una, a valores documentados en el manual de taller del vehículo. Ese anclaje permite controlar determinados rangos y comportamientos descritos por la documentación técnica, pero no convierte los datos en una medición procedente de un vehículo real.
+
+Por esa razón, los resultados deben leerse dentro de un alcance concreto. Permiten observar cómo responde el agente ante los mecanismos de fallo representados en el experimento y bajo las condiciones controladas definidas en el diseño. No permiten afirmar que el mismo comportamiento se reproducirá de forma equivalente en un vehículo real. Entre ambas cosas existe una distancia que este trabajo no intenta ocultar. La incorporación de datos OBD-II reales como validación externa se mantiene, por tanto, como una de las principales limitaciones y como el primer paso pendiente para ampliar la validez de los resultados.
+
+Esta distinción permanece visible en los capítulos 4, 5 y 6 porque afecta directamente a la interpretación de la evidencia. Un resultado puede ser reproducible, internamente coherente y útil para estudiar el mecanismo propuesto sin constituir todavía una demostración de desempeño en condiciones reales. Confundir ambos niveles haría parecer más fuerte la evidencia de lo que realmente es.
+
+Todo el código, la documentación, los registros experimentales y esta memoria se mantienen versionados en un repositorio Git, junto con las instrucciones necesarias para reproducir el entorno y las ejecuciones. El manual de taller del vehículo no se redistribuye, debido a los derechos de su fabricante. En su lugar, se conserva su huella criptográfica, de modo que un tercero que disponga legítimamente del mismo documento pueda comprobar que trabaja sobre la misma versión utilizada en los experimentos.

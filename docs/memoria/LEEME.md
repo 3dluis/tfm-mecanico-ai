@@ -38,15 +38,17 @@ documento Word queda fuera del control de versiones.
 4. **Un solo verbo en el objetivo general**, en infinitivo, verificable al terminar.
 5. **Vocabulario canónico** (ADR-001): PI.1–PI.4, E1–E20, M1–M6, condiciones FULL /
    PARTIAL / ABSENT / DISTRACTOR. No se mezcla con la nomenclatura del repositorio heredado.
-6. Las decisiones que corresponden al autor o al director van marcadas `[DECISIÓN DEL
-   AUTOR]` o `[CONSENSUAR CON EL DIRECTOR]` y no se resuelven en el texto.
+6. Las decisiones que corresponden al director **no se resuelven en el texto ni se marcan
+   dentro de él**: van al registro `preguntas-abiertas-al-director.md`, con su procedencia y
+   con lo que bloquean. El cuerpo de la memoria queda redactado de forma neutral, sin dar por
+   supuesta ninguna respuesta y sin corchetes editoriales visibles para el lector.
 
 ## Lo que este texto no puede cerrar todavía
 
 | Depende de | Afecta a |
 |---|---|
 | Dataset de la evaluación final (E19) y, si la hay, fuente de datos reales (E3) | Cap. 4 «Población y muestra» (versión final), Cap. 5 apartados finales, Cap. 6 conclusiones |
-| Reunión con el director | Título definitivo, objetivos reformulados, extensión (tres cifras oficiales incompatibles), estilo de cita, convocatoria |
+| Reunión con el director | Título definitivo, objetivos reformulados (P-01, P-02), extensión (tres cifras oficiales incompatibles), edición de APA (P-04), convocatoria |
 | E18, ablaciones | Cap. 5 «Discusión» (contribución de cada componente) |
 | Reconciliación de la lista maestra de referencias (144 frente a 153 declaradas) | Bibliografía |
 
