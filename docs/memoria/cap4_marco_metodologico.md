@@ -471,14 +471,25 @@ Cada ablación cambia exactamente un factor: sin atribución, sin recuperación 
 criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para
 saber qué parte del resultado aporta cada pieza. `[Pendiente: E18.]`
 
-### Reproducibilidad
+### Reproducibilidad y trazabilidad experimental
 
 Toda ejecución registra identificador de experimento, versión del dataset, versión del
 corpus, modelo de embeddings, proveedor y modelo de lenguaje, versión del prompt, semilla,
-parámetros y métricas, en JSON y CSV. `[Pendiente: commit y versiones documentales en la
-cabecera de todos los registros; hoy solo en parte.]` El entorno se fija con un gestor de
-dependencias con fichero de bloqueo; las puertas de calidad, análisis estático, tipado
-estricto y una batería de 283 tests, se ejecutan tras cada cambio.
+parámetros y métricas, en JSON y CSV. El entorno se fija con un gestor de dependencias con
+fichero de bloqueo; las puertas de calidad, análisis estático, tipado estricto y una batería
+de 400 tests, se ejecutan tras cada cambio.
+
+Los artefactos de software, las configuraciones y los registros experimentales se mantienen
+bajo control de versiones, de modo que cada ejecución pueda relacionarse con la configuración,
+las semillas, las versiones de los componentes y los datos utilizados. La documentación técnica
+empleada como corpus se identifica mediante metadatos y huellas criptográficas, dado que sus
+condiciones de distribución impiden incorporarla directamente al repositorio. Este mecanismo
+permite comprobar que las ejecuciones reproducidas utilizan la misma versión documental sin
+redistribuir material sujeto a restricciones de uso.
+
+La identificación del commit y de las versiones documentales en la cabecera de los registros
+está implantada solo en parte, y completarla es condición para dar por cerrada la fase de
+evaluación final.
 
 ## Modelo de análisis de datos
 
