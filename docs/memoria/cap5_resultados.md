@@ -4,6 +4,13 @@ Todos los resultados de este capítulo proceden del vehículo de referencia defi
 capítulo 4, un Mazda 3 BK de 2007 con motor Z6, y de su corpus documental. No se han evaluado
 otros vehículos ni otras generaciones.
 
+**Las cifras de recuperación de este capítulo están pendientes de reejecución.** Se detectó que
+el índice documental contenía dos representaciones vectoriales por fragmento y que ninguna
+búsqueda declaraba en cuál buscaba, de modo que la procedencia de cada fragmento recuperado es
+indeterminada. El defecto está corregido y la reejecución canónica sigue pendiente; hasta que
+termine, estas cifras son reproducibles pero no canónicas, y así deben leerse. La limitación
+figura como L-20 en el capítulo 6.
+
 Todas las cifras de este capítulo proceden de la partición de **validación** del conjunto
 `synthetic_v2`; el conjunto de test permanece cerrado y no se ha consultado. La procedencia del
 dato es sintética, y su validez externa se discute en el capítulo 6. Cada tabla cita el registro

@@ -76,7 +76,7 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 - **Las fichas de fallo del generador no tienen respaldo documental completo** (L-03): la
   calibración ancla las constantes al manual, pero el mecanismo de cada fallo es una
   simplificación declarada.
-- **Los resultados describen un solo vehículo** (L-17). Todo el trabajo se apoya en un Mazda 3
+- **Los resultados describen un solo vehículo** (L-19). Todo el trabajo se apoya en un Mazda 3
   BK de 2007 con motor Z6 y en su manual de taller, elección justificada en el capítulo 4. Esa
   decisión garantiza por construcción la coherencia entre telemetría, códigos de avería y
   procedimientos documentales, que es exactamente lo que no puede darse por supuesto en otro
@@ -85,6 +85,17 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
   generalizan a otros modelos, a otras generaciones del mismo modelo ni a los otros dos motores
   documentados en el corpus, y comprobarlo exigiría repetir el trabajo sobre un vehículo con
   documentación equivalente.
+- **Toda cifra de recuperación está pendiente de reejecución** (L-20). Se detectó que el índice
+  documental contiene dos representaciones vectoriales de cada fragmento, procedentes de dos
+  modelos distintos, y que ninguna búsqueda declaraba en cuál de los dos buscaba. Las consultas
+  ordenaron por proximidad sobre dos espacios semánticos a la vez, y la procedencia de cada
+  fragmento recuperado es indeterminada. El defecto está corregido en el código y la reejecución
+  canónica sigue pendiente de sus auditorías. Afecta a las cuatro tablas del capítulo 5 que
+  dependen de la recuperación, a los datos de ajuste del redactor y, por tanto, a lo que puede
+  concluirse sobre las dos subpreguntas que exigen evidencia documental. Mientras esa
+  reejecución no termine, las cifras de recuperación de esta memoria son **reproducibles pero no
+  canónicas**.
+
 - **Dos ejecuciones con resultado negativo no llegaron al capítulo de resultados** (L-18). El
   experimento de suficiencia se ejecutó también en una variante que retira el conocimiento de
   la etiqueta anotada y en un escenario adverso donde el modelo especializado se equivoca. La

@@ -243,3 +243,22 @@ documento de método o de un documento oficial. Ninguna se ha añadido porque «
 `[EXPERIMENT_REQUIRED]` — las limitaciones que se descubran al ejecutar: comportamiento del
 modelo por clase, calidad real de la recuperación, tasa de falsa abstención, coste de la
 política. Se añaden aquí cuando existan, no antes.
+
+## L-20 · Espacios de embeddings mezclados en toda la recuperación
+
+**Severidad:** crítica · **Fecha:** 4 de septiembre de 2026 · **Estado:** corregida en código,
+reejecución canónica pendiente · **Hallazgo:** `MIXED-EMBEDDING-SPACE`.
+
+El índice contiene dos representaciones vectoriales de cada uno de los 6 158 fragmentos,
+procedentes de dos modelos distintos, y ninguna búsqueda declaraba en cuál de los dos buscaba.
+Cada consulta ordenó por proximidad sobre 12 316 vectores de dos espacios semánticos
+incompatibles.
+
+**Alcance:** las tres rutas que recuperan —suficiencia, recuperación y agente, y generación de
+datos de ajuste—. Cuatro tablas del capítulo 5 dependen de ellas.
+
+**Consecuencia:** la procedencia de cada fragmento recuperado es indeterminada. Las cifras
+publicadas son reproducibles y no canónicas.
+
+**Documentación:** `docs/methodology/politica-espacio-de-embeddings.md`,
+`docs/methodology/preregistro-rerun-a.md`.
