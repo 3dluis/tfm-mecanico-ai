@@ -15,7 +15,7 @@ Estados: `DEFINIDO` · `IMPLEMENTADO` · `MEDIDO` · `VALIDADO` · `PENDIENTE` �
 | Subpregunta | Objetivo | Fases | Métrica | Artefacto | Estado |
 |---|---|---|---|---|---|
 | **PI.1** ¿diagnostica a partir de la telemetría? | OE3 | E5–E9 | M1 | `E6_baseline.json`, `E7_modelo_temporal.json` | **MEDIDO**. No validado: dos cifras de F1 en conflicto entre informe y registro, sin resolver |
-| **PI.2** ¿la explicación es trazable? | OE4, fases 4.1 a 4.3 | E11–E15 | M2, M4 | `E12_retrieval.json`, `E15_suficiencia.json` | **MEDIDO**. No validado: la recuperación que lo alimentó está bajo reejecución canónica |
+| **PI.2** ¿la explicación es trazable? | OE4, fases 4.1 a 4.3 | E11–E15 | M2, M4 | `E12_retrieval.json`, `E15_suficiencia.json` (corrida **oracular**) | **IMPLEMENTADO**. M2 medida; **M4 no**: el registro guarda las comprobaciones en crudo y las magnitudes agregadas no se han calculado |
 | **PI.3** ¿reconoce la insuficiencia? | OE4 fase 4.4, OE5 | E15, E16, E17 | M5 | `E15_suficiencia.json`, `E15b_barrido_umbral.json` | **MEDIDO**. Es lo más sólido del trabajo y sobrevive a las tres versiones del verificador |
 | **PI.4** ¿rechaza evidencia engañosa? | OE4 fases 4.3 y 4.4, OE5 | E15, E17 | M4, M5 | `E15_suficiencia_verifier_v2_1.json` | **BAJO DIAGNÓSTICO**. La condición que debía medirlo recupera los mismos fragmentos que la parcial |
 
@@ -26,7 +26,7 @@ Estados: `DEFINIDO` · `IMPLEMENTADO` · `MEDIDO` · `VALIDADO` · `PENDIENTE` �
 | OE1 revisión del conocimiento previo | revisión documental | — | **IMPLEMENTADO**. Flujo PRISMA formal pendiente de acceso institucional |
 | OE2 entorno experimental reproducible | E1, E2, E4, E5, E10 | — | **IMPLEMENTADO**. E3, datos reales, `PENDIENTE` como validación externa |
 | OE3 modelo de diagnóstico | E5–E9 | M1 | **MEDIDO** sobre datos sintéticos |
-| OE4 agente con verificación y abstención | E11–E16 | M2, M3, M4, M5 | **MEDIDO**, ninguna métrica `VALIDADO` |
+| OE4 agente con verificación y abstención | E11, E12, E13, E15; E14 y E16 **pendientes** | M2, M3, M4, M5 | **IMPLEMENTADO**. M2, M3 y M5 medidas; M4 no. Ninguna `VALIDADO` |
 | OE5 evaluación bajo cuatro condiciones | E17–E20 | M1–M6 | E17 **MEDIDO**; E18, E19, E20 `PENDIENTE` |
 
 ## Métricas: qué responde cada una
@@ -36,7 +36,7 @@ Estados: `DEFINIDO` · `IMPLEMENTADO` · `MEDIDO` · `VALIDADO` · `PENDIENTE` �
 | M1 diagnóstico | exactitud, F1 macro, calibración | E5–E9 | OE3 | PI.1 |
 | M2 recuperación | acierto en diez primeros, rango recíproco, ganancia descontada | 4.1 | OE4 | PI.2 |
 | M3 explicación | adecuación al esquema, salidas válidas | 4.2 | OE4 | **ninguna**, y se declara descriptiva |
-| M4 trazabilidad | corrección de citas, completitud, tasa de soporte | 4.3 | OE4 | PI.2, PI.4 |
+| M4 trazabilidad | corrección de citas, completitud, tasa de soporte | 4.3 | OE4 | PI.2, PI.4 · **implementada, no medida** |
 | M5 abstención | abstención correcta, injustificada, explicación sin fundamento, con cobertura | 4.4 | OE4, OE5 | PI.3, PI.4 |
 | M6 rendimiento | latencia, tamaño, coste | transversal | — | **ninguna**, y se declara descriptiva |
 

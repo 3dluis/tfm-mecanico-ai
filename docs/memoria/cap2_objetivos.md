@@ -90,7 +90,7 @@ que la siguiente consume.
 | **Salida** | conjunto de fragmentos recuperados, cada uno con su identificador, su documento, su sección y su puntuación |
 | **Artefactos** | `experiments/E12_retrieval.json`, índice `rag.document_chunk` con procedencia por fragmento |
 | **Métrica** | M2, recuperación: acierto en los diez primeros, rango recíproco medio y ganancia acumulada descontada, **reportados por condición** y no en agregado |
-| **Criterio de aceptación** | que la evidencia relevante desaparezca de los fragmentos recuperados cuando la variante de corpus la retire. **La mitad afirmativa no es un criterio**: la búsqueda se acota por los códigos que documentan la condición diagnosticada, de modo que encontrar el documento correcto está garantizado por construcción y no puede fallar |
+| **Criterio de aceptación** | **ninguno de los dos sentidos es refutable, y conviene decirlo.** Encontrar el documento correcto está garantizado por construcción, porque la búsqueda se acota por los códigos que documentan la condición diagnosticada. Y que desaparezca al retirarlo también: la consulta se acota por el mismo código que la variante excluye, así que el conjunto recuperado sale vacío por definición. Lo que la fase comprueba es que **la manipulación del corpus llega al sistema**, no que el sistema discrimine |
 | **Responde a** | PI.2 |
 
 #### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
@@ -132,12 +132,18 @@ el modelo escribió, sino lo que el manual dice.
 | | |
 |---|---|
 | **Entrada** | el veredicto de soporte, la confianza calibrada del modelo especializado y el recuento de evidencia aplicable |
-| **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados y calibrados sobre validación. El registro del barrido declara que **no fue un pre-registro ciego**: el criterio se fijó tras ver una tabla previa, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
+| **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados sobre validación. La palabra «calibrado» solo puede aplicarse a **uno** de los seis: el de confianza. El que de hecho decide la mayoría de las abstenciones es el de cobertura de afirmaciones, fijado en 0,8 **sin barrido**, y dispara trece de las catorce abstenciones registradas, ocho de ellas como motivo único. El registro del barrido declara además que **no fue un pre-registro ciego**: el criterio se fijó tras ver una tabla previa, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
 | **Salida** | decisión **EXPLICA** o **ABSTIENE**, con los motivos concretos de la abstención cuando la haya |
 | **Artefactos** | `experiments/E15_suficiencia.json`, campo `verdict`, **corrida oracular**; barrido del umbral en `E15b_barrido_umbral.json` |
 | **Métrica** | M5, abstención: abstención correcta, abstención injustificada y explicación sin fundamento, **siempre con su cobertura** |
 | **Criterio de aceptación** | que la decisión cambie al manipular la evidencia disponible manteniendo constantes los datos, el modelo, la atribución y la confianza |
 | **Responde a** | PI.3 y PI.4 |
+
+Un matiz que la métrica sola no revela: de las catorce abstenciones registradas, **trece se
+disparan por cobertura de afirmaciones insuficiente** y ocho tienen ese motivo como único. La
+decisión de abstenerse, en la práctica, la toma casi siempre ese umbral y no el conjunto de las
+cuatro condiciones del criterio. Atribuir la abstención al criterio completo sería atribuirle
+más de lo que hace.
 
 La abstención **no se cuenta como fallo** cuando la evidencia es insuficiente: es la respuesta
 correcta a esa situación y una capacidad evaluable por derecho propio. Por eso M5 exige
@@ -152,9 +158,9 @@ el número de filas de la tabla.
 
 | Métrica | Filas ejecutadas | Observaciones independientes |
 |---|---|---|
-| M2, recuperación | 6 casos | 6 consultas |
-| M3, explicación | 9 ejecuciones | 9 |
-| M4 y M5, trazabilidad y abstención | 17 filas | **5 ventanas de origen** |
+| M2, recuperación | 6 casos anotados | **5 ventanas**: dos de esos casos son la misma ventana con y sin evidencia |
+| M3, explicación | 9 ejecuciones | **5 ventanas**: una de ellas se repite cinco veces bajo distintas variantes de corpus |
+| M4 y M5, trazabilidad y abstención | 17 filas | **5 ventanas** |
 
 Las diecisiete filas del experimento de suficiencia proceden de cinco ventanas de telemetría
 evaluadas bajo varias variantes de corpus. Tratarlas como diecisiete observaciones
@@ -204,7 +210,7 @@ expresamente este diseño de cuatro condiciones en su revisión de septiembre de
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
-| OE4 | E11, E12, E13, E14, E15, E16 | M2, M4, M5 | ejecutadas sobre datos sintéticos; medidas pero **no validadas**: la recuperación está bajo reejecución canónica |
+| OE4 | E11, E12, E13, E15 ejecutadas; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 medidas sobre datos sintéticos; **M4 implementada y no medida**. Ninguna validada, por dos razones: la recuperación está bajo reejecución canónica y la condición con distractor bajo diagnóstico |
 | OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada sobre datos sintéticos; E18 pendiente; E19 y E20 pendientes de la decisión sobre el dataset de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo. Ninguna subpregunta de investigación queda
