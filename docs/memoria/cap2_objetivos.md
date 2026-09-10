@@ -62,6 +62,10 @@ decisión entre explicar y abstenerse, así como la contribución de sus princip
 
 ## Correspondencia entre objetivos, fases y métricas
 
+La Tabla 2.1 recoge esa correspondencia con el estado de cada objetivo.
+
+**Tabla 2.1. Trazabilidad entre objetivos específicos, fases experimentales y métricas.**
+
 | Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
 |---|---|---|---|
 | OE1 | revisión documental | — | en curso; flujo PRISMA formal pendiente de acceso institucional |
@@ -69,6 +73,8 @@ decisión entre explicar y abstenerse, así como la contribución de sus princip
 | OE3 | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; **E8 pendiente** |
 | OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
 | OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+
+*Fuente: elaboración propia.*
 
 Ninguna de las veinte fases queda sin objetivo. La correspondencia inversa, en cambio, no es
 completa: dos de los términos del objetivo general no tienen objetivo específico que los

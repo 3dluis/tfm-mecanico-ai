@@ -43,8 +43,11 @@ porque sus procedimientos de diagnóstico son específicos del motor, lo que per
 la condición con distractor con evidencia real de otro motor de la misma gama. La comparación
 está documentada en el repositorio.
 
-Esta elección fija el contexto experimental sobre el que se construyen la telemetría sintética,
-el corpus documental y los casos utilizados para evaluar el agente.
+Esta elección, recogida en la Tabla 4.1, fija el contexto experimental sobre el que se
+construyen la telemetría sintética, el corpus documental y los casos utilizados para evaluar el
+agente.
+
+**Tabla 4.1. Vehículo de referencia y documentación técnica asociada.**
 
 | | |
 |---|---|
@@ -55,6 +58,8 @@ el corpus documental y los casos utilizados para evaluar el agente.
 | Transmisión | manual |
 | Corpus documental | manual de taller del fabricante para la generación BK, 1 documento estructurado en 6 158 fragmentos indexados |
 | Motores documentados en el corpus | LF de 2,0 litros con 507 ficheros, Z6 de 1,6 con 486 y ZJ de 1,4 con 486, más 90 comunes a los tres |
+
+*Fuente: elaboración propia.*
 
 **Qué depende de esta elección.** La calibración del generador sintético, cuyas constantes
 salen una a una de páginas concretas del manual y llevan su cita literal; el corpus sobre el que
@@ -104,7 +109,10 @@ oxígeno, límites de corrección de combustible que disparan cada código de av
 ancladas una por una a valores del manual de taller, con la cita de la página de la que
 proceden, en un fichero de calibración versionado. La calibración se hizo después de una
 primera versión de los datos y corrigió varias constantes que no procedían de ninguna fuente;
-el proceso está documentado con cada hallazgo y su corrección.
+el proceso está documentado con cada hallazgo y su corrección. La Tabla 4.2 recoge los
+parámetros resultantes.
+
+**Tabla 4.2. Parámetros de generación de la muestra sintética de telemetría OBD-II.**
 
 | Parámetro de la muestra sintética | Valor |
 |---|---|
@@ -119,14 +127,18 @@ el proceso está documentado con cada hallazgo y su corrección.
 | Descriptores por ventana | 139 |
 | Reparto | entrenamiento, validación y test, por sesión; 392 ventanas de entrenamiento y 98 de validación |
 
+*Fuente: elaboración propia a partir de la ficha de calibración del vehículo.*
+
 Registro: `data/raw/synthetic/synthetic_v2.meta.json`.
 
 La elección de la ventana no fue arbitraria. Se estudiaron cuatro longitudes, 10, 30, 60 y
 120 segundos, midiendo para cada fallo la separabilidad de sus descriptores respecto de la
 condición sin fallo, en nivel y en dispersión, y comparándola con el suelo de ruido que se
 obtiene al tomar el máximo entre todos los descriptores de una condición sin fallo,
-partida en dos mitades por sesión, en treinta repeticiones. Ese suelo no es despreciable, y
-crece con la ventana:
+partida en dos mitades por sesión, en treinta repeticiones. Ese suelo no es despreciable y crece con la
+ventana, como recoge la Tabla 4.3:
+
+**Tabla 4.3. Suelo de ruido de los descriptores según la longitud de la ventana temporal.**
 
 | Ventana | Suelo de ruido (percentil 90 del máximo entre 139 descriptores) |
 |---|---|
@@ -134,6 +146,8 @@ crece con la ventana:
 | 30 s | 0,399 |
 | 60 s | 0,438 |
 | 120 s | 0,512 |
+
+*Fuente: elaboración propia a partir del registro de la fase E4.*
 
 Con ventanas cortas, el mejor descriptor de un fallo de encendido resultaba ser una variante
 de la temperatura del refrigerante, señal que ese fallo no toca, y su tamaño de efecto
@@ -154,7 +168,10 @@ ella.
 El corpus es el manual de taller del vehículo, en su copia local del autor, procedente de un
 repositorio secundario en la web. No se redistribuye; se registra su huella SHA-256 para que
 un tercero que disponga del mismo documento pueda comprobar la identidad. Está compuesto por
-ficheros por procedimiento, cada uno con los códigos de motor a los que aplica.
+ficheros por procedimiento, cada uno con los códigos de motor a los que aplica; la Tabla 4.4
+resume su composición.
+
+**Tabla 4.4. Composición del corpus documental del vehículo de referencia.**
 
 | Corpus | Valor |
 |---|---|
@@ -164,6 +181,8 @@ ficheros por procedimiento, cada uno con los códigos de motor a los que aplica.
 | Fragmentos indexados | 6 158, todos en inglés |
 | Modelos de embeddings indexados | dos: uno monolingüe en inglés y otro multilingüe, ambos sobre los 6 158 fragmentos, para medir el efecto del idioma de la consulta |
 | Idioma de las consultas | español e inglés; cada caso anotado lleva la consulta en ambos |
+
+*Fuente: elaboración propia.*
 
 El manual no se traduce. El trabajo se escribe en español y la documentación está en
 inglés, que es la situación normal de un taller en España con un vehículo de fabricante
@@ -192,7 +211,10 @@ cifras de esta memoria anteriores a E19 son de validación.
 ## Objetivos de investigación
 
 Los objetivos del capítulo 2 se operacionalizan en cuatro subpreguntas, cada una con un
-desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación.
+desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación y recogidos
+en la Tabla 4.5.
+
+**Tabla 4.5. Subpreguntas de investigación con sus desenlaces de sostenimiento y refutación.**
 
 | Subpregunta | Qué pregunta | Sostenida si | Refutada si |
 |---|---|---|---|
@@ -200,6 +222,8 @@ desenlace que la sostendría y otro que la refutaría, fijados antes de la evalu
 | PI.2 | ¿La explicación es trazable? | toda afirmación admitida se ancla en una observación y un documento verificados | las referencias existen pero no sostienen lo afirmado |
 | PI.3 | ¿Reconoce la insuficiencia? | la decisión cambia al retirar la evidencia, con todo lo demás idéntico | explica igual con y sin evidencia, o se abstiene siempre |
 | PI.4 | ¿Rechaza evidencia engañosa? | el procedimiento de otro motor no se acepta como soporte | acepta distractores como evidencia |
+
+*Fuente: elaboración propia.*
 
 La respuesta global a la pregunta admite tres valores, sostenida, parcialmente sostenida y
 no sostenida, y cuatro desenlaces la refutarían, enumerados de antemano: que el agente
@@ -214,7 +238,10 @@ seis familias de variables medidas y los instrumentos con que se miden.
 
 ### Variable manipulada
 
-Una sola: **qué evidencia documental está disponible en el corpus**. Toma cuatro valores.
+Una sola: **qué evidencia documental está disponible en el corpus**. Toma los cuatro valores
+que define la Tabla 4.6.
+
+**Tabla 4.6. Condiciones experimentales de disponibilidad y pertinencia de la evidencia documental.**
 
 | Condición | Corpus | Comportamiento esperado |
 |---|---|---|
@@ -222,6 +249,8 @@ Una sola: **qué evidencia documental está disponible en el corpus**. Toma cuat
 | PARTIAL | evidencia incompleta | ABSTAIN, salvo explicación limitada declarada como tal |
 | ABSENT | la evidencia relevante ha sido retirada del índice | ABSTAIN |
 | DISTRACTOR | contiene evidencia parecida pero incorrecta | rechazo del distractor; ABSTAIN si no queda otra |
+
+*Fuente: elaboración propia.*
 
 Las variantes se construyen sobre el mismo índice, excluyendo fragmentos por código de
 avería o por fichero en el momento de la consulta. La condición ABSENT retira todos los
@@ -327,7 +356,9 @@ recordaría de sus pesos y el experimento mediría memoria en lugar de evidencia
 ## Diseño experimental
 
 El plan tiene veinte fases, cada una con informe, criterio de aceptación y puertas de calidad
-de código. Se agrupan en cinco bloques.
+de código. Se agrupan en los cinco bloques de la Tabla 4.7.
+
+**Tabla 4.7. Agrupación en bloques de las veinte fases del plan experimental.**
 
 | Bloque | Fases | Qué producen |
 |---|---|---|
@@ -336,6 +367,8 @@ de código. Se agrupan en cinco bloques.
 | Corpus y recuperación | E10–E12 | corpus del vehículo, ingesta, evaluación de la recuperación |
 | Agente y suficiencia | E13–E16 | modelo de lenguaje, modelo de evidencia, verificador, abstención |
 | Evaluación | E17–E20 | experimento integrado, ablaciones, evaluación final, demostración |
+
+*Fuente: elaboración propia.*
 
 ### Experimento central
 
@@ -367,6 +400,10 @@ punto.
 
 #### Fase 4.1 · Recuperación de evidencia (E11, E12)
 
+La Tabla 4.8 recoge su entrada, su proceso, su salida y su artefacto.
+
+**Tabla 4.8. Instrumentación de la fase de recuperación de evidencia.**
+
 | | |
 |---|---|
 | **Entrada** | ventana de telemetría OBD-II ya clasificada, ficha del vehículo y corpus documental de taller en la variante de corpus que la condición experimental determine |
@@ -377,7 +414,13 @@ punto.
 | **Criterio de aceptación** | **Ninguno de los dos sentidos es refutable.** Encontrar el documento correcto está garantizado por construcción, porque la búsqueda se acota por los códigos que documentan la condición diagnosticada. Y que desaparezca al retirarlo también: la consulta se acota por el mismo código que la variante excluye, así que el conjunto recuperado sale vacío por definición. Lo que la fase comprueba es que **la manipulación del corpus llega al sistema**, no que el sistema discrimine |
 | **Responde a** | PI.2 |
 
+*Fuente: elaboración propia.*
+
 #### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
+
+Sigue el mismo esquema, en la Tabla 4.9.
+
+**Tabla 4.9. Instrumentación de la fase de construcción de la explicación.**
 
 | | |
 |---|---|
@@ -389,6 +432,8 @@ punto.
 | **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
 | **Responde a** | **ninguna subpregunta**. La fase es condición necesaria de PI.2 —sin afirmaciones ancladas no hay nada que rastrear— pero no la mide |
 
+*Fuente: elaboración propia.*
+
 La separación entre observación, evidencia, inferencia y explicación es deliberada y está en la
 forma del dato, no solo en la redacción: la observación es el valor medido del descriptor, la
 evidencia es el fragmento del manual, la inferencia es la salida del modelo especializado, y la
@@ -396,6 +441,10 @@ explicación es el texto que las une. Ninguna de las cuatro puede ocupar el luga
 el registro lo delate.
 
 #### Fase 4.3 · Verificación del soporte (E15)
+
+La Tabla 4.10 la instrumenta.
+
+**Tabla 4.10. Instrumentación de la fase de verificación del soporte.**
 
 | | |
 |---|---|
@@ -407,21 +456,29 @@ el registro lo delate.
 | **Criterio de aceptación** | que ninguna afirmación quede marcada como sostenida por un fragmento que no la sostiene |
 | **Responde a** | PI.2 y PI.4 |
 
+*Fuente: elaboración propia.*
+
 Que la verificación sea determinista y externa al modelo de lenguaje es lo que impide que una
 inferencia del propio modelo se presente como evidencia documental: el verificador no lee lo que
 el modelo escribió, sino lo que el manual dice.
 
 #### Fase 4.4 · Decisión de explicar o abstenerse (dentro de E15; E16 pendiente)
 
+Cierra la secuencia, y la Tabla 4.11 la detalla.
+
+**Tabla 4.11. Instrumentación de la fase de decisión entre explicar y abstenerse.**
+
 | | |
 |---|---|
 | **Entrada** | el veredicto de soporte, la confianza calibrada del modelo especializado y el recuento de evidencia aplicable |
-| **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados sobre validación. La palabra «calibrado» solo puede aplicarse a **uno** de los seis: el de confianza. El que de hecho decide la mayoría de las abstenciones es el de cobertura de afirmaciones, fijado en 0,8 **sin barrido**, y dispara trece de las catorce abstenciones registradas, ocho de ellas como motivo único. El registro del barrido declara además que **no fue un pre-registro ciego**: el criterio se fijó tras ver una tabla previa, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
+| **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados sobre validación. La palabra «calibrado» solo puede aplicarse a **uno** de los seis: el de confianza. El que de hecho decide la mayoría de las abstenciones es el de cobertura de afirmaciones, fijado en 0,8 **sin barrido**, y dispara trece de las catorce abstenciones registradas, ocho de ellas como motivo único. El registro del barrido declara además que **no fue un pre-registro ciego**: el criterio se fijó tras ver un resultado ya conocido, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
 | **Salida** | decisión **EXPLICA** o **ABSTIENE**, con los motivos concretos de la abstención cuando la haya |
 | **Artefactos** | `experiments/E15_suficiencia.json`, campo `verdict`, **corrida oracular**; barrido del umbral en `E15b_barrido_umbral.json` |
 | **Métrica** | M5, abstención: abstención correcta, abstención injustificada y explicación sin fundamento, **siempre con su cobertura** |
 | **Criterio de aceptación** | que la decisión cambie al manipular la evidencia disponible manteniendo constantes los datos, el modelo, la atribución y la confianza |
 | **Responde a** | PI.3 y PI.4 |
+
+*Fuente: elaboración propia.*
 
 Un matiz que la métrica sola no revela: de las catorce abstenciones registradas, **trece se
 disparan por cobertura de afirmaciones insuficiente** y ocho tienen ese motivo como único. La
@@ -438,13 +495,17 @@ trabajo.
 #### Tamaño de la evidencia que sostiene OE4
 
 Ninguna de las magnitudes anteriores significa nada sin su denominador, y el denominador no es
-el número de filas de la tabla.
+el número de filas ejecutadas. La Tabla 4.12 los separa.
+
+**Tabla 4.12. Unidades de observación independientes por métrica.**
 
 | Métrica | Filas ejecutadas | Observaciones independientes |
 |---|---|---|
 | M2, recuperación | 6 casos anotados | **5 ventanas**: dos de esos casos son la misma ventana con y sin evidencia |
 | M3, explicación | 9 ejecuciones | **5 ventanas**: una de ellas se repite cinco veces bajo distintas variantes de corpus |
 | M4 y M5, trazabilidad y abstención | 17 filas | **5 ventanas** |
+
+*Fuente: elaboración propia.*
 
 Las diecisiete filas del experimento de suficiencia proceden de cinco ventanas de telemetría
 evaluadas bajo varias variantes de corpus. Tratarlas como diecisiete observaciones
@@ -453,8 +514,10 @@ variantes de una misma ventana comparten datos, atribución y confianza.
 
 #### Estado de las métricas de OE4
 
-La distinción entre definir, implementar, medir y validar evita que una métrica se dé por
-obtenida porque esté descrita.
+La distinción entre definir, implementar, medir y validar, que recoge la Tabla 4.13, evita que
+una métrica se dé por obtenida porque esté descrita.
+
+**Tabla 4.13. Estado de definición, implementación y cálculo de las métricas de OE4.**
 
 | Métrica | Definida | Implementada | Calculada | Resultado definitivo |
 |---|---|---|---|---|
@@ -462,6 +525,8 @@ obtenida porque esté descrita.
 | M3, explicación | sí | sí | sí, sobre datos sintéticos | descriptiva; no valida ninguna subpregunta |
 | M4, trazabilidad | sí | sí | **no**: el registro guarda las comprobaciones de soporte en crudo, pero las magnitudes agregadas —corrección de citas, completitud, tasa de soporte— no se han calculado ni escrito en ningún artefacto | no |
 | M5, abstención | sí | sí | sí, sobre datos sintéticos | **no**: misma dependencia |
+
+*Fuente: elaboración propia.*
 
 M6, rendimiento, pertenece al quinto objetivo específico y no a este.
 

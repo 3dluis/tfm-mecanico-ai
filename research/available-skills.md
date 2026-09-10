@@ -11,6 +11,7 @@ y se vuelve a comprobar en cada una.
 | `remove-ai-marks` | plugin `watermarks-remover` 0.5.0 | disponible **con reserva** | higiene documental autorizada | 2026-09-01 |
 | `find-docs` | `~/.claude/skills/` | disponible | documentación actual de librerías para el capítulo 4 | 2026-09-01 |
 | `humanizer` | plugin `humanizer` 2.11.2 | disponible, **no previsto** | PHILIP-K-MODERATE ya cubre la fase de voz; solo con la lista de preservación | 2026-09-03 |
+| `tfm-format-auditor` | `TFM/.claude/skills/` | construido y ejecutado sobre la memoria completa | auditoría editorial y estructural: numeración, rótulos, procedencia, referencias cruzadas, ubicación definición/resultado, índices de la plantilla | 2026-09-10 |
 
 ## Scripts del researcher ejecutados el 3 de septiembre de 2026
 
