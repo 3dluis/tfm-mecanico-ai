@@ -461,21 +461,6 @@ está bajo diagnóstico porque su manipulación no se ha comprobado. Las magnitu
 se conservan; lo que está en revisión es si la recuperación que las alimentó aislaba
 correctamente el espacio vectorial en que buscaba.
 
-**OE5. Evaluar el agente frente a las hipótesis declaradas bajo cuatro condiciones de
-disponibilidad y pertinencia de la evidencia**, completa, parcial, ausente y con distractor,
-midiendo exactitud diagnóstica, calidad de la recuperación, trazabilidad de las afirmaciones y
-calidad de la abstención con su cobertura, aislando la contribución de cada componente
-mediante ablaciones, y documentar el trabajo conforme a la normativa de la titulación,
-incluidos de forma explícita los resultados negativos y las limitaciones de validez. Lo
-cumplen las fases E17 a E20. «Con su cobertura» es deliberado: la corrección de la abstención
-y su cobertura solo significan algo juntas, porque un sistema que se abstuviera siempre
-tendría abstención perfecta y utilidad nula.
-
-El enunciado aprobado en julio hablaba de dos escenarios de evaluación. El diseño ejecutado
-tiene **cuatro condiciones** de disponibilidad y pertinencia de la evidencia, y añade las
-ablaciones y la demostración final, que aquel enunciado no cubría. La dirección validó
-expresamente este diseño de cuatro condiciones en su revisión de septiembre de 2026.
-
 
 ### Ablaciones
 

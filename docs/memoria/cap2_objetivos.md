@@ -30,8 +30,11 @@ trabajo ejecutado. Ambos ajustes están pendientes de consulta con la dirección
 
 ## Objetivos específicos
 
-Son cinco. Los tres primeros construyen lo necesario para responder a la pregunta, el cuarto
-integra el agente y el quinto lo evalúa y documenta.
+Son cinco, dentro del rango que la plantilla recomienda. El primero delimita el vacío que la
+pregunta aborda; el segundo y el tercero construyen el entorno experimental y el modelo de
+diagnóstico; el cuarto implementa el agente que recupera, verifica y decide; y el quinto lo
+evalúa bajo las cuatro condiciones de evidencia y documenta el trabajo. La evaluación no está
+reservada al último: el tercero también evalúa lo que construye.
 
 **OE1. Revisar críticamente el estado del conocimiento** sobre diagnóstico vehicular a partir
 de OBD-II, explicabilidad de modelos de diagnóstico, recuperación aumentada aplicada a
@@ -50,9 +53,9 @@ de datos reales, queda como validación externa, pendiente de una fuente.
 contrastado frente a una referencia mínima y a un baseline tabular, con su confianza
 calibrada y con atribución de descriptores, de modo que el sistema disponga de un contexto
 diagnóstico verificable y caracterizado. Lo cumplen las fases E5 a E9 y se mide con el grupo
-de métricas M1. La calibración se nombra expresamente porque la confianza del modelo alimenta
-el criterio de suficiencia: una confianza sin calibrar haría que ese criterio decidiera sobre
-un número que no significa lo que aparenta.
+de métricas M1. La calibración se nombra expresamente porque la confianza alimenta el
+criterio de suficiencia: sin calibrar, ese criterio decidiría sobre un número que no significa
+lo que aparenta.
 
 El enunciado aprobado hablaba de técnicas no supervisadas de detección de anomalías. El diseño
 ejecutado usa un modelo supervisado con atribución de descriptores, y conserva íntegra la parte
@@ -78,6 +81,18 @@ PI.3 y PI.4. Ninguna de las cuatro métricas está validada todavía, por dos ra
 capítulo 4 desarrolla: la recuperación que las alimentó está bajo reejecución canónica y la
 condición con distractor bajo diagnóstico.
 
+**OE5. Evaluar el agente frente a las hipótesis declaradas bajo cuatro condiciones de
+disponibilidad y pertinencia de la evidencia**, completa, parcial, ausente y con distractor,
+midiendo exactitud diagnóstica, calidad de la recuperación, trazabilidad de las afirmaciones y
+calidad de la abstención con su cobertura, aislando la contribución de cada componente
+mediante ablaciones, y documentar el trabajo conforme a la normativa de la titulación,
+incluidos de forma explícita los resultados negativos y las limitaciones de validez. Lo
+cumplen las fases E17 a E20. «Con su cobertura» es deliberado, por la razón que el capítulo 4
+desarrolla: un sistema que se abstuviera siempre tendría abstención perfecta y utilidad nula.
+
+El enunciado de julio hablaba de dos escenarios y no cubría las ablaciones ni la demostración
+final. La dirección validó expresamente el diseño de cuatro condiciones en septiembre de 2026.
+
 ## Correspondencia entre objetivos, fases y métricas
 
 | Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
@@ -85,14 +100,14 @@ condición con distractor bajo diagnóstico.
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
-| OE4 | E11, E12, E13, E15 ejecutadas; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 medidas sobre datos sintéticos; **M4 implementada y no medida**. Ninguna validada, por dos razones: la recuperación está bajo reejecución canónica y la condición con distractor bajo diagnóstico |
-| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada sobre datos sintéticos; E18 pendiente; E19 y E20 pendientes de la decisión sobre el dataset de evaluación final |
+| OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 medidas; **M4 implementada y no medida**; ninguna validada |
+| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo, y ninguna subpregunta sin fase que la responda.
 
-Los cinco objetivos se persiguen sobre un único vehículo de referencia, el Mazda 3 BK de 2007
-con motor Z6, cuya elección y consecuencias se justifican en el capítulo 4. El alcance de lo que
-puede afirmarse queda acotado por esa decisión.
+Los cinco se persiguen sobre un único vehículo de referencia, el Mazda 3 BK de 2007 con motor
+Z6, y el alcance de lo que puede afirmarse queda acotado por esa elección, justificada en el
+capítulo 4.
 
 ## Lo que los objetivos no incluyen
 
