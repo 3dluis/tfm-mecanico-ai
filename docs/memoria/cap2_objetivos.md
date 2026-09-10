@@ -76,6 +76,93 @@ verifique de forma determinista que cada cita sostiene lo afirmado y decida entr
 abstenerse mediante un criterio de suficiencia independiente del modelo de lenguaje. Lo
 cumplen las fases E11 a E16 y se mide con los grupos M2, M4 y M5.
 
+Es el objetivo que sostiene el núcleo de la pregunta, de modo que conviene desglosarlo en las
+cuatro fases que lo componen, con lo que entra, lo que hace y lo que deja escrito cada una.
+El desglose sigue el orden en que el sistema procesa un caso, y cada fase produce un artefacto
+que la siguiente consume.
+
+#### Fase 4.1 · Recuperación de evidencia (E11, E12)
+
+| | |
+|---|---|
+| **Entrada** | ventana de telemetría OBD-II ya clasificada, ficha del vehículo y corpus documental de taller en la variante de corpus que la condición experimental determine |
+| **Proceso** | consulta al índice vectorial acotada por vehículo, por motor aplicable y por los códigos de avería que documentan la condición diagnosticada; ordenación por autoridad documental; conservación de la procedencia de cada fragmento hasta su fichero de origen |
+| **Salida** | conjunto de fragmentos recuperados, cada uno con su identificador, su documento, su sección y su puntuación |
+| **Artefactos** | `experiments/E12_retrieval.json`, índice `rag.document_chunk` con procedencia por fragmento |
+| **Métrica** | M2, recuperación: acierto en los diez primeros, rango recíproco medio y ganancia acumulada descontada, **reportados por condición** y no en agregado |
+| **Criterio de aceptación** | que la evidencia relevante anotada aparezca entre los fragmentos recuperados cuando el corpus la contenga, y que no aparezca cuando la variante de corpus la haya retirado |
+| **Responde a** | PI.2 |
+
+#### Fase 4.2 · Construcción de la explicación (E13, E14)
+
+| | |
+|---|---|
+| **Entrada** | atribución de descriptores del modelo especializado, su confianza calibrada y los fragmentos de la fase anterior |
+| **Proceso** | construcción de una afirmación por descriptor observado, anclada a la vez en la observación y en el fragmento documental que la sostiene; el modelo de lenguaje **redacta**, no decide: recibe el paquete de evidencia ya montado y el veredicto ya emitido |
+| **Salida** | conjunto de afirmaciones, cada una con su observación de origen y sus citas documentales |
+| **Artefactos** | `experiments/E13_agente_*.json` para cada configuración de redactor |
+| **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **Es descriptiva y no responde a ninguna subpregunta**, y así se declara |
+| **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
+| **Responde a** | PI.1, en su parte de construcción |
+
+La separación entre observación, evidencia, inferencia y explicación es deliberada y está en la
+forma del dato, no solo en la redacción: la observación es el valor medido del descriptor, la
+evidencia es el fragmento del manual, la inferencia es la salida del modelo especializado, y la
+explicación es el texto que las une. Ninguna de las cuatro puede ocupar el lugar de otra sin que
+el registro lo delate.
+
+#### Fase 4.3 · Verificación del soporte (E15)
+
+| | |
+|---|---|
+| **Entrada** | las afirmaciones de la fase anterior y los fragmentos citados |
+| **Proceso** | comprobación determinista, **fuera del modelo de lenguaje**, de que cada fragmento citado menciona la señal observada, constituye contenido diagnóstico, porta el código de avería que documenta la condición y desempeña el papel documental de procedimiento |
+| **Salida** | una comprobación por pareja de afirmación y fragmento, con su resultado y el motivo |
+| **Artefactos** | `experiments/E15_suficiencia.json`, campo `support_checks` |
+| **Métrica** | M4, trazabilidad: corrección de las citas, completitud y tasa de soporte. La distancia entre completitud y soporte mide cuántas afirmaciones llevan una referencia que no las respalda |
+| **Criterio de aceptación** | que ninguna afirmación quede marcada como sostenida por un fragmento que no la sostiene |
+| **Responde a** | PI.1 y PI.4 |
+
+Que la verificación sea determinista y externa al modelo de lenguaje es lo que impide que una
+inferencia del propio modelo se presente como evidencia documental: el verificador no lee lo que
+el modelo escribió, sino lo que el manual dice.
+
+#### Fase 4.4 · Decisión de explicar o abstenerse (E16)
+
+| | |
+|---|---|
+| **Entrada** | el veredicto de soporte, la confianza calibrada del modelo especializado y el recuento de evidencia aplicable |
+| **Proceso** | aplicación de un criterio de suficiencia con umbrales declarados y calibrados sobre validación, independiente del modelo de lenguaje |
+| **Salida** | decisión **EXPLICA** o **ABSTIENE**, con los motivos concretos de la abstención cuando la haya |
+| **Artefactos** | `experiments/E15_suficiencia.json`, campo `verdict`; barrido del umbral en `E15b_barrido_umbral.json` |
+| **Métrica** | M5, abstención: abstención correcta, abstención injustificada y explicación sin fundamento, **siempre con su cobertura** |
+| **Criterio de aceptación** | que la decisión cambie al manipular la evidencia disponible manteniendo constantes los datos, el modelo, la atribución y la confianza |
+| **Responde a** | PI.3 y PI.4 |
+
+La abstención **no se cuenta como fallo** cuando la evidencia es insuficiente: es la respuesta
+correcta a esa situación y una capacidad evaluable por derecho propio. Por eso M5 exige
+reportarla junto a su cobertura. Un sistema que se abstuviera siempre obtendría abstención
+perfecta y utilidad nula, y ese desenlace figura desde el diseño entre los que refutarían el
+trabajo.
+
+#### Estado de las métricas de OE4
+
+La distinción entre definir, implementar, medir y validar evita que una métrica se dé por
+obtenida porque esté descrita.
+
+| Métrica | Definida | Implementada | Medida | Validada |
+|---|---|---|---|---|
+| M2, recuperación | sí | sí | sí, sobre datos sintéticos | **no**: la ejecución vigente está bajo reejecución canónica |
+| M3, explicación | sí | sí | sí, sobre datos sintéticos | descriptiva; no valida ninguna subpregunta |
+| M4, trazabilidad | sí | sí | sí, sobre datos sintéticos | **no**: depende de la recuperación bajo reejecución |
+| M5, abstención | sí | sí | sí, sobre datos sintéticos | **no**: misma dependencia |
+| M6, rendimiento | sí | sí | parcial | descriptiva; sin criterio de aceptación |
+
+Ninguna cifra de estas métricas debe leerse como validada mientras la reejecución canónica de la
+recuperación siga pendiente. Las magnitudes ya medidas son reproducibles desde sus registros y
+se conservan; lo que está en revisión es si la recuperación que las alimentó aislaba
+correctamente el espacio vectorial en que buscaba.
+
 **OE5. Evaluar el agente frente a las hipótesis declaradas bajo cuatro condiciones de
 disponibilidad y pertinencia de la evidencia**, completa, parcial, ausente y con distractor,
 midiendo exactitud diagnóstica, calidad de la recuperación, trazabilidad de las afirmaciones y
@@ -98,7 +185,7 @@ expresamente este diseño de cuatro condiciones en su revisión de septiembre de
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
-| OE4 | E11, E12, E13, E14, E15, E16 | M2, M4, M5 | cerradas sobre datos sintéticos |
+| OE4 | E11, E12, E13, E14, E15, E16 | M2, M4, M5 | ejecutadas sobre datos sintéticos; medidas pero **no validadas**: la recuperación está bajo reejecución canónica |
 | OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada sobre datos sintéticos; E18 pendiente; E19 y E20 pendientes de la decisión sobre el dataset de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo. Ninguna subpregunta de investigación queda
