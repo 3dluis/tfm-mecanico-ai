@@ -9,7 +9,7 @@
 
 Abboush, M., Dzoupet Yimtchi, F. A., Tan, Ö., Ouarrad, H., & Rausch, A. (2026). Robust and interpretable anomaly detection in automotive test recordings using denoising autoencoders with adaptive thresholding. *Electronics, 15*(12), 2723. https://doi.org/10.3390/electronics15122723
 
-Béchard, P., & Ayala, O. M. (2024). *Reducing hallucination in structured outputs via retrieval-augmented generation*. arXiv:2404.08189. https://arxiv.org/abs/2404.08189
+Béchard, P., & Marquez Ayala, O. (2024). Reducing hallucination in structured outputs via retrieval-augmented generation. En *Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Industry Track)*. Preimpresión: arXiv:2404.08189. https://arxiv.org/abs/2404.08189
 
 Breiman, L. (2001). Random forests. *Machine Learning, 45*(1), 5–32. https://doi.org/10.1023/a:1010933404324
 
@@ -33,7 +33,7 @@ Haque, M. E., Zabin, M., & Uddin, J. (2025). EnsembleXAI-Motor: A lightweight fr
 
 Hevner, A. R., March, S. T., Park, J., & Ram, S. (2004). Design science in information systems research. *MIS Quarterly, 28*(1), 75–105. https://doi.org/10.2307/25148625
 
-Hossain et al. (2024). AI-driven vehicle fault diagnosis: A review. *Computer Modeling in Engineering & Sciences, 141*(2). `[VERIFY_SOURCE: autores completos, páginas, DOI]`
+Hossain, M. N., Rahman, M. M., & Ramasamy, D. (2024). Artificial intelligence-driven vehicle fault diagnosis to revolutionize automotive maintenance: A review. *Computer Modeling in Engineering & Sciences, 141*(2), 951–996. https://doi.org/10.32604/cmes.2024.056022
 
 Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W. (2022). LoRA: Low-rank adaptation of large language models. En *International Conference on Learning Representations*. arXiv:2106.09685
 
@@ -81,6 +81,6 @@ Rimpas, D., Papadakis, A., & Samarakou, M. (2020). OBD-II sensor diagnostics for
 
 SAE International. (2025). *J1979-DA: Digital annex of E/E diagnostic test modes*. https://doi.org/10.4271/j1979da_202504
 
-Shuster et al. (2021). Retrieval augmentation reduces hallucination in conversation. En *Findings of EMNLP 2021*. `[VERIFY_SOURCE: autores completos, DOI]`
+Shuster, K., Poff, S., Chen, M., Kiela, D., & Weston, J. (2021). Retrieval augmentation reduces hallucination in conversation. En *Findings of the Association for Computational Linguistics: EMNLP 2021* (pp. 3784–3803). https://doi.org/10.18653/v1/2021.findings-emnlp.320
 
 Zadrozny, B., & Elkan, C. (2002). Transforming classifier scores into accurate multiclass probability estimates. En *Proceedings of the Eighth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining*. https://doi.org/10.1145/775047.775151

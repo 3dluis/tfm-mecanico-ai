@@ -61,10 +61,14 @@ este.
 
 ### Datos: la limitación estructural del área
 
-La revisión de Hossain et al. (2024, REF-049) sobre diagnóstico vehicular con inteligencia
-artificial coincide con lo que este trabajo encontró al buscar datos: los conjuntos públicos
-de telemetría OBD-II con fallos etiquetados son escasos y, cuando existen, rara vez vienen
-acompañados de la documentación de taller del vehículo del que proceden.
+La revisión de Hossain et al. (2024, REF-049) dedica un apartado a la escasez de datos
+etiquetados, y señala que la limitación principal de los datos reales es «la ausencia o el
+carácter incompleto del etiquetado», porque anotar grandes volúmenes exige tiempo y
+conocimiento especializado. Coincide en eso con lo que este trabajo encontró al buscar datos.
+
+A esa dificultad, ya documentada, este trabajo añade una segunda que la revisión no trata: aun
+cuando el conjunto exista y esté etiquetado, rara vez viene acompañado de la documentación de
+taller del vehículo del que procede.
 
 Conviene precisar la afirmación, porque decir que no hay datos sería falso. Los hay. Hojjati
 et al. (2026, REF-048) publican un conjunto de detección de anomalías en motores de vehículos
@@ -113,11 +117,14 @@ significa lo que aparenta. El capítulo 4 lo trata como precondición y no como 
 ## Explicabilidad de los modelos de diagnóstico
 
 Los valores de Shapley aplicados a modelos de aprendizaje (Lundberg y Lee, 2017, MET-03) son
-el método de atribución dominante en los trabajos de diagnóstico de fallos revisados. Brusa
-et al. (2023, REF-014) los usan para entender la contribución de cada descriptor en
-monitorización de condición industrial; Haque, Zabin y Uddin (2025, REF-044) los combinan con
-selección de descriptores y ensamblado para clasificar fallos en motores de vehículo
-eléctrico; Li y van Leeuwen (2023, REF-071) proponen detección contextual de anomalías
+el método de atribución más frecuente en los trabajos de diagnóstico de fallos revisados, aunque
+no el único. Brusa et al. (2023, REF-014) los usan para entender la contribución de cada
+descriptor en monitorización de condición industrial. Haque, Zabin y Uddin (2025, REF-044)
+recurren en cambio a explicaciones locales por aproximación con un modelo interpretable, y las
+combinan con selección recursiva de descriptores y un ensamblado por voto para clasificar
+fallos en motores de vehículo eléctrico: un recordatorio de que la atribución en este dominio
+no se hace solo con valores de Shapley. Li y van Leeuwen (2023, REF-071) proponen detección
+contextual de anomalías
 explicable con bosques de regresión por cuantiles; Abboush et al. (2026, REF-002) buscan
 detección robusta e interpretable en grabaciones de pruebas de automoción.
 
@@ -174,9 +181,10 @@ necesaria. Esa diferencia de objeto de medida, más que de arquitectura, es la q
 trabajo respecto de ellos.
 
 **Lo que la evidencia revisada no permite afirmar.** Que la recuperación evite las
-afirmaciones sin fundamento. Béchard y Ayala (2024, REF-016) documentan una reducción en
-salidas estructuradas, no una eliminación, y el mecanismo que la produce sigue siendo el
-modelo de lenguaje. Recuperar el documento correcto no obliga al modelo a usarlo, y esa
+afirmaciones sin fundamento. Lo que Béchard y Ayala (2024, REF-016) miden es una **reducción**
+en salidas estructuradas, y lo que este trabajo asume es que reducir no es eliminar: ninguno de
+los dos artículos afirma haber eliminado el fenómeno, y el mecanismo que lo produce sigue
+siendo el modelo de lenguaje. Recuperar el documento correcto no obliga al modelo a usarlo, y esa
 distancia entre disponer de la evidencia y apoyarse en ella es justamente lo que este trabajo
 convierte en objeto de medición.
 Tres rasgos separan este trabajo de los anteriores. Primero, el modelo de lenguaje no
