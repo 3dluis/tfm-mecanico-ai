@@ -107,10 +107,10 @@ final. La dirección validó el diseño de cuatro condiciones en septiembre de 2
 | Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
 |---|---|---|---|
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
-| OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
-| OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
+| OE2 | E1, E2, E3, E4, E5, E10 | — | cuatro cerradas; **E10 con la infraestructura cerrada y el corpus vacío**; E3 pendiente como validación externa |
+| OE3 | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; **E8 pendiente** |
 | OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
-| OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada **sobre datos sintéticos**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+| OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**: sus resultados constan en el registro de suficiencia y el índice de experimentos la da pendiente de cierre. E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo, y ninguna subpregunta sin fase que la responda.
 

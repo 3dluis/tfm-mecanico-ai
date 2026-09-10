@@ -19,6 +19,10 @@ prompt. Lo que no se ha ejecutado se declara como no ejecutado.
 
 Todas las cifras de este capítulo proceden de registros versionados del repositorio o de la
 ficha de calibración del vehículo, y el diseño que describe se ejecutó sobre datos sintéticos.
+De las veinte fases planificadas, tres quedan sin cerrar dentro del tramo ejecutado —la
+evaluación del modelo, el corpus documental, que tiene la infraestructura cerrada y el contenido
+vacío, y las condiciones de evidencia, cuyos resultados constan en el registro sin informe de
+fase— y cuatro más pertenecen al tramo pendiente.
 
 ## Población y muestra
 
