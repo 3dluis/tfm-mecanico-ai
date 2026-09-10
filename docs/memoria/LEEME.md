@@ -60,6 +60,23 @@ autor-año; la bibliografía, en el estilo *Bibliografía*. Todo texto entre cor
 plantilla se elimina de la versión final.
 
 
+## Regla de adición bibliográfica
+
+`docs/memoria/bibliografia.md` contiene **solo** las referencias citadas en los capítulos
+redactados, y su fuente de verdad es `research/references/references.md` para las de dominio y
+`research/references/referencias-metodo.md` para las de método.
+
+> **Cuando un capítulo cite una referencia nueva, su entrada se añade en el mismo cambio.**
+
+Esta regla encabezaba el fichero de bibliografía como bloque de estado y se perdió al retirar
+esos bloques el 10 de septiembre de 2026. Su incumplimiento es exactamente lo que produjo que
+una referencia citada en el capítulo 3 quedara sin entrada durante seis días. Se restituye aquí,
+donde vive el resto del estado, en lugar de devolverla al cuerpo del documento.
+
+Una verificación contra fuente primaria debe propagarse a **las tres vistas**: el fichero de
+depósito, la lista maestra y `bibliography.bib`. Corregir solo la primera hace que el proyecto
+publique un identificador que su propia lista maestra declara inexistente.
+
 ## Estado por capítulo
 
 Esta información encabezaba cada fichero como bloque de cita. Se traslada aquí el 10 de

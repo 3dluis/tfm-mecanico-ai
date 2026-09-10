@@ -154,7 +154,7 @@ lenguaje, las llamadas alucinaciones, y la clasifican en intrínseca, que contra
 y extrínseca, que no puede verificarse con ella. La recuperación aumentada (Lewis et al.,
 2020, MET-10; Gao et al., 2023, REF-035) reduce el problema al anclar la generación en
 documentos recuperados: Shuster et al. (2021, REF-106) miden esa reducción en diálogo
-abierto, y Béchard y Ayala (2024, REF-016) en salidas estructuradas. Ninguno de ellos afirma
+abierto, y Béchard y Marquez Ayala (2024, REF-016) en salidas estructuradas. Ninguno de ellos afirma
 que la elimine. La recuperación garantiza que haya documentos delante del modelo; no
 garantiza que sean los pertinentes, ni que el modelo los use, ni que lo que escriba se
 sostenga en ellos.
@@ -187,7 +187,7 @@ necesaria. Esa diferencia de objeto de medida, más que de arquitectura, es la q
 trabajo respecto de ellos.
 
 **Lo que la evidencia revisada no permite afirmar.** Que la recuperación evite las
-afirmaciones sin fundamento. Lo que Béchard y Ayala (2024, REF-016) miden es una **reducción**
+afirmaciones sin fundamento. Lo que Béchard y Marquez Ayala (2024, REF-016) miden es una **reducción**
 en salidas estructuradas, y lo que este trabajo asume es que reducir no es eliminar: ninguno de
 los dos artículos afirma haber eliminado el fenómeno, y el mecanismo que lo produce sigue
 siendo el modelo de lenguaje. Recuperar el documento correcto no obliga al modelo a usarlo, y esa

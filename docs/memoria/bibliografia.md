@@ -2,7 +2,7 @@
 
 Abboush, M., Dzoupet Yimtchi, F. A., Tan, Ö., Ouarrad, H., & Rausch, A. (2026). Robust and interpretable anomaly detection in automotive test recordings using denoising autoencoders with adaptive thresholding. *Electronics, 15*(12), 2723. https://doi.org/10.3390/electronics15122723
 
-Béchard, P., & Marquez Ayala, O. (2024). Reducing hallucination in structured outputs via retrieval-augmented generation. En *Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Industry Track)*. Preimpresión: arXiv:2404.08189. https://arxiv.org/abs/2404.08189
+Béchard, P., & Marquez Ayala, O. (2024). Reducing hallucination in structured outputs via retrieval-augmented generation. En *Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Industry Track)*. (pp. 228–238). https://doi.org/10.18653/v1/2024.naacl-industry.19
 
 Breiman, L. (2001). Random forests. *Machine Learning, 45*(1), 5–32. https://doi.org/10.1023/a:1010933404324
 
