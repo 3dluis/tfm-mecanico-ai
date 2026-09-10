@@ -17,7 +17,7 @@ abstiene cuando se retira. El modelo de lenguaje respeta la decisión en las sie
 cuya salida pudo evaluarse, de nueve, y no produce una sola cita inexistente, porque una
 barrera fuera de él lo impide.
 
-Tres precisiones acompañan a esa afirmación, y sin ellas resultaría más fuerte de lo que la
+Cuatro precisiones acompañan a esa afirmación, y sin ellas resultaría más fuerte de lo que la
 evidencia permite.
 
 La primera es de **unidad**. Las diecisiete decisiones evaluadas proceden de **cinco ventanas de
@@ -32,7 +32,16 @@ explicar. Dicho de otro modo, abstenerse bien no distingue a este sistema de uno
 nada; lo que lo distingue es abstenerse bien **y además** explicar cuando debe, que es la mitad
 donde falla dos de cada cinco veces por confianza insuficiente del modelo especializado.
 
-La tercera es de **procedencia del resultado**. Las cifras proceden de una ejecución que la
+La tercera afecta a la **mitad de la pregunta que habla de trazabilidad**. Cada comprobación de
+soporte queda registrada por separado —qué afirmación, qué fragmento, si lo sostiene y por
+qué—, de modo que la cadena es auditable caso a caso, y en cuarenta y cinco ejecuciones del
+redactor no aparece una sola cita inexistente. Lo que **no** se ha calculado son las magnitudes
+agregadas de esa trazabilidad: la proporción de afirmaciones con cita y la proporción cuya cita
+las sostiene existen como comprobaciones individuales en el registro, y no como cifra publicada.
+Mientras eso siga así, la trazabilidad se sostiene como propiedad verificable de cada caso, no
+como resultado agregado.
+
+La cuarta es de **procedencia del resultado**. Las cifras proceden de una ejecución que la
 metodología etiqueta como cota superior asistida por oráculo, porque la selección de ventanas
 exige que el modelo especializado haya acertado. Y el criterio de suficiencia se corrigió dos
 veces sobre los mismos casos puntuados, después de observar sus fallos; las tres versiones y
@@ -76,6 +85,15 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
   generalizan a otros modelos, a otras generaciones del mismo modelo ni a los otros dos motores
   documentados en el corpus, y comprobarlo exigiría repetir el trabajo sobre un vehículo con
   documentación equivalente.
+- **Dos ejecuciones con resultado negativo no llegaron al capítulo de resultados** (L-18). El
+  experimento de suficiencia se ejecutó también en una variante que retira el conocimiento de
+  la etiqueta anotada y en un escenario adverso donde el modelo especializado se equivoca. La
+  primera reproduce la ejecución de referencia decisión a decisión, lo que acota de dónde viene
+  el auxilio del oráculo; la segunda contiene evidencia de comportamiento ante un diagnóstico
+  incorrecto. Ambas están registradas en el repositorio y ninguna se reporta en el capítulo 5.
+  Como el quinto objetivo se compromete expresamente a documentar los resultados negativos, la
+  omisión se declara aquí y se corrige cuando ese capítulo deje de estar congelado.
+
 - **La atribución no es causalidad** (L-06). El sistema no lo afirma en ningún punto, y el
   esquema de salida rechaza afirmaciones causales; la limitación es de interpretación por
   parte del lector.
