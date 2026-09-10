@@ -54,29 +54,41 @@ de métricas M1. La calibración se nombra expresamente porque la confianza alim
 criterio de suficiencia: sin calibrar, ese criterio decidiría sobre un número que no significa
 lo que aparenta.
 
-El enunciado aprobado hablaba de técnicas no supervisadas de detección de anomalías. El diseño
-ejecutado usa un modelo supervisado con atribución de descriptores, y conserva íntegra la parte
-del enunciado original relativa a explicabilidad. El cambio condiciona lo que puede afirmarse
-sobre fallos no vistos durante el entrenamiento, y por eso se declara aquí en lugar de quedar
-implícito; su confirmación está pendiente de consulta con la dirección (P-01 y P-02 del registro
-de preguntas abiertas).
+El enunciado aprobado hablaba de técnicas no supervisadas. El diseño ejecutado usa un modelo
+supervisado con atribución, lo que condiciona lo que puede afirmarse sobre fallos no vistos
+durante el entrenamiento.
 
-**OE4. Implementar un agente** que recupere evidencia documental del vehículo, construya
-afirmaciones ancladas simultáneamente en la evidencia observacional y en la documental,
-verifique de forma determinista que cada cita sostiene lo afirmado y decida entre explicar y
-abstenerse mediante un criterio de suficiencia independiente del modelo de lenguaje. Lo cumplen
-las fases E11 a E16, de las que E14 y E16 siguen pendientes, y se mide con los grupos M2, M3,
-M4 y M5.
+**OE4. Implementar un agente** capaz de recuperar evidencia documental del vehículo, construir
+afirmaciones sustentadas a la vez en la evidencia observacional y en la documental, verificar de
+manera determinista que cada cita respalda aquello que se afirma, y decidir, mediante un
+criterio de suficiencia independiente del modelo de lenguaje, cuándo existe fundamento para
+explicar un diagnóstico y cuándo resulta más correcto abstenerse.
 
-Se desarrolla en cuatro fases que siguen el orden en que el sistema procesa un caso, y que el
-capítulo 4 detalla con su entrada, su proceso, su salida y su artefacto: **recuperación** de la
-evidencia documental, medida con M2 y ligada a PI.2; **construcción** de las afirmaciones
-ancladas, con M3, que es descriptiva y no responde a ninguna subpregunta; **verificación**
-determinista de que cada cita sostiene lo afirmado, con M4 y ligada a PI.2 y PI.4; y
-**decisión** de explicar o abstenerse mediante el criterio de suficiencia, con M5 y ligada a
-PI.3 y PI.4. Ninguna de las cuatro métricas está validada todavía, por dos razones que el
-capítulo 4 desarrolla: la recuperación que las alimentó está bajo reejecución canónica y la
-condición con distractor bajo diagnóstico.
+El objetivo se desarrolla entre las fases E11 y E16, de las que E14 y E16 siguen pendientes, y
+sus fases recorren el mismo camino que hace un caso dentro del sistema. Primero se recupera la
+evidencia documental pertinente, y la calidad de esa recuperación se observa con M2. Después se
+construyen las afirmaciones a partir de la evidencia disponible; su adecuación estructural se
+mide con M3, de carácter únicamente descriptivo. A continuación el verificador comprueba si las
+citas recuperadas sostienen de verdad lo que se afirma, que es lo que M4 recoge bajo la
+trazabilidad y la pertinencia de la evidencia. Y por último el criterio de suficiencia
+determina si hay fundamento para explicar o si procede abstenerse, comportamiento que M5 evalúa
+junto a su cobertura. El capítulo 4 detalla cada fase con su entrada, su proceso, su salida y su
+artefacto.
+
+Esa separación no es solo una decisión de arquitectura. Permite distinguir entre encontrar
+información, usarla como evidencia y aceptar que esa evidencia basta para sostener una
+explicación. Una recuperación aparentemente correcta no garantiza por sí sola que una afirmación
+esté respaldada, igual que disponer de documentos semánticamente próximos no significa que sean
+aplicables al caso analizado. Por esa razón la decisión final no se delega en el modelo de
+lenguaje.
+
+En el estado actual del trabajo, M2, M3 y M5 están definidas, implementadas y calculadas sobre
+datos sintéticos, mientras M4 está implementada y sus magnitudes agregadas aún no se han
+calculado. Los resultados obtenidos con todas ellas no se consideran todavía definitivos: la
+recuperación que alimenta al agente está sometida a una reejecución canónica y la condición con
+distractor continúa bajo diagnóstico. Mantener esa distinción importa, porque el objetivo y sus
+mecanismos están implementados, y no correspondería presentar como establecido aquello cuya
+evidencia experimental sigue en revisión.
 
 **OE5. Evaluar el agente frente a las hipótesis declaradas bajo cuatro condiciones de
 disponibilidad y pertinencia de la evidencia**, completa, parcial, ausente y con distractor,
@@ -88,7 +100,7 @@ cumplen las fases E17 a E20. «Con su cobertura» es deliberado, por la razón q
 desarrolla: un sistema que se abstuviera siempre tendría abstención perfecta y utilidad nula.
 
 El enunciado de julio hablaba de dos escenarios y no cubría las ablaciones ni la demostración
-final. La dirección validó expresamente el diseño de cuatro condiciones en septiembre de 2026.
+final. La dirección validó el diseño de cuatro condiciones en septiembre de 2026.
 
 ## Correspondencia entre objetivos, fases y métricas
 
@@ -97,7 +109,7 @@ final. La dirección validó expresamente el diseño de cuatro condiciones en se
 | OE1 | revisión documental | — | avanzado; flujo PRISMA formal pendiente de acceso institucional |
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cinco de seis cerradas; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cerradas sobre datos sintéticos |
-| OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 medidas **sobre datos sintéticos**; **M4 implementada y no medida**; ninguna validada |
+| OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
 | OE5 | E17, E18, E19, E20 | M1–M6 | E17 ejecutada **sobre datos sintéticos**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo, y ninguna subpregunta sin fase que la responda.
@@ -112,5 +124,4 @@ La propuesta temática de julio de 2026 contemplaba además el despliegue sobre 
 embarcada, una aplicación móvil y una plataforma en la nube. Esos tres elementos no forman
 parte de los objetivos de este trabajo: no aportan evidencia a la pregunta de investigación y
 su coste habría desplazado el esfuerzo del experimento central. Pasan a la prospectiva del
-capítulo 6. Esta acotación del alcance respecto de la propuesta inicial está pendiente de
-constancia formal ante la dirección (P-03 del registro de preguntas abiertas).
+capítulo 6.

@@ -36,7 +36,7 @@ Estados: `DEFINIDO` · `IMPLEMENTADO` · `MEDIDO` · `VALIDADO` · `PENDIENTE` �
 | M1 diagnóstico | exactitud, F1 macro, calibración | E5–E9 | OE3 | PI.1 |
 | M2 recuperación | acierto en diez primeros, rango recíproco, ganancia descontada | 4.1 | OE4 | PI.2 |
 | M3 explicación | adecuación al esquema, salidas válidas | 4.2 | OE4 | **ninguna**, y se declara descriptiva |
-| M4 trazabilidad | corrección de citas, completitud, tasa de soporte | 4.3 | OE4 | PI.2, PI.4 · **implementada, no medida** |
+| M4 trazabilidad | corrección de citas, completitud, tasa de soporte | 4.3 | OE4 | PI.2, PI.4 · **implementada, sin magnitudes calculadas** |
 | M5 abstención | abstención correcta, injustificada, explicación sin fundamento, con cobertura | 4.4 | OE4, OE5 | PI.3, PI.4 |
 | M6 rendimiento | latencia, tamaño, coste | transversal | — | **ninguna**, y se declara descriptiva |
 

@@ -442,7 +442,7 @@ variantes de una misma ventana comparten datos, atribución y confianza.
 La distinción entre definir, implementar, medir y validar evita que una métrica se dé por
 obtenida porque esté descrita.
 
-| Métrica | Definida | Implementada | Medida | Validada |
+| Métrica | Definida | Implementada | Calculada | Resultado definitivo |
 |---|---|---|---|---|
 | M2, recuperación | sí | sí | sí, sobre datos sintéticos | **no**: la ejecución vigente está bajo reejecución canónica |
 | M3, explicación | sí | sí | sí, sobre datos sintéticos | descriptiva; no valida ninguna subpregunta |
@@ -452,7 +452,8 @@ obtenida porque esté descrita.
 M6, rendimiento, pertenece a OE5 y no a este objetivo; se menciona aquí solo para evitar la
 confusión que provocaba incluirla.
 
-Ninguna cifra de estas métricas debe leerse como validada, y son **dos** las razones, no una:
+Los resultados obtenidos con estas métricas no se consideran todavía definitivos, y son **dos**
+las razones, no una:
 la recuperación que las alimentó está bajo reejecución canónica, y la condición con distractor
 está bajo diagnóstico porque su manipulación no se ha comprobado. Las magnitudes ya medidas son reproducibles desde sus registros y
 se conservan; lo que está en revisión es si la recuperación que las alimentó aislaba
