@@ -284,6 +284,14 @@ cada caso las señales, estadísticos, valores, dirección y ventana temporal qu
 contribuyen a la predicción. La memoria no afirma en ningún punto que esa atribución sea
 causal: indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.
 
+Este instrumento es un clasificador supervisado de conjunto cerrado: asigna cada ventana a una
+de las clases de fallo etiquetadas durante el entrenamiento. Esa elección acota lo que el diseño
+puede examinar. Reconocer una clase aprendida no es identificar un patrón no representado en el
+conocimiento disponible, y el diseño no incorpora una definición operacional de «no
+representado», ni un mecanismo de detección fuera de distribución, ni una condición experimental
+que construya ese caso. El término correspondiente del objetivo general queda, por tanto, fuera
+del alcance de lo instrumentado, y así se declara en el capítulo 6.
+
 El **sistema de recuperación** combina búsqueda semántica con un modelo multilingüe de
 embeddings de frases (Reimers y Gurevych, 2019, MET-11) sobre una base de datos PostgreSQL
 con extensión vectorial, búsqueda léxica sobre el texto completo y fusión por rango

@@ -78,6 +78,15 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 - **Las fichas de fallo del generador no tienen respaldo documental completo** (L-03): la
   calibración ancla las constantes al manual, pero el mecanismo de cada fallo es una
   simplificación declarada.
+- **Dos términos del objetivo general no están instrumentados** (L-21, L-22). El objetivo
+  general compromete la identificación de patrones de fallo no representados en el conocimiento
+  disponible y la incorporación de las hipótesis validadas como conocimiento reutilizable. El
+  modelo de diagnóstico es un clasificador supervisado de conjunto cerrado, de modo que reconocer
+  una clase aprendida no es identificar un patrón no representado; y ningún componente incorpora
+  una hipótesis validada ni la recupera después. No son resultados negativos: son capacidades que
+  el diseño no llegó a instrumentar, y el trabajo no puede por tanto afirmar ni negar nada sobre
+  ellas. El ciclo que la pregunta define se cierra en su tramo central —contraste con evidencia y
+  decisión entre explicar y abstenerse— y no de extremo a extremo.
 - **Los resultados describen un solo vehículo** (L-19). Todo el trabajo se apoya en un Mazda 3
   BK de 2007 con motor Z6 y en su manual de taller, elección justificada en el capítulo 4. Esa
   decisión garantiza por construcción la coherencia entre telemetría, códigos de avería y

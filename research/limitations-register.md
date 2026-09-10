@@ -256,17 +256,48 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 
 ---
 
+---
+
+## L-21 — El diseño no puede examinar la identificación de patrones no representados
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | El primer término del objetivo general y de la pregunta de investigación |
+| **Por qué** | El modelo de diagnóstico es un clasificador supervisado de conjunto cerrado sobre clases de fallo etiquetadas. Reconocer una clase aprendida no es identificar un patrón no representado |
+| **Evidencia** | Búsqueda de `out_of_distribution`, `unseen`, `novel_fault`, `open_set` y `no_representado` en `src/`: cero coincidencias. No hay definición operacional de «no representado» ni condición experimental que la construya |
+| **Afecta a** | El grado de cumplimiento del objetivo general; la respuesta al primer término de la pregunta |
+| **Consecuencia** | El trabajo no puede afirmar ni negar nada sobre esa capacidad. No es un resultado negativo: es una capacidad no instrumentada |
+| **Cómo comprobarlo** | Definir operacionalmente «no representado», añadir detección fuera de distribución y una condición experimental que retenga una clase del entrenamiento |
+| **Severidad** | **alta** — un término del objetivo general queda sin evidencia |
+
+---
+
+## L-22 — La incorporación de hipótesis validadas como conocimiento reutilizable no está instrumentada
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | El último término del objetivo general y de la pregunta de investigación |
+| **Por qué** | Ningún componente incorpora una hipótesis validada ni la recupera después. El ciclo termina en la decisión de explicar o abstenerse |
+| **Evidencia** | Búsqueda de `reutilizab`, `knowledge_base`, `write_back`, `incorporar` en `src/`: cero coincidencias. Ninguna de las veinte fases del plan (`docs/experiments/README.md`) contempla la incorporación |
+| **Afecta a** | El grado de cumplimiento del objetivo general; la respuesta al último término de la pregunta |
+| **Consecuencia** | El ciclo que la pregunta define se cierra en su tramo central y no de extremo a extremo |
+| **Cómo comprobarlo** | Un mecanismo de incorporación con criterio de admisión, y una fase que mida si lo incorporado se recupera y se reutiliza |
+| **Severidad** | **alta** — un término del objetivo general queda sin evidencia |
+
+---
+
 ## Resumen
 
 | Severidad | Entradas |
 |---|---|
 | crítica | 2 — L-01, **L-20** |
-| alta | 11 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14**, **L-18**, **L-19** |
+| alta | 13 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14**, **L-18**, **L-19**, **L-21**, **L-22** |
 | media | 5 — L-05, L-09, L-12, **L-15**, **L-16** |
 | baja | 2 — L-04, **L-17** |
 
-Veinte entradas. La numeración no tiene huecos: L-18 y L-19 se dieron de alta el 10 de
-septiembre de 2026, al redactarse el apartado 6.1, y L-20 el 4 de septiembre.
+Veintidós entradas. La numeración no tiene huecos: L-18 y L-19 se dieron de alta el 10 de
+septiembre de 2026 al redactarse el apartado 6.1, L-20 el 4 de septiembre, y L-21 y L-22 el 10
+de septiembre al alinear el objetivo general con la pregunta de investigación.
 
 **Ninguna de estas limitaciones es ceremonial.** Todas proceden de un informe de fase, de un
 documento de método o de un documento oficial. Ninguna se ha añadido porque «suele aparecer».

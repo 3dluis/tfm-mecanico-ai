@@ -23,61 +23,42 @@ establecido.
 
 ## Objetivos específicos
 
-Son cinco. El primero delimita el vacío que la pregunta aborda; el segundo y el tercero
-construyen el entorno experimental y el modelo de diagnóstico; el cuarto implementa el agente y
-el quinto lo evalúa bajo las cuatro condiciones de evidencia y documenta el trabajo. La
-evaluación no está reservada al último: el tercero también evalúa lo que construye.
+Los objetivos específicos recorren las etapas necesarias para responder a la pregunta de
+investigación: delimitan el problema a partir del conocimiento previo, establecen el entorno
+experimental, desarrollan los mecanismos de identificación y caracterización de patrones,
+implementan el proceso de generación y validación de hipótesis y, finalmente, evalúan el
+comportamiento del sistema bajo las condiciones experimentales definidas.
 
-**OE1. Revisar críticamente el estado del conocimiento** sobre diagnóstico vehicular a partir
-de OBD-II, explicabilidad, recuperación aumentada aplicada a documentación técnica y abstención
-ante evidencia insuficiente, de modo que quede delimitado el vacío que la pregunta aborda y las
-decisiones de diseño puedan justificarse frente a trabajos previos. Se cumple en el capítulo 3,
-que describe también el procedimiento de revisión inspirado en PRISMA con que se llevó a cabo.
+**OE1.** Revisar críticamente el estado del conocimiento sobre diagnóstico vehicular mediante
+datos OBD-II, explicabilidad de modelos, recuperación de información sobre documentación técnica
+y mecanismos de abstención ante evidencia insuficiente, con el propósito de delimitar el vacío
+abordado por la pregunta de investigación y fundamentar las decisiones metodológicas y de diseño
+del sistema frente a los trabajos previos.
 
-**OE2. Construir un entorno experimental reproducible** que comprenda telemetría OBD-II
-particionada sin fuga temporal y un corpus documental del vehículo con variantes congeladas
-de disponibilidad de evidencia, de modo que cualquier tercero pueda repetir cada experimento
-a partir de su registro. Lo cumplen las fases E1, E2, E4, E5 y E10; E3, la incorporación de
-datos reales, queda como validación externa pendiente de fuente.
+**OE2.** Construir un entorno experimental reproducible que integre telemetría OBD-II, un corpus
+documental asociado al vehículo de referencia y condiciones controladas de disponibilidad y
+pertinencia de la información documental, preservando la separación temporal de los datos y la
+trazabilidad necesaria para reproducir los experimentos.
 
-**OE3. Construir y evaluar un modelo de diagnóstico** sobre ventanas de telemetría,
-contrastado frente a una referencia mínima y a un baseline tabular, con su confianza calibrada
-y con atribución de descriptores, de modo que el sistema disponga de un contexto diagnóstico
-verificable y caracterizado. Lo cumplen las fases E5 a E9 y se mide con M1. La confianza
-alimenta el criterio de suficiencia, de modo que sin calibrar decidiría sobre un número que no
-significa lo que aparenta.
+**OE3.** Desarrollar y evaluar mecanismos para identificar y caracterizar patrones de
+comportamiento en ventanas de telemetría OBD-II, utilizando modelos de referencia, estimaciones
+de confianza y técnicas de atribución que permitan localizar las variables y los intervalos
+temporales relevantes para la formulación posterior de hipótesis diagnósticas.
 
-El diseño ejecutado emplea un modelo supervisado con atribución en lugar de las técnicas no
-supervisadas del enunciado aprobado, lo que condiciona lo que puede afirmarse sobre fallos no
-vistos y sobre la identificación de patrones no representados (P-02).
+**OE4.** Implementar un agente capaz de formular y contrastar hipótesis diagnósticas mediante la
+combinación de evidencia observacional procedente de la telemetría y evidencia documental
+recuperada de fuentes técnicas, verificando la aplicabilidad y el soporte de la información
+utilizada y aplicando un criterio explícito de suficiencia que permita decidir entre validar una
+hipótesis o abstenerse cuando la evidencia disponible no resulte suficiente.
 
-**OE4. Implementar un agente** capaz de recuperar evidencia documental del vehículo, construir
-afirmaciones sustentadas a la vez en la evidencia observacional y en la documental, verificar de
-manera determinista que cada cita respalda aquello que se afirma, y decidir, mediante un
-criterio de suficiencia independiente del modelo de lenguaje, cuándo existe fundamento para
-explicar un diagnóstico y cuándo resulta más correcto abstenerse.
+La generación de la hipótesis y su validación se mantienen como procesos diferenciados, de manera
+que la capacidad del modelo de lenguaje para formular una explicación no determine por sí misma
+que exista evidencia suficiente para sostenerla.
 
-El objetivo se desarrolla entre las fases E11 y E16, de las que E14 y E16 siguen pendientes, y
-sus cuatro fases recorren el mismo camino que hace un caso dentro del sistema: recuperar la
-evidencia documental, que observa M2; construir las afirmaciones, cuya adecuación estructural
-describe M3; verificar que las citas sostienen lo que se afirma, que es lo que M4 recoge; y
-decidir si hay fundamento para explicar o procede abstenerse, comportamiento que M5 evalúa junto
-a su cobertura, y el capítulo 4 detalla cada una. Separarlas permite distinguir entre encontrar información, usarla como evidencia y
-aceptar que esa evidencia basta; por esa razón la decisión final no se delega en el modelo de
-lenguaje.
-
-Ninguno de los resultados obtenidos con esas métricas es todavía definitivo: la recuperación que
-alimenta al agente está sometida a una reejecución canónica y la condición con distractor
-continúa bajo diagnóstico.
-
-**OE5. Evaluar el agente frente a las hipótesis declaradas bajo cuatro condiciones de
-disponibilidad y pertinencia de la evidencia**, completa, parcial, ausente y con distractor,
-midiendo exactitud diagnóstica, calidad de la recuperación, trazabilidad de las afirmaciones y
-calidad de la abstención con su cobertura, aislando la contribución de cada componente
-mediante ablaciones, y documentar el trabajo conforme a la normativa de la titulación,
-incluidos de forma explícita los resultados negativos y las limitaciones de validez. Lo
-cumplen las fases E17 a E20. La abstención se mide junto a su cobertura porque un sistema que se
-abstuviera siempre tendría abstención perfecta y utilidad nula, como desarrolla el capítulo 4.
+**OE5.** Evaluar experimentalmente el comportamiento del sistema bajo condiciones controladas de
+evidencia documental completa, parcial, ausente y con distractores, analizando su capacidad
+diagnóstica, la recuperación y trazabilidad de la evidencia, la validación de las hipótesis y la
+decisión entre explicar y abstenerse, así como la contribución de sus principales componentes.
 
 ## Correspondencia entre objetivos, fases y métricas
 
@@ -89,12 +70,13 @@ abstuviera siempre tendría abstención perfecta y utilidad nula, como desarroll
 | OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
 | OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
-Ninguna de las veinte fases queda sin objetivo. La correspondencia inversa no es completa: el
-contraste con evidencia y la abstención tienen fases y métricas asignadas, mientras que la
-identificación de patrones no representados y la incorporación de conocimiento reutilizable no
-cuentan todavía con fase ni instrumentación, y el análisis longitudinal está construido en E7
-sin alimentar el diagnóstico que el agente explica. El capítulo 4 detalla el estado de esa
-correspondencia.
+Ninguna de las veinte fases queda sin objetivo. La correspondencia inversa, en cambio, no es
+completa: dos de los términos del objetivo general no tienen objetivo específico que los
+desarrolle ni fase que los instrumente. El primero es la identificación de patrones **no
+representados** en el conocimiento disponible, que OE3 no aborda porque el modelo empleado
+clasifica sobre clases conocidas. El segundo es la incorporación de las hipótesis validadas como
+**conocimiento reutilizable**, que ninguna fase del plan contempla. El capítulo 4 desarrolla la
+primera de las dos limitaciones y el capítulo 6 recoge ambas.
 
 Los cinco se persiguen sobre un único vehículo de referencia, el Mazda 3 BK de 2007 con motor
 Z6, elección justificada en el capítulo 4 que acota cuanto pueda afirmarse. El alcance ejecutado
