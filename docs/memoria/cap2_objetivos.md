@@ -54,9 +54,8 @@ de métricas M1. La calibración se nombra expresamente porque la confianza alim
 criterio de suficiencia: sin calibrar, ese criterio decidiría sobre un número que no significa
 lo que aparenta.
 
-El enunciado aprobado hablaba de técnicas no supervisadas. El diseño ejecutado usa un modelo
-supervisado con atribución, lo que condiciona lo que puede afirmarse sobre fallos no vistos
-durante el entrenamiento.
+El enunciado aprobado hablaba de técnicas no supervisadas; el diseño ejecutado usa un modelo
+supervisado con atribución, lo que condiciona lo que puede afirmarse sobre fallos no vistos.
 
 **OE4. Implementar un agente** capaz de recuperar evidencia documental del vehículo, construir
 afirmaciones sustentadas a la vez en la evidencia observacional y en la documental, verificar de
@@ -75,20 +74,15 @@ determina si hay fundamento para explicar o si procede abstenerse, comportamient
 junto a su cobertura. El capítulo 4 detalla cada fase con su entrada, su proceso, su salida y su
 artefacto.
 
-Esa separación no es solo una decisión de arquitectura. Permite distinguir entre encontrar
-información, usarla como evidencia y aceptar que esa evidencia basta para sostener una
-explicación. Una recuperación aparentemente correcta no garantiza por sí sola que una afirmación
-esté respaldada, igual que disponer de documentos semánticamente próximos no significa que sean
-aplicables al caso analizado. Por esa razón la decisión final no se delega en el modelo de
-lenguaje.
+Separar esas cuatro fases permite distinguir entre encontrar información, usarla como evidencia
+y aceptar que esa evidencia basta para sostener una explicación. Por esa razón la decisión final
+no se delega en el modelo de lenguaje.
 
-En el estado actual del trabajo, M2, M3 y M5 están definidas, implementadas y calculadas sobre
-datos sintéticos, mientras M4 está implementada y sus magnitudes agregadas aún no se han
-calculado. Los resultados obtenidos con todas ellas no se consideran todavía definitivos: la
-recuperación que alimenta al agente está sometida a una reejecución canónica y la condición con
-distractor continúa bajo diagnóstico. Mantener esa distinción importa, porque el objetivo y sus
-mecanismos están implementados, y no correspondería presentar como establecido aquello cuya
-evidencia experimental sigue en revisión.
+M2, M3 y M5 están definidas, implementadas y calculadas sobre datos sintéticos; M4 está
+implementada y sus magnitudes agregadas aún no se han calculado. Los resultados obtenidos con
+todas ellas no se consideran todavía definitivos, porque la recuperación que alimenta al agente
+está sometida a una reejecución canónica y la condición con distractor continúa bajo
+diagnóstico.
 
 **OE5. Evaluar el agente frente a las hipótesis declaradas bajo cuatro condiciones de
 disponibilidad y pertinencia de la evidencia**, completa, parcial, ausente y con distractor,
@@ -99,8 +93,8 @@ incluidos de forma explícita los resultados negativos y las limitaciones de val
 cumplen las fases E17 a E20. «Con su cobertura» es deliberado, por la razón que el capítulo 4
 desarrolla: un sistema que se abstuviera siempre tendría abstención perfecta y utilidad nula.
 
-El enunciado de julio hablaba de dos escenarios y no cubría las ablaciones ni la demostración
-final. La dirección validó el diseño de cuatro condiciones en septiembre de 2026.
+La dirección validó el diseño de cuatro condiciones en septiembre de 2026; el enunciado de julio
+hablaba de dos escenarios y no cubría las ablaciones ni la demostración final.
 
 ## Correspondencia entre objetivos, fases y métricas
 
@@ -110,7 +104,7 @@ final. La dirección validó el diseño de cuatro condiciones en septiembre de 2
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cuatro cerradas; **E10 con la infraestructura cerrada y el corpus vacío**; E3 pendiente como validación externa |
 | OE3 | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; **E8 pendiente** |
 | OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
-| OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**: sus resultados constan en el registro de suficiencia y el índice de experimentos la da pendiente de cierre. E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+| OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
 Ninguna de las veinte fases queda sin objetivo, y ninguna subpregunta sin fase que la responda.
 
