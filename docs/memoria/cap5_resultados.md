@@ -62,8 +62,7 @@ falso, y las plantillas de afirmación del verificador no permiten formularlo.
 ## Resultados obtenidos
 
 Los resultados se presentan por subpregunta, PI.1 a PI.4, y se cierran con la medición del
-modelo de lenguaje. En este apartado se describe lo observado; su interpretación va en el
-siguiente.
+modelo de lenguaje. Primero lo observado; después su interpretación.
 
 ### PI.1 · Diagnóstico y calibración
 
@@ -153,7 +152,7 @@ fabricante, P2187. Los cuatro informes conservan la afirmación falsa tachada.
 contiene, y la selección no se declaró al redactarla. Una de sus celdas, la cobertura de
 soporte del caso de fallo de encendido, procede de la **primera versión** del criterio de
 suficiencia; el registro vigente da otro valor para ese caso. El criterio se revisó dos veces
-después de escribir este apartado, y sobre el conjunto completo el recuento de decisiones
+después de esta medición, y sobre el conjunto completo el recuento de decisiones
 correctas es distinto del que aquí aparece.
 
 Ninguna de esas cifras se corrige en esta versión, por la congelación ya declarada. Se advierte

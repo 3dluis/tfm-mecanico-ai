@@ -8,8 +8,7 @@ en memoria evolutiva y arquitecturas multiagente, y su texto habría arrastrado 
 ya no corresponde. Sí se reutilizan su procedimiento de revisión y sus referencias verificadas,
 previa comprobación de pertinencia una a una.
 
-Este capítulo delimita el conocimiento previo en los cuatro frentes que la pregunta de
-investigación toca: el diagnóstico de vehículos a partir de la telemetría OBD-II, la
+El conocimiento previo que la pregunta de investigación toca se reparte en cuatro frentes: el diagnóstico de vehículos a partir de la telemetría OBD-II, la
 explicabilidad de los modelos que lo hacen, la recuperación aumentada de documentación
 técnica con modelos de lenguaje, y la abstención ante evidencia insuficiente. Su finalidad
 no es enumerar trabajos sino localizar el vacío que la pregunta aborda y justificar, frente
@@ -28,7 +27,7 @@ el 2 de septiembre de 2026 por la misma vía; su registro está en el repositori
 
 ## Diagnóstico vehicular a partir de OBD-II
 
-Este apartado recorre tres cosas: qué señales expone el puerto de diagnóstico y qué
+Tres cuestiones ordenan este frente: qué señales expone el puerto de diagnóstico y qué
 normas las fijan, qué datos existen para trabajar con ellas, y qué modelos se han usado
 para diagnosticar a partir de esa telemetría.
 
@@ -125,8 +124,7 @@ contextual de anomalías
 explicable con bosques de regresión por cuantiles; Abboush et al. (2026, REF-002) buscan
 detección robusta e interpretable en grabaciones de pruebas de automoción.
 
-Lo que estos trabajos hacen con la atribución es explicar el modelo al analista. Lo que este
-trabajo hace es distinto y conviene subrayarlo: convierte la atribución en **evidencia
+Lo que estos trabajos hacen con la atribución es explicar el modelo al analista. Este trabajo hace algo distinto: convierte la atribución en **evidencia
 observacional citable**, con señal, estadístico, valor, dirección y ventana temporal, para
 que una afirmación de la explicación final pueda referirse a ella igual que se refiere a una
 página del manual. Esa conversión impone una restricción que los trabajos de explicabilidad

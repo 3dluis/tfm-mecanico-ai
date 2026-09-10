@@ -63,7 +63,7 @@ documento de método o de una norma, y dice qué limita, a qué afecta y cómo s
 **Crítica.**
 
 - **Los datos sintéticos no tienen validez externa** (L-01). Todos los experimentos se han
-  ejecutado sobre datos generados, y así se declara en cada cifra; la pregunta no exige datos
+  ejecutado sobre datos generados, y así consta en cada cifra; la pregunta no exige datos
   reales, pero un resultado sobre sintéticos no demuestra comportamiento equivalente en un
   vehículo real. Afecta sobre todo a PI.1 y, en cuanto a generalización, a las demás. Solo la
   validación externa con datos reales lo resolvería.

@@ -13,7 +13,7 @@ efecto, en su capacidad de explicar diagnósticos vehiculares obtenidos a partir
 OBD-II manteniendo una correspondencia verificable entre cada afirmación y la evidencia que la
 sostiene, y de abstenerse cuando la evidencia disponible resulta insuficiente o no pertinente.
 
-Tres decisiones de redacción conviene explicar. El verbo es uno solo, *evaluar*, porque el
+Tres decisiones sostienen este enunciado. El verbo es uno solo, *evaluar*, porque el
 artefacto es aquí el medio y no el fin. Se añade «o no pertinente» porque la pregunta no solo
 interroga si el agente reconoce la ausencia de evidencia, sino si distingue la evidencia
 parecida de la que de verdad sostiene una afirmación. Y se escribe «datos OBD-II» sin

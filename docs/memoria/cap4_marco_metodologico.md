@@ -38,8 +38,8 @@ porque sus procedimientos de diagnóstico son específicos del motor, lo que per
 la condición con distractor con evidencia real de otro motor de la misma gama. La comparación
 está documentada en el repositorio.
 
-**Esta elección es la ubicación canónica del vehículo de referencia**, y el resto de la memoria
-la cita en lugar de repetirla.
+Esta elección fija el contexto experimental sobre el que se construyen la telemetría sintética,
+el corpus documental y los casos utilizados para evaluar el agente.
 
 | | |
 |---|---|
@@ -347,9 +347,10 @@ una razón escrita. Los umbrales del criterio de suficiencia se fijan sobre vali
 
 ### Fases del agente y su instrumentación
 
-El objetivo específico 4 se desarrolla en cuatro fases. Se detallan aquí, y no en el capítulo
-de objetivos, porque lo que sigue son instrumentos: qué entra en cada fase, qué hace, qué deja
-escrito y con qué se mide. Cada fase produce un artefacto que la siguiente consume.
+El agente se desarrolla en cuatro fases que recorren el camino de un caso por el sistema. Cada
+una recibe lo que la anterior produjo y deja escrito un artefacto que la siguiente consume, de
+modo que la cadena entre el dato observado y la decisión final queda reconstruible en cualquier
+punto.
 
 #### Fase 4.1 · Recuperación de evidencia (E11, E12)
 
@@ -360,7 +361,7 @@ escrito y con qué se mide. Cada fase produce un artefacto que la siguiente cons
 | **Salida** | conjunto de fragmentos recuperados, cada uno con su identificador, su documento, su sección y su puntuación |
 | **Artefactos** | `experiments/E12_retrieval.json`, índice `rag.document_chunk` con procedencia por fragmento |
 | **Métrica** | M2, recuperación: acierto en los diez primeros, rango recíproco medio y ganancia acumulada descontada, **reportados por condición** y no en agregado |
-| **Criterio de aceptación** | **ninguno de los dos sentidos es refutable, y conviene decirlo.** Encontrar el documento correcto está garantizado por construcción, porque la búsqueda se acota por los códigos que documentan la condición diagnosticada. Y que desaparezca al retirarlo también: la consulta se acota por el mismo código que la variante excluye, así que el conjunto recuperado sale vacío por definición. Lo que la fase comprueba es que **la manipulación del corpus llega al sistema**, no que el sistema discrimine |
+| **Criterio de aceptación** | **Ninguno de los dos sentidos es refutable.** Encontrar el documento correcto está garantizado por construcción, porque la búsqueda se acota por los códigos que documentan la condición diagnosticada. Y que desaparezca al retirarlo también: la consulta se acota por el mismo código que la variante excluye, así que el conjunto recuperado sale vacío por definición. Lo que la fase comprueba es que **la manipulación del corpus llega al sistema**, no que el sistema discrimine |
 | **Responde a** | PI.2 |
 
 #### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
@@ -371,9 +372,9 @@ escrito y con qué se mide. Cada fase produce un artefacto que la siguiente cons
 | **Proceso** | construcción de una afirmación por descriptor observado, anclada a la vez en la observación y en el fragmento documental que la sostiene; el modelo de lenguaje **redacta**, no decide: recibe el paquete de evidencia ya montado y el veredicto ya emitido |
 | **Salida** | conjunto de afirmaciones, cada una con su observación de origen y sus citas documentales |
 | **Artefactos** | `experiments/E13_agente_*.json` para cada configuración de redactor |
-| **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **Es descriptiva y no responde a ninguna subpregunta**, y así se declara |
+| **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **descriptiva, sin responder a ninguna subpregunta** |
 | **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
-| **Responde a** | **ninguna subpregunta**, en coherencia con M3, que se declara descriptiva. La fase es condición necesaria de PI.2 —sin afirmaciones ancladas no hay nada que rastrear— pero no la mide |
+| **Responde a** | **ninguna subpregunta**. La fase es condición necesaria de PI.2 —sin afirmaciones ancladas no hay nada que rastrear— pero no la mide |
 
 La separación entre observación, evidencia, inferencia y explicación es deliberada y está en la
 forma del dato, no solo en la redacción: la observación es el valor medido del descriptor, la
@@ -449,8 +450,7 @@ obtenida porque esté descrita.
 | M4, trazabilidad | sí | sí | **no**: el registro guarda las comprobaciones de soporte en crudo, pero las magnitudes agregadas —corrección de citas, completitud, tasa de soporte— no se han calculado ni escrito en ningún artefacto | no |
 | M5, abstención | sí | sí | sí, sobre datos sintéticos | **no**: misma dependencia |
 
-M6, rendimiento, pertenece a OE5 y no a este objetivo; se menciona aquí solo para evitar la
-confusión que provocaba incluirla.
+M6, rendimiento, pertenece al quinto objetivo específico y no a este.
 
 Los resultados obtenidos con estas métricas no se consideran todavía definitivos, y son **dos**
 las razones, no una:
