@@ -7,6 +7,10 @@
 > trata en el capítulo 6. Dos discrepancias entre informes de
 > fase y registros están marcadas `[RECONCILIAR]` y no se han resuelto eligiendo una cifra.
 
+Todos los resultados de este capítulo proceden del vehículo de referencia definido en el
+capítulo 4, un Mazda 3 BK de 2007 con motor Z6, y de su corpus documental. No se han evaluado
+otros vehículos ni otras generaciones.
+
 ## Análisis descriptivo de la muestra
 
 La muestra sintética consta de 72 sesiones de 600 segundos, 12 por condición, muestreadas a

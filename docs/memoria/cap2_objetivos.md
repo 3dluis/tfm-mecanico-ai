@@ -191,6 +191,10 @@ expresamente este diseño de cuatro condiciones en su revisión de septiembre de
 Ninguna de las veinte fases queda sin objetivo. Ninguna subpregunta de investigación queda
 sin fase que la responda.
 
+Los cinco objetivos se persiguen sobre un único vehículo de referencia, el Mazda 3 BK de 2007
+con motor Z6, cuya elección y consecuencias se justifican en el capítulo 4. El alcance de lo que
+puede afirmarse queda acotado por esa decisión.
+
 ## Lo que los objetivos no incluyen
 
 La propuesta temática de julio de 2026 contemplaba además el despliegue sobre una placa

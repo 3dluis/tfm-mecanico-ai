@@ -41,6 +41,37 @@ porque sus procedimientos de diagnóstico son específicos del motor, lo que per
 la condición con distractor con evidencia real de otro motor de la misma gama. La comparación
 está documentada en el repositorio.
 
+**Esta elección es la ubicación canónica del vehículo de referencia**, y el resto de la memoria
+la cita en lugar de repetirla.
+
+| | |
+|---|---|
+| Vehículo | Mazda 3 |
+| Generación | BK |
+| Año de referencia | 2007 |
+| Motor del experimento | Z6, gasolina de 1,6 litros |
+| Transmisión | manual |
+| Corpus documental | manual de taller del fabricante para la generación BK, 1 documento estructurado en 6 158 fragmentos indexados |
+| Motores documentados en el corpus | LF de 2,0 litros con 507 ficheros, Z6 de 1,6 con 486 y ZJ de 1,4 con 486, más 90 comunes a los tres |
+
+**Qué depende de esta elección.** La calibración del generador sintético, cuyas constantes
+salen una a una de páginas concretas del manual y llevan su cita literal; el corpus sobre el que
+recupera el agente; los códigos de avería que documentan cada condición de fallo; los
+procedimientos de diagnóstico que el verificador exige como soporte; y la construcción de la
+condición con distractor, que usa el procedimiento del motor LF para el mismo código de avería.
+
+**Qué no depende.** La arquitectura del agente, la política de suficiencia y los criterios de
+verificación son independientes del vehículo: ninguna de sus reglas nombra un motor, un código
+ni una señal concretos.
+
+**Qué limita.** Los resultados describen el comportamiento del sistema sobre **un vehículo, una
+generación y un corpus documental**. La coherencia entre telemetría, documentación y códigos que
+esta elección garantiza por construcción es precisamente lo que no puede darse por supuesto en
+otro vehículo, donde el fabricante puede usar códigos genéricos distintos, documentar los
+procedimientos con otra estructura o no publicar manual accesible. La generalización a otros
+vehículos o a otras generaciones del mismo modelo no se sigue de estos resultados y figura entre
+las amenazas a la validez del capítulo 6.
+
 El código de motor, la cilindrada y la transmisión son un **supuesto de trabajo** del generador
 sintético, no una lectura tomada de un vehículo. El supuesto se justifica porque los códigos de
 avería que el experimento utiliza están documentados en el manual para los motores ZJ y Z6, de
