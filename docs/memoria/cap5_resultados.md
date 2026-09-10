@@ -149,6 +149,18 @@ fabricante, P2187. Los cuatro informes conservan la afirmación falsa tachada.
 
 ### PI.3 y PI.4 · Suficiencia, abstención y distractores
 
+**Sobre la tabla que sigue.** Recoge **nueve** de los diecisiete casos que el registro citado
+contiene, y la selección no se declaró al redactarla. Una de sus celdas, la cobertura de
+soporte del caso de fallo de encendido, procede de la **primera versión** del criterio de
+suficiencia; el registro vigente da otro valor para ese caso. El criterio se revisó dos veces
+después de escribir este apartado, y sobre el conjunto completo el recuento de decisiones
+correctas es distinto del que aquí aparece.
+
+Ninguna de esas cifras se corrige en esta versión, por la congelación ya declarada. Se advierte
+para que la tabla no se lea como el resultado vigente del experimento, sino como el estado en
+que quedó antes de las dos revisiones del instrumento.
+
+
 Nueve casos anotados, con el criterio de suficiencia calibrado sobre validación (umbral de
 confianza calibrada 0,80, elegido como el más bajo con precisión de decisión igual o superior
 a 0,93; umbral de puntuación de recuperación desactivado porque no discrimina):
@@ -188,7 +200,15 @@ Sobre los distractores, la recuperación semántica pura coloca un procedimiento
 por encima del correcto de los motores ZJ y Z6 en un caso; con el filtro de motor activo,
 ninguno. Y cuando el filtro se desactiva a propósito, en C09, el validador de aplicabilidad
 degrada el fragmento del otro motor a coincidencia parcial, que el criterio no admite como
-evidencia, y el agente se abstiene igual. Son dos líneas de defensa independientes.
+evidencia, y el agente se abstiene igual.
+
+Sería tentador leer eso como dos líneas de defensa independientes, y la revisión posterior
+mostró que no lo son. El filtro de motor no protege como se creía: con él activo, un
+procedimiento del motor incorrecto llega a examinarse con coincidencia exacta, y lo que lo
+detiene es el vocabulario de la señal. Lo que sí queda comprobado es que el fragmento del otro
+motor no llega a sostener una afirmación; el mecanismo que lo impide es la exigencia de
+coincidencia exacta al construir las afirmaciones, y no la combinación de filtro y verificador
+que este pasaje sugería.
 
 ### El modelo de lenguaje: respeta la decisión y no inventa citas
 
@@ -230,15 +250,29 @@ el patrón que atraviesa el trabajo.
 ### Lo que los resultados sostienen
 
 Sobre datos sintéticos calibrados contra el manual del vehículo, las cuatro subpreguntas
-quedan sostenidas, con matices que conviene no perder. El modelo diagnostica muy por
-encima de la referencia mínima y su confianza, una vez calibrada, significa lo que aparenta
-(PI.1). Toda afirmación admitida es trazable hasta una observación y un fragmento que la
-sostienen, y la distancia entre completitud y soporte es cero (PI.2). La decisión de explicar
-cambia cuando se retira la evidencia, con todo lo demás idéntico (PI.3). Y la evidencia
-parecida pero incorrecta no se acepta, ni por la recuperación con filtro ni, sin él, por el
-validador de aplicabilidad (PI.4). El modelo de lenguaje, que es la pieza en la que la
-literatura sitúa el riesgo, respeta la decisión en todos los casos y no inventa citas en
-ninguno.
+alcanzan estados distintos, y conviene no unificarlos.
+
+**PI.1 queda sostenida.** El modelo diagnostica muy por encima de la referencia mínima y su
+confianza, una vez calibrada, significa lo que aparenta.
+
+**PI.2 queda sostenida caso a caso y no como agregado.** Toda afirmación admitida se rastrea
+hasta una observación y un fragmento que la sostienen, y cada comprobación queda registrada por
+separado. Lo que no existe en ningún artefacto es la magnitud agregada de esa trazabilidad: la
+proporción de afirmaciones con cita y la proporción cuya cita las sostiene no se han calculado,
+de modo que ninguna cifra resume aquí lo que sí puede comprobarse una por una.
+
+**PI.3 queda sostenida.** La decisión de explicar cambia cuando se retira la evidencia, con todo
+lo demás idéntico. Es el contraste más firme del trabajo, y sobrevivió a las tres versiones del
+criterio de suficiencia.
+
+**PI.4 queda bajo diagnóstico.** La condición que debía medir el rechazo de evidencia parecida
+resultó recuperar los mismos fragmentos que la condición de evidencia parcial, de modo que no
+manipulaba la variable que decía manipular. Lo que puede afirmarse es más estrecho: el
+procedimiento del motor incorrecto no llega a sostener una afirmación.
+
+El modelo de lenguaje, que es la pieza en la que los trabajos revisados sitúan el riesgo,
+respeta la decisión en las ejecuciones cuya salida pudo evaluarse y no inventa citas en
+ninguna.
 
 ### Lo que no sostienen
 
