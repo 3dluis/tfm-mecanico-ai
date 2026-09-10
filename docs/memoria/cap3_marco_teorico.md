@@ -112,8 +112,8 @@ vehículo; Lu et al. (2025, REF-075) proponen un modelo híbrido explicable para
 de fallos múltiples en electrónica de automoción. El bosque aleatorio (Breiman, 2001,
 MET-01) es un baseline recurrente por su robustez con pocos datos y clases desbalanceadas;
 las redes recurrentes con unidades GRU (Cho et al., 2014, MET-02) son la alternativa
-secuencial habitual. La literatura no establece cuál de las dos familias
-conviene con ventanas cortas y volúmenes reducidos, de modo que la comparación entre ambas forma
+secuencial habitual. No se identificó, entre los trabajos revisados, evidencia concluyente sobre cuál de las
+dos familias conviene con ventanas cortas y volúmenes reducidos, de modo que la comparación entre ambas forma
 parte del diseño experimental.
 
 Un aspecto que la mayoría de los trabajos revisados no trata, y que para este es central, es
@@ -210,8 +210,8 @@ Tres rasgos separan este trabajo de los anteriores. Primero, el modelo de lengua
 diagnostica ni decide: recibe un diagnóstico, una atribución, una evidencia y una decisión ya
 tomada, y redacta. Segundo, cada afirmación de la salida se ancla simultáneamente en la
 telemetría y en el manual, y un componente determinista comprueba que la cita sostiene lo
-afirmado antes de que el modelo la vea. Tercero, y es lo que ninguno de los trabajos
-revisados mide, el sistema se evalúa retirando la evidencia y sustituyéndola por evidencia
+afirmado antes de que el modelo la vea. Tercero, y es lo que no se encontró medido dentro del corpus
+analizado, el sistema se evalúa retirando la evidencia y sustituyéndola por evidencia
 parecida pero incorrecta, para comprobar que responde a su pertinencia y no a su presencia.
 
 ### El ajuste del modelo pequeño
