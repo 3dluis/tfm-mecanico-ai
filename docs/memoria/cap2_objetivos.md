@@ -103,7 +103,7 @@ que la siguiente consume.
 | **Artefactos** | `experiments/E13_agente_*.json` para cada configuración de redactor |
 | **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **Es descriptiva y no responde a ninguna subpregunta**, y así se declara |
 | **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
-| **Responde a** | PI.1, en su parte de construcción |
+| **Responde a** | PI.2, en su parte de construcción: sin afirmaciones ancladas no hay nada que rastrear |
 
 La separación entre observación, evidencia, inferencia y explicación es deliberada y está en la
 forma del dato, no solo en la redacción: la observación es el valor medido del descriptor, la
@@ -121,7 +121,7 @@ el registro lo delate.
 | **Artefactos** | `experiments/E15_suficiencia.json`, campo `support_checks` |
 | **Métrica** | M4, trazabilidad: corrección de las citas, completitud y tasa de soporte. La distancia entre completitud y soporte mide cuántas afirmaciones llevan una referencia que no las respalda |
 | **Criterio de aceptación** | que ninguna afirmación quede marcada como sostenida por un fragmento que no la sostiene |
-| **Responde a** | PI.1 y PI.4 |
+| **Responde a** | PI.2 y PI.4 |
 
 Que la verificación sea determinista y externa al modelo de lenguaje es lo que impide que una
 inferencia del propio modelo se presente como evidencia documental: el verificador no lee lo que
