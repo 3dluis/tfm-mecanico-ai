@@ -5,8 +5,9 @@
 > estado del arte v2.0 del 18 de agosto de 2026 responde a la pregunta de investigación
 > anterior (memoria evolutiva, multiagente, edge) y **no se reutiliza como texto**; sí se
 > reutilizan su procedimiento de revisión y sus 144 referencias verificadas, previa
-> comprobación de pertinencia. Los apartados marcados `[AMPLIAR]` necesitan lecturas
-> adicionales de la lista maestra antes de cerrarse; se indica cuáles.
+> comprobación de pertinencia. Cada frente cierra declarando qué **no** permite afirmar la
+> evidencia revisada, porque ese límite es lo que justifica el diseño experimental del
+> capítulo 4.
 
 ## Propósito y procedimiento de la revisión
 
@@ -60,14 +61,31 @@ este.
 
 ### Datos: la limitación estructural del área
 
-`[AMPLIAR con REF-049 y las entradas de la línea de datasets OBD-II de la lista maestra]`
 La revisión de Hossain et al. (2024, REF-049) sobre diagnóstico vehicular con inteligencia
 artificial coincide con lo que este trabajo encontró al buscar datos: los conjuntos públicos
-de telemetría OBD-II con fallos etiquetados son escasos, pequeños o de vehículos que no
-documentan su avería con procedimientos de taller accesibles. La consecuencia para el diseño
-experimental es directa y se declara en el capítulo 4: el trabajo ha tenido que generar
-datos sintéticos calibrados contra la documentación del vehículo, y su incorporación de datos
-reales es la primera limitación que enumera.
+de telemetría OBD-II con fallos etiquetados son escasos y, cuando existen, rara vez vienen
+acompañados de la documentación de taller del vehículo del que proceden.
+
+Conviene precisar la afirmación, porque decir que no hay datos sería falso. Los hay. Hojjati
+et al. (2026, REF-048) publican un conjunto de detección de anomalías en motores de vehículos
+reales, y Jun et al. (2025, REF-059) trabajan sobre predicción de códigos de avería en
+vehículos comerciales. Lo que la revisión no encontró es un conjunto que reúna las **tres**
+cosas que este trabajo necesita a la vez: telemetría del puerto de diagnóstico, una etiqueta
+de fallo por sesión, y el manual de taller del mismo vehículo con los procedimientos que
+documentan ese fallo. La tercera es la que falta casi siempre, y sin ella la pregunta de
+investigación no puede evaluarse, porque no habría evidencia documental que recuperar ni
+contra la que verificar.
+
+La consecuencia para el diseño es directa y se declara en el capítulo 4: el trabajo genera
+telemetría sintética cuyas constantes se calibran una a una contra páginas concretas del
+manual del vehículo, de modo que dato y documentación se refieran a la misma configuración
+mecánica. Calibrar contra un manual real no convierte el dato en real, y el trabajo no lo
+presenta así en ningún punto.
+
+**Lo que la evidencia revisada no permite afirmar.** Que no existan conjuntos adecuados: solo
+que en el corpus revisado no se identificó ninguno que cumpliera las tres condiciones. Ni que
+los resultados obtenidos sobre datos sintéticos anticipen el comportamiento sobre telemetría
+real, que es una cuestión abierta y la primera limitación del capítulo 6.
 
 ### Modelos de diagnóstico sobre telemetría
 
@@ -112,6 +130,13 @@ enuncian y que el trabajo asume como regla: la atribución indica de qué depend
 del modelo, no qué le ocurre al vehículo. Ninguna afirmación del sistema atribuye causa a
 partir de una atribución, y el esquema de salida rechaza las que lo hacen.
 
+**Lo que la evidencia revisada no permite afirmar.** Que una atribución fiel al modelo sea una
+explicación útil para quien repara el vehículo. Los estudios analizados evalúan la atribución
+frente al comportamiento del modelo, no frente al juicio de un mecánico ni frente al resultado
+de la reparación. Este trabajo hereda ese límite: mide que la afirmación esté anclada en la
+observación y en el manual, no que la explicación conduzca a un diagnóstico acertado en el
+taller.
+
 ## Modelos de lenguaje y recuperación aumentada sobre documentación técnica
 
 El apartado parte del problema que motiva el trabajo, revisa las aplicaciones a
@@ -132,8 +157,7 @@ sostenga en ellos.
 
 ### Aplicaciones a documentación de vehículos
 
-`[AMPLIAR con las entradas de la línea de agentes y RAG de la lista maestra]` Los trabajos
-más próximos a este combinan modelos de lenguaje con documentación técnica de automoción.
+Los trabajos más próximos a este combinan modelos de lenguaje con documentación técnica de automoción.
 Nam et al. (2025, REF-086) ajustan con adaptadores de rango bajo un sistema de recuperación
 multimodal para responder preguntas sobre el manual de un vehículo concreto; Lin y Miao
 (2025, REF-072) construyen un marco de diagnóstico sobre grafos de conocimiento y modelos de
@@ -143,6 +167,18 @@ usan modelos de lenguaje para interpretar detecciones de fallo; Das, Griffith y 
 (2025, REF-024) y Liu et al. (2025, REF-074) exploran el modelo de lenguaje como detector
 sobre series temporales, con resultados que aconsejan no confiarle la detección.
 
+Estos trabajos comparten una forma de evaluar: miden si la respuesta es correcta. Ninguno de
+los revisados mide si cada afirmación de la respuesta puede seguirse hasta el fragmento
+documental que la sostiene, ni qué ocurre cuando el corpus **no** contiene la evidencia
+necesaria. Esa diferencia de objeto de medida, más que de arquitectura, es la que sitúa a este
+trabajo respecto de ellos.
+
+**Lo que la evidencia revisada no permite afirmar.** Que la recuperación evite las
+afirmaciones sin fundamento. Béchard y Ayala (2024, REF-016) documentan una reducción en
+salidas estructuradas, no una eliminación, y el mecanismo que la produce sigue siendo el
+modelo de lenguaje. Recuperar el documento correcto no obliga al modelo a usarlo, y esa
+distancia entre disponer de la evidencia y apoyarse en ella es justamente lo que este trabajo
+convierte en objeto de medición.
 Tres rasgos separan este trabajo de los anteriores. Primero, el modelo de lenguaje no
 diagnostica ni decide: recibe un diagnóstico, una atribución, una evidencia y una decisión ya
 tomada, y redacta. Segundo, cada afirmación de la salida se ancla simultáneamente en la
@@ -188,8 +224,7 @@ evaluación de este trabajo: la abstención es una salida legítima cuya calidad
 fallo; y no significa nada sin su cobertura, porque un sistema que se abstiene siempre tiene
 abstención perfecta y utilidad nula.
 
-`[AMPLIAR: literatura sobre abstención en modelos de lenguaje y en RAG, si la lista maestra
-la contiene; si no, verificar antes de citar]` En los sistemas con recuperación, la
+En los sistemas con recuperación, la
 abstención se ha tratado sobre todo como una propiedad del modelo de lenguaje: se le pide que
 diga «no lo sé» cuando los documentos no bastan. Este trabajo toma otra vía, y es su decisión
 de diseño más importante. La suficiencia de la evidencia la evalúa un componente
@@ -200,6 +235,15 @@ tomada y solo tiene que respetarla, y eso sí se mide. La razón es la misma que
 separar la decisión de la redacción: si la disposición a abstenerse dependiera del modelo,
 la respuesta a la pregunta de investigación dependería de una propiedad del modelo que no
 puede darse por supuesta.
+
+**Lo que la evidencia revisada no permite afirmar.** Que pedir a un modelo de lenguaje que
+reconozca su ignorancia sea suficiente, ni tampoco que sea inútil: los estudios analizados
+miden esa capacidad sobre preguntas de dominio general y no sobre documentación técnica de un
+vehículo, donde la evidencia pertinente es un procedimiento concreto y no un pasaje
+enciclopédico. La comparación entre una abstención decidida por el modelo y otra decidida
+fuera de él no se encontró resuelta en el corpus revisado, y este trabajo tampoco la resuelve:
+implementa la segunda y mide lo que consigue, sin contrastarla experimentalmente con la
+primera.
 
 ## Vacío y posicionamiento
 
