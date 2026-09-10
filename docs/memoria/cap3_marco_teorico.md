@@ -2,28 +2,43 @@
 
 ## Propósito y procedimiento de la revisión
 
-Conviene advertir de entrada que este capítulo no reutiliza el texto de la revisión de agosto
-de 2026. Aquella respondía a una formulación anterior de la pregunta de investigación, centrada
-en memoria evolutiva y arquitecturas multiagente, y su texto habría arrastrado un encuadre que
-ya no corresponde. Sí se reutilizan su procedimiento de revisión y sus referencias verificadas,
-previa comprobación de pertinencia una a una.
+La construcción del marco teórico comenzó con una primera revisión realizada entre julio y
+agosto de 2026, cuando la pregunta de investigación todavía contemplaba elementos que
+posteriormente fueron reformulados. Aquel trabajo permitió establecer una primera
+caracterización del estado del conocimiento, definir el procedimiento de búsqueda y reunir un
+conjunto inicial de referencias verificadas. La evolución posterior de la pregunta hizo
+necesario revisar ese material y reevaluar su pertinencia respecto del problema finalmente
+abordado. Por esa razón, las referencias procedentes de aquella revisión se conservaron
+únicamente cuando mantenían una relación justificable con la formulación actual y su fuente
+primaria podía verificarse.
 
-El conocimiento previo que la pregunta de investigación toca se reparte en cuatro frentes: el diagnóstico de vehículos a partir de la telemetría OBD-II, la
-explicabilidad de los modelos que lo hacen, la recuperación aumentada de documentación
-técnica con modelos de lenguaje, y la abstención ante evidencia insuficiente. Su finalidad
-no es enumerar trabajos sino localizar el vacío que la pregunta aborda y justificar, frente
-a lo que otros han hecho, las decisiones de diseño del capítulo 4.
+A partir de esta depuración, el marco teórico se organiza en cuatro frentes directamente
+relacionados con la pregunta de investigación: el diagnóstico vehicular mediante telemetría
+OBD-II, la explicabilidad de los modelos utilizados para analizarla, la recuperación de
+información sobre documentación técnica mediante modelos de lenguaje y la abstención ante
+evidencia insuficiente. Estos cuatro frentes no se examinan como líneas independientes, sino por
+la función que desempeñan dentro del problema estudiado: identificar y caracterizar patrones
+observados en la telemetría, disponer de información que permita interpretar el diagnóstico,
+contrastar las hipótesis formuladas con documentación aplicable y determinar cuándo la evidencia
+disponible resulta insuficiente para validarlas.
 
-La revisión siguió un procedimiento inspirado en PRISMA, en cuatro iteraciones entre julio y
-agosto de 2026: unas 170 consultas, unos 1 350 registros visualizados, unos 250 candidatos
-evaluados en fuente primaria y 144 referencias consolidadas, de las que 110 tienen su
-identificador persistente comprobado programáticamente en Crossref o DataCite. Los
-candidatos no verificables se descartaron en lugar de citarse. El barrido se hizo con
-buscadores web y verificación en la página del editor; el acceso automatizado a dos de las
-bases principales estuvo parcialmente bloqueado, de modo que el flujo PRISMA formal, con
-recuentos por base, queda pendiente de acceso institucional. Las referencias de método que
-este capítulo y el siguiente necesitan y que el barrido de dominio no incluía se verificaron
-el 2 de septiembre de 2026 por la misma vía; su registro está en el repositorio.
+La revisión se desarrolló mediante un procedimiento inspirado en PRISMA y organizado en cuatro
+iteraciones realizadas entre julio y agosto de 2026. En conjunto se efectuaron unas 170
+consultas, se examinaron unos 1 350 registros y se evaluaron alrededor de 250 trabajos
+candidatos mediante sus fuentes primarias. El proceso dio lugar a 144 referencias consolidadas,
+de las cuales 110 cuentan con un identificador persistente comprobado mediante Crossref o
+DataCite. Cuando una referencia no pudo verificarse de forma suficiente, se descartó en lugar de
+utilizarla como soporte de una afirmación.
+
+La búsqueda combinó buscadores académicos y web con la comprobación posterior en las páginas de
+los editores y otras fuentes primarias. El acceso automatizado a dos de las principales bases
+consultadas estuvo parcialmente restringido, por lo que no fue posible completar para ellas los
+recuentos desagregados necesarios para presentar el proceso como una revisión sistemática PRISMA
+completa. En consecuencia, el procedimiento se describe como inspirado en PRISMA, conservando
+sus principios de trazabilidad, selección y verificación sin atribuirle un alcance que el
+proceso realizado no permite sostener. Las referencias metodológicas necesarias para completar
+el diseño del TFM y que no formaban parte del barrido inicial se verificaron después mediante el
+mismo criterio de comprobación en fuente primaria.
 
 ## Diagnóstico vehicular a partir de OBD-II
 
@@ -97,9 +112,9 @@ vehículo; Lu et al. (2025, REF-075) proponen un modelo híbrido explicable para
 de fallos múltiples en electrónica de automoción. El bosque aleatorio (Breiman, 2001,
 MET-01) es un baseline recurrente por su robustez con pocos datos y clases desbalanceadas;
 las redes recurrentes con unidades GRU (Cho et al., 2014, MET-02) son la alternativa
-secuencial habitual. Este trabajo compara ambas y, sobre su volumen de datos, el modelo
-tabular no fue superado por el secuencial, un resultado que el capítulo 5 detalla y que los
-resultados publicados sobre series cortas hacen esperable.
+secuencial habitual. La literatura no establece cuál de las dos familias
+conviene con ventanas cortas y volúmenes reducidos, de modo que la comparación entre ambas forma
+parte del diseño experimental.
 
 Un aspecto que la mayoría de los trabajos revisados no trata, y que para este es central, es
 la **calibración** de la confianza del modelo. Guo et al. (2017, MET-04) mostraron que los
@@ -217,12 +232,10 @@ Los embeddings de frases (Reimers y Gurevych, 2019, MET-11) son la base de la re
 semántica; la fusión por rango recíproco (Cormack, Clarke y Buettcher, 2009, MET-12) permite
 combinarla con la búsqueda léxica sin ajustar pesos. Sobre documentación técnica, donde los
 códigos de avería, los nombres de sensores y los identificadores de procedimiento son
-términos exactos, la búsqueda léxica no es un complemento menor. Este trabajo midió que, sobre
-su corpus, la recuperación semántica pura no encuentra el procedimiento correcto entre los
-diez primeros resultados en ningún caso, y que guiar la consulta con los códigos de avería
-que el manual asocia al diagnóstico lo encuentra siempre; el capítulo 5 lo detalla. Midió
-también que un modelo de embeddings monolingüe en inglés se hunde con consultas en español
-sobre un manual en inglés, lo que justifica el modelo multilingüe.
+términos exactos, la búsqueda léxica no es un complemento menor. Esa asimetría entre proximidad
+semántica y coincidencia exacta motiva dos decisiones que el capítulo 4 desarrolla y el 5
+evalúa: guiar la consulta con los códigos de avería que el manual asocia al diagnóstico, y
+emplear un modelo de embeddings multilingüe cuando la consulta y el manual no comparten idioma.
 
 ## Abstención ante evidencia insuficiente
 
@@ -262,23 +275,30 @@ primera.
 De la revisión se desprende un vacío con tres caras. Los trabajos de diagnóstico sobre OBD-II
 producen etiquetas y, a lo sumo, atribuciones para el analista; no producen evidencia que
 una explicación pueda citar. Los trabajos de modelos de lenguaje con documentación de
-vehículos anclan la generación en documentos, pero ninguno de los revisados verifica que cada
-afirmación se sostenga en la evidencia citada ni mide qué ocurre cuando la evidencia
-disponible es parecida pero incorrecta. Y la abstención, cuando aparece, es una propiedad
+vehículos anclan la generación en documentos, pero no se identificó, entre los trabajos
+revisados, ninguno que verifique que cada afirmación se sostiene en la evidencia citada ni que
+mida qué ocurre cuando la evidencia disponible es parecida pero incorrecta. Y la abstención, cuando aparece, es una propiedad
 del modelo y no de la evidencia.
 
 Conviene acotar el alcance de esta afirmación. La novedad sobre la cuarta subpregunta, el
 rechazo de evidencia engañosa, es más estrecha de lo que parecía al inicio: existen trabajos
-sobre robustez de la recuperación a documentos irrelevantes en dominios generales. Lo que no
-se ha encontrado es su medición sobre documentación técnica de vehículo con evidencia
-incorrecta *del mismo fabricante y de otro motor*, que es la forma que el distractor toma
-aquí. El registro de limitaciones lo recoge como L-10.
+sobre robustez de la recuperación a documentos irrelevantes en dominios generales. Lo que no se encontró, dentro del corpus
+analizado, es su medición sobre documentación técnica de vehículo con evidencia incorrecta *del
+mismo fabricante y de otro motor*, que es la forma que el distractor toma aquí. El registro de limitaciones lo recoge como L-10.
 
-El trabajo se posiciona, por tanto, en la intersección de los cuatro frentes: un modelo de
-diagnóstico calibrado cuya atribución se convierte en evidencia citable; una recuperación
-sobre la documentación del vehículo con procedencia completa y aplicabilidad verificada; un
-verificador determinista que construye las afirmaciones, comprueba su soporte y decide; y un
-modelo de lenguaje pequeño y local que redacta lo decidido y cuya única obligación medible es
-respetarlo y no inventar citas. La contribución no es ninguna de esas piezas por separado,
-sino la evidencia experimental sobre cómo se comporta su composición cuando la evidencia se
-retira o se sustituye.
+Los trabajos revisados permiten justificar los componentes necesarios para abordar cada parte
+del problema, pero no muestran, dentro del alcance de la revisión realizada, una evaluación
+integrada del ciclo completo planteado en este TFM: identificar un patrón de fallo no
+representado en el conocimiento disponible, interpretarlo a partir del contexto longitudinal de
+la telemetría, formular una hipótesis diagnóstica, contrastarla con evidencia aplicable,
+rechazarla o abstenerse cuando esa evidencia resulte insuficiente y conservar como conocimiento
+reutilizable únicamente aquello que haya superado el proceso de validación.
+
+El vacío identificado no reside, por tanto, en la ausencia de modelos de diagnóstico, técnicas
+de explicabilidad, sistemas de recuperación o mecanismos de abstención considerados por
+separado. Todos ellos cuentan con antecedentes. La cuestión que permanece abierta, dentro de los
+trabajos analizados, es cómo articularlos en un proceso diagnóstico en el que una hipótesis no
+adquiera la condición de conocimiento por haber sido generada de forma plausible, sino por haber
+sido contrastada con evidencia suficiente. Esta relación entre observación, hipótesis, evidencia,
+validación y reutilización delimita el problema que el diseño experimental del capítulo siguiente
+intenta estudiar.
