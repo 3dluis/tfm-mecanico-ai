@@ -9,13 +9,35 @@ rastreando cada afirmación hasta su evidencia y abstenerse cuando la evidencia 
 respuesta que este trabajo puede dar hoy está acotada a la procedencia de sus datos y tiene
 dos partes.
 
-La primera es que **sí puede, cuando el agente está construido para que la decisión no
-dependa del modelo de lenguaje**. La separación entre quien diagnostica, quien decide y quien
-redacta no es un detalle de ingeniería: es lo que hace medible la pregunta. Con esa
-separación, sobre el mismo caso y con todo idéntico salvo el índice, el agente explica cuando
-la evidencia está, se abstiene cuando se retira, y se abstiene también cuando lo que queda es
-parecido pero no sostiene lo afirmado. El modelo de lenguaje respeta la decisión en todos los
-casos y no produce una sola cita inexistente, porque una barrera fuera de él lo impide.
+La primera es que **sí puede, con un alcance que conviene delimitar antes de enunciarlo**. La
+separación entre quien diagnostica, quien decide y quien redacta no es un detalle de
+ingeniería: es lo que hace medible la pregunta. Con esa separación, sobre la misma ventana y
+con todo idéntico salvo el índice documental, el agente explica cuando la evidencia está y se
+abstiene cuando se retira. El modelo de lenguaje respeta la decisión en las siete ejecuciones
+cuya salida pudo evaluarse, de nueve, y no produce una sola cita inexistente, porque una
+barrera fuera de él lo impide.
+
+Tres precisiones acompañan a esa afirmación, y sin ellas resultaría más fuerte de lo que la
+evidencia permite.
+
+La primera es de **unidad**. Las diecisiete decisiones evaluadas proceden de **cinco ventanas de
+telemetría** sometidas a distintas variantes del corpus. No son diecisiete observaciones
+independientes, y ninguna cifra de este trabajo debería leerse como si lo fueran.
+
+La segunda es de **comparación**. Una política que se abstuviera siempre, sin mirar nada,
+acertaría doce de esas diecisiete decisiones, y en las doce condiciones donde la evidencia no
+está completa acertaría las doce: exactamente las mismas que el sistema. Toda la ventaja del
+agente sobre esa política trivial está en los casos donde la evidencia sí está y hay que
+explicar. Dicho de otro modo, abstenerse bien no distingue a este sistema de uno que no mirara
+nada; lo que lo distingue es abstenerse bien **y además** explicar cuando debe, que es la mitad
+donde falla dos de cada cinco veces por confianza insuficiente del modelo especializado.
+
+La tercera es de **procedencia del resultado**. Las cifras proceden de una ejecución que la
+metodología etiqueta como cota superior asistida por oráculo, porque la selección de ventanas
+exige que el modelo especializado haya acertado. Y el criterio de suficiencia se corrigió dos
+veces sobre los mismos casos puntuados, después de observar sus fallos; las tres versiones y
+sus resultados se conservan, y esa secuencia forma parte del resultado tanto como su cifra
+final.
 
 La segunda es que **la respuesta vale para datos sintéticos calibrados contra la
 documentación del vehículo y no está validada en un vehículo real**. La pregunta no exige
