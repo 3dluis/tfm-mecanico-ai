@@ -23,14 +23,13 @@ parecida de la que de verdad sostiene una afirmación. Y se escribe «datos OBD-
 adjetivo, como la propia pregunta desde su enmienda del 3 de septiembre de 2026: la procedencia
 de cada conjunto se declara en el capítulo 4 y su validez externa en el capítulo 6.
 
-El enunciado difiere del aprobado en julio en dos puntos: aquel llevaba dos verbos, donde la
-plantilla indica uno, y cerraba con una cláusula sobre cómputo embarcado que ya no describe el
-trabajo ejecutado. Ambos ajustes están pendientes de consulta con la dirección
+El enunciado difiere del aprobado en julio en dos puntos: aquel llevaba dos verbos y cerraba
+con una cláusula sobre cómputo embarcado que ya no describe el trabajo ejecutado. Ambos ajustes están pendientes de consulta con la dirección
 (`preguntas-abiertas-al-director.md`, P-01).
 
 ## Objetivos específicos
 
-Son cinco, dentro del rango que la plantilla recomienda. El primero delimita el vacío que la
+Son cinco. El primero delimita el vacío que la
 pregunta aborda; el segundo y el tercero construyen el entorno experimental y el modelo de
 diagnóstico; el cuarto implementa el agente que recupera, verifica y decide; y el quinto lo
 evalúa bajo las cuatro condiciones de evidencia y documenta el trabajo. La evaluación no está
