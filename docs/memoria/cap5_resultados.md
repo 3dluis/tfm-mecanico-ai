@@ -16,9 +16,25 @@ Todas las cifras de este capítulo proceden de la partición de **validación** 
 dato es sintética, y su validez externa se discute en el capítulo 6. Cada tabla cita el registro
 del que sale.
 
-Dos magnitudes discrepan entre el informe de fase y su registro, y **no se han resuelto
-eligiendo una de las dos**: quedan señaladas donde aparecen, porque la discrepancia es en sí un
-resultado sobre la trazabilidad del trabajo.
+**Varias magnitudes de este capítulo discrepan de los registros que citan**, y no se han
+resuelto eligiendo una de las dos cifras. La revisión del 10 de septiembre de 2026 localizó
+cinco: dos entre informes de fase y registros del modelo, señaladas donde aparecen; la tabla de
+recuperación, cuyas celdas no se reproducen desde el registro citado; la columna de latencia del
+agente, que ninguna estadística del repositorio produce; y el punto de operación de la
+confianza, publicado aquí con un valor y registrado con otro tras una enmienda posterior. La
+matriz de decisiones, además, recoge un subconjunto de los casos del registro y una de sus
+celdas procede de una versión anterior del verificador.
+
+Ninguna se corrige en esta versión, porque el capítulo está congelado hasta la reejecución
+canónica y elegir ahora una cifra sería decidir sin la evidencia que ha de decidirlo. La
+discrepancia se declara porque es, en sí misma, un resultado sobre la trazabilidad del trabajo:
+**lo que un capítulo publica y lo que su registro contiene pueden separarse sin que nada avise.**
+
+Conviene además una advertencia sobre la comparación entre estrategias de recuperación que sigue.
+La estrategia que gana acota su búsqueda con los códigos de avería que documentan la condición
+**anotada**, información que el sistema no tiene antes de diagnosticar. Su ventaja mide, por
+tanto, una cota superior asistida por esa anotación y no una capacidad de recuperación
+comparable con las demás.
 
 ## Análisis descriptivo de la muestra
 
