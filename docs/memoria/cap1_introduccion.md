@@ -33,7 +33,7 @@ La segunda decisión consiste en separar también la suficiencia de evidencia de
 
 La tercera decisión limita el papel del modelo de lenguaje a aquello para lo que resulta más adecuado: redactar una explicación a partir de una decisión ya tomada y de afirmaciones cuya evidencia ha sido previamente delimitada. Las citas que acompañan la respuesta también quedan sujetas a una barrera externa que impide referenciar fragmentos que no hayan sido entregados al modelo.
 
-El trabajo se desarrolla sobre un vehículo concreto, un Mazda 3 de la generación BK de 2007, seleccionado entre tres candidatos por la disponibilidad y especificidad de su documentación de taller. La documentación aplicable al vehículo constituye el corpus del sistema de recuperación, mientras que el mismo vehículo define el contexto de las señales OBD-II utilizadas en el experimento. Esta correspondencia es importante: un documento técnicamente correcto para otro motor puede parecer pertinente y, sin embargo, no constituir evidencia válida para el caso analizado.
+Todo ello se apoya en un vehículo concreto, un Mazda 3 de la generación BK de 2007, seleccionado entre tres candidatos por la disponibilidad y especificidad de su documentación de taller. La documentación aplicable al vehículo constituye el corpus del sistema de recuperación, mientras que el mismo vehículo define el contexto de las señales OBD-II utilizadas en el experimento. Esta correspondencia es importante: un documento técnicamente correcto para otro motor puede parecer pertinente y, sin embargo, no constituir evidencia válida para el caso analizado.
 
 ## Presentación del proyecto y sus contenidos
 
