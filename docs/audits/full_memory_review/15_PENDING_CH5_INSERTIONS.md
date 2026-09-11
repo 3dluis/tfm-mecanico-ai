@@ -120,3 +120,59 @@ de lenguaje cubre esa clase. Nada de eso figura en las veinte fases del plan.
 | `PI_ALIGNMENT` | **BLOCKED** — `UNREPRESENTED_PATTERN_VALIDATION` |
 
 `SYNTHETIC_DATA_STATUS = EXPERIMENTAL_BASE` · `REAL_OBD_DATA_STATUS = EXTERNAL_VALIDATION_PENDING`
+
+---
+
+# Retirado del capítulo 4 en la revisión de las fases del agente
+
+Contenido que salió de las fichas de fase y de las dos tablas finales por ser resultado
+observado o estado de ejecución, no diseño metodológico. **Ningún valor se ha modificado.**
+Su destino es el capítulo 5 —el relato de qué ocurrió— y el apartado de amenazas a la validez.
+
+## Del criterio de suficiencia · a resultados
+
+> La palabra «calibrado» solo puede aplicarse a **uno** de los seis umbrales: el de confianza.
+> El que de hecho decide la mayoría de las abstenciones es el de cobertura de afirmaciones,
+> fijado en 0,8 **sin barrido**, y dispara trece de las catorce abstenciones registradas, ocho
+> de ellas como motivo único. El registro del barrido declara además que **no fue un
+> pre-registro ciego**: el criterio se fijó tras ver un resultado ya conocido, y el punto de
+> operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y
+> publicada junto al resultado original.
+
+Es una de las autocríticas más valiosas del trabajo y no puede perderse. En el capítulo 4 hacía
+que el lector pasara de entender el diseño a auditar incidentes. En el capítulo 5, junto a los
+resultados de abstención, es exactamente lo que corresponde declarar.
+
+## Del tamaño de la evidencia · a resultados
+
+> | Métrica | Filas ejecutadas | Observaciones independientes |
+> |---|---|---|
+> | M2, recuperación | 6 casos anotados | **5 ventanas** |
+> | M3, explicación | 9 ejecuciones | **5 ventanas** |
+> | M4 y M5 | 17 filas | **5 ventanas** |
+>
+> Las diecisiete filas proceden de cinco ventanas evaluadas bajo varias variantes de corpus.
+
+El **principio** —la unidad de independencia es la ventana— se queda en el capítulo 4, donde es
+diseño. Los **recuentos** de ejecuciones son resultado y van al 5.
+
+## Del estado de las métricas · a resultados y amenazas a la validez
+
+> M2 calculada sobre datos sintéticos, resultado no definitivo por reejecución canónica · M3
+> descriptiva, no valida ninguna subpregunta · M4 implementada, sin magnitudes agregadas
+> calculadas en ningún artefacto · M5 calculada, misma dependencia.
+>
+> Dos razones, no una: la recuperación que las alimentó está bajo reejecución canónica, y la
+> condición con distractor está bajo diagnóstico porque su manipulación no se ha comprobado. Lo
+> que está en revisión es si la recuperación aislaba correctamente el espacio vectorial en que
+> buscaba.
+
+El capítulo 4 conserva ahora qué mide cada métrica y cómo se interpreta. El estado de ejecución
+es resultado.
+
+## Qué se conserva en el capítulo 4
+
+El principio de independencia y su tabla de unidades de análisis; la definición de cada métrica
+y su dimensión; el criterio de suficiencia como conjunción de condiciones sobre confianza,
+aplicabilidad, soporte y cobertura, con los umbrales determinados sobre validación; y la
+interpretación conjunta de M5 con la cobertura.

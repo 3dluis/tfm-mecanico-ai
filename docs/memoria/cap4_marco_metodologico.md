@@ -264,97 +264,97 @@ Esta fase proporciona la información documental que posteriormente será evalua
 
 La interpretación de esta fase requiere considerar una característica del diseño experimental. La consulta utiliza información diagnóstica para restringir la recuperación y, por tanto, la presencia o ausencia de determinados documentos está parcialmente controlada por la construcción de cada condición. En consecuencia, esta fase no pretende demostrar por sí sola la capacidad del recuperador para discriminar entre documentación correcta e incorrecta. Su función experimental es comprobar que la manipulación realizada sobre el corpus se propaga hasta la información disponible para las etapas posteriores de verificación. La pertinencia de los fragmentos recuperados, el soporte que proporcionan a las afirmaciones diagnósticas y su suficiencia se evalúan posteriormente mediante criterios independientes.
 
-#### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
+#### Fase 4.2 · Construcción de la explicación (E13, E14)
 
-Sigue el mismo esquema, en la Tabla 4.10.
+Esta fase transforma la información producida por los componentes anteriores en una explicación estructurada. Su propósito no es determinar si una hipótesis es válida, sino construir una representación trazable que conserve la relación entre las observaciones de la telemetría, la inferencia diagnóstica y la información documental recuperada.
 
-**Tabla 4.10. Instrumentación de la fase de construcción de la explicación.**
+**Tabla 4.10. Diseño de la fase de construcción de la explicación.**
 
-| | |
+| Elemento | Descripción |
 |---|---|
-| **Entrada** | atribución de descriptores del modelo especializado, su confianza calibrada y los fragmentos de la fase anterior |
-| **Proceso** | construcción de una afirmación por descriptor observado, anclada a la vez en la observación y en el fragmento documental que la sostiene; el modelo de lenguaje **redacta**, no decide: recibe el paquete de evidencia ya montado y el veredicto ya emitido |
-| **Salida** | conjunto de afirmaciones, cada una con su observación de origen y sus citas documentales |
-| **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **descriptiva, sin responder a ninguna subpregunta** |
-| **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
-| **Propósito experimental** | Producir afirmaciones ancladas en la evidencia disponible. La fase es condición necesaria de la trazabilidad posterior —sin afirmaciones ancladas no hay nada que rastrear—, pero no la mide por sí misma. |
+| **Entrada** | Atribuciones obtenidas sobre la ventana de telemetría, estimación de confianza del modelo especializado y fragmentos documentales recuperados. |
+| **Procedimiento** | Construcción de afirmaciones diagnósticas vinculadas con las observaciones que las originan y con los fragmentos documentales utilizados como soporte. La construcción es determinista y no interviene en ella el modelo de lenguaje. |
+| **Salida** | Conjunto estructurado de afirmaciones con sus observaciones de origen y referencias documentales asociadas. |
+| **Evaluación** | La métrica M3 comprueba la adecuación de la salida al esquema definido y la proporción de respuestas estructuralmente válidas. |
+| **Criterio metodológico** | Toda afirmación debe conservar la referencia a la observación y a los fragmentos documentales utilizados en su construcción. |
 
 *Fuente: elaboración propia.*
 
-La separación entre observación, evidencia, inferencia y explicación es deliberada y está en la forma del dato, no solo en la redacción: la observación es el valor medido del descriptor, la evidencia es el fragmento del manual, la inferencia es la salida del modelo especializado, y la explicación es el texto que las une. Ninguna de las cuatro puede ocupar el lugar de otra sin que el registro lo delate.
+El diseño distingue cuatro elementos que cumplen funciones diferentes: la **observación** corresponde al valor derivado de la telemetría; la **inferencia** procede del modelo especializado; la **información documental** se obtiene del corpus técnico; y la **explicación** expresa la relación establecida entre estos elementos. Mantener esta separación permite evaluar posteriormente si una afirmación está realmente respaldada por la documentación citada.
 
-#### Fase 4.3 · Verificación del soporte (E15)
+#### Fase 4.3 · Verificación del soporte documental (E15)
 
-La Tabla 4.11 la instrumenta.
+La fase de verificación determina si los fragmentos documentales asociados a cada afirmación resultan aplicables al caso y proporcionan soporte para lo que se afirma. Esta comprobación se realiza mediante reglas independientes del modelo de lenguaje, con el propósito de evitar que la propia generación textual actúe como criterio de validación.
 
-**Tabla 4.11. Instrumentación de la fase de verificación del soporte.**
+**Tabla 4.11. Diseño de la fase de verificación del soporte documental.**
 
-| | |
+| Elemento | Descripción |
 |---|---|
-| **Entrada** | las afirmaciones de la fase anterior y los fragmentos citados |
-| **Proceso** | comprobación determinista, **fuera del modelo de lenguaje**, de que cada fragmento citado menciona la señal observada, constituye contenido diagnóstico, porta el código de avería que documenta la condición y desempeña el papel documental de procedimiento |
-| **Salida** | una comprobación por pareja de afirmación y fragmento, con su resultado y el motivo |
-| **Métrica** | M4, trazabilidad: corrección de las citas, completitud y tasa de soporte. La distancia entre completitud y soporte mide cuántas afirmaciones llevan una referencia que no las respalda |
-| **Criterio de aceptación** | que ninguna afirmación quede marcada como sostenida por un fragmento que no la sostiene |
+| **Entrada** | Afirmaciones estructuradas producidas en la fase anterior y fragmentos documentales asociados a cada una. |
+| **Procedimiento** | Comprobación determinista de la aplicabilidad y del soporte documental mediante atributos como la señal considerada, el contenido diagnóstico, el código de avería aplicable y la función desempeñada por el fragmento dentro del procedimiento técnico. |
+| **Salida** | Resultado de verificación para cada relación entre afirmación y fragmento, acompañado del motivo correspondiente. |
+| **Evaluación** | M4 caracteriza la trazabilidad mediante la corrección de las citas, la completitud de las referencias y la proporción de afirmaciones que disponen de soporte documental suficiente. |
+| **Criterio metodológico** | Una afirmación no puede considerarse respaldada cuando el fragmento citado no resulta aplicable o no sostiene el contenido que se le atribuye. |
 
 *Fuente: elaboración propia.*
 
-Que la verificación sea determinista y externa al modelo de lenguaje es lo que impide que una inferencia del propio modelo se presente como evidencia documental: el verificador no lee lo que el modelo escribió, sino lo que el manual dice.
+La existencia de una cita no se considera equivalente a disponer de evidencia. Un fragmento puede haber sido recuperado y estar correctamente identificado y, aun así, no ser aplicable al vehículo, al motor o a la afirmación concreta. Por esta razón, la verificación del soporte se mantiene separada tanto de la recuperación documental como de la generación de la explicación.
 
-#### Fase 4.4 · Decisión de explicar o abstenerse (dentro de E15; E16 pendiente)
+#### Fase 4.4 · Decisión entre explicar y abstenerse (E15, E16)
 
-Cierra la secuencia, y la Tabla 4.12 la detalla.
+La última etapa determina si la evidencia disponible resulta suficiente para presentar la hipótesis diagnóstica como respaldada o si el sistema debe abstenerse. La decisión se adopta mediante un criterio explícito e independiente del modelo de lenguaje.
 
-**Tabla 4.12. Instrumentación de la fase de decisión entre explicar y abstenerse.**
+**Tabla 4.12. Diseño de la fase de decisión entre explicar y abstenerse.**
 
-| | |
+| Elemento | Descripción |
 |---|---|
-| **Entrada** | el veredicto de soporte, la confianza calibrada del modelo especializado y el recuento de evidencia aplicable |
-| **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados sobre validación. La palabra «calibrado» solo puede aplicarse a **uno** de los seis: el de confianza. El que de hecho decide la mayoría de las abstenciones es el de cobertura de afirmaciones, fijado en 0,8 **sin barrido**, y dispara trece de las catorce abstenciones registradas, ocho de ellas como motivo único. El registro del barrido declara además que **no fue un pre-registro ciego**: el criterio se fijó tras ver un resultado ya conocido, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
-| **Salida** | decisión **EXPLICA** o **ABSTIENE**, con los motivos concretos de la abstención cuando la haya |
-| **Métrica** | M5, abstención: abstención correcta, abstención injustificada y explicación sin fundamento, **siempre con su cobertura** |
-| **Criterio de aceptación** | que la decisión cambie al manipular la evidencia disponible manteniendo constantes los datos, el modelo, la atribución y la confianza |
+| **Entrada** | Resultado de la verificación del soporte, estimación de confianza del modelo especializado y medidas asociadas a la cantidad y cobertura de la evidencia aplicable. |
+| **Procedimiento** | Aplicación de un criterio de suficiencia compuesto por condiciones explícitas sobre confianza, aplicabilidad, soporte y cobertura de las afirmaciones. Los umbrales utilizados se determinan sobre el conjunto de validación y se mantienen separados de la evaluación final. |
+| **Salida** | Decisión `EXPLICA` o `ABSTIENE`, acompañada de los motivos que justifican la abstención cuando corresponda. |
+| **Evaluación** | M5 analiza la frecuencia y adecuación de las decisiones de explicación y abstención, considerando también la cobertura alcanzada por el sistema. |
+| **Criterio metodológico** | El sistema solo puede presentar una hipótesis como suficientemente respaldada cuando se satisfacen simultáneamente los requisitos definidos para la evidencia; en caso contrario debe abstenerse. |
 
 *Fuente: elaboración propia.*
 
-Un matiz que la métrica sola no revela: de las catorce abstenciones registradas, **trece se disparan por cobertura de afirmaciones insuficiente** y ocho tienen ese motivo como único. La decisión de abstenerse, en la práctica, la toma casi siempre ese umbral y no el conjunto de las cuatro condiciones del criterio. Atribuir la abstención al criterio completo sería atribuirle más de lo que hace.
+La abstención se considera una decisión válida cuando la evidencia disponible no permite sostener la hipótesis con los criterios definidos. Su evaluación, sin embargo, no puede limitarse a contabilizar abstenciones correctas: un sistema que se abstuviera de forma sistemática reduciría las explicaciones sin fundamento a costa de perder utilidad diagnóstica. Por este motivo, M5 se interpreta conjuntamente con la cobertura del sistema.
 
-La abstención **no se cuenta como fallo** cuando la evidencia es insuficiente: es la respuesta correcta a esa situación y una capacidad evaluable por derecho propio. Por eso M5 exige reportarla junto a su cobertura. Un sistema que se abstuviera siempre obtendría abstención perfecta y utilidad nula, y ese desenlace figura desde el diseño entre los que refutarían el trabajo.
+#### Redacción de la explicación final
 
-#### Tamaño de la evidencia que sostiene OE4
+Adoptada la decisión, el modelo de lenguaje redacta la respuesta a partir de las afirmaciones verificadas y del veredicto ya emitido. Su intervención se limita a la expresión textual: no formula la hipótesis diagnóstica, que procede del modelo especializado, ni determina la suficiencia de la evidencia, que resuelve el criterio de la fase anterior. Una barrera externa rechaza cualquier identificador documental que no corresponda a un fragmento entregado, de modo que la respuesta no puede citar lo que no ha recibido. Lo que sí se mide sobre esta etapa es si respeta el veredicto y si sus citas existen.
 
-Ninguna de las magnitudes anteriores significa nada sin su denominador, y el denominador no es el número de filas ejecutadas. La Tabla 4.13 los separa.
+La secuencia completa queda, por tanto, así: telemetría, inferencia diagnóstica, recuperación de información documental, construcción de afirmaciones, verificación del soporte, evaluación de la suficiencia, decisión y redacción final.
 
-**Tabla 4.13. Unidades de observación independientes por métrica.**
+#### Unidades de análisis e independencia experimental
 
-| Métrica | Filas ejecutadas | Observaciones independientes |
+Las distintas variantes documentales aplicadas sobre una misma ventana de telemetría no constituyen observaciones independientes. Comparten los mismos datos OBD-II, la misma predicción y la misma atribución, y difieren únicamente en la información documental disponible. Por esta razón, la unidad de independencia se establece en la ventana de telemetría y no en el número total de ejecuciones.
+
+**Tabla 4.13. Unidades de análisis utilizadas en las métricas asociadas a OE4.**
+
+| Métrica | Unidad de análisis |
+|---|---|
+| M2. Recuperación | Caso documental aplicado a una ventana de telemetría |
+| M3. Explicación | Ventana de telemetría, considerando sus variantes documentales como medidas relacionadas |
+| M4. Trazabilidad | Ventana de telemetría y relaciones afirmación-fragmento asociadas |
+| M5. Abstención | Ventana de telemetría evaluada bajo las distintas condiciones documentales |
+
+*Fuente: elaboración propia.*
+
+Las ejecuciones correspondientes a distintas variantes del corpus sobre una misma ventana se consideran medidas relacionadas. No se interpretan como observaciones independientes ni se utilizan para incrementar artificialmente el tamaño efectivo de la muestra.
+
+#### Métricas asociadas a la generación y validación de hipótesis
+
+**Tabla 4.14. Métricas utilizadas en la evaluación de la generación y validación de hipótesis.**
+
+| Métrica | Dimensión evaluada | Interpretación |
 |---|---|---|
-| M2, recuperación | 6 casos anotados | **5 ventanas**: dos de esos casos son la misma ventana con y sin evidencia |
-| M3, explicación | 9 ejecuciones | **5 ventanas**: una de ellas se repite cinco veces bajo distintas variantes de corpus |
-| M4 y M5, trazabilidad y abstención | 17 filas | **5 ventanas** |
+| M2 | Recuperación documental | Capacidad para recuperar y ordenar información documental relevante bajo cada condición experimental |
+| M3 | Validez estructural de la explicación | Grado en que la salida respeta el esquema y conserva los vínculos requeridos |
+| M4 | Trazabilidad y soporte | Correspondencia entre las afirmaciones formuladas y los fragmentos documentales que las respaldan |
+| M5 | Explicación y abstención | Adecuación de la decisión de explicar o abstenerse según la suficiencia de la evidencia |
 
 *Fuente: elaboración propia.*
 
-Las diecisiete filas del experimento de suficiencia proceden de cinco ventanas de telemetría evaluadas bajo varias variantes de corpus. Tratarlas como diecisiete observaciones independientes sería pseudorreplicación: la unidad de independencia es la ventana, y las variantes de una misma ventana comparten datos, atribución y confianza.
-
-#### Estado de las métricas de OE4
-
-La distinción entre definir, implementar, medir y validar, que recoge la Tabla 4.14, evita que una métrica se dé por obtenida porque esté descrita.
-
-**Tabla 4.14. Estado de definición, implementación y cálculo de las métricas de OE4.**
-
-| Métrica | Definida | Implementada | Calculada | Resultado definitivo |
-|---|---|---|---|---|
-| M2, recuperación | sí | sí | sí, sobre datos sintéticos | **no**: la ejecución vigente está bajo reejecución canónica |
-| M3, explicación | sí | sí | sí, sobre datos sintéticos | descriptiva; no valida ninguna subpregunta |
-| M4, trazabilidad | sí | sí | **no**: el registro guarda las comprobaciones de soporte en crudo, pero las magnitudes agregadas —corrección de citas, completitud, tasa de soporte— no se han calculado ni escrito en ningún artefacto | no |
-| M5, abstención | sí | sí | sí, sobre datos sintéticos | **no**: misma dependencia |
-
-*Fuente: elaboración propia.*
-
-M6, rendimiento, pertenece al quinto objetivo específico y no a este.
-
-Los resultados obtenidos con estas métricas no se consideran todavía definitivos, y son **dos** las razones, no una: la recuperación que las alimentó está bajo reejecución canónica, y la condición con distractor está bajo diagnóstico porque su manipulación no se ha comprobado. Las magnitudes ya medidas son reproducibles desde sus registros y se conservan; lo que está en revisión es si la recuperación que las alimentó aislaba correctamente el espacio vectorial en que buscaba.
+La definición formal de cada magnitud —tasa de acierto entre los diez primeros, rango recíproco medio, ganancia acumulada descontada normalizada, cobertura y tasas de decisión— se recoge en el apartado de variables medidas.
 
 
 ### Ablaciones
