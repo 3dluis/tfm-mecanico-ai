@@ -63,7 +63,7 @@ misma sesión no son independientes entre sí, de modo que el reparto entre entr
 validación y test se hace por sesión y no por ventana. La **unidad de análisis del agente** no es
 la ventana sino el **caso**: un diagnóstico concreto evaluado bajo una condición de evidencia
 concreta. El número de filas de una tabla de resultados no equivale, por tanto, al número de
-observaciones independientes que la sostienen; la Tabla 4.11 separa ambas cifras para cada
+observaciones independientes que la sostienen; la Tabla 4.12 separa ambas cifras para cada
 métrica.
 
 Esta elección, recogida en la Tabla 4.1, encadena el resto del entorno experimental. De ella
@@ -212,11 +212,36 @@ cifras de esta memoria anteriores a E19 son de validación.
 
 ## Objetivos de investigación
 
+La Tabla 4.4 lleva la correspondencia del capítulo 2 hasta las fases, las métricas y el estado
+de ejecución de cada objetivo. Declara también dónde el diseño todavía no alcanza al objetivo
+que dice desarrollar.
+
+**Tabla 4.4. Correspondencia entre objetivos, fases experimentales, métricas y estado de ejecución.**
+
+| Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
+|---|---|---|---|
+| OE1 | revisión documental | — | en curso; flujo PRISMA formal pendiente de acceso institucional |
+| OE2 | E1, E2, E3, E4, E5, E10 | — | cuatro cerradas; E10 con la infraestructura cerrada y el corpus vacío; E3 pendiente como validación externa |
+| OE3 · identificación y caracterización | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; E8 pendiente |
+| OE3 · patrón no representado | **ninguna** | **ninguna** | **sin instrumentar**; el diseño de la condición se desarrolla más adelante en este capítulo |
+| OE4 | E11, E12, E13, E15; E14 y E16 pendientes | M2, M3, M4, M5 | M2, M3 y M5 calculadas sobre datos sintéticos; M4 implementada, sin calcular sus magnitudes agregadas; resultados no definitivos |
+| OE5 · ciclo bajo las cuatro condiciones | E17, E18, E19, E20 | M1-M6 | E17 ejecutada sin informe de fase; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+| OE5 · incorporación y recuperación | **ninguna** | **ninguna** | **sin instrumentar**; el diseño de la condición se desarrolla más adelante en este capítulo |
+
+*Fuente: elaboración propia.*
+
+Las dos filas sin fase corresponden a los dos términos de la pregunta de investigación cuyo
+diseño experimental está formulado pero no ejecutado. No son resultados negativos: son
+capacidades que el plan de veinte fases no contemplaba y que las secciones de diseño
+experimental incorporan como condiciones nuevas. Mientras no se ejecuten, el trabajo no puede
+afirmar ni negar nada sobre ellas.
+
+
 Los objetivos del capítulo 2 se operacionalizan en cuatro subpreguntas, cada una con un
 desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación y recogidos
-en la Tabla 4.4.
+en la Tabla 4.5.
 
-**Tabla 4.4. Subpreguntas de investigación con sus desenlaces de sostenimiento y refutación.**
+**Tabla 4.5. Subpreguntas de investigación con sus desenlaces de sostenimiento y refutación.**
 
 | Subpregunta | Qué pregunta | Sostenida si | Refutada si |
 |---|---|---|---|
@@ -241,9 +266,9 @@ seis familias de variables medidas y los instrumentos con que se miden.
 ### Variable manipulada
 
 Una sola: **qué evidencia documental está disponible en el corpus**. Toma los cuatro valores
-que define la Tabla 4.5.
+que define la Tabla 4.6.
 
-**Tabla 4.5. Condiciones experimentales de disponibilidad y pertinencia de la evidencia documental.**
+**Tabla 4.6. Condiciones experimentales de disponibilidad y pertinencia de la evidencia documental.**
 
 | Condición | Corpus | Comportamiento esperado |
 |---|---|---|
@@ -358,9 +383,9 @@ recordaría de sus pesos y el experimento mediría memoria en lugar de evidencia
 ## Diseño experimental
 
 El plan tiene veinte fases, cada una con informe, criterio de aceptación y puertas de calidad
-de código. Se agrupan en los cinco bloques de la Tabla 4.6.
+de código. Se agrupan en los cinco bloques de la Tabla 4.7.
 
-**Tabla 4.6. Agrupación en bloques de las veinte fases del plan experimental.**
+**Tabla 4.7. Agrupación en bloques de las veinte fases del plan experimental.**
 
 | Bloque | Fases | Qué producen |
 |---|---|---|
@@ -402,9 +427,9 @@ punto.
 
 #### Fase 4.1 · Recuperación de evidencia (E11, E12)
 
-La Tabla 4.7 recoge su entrada, su proceso, su salida y su artefacto.
+La Tabla 4.8 recoge su entrada, su proceso, su salida y su artefacto.
 
-**Tabla 4.7. Instrumentación de la fase de recuperación de evidencia.**
+**Tabla 4.8. Instrumentación de la fase de recuperación de evidencia.**
 
 | | |
 |---|---|
@@ -420,9 +445,9 @@ La Tabla 4.7 recoge su entrada, su proceso, su salida y su artefacto.
 
 #### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
 
-Sigue el mismo esquema, en la Tabla 4.8.
+Sigue el mismo esquema, en la Tabla 4.9.
 
-**Tabla 4.8. Instrumentación de la fase de construcción de la explicación.**
+**Tabla 4.9. Instrumentación de la fase de construcción de la explicación.**
 
 | | |
 |---|---|
@@ -444,9 +469,9 @@ el registro lo delate.
 
 #### Fase 4.3 · Verificación del soporte (E15)
 
-La Tabla 4.9 la instrumenta.
+La Tabla 4.10 la instrumenta.
 
-**Tabla 4.9. Instrumentación de la fase de verificación del soporte.**
+**Tabla 4.10. Instrumentación de la fase de verificación del soporte.**
 
 | | |
 |---|---|
@@ -466,9 +491,9 @@ el modelo escribió, sino lo que el manual dice.
 
 #### Fase 4.4 · Decisión de explicar o abstenerse (dentro de E15; E16 pendiente)
 
-Cierra la secuencia, y la Tabla 4.10 la detalla.
+Cierra la secuencia, y la Tabla 4.11 la detalla.
 
-**Tabla 4.10. Instrumentación de la fase de decisión entre explicar y abstenerse.**
+**Tabla 4.11. Instrumentación de la fase de decisión entre explicar y abstenerse.**
 
 | | |
 |---|---|
@@ -497,9 +522,9 @@ trabajo.
 #### Tamaño de la evidencia que sostiene OE4
 
 Ninguna de las magnitudes anteriores significa nada sin su denominador, y el denominador no es
-el número de filas ejecutadas. La Tabla 4.11 los separa.
+el número de filas ejecutadas. La Tabla 4.12 los separa.
 
-**Tabla 4.11. Unidades de observación independientes por métrica.**
+**Tabla 4.12. Unidades de observación independientes por métrica.**
 
 | Métrica | Filas ejecutadas | Observaciones independientes |
 |---|---|---|
@@ -516,10 +541,10 @@ variantes de una misma ventana comparten datos, atribución y confianza.
 
 #### Estado de las métricas de OE4
 
-La distinción entre definir, implementar, medir y validar, que recoge la Tabla 4.12, evita que
+La distinción entre definir, implementar, medir y validar, que recoge la Tabla 4.13, evita que
 una métrica se dé por obtenida porque esté descrita.
 
-**Tabla 4.12. Estado de definición, implementación y cálculo de las métricas de OE4.**
+**Tabla 4.13. Estado de definición, implementación y cálculo de las métricas de OE4.**
 
 | Métrica | Definida | Implementada | Calculada | Resultado definitivo |
 |---|---|---|---|---|

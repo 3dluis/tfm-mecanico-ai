@@ -40,10 +40,11 @@ documental asociado al vehículo de referencia y condiciones controladas de disp
 pertinencia de la información documental, preservando la separación temporal de los datos y la
 trazabilidad necesaria para reproducir los experimentos.
 
-**OE3.** Desarrollar y evaluar mecanismos para identificar y caracterizar patrones de
-comportamiento en ventanas de telemetría OBD-II, utilizando modelos de referencia, estimaciones
-de confianza y técnicas de atribución que permitan localizar las variables y los intervalos
-temporales relevantes para la formulación posterior de hipótesis diagnósticas.
+**OE3.** Desarrollar y evaluar mecanismos para identificar y caracterizar patrones de fallo en
+ventanas de telemetría OBD-II y determinar cuándo estos no se encuentran representados en el
+conocimiento disponible para el proceso diagnóstico, utilizando el comportamiento contextual y
+longitudinal de las señales, estimaciones de confianza y técnicas de atribución como soporte
+para la formulación posterior de hipótesis diagnósticas.
 
 **OE4.** Implementar un agente capaz de formular y contrastar hipótesis diagnósticas mediante la
 combinación de evidencia observacional procedente de la telemetría y evidencia documental
@@ -51,44 +52,31 @@ recuperada de fuentes técnicas, verificando la aplicabilidad y el soporte de la
 utilizada y aplicando un criterio explícito de suficiencia que permita decidir entre validar una
 hipótesis o abstenerse cuando la evidencia disponible no resulte suficiente.
 
-La generación de la hipótesis y su validación se mantienen como procesos diferenciados, de manera
-que la capacidad del modelo de lenguaje para formular una explicación no determine por sí misma
-que exista evidencia suficiente para sostenerla.
+La generación de una hipótesis y su validación se consideran procesos diferenciados. La
+capacidad del modelo de lenguaje para producir una explicación diagnóstica no determina por sí
+misma que exista evidencia suficiente para sostenerla.
 
-**OE5.** Evaluar experimentalmente el comportamiento del sistema bajo condiciones controladas de
-evidencia documental completa, parcial, ausente y con distractores, analizando su capacidad
-diagnóstica, la recuperación y trazabilidad de la evidencia, la validación de las hipótesis y la
-decisión entre explicar y abstenerse, así como la contribución de sus principales componentes.
+**OE5.** Evaluar experimentalmente el ciclo de diagnóstico y validación bajo condiciones
+controladas de evidencia documental completa, parcial, ausente y con distractores, analizando la
+identificación y caracterización del patrón, la formulación de la hipótesis, la recuperación y
+trazabilidad de la evidencia y la decisión entre validarla o abstenerse; así como comprobar que
+las hipótesis que superen el proceso de validación puedan incorporarse y recuperarse
+posteriormente como conocimiento reutilizable sin admitir aquellas que no satisfagan los
+criterios establecidos.
 
-## Correspondencia entre objetivos, fases y métricas
+## Correspondencia entre los objetivos y su evaluación
 
-La Tabla 2.1 recoge esa correspondencia con el estado de cada objetivo.
+**Tabla 2.1. Correspondencia entre los objetivos específicos y su estrategia de evaluación.**
 
-**Tabla 2.1. Trazabilidad entre objetivos específicos, fases experimentales y métricas.**
-
-| Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
-|---|---|---|---|
-| OE1 | revisión documental | — | en curso; flujo PRISMA formal pendiente de acceso institucional |
-| OE2 | E1, E2, E3, E4, E5, E10 | — | cuatro cerradas; **E10 con la infraestructura cerrada y el corpus vacío**; E3 pendiente como validación externa |
-| OE3 | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; **E8 pendiente** |
-| OE4 | E11, E12, E13, E15; **E14 y E16 pendientes** | M2, M3, M4, M5 | M2, M3 y M5 calculadas **sobre datos sintéticos**; **M4 implementada, sin calcular sus magnitudes agregadas**; resultados no definitivos |
-| OE5 | E17, E18, E19, E20 | M1–M6 | **E17 ejecutada sin informe de fase**; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+| Objetivo | Propósito | Estrategia de evaluación |
+|---|---|---|
+| OE1 | Delimitar el estado del conocimiento y el vacío investigado | Revisión estructurada y verificación de fuentes primarias |
+| OE2 | Establecer el entorno experimental | Verificación de reproducibilidad, procedencia de los datos y coherencia entre telemetría y corpus |
+| OE3 | Identificar y caracterizar patrones de fallo, y determinar cuándo no están representados | Evaluación experimental sobre telemetría OBD-II y análisis de atribuciones y confianza |
+| OE4 | Formular y validar hipótesis mediante evidencia | Evaluación de recuperación, aplicabilidad, soporte, suficiencia y abstención |
+| OE5 | Evaluar el ciclo integrado y la reutilización del conocimiento validado | Comparación entre condiciones experimentales y comprobación de incorporación y recuperación posterior |
 
 *Fuente: elaboración propia.*
 
-Ninguna de las veinte fases queda sin objetivo. La correspondencia inversa, en cambio, no es
-completa: dos de los términos del objetivo general no tienen objetivo específico que los
-desarrolle ni fase que los instrumente. El primero es la identificación de patrones **no
-representados** en el conocimiento disponible, que OE3 no aborda porque el modelo empleado
-clasifica sobre clases conocidas. El segundo es la incorporación de las hipótesis validadas como
-**conocimiento reutilizable**, que ninguna fase del plan contempla. El capítulo 4 desarrolla la
-primera de las dos limitaciones y el capítulo 6 recoge ambas.
-
-Los cinco se persiguen sobre un único vehículo de referencia, el Mazda 3 BK de 2007 con motor
-Z6, elección justificada en el capítulo 4 que acota cuanto pueda afirmarse. El alcance ejecutado
-es más estrecho que el aprobado en julio, y esa distancia está planteada a la dirección (P-03).
-
-Quedan fuera el despliegue sobre placa embarcada, la aplicación móvil y la plataforma en la
-nube que contemplaba la propuesta de julio de 2026: no aportan evidencia a la pregunta y su
-coste habría desplazado el esfuerzo del experimento central. Pasan a la prospectiva del
-capítulo 6.
+El capítulo 4 desarrolla esta correspondencia hasta las fases experimentales, las métricas y los
+criterios de evaluación de cada objetivo, y declara el estado de ejecución de cada una.
