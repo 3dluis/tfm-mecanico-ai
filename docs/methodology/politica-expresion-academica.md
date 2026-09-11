@@ -256,3 +256,74 @@ reglas: **el hallazgo manda sobre la forma, y la forma se ajusta después.**
 
 Esta política **no** puede usarse para rebajar un hallazgo, suavizar una limitación ni retirar
 una cifra incómoda.
+
+---
+
+# Patrón editorial del TFM · la voz de referencia
+
+Decisión del autor, 11 de septiembre de 2026. El fragmento que abre la justificación del
+capítulo 1 —«Un vehículo moderno deja un rastro continuo de su funcionamiento»— **fija la voz de
+toda la memoria**. No se imita su tema ni sus frases: se reproducen sus características.
+
+## Qué hace ese fragmento
+
+Abre con un hecho concreto, no con un marco. Encuentra dentro de ese hecho el problema que
+contiene: las señales, leídas por separado, dicen poco. Y solo entonces explica por qué importa.
+El razonamiento avanza; no se anuncia.
+
+El contraste epistémico aterriza como frase corta, en el punto donde el razonamiento ya lo
+sostiene: *«Una etiqueta puede ser correcta y, aun así, decir muy poco sobre aquello que la
+produjo.»* No es un eslogan colocado al final del párrafo. Es la consecuencia de lo anterior.
+
+## Perfil medible
+
+| | referencia | umbral aceptable |
+|---|---|---|
+| longitud media de oración | 14,6 palabras | 14-22 |
+| variación σ/µ | 0,63 | **> 0,40** |
+| nominalizaciones | 3,4 % | < 7 % en prosa, < 9 % en método |
+| oraciones de 12 palabras o menos | 56 % | > 25 % |
+| aperturas de párrafo con conector | 0 | **0** |
+
+La variación importa más que la media: un apartado con todas las oraciones de 25 palabras se lee
+como una plantilla aunque cada una sea correcta.
+
+## Reglas
+
+Escribir como quien hizo el trabajo, no como quien lo resume. Hecho concreto antes que
+formulación abstracta. Verbo antes que sustantivo derivado: *se comprobaron* y no *se llevó a
+cabo la verificación*; *la búsqueda se hizo en cuatro iteraciones* y no *se procedió a la
+realización de cuatro iteraciones*. Cuando algo puede decirse directamente, se dice.
+
+No todos los párrafos con la misma forma. No cerrar cada uno resumiendo lo dicho. Dejar que una
+idea lleve a la siguiente sin anunciarlo.
+
+Los contrastes —detectar no es explicar, recuperar no es demostrar, una referencia no es
+evidencia, formular una hipótesis no es validarla— aparecen cuando el razonamiento los alcanza.
+Repetidos mecánicamente se convierten en muletilla y pierden el filo.
+
+La tensión epistemológica es de fondo, no de superficie: qué observó el sistema, qué infiere, qué
+sostiene la evidencia, qué queda sin saber. Sin metáforas, sin dramatismo, sin ensayo.
+
+## Prohibiciones
+
+`A partir de` como conector de párrafo (su uso preposicional —«a partir de datos OBD-II»— es
+correcto y pertenece a la pregunta de investigación) · `En este contexto` · `En este sentido` ·
+`Cabe destacar` · `Conviene precisar` · `Resulta fundamental` · `Por este motivo` · `Por esta
+razón` · `Estos resultados ponen de manifiesto` · `Esta correspondencia permite` · `Estos frentes
+se examinan` · `El proceso dio lugar a` · `Por otro lado` · `Es importante señalar`.
+
+También: enumeraciones perfectamente simétricas, cadenas de sustantivos abstractos, exceso de
+pasiva, frases que anuncian lo que el párrafo va a hacer, conclusiones artificiales de cierre,
+lenguaje promocional y lenguaje defensivo.
+
+## Límite
+
+**La naturalidad nunca tiene prioridad sobre la precisión.** No se modifican cifras, resultados,
+referencias, limitaciones, decisiones metodológicas, estado de los experimentos ni la pregunta de
+investigación. No se inventan hechos para que la narración fluya, no se ocultan resultados
+negativos, no se convierte una limitación en fortaleza, y no se presenta como validado lo que
+solo está diseñado, implementado o medido.
+
+Ninguna reescritura reduce la investigación a RAG, a un modelo de lenguaje, a clasificación, a
+explicabilidad o a abstención. Son mecanismos del sistema, no sustitutos de la pregunta.
