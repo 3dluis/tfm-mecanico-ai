@@ -18,7 +18,7 @@ La configuración mecánica de referencia del entorno experimental es un Mazda 3
 
 Conviene precisar el estatuto de esa configuración. El código de motor, la cilindrada y la transmisión son un **supuesto de trabajo del generador sintético**, no una lectura tomada de un vehículo físico: la telemetría de esta memoria no procede de un Mazda 3 real. El supuesto se justifica porque los códigos de avería que el experimento utiliza están documentados en el manual para los motores Z6 y ZJ, de modo que la telemetría generada y la documentación consultada se refieren a la misma configuración mecánica. Si se incorpora telemetría real como validación externa, esos tres valores deberán tomarse del vehículo del que proceda, y la correspondencia con el corpus dejará de estar garantizada por construcción para convertirse en una comprobación previa.
 
-Conviene distinguir los niveles de agregación, porque el diseño los usa para cosas distintas y confundirlos produciría pseudorreplicación. La **unidad de análisis** del modelo de diagnóstico es la ventana de telemetría; las ventanas proceden de **sesiones** de conducción, y las de una misma sesión no son independientes entre sí, de modo que el reparto entre entrenamiento, validación y test se hace por sesión y no por ventana. La **unidad de análisis del agente** no es la ventana sino el **caso**: un diagnóstico concreto evaluado bajo una condición de evidencia concreta. El número de filas de una tabla de resultados no equivale, por tanto, al número de observaciones independientes que la sostienen; la Tabla 4.12 separa ambas cifras para cada métrica.
+Conviene distinguir los niveles de agregación, porque el diseño los usa para cosas distintas y confundirlos produciría pseudorreplicación. La **unidad de análisis** del modelo de diagnóstico es la ventana de telemetría; las ventanas proceden de **sesiones** de conducción, y las de una misma sesión no son independientes entre sí, de modo que el reparto entre entrenamiento, validación y test se hace por sesión y no por ventana. La **unidad de análisis del agente** no es la ventana sino el **caso**: un diagnóstico concreto evaluado bajo una condición de evidencia concreta. El número de filas de una tabla de resultados no equivale, por tanto, al número de observaciones independientes que la sostienen; la Tabla 4.13 separa ambas cifras para cada métrica.
 
 Esta elección, recogida en la Tabla 4.1, encadena el resto del entorno experimental. De ella dependen la calibración del generador, cuyas constantes proceden de páginas concretas del manual y conservan su cita; el corpus sobre el que recupera el agente; los códigos de avería que documentan cada condición de fallo; los procedimientos que el verificador exige como soporte; y la construcción de la condición con distractor, que emplea el procedimiento del motor LF para el mismo código de avería.
 
@@ -42,28 +42,56 @@ El alcance de los resultados queda acotado por esta elección. Describen el comp
 
 ### Muestra: telemetría
 
-La base experimental sobre la que se han ejecutado los experimentos es una muestra **sintética** (`dataset_type: synthetic`), generada por un modelo paramétrico determinista con semilla fija. La taxonomía de procedencia que rige todo el trabajo distingue cuatro valores —real, sintético, simulado y conjunto público— y ningún resultado se agrega entre procedencias distintas sin declararlo. La incorporación de telemetría real permanece como etapa posterior de validación externa.
+La base experimental utilizada en este trabajo está constituida por telemetría OBD-II sintética, generada mediante un modelo paramétrico determinista con semilla fija. La procedencia de los datos se conserva explícitamente durante el proceso experimental y se mantiene diferenciada de cualquier fuente real, simulada o procedente de conjuntos públicos. La incorporación de telemetría obtenida de vehículos reales se plantea como una etapa posterior de validación externa.
 
-El generador produce sesiones de conducción en tres regímenes —ralentí, urbano y carretera— para seis condiciones: sin fallo y cinco fallos representativos de los sistemas nombrados. Cada fallo tiene una firma que afecta a una o varias señales mediante un mecanismo físico declarado. Una fuga de vacío, por ejemplo, eleva las correcciones de combustible a corto y largo plazo sin alterar el caudal de aire medido; un termostato bloqueado abierto impide que la temperatura del refrigerante alcance su valor de régimen.
+El generador produce sesiones correspondientes a tres regímenes de funcionamiento —ralentí, conducción urbana y carretera— y seis condiciones experimentales: funcionamiento sin fallo y cinco condiciones de fallo asociadas a los sistemas considerados. Cada condición modifica una o varias señales siguiendo un mecanismo previamente definido. Por ejemplo, una fuga de vacío modifica las correcciones de combustible a corto y largo plazo, mientras que un termostato bloqueado en posición abierta altera la evolución de la temperatura del refrigerante.
 
-Las constantes del generador —régimen de ralentí, temperatura de apertura del termostato, rangos de tensión de la sonda de oxígeno, límites de corrección de combustible que disparan cada código de avería— se parametrizan a partir de especificaciones documentadas en el manual de taller, con la cita de la página de la que procede cada una, recogidas en una ficha de calibración versionada. Esa parametrización se realizó después de una primera versión de los datos y corrigió varias constantes que no procedían de ninguna fuente; cada hallazgo y su corrección quedaron registrados. La Tabla 4.2 recoge los parámetros resultantes.
+Las constantes empleadas por el generador se parametrizan a partir de especificaciones documentadas en el manual de taller del vehículo de referencia. Entre ellas se encuentran el régimen de ralentí, la temperatura de apertura del termostato, los rangos de tensión de la sonda de oxígeno y los límites de corrección de combustible asociados a determinados códigos de avería. La procedencia documental de estos valores se conserva en la ficha de calibración utilizada para construir el conjunto experimental. Las principales características de la muestra resultante se presentan en la Tabla 4.2.
 
 **Tabla 4.2. Características de la muestra sintética de telemetría OBD-II.**
 
-| Parámetro de la muestra sintética | Valor |
+| Característica | Descripción |
 |---|---|
-| Procedencia (`dataset_type`) | `synthetic`; identificador `synthetic_v2` |
-| Condiciones | 6 (sin fallo y cinco fallos) |
-| Sesiones por condición | 12; 72 en total |
-| Duración de cada sesión | 600 s |
-| Frecuencia de muestreo | 1 Hz; 43 200 muestras |
-| Señales | 12: régimen, velocidad, carga, mariposa, temperatura de refrigerante, temperatura de admisión, caudal másico, presión del colector, correcciones de combustible a corto y largo plazo, sonda de oxígeno, avance del encendido |
-| Semilla | 20260901 |
-| Ventana de análisis | 120 s, con solape |
+| Procedencia | telemetría sintética |
+| Regímenes de funcionamiento | ralentí, conducción urbana y carretera |
+| Condiciones experimentales | 6: funcionamiento sin fallo y cinco condiciones de fallo |
+| Número de sesiones | 72; 12 por condición |
+| Duración por sesión | 600 s |
+| Frecuencia de muestreo | 1 Hz |
+| Número total de muestras | 43 200 |
+| Señales OBD-II | 12 |
+| Longitud de ventana | 120 s, con desplazamiento de 60 s (solape del 50 %) |
 | Descriptores por ventana | 139 |
-| Reparto | entrenamiento, validación y test, por sesión; 392 ventanas de entrenamiento y 98 de validación |
+| Partición de los datos | por sesión, separando entrenamiento, validación y prueba |
+| Ventanas de entrenamiento | 392, sobre 48 sesiones |
+| Ventanas de validación | 98, sobre 12 sesiones |
+| Ventanas de prueba | 98, sobre 12 sesiones; reservadas para la evaluación final |
+| Semilla de generación | 20260901 |
 
-*Fuente: elaboración propia a partir de la ficha de calibración del vehículo.*
+*Fuente: elaboración propia.*
+
+Las ventanas que cruzan la entrada de un fallo se descartan, por lo que el reparto anterior no agota la totalidad de las ventanas construidas. El conjunto de prueba permanece cerrado por diseño hasta la fase de evaluación final: su tamaño forma parte del diseño experimental, pero ninguna cifra de esta memoria se ha obtenido sobre él.
+
+La muestra contiene doce señales OBD-II relacionadas con el estado operativo del motor, la admisión, la combustión y el control de emisiones. La Tabla 4.4 recoge cada señal con su unidad y el rango físico dentro del cual el generador la mantiene; su función dentro del entorno experimental se desarrolla en el apartado de variables e instrumentos.
+
+**Tabla 4.3. Señales OBD-II utilizadas en el entorno experimental.**
+
+| Señal | Unidad | Rango físico admitido |
+|---|---|---|
+| Régimen de giro del motor | rpm | 0 a 8 000 |
+| Velocidad del vehículo | km/h | 0 a 250 |
+| Carga calculada del motor | % | 0 a 100 |
+| Posición de la mariposa | % | 0 a 100 |
+| Temperatura del refrigerante | °C | −40 a 150 |
+| Temperatura del aire de admisión | °C | −40 a 120 |
+| Caudal másico de aire | g/s | 0 a 300 |
+| Presión absoluta en el colector de admisión | kPa | 0 a 255 |
+| Ajuste de combustible a corto plazo, banco 1 | % | −100 a 100 |
+| Ajuste de combustible a largo plazo, banco 1 | % | −100 a 100 |
+| Tensión de la sonda lambda anterior al catalizador | V | 0 a 1,275 |
+| Avance del encendido | ° antes del PMS | −64 a 64 |
+
+*Fuente: elaboración propia a partir de la especificación de señales del entorno experimental.*
 
 Esta construcción permite controlar qué mecanismos de fallo están representados, en qué régimen aparecen y con qué intensidad, y repetir cualquier experimento sobre exactamente los mismos datos: la semilla, la versión del generador y la ficha de calibración quedan fijadas en el registro de cada ejecución. Lo que no permite es establecer, por sí sola, que el comportamiento observado se reproduzca sobre telemetría de un vehículo en operación.
 
@@ -73,9 +101,9 @@ La longitud de la ventana de análisis no se fijó por convención. Se evaluaron
 
 ### Muestra: corpus documental
 
-El corpus es el manual de taller del vehículo, en su copia local del autor, procedente de un repositorio secundario en la web. No se redistribuye; se registra su huella SHA-256 para que un tercero que disponga del mismo documento pueda comprobar la identidad. Está compuesto por ficheros por procedimiento, cada uno con los códigos de motor a los que aplica; la Tabla 4.3 resume su composición.
+El corpus es el manual de taller del vehículo, en su copia local del autor, procedente de un repositorio secundario en la web. No se redistribuye; se registra su huella SHA-256 para que un tercero que disponga del mismo documento pueda comprobar la identidad. Está compuesto por ficheros por procedimiento, cada uno con los códigos de motor a los que aplica; la Tabla 4.4 resume su composición.
 
-**Tabla 4.3. Composición del corpus documental del vehículo de referencia.**
+**Tabla 4.4. Composición del corpus documental del vehículo de referencia.**
 
 | Corpus | Valor |
 |---|---|
@@ -100,9 +128,9 @@ El conjunto de test de la telemetría **permanece cerrado** hasta la evaluación
 
 ## Objetivos de investigación
 
-La Tabla 4.4 lleva la correspondencia del capítulo 2 hasta las fases, las métricas y el estado de ejecución de cada objetivo. Declara también dónde el diseño todavía no alcanza al objetivo que dice desarrollar.
+La Tabla 4.5 lleva la correspondencia del capítulo 2 hasta las fases, las métricas y el estado de ejecución de cada objetivo. Declara también dónde el diseño todavía no alcanza al objetivo que dice desarrollar.
 
-**Tabla 4.4. Correspondencia entre objetivos, fases experimentales, métricas y estado de ejecución.**
+**Tabla 4.5. Correspondencia entre objetivos, fases experimentales, métricas y estado de ejecución.**
 
 | Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
 |---|---|---|---|
@@ -119,9 +147,9 @@ La Tabla 4.4 lleva la correspondencia del capítulo 2 hasta las fases, las métr
 Las dos filas sin fase corresponden a los dos términos de la pregunta de investigación cuyo diseño experimental está formulado pero no ejecutado. No son resultados negativos: son capacidades que el plan de veinte fases no contemplaba y que las secciones de diseño experimental incorporan como condiciones nuevas. Mientras no se ejecuten, el trabajo no puede afirmar ni negar nada sobre ellas.
 
 
-Los objetivos del capítulo 2 se operacionalizan en cuatro subpreguntas, cada una con un desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación y recogidos en la Tabla 4.5.
+Los objetivos del capítulo 2 se operacionalizan en cuatro subpreguntas, cada una con un desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación y recogidos en la Tabla 4.6.
 
-**Tabla 4.5. Subpreguntas de investigación con sus desenlaces de sostenimiento y refutación.**
+**Tabla 4.6. Subpreguntas de investigación con sus desenlaces de sostenimiento y refutación.**
 
 | Subpregunta | Qué pregunta | Sostenida si | Refutada si |
 |---|---|---|---|
@@ -140,9 +168,9 @@ El apartado declara la única variable manipulada, las que se mantienen controla
 
 ### Variable manipulada
 
-Una sola: **qué evidencia documental está disponible en el corpus**. Toma los cuatro valores que define la Tabla 4.6.
+Una sola: **qué evidencia documental está disponible en el corpus**. Toma los cuatro valores que define la Tabla 4.7.
 
-**Tabla 4.6. Condiciones experimentales de disponibilidad y pertinencia de la evidencia documental.**
+**Tabla 4.7. Condiciones experimentales de disponibilidad y pertinencia de la evidencia documental.**
 
 | Condición | Corpus | Comportamiento esperado |
 |---|---|---|
@@ -191,9 +219,9 @@ El **modelo de lenguaje** es Qwen2.5 de 3 000 millones de parámetros (Qwen Team
 
 ## Diseño experimental
 
-El plan tiene veinte fases, cada una con informe, criterio de aceptación y puertas de calidad de código. Se agrupan en los cinco bloques de la Tabla 4.7.
+El plan tiene veinte fases, cada una con informe, criterio de aceptación y puertas de calidad de código. Se agrupan en los cinco bloques de la Tabla 4.8.
 
-**Tabla 4.7. Agrupación en bloques de las veinte fases del plan experimental.**
+**Tabla 4.8. Agrupación en bloques de las veinte fases del plan experimental.**
 
 | Bloque | Fases | Qué producen |
 |---|---|---|
@@ -219,9 +247,9 @@ El agente se desarrolla en cuatro fases que recorren el camino de un caso por el
 
 #### Fase 4.1 · Recuperación de evidencia (E11, E12)
 
-La Tabla 4.8 recoge su entrada, su proceso, su salida y su artefacto.
+La Tabla 4.9 recoge su entrada, su proceso, su salida y su artefacto.
 
-**Tabla 4.8. Instrumentación de la fase de recuperación de evidencia.**
+**Tabla 4.9. Instrumentación de la fase de recuperación de evidencia.**
 
 | | |
 |---|---|
@@ -237,9 +265,9 @@ La Tabla 4.8 recoge su entrada, su proceso, su salida y su artefacto.
 
 #### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
 
-Sigue el mismo esquema, en la Tabla 4.9.
+Sigue el mismo esquema, en la Tabla 4.10.
 
-**Tabla 4.9. Instrumentación de la fase de construcción de la explicación.**
+**Tabla 4.10. Instrumentación de la fase de construcción de la explicación.**
 
 | | |
 |---|---|
@@ -257,9 +285,9 @@ La separación entre observación, evidencia, inferencia y explicación es delib
 
 #### Fase 4.3 · Verificación del soporte (E15)
 
-La Tabla 4.10 la instrumenta.
+La Tabla 4.11 la instrumenta.
 
-**Tabla 4.10. Instrumentación de la fase de verificación del soporte.**
+**Tabla 4.11. Instrumentación de la fase de verificación del soporte.**
 
 | | |
 |---|---|
@@ -277,9 +305,9 @@ Que la verificación sea determinista y externa al modelo de lenguaje es lo que 
 
 #### Fase 4.4 · Decisión de explicar o abstenerse (dentro de E15; E16 pendiente)
 
-Cierra la secuencia, y la Tabla 4.11 la detalla.
+Cierra la secuencia, y la Tabla 4.12 la detalla.
 
-**Tabla 4.11. Instrumentación de la fase de decisión entre explicar y abstenerse.**
+**Tabla 4.12. Instrumentación de la fase de decisión entre explicar y abstenerse.**
 
 | | |
 |---|---|
@@ -299,9 +327,9 @@ La abstención **no se cuenta como fallo** cuando la evidencia es insuficiente: 
 
 #### Tamaño de la evidencia que sostiene OE4
 
-Ninguna de las magnitudes anteriores significa nada sin su denominador, y el denominador no es el número de filas ejecutadas. La Tabla 4.12 los separa.
+Ninguna de las magnitudes anteriores significa nada sin su denominador, y el denominador no es el número de filas ejecutadas. La Tabla 4.13 los separa.
 
-**Tabla 4.12. Unidades de observación independientes por métrica.**
+**Tabla 4.13. Unidades de observación independientes por métrica.**
 
 | Métrica | Filas ejecutadas | Observaciones independientes |
 |---|---|---|
@@ -315,9 +343,9 @@ Las diecisiete filas del experimento de suficiencia proceden de cinco ventanas d
 
 #### Estado de las métricas de OE4
 
-La distinción entre definir, implementar, medir y validar, que recoge la Tabla 4.13, evita que una métrica se dé por obtenida porque esté descrita.
+La distinción entre definir, implementar, medir y validar, que recoge la Tabla 4.14, evita que una métrica se dé por obtenida porque esté descrita.
 
-**Tabla 4.13. Estado de definición, implementación y cálculo de las métricas de OE4.**
+**Tabla 4.14. Estado de definición, implementación y cálculo de las métricas de OE4.**
 
 | Métrica | Definida | Implementada | Calculada | Resultado definitivo |
 |---|---|---|---|---|
