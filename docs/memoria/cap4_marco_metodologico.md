@@ -219,7 +219,7 @@ El **modelo de lenguaje** es Qwen2.5 de 3 000 millones de parámetros (Qwen Team
 
 ## Diseño experimental
 
-El plan tiene veinte fases, cada una con informe, criterio de aceptación y puertas de calidad de código. Se agrupan en los cinco bloques de la Tabla 4.8.
+El plan tiene veinte fases, cada una con su informe, su criterio de aceptación y las comprobaciones automatizadas de calidad del código que la acompañan. Se agrupan en los cinco bloques de la Tabla 4.8.
 
 **Tabla 4.8. Agrupación en bloques de las veinte fases del plan experimental.**
 
@@ -361,11 +361,17 @@ La definición formal de cada magnitud —tasa de acierto entre los diez primero
 
 Cada ablación cambia exactamente un factor: sin atribución, sin recuperación semántica, sin criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para saber qué parte del resultado aporta cada pieza. `[Pendiente: E18.]`
 
-### Reproducibilidad y trazabilidad experimental
+### Reproducibilidad, versionado y trazabilidad experimental
 
-Toda ejecución registra identificador de experimento, versión del dataset, versión del corpus, modelo de embeddings, proveedor y modelo de lenguaje, versión del prompt, semilla, parámetros y métricas, en JSON y CSV. El entorno se fija con un gestor de dependencias con fichero de bloqueo; las puertas de calidad, análisis estático, tipado estricto y una batería de 400 tests, se ejecutan tras cada cambio.
+Cada ejecución experimental registra un identificador único, la versión del conjunto de datos y del corpus documental, el modelo de embeddings utilizado, el proveedor y el modelo de lenguaje, la versión del prompt, la semilla de generación, los parámetros de configuración y las métricas obtenidas. Esta información se conserva en formatos estructurados, principalmente JSON y CSV, con el propósito de permitir la reconstrucción posterior de las condiciones bajo las que se obtuvo cada resultado.
 
-Los resultados de recuperación y la procedencia de los fragmentos se conservan junto con los artefactos experimentales, de modo que las consultas y las fuentes utilizadas en cada ejecución puedan reconstruirse. Los artefactos de software, las configuraciones y los registros experimentales se mantienen bajo control de versiones, de modo que cada ejecución pueda relacionarse con la configuración, las semillas, las versiones de los componentes y los datos utilizados. La documentación técnica empleada como corpus se identifica mediante metadatos y huellas criptográficas, dado que sus condiciones de distribución impiden incorporarla directamente al repositorio. Este mecanismo permite comprobar que las ejecuciones reproducidas utilizan la misma versión documental sin redistribuir material sujeto a restricciones de uso.
+El entorno de ejecución se mantiene mediante un gestor de dependencias con fichero de bloqueo, de forma que las versiones de las bibliotecas empleadas puedan reproducirse. Además, el código se somete a comprobaciones automatizadas de calidad, análisis estático, verificación de tipos y una batería automatizada de pruebas destinada a detectar cambios que puedan alterar el comportamiento esperado de los componentes experimentales.
+
+Los resultados de recuperación y la procedencia de los fragmentos documentales se conservan junto con los registros experimentales. Esto permite reconstruir las consultas realizadas, identificar los documentos y secciones utilizados en cada ejecución y relacionar las salidas obtenidas con la configuración concreta del sistema.
+
+Los artefactos de software, las configuraciones y los registros experimentales se mantienen bajo control de versiones, de modo que cada ejecución pueda vincularse con las versiones de los componentes, los datos, las semillas y los parámetros empleados.
+
+La documentación técnica utilizada como corpus se identifica mediante metadatos y huellas criptográficas. La huella se calcula mediante SHA-256 sobre el fichero original completo, en su forma binaria, y no sobre el texto extraído ni sobre los fragmentos derivados de él; los fragmentos conservan además su propia huella, que identifica el resultado de la segmentación. Dado que las condiciones de distribución de algunos de estos documentos impiden incorporarlos directamente al repositorio del proyecto, sus huellas permiten comprobar que una ejecución reproducida utiliza exactamente el mismo documento sin necesidad de redistribuir el material original.
 
 La identificación del commit y de las versiones documentales en la cabecera de los registros está implantada solo en parte, y completarla es condición para dar por cerrada la fase de evaluación final.
 
