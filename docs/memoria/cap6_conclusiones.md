@@ -26,15 +26,19 @@ El número de casos anotados y la utilización de diferentes variantes documenta
 
 Algunas etapas de la evaluación permanecen abiertas en esta primera entrega. El conjunto de prueba continúa reservado para la evaluación final. Las condiciones experimentales cuya manipulación o recuperación documental sigue en comprobación no se interpretan como resultados definitivos.
 
-## Líneas futuras
+## Prospectiva
 
-La principal línea de continuidad consiste en evaluar el sistema sobre telemetría OBD-II procedente de vehículos reales. Esta validación permitiría estudiar hasta qué punto el comportamiento observado bajo condiciones sintéticas se mantiene frente a la variabilidad introducida por sensores, condiciones ambientales, estilos de conducción, desgaste e interacción entre diferentes mecanismos de fallo.
+La principal línea de continuidad del trabajo consiste en realizar una validación externa con telemetría OBD-II obtenida de vehículos reales. Esta evaluación permitiría comprobar hasta qué punto el comportamiento observado sobre datos sintéticos se mantiene frente a la variabilidad propia de la operación real, incluyendo diferencias entre conductores, condiciones ambientales, desgaste de los componentes, ruido de los sensores e interacción entre mecanismos de fallo.
 
-Una segunda línea consiste en extender la evaluación a otros vehículos y configuraciones mecánicas. Esto permitiría comprobar especialmente la capacidad del sistema para determinar la aplicabilidad de la documentación recuperada cuando existen diferencias entre fabricantes, modelos, generaciones y motores.
+Esta validación debería realizarse preferentemente sobre el vehículo de referencia o sobre otro vehículo para el que exista documentación técnica con un nivel de detalle suficiente para mantener la correspondencia entre telemetría, configuración mecánica y evidencia documental. El entorno experimental ha sido diseñado de forma que la fuente de telemetría pueda sustituirse sin modificar la lógica general de recuperación, verificación y decisión, aunque cada nueva fuente de datos requeriría comprobar nuevamente la parametrización, la segmentación temporal y la aplicabilidad de la documentación utilizada.
 
-También resulta necesario ampliar el número y la diversidad de los casos diagnósticos, incluyendo combinaciones de fallos y situaciones en las que la información disponible sea ambigua, incompleta o aparentemente pertinente pero no aplicable. Esta ampliación permitiría evaluar con mayor precisión tanto la generación de hipótesis como la decisión de abstenerse.
+Una segunda línea consiste en extender la evaluación a otros vehículos, motores y fabricantes. El trabajo actual utiliza una única configuración mecánica de referencia, por lo que ampliar el corpus y los casos permitiría estudiar si los mecanismos de recuperación y validación continúan siendo efectivos cuando la documentación presenta diferencias de estructura, nomenclatura, códigos de avería y procedimientos de diagnóstico.
 
-Una vez establecido el comportamiento del ciclo diagnóstico, pueden estudiarse además aspectos de despliegue que no forman parte de la evaluación experimental central de este trabajo, como su ejecución sobre una plataforma embarcada y su integración con aplicaciones destinadas a la interacción con el usuario.
+También resulta relevante ampliar el conjunto de casos anotados y la diversidad de las condiciones experimentales. En particular, sería de interés incluir fallos simultáneos, evidencia parcialmente contradictoria, documentación aparentemente pertinente pero correspondiente a otra configuración mecánica y casos en los que más de una hipótesis diagnóstica resulte compatible con la telemetría observada. Esta ampliación permitiría estudiar con mayor profundidad la capacidad del sistema para discriminar entre hipótesis y determinar cuándo la evidencia disponible no permite sostener una única explicación.
+
+Una línea adicional consiste en evaluar el sistema sobre una plataforma embarcada. El despliegue en hardware de borde permitiría medir latencia, consumo de recursos, comportamiento sin conexión y capacidad de operar de forma continua sobre telemetría adquirida directamente del vehículo. Esta evaluación pertenece a una etapa posterior, ya que el trabajo actual prioriza la validación del ciclo diagnóstico sobre las características de despliegue.
+
+La evolución del mecanismo de conocimiento reutilizable, una vez implantado y evaluado, abre la posibilidad de estudiar cómo las hipótesis previamente validadas pueden recuperarse en situaciones posteriores, cómo deben actualizarse cuando aparece nueva evidencia y qué controles son necesarios para evitar que una conclusión aceptada en un contexto concreto se generalice indebidamente a otros vehículos o condiciones.
 
 ## Consideraciones finales
 

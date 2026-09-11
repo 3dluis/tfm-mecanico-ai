@@ -375,6 +375,12 @@ La documentación técnica utilizada como corpus se identifica mediante metadato
 
 La identificación del commit y de las versiones documentales en la cabecera de los registros está implantada solo en parte, y completarla es condición para dar por cerrada la fase de evaluación final.
 
+### Trabajo experimental pendiente para el cierre del TFM
+
+Antes del cierre de la evaluación quedan previstas las ablaciones de los principales componentes, la apertura controlada del conjunto de prueba para la evaluación final y la demostración del experimento integrado sobre casos de la partición final. A ellas se añaden los dos experimentos que permiten examinar los términos de la pregunta de investigación todavía no instrumentados: la comprobación de la identificación de patrones no representados, mediante la exclusión controlada de una clase del conocimiento del sistema, y la del mecanismo por el que una hipótesis validada se incorpora y se recupera después como conocimiento reutilizable, con su vía negativa correspondiente.
+
+Todas estas actividades forman parte del diseño experimental del presente trabajo y no se consideran líneas futuras.
+
 ## Modelo de análisis de datos
 
 El análisis de los resultados se plantea principalmente como una comparación experimental por casos y condiciones, y no como un estudio inferencial clásico. El número limitado de casos anotados y la existencia de varias ejecuciones relacionadas con una misma ventana de telemetría hacen que las observaciones no puedan tratarse como una muestra amplia de unidades independientes. Por esta razón, el análisis se centra en describir y comparar el comportamiento del sistema bajo las condiciones experimentales definidas, preservando la unidad de análisis correspondiente a cada métrica.
