@@ -267,7 +267,7 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 | **Evidencia** | Búsqueda de `out_of_distribution`, `unseen`, `novel_fault`, `open_set` y `no_representado` en `src/`: cero coincidencias. No hay definición operacional de «no representado» ni condición experimental que la construya |
 | **Afecta a** | El grado de cumplimiento del objetivo general; la respuesta al primer término de la pregunta |
 | **Consecuencia** | El trabajo no puede afirmar ni negar nada sobre esa capacidad. No es un resultado negativo: es una capacidad no instrumentada |
-| **Cómo comprobarlo** | Definir operacionalmente «no representado», añadir detección fuera de distribución y una condición experimental que retenga una clase del entrenamiento |
+| **Cómo comprobarlo** | Gate 1 de `docs/methodology/diseno-gates-pi-pendientes.md`: exclusión de una clase en cuatro brazos, con control de observabilidad y del conocimiento paramétrico del modelo de lenguaje |
 | **Severidad** | **alta** — un término del objetivo general queda sin evidencia |
 
 ---
@@ -281,7 +281,7 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 | **Evidencia** | Búsqueda de `reutilizab`, `knowledge_base`, `write_back`, `incorporar` en `src/`: cero coincidencias. Ninguna de las veinte fases del plan (`docs/experiments/README.md`) contempla la incorporación |
 | **Afecta a** | El grado de cumplimiento del objetivo general; la respuesta al último término de la pregunta |
 | **Consecuencia** | El ciclo que la pregunta define se cierra en su tramo central y no de extremo a extremo |
-| **Cómo comprobarlo** | Un mecanismo de incorporación con criterio de admisión, y una fase que mida si lo incorporado se recupera y se reutiliza |
+| **Cómo comprobarlo** | Gate 2 de `docs/methodology/diseno-gates-pi-pendientes.md`: almacén de hipótesis validadas con vía negativa y control de no contaminación |
 | **Severidad** | **alta** — un término del objetivo general queda sin evidencia |
 
 ---
