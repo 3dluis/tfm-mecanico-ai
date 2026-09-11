@@ -1,14 +1,8 @@
 # Memoria del TFM — texto fuente por capítulos
 
-**Autor:** Luis Daniel Díaz Díaz · **Titulación:** Máster Universitario en Inteligencia
-Artificial, Universidad Alfonso X el Sabio · **Convocatoria:** noviembre o diciembre de 2026
-(`[DECISIÓN DEL AUTOR]`).
+**Autor:** Luis Daniel Díaz Díaz · **Titulación:** Máster Universitario en Inteligencia Artificial, Universidad Alfonso X el Sabio · **Convocatoria:** noviembre o diciembre de 2026 (`[DECISIÓN DEL AUTOR]`).
 
-Este directorio es la **fuente de verdad del texto de la memoria**. Se escribe en Markdown,
-versionado en Git, y se vuelca en la plantilla oficial de Word (`24-25 Plantilla TFM`, en la
-raíz de `TFM/`) usando exclusivamente sus estilos: *Título Capítulo*, *Título Apartado*,
-*Título Subapartado*, *Texto TFM*, *Viñetas TFM*, *Cita Literal APA*, *Bibliografía*. El
-documento Word queda fuera del control de versiones.
+Este directorio es la **fuente de verdad del texto de la memoria**. Se escribe en Markdown, versionado en Git, y se vuelca en la plantilla oficial de Word (`24-25 Plantilla TFM`, en la raíz de `TFM/`) usando exclusivamente sus estilos: *Título Capítulo*, *Título Apartado*, *Título Subapartado*, *Texto TFM*, *Viñetas TFM*, *Cita Literal APA*, *Bibliografía*. El documento Word queda fuera del control de versiones.
 
 ## Correspondencia con la plantilla oficial
 
@@ -25,23 +19,12 @@ documento Word queda fuera del control de versiones.
 
 ## Reglas que gobiernan este texto
 
-1. **Nada se afirma sin registro.** Toda cifra procede de un fichero de `experiments/` o
-   `results/` y se cita con su identificador. Lo no ejecutado se declara no ejecutado.
-2. **Ninguna referencia sin verificar.** Solo entran las de `research/references/` (144,
-   verificadas en fuente primaria) y las de método verificadas en Crossref o arXiv el 2 de
-   septiembre de 2026 (`research/references/referencias-metodo.md`). La sesión informativa
-   25-26 advierte de que una fuente inexistente puede suponer un *no apto*.
-3. **Los datos son sintéticos y se dice en cada capítulo.** La pregunta de investigación no
-   exige datos reales (ADR-003, 3 de septiembre de 2026); cada resultado declara la
-   procedencia de su dato (`dataset_type`) y la validez externa se trata como limitación.
-   No se suaviza y no se presenta un resultado sintético como comportamiento real.
+1. **Nada se afirma sin registro.** Toda cifra procede de un fichero de `experiments/` o `results/` y se cita con su identificador. Lo no ejecutado se declara no ejecutado.
+2. **Ninguna referencia sin verificar.** Solo entran las de `research/references/` (144, verificadas en fuente primaria) y las de método verificadas en Crossref o arXiv el 2 de septiembre de 2026 (`research/references/referencias-metodo.md`). La sesión informativa 25-26 advierte de que una fuente inexistente puede suponer un *no apto*.
+3. **Los datos son sintéticos y se dice en cada capítulo.** La pregunta de investigación no exige datos reales (ADR-003, 3 de septiembre de 2026); cada resultado declara la procedencia de su dato (`dataset_type`) y la validez externa se trata como limitación. No se suaviza y no se presenta un resultado sintético como comportamiento real.
 4. **Un solo verbo en el objetivo general**, en infinitivo, verificable al terminar.
-5. **Vocabulario canónico** (ADR-001): PI.1–PI.4, E1–E20, M1–M6, condiciones FULL /
-   PARTIAL / ABSENT / DISTRACTOR. No se mezcla con la nomenclatura del repositorio heredado.
-6. Las decisiones que corresponden al director **no se resuelven en el texto ni se marcan
-   dentro de él**: van al registro `preguntas-abiertas-al-director.md`, con su procedencia y
-   con lo que bloquean. El cuerpo de la memoria queda redactado de forma neutral, sin dar por
-   supuesta ninguna respuesta y sin corchetes editoriales visibles para el lector.
+5. **Vocabulario canónico** (ADR-001): PI.1–PI.4, E1–E20, M1–M6, condiciones FULL / PARTIAL / ABSENT / DISTRACTOR. No se mezcla con la nomenclatura del repositorio heredado.
+6. Las decisiones que corresponden al director **no se resuelven en el texto ni se marcan dentro de él**: van al registro `preguntas-abiertas-al-director.md`, con su procedencia y con lo que bloquean. El cuerpo de la memoria queda redactado de forma neutral, sin dar por supuesta ninguna respuesta y sin corchetes editoriales visibles para el lector.
 
 ## Lo que este texto no puede cerrar todavía
 
@@ -54,35 +37,22 @@ documento Word queda fuera del control de versiones.
 
 ## Cómo se vuelca a Word
 
-Capítulo a capítulo, sin sangrías propias ni estilos nuevos. Las tablas Markdown se
-convierten en tablas de Word con el estilo de la plantilla. Las citas van en formato
-autor-año; la bibliografía, en el estilo *Bibliografía*. Todo texto entre corchetes de la
-plantilla se elimina de la versión final.
+Capítulo a capítulo, sin sangrías propias ni estilos nuevos. Las tablas Markdown se convierten en tablas de Word con el estilo de la plantilla. Las citas van en formato autor-año; la bibliografía, en el estilo *Bibliografía*. Todo texto entre corchetes de la plantilla se elimina de la versión final.
 
 
 ## Regla de adición bibliográfica
 
-`docs/memoria/bibliografia.md` contiene **solo** las referencias citadas en los capítulos
-redactados, y su fuente de verdad es `research/references/references.md` para las de dominio y
-`research/references/referencias-metodo.md` para las de método.
+`docs/memoria/bibliografia.md` contiene **solo** las referencias citadas en los capítulos redactados, y su fuente de verdad es `research/references/references.md` para las de dominio y `research/references/referencias-metodo.md` para las de método.
 
 > **Cuando un capítulo cite una referencia nueva, su entrada se añade en el mismo cambio.**
 
-Esta regla encabezaba el fichero de bibliografía como bloque de estado y se perdió al retirar
-esos bloques el 10 de septiembre de 2026. Su incumplimiento es exactamente lo que produjo que
-una referencia citada en el capítulo 3 quedara sin entrada durante seis días. Se restituye aquí,
-donde vive el resto del estado, en lugar de devolverla al cuerpo del documento.
+Esta regla encabezaba el fichero de bibliografía como bloque de estado y se perdió al retirar esos bloques el 10 de septiembre de 2026. Su incumplimiento es exactamente lo que produjo que una referencia citada en el capítulo 3 quedara sin entrada durante seis días. Se restituye aquí, donde vive el resto del estado, en lugar de devolverla al cuerpo del documento.
 
-Una verificación contra fuente primaria debe propagarse a **las tres vistas**: el fichero de
-depósito, la lista maestra y `bibliography.bib`. Corregir solo la primera hace que el proyecto
-publique un identificador que su propia lista maestra declara inexistente.
+Una verificación contra fuente primaria debe propagarse a **las tres vistas**: el fichero de depósito, la lista maestra y `bibliography.bib`. Corregir solo la primera hace que el proyecto publique un identificador que su propia lista maestra declara inexistente.
 
 ## Estado por capítulo
 
-Esta información encabezaba cada fichero como bloque de cita. Se traslada aquí el 10 de
-septiembre de 2026: eran notas de trabajo visibles para cualquier lector del borrador, y la
-regla 6 de este documento prohíbe dejar dentro del texto las decisiones que corresponden al
-director. Lo sustantivo de aquellos bloques se reescribió como texto académico en su capítulo.
+Esta información encabezaba cada fichero como bloque de cita. Se traslada aquí el 10 de septiembre de 2026: eran notas de trabajo visibles para cualquier lector del borrador, y la regla 6 de este documento prohíbe dejar dentro del texto las decisiones que corresponden al director. Lo sustantivo de aquellos bloques se reescribió como texto académico en su capítulo.
 
 | Fichero | Estado | Pendiente de |
 |---|---|---|
