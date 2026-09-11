@@ -193,7 +193,7 @@ Se agrupan en seis familias. No todas se calculan en cada experimento; se report
 
 **M1, diagnóstico.** Exactitud, F1 macro y calibración del modelo especializado. La calibración se mide con el error esperado de calibración (Naeini, Cooper y Hauskrecht, 2015, MET-07) y se corrige con regresión isotónica (Zadrozny y Elkan, 2002, MET-05; Niculescu-Mizil y Caruana, 2005, MET-06) ajustada por validación cruzada sobre entrenamiento, para no gastar la validación en dos cosas.
 
-**M2, recuperación.** Tasa de acierto en los diez primeros, rango recíproco medio y nDCG sobre el conjunto anotado, reportados por condición de corpus y no solo en agregado, porque el agregado promedia condiciones diseñadas para diferir.
+**M2, recuperación.** Tasa de acierto entre los diez primeros resultados (Hit@10), rango recíproco medio (MRR) y ganancia acumulada descontada normalizada (nDCG) sobre el conjunto anotado, reportados por condición de corpus y no solo en agregado, porque el agregado promedia condiciones diseñadas para diferir.
 
 **M3, explicación.** Adecuación al esquema de salida y tasa de salidas válidas. Es descriptiva y no responde a ninguna subpregunta; se declara como tal.
 
@@ -245,23 +245,24 @@ Entrenamiento, validación y test se separan por sesión, nunca por partición a
 
 El agente se desarrolla en cuatro fases que recorren el camino de un caso por el sistema. Cada una recibe lo que la anterior produjo y deja escrito un artefacto que la siguiente consume, de modo que la cadena entre el dato observado y la decisión final queda reconstruible en cualquier punto.
 
-#### Fase 4.1 · Recuperación de evidencia (E11, E12)
+#### Fase 4.1 · Recuperación de información documental (E11, E12)
 
-La Tabla 4.9 recoge su entrada, su proceso, su salida y su artefacto.
+Esta fase proporciona la información documental que posteriormente será evaluada como posible evidencia para contrastar la hipótesis diagnóstica. La recuperación se realiza sobre el corpus técnico asociado al vehículo de referencia y bajo la variante documental definida para cada condición experimental. La Tabla 4.9 resume sus principales elementos.
 
-**Tabla 4.9. Instrumentación de la fase de recuperación de evidencia.**
+**Tabla 4.9. Diseño de la fase de recuperación de información documental.**
 
-| | |
+| Elemento | Descripción |
 |---|---|
-| **Entrada** | ventana de telemetría OBD-II ya clasificada, ficha del vehículo y corpus documental de taller en la variante de corpus que la condición experimental determine |
-| **Proceso** | consulta al índice vectorial acotada por vehículo, por motor aplicable y por los códigos de avería que documentan la condición diagnosticada; ordenación por autoridad documental; conservación de la procedencia de cada fragmento hasta su fichero de origen |
-| **Salida** | conjunto de fragmentos recuperados, cada uno con su identificador, su documento, su sección y su puntuación |
-| **Artefactos** | `experiments/E12_retrieval.json`, índice `rag.document_chunk` con procedencia por fragmento |
-| **Métrica** | M2, recuperación: acierto en los diez primeros, rango recíproco medio y ganancia acumulada descontada, **reportados por condición** y no en agregado |
-| **Criterio de aceptación** | **Ninguno de los dos sentidos es refutable.** Encontrar el documento correcto está garantizado por construcción, porque la búsqueda se acota por los códigos que documentan la condición diagnosticada. Y que desaparezca al retirarlo también: la consulta se acota por el mismo código que la variante excluye, así que el conjunto recuperado sale vacío por definición. Lo que la fase comprueba es que **la manipulación del corpus llega al sistema**, no que el sistema discrimine |
-| **Responde a** | PI.2 |
+| **Entrada** | Ventana de telemetría OBD-II previamente analizada, configuración del vehículo y variante del corpus documental correspondiente a la condición experimental. |
+| **Procedimiento** | Recuperación de fragmentos del corpus mediante búsqueda sobre el índice documental, restringiendo la aplicabilidad por vehículo y motor y utilizando la información diagnóstica disponible para orientar la consulta. Se conserva la procedencia de cada fragmento hasta su documento y sección de origen. |
+| **Salida** | Conjunto ordenado de fragmentos documentales con su identificador, documento de procedencia, sección y puntuación de recuperación. |
+| **Evaluación** | La recuperación se caracteriza mediante M2, considerando la tasa de acierto entre los diez primeros resultados, el rango recíproco medio y la ganancia acumulada descontada normalizada. Los resultados se analizan por condición experimental para evitar que la agregación oculte diferencias derivadas de la disponibilidad de documentación. |
+| **Propósito experimental** | Comprobar que las modificaciones introducidas en el corpus para cada condición experimental se reflejan efectivamente en la información que alcanza las etapas posteriores del sistema. |
+| **Trazabilidad** | Se conserva la relación entre cada fragmento recuperado y su fuente documental para permitir su posterior evaluación de aplicabilidad y soporte. |
 
 *Fuente: elaboración propia.*
+
+La interpretación de esta fase requiere considerar una característica del diseño experimental. La consulta utiliza información diagnóstica para restringir la recuperación y, por tanto, la presencia o ausencia de determinados documentos está parcialmente controlada por la construcción de cada condición. En consecuencia, esta fase no pretende demostrar por sí sola la capacidad del recuperador para discriminar entre documentación correcta e incorrecta. Su función experimental es comprobar que la manipulación realizada sobre el corpus se propaga hasta la información disponible para las etapas posteriores de verificación. La pertinencia de los fragmentos recuperados, el soporte que proporcionan a las afirmaciones diagnósticas y su suficiencia se evalúan posteriormente mediante criterios independientes.
 
 #### Fase 4.2 · Construcción de la explicación (E13; E14 pendiente)
 
@@ -274,10 +275,9 @@ Sigue el mismo esquema, en la Tabla 4.10.
 | **Entrada** | atribución de descriptores del modelo especializado, su confianza calibrada y los fragmentos de la fase anterior |
 | **Proceso** | construcción de una afirmación por descriptor observado, anclada a la vez en la observación y en el fragmento documental que la sostiene; el modelo de lenguaje **redacta**, no decide: recibe el paquete de evidencia ya montado y el veredicto ya emitido |
 | **Salida** | conjunto de afirmaciones, cada una con su observación de origen y sus citas documentales |
-| **Artefactos** | `experiments/E13_agente_*.json` para cada configuración de redactor |
 | **Métrica** | M3, explicación: adecuación al esquema de salida y tasa de salidas válidas. **descriptiva, sin responder a ninguna subpregunta** |
 | **Criterio de aceptación** | que la salida se ajuste al esquema y que ninguna afirmación cite un fragmento ausente del paquete recibido |
-| **Responde a** | **ninguna subpregunta**. La fase es condición necesaria de PI.2 —sin afirmaciones ancladas no hay nada que rastrear— pero no la mide |
+| **Propósito experimental** | Producir afirmaciones ancladas en la evidencia disponible. La fase es condición necesaria de la trazabilidad posterior —sin afirmaciones ancladas no hay nada que rastrear—, pero no la mide por sí misma. |
 
 *Fuente: elaboración propia.*
 
@@ -294,10 +294,8 @@ La Tabla 4.11 la instrumenta.
 | **Entrada** | las afirmaciones de la fase anterior y los fragmentos citados |
 | **Proceso** | comprobación determinista, **fuera del modelo de lenguaje**, de que cada fragmento citado menciona la señal observada, constituye contenido diagnóstico, porta el código de avería que documenta la condición y desempeña el papel documental de procedimiento |
 | **Salida** | una comprobación por pareja de afirmación y fragmento, con su resultado y el motivo |
-| **Artefactos** | `experiments/E15_suficiencia.json`, campo `support_checks`. **Es la corrida en modo oracular**, con los tres canales de información abiertos, que la metodología etiqueta como **cota superior asistida por oráculo** y no como estimación del comportamiento. Existen además las variantes no oracular y adversa |
 | **Métrica** | M4, trazabilidad: corrección de las citas, completitud y tasa de soporte. La distancia entre completitud y soporte mide cuántas afirmaciones llevan una referencia que no las respalda |
 | **Criterio de aceptación** | que ninguna afirmación quede marcada como sostenida por un fragmento que no la sostiene |
-| **Responde a** | PI.2 y PI.4 |
 
 *Fuente: elaboración propia.*
 
@@ -314,10 +312,8 @@ Cierra la secuencia, y la Tabla 4.12 la detalla.
 | **Entrada** | el veredicto de soporte, la confianza calibrada del modelo especializado y el recuento de evidencia aplicable |
 | **Proceso** | aplicación de un criterio de suficiencia independiente del modelo de lenguaje, con umbrales declarados sobre validación. La palabra «calibrado» solo puede aplicarse a **uno** de los seis: el de confianza. El que de hecho decide la mayoría de las abstenciones es el de cobertura de afirmaciones, fijado en 0,8 **sin barrido**, y dispara trece de las catorce abstenciones registradas, ocho de ellas como motivo único. El registro del barrido declara además que **no fue un pre-registro ciego**: el criterio se fijó tras ver un resultado ya conocido, y el punto de operación pasó de 0,72 a 0,79 mediante una enmienda posterior al primer barrido, fechada y publicada junto al resultado original |
 | **Salida** | decisión **EXPLICA** o **ABSTIENE**, con los motivos concretos de la abstención cuando la haya |
-| **Artefactos** | `experiments/E15_suficiencia.json`, campo `verdict`, **corrida oracular**; barrido del umbral en `E15b_barrido_umbral.json` |
 | **Métrica** | M5, abstención: abstención correcta, abstención injustificada y explicación sin fundamento, **siempre con su cobertura** |
 | **Criterio de aceptación** | que la decisión cambie al manipular la evidencia disponible manteniendo constantes los datos, el modelo, la atribución y la confianza |
-| **Responde a** | PI.3 y PI.4 |
 
 *Fuente: elaboración propia.*
 
@@ -369,7 +365,7 @@ Cada ablación cambia exactamente un factor: sin atribución, sin recuperación 
 
 Toda ejecución registra identificador de experimento, versión del dataset, versión del corpus, modelo de embeddings, proveedor y modelo de lenguaje, versión del prompt, semilla, parámetros y métricas, en JSON y CSV. El entorno se fija con un gestor de dependencias con fichero de bloqueo; las puertas de calidad, análisis estático, tipado estricto y una batería de 400 tests, se ejecutan tras cada cambio.
 
-Los artefactos de software, las configuraciones y los registros experimentales se mantienen bajo control de versiones, de modo que cada ejecución pueda relacionarse con la configuración, las semillas, las versiones de los componentes y los datos utilizados. La documentación técnica empleada como corpus se identifica mediante metadatos y huellas criptográficas, dado que sus condiciones de distribución impiden incorporarla directamente al repositorio. Este mecanismo permite comprobar que las ejecuciones reproducidas utilizan la misma versión documental sin redistribuir material sujeto a restricciones de uso.
+Los resultados de recuperación y la procedencia de los fragmentos se conservan junto con los artefactos experimentales, de modo que las consultas y las fuentes utilizadas en cada ejecución puedan reconstruirse. Los artefactos de software, las configuraciones y los registros experimentales se mantienen bajo control de versiones, de modo que cada ejecución pueda relacionarse con la configuración, las semillas, las versiones de los componentes y los datos utilizados. La documentación técnica empleada como corpus se identifica mediante metadatos y huellas criptográficas, dado que sus condiciones de distribución impiden incorporarla directamente al repositorio. Este mecanismo permite comprobar que las ejecuciones reproducidas utilizan la misma versión documental sin redistribuir material sujeto a restricciones de uso.
 
 La identificación del commit y de las versiones documentales en la cabecera de los registros está implantada solo en parte, y completarla es condición para dar por cerrada la fase de evaluación final.
 
