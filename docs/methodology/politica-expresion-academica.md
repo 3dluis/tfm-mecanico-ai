@@ -327,3 +327,6 @@ solo está diseñado, implementado o medido.
 
 Ninguna reescritura reduce la investigación a RAG, a un modelo de lenguaje, a clasificación, a
 explicabilidad o a abstención. Son mecanismos del sistema, no sustitutos de la pregunta.
+
+El criterio de escritura completo, con los dos textos patrón y el
+control final, está en `criterio-de-escritura.md`.
