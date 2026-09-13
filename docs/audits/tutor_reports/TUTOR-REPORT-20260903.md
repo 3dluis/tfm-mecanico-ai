@@ -5,7 +5,7 @@ del requisito «datos OBD-II reales»), ADR-003.
 **Modo:** `TRACEABILITY_REVIEW` + `EVIDENCE_REVIEW`, acotados al cambio.
 **Instantánea:** `mecanico-ia-exp` en el commit `b7a68f9` (los siete commits `ce9be6d` …
 `b7a68f9` del 3 de septiembre de 2026), más el espejo del proyecto en
-`TFM/.claude/skills/uax-tfm-ai-researcher/references/project/` (fuera de Git).
+el espejo del marco de investigación del skill `uax-tfm-ai-researcher` (fuera de Git).
 **Responsable del veredicto:** quien lo adopte; este informe no se firma por ninguna
 herramienta.
 
@@ -284,7 +284,7 @@ TUTOR_HANDOFF:
     - id: TUTOR-INF-001
       severity: INFO
       status: FIXED
-      file: "TFM/.claude/skills/uax-tfm-ai-researcher/references/project/{experiments,results}.md"
+      file: "espejo del marco de investigación (fuera del repositorio): {experiments,results}.md"
       action: "actualizar estado de E3 o nota fechada"
     - id: TUTOR-INF-002
       severity: INFO
@@ -295,7 +295,7 @@ TUTOR_HANDOFF:
     - id: TUTOR-INF-003
       severity: INFO
       status: OPEN
-      file: "TFM/.claude/skills/uax-tfm-ai-tutor/"
+      file: "directorio del skill uax-tfm-ai-tutor (fuera del repositorio)"
       action: "completar workflows, templates, rubrics y scripts, o aceptar la limitación"
       author_decision_required: true
   author_decisions_required:

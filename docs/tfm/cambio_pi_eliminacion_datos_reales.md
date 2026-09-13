@@ -94,7 +94,7 @@ como registro histórico; este último recibe una nota fechada.
 | `src/mecanico_ia_exp/data/metadata.py` | `DatasetType` | `synthetic, real` → `synthetic, real, simulated, public_dataset`, documentados |
 | `tests/test_dataset_provenance.py` | nuevo | taxonomía cerrada; ficha del dataset con procedencia |
 | `scripts/gen_notebooks.py` y 17 cuadernos | celda de cabecera; cuaderno 02; cuadernos 10 y 15 | PI nueva; E3 como validación externa; E20 «mismo caso» |
-| Espejo del skill (`TFM/.claude/skills/uax-tfm-ai-researcher/references/project/`) | `research-question`, `hypotheses`, `datasets`, `gaps`, `objectives`, `decisions`, `README` | PI nueva; GATE-01; hipótesis con «procedencia declarada»; GAP-01 revisado; E3 como validación externa. **Fuera del repositorio Git** |
+| Espejo del skill (directorio de skills de revisión, fuera del repositorio) | `research-question`, `hypotheses`, `datasets`, `gaps`, `objectives`, `decisions`, `README` | PI nueva; GATE-01; hipótesis con «procedencia declarada»; GAP-01 revisado; E3 como validación externa. **Fuera del repositorio Git** |
 
 ## 7. Secciones que no requirieron modificación
 
@@ -231,7 +231,7 @@ Cada fila: fichero · sección · concepto anterior · concepto actualizado · r
 | `word_count.py` | 12 336 palabras netas (≈ 30 páginas) | extensión pendiente de decisión con el director |
 | `ruff`, `mypy --strict`, `pytest` | verde; 4 tests nuevos | — |
 
-**Auditoría independiente (`uax-tfm-ai-tutor`, `tutor-reports/TUTOR-REPORT-20260903.md`):**
+**Auditoría independiente (`uax-tfm-ai-tutor`, `docs/audits/tutor_reports/TUTOR-REPORT-20260903.md`):**
 primera evaluación `FAIL` por un `MAJOR` (la matriz de trazabilidad conservaba la PI antigua
 en su §1) y tres `MINOR`; corregidos y reevaluados el mismo día: `PASS_WITH_OBSERVATIONS`,
 45/47 en los bloques evaluables. Queda a decisión del autor completar el skill de tutor, que

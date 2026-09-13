@@ -12,7 +12,7 @@ Memoria en `docs/memoria/` (siete ficheros); plantilla oficial `24-25 Plantilla 
 decisiones en `research/decisions/` y `docs/memoria/preguntas-abiertas-al-director.md`; índice de
 fases en `docs/experiments/README.md`; registros de ejecución en `experiments/`; registro de
 búsqueda documental y lista maestra en `research/references/`; registro de limitaciones en
-`research/limitations-register.md`; definiciones de los once skills en `TFM/.claude/skills/`.
+`research/limitations-register.md`; definiciones de los once skills de revisión (fuera del repositorio).
 
 El estado del proyecto **no se infirió del texto de la memoria**: cada afirmación de este
 diagnóstico se contrastó con el código o con un registro.
