@@ -104,11 +104,14 @@ incertidumbre se escribe. Los resultados negativos se conservan.
 
 **Una oración elegante no repara evidencia insuficiente.**
 
-La pregunta de investigación está bloqueada. `PI_STATUS=LOCKED`. No se reformula para acomodarla
-a los resultados ni se reduce a clasificación de fallos. Sus cinco componentes —patrones no
-representados, análisis contextual y longitudinal, generación de hipótesis, validación mediante
-evidencia e incorporación como conocimiento reutilizable— permanecen. Lo que los experimentos no
-demuestren se declara como limitación o como trabajo experimental pendiente.
+La pregunta de investigación es la que fija `ADR-004`, acordada con la dirección y enunciada una
+sola vez, en el capítulo 1. No se reformula para acomodarla a los resultados, no se reduce a
+clasificación de fallos, y **no se reescribe en ninguna otra sección**: el resto del documento
+remite a ella. Lo que los experimentos no demuestren se declara como limitación.
+
+La formulación amplia de agosto de 2026 —patrones no representados, conocimiento reutilizable—
+quedó descartada por la dirección el 12 de septiembre. Reintroducirla en cualquier sección es el
+error que `ADR-004` existe para impedir.
 
 ## Control final
 

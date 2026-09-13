@@ -94,3 +94,10 @@ cerrados.
 
 Documentadas una a una en `docs/audits/full_memory_review/12_CORRECTION_LOG.md`,
 `14_TABLES_FIGURES_INVENTORY.md` y `15_PENDING_CH5_INSERTIONS.md`.
+
+---
+
+> **Superado por `ADR-004`, 12 de septiembre de 2026.** La dirección resolvió `SD-01` a favor de
+> la pregunta acotada y descartó la formulación amplia. Lo que este documento registra sobre los
+> componentes de esa formulación era cierto cuando se escribió y se conserva como tal; ya no
+> describe el alcance vigente del trabajo.

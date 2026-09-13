@@ -132,3 +132,10 @@ términos ausentes o acotar el objetivo general.
 | `TABLE_FIGURE_FORMAT` | PASS · figuras N/A |
 | `UAX_TEMPLATE_COMPLIANCE` | PASS con observación — capítulo 1 corto, `P-05` abierto |
 | `WRITING_AUTHENTICITY` | PASS — `NO_MARKS_FOUND` en los cinco documentos entregables |
+
+---
+
+> **Superado por `ADR-004`, 12 de septiembre de 2026.** La dirección resolvió `SD-01` a favor de
+> la pregunta acotada y descartó la formulación amplia. Lo que este documento registra sobre los
+> componentes de esa formulación era cierto cuando se escribió y se conserva como tal; ya no
+> describe el alcance vigente del trabajo.

@@ -101,3 +101,10 @@ Markdown, la renumeración es manual y este inventario es el control.
 
 **Veredicto: `BLOCKED_REQUIRES_DECISION`**, por dos asuntos que no se resuelven sin tocar
 ciencia o el capítulo congelado: la ubicación de la Tabla 4.3 y la numeración del capítulo 5.
+
+---
+
+> **Superado por `ADR-004`, 12 de septiembre de 2026.** La dirección resolvió `SD-01` a favor de
+> la pregunta acotada y descartó la formulación amplia. Lo que este documento registra sobre los
+> componentes de esa formulación era cierto cuando se escribió y se conserva como tal; ya no
+> describe el alcance vigente del trabajo.

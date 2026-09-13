@@ -74,3 +74,10 @@ Tres caminos, y la elección no es de esta revisión:
    fases nuevas. No cabe en el calendario sin desplazar lo demás.
 3. **Acotar la pregunta a lo que el aparato mide**, y llevar los dos eslabones a la prospectiva.
    Es lo que recomienda `SD-01`, y exige un ADR y hablarlo con la dirección.
+
+---
+
+> **Superado por `ADR-004`, 12 de septiembre de 2026.** La dirección resolvió `SD-01` a favor de
+> la pregunta acotada y descartó la formulación amplia. Lo que este documento registra sobre los
+> componentes de esa formulación era cierto cuando se escribió y se conserva como tal; ya no
+> describe el alcance vigente del trabajo.

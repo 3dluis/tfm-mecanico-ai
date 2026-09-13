@@ -2,7 +2,7 @@
 
 ## Conclusiones provisionales sobre la pregunta de investigación
 
-La pregunta de investigación indaga si un agente con recuperación aumentada puede explicar el diagnóstico de un vehículo rastreando cada afirmación hasta la evidencia que la sostiene, y reconocer cuándo esa evidencia no basta para sostener una explicación. Sobre esa pregunta, la evaluación realizada hasta esta versión permite adelantar una respuesta parcial que las ejecuciones pendientes deberán confirmar.
+La pregunta de investigación, enunciada en el capítulo 1, interroga dos capacidades del agente: que cada afirmación de su explicación pueda rastrearse hasta la evidencia que la sostiene, y que sepa reconocer cuándo esa evidencia no basta. Sobre ambas, la evaluación realizada hasta esta versión permite adelantar una respuesta parcial que las ejecuciones pendientes deberán confirmar.
 
 El desarrollo realizado establece la estructura metodológica que la pregunta requiere. La arquitectura separa la información obtenida de la telemetría, la inferencia producida por el modelo especializado, la recuperación de información documental, la verificación de su aplicabilidad y soporte, la evaluación de suficiencia y la generación de la explicación. Esta separación permite examinar de forma independiente si una hipótesis dispone realmente de evidencia suficiente y establecer la abstención como una posible decisión cuando dicha evidencia no permite validarla.
 

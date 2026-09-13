@@ -93,3 +93,10 @@ de esas correcciones cambia de sentido según la decisión.
 | Acotación del alcance | constancia formal (P-03) |
 | Edición de las normas de citación | sexta o séptima (P-04) |
 | Capítulo 1 | reescritura previa sin confirmar, ya corregida en sus cuatro defectos |
+
+---
+
+> **Superado por `ADR-004`, 12 de septiembre de 2026.** La dirección resolvió `SD-01` a favor de
+> la pregunta acotada y descartó la formulación amplia. Lo que este documento registra sobre los
+> componentes de esa formulación era cierto cuando se escribió y se conserva como tal; ya no
+> describe el alcance vigente del trabajo.
