@@ -1,10 +1,14 @@
-# Diseño de los dos experimentos que faltan para alcanzar la pregunta
+# Diseño de dos experimentos fuera del alcance de este TFM
 
 Pre-registro. Se escribe **antes** de ejecutar nada y fija los criterios de aceptación antes de
-conocer ningún resultado. Cubre los dos términos de la pregunta de investigación que el plan de
-veinte fases no contemplaba.
+conocer ningún resultado.
 
-`PI_STATUS = LOCKED` — el plan experimental alcanza a la pregunta, no al revés.
+> **Estado desde el 12 de septiembre de 2026.** `ADR-004` fija como canónica la pregunta acotada,
+> y los dos términos que estos experimentos examinan —la identificación de patrones no
+> representados y la incorporación de conocimiento reutilizable— dejan de formar parte de ella.
+> Los diseños **se conservan íntegros** y pasan a prospectiva: no son trabajo pendiente del TFM,
+> sino la vía por la que una continuación podría abordarlos. Sus criterios de aceptación se
+> mantienen fijados por si llega ese momento.
 
 ---
 
