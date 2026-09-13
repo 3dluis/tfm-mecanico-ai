@@ -136,15 +136,11 @@ La Tabla 4.5 lleva la correspondencia del capítulo 2 hasta las fases, las métr
 |---|---|---|---|
 | OE1 | revisión documental | — | en curso; flujo PRISMA formal pendiente de acceso institucional |
 | OE2 | E1, E2, E3, E4, E5, E10 | — | cuatro cerradas; E10 con la infraestructura cerrada y el corpus vacío; E3 pendiente como validación externa |
-| OE3 · identificación y caracterización | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; E8 pendiente |
-| OE3 · patrón no representado | **ninguna** | **ninguna** | **sin instrumentar**; el diseño de la condición se desarrolla más adelante en este capítulo |
+| OE3 | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; E8 pendiente |
 | OE4 | E11, E12, E13, E15; E14 y E16 pendientes | M2, M3, M4, M5 | M2, M3 y M5 calculadas sobre datos sintéticos; M4 implementada, sin calcular sus magnitudes agregadas; resultados no definitivos |
-| OE5 · ciclo bajo las cuatro condiciones | E17, E18, E19, E20 | M1-M6 | E17 ejecutada sin informe de fase; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
-| OE5 · incorporación y recuperación | **ninguna** | **ninguna** | **sin instrumentar**; el diseño de la condición se desarrolla más adelante en este capítulo |
+| OE5 | E17, E18, E19, E20 | M1-M6 | E17 ejecutada sin informe de fase; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
 
 *Fuente: elaboración propia.*
-
-Las dos filas sin fase corresponden a los dos términos de la pregunta de investigación cuyo diseño experimental está formulado pero no ejecutado. No son resultados negativos: son capacidades que el plan de veinte fases no contemplaba y que las secciones de diseño experimental incorporan como condiciones nuevas. Mientras no se ejecuten, el trabajo no puede afirmar ni negar nada sobre ellas.
 
 
 Los objetivos del capítulo 2 se operacionalizan en cuatro subpreguntas, cada una con un desenlace que la sostendría y otro que la refutaría, fijados antes de la evaluación y recogidos en la Tabla 4.6.
@@ -209,7 +205,7 @@ Todos los instrumentos son código versionado con tests, y ninguna métrica que 
 
 El **modelo de diagnóstico** es un bosque aleatorio (Breiman, 2001, MET-01) sobre los 139 descriptores de ventana, con pesos de clase, elegido como baseline por su robustez con pocos datos; se contrastó con una red recurrente bidireccional de unidades GRU (Cho et al., 2014, MET-02) sobre las secuencias crudas, que no lo superó en este volumen de datos. La **atribución** usa valores de Shapley (Lundberg y Lee, 2017, MET-03) en su variante por permutación, con un fondo de referencia de ventanas sin fallo y semilla fija, y produce para cada caso las señales, estadísticos, valores, dirección y ventana temporal que más contribuyen a la predicción. La memoria no afirma en ningún punto que esa atribución sea causal: indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.
 
-Este instrumento es un clasificador supervisado de conjunto cerrado: asigna cada ventana a una de las clases de fallo etiquetadas durante el entrenamiento. Esa elección acota lo que el diseño puede examinar. Reconocer una clase aprendida no es identificar un patrón no representado en el conocimiento disponible, y el diseño no incorpora una definición operacional de «no representado», ni un mecanismo de detección fuera de distribución, ni una condición experimental que construya ese caso. El término correspondiente del objetivo general queda, por tanto, fuera del alcance de lo instrumentado, y así se declara en el capítulo 6.
+Este instrumento es un clasificador supervisado de conjunto cerrado: asigna cada ventana a una de las clases de fallo etiquetadas durante el entrenamiento, de modo que lo que el diseño puede examinar son patrones pertenecientes a esas clases. La detección de fallos ajenos al catálogo queda fuera del alcance de este trabajo.
 
 El **sistema de recuperación** combina búsqueda semántica con un modelo multilingüe de embeddings de frases (Reimers y Gurevych, 2019, MET-11) sobre una base de datos PostgreSQL con extensión vectorial, búsqueda léxica sobre el texto completo y fusión por rango recíproco (Cormack, Clarke y Buettcher, 2009, MET-12) que conserva las puntuaciones originales; se filtra siempre por vehículo y, cuando procede, por motor. La recuperación guiada por el diagnóstico añade a la consulta los códigos de avería que el manual asocia a la condición predicha. Un **validador de aplicabilidad** asigna a cada fragmento uno de cinco grados respecto del vehículo, coincidencia exacta, compatible, parcial, desconocido o incompatible, y solo los dos primeros pueden contar como evidencia.
 
@@ -377,7 +373,7 @@ La identificación del commit y de las versiones documentales en la cabecera de 
 
 ### Trabajo experimental pendiente para el cierre del TFM
 
-Antes del cierre de la evaluación quedan previstas las ablaciones de los principales componentes, la apertura controlada del conjunto de prueba para la evaluación final y la demostración del experimento integrado sobre casos de la partición final. A ellas se añaden los dos experimentos que permiten examinar los términos de la pregunta de investigación todavía no instrumentados: la comprobación de la identificación de patrones no representados, mediante la exclusión controlada de una clase del conocimiento del sistema, y la del mecanismo por el que una hipótesis validada se incorpora y se recupera después como conocimiento reutilizable, con su vía negativa correspondiente.
+Antes del cierre de la evaluación quedan previstas las ablaciones de los principales componentes, la apertura controlada del conjunto de prueba para la evaluación final y la demostración del experimento integrado sobre casos de la partición final.
 
 Todas estas actividades forman parte del diseño experimental del presente trabajo y no se consideran líneas futuras.
 

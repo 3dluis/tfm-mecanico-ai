@@ -60,3 +60,22 @@ negativas sin reportar y las discrepancias entre informes de fase y registros.
 ## Versión anterior completa
 
 Recuperable con `git show` sobre el commit anterior a esta revisión.
+
+---
+
+# Retirado el 12 de septiembre · sección del capítulo 3
+
+Al adoptarse la pregunta acotada (`ADR-004`), la sección **«Qué significa que un patrón no esté
+representado»** queda fuera de alcance y sale del capítulo 3. Distinguía cinco situaciones: clase
+fuera del entrenamiento, patrón no observable en la ventana, anomalía sin clase, procedimiento
+ausente del corpus y conocimiento en los parámetros del modelo de lenguaje.
+
+Dos de esas cinco siguen siendo pertinentes bajo la pregunta acotada y **no se pierden**: la
+ausencia del procedimiento en el corpus es la condición ABSENT del diseño experimental, y el
+conocimiento alojado en los parámetros del modelo se conserva en el frente de modelos de lenguaje
+como el riesgo que vigilan los controles de contaminación del ajuste.
+
+Las tres restantes —clase fuera del entrenamiento, patrón no observable, anomalía sin clase— y
+la referencia REF-019 (Chandola, Banerjee y Kumar, 2009) que las fundamentaba quedan disponibles
+en el historial por si una continuación recupera el término. El texto completo, en el commit
+anterior a esta reversión.

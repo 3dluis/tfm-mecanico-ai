@@ -6,7 +6,7 @@ No todos los objetivos requieren una medida cuantitativa. En aquellos relacionad
 
 ## Objetivo general
 
-Evaluar experimentalmente la capacidad de un sistema inteligente híbrido para identificar patrones de fallo no representados en su conocimiento disponible, generar hipótesis diagnósticas mediante el análisis contextual y longitudinal de datos OBD-II, contrastarlas con evidencia suficiente y pertinente, abstenerse cuando dicha evidencia no permita validarlas e incorporar como conocimiento reutilizable únicamente aquellas hipótesis que superen el proceso de validación establecido.
+Evaluar experimentalmente un agente de recuperación aumentada por evidencia en su capacidad de explicar diagnósticos vehiculares obtenidos a partir de datos OBD-II, manteniendo una correspondencia verificable entre cada afirmación y la evidencia que la sostiene, y de abstenerse cuando la evidencia disponible resulta insuficiente o no pertinente.
 
 ## Objetivos específicos
 
@@ -16,13 +16,13 @@ Los objetivos específicos recorren las etapas necesarias para responder a la pr
 
 **OE2.** Construir un entorno experimental reproducible que integre telemetría OBD-II, un corpus documental asociado al vehículo de referencia y condiciones controladas de disponibilidad y pertinencia de la información documental, preservando la separación temporal de los datos y la trazabilidad necesaria para reproducir los experimentos.
 
-**OE3.** Desarrollar y evaluar mecanismos para identificar y caracterizar patrones de fallo en ventanas de telemetría OBD-II y determinar cuándo estos no se encuentran representados en el conocimiento disponible para el proceso diagnóstico, utilizando el comportamiento contextual y longitudinal de las señales, estimaciones de confianza y técnicas de atribución como soporte para la formulación posterior de hipótesis diagnósticas.
+**OE3.** Desarrollar y evaluar mecanismos para identificar y caracterizar patrones de comportamiento en ventanas de telemetría OBD-II, utilizando modelos de referencia, estimaciones de confianza y técnicas de atribución que permitan localizar las variables y los intervalos temporales relevantes para la formulación posterior de hipótesis diagnósticas.
 
 **OE4.** Implementar un agente capaz de formular y contrastar hipótesis diagnósticas mediante la combinación de evidencia observacional procedente de la telemetría y evidencia documental recuperada de fuentes técnicas, verificando la aplicabilidad y el soporte de la información utilizada y aplicando un criterio explícito de suficiencia que permita decidir entre validar una hipótesis o abstenerse cuando la evidencia disponible no resulte suficiente.
 
 La generación de una hipótesis y su validación se consideran procesos diferenciados. La capacidad del modelo de lenguaje para producir una explicación diagnóstica no determina por sí misma que exista evidencia suficiente para sostenerla.
 
-**OE5.** Evaluar experimentalmente el ciclo de diagnóstico y validación bajo condiciones controladas de evidencia documental completa, parcial, ausente y con distractores, analizando la identificación y caracterización del patrón, la formulación de la hipótesis, la recuperación y trazabilidad de la evidencia y la decisión entre validarla o abstenerse; así como comprobar que las hipótesis que superen el proceso de validación puedan incorporarse y recuperarse posteriormente como conocimiento reutilizable sin admitir aquellas que no satisfagan los criterios establecidos.
+**OE5.** Evaluar experimentalmente el comportamiento del sistema bajo condiciones controladas de evidencia documental completa, parcial, ausente y con distractores, analizando su capacidad diagnóstica, la recuperación y trazabilidad de la evidencia, la validación de las hipótesis y la decisión entre explicar y abstenerse, así como la contribución de sus principales componentes.
 
 ## Correspondencia entre los objetivos y su evaluación
 
@@ -32,9 +32,9 @@ La generación de una hipótesis y su validación se consideran procesos diferen
 |---|---|---|
 | OE1 | Delimitar el estado del conocimiento y el vacío investigado | Revisión estructurada y verificación de fuentes primarias |
 | OE2 | Establecer el entorno experimental | Verificación de reproducibilidad, procedencia de los datos y coherencia entre telemetría y corpus |
-| OE3 | Identificar y caracterizar patrones de fallo, y determinar cuándo no están representados | Evaluación experimental sobre telemetría OBD-II y análisis de atribuciones y confianza |
+| OE3 | Identificar y caracterizar patrones de comportamiento en la telemetría | Evaluación experimental sobre telemetría OBD-II y análisis de atribuciones y confianza |
 | OE4 | Formular y validar hipótesis mediante evidencia | Evaluación de recuperación, aplicabilidad, soporte, suficiencia y abstención |
-| OE5 | Evaluar el ciclo integrado y la reutilización del conocimiento validado | Comparación entre condiciones experimentales y comprobación de incorporación y recuperación posterior |
+| OE5 | Evaluar el comportamiento del sistema bajo las cuatro condiciones de evidencia | Comparación entre condiciones experimentales y análisis de la contribución de cada componente |
 
 *Fuente: elaboración propia.*
 

@@ -2,15 +2,13 @@
 
 ## Conclusiones provisionales sobre la pregunta de investigación
 
-La pregunta de investigación plantea un ciclo diagnóstico completo: identificar un patrón de fallo no representado en el conocimiento disponible, formular una hipótesis a partir del análisis contextual y longitudinal de la telemetría OBD-II, contrastarla mediante evidencia y, únicamente cuando esta resulte suficiente, incorporar la hipótesis validada como conocimiento reutilizable.
+La pregunta de investigación indaga si un agente con recuperación aumentada puede explicar el diagnóstico de un vehículo rastreando cada afirmación hasta la evidencia que la sostiene, y reconocer cuándo esa evidencia no basta para sostener una explicación. Sobre esa pregunta, la evaluación realizada hasta esta versión permite adelantar una respuesta parcial que las ejecuciones pendientes deberán confirmar.
 
-En el estado actual del trabajo no es posible ofrecer todavía una respuesta definitiva. La evaluación experimental sigue en curso, y algunos de los componentes necesarios para estudiar el ciclo completo requieren completar su instrumentación. En particular, debe comprobarse experimentalmente la identificación de patrones no representados en el conocimiento disponible y el mecanismo mediante el que una hipótesis validada puede incorporarse y recuperarse posteriormente como conocimiento reutilizable.
-
-El desarrollo realizado permite, sin embargo, establecer la estructura metodológica necesaria para estudiar el tramo correspondiente a la formulación y validación de hipótesis. La arquitectura separa la información obtenida de la telemetría, la inferencia producida por el modelo especializado, la recuperación de información documental, la verificación de su aplicabilidad y soporte, la evaluación de suficiencia y la generación de la explicación. Esta separación permite examinar de forma independiente si una hipótesis dispone realmente de evidencia suficiente y establecer la abstención como una posible decisión cuando dicha evidencia no permite validarla.
+El desarrollo realizado establece la estructura metodológica que la pregunta requiere. La arquitectura separa la información obtenida de la telemetría, la inferencia producida por el modelo especializado, la recuperación de información documental, la verificación de su aplicabilidad y soporte, la evaluación de suficiencia y la generación de la explicación. Esta separación permite examinar de forma independiente si una hipótesis dispone realmente de evidencia suficiente y establecer la abstención como una posible decisión cuando dicha evidencia no permite validarla.
 
 La evaluación se desarrolla sobre telemetría OBD-II sintética, generada bajo condiciones controladas y parametrizada a partir de documentación técnica del vehículo de referencia. Esa configuración permite reproducir los experimentos y controlar los mecanismos de fallo representados. No permite, en cambio, establecer por sí sola que el comportamiento observado se generalice a telemetría procedente de vehículos reales. La evaluación con datos reales se considera, por tanto, una etapa posterior de validación externa.
 
-La respuesta definitiva a la pregunta de investigación quedará condicionada a la finalización del diseño experimental previsto, la evaluación sobre el conjunto de prueba reservado y la comprobación de los componentes que permiten cerrar el ciclo completo definido por la pregunta. Los resultados obtenidos hasta ese momento deberán interpretarse exclusivamente dentro de las condiciones experimentales en las que fueron producidos.
+La respuesta definitiva quedará condicionada a la finalización del diseño experimental previsto y a la evaluación sobre el conjunto de prueba reservado. Los resultados obtenidos hasta ese momento deberán interpretarse exclusivamente dentro de las condiciones experimentales en las que fueron producidos.
 
 ## Limitaciones
 
@@ -18,9 +16,7 @@ La interpretación de los resultados está condicionada, en primer lugar, por la
 
 El estudio utiliza un único vehículo de referencia, un Mazda 3 BK de 2007 con motor Z6. Esta decisión permite mantener coherencia entre la configuración mecánica representada, los códigos de avería y la documentación técnica utilizada, pero limita la generalización de los resultados a otros vehículos, generaciones, motores y fabricantes.
 
-La identificación de patrones no representados en el conocimiento disponible requiere una evaluación específica que permita distinguir entre reconocer una clase previamente aprendida y detectar un comportamiento que el sistema no conocía. El modelo de diagnóstico utilizado trabaja sobre clases conocidas. Su rendimiento de clasificación no puede interpretarse, por tanto, como evidencia de esa capacidad.
-
-De forma análoga, el ciclo definido por la pregunta de investigación requiere que una hipótesis que haya superado el proceso de validación pueda incorporarse y recuperarse posteriormente como conocimiento reutilizable, impidiendo al mismo tiempo la incorporación de hipótesis no validadas. La evaluación experimental de este mecanismo debe completarse antes de responder a esta parte de la pregunta.
+El modelo de diagnóstico trabaja sobre un catálogo cerrado de clases de fallo, de modo que el trabajo no examina el comportamiento del sistema ante averías ajenas a ese catálogo; esa extensión queda fuera del alcance y se recoge entre las líneas futuras.
 
 El número de casos anotados y la utilización de diferentes variantes documentales sobre una misma ventana de telemetría limitan el tamaño efectivo de la muestra. Las ejecuciones realizadas sobre una misma ventana se consideran medidas relacionadas y no observaciones independientes, por lo que el análisis se plantea principalmente de forma comparativa y por casos.
 
@@ -38,7 +34,7 @@ Hace falta también ampliar los casos anotados y hacerlos más difíciles: fallo
 
 El despliegue sobre una plataforma embarcada abre otra línea. Permitiría medir latencia, consumo de recursos, funcionamiento sin conexión y operación continua sobre telemetría tomada directamente del vehículo. Llega después, porque lo que ahora está en juego es el ciclo diagnóstico y no sus condiciones de ejecución.
 
-La evolución del mecanismo de conocimiento reutilizable, una vez implantado y evaluado, plantea preguntas propias. Cómo se recupera una hipótesis validada en un caso posterior. Qué hacer cuando aparece evidencia que la contradice. Y qué impide que algo aceptado para un vehículo y unas condiciones concretas acabe aplicándose donde no corresponde.
+Queda abierta, por último, la posibilidad de conservar las explicaciones que superaron la validación para reutilizarlas en casos posteriores. Eso plantea preguntas propias: cómo se recupera una explicación validada cuando reaparece un caso equivalente, qué hacer cuando surge evidencia que la contradice, y qué impide que algo aceptado para un vehículo y unas condiciones concretas acabe aplicándose donde no corresponde. También exigiría una salvaguarda contra la circularidad, para que una explicación conservada no se convierta en evidencia de sí misma.
 
 ## Consideraciones finales
 

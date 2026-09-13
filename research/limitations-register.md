@@ -258,31 +258,17 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 
 ---
 
-## L-21 — El diseño no puede examinar la identificación de patrones no representados
+## L-21 — El catálogo de fallos del modelo de diagnóstico es cerrado
 
 | Campo | Contenido |
 |---|---|
-| **Qué limita** | El primer término del objetivo general y de la pregunta de investigación |
-| **Por qué** | El modelo de diagnóstico es un clasificador supervisado de conjunto cerrado sobre clases de fallo etiquetadas. Reconocer una clase aprendida no es identificar un patrón no representado |
-| **Evidencia** | Búsqueda de `out_of_distribution`, `unseen`, `novel_fault`, `open_set` y `no_representado` en `src/`: cero coincidencias. No hay definición operacional de «no representado» ni condición experimental que la construya |
-| **Afecta a** | El grado de cumplimiento del objetivo general; la respuesta al primer término de la pregunta |
-| **Consecuencia** | El trabajo no puede afirmar ni negar nada sobre esa capacidad. No es un resultado negativo: es una capacidad no instrumentada |
-| **Cómo comprobarlo** | Gate 1 de `docs/methodology/diseno-gates-pi-pendientes.md`: exclusión de una clase en cuatro brazos, con control de observabilidad y del conocimiento paramétrico del modelo de lenguaje |
-| **Severidad** | **alta** — un término del objetivo general queda sin evidencia |
-
----
-
-## L-22 — La incorporación de hipótesis validadas como conocimiento reutilizable no está instrumentada
-
-| Campo | Contenido |
-|---|---|
-| **Qué limita** | El último término del objetivo general y de la pregunta de investigación |
-| **Por qué** | Ningún componente incorpora una hipótesis validada ni la recupera después. El ciclo termina en la decisión de explicar o abstenerse |
-| **Evidencia** | Búsqueda de `reutilizab`, `knowledge_base`, `write_back`, `incorporar` en `src/`: cero coincidencias. Ninguna de las veinte fases del plan (`docs/experiments/README.md`) contempla la incorporación |
-| **Afecta a** | El grado de cumplimiento del objetivo general; la respuesta al último término de la pregunta |
-| **Consecuencia** | El ciclo que la pregunta define se cierra en su tramo central y no de extremo a extremo |
-| **Cómo comprobarlo** | Gate 2 de `docs/methodology/diseno-gates-pi-pendientes.md`: almacén de hipótesis validadas con vía negativa y control de no contaminación |
-| **Severidad** | **alta** — un término del objetivo general queda sin evidencia |
+| **Qué limita** | El alcance de lo que el sistema puede diagnosticar |
+| **Por qué** | El modelo es un clasificador supervisado sobre cinco clases de fallo etiquetadas. Una avería ajena a ese catálogo no puede asignarse a ninguna clase |
+| **Evidencia** | `CANONICAL_SIGNALS` y `fault_ids` del generador; búsqueda de `out_of_distribution`, `unseen`, `open_set` en `src/`: cero coincidencias |
+| **Afecta a** | La generalización a averías no representadas en el conjunto de entrenamiento |
+| **Consecuencia** | El trabajo no examina el comportamiento del sistema ante fallos fuera del catálogo. No es un resultado negativo: queda fuera del alcance acordado con la dirección el 12 de septiembre de 2026 |
+| **Cómo comprobarlo** | Una condición experimental que retenga una clase fuera del entrenamiento y del diccionario de recuperación. Diseñada en `docs/methodology/diseno-gates-pi-pendientes.md`, fuera del alcance de este TFM |
+| **Severidad** | **media** — acota el alcance, no invalida ningún resultado |
 
 ---
 
@@ -291,13 +277,15 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 | Severidad | Entradas |
 |---|---|
 | crítica | 2 — L-01, **L-20** |
-| alta | 13 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14**, **L-18**, **L-19**, **L-21**, **L-22** |
-| media | 5 — L-05, L-09, L-12, **L-15**, **L-16** |
+| alta | 11 — L-02, L-03, L-06, L-07, L-08, L-10, L-11, L-13, **L-14**, **L-18**, **L-19** |
+| media | 6 — L-05, L-09, L-12, **L-15**, **L-16**, **L-21** |
 | baja | 2 — L-04, **L-17** |
 
-Veintidós entradas. La numeración no tiene huecos: L-18 y L-19 se dieron de alta el 10 de
-septiembre de 2026 al redactarse el apartado 6.1, L-20 el 4 de septiembre, y L-21 y L-22 el 10
-de septiembre al alinear el objetivo general con la pregunta de investigación.
+Veintiuna entradas. L-18 y L-19 se dieron de alta el 10 de septiembre de 2026 al redactarse el
+apartado 6.1, y L-20 el 4 de septiembre. **L-22, sobre la incorporación de conocimiento
+reutilizable, se retiró el 12 de septiembre**: pertenecía a una formulación de la pregunta que
+la dirección descartó, y lo que no está en la pregunta no puede ser una limitación de su
+respuesta. L-21 se reformula en los mismos términos y baja a severidad media.
 
 **Ninguna de estas limitaciones es ceremonial.** Todas proceden de un informe de fase, de un
 documento de método o de un documento oficial. Ninguna se ha añadido porque «suele aparecer».

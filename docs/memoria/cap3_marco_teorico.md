@@ -68,31 +68,11 @@ En los trabajos revisados, la evaluación se concentra principalmente en la corr
 
 ### El ajuste del modelo pequeño
 
-Los adaptadores de rango bajo (Hu et al., 2022, MET-13) permiten ajustar un modelo de lenguaje modificando una fracción muy pequeña de sus parámetros, lo que los hace viables para adaptar un modelo pequeño al formato de una tarea sin reentrenarlo. Esa distinción entre adaptar el formato y adaptar el contenido es la que importa aquí. Un modelo que hubiera memorizado la documentación explicaría igual cuando la evidencia se retira del índice, y el experimento mediría entonces memoria en lugar de evidencia. La aplicación de Nam et al. (2025, REF-086) no impone esa restricción; el capítulo 4 describe el modelo empleado y los controles con que se comprueba.
+Los adaptadores de rango bajo (Hu et al., 2022, MET-13) permiten ajustar un modelo de lenguaje modificando una fracción muy pequeña de sus parámetros, lo que los hace viables para adaptar un modelo pequeño al formato de una tarea sin reentrenarlo. Esa distinción entre adaptar el formato y adaptar el contenido es la que importa aquí. Un modelo que hubiera memorizado la documentación explicaría igual cuando la evidencia se retira del índice, y el experimento mediría entonces memoria en lugar de evidencia. La aplicación de Nam et al. (2025, REF-086) no impone esa restricción; el capítulo 4 describe el modelo empleado y los controles con que se comprueba. El riesgo que esos controles vigilan es el inverso del que la recuperación pretende resolver: que el conocimiento esté en los parámetros del modelo y no en la evidencia entregada, de modo que el sistema explique correctamente sin apoyarse en nada y recuperar y recordar dejen de distinguirse.
 
 ### Recuperación: semántica, léxica y filtrada
 
 Los embeddings de frases (Reimers y Gurevych, 2019, MET-11) son la base de la recuperación semántica; la fusión por rango recíproco (Cormack, Clarke y Buettcher, 2009, MET-12) permite combinarla con la búsqueda léxica sin ajustar pesos. Sobre documentación técnica, donde los códigos de avería, los nombres de sensores y los identificadores de procedimiento son términos exactos, la búsqueda léxica conserva relevancia cuando la documentación contiene identificadores y términos técnicos cuya coincidencia exacta aporta información discriminativa. Esa asimetría entre proximidad semántica y coincidencia exacta motiva dos decisiones que el capítulo 4 desarrolla y el 5 evalúa: guiar la consulta con los códigos de avería que el manual asocia al diagnóstico, y emplear un modelo de embeddings multilingüe cuando la consulta y el manual no comparten idioma.
-
-## Qué significa que un patrón no esté representado
-
-En el origen de la pregunta hay un patrón de fallo **no representado en el conocimiento disponible**, una expresión que suena unívoca y no lo es: bajo ella caben situaciones que los trabajos revisados tratan por separado, cada una con su forma de detectarse, su vía de corrección y su punto de impacto sobre la explicación. Distinguirlas antes del diseño experimental ahorra confundirlas después.
-
-Chandola, Banerjee y Kumar (2009, REF-019) agrupan las técnicas de detección de anomalías por el supuesto con que cada familia separa lo normal de lo anómalo, y avisan de que ese supuesto decide si la técnica sirve en un dominio dado. La advertencia, llevada a un sistema de varias piezas, obliga a una pregunta: **respecto de qué conocimiento** se declara no representado un patrón. Caben al menos cinco respuestas.
-
-Puede ocurrir que el patrón **no esté en el entrenamiento del modelo de diagnóstico**, de modo que la clase exista en el dominio pero no entre las etiquetas aprendidas; un clasificador de conjunto cerrado no puede señalarla, y se limitará a repartir su probabilidad entre las clases que conoce mientras la confianza calibrada baja sin decir por qué.
-
-Cabe también que el patrón **esté entre las clases y no resulte reconocible en la ventana observada**, por ruido, por el régimen de conducción o porque duró poco; eso es un fallo de observación y no de conocimiento, pero se manifiesta igual, con confianza baja, de manera que desde la salida del modelo ambas situaciones resultan indistinguibles.
-
-Una tercera situación es la del patrón **anómalo respecto del comportamiento normal** que no corresponde a ninguna clase: la telemetría se aparta de lo esperado y ninguna etiqueta le conviene. Es lo que aborda la detección de anomalías, y se distingue de las dos anteriores en que no necesita un catálogo previo de fallos.
-
-El conocimiento que falta puede estar en la evidencia y no en el modelo: el patrón se reconoce, pero **el corpus no contiene el procedimiento** que lo trata, de modo que hay diagnóstico y no hay documentación aplicable con la que sostenerlo.
-
-Queda un último caso, inverso a los anteriores: el conocimiento está **en los parámetros del modelo de lenguaje** y no en la evidencia entregada, que es el más peligroso para la validez del experimento, porque el sistema podría explicar bien sin evidencia alguna y entonces recuperar y recordar dejarían de distinguirse.
-
-Las cinco se comportan igual ante un lector de la salida final —el sistema no explica, o explica con poca confianza— y exigen instrumentos distintos: detección fuera de distribución para la primera, control del régimen de conducción para la segunda, detección de anomalías para la tercera, medición de cobertura documental para la cuarta y control de contaminación del ajuste para la quinta. El capítulo 4 declara cuáles de esos instrumentos incorpora el diseño ejecutado y cuáles no, y el capítulo 6 recoge la consecuencia de las ausencias.
-
-**Lo que la evidencia revisada no permite afirmar.** Que estas cinco situaciones agoten las formas en que un patrón puede no estar representado, ni que la distinción entre ellas sea resoluble a partir de la salida del sistema. Dentro del corpus revisado no se identificó un trabajo que las separe experimentalmente en un sistema de diagnóstico con recuperación.
 
 ## Abstención ante evidencia insuficiente
 
@@ -112,7 +92,7 @@ La revisión converge en un vacío que aparece por varios lados a la vez. Los tr
 
 Del lado de los modelos de lenguaje con recuperación sobre documentación técnica ocurre algo parecido: los mecanismos para anclar una respuesta en documentos existen y funcionan, pero no se encontró una evaluación sistemática de la correspondencia entre cada afirmación y la evidencia concreta que la sostiene, y menos aún cuando la información disponible está incompleta, falta, o se parece al caso sin serle aplicable.
 
-La abstención es parte del problema, no el problema entero. La cuestión es si un sistema puede recorrer de forma trazable el camino que va de identificar un patrón no representado e interpretarlo en su contexto y en el tiempo, hasta formular una hipótesis, contrastarla con evidencia aplicable y decidir si la valida o la deja sin confirmar. Solo después de esa validación tiene sentido hablar de incorporarla como conocimiento reutilizable.
+La abstención es parte del problema, no el problema entero. La cuestión es si un sistema puede recorrer de forma trazable el camino que va del diagnóstico obtenido de la telemetría hasta una explicación cuyas afirmaciones se apoyen, una a una, en evidencia verificable, y si sabe detenerse cuando esa evidencia no alcanza.
 
 Un matiz sobre el rechazo de evidencia engañosa: su novedad es más estrecha de lo que parecía al principio, porque existen trabajos sobre robustez de la recuperación frente a documentos irrelevantes en dominios generales. Lo que no se encontró, dentro del corpus revisado, es esa medición sobre documentación técnica de vehículo con evidencia incorrecta *del mismo fabricante y de otro motor*, que es la forma que el distractor toma aquí; el capítulo 6 recoge la limitación.
 
