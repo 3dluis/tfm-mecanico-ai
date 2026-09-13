@@ -13,7 +13,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from mecanico_ia_exp.config.paths import ROOT
 
-LLMProviderName = Literal["openai_compatible", "anthropic", "ollama", "echo"]
+#: Proveedores con implementación en ``mecanico_ia_exp.llm.provider.get_llm``. La variante
+#: ``transformers-lora@<subdirectorio>`` se acepta por la CLI, no por configuración de entorno.
+LLMProviderName = Literal["echo", "ollama", "transformers", "transformers-lora"]
 
 
 class DatabaseSettings(BaseSettings):
