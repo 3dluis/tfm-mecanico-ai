@@ -1,5 +1,18 @@
 # Resultados
 
+> **ESTADO: OBSOLETO (SUPERSEDED).** Este fichero se escribió el 1-09-2026, al cerrar la fase de
+> entorno (E1), como plantilla del documento de resultados previsto para E19. **E19 no se ha
+> ejecutado** y el fichero no se actualizó, de modo que su afirmación «sin resultados» dejó de
+> ser cierta ese mismo día: desde entonces existen 23 registros de ejecución en `experiments/`.
+> Se conserva íntegro, marcado como obsoleto, porque documenta el estado inicial y la estructura
+> que se preveía. Los resultados reales, con su estado (validado, negativo, inconcluso,
+> superseded, no canónico), están en `docs/experiment-index.md`; las cifras proceden de
+> `experiments/*.json`. Marcado el 13-09-2026.
+
+---
+
+## Texto original (1-09-2026, sin cambios)
+
 Lectura de los resultados del experimento. Se rellena en E19.
 
 **Estado: sin resultados.** El laboratorio ha cerrado la fase de entorno (E1). No
