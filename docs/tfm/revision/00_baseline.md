@@ -66,7 +66,7 @@ agente que lo ejecuta antes de empezar.
 | Skill | Entrada | Salida | Escribe en el repo |
 |---|---|---|---|
 | researcher | evidencia + reglas | capítulos, matrices, ADR | sí |
-| tutor | documento + artefactos | `tutor-reports/TUTOR-REPORT-*.md` + `TUTOR_HANDOFF` | no |
+| tutor | documento + artefactos | `docs/audits/tutor_reports/TUTOR-REPORT-*.md` + `TUTOR_HANDOFF` | no |
 | rag-evaluator | sistema RAG, registros, corpus | `rag-reports/RAG-EVALUATION-*.md` + handoff | no |
 | experiment-auditor | experimentos, registros, datos, código | `experiment-reports/EXPERIMENT-AUDIT-*.md` + handoff | no |
 | evidence-verifier | claims de la memoria | `evidence-reports/EVIDENCE-VERIFICATION-*.md`, `claims/` | no |

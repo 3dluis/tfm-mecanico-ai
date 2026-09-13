@@ -12,7 +12,7 @@ scorecard y bloque `TUTOR_HANDOFF`).
 
 > **Colisión de identificadores declarada.** Los dos informes anteriores del tutor usan
 > series solapadas: `TUTOR-MAJ-001` y `TUTOR-MIN-003` designan problemas distintos en
-> `TFM/tutor-reports/TUTOR-DRY-RUN-01.md` y en `tutor-reports/TUTOR-REPORT-20260903.md`.
+> `TFM/tutor-reports/TUTOR-DRY-RUN-01.md` y en `docs/audits/tutor_reports/TUTOR-REPORT-20260903.md`.
 > **No se renumera el pasado**; cada ID se cita con su informe de origen. Desde este informe
 > la serie es global y única, y los IDs nuevos arrancan en `TUTOR-MAJ-003`,
 > `TUTOR-MIN-006` y `TUTOR-INF-008`.
