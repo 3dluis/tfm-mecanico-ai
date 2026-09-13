@@ -24,22 +24,22 @@ Algunas etapas de la evaluación permanecen abiertas en esta primera entrega. El
 
 ## Prospectiva
 
-La continuación más clara es evaluar el sistema con telemetría OBD-II tomada de vehículos reales. Solo así puede verse si el comportamiento observado sobre datos sintéticos aguanta la variabilidad de la operación: conductores distintos, condiciones ambientales cambiantes, componentes desgastados, ruido de sensores y fallos que aparecen a la vez.
+La continuación más clara es evaluar el sistema con telemetría OBD-II tomada de vehículos reales, porque solo así puede verse si el comportamiento observado sobre datos sintéticos aguanta la variabilidad de la operación: conductores distintos, condiciones ambientales cambiantes, componentes desgastados, ruido de sensores y fallos que aparecen a la vez.
 
-Conviene hacerlo sobre el vehículo de referencia, o sobre otro cuya documentación técnica tenga suficiente detalle para que telemetría, configuración mecánica y evidencia documental sigan correspondiéndose. El entorno experimental admite cambiar la fuente de telemetría sin tocar la lógica de recuperación, verificación y decisión. Cada fuente nueva, eso sí, obliga a revisar la parametrización, la segmentación temporal y la aplicabilidad de la documentación.
+Conviene hacerlo sobre el vehículo de referencia, o sobre otro cuya documentación técnica tenga suficiente detalle para que telemetría, configuración mecánica y evidencia documental sigan correspondiéndose. El entorno experimental admite cambiar la fuente de telemetría sin tocar la lógica de recuperación, verificación y decisión, aunque cada fuente nueva obliga a revisar la parametrización, la segmentación temporal y la aplicabilidad de la documentación.
 
-Vendrían después otros vehículos, otros motores, otros fabricantes. El trabajo se apoya hoy en una sola configuración mecánica, y ampliarla mostraría si la recuperación y la validación siguen funcionando cuando la documentación cambia de estructura, de nomenclatura, de códigos de avería y de procedimientos.
+Vendrían después otros vehículos, otros motores y otros fabricantes: el trabajo se apoya hoy en una sola configuración mecánica, y ampliarla mostraría si la recuperación y la validación siguen funcionando cuando la documentación cambia de estructura, de nomenclatura, de códigos de avería y de procedimientos.
 
 Hace falta también ampliar los casos anotados y hacerlos más difíciles: fallos simultáneos, evidencia que se contradice en parte, documentación que parece pertinente pero corresponde a otra configuración, y situaciones en las que más de una hipótesis encaja con la misma telemetría. Ese último caso es el que menos se ha explorado y el que más dice sobre cuándo el sistema debería abstenerse en lugar de elegir.
 
-El despliegue sobre una plataforma embarcada abre otra línea. Permitiría medir latencia, consumo de recursos, funcionamiento sin conexión y operación continua sobre telemetría tomada directamente del vehículo. Llega después, porque lo que ahora está en juego es el ciclo diagnóstico y no sus condiciones de ejecución.
+El despliegue sobre una plataforma embarcada abre otra línea, que permitiría medir latencia, consumo de recursos, funcionamiento sin conexión y operación continua sobre telemetría tomada directamente del vehículo. Llega después, porque lo que ahora está en juego es el proceso diagnóstico y no sus condiciones de ejecución.
 
 Queda abierta, por último, la posibilidad de conservar las explicaciones que superaron la validación para reutilizarlas en casos posteriores. Eso plantea preguntas propias: cómo se recupera una explicación validada cuando reaparece un caso equivalente, qué hacer cuando surge evidencia que la contradice, y qué impide que algo aceptado para un vehículo y unas condiciones concretas acabe aplicándose donde no corresponde. También exigiría una salvaguarda contra la circularidad, para que una explicación conservada no se convierta en evidencia de sí misma.
 
 ## Consideraciones finales
 
-Una explicación plausible y una explicación sostenida por evidencia se parecen mucho sobre el papel. En diagnóstico, las dos pueden producir un texto convincente. Solo una permite dar una hipótesis por validada.
+Una explicación plausible y una explicación sostenida por evidencia se parecen mucho sobre el papel, y en diagnóstico las dos pueden producir un texto igualmente convincente. Solo una permite dar una hipótesis por validada.
 
-De ahí que la arquitectura mantenga separados lo que se observa, lo que el modelo infiere, lo que se recupera, lo que se verifica y lo que se decide. Encontrar un fragmento no es tener evidencia. Una referencia puede existir, estar bien citada y no sostener aquello para lo que se usa. Y cuando la evidencia falta, que un modelo sepa redactar una respuesta no la suple.
+De ahí que la arquitectura mantenga separados lo que se observa, lo que el modelo infiere, lo que se recupera, lo que se verifica y lo que se decide, porque encontrar un fragmento no es tener evidencia y una referencia puede existir, estar bien citada y no sostener aquello para lo que se usa. Cuando la evidencia falta, que un modelo sepa redactar una respuesta no la suple.
 
-Queda por determinar hasta dónde llega esa separación al recorrer el ciclo completo que plantea la pregunta. Mientras tanto, las conclusiones no pueden ir más allá de lo que los experimentos hayan mostrado.
+Queda por determinar hasta dónde llega esa separación cuando se recorre el proceso completo que plantea la pregunta; mientras tanto, las conclusiones no pueden ir más allá de lo que los experimentos hayan mostrado.
