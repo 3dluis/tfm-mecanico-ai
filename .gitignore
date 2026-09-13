@@ -44,6 +44,9 @@ experiments/runs/**
 # los .gitkeep; los ficheros de datos siguen excluidos.
 !**/
 !**/.gitkeep
+# La reinclusión de directorios anterior deja visible .idea/ (la regla `.idea/` solo
+# cubre el directorio); se excluye su contenido de forma explícita.
+.idea/**
 # El adaptador LoRA (29 MB) no entra en Git; su configuración e historial de
 # pérdida sí, porque son el registro que hace reproducible el ajuste.
 !models/slm_lora/adapter_config.json
