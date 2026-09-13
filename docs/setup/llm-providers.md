@@ -28,14 +28,20 @@ Toda llamada registra lo que la hace reproducible:
 | `endpoint_type` | remoto por API, local o determinista |
 | `experiment_id` | ejecución a la que pertenece |
 
-## Proveedores previstos
+## Proveedores implementados
 
 | Valor de `LLM_PROVIDER` | Uso |
 |---|---|
 | `echo` | determinista, sin red. Por defecto. Tests y CI |
-| `openai_compatible` | cualquier endpoint con la interfaz de chat habitual |
-| `anthropic` | proveedor remoto por API |
-| `ollama` | modelo local; solo portabilidad |
+| `ollama` | modelo local vía HTTP; solo portabilidad |
+| `transformers` | modelo local con `transformers` (Qwen2.5-3B-Instruct por defecto), en MPS |
+| `transformers-lora` | el anterior con el adaptador LoRA de `models/slm_lora`; `transformers-lora@<subdir>` elige otro adaptador (`mecanico-exp sufficiency --llm transformers-lora@slm_lora_v2`) |
+
+Un proveedor remoto por API con la interfaz de chat habitual estaba previsto en el diseño
+(`docs/plan_experimental_macbook.md`), pero **no se implementó**: ningún resultado del
+laboratorio procede de un proveedor remoto. Hasta el 13-09-2026 el tipo de configuración
+admitía los valores `openai_compatible` y `anthropic` sin implementación detrás; se corrigió
+para que la configuración documente solo lo que existe.
 
 `echo` es el valor por defecto deliberadamente: un checkout recién clonado no
 llama a ninguna red hasta que alguien lo configura para hacerlo.
@@ -43,10 +49,10 @@ llama a ninguna red hasta que alguien lo configura para hacerlo.
 ## Configuración
 
 ```dotenv
-LLM_PROVIDER=openai_compatible
-LLM_MODEL=<identificador del modelo>
-LLM_BASE_URL=<endpoint>
-LLM_API_KEY=<clave>
+LLM_PROVIDER=transformers-lora
+LLM_MODEL=
+LLM_BASE_URL=
+LLM_API_KEY=
 LLM_TEMPERATURE=0.0
 LLM_MAX_TOKENS=2048
 ```
