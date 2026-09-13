@@ -176,3 +176,47 @@ El principio de independencia y su tabla de unidades de análisis; la definició
 y su dimensión; el criterio de suficiencia como conjunción de condiciones sobre confianza,
 aplicabilidad, soporte y cobertura, con los umbrales determinados sobre validación; y la
 interpretación conjunta de M5 con la cobertura.
+
+---
+
+# Lenguaje de repositorio que sobrevive en el capítulo 5
+
+La memoria ya no menciona ficheros internos en ningún capítulo salvo el 5, que sigue congelado.
+Ahí quedan **quince apariciones** de tres clases distintas, y las tres deben salir antes del
+depósito.
+
+| clase | ejemplos | por qué sale |
+|---|---|---|
+| marcas de trabajo | `[RECONCILIAR]`, `[Pendiente: E18, ablaciones…]` | son notas para uno mismo; en un documento depositado señalan que no se terminó de revisarlo |
+| nombres de fichero | `E6_baseline.md`, `E15_suficiencia.json`, `E12_evaluacion_recuperacion.md` | el lector no tiene el repositorio; su sitio es reproducibilidad o un anexo |
+| proceso interno | «por regla del proyecto», «antes del depósito» | metadocumentación sobre cómo se gestiona el trabajo, no sobre lo investigado |
+
+## El caso que lo motiva
+
+> `[RECONCILIAR]` El informe `E6_baseline.md` da F1 0,876 y el informe
+> `E7_modelo_temporal.md` da para la GRU exactitud 0,806 y F1 0,822; los registros JSON dan las
+> cifras de la tabla. Se citan los registros por regla del proyecto, y la diferencia debe
+> explicarse (probablemente una ejecución anterior del informe) antes del depósito.
+
+El **hallazgo es real y no puede perderse**: dos informes de fase y los registros de ejecución
+dan cifras distintas para lo mismo, y la memoria publica las de los registros. Eso es una
+discrepancia declarada, y declararla es correcto. Lo que sobra es la forma.
+
+Redacción equivalente, sin lenguaje de repositorio:
+
+> Las cifras de esta tabla proceden de los registros de ejecución. Los informes de las fases
+> correspondientes recogen valores distintos para el mismo modelo —un F1 de 0,876 para el
+> baseline, y una exactitud de 0,806 con un F1 de 0,822 para la red recurrente—, diferencia que
+> se atribuye a una ejecución anterior a la que quedó registrada. Cuando dos artefactos del
+> trabajo discrepan, esta memoria publica el registro de ejecución y lo hace constar.
+
+La última frase convierte una nota de gestión en un criterio metodológico, que es lo que en
+realidad era.
+
+## Qué hacer con las otras dos clases
+
+Los nombres de fichero pasan a la subsección de reproducibilidad del capítulo 4, que ya declara
+que cada ejecución conserva su identificador y su configuración, o a un anexo técnico si se
+quiere la ruta exacta. «Por regla del proyecto» y «antes del depósito» desaparecen sin
+sustitución: lo primero es el criterio que acaba de enunciarse, lo segundo no le dice nada al
+lector.
