@@ -35,11 +35,11 @@ Redactado: 1 de septiembre de 2026, al cerrar E1
 | E10 corpus por vehículo | ✅ | Mazda 3 BK, manual verificado en contenido |
 | E11 pgvector | ✅ | 6 158 fragmentos, 320 DTC distintos |
 | E12 evaluación de recuperación | ✅ | Semántica pura Hit@10 = 0,00; guiada = 1,00 |
-| E13 integración del LLM | 🔴 **bloqueada** | Sin proveedor configurado |
+| E13 integración del LLM | ✅ | Qwen2.5-3B + LoRA v2 local: 9/9 válidas (4-09); 17/17 tras RERUN-A (14-09). Actualizado el 13-09-2026; antes decía «bloqueada, sin proveedor» |
 | E14 trazabilidad de afirmaciones | ✅ | Integrada en E15 |
 | E15 suficiencia | ✅ | EXPLAIN → ABSTAIN al retirar la evidencia |
 | E16 abstención | ✅ | Integrada en E15 |
-| E17 condiciones de corpus | 🟡 parcial | FULL y ABSENT hechas; faltan PARTIAL y DISTRACTOR completas |
+| E17 condiciones de corpus | 🟡 parcial | FULL, ABSENT y PARTIAL puntuadas en E15; DISTRACTOR diagnosticada en RERUN-A: redundante con PARTIAL en dos de tres fallos (13-09-2026) |
 | E18 ablaciones | ⬜ | |
 | E19 evaluación final | 🔴 **bloqueada** | Depende de E3 y E13 |
 | E20 demostración | 🔴 **bloqueada** | Depende de E19 |

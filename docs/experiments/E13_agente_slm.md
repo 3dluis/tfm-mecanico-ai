@@ -245,8 +245,8 @@ afecta a los dos. Registros: `experiments/E13_agente_transformers.json` y
 
 | | Salidas válidas | Respeta veredicto | Citas inventadas | Esquema roto | Latencia media · máx |
 |---|---|---|---|---|---|
-| Base (`transformers`) | 7/9 | 9/9 | 0 | 2 (C02, C05) | 20,4 s · 100,7 s |
-| Base + LoRA v1 | 7/9 | 9/9 | 0 | 2 (C07, C08) | 14,7 s · 38,0 s |
+| Base (`transformers`) | 7/9 | 7/7 evaluables | 0 | 2 (C02, C05) | 20,4 s · 100,7 s |
+| Base + LoRA v1 | 7/9 | 7/7 evaluables | 0 | 2 (C07, C08) | 14,7 s · 38,0 s |
 
 **El base pasa de 5/9 a 7/9 sin tocar el modelo.** Sus dos fallos en C07 y C08
 de la primera pasada eran también el fallo de vocabulario. Conviene decirlo:
@@ -334,9 +334,19 @@ Mismo motor, mismas nueve preguntas, mismo esquema unificado. Registro:
 
 | | Salidas válidas | Respeta veredicto | Citas inventadas | Esquema roto | Latencia media · máx |
 |---|---|---|---|---|---|
-| Base (`transformers`) | 7/9 | 9/9 | 0 | 2 | 20,4 s · 100,7 s |
-| Base + LoRA v1 | 7/9 | 9/9 | 0 | 2 | 14,7 s · 38,0 s |
+| Base (`transformers`) | 7/9 | 7/7 evaluables | 0 | 2 | 20,4 s · 100,7 s |
+| Base + LoRA v1 | 7/9 | 7/7 evaluables | 0 | 2 | 14,7 s · 38,0 s |
 | **Base + LoRA v2** | **9/9** | 9/9 | 0 | **0** | 13,1 s · 31,3 s |
+
+> **Corrección del 13-09-2026.** Las dos tablas de este informe decían «9/9» en la columna
+> «Respeta veredicto» para el modelo base y para LoRA v1. Los registros
+> (`experiments/pre_mixed_embedding_fix/E13_agente_transformers*.json`) tienen
+> `respected_verdict: null` en los dos runs con fallo de esquema de cada configuración: el
+> veredicto no se puede evaluar en una salida que no es válida. La cifra correcta es **7 de 7
+> evaluables**; el «9/9» contaba como respetado lo que no era evaluable. Se corrige aquí y en
+> `docs/memoria/cap5_resultados.md`. La reejecución del 13/14-09-2026 sobre recuperación
+> canónica y 17 casos está en `docs/experiments/resultado-rerun-a.md` (paso I): LoRA v2 17/17
+> válidas, 17/17 respetan el veredicto, 0 citas inventadas; base 15/17; LoRA v1 11/17.
 
 Caso a caso:
 

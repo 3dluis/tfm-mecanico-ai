@@ -117,8 +117,12 @@ códigos que documentan esa condición.
 La decisión cambia **porque cambió la evidencia**, no porque cambiara la certeza
 del modelo. Es la pregunta de investigación reducida a su mínima expresión.
 
-Decisiones correctas: **7 de 9**. Las dos discrepancias se dejan registradas sin
+Decisiones correctas: **7 de 9** (verificador v1, 9 casos, 1-09-2026; cifra histórica). Las dos discrepancias se dejan registradas sin
 ajustar umbrales:
+
+> **Nota del 13-09-2026.** El resultado vigente es **15 de 17** con el verificador v2.1 sobre el
+> conjunto ampliado, reejecutado con recuperación canónica (`docs/experiments/resultado-rerun-a.md`).
+> Esta matriz no se ha reescrito: documenta el estado del 3-09-2026.
 
 - **Fallo de encendido:** confianza calibrada 0,462. El conjunto anotado dice
   EXPLAIN porque *existe documento*; el criterio dice ABSTAIN porque *el modelo
