@@ -1,0 +1,5 @@
+regime,sessions,samples
+highway,12,7200
+idle,6,3600
+urban,12,7200
+warmup,6,3600

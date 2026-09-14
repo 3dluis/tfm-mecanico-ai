@@ -1,0 +1,7 @@
+,F00_normal,F01_vacuum_leak,F02_maf_drift,F03_thermostat_stuck,F04_o2_lag,F05_misfire
+F00_normal,28,0,0,0,0,0
+F01_vacuum_leak,0,14,0,0,0,0
+F02_maf_drift,0,0,14,0,0,0
+F03_thermostat_stuck,5,0,0,9,0,0
+F04_o2_lag,0,0,0,0,14,0
+F05_misfire,7,0,0,0,0,7
