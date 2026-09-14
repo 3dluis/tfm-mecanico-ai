@@ -1,9 +1,25 @@
 {
   "experiment_id": "E12_retrieval",
-  "executed_at": "2026-09-01T21:32:01.707605+00:00",
+  "commit": "e93dda99f1b0be4328170a68253a478528a01f31",
+  "dirty": false,
+  "executed_at": "2026-09-13T22:57:21.705866+00:00",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "goldset": "goldset_mazda3_bk.yaml",
   "vehicle_id": "mazda-3-bk-2007",
   "engine_code": "Z6",
-  "goldset": "goldset_mazda3_bk.yaml",
+  "case_set_id": "E12_ORIGINAL_6",
+  "case_set": [
+    "C01_maf_drift",
+    "C02_thermostat_stuck",
+    "C03_o2_slow_response",
+    "C04_misfire",
+    "C05_vacuum_leak",
+    "C06_vacuum_leak_evidencia_retirada"
+  ],
+  "case_set_hash": "1af2a473ed85a4d7",
+  "dtc_map_id": "E12_LEGACY_DTC_MAP",
+  "dtc_map_hash": "742a0a4134cde836",
+  "goldset_hash": "7fadc49fc7daaad1",
   "top_k": 10,
   "retrieval_depth": 60,
   "embedding": {
@@ -12,10 +28,18 @@
     "embedding_dimension": 384,
     "embedding_version": "1.0.0"
   },
+  "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
   "strategies": [
     {
       "strategy": "semantic",
       "k": 10,
+      "n_evaluated": 6,
+      "n_scored": 5,
+      "n_excluded_from_metric": 1,
+      "exclusion_reason": "no relevant files in ground truth",
+      "excluded_case_ids": [
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
       "n_cases": 6,
       "precision_at_k": 0.0,
       "recall_at_k": 0.0,
@@ -122,6 +146,13 @@
     {
       "strategy": "semantic+engine",
       "k": 10,
+      "n_evaluated": 6,
+      "n_scored": 5,
+      "n_excluded_from_metric": 1,
+      "exclusion_reason": "no relevant files in ground truth",
+      "excluded_case_ids": [
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
       "n_cases": 6,
       "precision_at_k": 0.02,
       "recall_at_k": 0.2,
@@ -226,6 +257,13 @@
     {
       "strategy": "semantic+authority",
       "k": 10,
+      "n_evaluated": 6,
+      "n_scored": 5,
+      "n_excluded_from_metric": 1,
+      "exclusion_reason": "no relevant files in ground truth",
+      "excluded_case_ids": [
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
       "n_cases": 6,
       "precision_at_k": 0.04,
       "recall_at_k": 0.4,
@@ -330,6 +368,13 @@
     {
       "strategy": "hybrid",
       "k": 10,
+      "n_evaluated": 6,
+      "n_scored": 5,
+      "n_excluded_from_metric": 1,
+      "exclusion_reason": "no relevant files in ground truth",
+      "excluded_case_ids": [
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
       "n_cases": 6,
       "precision_at_k": 0.04,
       "recall_at_k": 0.4,
@@ -434,13 +479,20 @@
     {
       "strategy": "diagnosis-guided",
       "k": 10,
+      "n_evaluated": 6,
+      "n_scored": 5,
+      "n_excluded_from_metric": 1,
+      "exclusion_reason": "no relevant files in ground truth",
+      "excluded_case_ids": [
+        "C06_vacuum_leak_evidencia_retirada"
+      ],
       "n_cases": 6,
-      "precision_at_k": 0.24,
+      "precision_at_k": 0.26,
       "recall_at_k": 1.0,
       "mrr": 0.4667,
       "hit_rate": 1.0,
-      "ndcg_at_k": 0.6417,
-      "distractors_retrieved": 0,
+      "ndcg_at_k": 0.6534,
+      "distractors_retrieved": 1,
       "cases_with_distractor_above_relevant": 0,
       "cases": [
         {
@@ -448,11 +500,11 @@
           "k": 10,
           "n_relevant": 1,
           "n_retrieved": 10,
-          "precision_at_k": 0.2,
+          "precision_at_k": 0.3,
           "recall_at_k": 1.0,
           "hit_rate": 1.0,
           "reciprocal_rank": 0.5,
-          "ndcg_at_k": 0.6064,
+          "ndcg_at_k": 0.619,
           "first_relevant_rank": 2,
           "distractors_retrieved": 0,
           "distractor_ranks": [],
@@ -463,11 +515,11 @@
           "k": 10,
           "n_relevant": 1,
           "n_retrieved": 10,
-          "precision_at_k": 0.4,
+          "precision_at_k": 0.3,
           "recall_at_k": 1.0,
           "hit_rate": 1.0,
           "reciprocal_rank": 1.0,
-          "ndcg_at_k": 0.8213,
+          "ndcg_at_k": 0.8293,
           "first_relevant_rank": 1,
           "distractors_retrieved": 0,
           "distractor_ranks": [],
@@ -508,14 +560,16 @@
           "k": 10,
           "n_relevant": 1,
           "n_retrieved": 10,
-          "precision_at_k": 0.2,
+          "precision_at_k": 0.3,
           "recall_at_k": 1.0,
           "hit_rate": 1.0,
           "reciprocal_rank": 0.3333,
-          "ndcg_at_k": 0.5635,
+          "ndcg_at_k": 0.6014,
           "first_relevant_rank": 3,
-          "distractors_retrieved": 0,
-          "distractor_ranks": [],
+          "distractors_retrieved": 1,
+          "distractor_ranks": [
+            9
+          ],
           "distractor_above_relevant": false
         },
         {
@@ -532,6 +586,2798 @@
           "distractors_retrieved": 0,
           "distractor_ranks": [],
           "distractor_above_relevant": false
+        }
+      ]
+    }
+  ],
+  "retrieved": [
+    {
+      "case_id": "C01_maf_drift",
+      "retrieval_strategy": "semantic",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003086",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T30.pdf",
+          "score": 0.630297,
+          "section": "EGR CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001578",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010201084W05.pdf",
+          "score": 0.628236,
+          "section": "DTC P0101 [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001804",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W02.pdf",
+          "score": 0.622372,
+          "section": "DTC P2178 [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001797",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W01.pdf",
+          "score": 0.619738,
+          "section": "DTC P2177 [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001818",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W04.pdf",
+          "score": 0.610483,
+          "section": "DTC P2188 [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001347",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.610158,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.608697,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001811",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W03.pdf",
+          "score": 0.606464,
+          "section": "DTC P2187 [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.601248,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001939",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W08.pdf",
+          "score": 0.600135,
+          "section": "NO.6 CRANKS NORMALLY BUT WILL NOT START [LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C02_thermostat_stuck",
+      "retrieval_strategy": "semantic",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002222",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011002000W01.pdf",
+          "score": 0.661289,
+          "section": "ENGINE TUNE - UP [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001995",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W20.pdf",
+          "score": 0.659609,
+          "section": "NO.18 COOLING SYSTEM CONCERNS - RUNS COLD [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003087",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T30.pdf",
+          "score": 0.659431,
+          "section": "EGR CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.657191,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003066",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T21.pdf",
+          "score": 0.656566,
+          "section": "FUEL INJECTION CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002142",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W51.pdf",
+          "score": 0.655703,
+          "section": "NO.18 COOLING SYSTEM CONCERNS - RUNS COLD [ZJ,"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002810",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T36.pdf",
+          "score": 0.64268,
+          "section": "EGR CONTROL OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:004396",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E074061190T05.pdf",
+          "score": 0.635463,
+          "section": "AIRFLOW TEMPERATURE CONTROL OPERATION"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002434",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011215001W05.pdf",
+          "score": 0.627522,
+          "section": "ENGINE COOLANT LEAKAGE INSPECTION"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002216",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011001001W06.pdf",
+          "score": 0.622786,
+          "section": "ENGINE TUNE - UP [LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C03_o2_slow_response",
+      "retrieval_strategy": "semantic",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003326",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E040243000W22.pdf",
+          "score": 0.569357,
+          "section": "DTC C1279, C1280, C1281, C1282, C2778 [DSC]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002934",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018861T04.pdf",
+          "score": 0.567668,
+          "section": "HEATED OXYGEN SENSOR (HO2S)"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002180",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W62.pdf",
+          "score": 0.562226,
+          "section": "ENGINE CONTROL SYSTEM OPERATION INSPECTION"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002814",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T39.pdf",
+          "score": 0.561027,
+          "section": "HEATED OXYGEN SENSOR (HO2S) HEATER CONTROL"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002917",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018860W08.pdf",
+          "score": 0.559385,
+          "section": "REAR HEATED OXYGEN SENSOR (HO2S) INSPECTION"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:005136",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E091467543W02.pdf",
+          "score": 0.556321,
+          "section": "TRANSMITTER BATTERY INSPECTION"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002913",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018860W06.pdf",
+          "score": 0.555163,
+          "section": "FRONT HEATED OXYGEN SENSOR (HO2S) INSPECTION"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002932",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018861T03.pdf",
+          "score": 0.552177,
+          "section": "HEATED OXYGEN SENSOR (HO2S) FUNCTION [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002910",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018860T01.pdf",
+          "score": 0.543325,
+          "section": "HEATED OXYGEN SENSOR (HO2S) FUNCTION [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002832",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014013211T02.pdf",
+          "score": 0.543139,
+          "section": "MASS AIR FLOW (MAF) SENSOR"
+        }
+      ]
+    },
+    {
+      "case_id": "C04_misfire",
+      "retrieval_strategy": "semantic",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002979",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018880W08.pdf",
+          "score": 0.663891,
+          "section": "PCM INSPECTION [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002981",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018880W08.pdf",
+          "score": 0.659685,
+          "section": "PCM INSPECTION [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001748",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202000W01.pdf",
+          "score": 0.639276,
+          "section": "DTC P2006 [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001347",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.630078,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002570",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011413250W03.pdf",
+          "score": 0.620642,
+          "section": "FUEL INJECTOR INSPECTION [ZJ, Z6, LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003047",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.620418,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002770",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T15.pdf",
+          "score": 0.619793,
+          "section": "VARIABLE INTAKE - AIR CONTROL OPERATION [Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W03.pdf",
+          "score": 0.61784,
+          "section": "DTC P0506 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002086",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W40.pdf",
+          "score": 0.611559,
+          "section": "NO.7 SLOW RETURN TO IDLE [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003063",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T21.pdf",
+          "score": 0.602022,
+          "section": "FUEL INJECTION CONTROL OPERATION [LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C05_vacuum_leak",
+      "retrieval_strategy": "semantic",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001337",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T02.pdf",
+          "score": 0.617889,
+          "section": "DIAGNOSTIC TEST MODE [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001811",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W03.pdf",
+          "score": 0.613318,
+          "section": "DTC P2187 [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001818",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W04.pdf",
+          "score": 0.610457,
+          "section": "DTC P2188 [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001804",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W02.pdf",
+          "score": 0.602832,
+          "section": "DTC P2178 [LF]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003045",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.600659,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001797",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W01.pdf",
+          "score": 0.599616,
+          "section": "DTC P2177 [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003063",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T21.pdf",
+          "score": 0.593421,
+          "section": "FUEL INJECTION CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "retrieval_strategy": "semantic",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001337",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T02.pdf",
+          "score": 0.617889,
+          "section": "DIAGNOSTIC TEST MODE [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001811",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W03.pdf",
+          "score": 0.613318,
+          "section": "DTC P2187 [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001818",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W04.pdf",
+          "score": 0.610457,
+          "section": "DTC P2188 [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001804",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W02.pdf",
+          "score": 0.602832,
+          "section": "DTC P2178 [LF]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003045",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.600659,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001797",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W01.pdf",
+          "score": 0.599616,
+          "section": "DTC P2177 [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003063",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T21.pdf",
+          "score": 0.593421,
+          "section": "FUEL INJECTION CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C01_maf_drift",
+      "retrieval_strategy": "semantic+engine",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003086",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T30.pdf",
+          "score": 0.630297,
+          "section": "EGR CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.608697,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.601248,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002073",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W38.pdf",
+          "score": 0.598676,
+          "section": "NO.5 ENGINE STALLS - AFTER START/AT IDLE [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.596629,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002459",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011300113T07.pdf",
+          "score": 0.595994,
+          "section": "VARIABLE INTAKE - AIR SYSTEM OPERATION [Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001634",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010201084W20.pdf",
+          "score": 0.593907,
+          "section": "DTC P0133 [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002179",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W62.pdf",
+          "score": 0.592593,
+          "section": "ENGINE CONTROL SYSTEM OPERATION INSPECTION"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.589252,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.589012,
+          "section": "DTC P2187 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C02_thermostat_stuck",
+      "retrieval_strategy": "semantic+engine",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002222",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011002000W01.pdf",
+          "score": 0.661289,
+          "section": "ENGINE TUNE - UP [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003087",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T30.pdf",
+          "score": 0.659431,
+          "section": "EGR CONTROL OPERATION [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.657191,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002142",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W51.pdf",
+          "score": 0.655703,
+          "section": "NO.18 COOLING SYSTEM CONCERNS - RUNS COLD [ZJ,"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002810",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T36.pdf",
+          "score": 0.64268,
+          "section": "EGR CONTROL OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:004396",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E074061190T05.pdf",
+          "score": 0.635463,
+          "section": "AIRFLOW TEMPERATURE CONTROL OPERATION"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002434",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011215001W05.pdf",
+          "score": 0.627522,
+          "section": "ENGINE COOLANT LEAKAGE INSPECTION"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002786",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T24.pdf",
+          "score": 0.621006,
+          "section": "FUEL INJECTION CONTROL OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:004400",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E074061190T08.pdf",
+          "score": 0.61098,
+          "section": "AIRFLOW VOLUME CONTROL OPERATION"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001346",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.603567,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C03_o2_slow_response",
+      "retrieval_strategy": "semantic+engine",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003326",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E040243000W22.pdf",
+          "score": 0.569357,
+          "section": "DTC C1279, C1280, C1281, C1282, C2778 [DSC]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002180",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W62.pdf",
+          "score": 0.562226,
+          "section": "ENGINE CONTROL SYSTEM OPERATION INSPECTION"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002814",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T39.pdf",
+          "score": 0.561027,
+          "section": "HEATED OXYGEN SENSOR (HO2S) HEATER CONTROL"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002917",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018860W08.pdf",
+          "score": 0.559385,
+          "section": "REAR HEATED OXYGEN SENSOR (HO2S) INSPECTION"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:005136",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E091467543W02.pdf",
+          "score": 0.556321,
+          "section": "TRANSMITTER BATTERY INSPECTION"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002913",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018860W06.pdf",
+          "score": 0.555163,
+          "section": "FRONT HEATED OXYGEN SENSOR (HO2S) INSPECTION"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002910",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018860T01.pdf",
+          "score": 0.543325,
+          "section": "HEATED OXYGEN SENSOR (HO2S) FUNCTION [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001387",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.541204,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014013215T02.pdf",
+          "score": 0.538633,
+          "section": "MASS AIR FLOW (MAF) SENSOR"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002642",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011601007T04.pdf",
+          "score": 0.537086,
+          "section": "EGR SYSTEM OPERATION [ZJ, Z6, LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C04_misfire",
+      "retrieval_strategy": "semantic+engine",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002979",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018880W08.pdf",
+          "score": 0.663891,
+          "section": "PCM INSPECTION [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002981",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018880W08.pdf",
+          "score": 0.659685,
+          "section": "PCM INSPECTION [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002570",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011413250W03.pdf",
+          "score": 0.620642,
+          "section": "FUEL INJECTOR INSPECTION [ZJ, Z6, LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002770",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T15.pdf",
+          "score": 0.619793,
+          "section": "VARIABLE INTAKE - AIR CONTROL OPERATION [Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W03.pdf",
+          "score": 0.61784,
+          "section": "DTC P0506 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002086",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W40.pdf",
+          "score": 0.611559,
+          "section": "NO.7 SLOW RETURN TO IDLE [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001243",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010002000T03.pdf",
+          "score": 0.599783,
+          "section": "ENGINE SPECIFICATION"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.597298,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002458",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E011300113T07.pdf",
+          "score": 0.592415,
+          "section": "VARIABLE INTAKE - AIR SYSTEM OPERATION [Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002810",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T36.pdf",
+          "score": 0.591898,
+          "section": "EGR CONTROL OPERATION [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C05_vacuum_leak",
+      "retrieval_strategy": "semantic+engine",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.590877,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003773",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050319090W08.pdf",
+          "score": 0.586206,
+          "section": "NO.4 EXCESSIVE CREEP"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.585616,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002762",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T09.pdf",
+          "score": 0.582317,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001392",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565823,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "retrieval_strategy": "semantic+engine",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.590877,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003773",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050319090W08.pdf",
+          "score": 0.586206,
+          "section": "NO.4 EXCESSIVE CREEP"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.585616,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002762",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T09.pdf",
+          "score": 0.582317,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001392",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565823,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C01_maf_drift",
+      "retrieval_strategy": "semantic+authority",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.608697,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.601248,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.596629,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.589252,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.589012,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001396",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.576164,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W03.pdf",
+          "score": 0.571899,
+          "section": "DTC P0506 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W04.pdf",
+          "score": 0.571164,
+          "section": "DTC P0507 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001400",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565836,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.564604,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C02_thermostat_stuck",
+      "retrieval_strategy": "semantic+authority",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.657191,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001346",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.603567,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W11.pdf",
+          "score": 0.560697,
+          "section": "DTC P0125 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003748",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W36.pdf",
+          "score": 0.553388,
+          "section": "DTC P0894 [FN4A - EL]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W62.pdf",
+          "score": 0.546532,
+          "section": "ENGINE CONTROL SYSTEM OPERATION INSPECTION"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001386",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.530495,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003732",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W33.pdf",
+          "score": 0.52274,
+          "section": "DTC P0771 [FN4A - EL]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003665",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W21.pdf",
+          "score": 0.506987,
+          "section": "DTC P0751 [FN4A - EL]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003682",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W24.pdf",
+          "score": 0.506976,
+          "section": "DTC P0756 [FN4A - EL]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003671",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W22.pdf",
+          "score": 0.497154,
+          "section": "DTC P0752 [FN4A - EL]"
+        }
+      ]
+    },
+    {
+      "case_id": "C03_o2_slow_response",
+      "retrieval_strategy": "semantic+authority",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003326",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E040243000W22.pdf",
+          "score": 0.569357,
+          "section": "DTC C1279, C1280, C1281, C1282, C2778 [DSC]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001387",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.541204,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001875",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W12.pdf",
+          "score": 0.520128,
+          "section": "DTC P2196 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001867",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W11.pdf",
+          "score": 0.520041,
+          "section": "DTC P2195 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001352",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.519266,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001383",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.513558,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001343",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.510008,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001457",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200300W01.pdf",
+          "score": 0.508931,
+          "section": "DTC P0300 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001401",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.508796,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001317",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W14.pdf",
+          "score": 0.508796,
+          "section": "DTC P0134 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C04_misfire",
+      "retrieval_strategy": "semantic+authority",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W03.pdf",
+          "score": 0.61784,
+          "section": "DTC P0506 [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.597298,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W04.pdf",
+          "score": 0.590444,
+          "section": "DTC P0507 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:004110",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E060201038T02.pdf",
+          "score": 0.572327,
+          "section": "ON - BOARD DIAGNOSTIC SYSTEM FUNCTION"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001396",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.568578,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003748",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W36.pdf",
+          "score": 0.559133,
+          "section": "DTC P0894 [FN4A - EL]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.553482,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003599",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W07.pdf",
+          "score": 0.553144,
+          "section": "DTC P0706 [FN4A - EL]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003665",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W21.pdf",
+          "score": 0.550357,
+          "section": "DTC P0751 [FN4A - EL]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003732",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W33.pdf",
+          "score": 0.542664,
+          "section": "DTC P0771 [FN4A - EL]"
+        }
+      ]
+    },
+    {
+      "case_id": "C05_vacuum_leak",
+      "retrieval_strategy": "semantic+authority",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.590877,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.585616,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002762",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T09.pdf",
+          "score": 0.582317,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001392",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565823,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.517643,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "retrieval_strategy": "semantic+authority",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.590877,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.585616,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002762",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T09.pdf",
+          "score": 0.582317,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001392",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565823,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.517643,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C01_maf_drift",
+      "retrieval_strategy": "hybrid",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.608697,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.601248,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.596629,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.589252,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.589012,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001396",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.576164,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W03.pdf",
+          "score": 0.571899,
+          "section": "DTC P0506 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W04.pdf",
+          "score": 0.571164,
+          "section": "DTC P0507 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001400",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565836,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.564604,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        }
+      ]
+    },
+    {
+      "case_id": "C02_thermostat_stuck",
+      "retrieval_strategy": "hybrid",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.657191,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001346",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.603567,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W11.pdf",
+          "score": 0.560697,
+          "section": "DTC P0125 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003748",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W36.pdf",
+          "score": 0.553388,
+          "section": "DTC P0894 [FN4A - EL]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002185",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010318881W62.pdf",
+          "score": 0.546532,
+          "section": "ENGINE CONTROL SYSTEM OPERATION INSPECTION"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001386",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.530495,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003732",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W33.pdf",
+          "score": 0.52274,
+          "section": "DTC P0771 [FN4A - EL]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003665",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W21.pdf",
+          "score": 0.506987,
+          "section": "DTC P0751 [FN4A - EL]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003682",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W24.pdf",
+          "score": 0.506976,
+          "section": "DTC P0756 [FN4A - EL]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003671",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W22.pdf",
+          "score": 0.497154,
+          "section": "DTC P0752 [FN4A - EL]"
+        }
+      ]
+    },
+    {
+      "case_id": "C03_o2_slow_response",
+      "retrieval_strategy": "hybrid",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003326",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E040243000W22.pdf",
+          "score": 0.569357,
+          "section": "DTC C1279, C1280, C1281, C1282, C2778 [DSC]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001387",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.541204,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001875",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W12.pdf",
+          "score": 0.520128,
+          "section": "DTC P2196 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001867",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W11.pdf",
+          "score": 0.520041,
+          "section": "DTC P2195 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001352",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.519266,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001383",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.513558,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001343",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.510008,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001457",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200300W01.pdf",
+          "score": 0.508931,
+          "section": "DTC P0300 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001401",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.508796,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001317",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W14.pdf",
+          "score": 0.508796,
+          "section": "DTC P0134 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C04_misfire",
+      "retrieval_strategy": "hybrid",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001508",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W03.pdf",
+          "score": 0.61784,
+          "section": "DTC P0506 [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.597298,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001515",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200500W04.pdf",
+          "score": 0.590444,
+          "section": "DTC P0507 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:004110",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E060201038T02.pdf",
+          "score": 0.572327,
+          "section": "ON - BOARD DIAGNOSTIC SYSTEM FUNCTION"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001396",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.568578,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003748",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W36.pdf",
+          "score": 0.559133,
+          "section": "DTC P0894 [FN4A - EL]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.553482,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003599",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W07.pdf",
+          "score": 0.553144,
+          "section": "DTC P0706 [FN4A - EL]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003665",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W21.pdf",
+          "score": 0.550357,
+          "section": "DTC P0751 [FN4A - EL]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003732",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W33.pdf",
+          "score": 0.542664,
+          "section": "DTC P0771 [FN4A - EL]"
+        }
+      ]
+    },
+    {
+      "case_id": "C05_vacuum_leak",
+      "retrieval_strategy": "hybrid",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.590877,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.585616,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002762",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T09.pdf",
+          "score": 0.582317,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001392",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565823,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.517643,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "retrieval_strategy": "hybrid",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001859",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W10.pdf",
+          "score": 0.593351,
+          "section": "DTC P2188 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003046",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014018881T09.pdf",
+          "score": 0.590877,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001843",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W08.pdf",
+          "score": 0.585616,
+          "section": "DTC P2178 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:002762",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E014000140T09.pdf",
+          "score": 0.582317,
+          "section": "IDLE AIR CONTROL (IAC) OPERATION [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001392",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.565823,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.517643,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C01_maf_drift",
+      "retrieval_strategy": "diagnosis-guided",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001340",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.608697,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001265",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W01.pdf",
+          "score": 0.440489,
+          "section": "DTC P0102 [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T10.pdf",
+          "score": 0.416687,
+          "section": "KOEO/KOER SELF - TEST [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.38826,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102W22.pdf",
+          "score": 0.379126,
+          "section": "DTC TABLE [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W05.pdf",
+          "score": 0.333756,
+          "section": "DTC TABLE [FN4A - EL]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001581",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010201084W05.pdf",
+          "score": 0.321725,
+          "section": "DTC P0101 [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001381",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.314555,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001269",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W01.pdf",
+          "score": 0.245953,
+          "section": "DTC P0102 [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001268",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W01.pdf",
+          "score": 0.218819,
+          "section": "DTC P0102 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C02_thermostat_stuck",
+      "retrieval_strategy": "diagnosis-guided",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001304",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W11.pdf",
+          "score": 0.560697,
+          "section": "DTC P0125 [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001404",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T10.pdf",
+          "score": 0.365283,
+          "section": "KOEO/KOER SELF - TEST [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T04.pdf",
+          "score": 0.334938,
+          "section": "KOEO/KOER SELF - TEST [LF]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001306",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W11.pdf",
+          "score": 0.334675,
+          "section": "DTC P0125 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001384",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.306078,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001376",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.293636,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102W22.pdf",
+          "score": 0.285972,
+          "section": "DTC TABLE [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001307",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W11.pdf",
+          "score": 0.267569,
+          "section": "DTC P0125 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E050219090W05.pdf",
+          "score": 0.20999,
+          "section": "DTC TABLE [FN4A - EL]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/node_S01_0015.pdf",
+          "score": 0.113367,
+          "section": " CONTROL SYSTEM WIRING DIAGRAM [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C03_o2_slow_response",
+      "retrieval_strategy": "diagnosis-guided",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001385",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.45946,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T10.pdf",
+          "score": 0.458117,
+          "section": "KOEO/KOER SELF - TEST [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001377",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.446684,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001345",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.426983,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T04.pdf",
+          "score": 0.42629,
+          "section": "KOEO/KOER SELF - TEST [LF]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001316",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W13.pdf",
+          "score": 0.379787,
+          "section": "DTC P0133 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001336",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T02.pdf",
+          "score": 0.372746,
+          "section": "DIAGNOSTIC TEST MODE [LF]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001311",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W13.pdf",
+          "score": 0.371095,
+          "section": "DTC P0133 [ZJ, Z6]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001315",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200100W13.pdf",
+          "score": 0.368065,
+          "section": "DTC P0133 [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001446",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102W22.pdf",
+          "score": 0.344062,
+          "section": "DTC TABLE [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C04_misfire",
+      "retrieval_strategy": "diagnosis-guided",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001348",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.498338,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001349",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.476638,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001453",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200300W01.pdf",
+          "score": 0.475579,
+          "section": "DTC P0300 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001388",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.470181,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001387",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.452758,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001350",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.44788,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001468",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200300W02.pdf",
+          "score": 0.404605,
+          "section": "DTC P0301, P0302, P0303, P0304 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T04.pdf",
+          "score": 0.399926,
+          "section": "KOEO/KOER SELF - TEST [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001377",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.368495,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T10.pdf",
+          "score": 0.35491,
+          "section": "KOEO/KOER SELF - TEST [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C05_vacuum_leak",
+      "retrieval_strategy": "diagnosis-guided",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.517643,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001856",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.465414,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001840",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.445876,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T04.pdf",
+          "score": 0.43178,
+          "section": "KOEO/KOER SELF - TEST [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W03.pdf",
+          "score": 0.421784,
+          "section": "DTC P2187 [LF]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001857",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.419023,
+          "section": "DTC P2187 [ZJ, Z6]"
+        }
+      ]
+    },
+    {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "retrieval_strategy": "diagnosis-guided",
+      "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "top_k": 10,
+      "filters": {
+        "vehicle_id": "mazda-3-bk-2007",
+        "engine_code": "Z6",
+        "corpus_variant": "FULL"
+      },
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001359",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T03.pdf",
+          "score": 0.653171,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [LF]"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001399",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T09.pdf",
+          "score": 0.612521,
+          "section": "DTC DETECTION LOGIC AND CONDITIONS [ZJ, Z6]"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001851",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.59075,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001835",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.588624,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001378",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T08.pdf",
+          "score": 0.517643,
+          "section": "DIAGNOSTIC TEST MODE [ZJ, Z6]"
+        },
+        {
+          "rank": 6,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001856",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.465414,
+          "section": "DTC P2187 [ZJ, Z6]"
+        },
+        {
+          "rank": 7,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001840",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W07.pdf",
+          "score": 0.445876,
+          "section": "DTC P2177 [ZJ, Z6]"
+        },
+        {
+          "rank": 8,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001365",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010200102T04.pdf",
+          "score": 0.43178,
+          "section": "KOEO/KOER SELF - TEST [LF]"
+        },
+        {
+          "rank": 9,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W03.pdf",
+          "score": 0.421784,
+          "section": "DTC P2187 [LF]"
+        },
+        {
+          "rank": 10,
+          "chunk_id": "mazda3-bk-workshop-manual-local@9a90d2f6a951:001857",
+          "document_id": "mazda3-bk-workshop-manual-local",
+          "source_file": "srvc/B3E010202100W09.pdf",
+          "score": 0.419023,
+          "section": "DTC P2187 [ZJ, Z6]"
         }
       ]
     }
