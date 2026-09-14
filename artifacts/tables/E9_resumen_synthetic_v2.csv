@@ -1,0 +1,7 @@
+predicted_class,n_cases,mean_confidence,top_signals,declared_by_fault,top_signal_declared
+F00_normal,3,0.5542,"oxygen_sensor, rpm, ignition_timing, intake_air_temperature",—,
+F01_vacuum_leak,3,0.7215,"ltft_bank1, stft_bank1, map, rpm","ltft_bank1, map, rpm, stft_bank1",True
+F02_maf_drift,3,0.6563,"ltft_bank1, stft_bank1, stft_bank1+ltft_bank1","ltft_bank1, maf, stft_bank1",True
+F03_thermostat_stuck,3,0.9475,coolant_temperature,coolant_temperature,True
+F04_o2_lag,3,0.9156,"oxygen_sensor, stft_bank1","oxygen_sensor, stft_bank1",True
+F05_misfire,3,0.6494,"oxygen_sensor, rpm, coolant_temperature, intake_air_temperature","engine_load, oxygen_sensor, rpm, stft_bank1",True

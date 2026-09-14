@@ -1,0 +1,2348 @@
+{
+ "B_E12": {
+  "old_executed_at": "2026-09-01T21:32:01.707605+00:00",
+  "new_executed_at": "2026-09-13T22:57:21.705866+00:00",
+  "new_commit": "e93dda99f1b0be4328170a68253a478528a01f31",
+  "new_embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+  "strategies": [
+   {
+    "strategy": "semantic",
+    "n_evaluated": 6,
+    "n_scored": 5,
+    "hit_rate": {
+     "before": 0.0,
+     "after": 0.0
+    },
+    "mrr": {
+     "before": 0.0,
+     "after": 0.0
+    },
+    "ndcg_at_k": {
+     "before": 0.0,
+     "after": 0.0
+    },
+    "precision_at_k": {
+     "before": 0.0,
+     "after": 0.0
+    },
+    "recall_at_k": {
+     "before": 0.0,
+     "after": 0.0
+    },
+    "distractors_retrieved": {
+     "before": 1,
+     "after": 1
+    },
+    "cases_with_distractor_above_relevant": {
+     "before": 1,
+     "after": 1
+    },
+    "cases": [
+     {
+      "case_id": "C01_maf_drift",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C02_thermostat_stuck",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C03_o2_slow_response",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C04_misfire",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C05_vacuum_leak",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": true,
+      "distractor_above_after": true
+     },
+     {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     }
+    ]
+   },
+   {
+    "strategy": "semantic+engine",
+    "n_evaluated": 6,
+    "n_scored": 5,
+    "hit_rate": {
+     "before": 0.2,
+     "after": 0.2
+    },
+    "mrr": {
+     "before": 0.04,
+     "after": 0.04
+    },
+    "ndcg_at_k": {
+     "before": 0.149,
+     "after": 0.149
+    },
+    "precision_at_k": {
+     "before": 0.02,
+     "after": 0.02
+    },
+    "recall_at_k": {
+     "before": 0.2,
+     "after": 0.2
+    },
+    "distractors_retrieved": {
+     "before": 0,
+     "after": 0
+    },
+    "cases_with_distractor_above_relevant": {
+     "before": 0,
+     "after": 0
+    },
+    "cases": [
+     {
+      "case_id": "C01_maf_drift",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C02_thermostat_stuck",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C03_o2_slow_response",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C04_misfire",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C05_vacuum_leak",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 5,
+      "rank_after": 5,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     }
+    ]
+   },
+   {
+    "strategy": "semantic+authority",
+    "n_evaluated": 6,
+    "n_scored": 5,
+    "hit_rate": {
+     "before": 0.4,
+     "after": 0.4
+    },
+    "mrr": {
+     "before": 0.1067,
+     "after": 0.1067
+    },
+    "ndcg_at_k": {
+     "before": 0.4679,
+     "after": 0.4679
+    },
+    "precision_at_k": {
+     "before": 0.04,
+     "after": 0.04
+    },
+    "recall_at_k": {
+     "before": 0.4,
+     "after": 0.4
+    },
+    "distractors_retrieved": {
+     "before": 0,
+     "after": 0
+    },
+    "cases_with_distractor_above_relevant": {
+     "before": 0,
+     "after": 0
+    },
+    "cases": [
+     {
+      "case_id": "C01_maf_drift",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C02_thermostat_stuck",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 3,
+      "rank_after": 3,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C03_o2_slow_response",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C04_misfire",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C05_vacuum_leak",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 5,
+      "rank_after": 5,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     }
+    ]
+   },
+   {
+    "strategy": "hybrid",
+    "n_evaluated": 6,
+    "n_scored": 5,
+    "hit_rate": {
+     "before": 0.4,
+     "after": 0.4
+    },
+    "mrr": {
+     "before": 0.1067,
+     "after": 0.1067
+    },
+    "ndcg_at_k": {
+     "before": 0.4679,
+     "after": 0.4679
+    },
+    "precision_at_k": {
+     "before": 0.04,
+     "after": 0.04
+    },
+    "recall_at_k": {
+     "before": 0.4,
+     "after": 0.4
+    },
+    "distractors_retrieved": {
+     "before": 0,
+     "after": 0
+    },
+    "cases_with_distractor_above_relevant": {
+     "before": 0,
+     "after": 0
+    },
+    "cases": [
+     {
+      "case_id": "C01_maf_drift",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C02_thermostat_stuck",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 3,
+      "rank_after": 3,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C03_o2_slow_response",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C04_misfire",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C05_vacuum_leak",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 5,
+      "rank_after": 5,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     }
+    ]
+   },
+   {
+    "strategy": "diagnosis-guided",
+    "n_evaluated": 6,
+    "n_scored": 5,
+    "hit_rate": {
+     "before": 1.0,
+     "after": 1.0
+    },
+    "mrr": {
+     "before": 0.4667,
+     "after": 0.4667
+    },
+    "ndcg_at_k": {
+     "before": 0.6417,
+     "after": 0.6534
+    },
+    "precision_at_k": {
+     "before": 0.24,
+     "after": 0.26
+    },
+    "recall_at_k": {
+     "before": 1.0,
+     "after": 1.0
+    },
+    "distractors_retrieved": {
+     "before": 0,
+     "after": 1
+    },
+    "cases_with_distractor_above_relevant": {
+     "before": 0,
+     "after": 0
+    },
+    "cases": [
+     {
+      "case_id": "C01_maf_drift",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 2,
+      "rank_after": 2,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C02_thermostat_stuck",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 1,
+      "rank_after": 1,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C03_o2_slow_response",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 6,
+      "rank_after": 6,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C04_misfire",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 3,
+      "rank_after": 3,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C05_vacuum_leak",
+      "hit_before": 1.0,
+      "hit_after": 1.0,
+      "rank_before": 3,
+      "rank_after": 3,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     },
+     {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "hit_before": 0.0,
+      "hit_after": 0.0,
+      "rank_before": null,
+      "rank_after": null,
+      "distractor_above_before": false,
+      "distractor_above_after": false
+     }
+    ]
+   }
+  ],
+  "M5_duplicates_after": {
+   "numerator": 0,
+   "denominator": 300,
+   "per_set": [
+    {
+     "case_id": "C01_maf_drift",
+     "strategy": "semantic",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C02_thermostat_stuck",
+     "strategy": "semantic",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C03_o2_slow_response",
+     "strategy": "semantic",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C04_misfire",
+     "strategy": "semantic",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C05_vacuum_leak",
+     "strategy": "semantic",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C06_vacuum_leak_evidencia_retirada",
+     "strategy": "semantic",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C01_maf_drift",
+     "strategy": "semantic+engine",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C02_thermostat_stuck",
+     "strategy": "semantic+engine",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C03_o2_slow_response",
+     "strategy": "semantic+engine",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C04_misfire",
+     "strategy": "semantic+engine",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C05_vacuum_leak",
+     "strategy": "semantic+engine",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C06_vacuum_leak_evidencia_retirada",
+     "strategy": "semantic+engine",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C01_maf_drift",
+     "strategy": "semantic+authority",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C02_thermostat_stuck",
+     "strategy": "semantic+authority",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C03_o2_slow_response",
+     "strategy": "semantic+authority",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C04_misfire",
+     "strategy": "semantic+authority",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C05_vacuum_leak",
+     "strategy": "semantic+authority",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C06_vacuum_leak_evidencia_retirada",
+     "strategy": "semantic+authority",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C01_maf_drift",
+     "strategy": "hybrid",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C02_thermostat_stuck",
+     "strategy": "hybrid",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C03_o2_slow_response",
+     "strategy": "hybrid",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C04_misfire",
+     "strategy": "hybrid",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C05_vacuum_leak",
+     "strategy": "hybrid",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C06_vacuum_leak_evidencia_retirada",
+     "strategy": "hybrid",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C01_maf_drift",
+     "strategy": "diagnosis-guided",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C02_thermostat_stuck",
+     "strategy": "diagnosis-guided",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C03_o2_slow_response",
+     "strategy": "diagnosis-guided",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C04_misfire",
+     "strategy": "diagnosis-guided",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C05_vacuum_leak",
+     "strategy": "diagnosis-guided",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    },
+    {
+     "case_id": "C06_vacuum_leak_evidencia_retirada",
+     "strategy": "diagnosis-guided",
+     "positions": 10,
+     "duplicates": 0,
+     "space": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0"
+    }
+   ],
+   "before": "no computable: el artefacto anterior no guarda los conjuntos recuperados (frozen_pre_embedding_fix.duplicate_positions=0/0, unidad no definida)"
+  }
+ },
+ "D_E15_oracle": {
+  "old_executed_at": "2026-09-04T11:11:45.690454+00:00",
+  "old_commit": "43f56dc",
+  "new_executed_at": "2026-09-13T22:57:41.203400+00:00",
+  "new_commit": "e93dda9",
+  "verifier": "v2.1",
+  "thresholds": {
+   "min_confidence": 0.79,
+   "min_retrieval_score": 0.0,
+   "min_supporting_chunks": 2,
+   "min_distinct_sources": 1,
+   "min_claim_coverage": 0.8,
+   "allow_compatible_applicability": false,
+   "accepted_applicability": [
+    "EXACT_MATCH"
+   ]
+  },
+  "cases": [
+   {
+    "case_id": "C01_maf_drift",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": false,
+    "correct_after": false,
+    "reasons_before": [
+     "LOW_MODEL_CONFIDENCE"
+    ],
+    "reasons_after": [
+     "LOW_MODEL_CONFIDENCE"
+    ],
+    "confidence": [
+     0.5999,
+     0.5999
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     6,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C02_thermostat_stuck",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "EXPLAIN",
+    "decision_after": "EXPLAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [],
+    "reasons_after": [],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     7,
+     8
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796"
+    ]
+   },
+   {
+    "case_id": "C03_o2_slow_response",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "EXPLAIN",
+    "decision_after": "EXPLAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [],
+    "reasons_after": [],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     6,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C04_misfire",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": false,
+    "correct_after": false,
+    "reasons_before": [
+     "LOW_MODEL_CONFIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_MODEL_CONFIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.4621,
+     0.4621
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     4,
+     4
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C05_vacuum_leak",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "EXPLAIN",
+    "decision_after": "EXPLAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [],
+    "reasons_after": [],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     5,
+     7
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001857"
+    ]
+   },
+   {
+    "case_id": "C06_vacuum_leak_evidencia_retirada",
+    "condition": "ABSENT",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     0,
+     0
+    ],
+    "n_distinct_sources": [
+     0,
+     0
+    ],
+    "docs_before": 0,
+    "docs_after": 0,
+    "docs_common": 0,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C07_partial",
+    "condition": "PARTIAL",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     4,
+     5
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 7,
+    "docs_after": 10,
+    "docs_common": 7,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001398",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003593"
+    ]
+   },
+   {
+    "case_id": "C08_distractor",
+    "condition": "DISTRACTOR",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     4,
+     5
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 7,
+    "docs_after": 10,
+    "docs_common": 7,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001398",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001785",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003593"
+    ]
+   },
+   {
+    "case_id": "C09_distractor_sin_filtro",
+    "condition": "DISTRACTOR_NO_FILTER",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "TOO_FEW_SUPPORTING_CHUNKS",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     1,
+     3
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 7,
+    "docs_after": 10,
+    "docs_common": 7,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001358",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817"
+    ]
+   },
+   {
+    "case_id": "C10_thermostat_absent",
+    "condition": "ABSENT",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     0,
+     0
+    ],
+    "n_distinct_sources": [
+     0,
+     0
+    ],
+    "docs_before": 0,
+    "docs_after": 0,
+    "docs_common": 0,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C11_thermostat_partial",
+    "condition": "PARTIAL",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     6,
+     7
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 6,
+    "docs_after": 9,
+    "docs_common": 6,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006130"
+    ]
+   },
+   {
+    "case_id": "C12_thermostat_distractor",
+    "condition": "DISTRACTOR",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     6,
+     7
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 6,
+    "docs_after": 9,
+    "docs_common": 6,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006130"
+    ]
+   },
+   {
+    "case_id": "C13_thermostat_distractor_sin_filtro",
+    "condition": "DISTRACTOR_NO_FILTER",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     3,
+     4
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001425",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586"
+    ]
+   },
+   {
+    "case_id": "C14_o2_absent",
+    "condition": "ABSENT",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     0,
+     0
+    ],
+    "n_distinct_sources": [
+     0,
+     0
+    ],
+    "docs_before": 0,
+    "docs_after": 0,
+    "docs_common": 0,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C15_o2_partial",
+    "condition": "PARTIAL",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     5,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129"
+    ]
+   },
+   {
+    "case_id": "C16_o2_distractor",
+    "condition": "DISTRACTOR",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     5,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129"
+    ]
+   },
+   {
+    "case_id": "C17_o2_distractor_sin_filtro",
+    "condition": "DISTRACTOR_NO_FILTER",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     3,
+     3
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   }
+  ],
+  "accuracy_before": "15/17",
+  "accuracy_after": "15/17",
+  "decisions_identical": true,
+  "reasons_identical": false,
+  "retrieved_sets_identical": false,
+  "n_cases_with_set_change": 10,
+  "baselines_vector_identical": true,
+  "baselines_scores": {
+   "before": {
+    "ALWAYS_ABSTAIN": 12,
+    "ALWAYS_EXPLAIN": 5,
+    "ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT": 3
+   },
+   "after": {
+    "ALWAYS_ABSTAIN": 12,
+    "ALWAYS_EXPLAIN": 5,
+    "ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT": 3
+   },
+   "ABSTAIN_IF_NO_EVIDENCE_RETRIEVED": {
+    "before": 8,
+    "after": 8
+   },
+   "TECHO_ALCANZABLE": "no recalculado: su definición no está implementada en el código; el pre-registro lo fija en 15/17"
+  },
+  "oracle_channels_open": {
+   "O1_window_selection_requires_correct_prediction": true,
+   "O2_retrieval_scoped_by_annotated_label": true,
+   "O3_support_dtc_from_annotated_label": true
+  }
+ },
+ "F_E15_non_oracle": {
+  "old_executed_at": "2026-09-04T11:12:09.084436+00:00",
+  "old_commit": "43f56dc",
+  "new_executed_at": "2026-09-13T22:58:00.562018+00:00",
+  "new_commit": "e93dda9",
+  "verifier": "v2.1",
+  "thresholds": {
+   "min_confidence": 0.79,
+   "min_retrieval_score": 0.0,
+   "min_supporting_chunks": 2,
+   "min_distinct_sources": 1,
+   "min_claim_coverage": 0.8,
+   "allow_compatible_applicability": false,
+   "accepted_applicability": [
+    "EXACT_MATCH"
+   ]
+  },
+  "cases": [
+   {
+    "case_id": "C01_maf_drift",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": false,
+    "correct_after": false,
+    "reasons_before": [
+     "LOW_MODEL_CONFIDENCE"
+    ],
+    "reasons_after": [
+     "LOW_MODEL_CONFIDENCE"
+    ],
+    "confidence": [
+     0.5999,
+     0.5999
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     6,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C02_thermostat_stuck",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "EXPLAIN",
+    "decision_after": "EXPLAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [],
+    "reasons_after": [],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     7,
+     8
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796"
+    ]
+   },
+   {
+    "case_id": "C03_o2_slow_response",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "EXPLAIN",
+    "decision_after": "EXPLAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [],
+    "reasons_after": [],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     6,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C04_misfire",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": false,
+    "correct_after": false,
+    "reasons_before": [
+     "LOW_MODEL_CONFIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_MODEL_CONFIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.4621,
+     0.4621
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     4,
+     4
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C05_vacuum_leak",
+    "condition": "FULL",
+    "expected": "EXPLAIN",
+    "decision_before": "EXPLAIN",
+    "decision_after": "EXPLAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [],
+    "reasons_after": [],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     1.0,
+     1.0
+    ],
+    "n_documents_applicable": [
+     5,
+     7
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001857"
+    ]
+   },
+   {
+    "case_id": "C06_vacuum_leak_evidencia_retirada",
+    "condition": "ABSENT",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     0,
+     0
+    ],
+    "n_distinct_sources": [
+     0,
+     0
+    ],
+    "docs_before": 0,
+    "docs_after": 0,
+    "docs_common": 0,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C07_partial",
+    "condition": "PARTIAL",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     4,
+     5
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 7,
+    "docs_after": 10,
+    "docs_common": 7,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001398",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001405",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003593"
+    ]
+   },
+   {
+    "case_id": "C08_distractor",
+    "condition": "DISTRACTOR",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     4,
+     5
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 7,
+    "docs_after": 10,
+    "docs_common": 7,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001398",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001785",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003593"
+    ]
+   },
+   {
+    "case_id": "C09_distractor_sin_filtro",
+    "condition": "DISTRACTOR_NO_FILTER",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "TOO_FEW_SUPPORTING_CHUNKS",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     0.9078,
+     0.9078
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     1,
+     3
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 7,
+    "docs_after": 10,
+    "docs_common": 7,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001358",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001803",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001817"
+    ]
+   },
+   {
+    "case_id": "C10_thermostat_absent",
+    "condition": "ABSENT",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     0,
+     0
+    ],
+    "n_distinct_sources": [
+     0,
+     0
+    ],
+    "docs_before": 0,
+    "docs_after": 0,
+    "docs_common": 0,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C11_thermostat_partial",
+    "condition": "PARTIAL",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     6,
+     7
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 6,
+    "docs_after": 9,
+    "docs_common": 6,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006130"
+    ]
+   },
+   {
+    "case_id": "C12_thermostat_distractor",
+    "condition": "DISTRACTOR",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     6,
+     7
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 6,
+    "docs_after": 9,
+    "docs_common": 6,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006130"
+    ]
+   },
+   {
+    "case_id": "C13_thermostat_distractor_sin_filtro",
+    "condition": "DISTRACTOR_NO_FILTER",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     3,
+     4
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:001425",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:003586"
+    ]
+   },
+   {
+    "case_id": "C14_o2_absent",
+    "condition": "ABSENT",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     0,
+     0
+    ],
+    "n_distinct_sources": [
+     0,
+     0
+    ],
+    "docs_before": 0,
+    "docs_after": 0,
+    "docs_common": 0,
+    "docs_removed": [],
+    "docs_added": []
+   },
+   {
+    "case_id": "C15_o2_partial",
+    "condition": "PARTIAL",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     5,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129"
+    ]
+   },
+   {
+    "case_id": "C16_o2_distractor",
+    "condition": "DISTRACTOR",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     5,
+     6
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 8,
+    "docs_after": 10,
+    "docs_common": 8,
+    "docs_removed": [],
+    "docs_added": [
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:005796",
+     "mazda3-bk-workshop-manual-local@9a90d2f6a951:006129"
+    ]
+   },
+   {
+    "case_id": "C17_o2_distractor_sin_filtro",
+    "condition": "DISTRACTOR_NO_FILTER",
+    "expected": "ABSTAIN",
+    "decision_before": "ABSTAIN",
+    "decision_after": "ABSTAIN",
+    "correct_before": true,
+    "correct_after": true,
+    "reasons_before": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "reasons_after": [
+     "LOW_CLAIM_COVERAGE"
+    ],
+    "confidence": [
+     1.0,
+     1.0
+    ],
+    "claim_coverage": [
+     0.0,
+     0.0
+    ],
+    "n_documents_applicable": [
+     3,
+     3
+    ],
+    "n_distinct_sources": [
+     1,
+     1
+    ],
+    "docs_before": 10,
+    "docs_after": 10,
+    "docs_common": 10,
+    "docs_removed": [],
+    "docs_added": []
+   }
+  ],
+  "accuracy_before": "15/17",
+  "accuracy_after": "15/17",
+  "decisions_identical": true,
+  "reasons_identical": false,
+  "retrieved_sets_identical": false,
+  "n_cases_with_set_change": 10,
+  "baselines_vector_identical": true,
+  "baselines_scores": {
+   "before": {
+    "ALWAYS_ABSTAIN": 12,
+    "ALWAYS_EXPLAIN": 5,
+    "ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT": 3
+   },
+   "after": {
+    "ALWAYS_ABSTAIN": 12,
+    "ALWAYS_EXPLAIN": 5,
+    "ALWAYS_EXPLAIN_WHEN_MODEL_CONFIDENT": 3
+   },
+   "ABSTAIN_IF_NO_EVIDENCE_RETRIEVED": {
+    "before": 8,
+    "after": 8
+   },
+   "TECHO_ALCANZABLE": "no recalculado: su definición no está implementada en el código; el pre-registro lo fija en 15/17"
+  },
+  "oracle_channels_open": {
+   "O1_window_selection_requires_correct_prediction": true,
+   "O2_retrieval_scoped_by_annotated_label": false,
+   "O3_support_dtc_from_annotated_label": false
+  }
+ },
+ "F_identical_to_new_oracle": true,
+ "E_distractor_diagnosis": [
+  {
+   "case_id": "C08_distractor",
+   "partial_ref": "C07_partial",
+   "condition": "DISTRACTOR",
+   "distractor_files": [
+    "srvc/B3E010202100W01.pdf",
+    "srvc/B3E010202100W03.pdf"
+   ],
+   "source_files_in_bundle": [
+    "srvc/B3E010200102T03.pdf",
+    "srvc/B3E010200102T04.pdf",
+    "srvc/B3E010200102T08.pdf",
+    "srvc/B3E010200102T09.pdf",
+    "srvc/B3E010202000W10.pdf",
+    "srvc/B3E010202100W01.pdf",
+    "srvc/B3E010202100W03.pdf",
+    "srvc/B3E050219090W05.pdf"
+   ],
+   "D1_distractor_present": true,
+   "D2_symmetric_difference_size": 2,
+   "n_docs_distractor": 10,
+   "n_docs_partial": 10,
+   "classification": "VALID_CONDITION"
+  },
+  {
+   "case_id": "C09_distractor_sin_filtro",
+   "partial_ref": "C07_partial",
+   "condition": "DISTRACTOR_NO_FILTER",
+   "distractor_files": [
+    "srvc/B3E010202100W01.pdf",
+    "srvc/B3E010202100W03.pdf"
+   ],
+   "source_files_in_bundle": [
+    "srvc/B3E010200102T02.pdf",
+    "srvc/B3E010200102T03.pdf",
+    "srvc/B3E010200102T04.pdf",
+    "srvc/B3E010200102T08.pdf",
+    "srvc/B3E010200102T09.pdf",
+    "srvc/B3E010202100W01.pdf",
+    "srvc/B3E010202100W03.pdf"
+   ],
+   "D1_distractor_present": true,
+   "D2_symmetric_difference_size": 6,
+   "n_docs_distractor": 10,
+   "n_docs_partial": 10,
+   "classification": "VALID_CONDITION"
+  },
+  {
+   "case_id": "C12_thermostat_distractor",
+   "partial_ref": "C11_thermostat_partial",
+   "condition": "DISTRACTOR",
+   "distractor_files": [
+    "srvc/B3E010201084W18.pdf"
+   ],
+   "source_files_in_bundle": [
+    "srvc/B3E010200102T04.pdf",
+    "srvc/B3E010200102T08.pdf",
+    "srvc/B3E010200102T09.pdf",
+    "srvc/B3E010200102T10.pdf",
+    "srvc/B3E010200102W22.pdf",
+    "srvc/B3E050219090W05.pdf",
+    "srvc/node_S01_0015.pdf",
+    "srvc/node_S07_0000.pdf"
+   ],
+   "D1_distractor_present": false,
+   "D2_symmetric_difference_size": 0,
+   "n_docs_distractor": 9,
+   "n_docs_partial": 9,
+   "classification": "REDUNDANT_WITH_PARTIAL"
+  },
+  {
+   "case_id": "C13_thermostat_distractor_sin_filtro",
+   "partial_ref": "C11_thermostat_partial",
+   "condition": "DISTRACTOR_NO_FILTER",
+   "distractor_files": [
+    "srvc/B3E010201084W18.pdf"
+   ],
+   "source_files_in_bundle": [
+    "srvc/B3E010200102T02.pdf",
+    "srvc/B3E010200102T03.pdf",
+    "srvc/B3E010200102T04.pdf",
+    "srvc/B3E010200102T08.pdf",
+    "srvc/B3E010200102T09.pdf",
+    "srvc/B3E010200102T10.pdf",
+    "srvc/B3E010200102W11.pdf",
+    "srvc/B3E010200102W22.pdf",
+    "srvc/B3E010201084W18.pdf",
+    "srvc/B3E050219090W05.pdf"
+   ],
+   "D1_distractor_present": true,
+   "D2_symmetric_difference_size": 7,
+   "n_docs_distractor": 10,
+   "n_docs_partial": 9,
+   "classification": "VALID_CONDITION"
+  },
+  {
+   "case_id": "C16_o2_distractor",
+   "partial_ref": "C15_o2_partial",
+   "condition": "DISTRACTOR",
+   "distractor_files": [
+    "srvc/B3E010201084W20.pdf"
+   ],
+   "source_files_in_bundle": [
+    "srvc/B3E010200102T02.pdf",
+    "srvc/B3E010200102T03.pdf",
+    "srvc/B3E010200102T04.pdf",
+    "srvc/B3E010200102T08.pdf",
+    "srvc/B3E010200102T09.pdf",
+    "srvc/B3E010200102T10.pdf",
+    "srvc/B3E010200102W22.pdf",
+    "srvc/B3E050219090W05.pdf",
+    "srvc/node_S01_0015.pdf",
+    "srvc/node_S07_0000.pdf"
+   ],
+   "D1_distractor_present": false,
+   "D2_symmetric_difference_size": 0,
+   "n_docs_distractor": 10,
+   "n_docs_partial": 10,
+   "classification": "REDUNDANT_WITH_PARTIAL"
+  },
+  {
+   "case_id": "C17_o2_distractor_sin_filtro",
+   "partial_ref": "C15_o2_partial",
+   "condition": "DISTRACTOR_NO_FILTER",
+   "distractor_files": [
+    "srvc/B3E010201084W20.pdf"
+   ],
+   "source_files_in_bundle": [
+    "srvc/B3E010200102T02.pdf",
+    "srvc/B3E010200102T03.pdf",
+    "srvc/B3E010200102T04.pdf",
+    "srvc/B3E010200102T08.pdf",
+    "srvc/B3E010200102T09.pdf",
+    "srvc/B3E010200102T10.pdf",
+    "srvc/B3E010200102W22.pdf",
+    "srvc/B3E010201084W20.pdf"
+   ],
+   "D1_distractor_present": true,
+   "D2_symmetric_difference_size": 6,
+   "n_docs_distractor": 10,
+   "n_docs_partial": 10,
+   "classification": "VALID_CONDITION"
+  }
+ ],
+ "G_H_E13b": {
+  "before": {
+   "n_examples": 62,
+   "n_cases": 44,
+   "split_by": "case_id",
+   "distribution": {
+    "FULL/EXPLAIN": 27,
+    "FULL/ABSTAIN": 10,
+    "PARTIAL/ABSTAIN": 10,
+    "ABSENT/ABSTAIN": 10,
+    "PARTIAL/EXPLAIN": 5
+   },
+   "leakage_check": "sin texto del manual en las salidas esperadas"
+  },
+  "after": {
+   "n_examples": 66,
+   "n_cases": 43,
+   "split_by": "source_window",
+   "distribution": {
+    "FULL/EXPLAIN": 28,
+    "FULL/ABSTAIN": 11,
+    "PARTIAL/ABSTAIN": 11,
+    "ABSENT/ABSTAIN": 11,
+    "PARTIAL/EXPLAIN": 5
+   },
+   "leakage_check": "sin texto del manual en las salidas esperadas",
+   "commit": "e93dda99f1b0be4328170a68253a478528a01f31",
+   "executed_at": "2026-09-13T22:58:18.818942+00:00",
+   "dataset_hash": {
+    "train": "70bd0d7e6c406319",
+    "valid": "ac81346e6d48548a"
+   }
+  }
+ },
+ "I_E13": {
+  "transformers": {
+   "before": {
+    "executed_at": "2026-09-04T04:30:38.671600+00:00",
+    "commit": "68cb5f5",
+    "dirty": true,
+    "n_runs": 9,
+    "valid": 7,
+    "verdict_evaluable": 7,
+    "respected_verdict": 7,
+    "fake_citations": 0,
+    "schema_errors": 2,
+    "latency_s": 240.8,
+    "first9": {
+     "valid": 7,
+     "respected": 7,
+     "evaluable": 7
+    }
+   },
+   "after": {
+    "executed_at": "2026-09-14T00:25:44.947603+00:00",
+    "commit": "487e98a",
+    "dirty": true,
+    "n_runs": 17,
+    "valid": 15,
+    "verdict_evaluable": 15,
+    "respected_verdict": 15,
+    "fake_citations": 0,
+    "schema_errors": 2,
+    "latency_s": 148.7,
+    "first9": {
+     "valid": 7,
+     "respected": 7,
+     "evaluable": 7
+    }
+   }
+  },
+  "transformers-lora": {
+   "before": {
+    "executed_at": "2026-09-04T04:37:06.635075+00:00",
+    "commit": "68cb5f5",
+    "dirty": true,
+    "n_runs": 9,
+    "valid": 7,
+    "verdict_evaluable": 7,
+    "respected_verdict": 7,
+    "fake_citations": 0,
+    "schema_errors": 2,
+    "latency_s": 186.6,
+    "first9": {
+     "valid": 7,
+     "respected": 7,
+     "evaluable": 7
+    }
+   },
+   "after": {
+    "executed_at": "2026-09-14T00:31:48.177962+00:00",
+    "commit": "487e98a",
+    "dirty": true,
+    "n_runs": 17,
+    "valid": 11,
+    "verdict_evaluable": 11,
+    "respected_verdict": 11,
+    "fake_citations": 0,
+    "schema_errors": 6,
+    "latency_s": 187.9,
+    "first9": {
+     "valid": 6,
+     "respected": 6,
+     "evaluable": 6
+    }
+   }
+  },
+  "transformers-lora@slm_lora_v2": {
+   "before": {
+    "executed_at": "2026-09-04T04:46:05.784127+00:00",
+    "commit": "68cb5f5",
+    "dirty": true,
+    "n_runs": 9,
+    "valid": 9,
+    "verdict_evaluable": 9,
+    "respected_verdict": 9,
+    "fake_citations": 0,
+    "schema_errors": 0,
+    "latency_s": 240.7,
+    "first9": {
+     "valid": 9,
+     "respected": 9,
+     "evaluable": 9
+    }
+   },
+   "after": {
+    "executed_at": "2026-09-14T00:20:39.620836+00:00",
+    "commit": "487e98a",
+    "dirty": true,
+    "n_runs": 17,
+    "valid": 17,
+    "verdict_evaluable": 17,
+    "respected_verdict": 17,
+    "fake_citations": 0,
+    "schema_errors": 0,
+    "latency_s": 227.0,
+    "first9": {
+     "valid": 9,
+     "respected": 9,
+     "evaluable": 9
+    }
+   }
+  }
+ }
+}

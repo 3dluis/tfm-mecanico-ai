@@ -1,0 +1,6 @@
+strategy,k,n_evaluated,n_scored,n_excluded_from_metric,exclusion_reason,excluded_case_ids,n_cases,precision_at_k,recall_at_k,mrr,hit_rate,ndcg_at_k,distractors_retrieved,cases_with_distractor_above_relevant
+semantic,10,6,5,1,no relevant files in ground truth,['C06_vacuum_leak_evidencia_retirada'],6,0.0,0.0,0.0,0.0,0.0,1,1
+semantic+engine,10,6,5,1,no relevant files in ground truth,['C06_vacuum_leak_evidencia_retirada'],6,0.02,0.2,0.04,0.2,0.149,0,0
+semantic+authority,10,6,5,1,no relevant files in ground truth,['C06_vacuum_leak_evidencia_retirada'],6,0.04,0.4,0.1067,0.4,0.4679,0,0
+hybrid,10,6,5,1,no relevant files in ground truth,['C06_vacuum_leak_evidencia_retirada'],6,0.04,0.4,0.1067,0.4,0.4679,0,0
+diagnosis-guided,10,6,5,1,no relevant files in ground truth,['C06_vacuum_leak_evidencia_retirada'],6,0.26,1.0,0.4667,1.0,0.6534,1,0
