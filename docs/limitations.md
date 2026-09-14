@@ -17,9 +17,11 @@ precondición de la pregunta, pero sigue sin fuente. Nada de lo medido sobre dia
 `MIXED-EMBEDDING-SPACE`, 4-09-2026). El índice contenía dos representaciones vectoriales de
 cada fragmento y ninguna búsqueda declaraba cuál usaba. La corrección está implementada y
 probada; los resultados de recuperación anteriores (E12, E15, E13) quedaron marcados como
-reproducibles pero no canónicos, y la reejecución pre-registrada RERUN-A es la que fija su
-estado. Su resultado está en `docs/experiments/resultado-rerun-a.md` y en
-`docs/experiment-index.md`.
+reproducibles pero no canónicos. La reejecución pre-registrada RERUN-A se ejecutó el 13 y 14 de
+septiembre: las decisiones no cambiaron y los conjuntos recuperados sí, en 10 de 17 casos; por
+el criterio fijado de antemano, «sin efecto detectable con este instrumento». Queda abierto el
+adaptador LoRA, entrenado sobre el conjunto anterior y no reentrenado
+(`docs/experiments/resultado-rerun-a.md`).
 
 ## Alcance de lo que se puede afirmar
 
