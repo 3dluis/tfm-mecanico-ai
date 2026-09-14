@@ -1,15 +1,17 @@
 {
   "experiment_id": "E13_agent",
-  "commit": "68cb5f5192f431c0885fe70b1cfae22fd30fa52c",
+  "commit": "487e98a9a63e365928e1d1c8fe2f288092fbdcfa",
   "dirty": true,
-  "executed_at": "2026-09-04T04:30:38.671600+00:00",
+  "executed_at": "2026-09-14T00:25:44.947603+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "model": "transformers",
   "prompt_version": "agent-2026-09-04",
   "goldset": "goldset_mazda3_bk.yaml",
   "llm": "transformers",
+  "llm_provider": "transformers",
   "identity": {
     "llm_provider": "transformers",
     "llm_model": "Qwen/Qwen2.5-3B-Instruct",
@@ -18,6 +20,9 @@
     "prompt_version": "p1",
     "endpoint_type": "local"
   },
+  "retrieval_run_id": "oracle@v2.1",
+  "verifier_version": "v2.1",
+  "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
   "runs": [
     {
       "case_id": "F02_maf_drift__highway__01@120s",
@@ -44,7 +49,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 5.65,
+      "latency_s": 5.97,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"foreign materials or stain inside fuel filter (low-pressure)\"]}"
     },
     {
@@ -53,7 +58,7 @@
       "verdict": "EXPLAIN",
       "output": null,
       "fake_citations": [],
-      "schema_error": "sin JSON en la respuesta: el objeto JSON de la respuesta está incompleto",
+      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 1122 (char 1121)",
       "respected_verdict": null,
       "verdict_evaluable": false,
       "valid": false,
@@ -65,8 +70,8 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 38.87,
-      "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"Insufficient coolant temperature detected.\",\"confidence\":1.0,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"La temperatura del líquido de enfriamiento no alcanza el valor especificado durante el arranque frío del motor, lo que hace que el PCM determine que la temperatura del líquido de enfriamiento para el control de combustible en ciclo cerrado es insuficiente, según la evidencia proporcionada.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001306\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001376\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001446\"]},{\"limitations\":[\"No se han observado señales de otros problemas relacionados con el sistema de control de combustible o de enfriamiento del motor.\"]}"
+      "latency_s": 22.68,
+      "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"Coolant temperature is insufficient for closed loop fuel control.\",\"confidence\":0.95,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"The coolant temperature has been consistently increasing over time, as evidenced by the delta_max, autocorr1, delta_min, crossings, and max statistics of the coolant temperature signal within the window of 120-239 seconds. This observation aligns with the diagnostic trouble code P0125, which indicates insufficient coolant temperature for closed loop fuel control according to the Mazda Motor Corporation workshop manual.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001306\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001376\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:003586\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:005796\"]},{\"limitations\":[\"The evidence does not provide information about other potential causes of the malfunction, such as issues with the thermostat, MAF sensor, or IAT sensor.\"]}}"
     },
     {
       "case_id": "F04_o2_lag__idle__02@120s",
@@ -122,7 +127,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 98.01,
+      "latency_s": 24.89,
       "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"La detección de DTC P0133 sugiere un problema con el sensor de óxidos de hidrógeno frontal, lo que puede indicar una respuesta lenta o inactividad del sensor.\",\"confidence\":1.0,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"Se observó que el valor máximo del sensor de óxidos de hidrógeno frontal aumenta (OBS003), lo que sugiere una respuesta lenta o inactividad del sensor.\",\"observational_evidence\":[\"OBS003\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001315\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001311\"]},{\"claim_id\":\"C02\",\"text\":\"El manual de servicio indica que P0133 se detecta cuando el PCM monitorea la respuesta del sensor de óxidos de hidrógeno frontal, incluyendo el ciclo de inversión, la respuesta de pobre a rico y la respuesta de rico a pobre, y si alguno de estos excede el umbral, el PCM determina que hay un problema con el sensor de óxidos de hidrógeno frontal.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001311\"]}], \"limitations\":[\"No se han observado señales de fuga de combustible o problemas relacionados con el filtro de combustible.\"]}"
     },
     {
@@ -133,8 +138,8 @@
         "decision": "ABSTAIN",
         "reason": "INSUFFICIENT_EVIDENCE",
         "missing_evidence": [
-          "engine_compression_inspection",
-          "fuel_injector_operation_test"
+          "fuel_injector_operation",
+          "engine_compression"
         ],
         "notes": ""
       },
@@ -151,8 +156,8 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 16.19,
-      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"engine_compression_inspection\",\"fuel_injector_operation_test\"]}"
+      "latency_s": 4.1,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"fuel_injector_operation\",\"engine_compression\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -160,7 +165,7 @@
       "verdict": "EXPLAIN",
       "output": null,
       "fake_citations": [],
-      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 961 (char 960)",
+      "schema_error": "sin JSON en la respuesta: Expecting ',' delimiter: line 1 column 983 (char 982)",
       "respected_verdict": null,
       "verdict_evaluable": false,
       "valid": false,
@@ -172,8 +177,8 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 32.75,
-      "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"Vacuum leak detected, investigate fuel line pressure.\",\"confidence\":0.908,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"Observation OBS001 muestra un aumento en el valor máximo de ltft_bank1 durante el intervalo 120-239 s. Observación OBS002 indica un aumento en la media de stft_bank1 durante el mismo intervalo. Observación OBS003 muestra un aumento en la media de ltft_bank1 durante el intervalo 120-239 s. Observación OBS004 revela un aumento en el valor mínimo de stft_bank1 durante el intervalo 120-239 s. Observación OBS005 indica un aumento en el valor mínimo de map durante el intervalo 120-239 s.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001856\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001840\"]},\"limitations\":[\"The evidence does not provide information about the fuel pump unit or the BARO sensor circuit.\"]}"
+      "latency_s": 19.85,
+      "raw_text": "{\"decision\":\"EXPLAIN\",\"diagnosis\":\"El vehículo presenta un problema de combustión demasiado ligero durante el encendido, lo que se refleja en los valores observados de los ajustes de combustible y en la presión de combustible.\",\"confidence\":0.908,\"claims\":[{\"claim_id\":\"C01\",\"text\":\"Los ajustes de combustible (SHRTFT y LONGFT) muestran valores crecientes durante el encendido, indicando un sistema de combustión demasiado ligero.\",\"observational_evidence\":[\"OBS001\",\"OBS002\",\"OBS003\",\"OBS004\",\"OBS005\"],\"documentary_evidence\":[\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001856\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001840\",\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001857\"]},{\"limitations\":[\"No se han observado señales de sobrecarga de combustible (p.ej., P2188 o P2196) que podrían indicar un problema de combustión demasiado rica durante el encendido.\"]}}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -200,7 +205,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 6.02,
+      "latency_s": 3.1,
       "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"Documentary evidence related to F01_vacuum_leak\"],\"notes\":\"\"}"
     },
     {
@@ -209,10 +214,9 @@
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
-        "reason": "LOW_CLAIM_COVERAGE",
+        "reason": "INSUFFICIENT_EVIDENCE",
         "missing_evidence": [
-          "engine_compression_inspection",
-          "fuel_injector_inspection"
+          "Fuel system checks and injector inspections"
         ],
         "notes": ""
       },
@@ -229,8 +233,8 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 11.04,
-      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"engine_compression_inspection\",\"fuel_injector_inspection\"]}"
+      "latency_s": 4.71,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"Fuel system checks and injector inspections\"],\"notes\":\"\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -238,10 +242,10 @@
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
-        "reason": "LOW_CLAIM_COVERAGE",
+        "reason": "INSUFFICIENT_EVIDENCE",
         "missing_evidence": [
-          "engine_compression_inspection",
-          "fuel_injector_inspection"
+          "engine_compression",
+          "fuel_injector_operation"
         ],
         "notes": ""
       },
@@ -258,8 +262,8 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 8.44,
-      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"engine_compression_inspection\",\"fuel_injector_inspection\"]}"
+      "latency_s": 4.29,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"engine_compression\",\"fuel_injector_operation\"]}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
@@ -267,9 +271,9 @@
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
-        "reason": "INSUFFICIENT_EVIDENCE",
+        "reason": "LOW_CLAIM_COVERAGE",
         "missing_evidence": [
-          "CHUNKS_RELEVANT_TO_VACUUM_LEAK"
+          "Inspection results of engine compression and fuel injectors"
         ],
         "notes": ""
       },
@@ -286,8 +290,232 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 23.78,
-      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"CHUNKS_RELEVANT_TO_VACUUM_LEAK\"],\"notes\":\"\"}"
+      "latency_s": 3.51,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"Inspection results of engine compression and fuel injectors\"]}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C10_thermostat_absent",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "documentary evidence related to thermostat stuck issue"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.54,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"documentary evidence related to thermostat stuck issue\"],\"notes\":\"\"}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C11_thermostat_partial",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "Insufficient evidence to confirm or deny the presence of specific diagnostic trouble codes related to the thermostat."
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 9.23,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"Insufficient evidence to confirm or deny the presence of specific diagnostic trouble codes related to the thermostat.\"]}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C12_thermostat_distractor",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "Insufficient evidence to confirm or deny the presence of specific diagnostic trouble codes related to the thermostat."
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 7.91,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"LOW_CLAIM_COVERAGE\",\"missing_evidence\":[\"Insufficient evidence to confirm or deny the presence of specific diagnostic trouble codes related to the thermostat.\"]}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C13_thermostat_distractor_sin_filtro",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "specific_dtc_codes_for_confirmation"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.58,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"specific_dtc_codes_for_confirmation\"]}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C14_o2_absent",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "Documentary evidence related to F04_o2_lag"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 3.82,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"Documentary evidence related to F04_o2_lag\"],\"notes\":\"\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C15_o2_partial",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "The provided evidence does not contain specific information about the oxygen sensor's performance or the cause of the DTC P0133."
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 13.3,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"The provided evidence does not contain specific information about the oxygen sensor's performance or the cause of the DTC P0133.\"],\"notes\":\"\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C16_o2_distractor",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "The provided evidence does not contain specific information about the oxygen sensor's performance or the cause of the DTC P0133."
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 7.23,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"The provided evidence does not contain specific information about the oxygen sensor's performance or the cause of the DTC P0133.\"],\"notes\":\"\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C17_o2_distractor_sin_filtro",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "INSUFFICIENT_EVIDENCE",
+        "missing_evidence": [
+          "specific_fault_details"
+        ],
+        "notes": ""
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 4.02,
+      "raw_text": "{\"decision\":\"ABSTAIN\",\"reason\":\"INSUFFICIENT_EVIDENCE\",\"missing_evidence\":[\"specific_fault_details\"]}"
     }
   ]
 }

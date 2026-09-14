@@ -1,15 +1,17 @@
 {
   "experiment_id": "E13_agent",
-  "commit": "68cb5f5192f431c0885fe70b1cfae22fd30fa52c",
+  "commit": "487e98a9a63e365928e1d1c8fe2f288092fbdcfa",
   "dirty": true,
-  "executed_at": "2026-09-04T04:46:05.784127+00:00",
+  "executed_at": "2026-09-14T00:20:39.620836+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "model": "transformers-lora@slm_lora_v2",
   "prompt_version": "agent-2026-09-04",
   "goldset": "goldset_mazda3_bk.yaml",
   "llm": "transformers-lora@slm_lora_v2",
+  "llm_provider": "transformers",
   "identity": {
     "llm_provider": "transformers",
     "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
@@ -18,6 +20,9 @@
     "prompt_version": "p1",
     "endpoint_type": "local"
   },
+  "retrieval_run_id": "oracle@v2.1",
+  "verifier_version": "v2.1",
+  "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
   "runs": [
     {
       "case_id": "F02_maf_drift__highway__01@120s",
@@ -44,7 +49,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 6.63,
+      "latency_s": 10.86,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_MODEL_CONFIDENCE\", \"missing_evidence\": [\"confianza 0.60 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -54,7 +59,7 @@
       "output": {
         "decision": "EXPLAIN",
         "diagnosis": "Condición compatible con F03_thermostat_stuck",
-        "confidence": 1.0,
+        "confidence": 0.89,
         "claims": [
           {
             "claim_id": "C01",
@@ -69,7 +74,7 @@
           },
           {
             "claim_id": "C02",
-            "text": "Se observa coolant_temperature con autocorr1 de 0.0549, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.",
+            "text": "El autocorr1 de coolant_temperature alcanza 0.0549, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.",
             "observational_evidence": [
               "OBS002"
             ],
@@ -108,8 +113,8 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 33.54,
-      "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F03_thermostat_stuck\", \"confidence\": 1.0, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal coolant_temperature presenta un delta_max de 1.686, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C02\", \"text\": \"Se observa coolant_temperature con autocorr1 de 0.0549, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal coolant_temperature presenta un delta_min de -1.496, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
+      "latency_s": 30.99,
+      "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F03_thermostat_stuck\", \"confidence\": 0.89, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal coolant_temperature presenta un delta_max de 1.686, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C02\", \"text\": \"El autocorr1 de coolant_temperature alcanza 0.0549, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal coolant_temperature presenta un delta_min de -1.496, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001304\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001404\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
       "case_id": "F04_o2_lag__idle__02@120s",
@@ -172,7 +177,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 96.31,
+      "latency_s": 28.95,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F04_o2_lag\", \"confidence\": 1.0, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"La señal oxygen_sensor presenta un delta_max de 0.08381, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}, {\"claim_id\": \"C02\", \"text\": \"El std de oxygen_sensor alcanza 0.02871, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal oxygen_sensor presenta un max de 0.5147, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001385\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001405\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
@@ -200,7 +205,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 8.27,
+      "latency_s": 5.69,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_MODEL_CONFIDENCE\", \"missing_evidence\": [\"confianza 0.462 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -264,7 +269,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 48.88,
+      "latency_s": 27.33,
       "raw_text": "{\"decision\": \"EXPLAIN\", \"diagnosis\": \"Condición compatible con F01_vacuum_leak\", \"confidence\": 0.91, \"claims\": [{\"claim_id\": \"C01\", \"text\": \"Se observa ltft_bank1 con max de 2.716, desplazado al alza respecto de lo normal, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS001\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}, {\"claim_id\": \"C02\", \"text\": \"El mean de stft_bank1 alcanza 7.077, valor superior al habitual en esta condición de funcionamiento, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS002\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}, {\"claim_id\": \"C03\", \"text\": \"La señal ltft_bank1 presenta un mean de 1.294, por encima de lo esperable en la ventana observada, entre los segundos 120 y 239 de la sesión.\", \"observational_evidence\": [\"OBS003\"], \"documentary_evidence\": [\"mazda3-bk-workshop-manual-local@9a90d2f6a951:001851\", \"mazda3-bk-workshop-manual-local@9a90d2f6a951:001835\"]}], \"limitations\": [\"La atribución indica de qué depende la predicción del modelo, no qué le ocurre al vehículo.\", \"La evidencia sostiene lo observado en las señales; no demuestra la causa.\"]}"
     },
     {
@@ -293,7 +298,7 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 11.55,
+      "latency_s": 4.68,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"NO_APPLICABLE_DOCUMENTARY_EVIDENCE\", \"missing_evidence\": [\"ningún fragmento documental aplicable a este vehículo\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
@@ -304,7 +309,7 @@
         "decision": "ABSTAIN",
         "reason": "LOW_CLAIM_COVERAGE",
         "missing_evidence": [
-          "cobertura 0.00 < 0.80"
+          "cobertura 0.908 < 0.80"
         ],
         "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
       },
@@ -321,12 +326,40 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 8.73,
-      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+      "latency_s": 6.5,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.908 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
       "case_id": "F01_vacuum_leak__idle__10@120s",
       "gold_case_id": "C08_distractor",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.908 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 8.46,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.908 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "C09_distractor_sin_filtro",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
@@ -349,18 +382,18 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 8.66,
+      "latency_s": 5.12,
       "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     },
     {
-      "case_id": "F01_vacuum_leak__idle__10@120s",
-      "gold_case_id": "C09_distractor_sin_filtro",
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C10_thermostat_absent",
       "verdict": "ABSTAIN",
       "output": {
         "decision": "ABSTAIN",
-        "reason": "TOO_FEW_SUPPORTING_CHUNKS",
+        "reason": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
         "missing_evidence": [
-          "ningún fragmento de evidencia sostiene la explicación",
+          "ningún fragmento documental aplicable a este vehículo",
           "cobertura 0.00 < 0.80"
         ],
         "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
@@ -378,8 +411,205 @@
         "prompt_version": "p1",
         "endpoint_type": "local"
       },
-      "latency_s": 18.14,
-      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"TOO_FEW_SUPPORTING_CHUNKS\", \"missing_evidence\": [\"ningún fragmento de evidencia sostiene la explicación\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+      "latency_s": 15.41,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"NO_APPLICABLE_DOCUMENTARY_EVIDENCE\", \"missing_evidence\": [\"ningún fragmento documental aplicable a este vehículo\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C11_thermostat_partial",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 22.14,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C12_thermostat_distractor",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 16.93,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "C13_thermostat_distractor_sin_filtro",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 6.45,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C14_o2_absent",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 13.3,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"NO_APPLICABLE_DOCUMENTARY_EVIDENCE\", \"missing_evidence\": [\"ningún fragmento documental aplicable a este vehículo\", \"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C15_o2_partial",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 9.74,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C16_o2_distractor",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 8.89,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "C17_o2_distractor_sin_filtro",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.58,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
     }
   ]
 }
