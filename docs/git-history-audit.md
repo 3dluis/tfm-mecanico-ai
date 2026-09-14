@@ -1,7 +1,8 @@
 # Git History Audit
 
 Auditoría del historial Git de `mecanico-ia-exp`, realizada el 13-09-2026 antes de
-cualquier modificación. Todo lo que sigue se obtuvo del propio repositorio; no se
+cualquier modificación. **Ejecutada** el 13 y 14-09 según la opción A; resultado en
+`docs/git-history-report.md`. Todo lo que sigue se obtuvo del propio repositorio; no se
 infiere nada que no conste en Git o en los ficheros versionados.
 
 ## 1. Estado actual
@@ -290,7 +291,7 @@ nuevos, ninguno modifica código ni resultados):
 | `docs/experiment-index.md` | Índice de experimentos con identificadores estables | `docs(experiments): índice de experimentos con estado y evidencia` |
 | `docs/tfm-traceability.md` | Matriz objetivo → experimento → evidencia → sección | `docs(tfm): matriz de trazabilidad pregunta → experimento → evidencia` |
 | `docs/reproducibility.md` | Entorno, versiones, semillas y comandos | `docs(reproducibility): entorno, versiones y comandos de reproducción` |
-| `docs/drafts/README.draft.md`, `docs/drafts/JURY_GUIDE.draft.md`, `docs/drafts/estructura-para-jurado.md` | Borradores para revisión del autor; no sustituyen a nada hasta que se aprueben | Se confirman solo cuando el autor los apruebe y pasen a su ubicación definitiva |
+| `README.md`, `JURY_GUIDE.md` | Redactados como borrador, aprobados por el autor el 13-09 y confirmados en su ubicación definitiva | `docs: README de investigación y guía de revisión para el tribunal` |
 
 ## 5. Reescrituras propuestas
 

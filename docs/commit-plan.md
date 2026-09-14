@@ -1,6 +1,11 @@
 # Plan de commits
 
-Estado: **propuesta, pendiente de aprobación del autor**. Nada de lo que sigue se ha ejecutado.
+Estado: aprobado por el autor el 13-09-2026 y **ejecutado** (con la reescritura primero y los
+commits nuevos después, la segunda de las dos ordenaciones que se proponían). Los SHA definitivos
+están en `docs/git-history-report.md`. Se conserva como plan original; las diferencias respecto
+a lo ejecutado: la rama de respaldo mantiene su nombre (no se renombró), `research/available-skills.md`
+se retiró (decisión del autor), y se añadieron RERUN-A, `artifacts/`, `data/samples/`, los scripts
+de reproducción y la resolución de discrepancias, que no estaban en este plan.
 Contexto y evidencia en `docs/git-history-audit.md`.
 
 ## Principio
