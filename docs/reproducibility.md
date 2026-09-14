@@ -72,6 +72,23 @@ No se fija `PYTHONHASHSEED` ni `torch.use_deterministic_algorithms`.
   fragmentos con `content_hash`; estado congelado en `configs/manifest_rerun_a.json`.
 - Conjunto anotado: `configs/goldset_mazda3_bk.yaml` (versionado).
 
+## Identificadores de commit anteriores al 13-09-2026
+
+El historial de `main` se normalizó el 13-09-2026 (retirada de trailers automáticos en 69
+mensajes). Los SHA anteriores a esa fecha que aparecen en el campo `commit` de los registros
+JSON, en `configs/manifest_rerun_a.json` y en documentos de método no se han editado: se
+resuelven con la tabla de `docs/git-sha-mapping.md` o directamente contra la rama de archivo
+`backup/pre-history-cleanup-20260913-1815`, que conserva el historial original de forma
+permanente (`git show <sha-antiguo>` funciona mientras exista esa rama). Los registros de
+RERUN-A (13/14-09) citan ya SHA del historial normalizado.
+
+## Muestra de datos y scripts
+
+`data/samples/synthetic_sample.parquet` (18 sesiones, 1,3 MB) permite ejecutar el flujo
+`preprocess → train-baseline` sin regenerar nada (`data/README.md`). `scripts/reproduce_baseline.sh`
+y `scripts/reproduce_main_results.sh` encadenan los comandos de abajo y muestran el `diff` con
+los registros versionados.
+
 ## Ruta mínima para el tribunal
 
 Sin PostgreSQL ni manual de taller se reproduce el bloque de telemetría (E2 → E9):
@@ -104,12 +121,13 @@ Nota sobre `uv sync --frozen`: `uv.lock` está en sincronía con `pyproject.toml
 1. **El corpus no es redistribuible y entra por un symlink absoluto** a la máquina del autor.
    Un tercero no puede ejecutar E11–E15 sin conseguir el manual por su cuenta; el manifiesto
    además declara procedencia no verificada.
-2. **Los resultados de recuperación están `SUPERSEDED`** por `MIXED-EMBEDDING-SPACE` y la
-   reejecución pre-registrada RERUN-A no consta ejecutada: las cifras de E12/E15 son
-   reproducibles pero el propio proyecto no las considera canónicas.
-3. **Tablas, figuras y pesos LoRA no están versionados** (`.gitignore`). La memoria cita cifras
-   que salen de ellos; para el tribunal existen solo si se regeneran o si el autor los entrega
-   aparte.
+2. **El adaptador LoRA no es canónico**: se entrenó sobre un conjunto generado con
+   recuperación de procedencia indeterminada (`MIXED-EMBEDDING-SPACE`). RERUN-A (13/14-09)
+   fijó registros canónicos para E12, E15, E13b y E13, con decisiones idénticas; el
+   reentrenamiento del adaptador sigue pendiente (`docs/experiments/resultado-rerun-a.md`).
+3. **Los pesos LoRA no están versionados** (28 MB × 2); se regeneran con `finetune-slm`
+   (~75 min). Las tablas y figuras usadas en la memoria sí están, desde el 13-09, en
+   `artifacts/` con su procedencia (`artifacts/README.md`).
 4. **Sin CI ni pre-commit**: los gates dependen de ejecución manual.
 5. **Registros sin huella de máquina** y **sin `commit`/`executed_at` en siete JSON** (E6, E7,
    E9, E13b, E13 echo/ollama/esquema_v1).
