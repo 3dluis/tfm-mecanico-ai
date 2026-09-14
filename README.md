@@ -1,100 +1,188 @@
-# mecanico-ia-exp
+# Mecánico IA: repositorio experimental del TFM
 
-Laboratorio experimental reproducible del Trabajo Fin de Máster en Inteligencia
-Artificial (UAX). Aquí se construye, se ejecuta y se documenta el experimento
-científico principal.
+Artefacto experimental del Trabajo Fin de Máster en Inteligencia Artificial (UAX, Luis Daniel
+Díaz, 2026). Contiene el código, los registros de ejecución, las decisiones y las auditorías
+con los que se construyó la evidencia de la memoria. No es un producto: es el laboratorio, con
+su historial completo, incluidos los resultados que no salieron como se esperaba.
 
-## Pregunta de investigación
+Guía de lectura para el tribunal en 10–15 minutos: [`JURY_GUIDE.md`](JURY_GUIDE.md).
 
-> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de
-> datos OBD-II, rastreando cada explicación hasta su evidencia de origen,
-> y reconocer cuándo la evidencia disponible no es suficiente para sostener una
-> explicación en lugar de generar una hipótesis sin fundamento?
+## 1. Qué se investiga
 
-## Cadena experimental
+Cuando un sistema de diagnóstico de vehículos explica una avería a partir de telemetría OBD-II,
+la explicación suele evaluarse por si el diagnóstico final es correcto. Este trabajo estudia
+otra propiedad: si **cada afirmación de la explicación puede seguirse hasta la evidencia que la
+sostiene** (una observación de la telemetría o un fragmento identificable del manual de taller)
+y si el sistema es capaz de **abstenerse** cuando esa evidencia no basta, en lugar de producir
+una hipótesis sin fundamento.
+
+## 2. Pregunta de investigación
+
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
+> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+> disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis
+> sin fundamento?
+
+Enunciada en `docs/memoria/cap1_introduccion.md`; fijada como canónica por
+`research/decisions/ADR-004-pregunta-de-investigacion-canonica.md` tras dos revisiones
+documentadas (ADR-003 retiró el requisito de datos reales; ADR-004 descartó una formulación
+más amplia). Se descompone en cuatro subpreguntas (PI.1 diagnóstico y calibración, PI.2
+recuperación y trazabilidad, PI.3 abstención con evidencia insuficiente, PI.4 rechazo de
+evidencia parecida pero no aplicable), cada una con su hipótesis y su criterio de refutación
+en `docs/memoria/cap4_marco_metodologico.md` (Tabla 4.6).
+
+## 3. El vacío que se aborda
+
+Según la revisión del capítulo 3 (`docs/memoria/cap3_marco_teorico.md`), y solo entre los
+trabajos revisados: los sistemas de diagnóstico sobre OBD-II clasifican, detectan y atribuyen,
+y ahí terminan; los sistemas de recuperación sobre documentación técnica anclan la respuesta
+en documentos, pero miden si la respuesta final es correcta, no si cada afirmación puede
+seguirse hasta el fragmento que la sostiene; y la abstención se trata como una disposición del
+modelo de lenguaje, no como una propiedad de la evidencia disponible. Este trabajo sitúa la
+decisión de explicar o abstenerse fuera del modelo de lenguaje, en un verificador determinista
+que examina la evidencia. La revisión no es un flujo PRISMA formal (L-08) y tres trabajos no se
+leyeron a texto completo (L-09): el vacío se afirma con ese alcance.
+
+## 4. Arquitectura experimental
 
 ```
-datos OBD-II → series temporales → preprocesamiento → modelo especializado
-  → diagnóstico + confianza → XAI → evidencia observacional
-  → RAG → evidencia documental → evaluación de suficiencia
-  → EXPLAIN / ABSTAIN → LLM → explicación trazable → evaluación científica
+telemetría OBD-II sintética, calibrada contra el manual del vehículo    (E2)
+  → ventanas de 120 s y 139 descriptores, reparto por sesión              (E5)
+  → modelo de diagnóstico con confianza calibrada                         (E6 bosque · E7 GRU)
+  → atribución SHAP: evidencia observacional                              (E9)
+  → recuperación sobre el manual de taller, filtrada por vehículo y motor (E11 · E12)
+  → verificador determinista de suficiencia → EXPLAIN / ABSTAIN           (E15 · E15b umbral)
+  → redactor SLM (Qwen2.5-3B + LoRA) con citas comprobadas contra el índice (E13)
 ```
 
-El LLM no diagnostica a partir de OBD-II crudo: redacta y organiza la evidencia
-que otros componentes han producido. La decisión de explicar o abstenerse la
-toma un componente determinista, fuera del LLM.
+El modelo de lenguaje no diagnostica ni decide: redacta la evidencia que los componentes
+anteriores produjeron, y cada cita se comprueba contra el índice. El conjunto de test está
+cerrado por excepción en el código y nunca se abrió: todas las cifras son de validación (L-17).
+Vehículo de referencia: Mazda 3 BK 2007, motor Z6 (`docs/memoria/cap4_marco_metodologico.md`,
+Tabla 4.1). Detalle de fases, políticas y pre-registros: `docs/methodology/`.
 
-## Quick Start — entorno oficial (macOS Apple Silicon)
+## 5. Experimentos más importantes
 
-Requisitos: macOS sobre Apple Silicon, [uv](https://docs.astral.sh/uv/) y una
-instalación local de PostgreSQL 14+ con la extensión `pgvector` disponible.
+| Exp. | Qué responde | Dónde está el registro |
+|---|---|---|
+| E6 | Línea base de diagnóstico y calibración de la confianza | `experiments/E6_baseline_synthetic_v2.json` |
+| E7 | Si un modelo temporal aporta algo sobre la línea base | `experiments/E7_temporal_synthetic_v{2,3}.json` |
+| E12 | Cuánto aporta filtrar la recuperación por vehículo, motor y autoridad | `experiments/E12_retrieval.json` |
+| E15 | Si el verificador decide EXPLAIN/ABSTAIN correctamente bajo cuatro condiciones de evidencia | `experiments/E15_suficiencia*.json` |
+| E15b | Qué umbral de confianza es estable | `experiments/E15b_barrido_umbral.json` |
+| E13 | Si el redactor produce explicaciones válidas, respeta el veredicto y no inventa citas | `experiments/E13_agente_*.json` |
+| RERUN-A | Si un defecto metodológico descubierto el 4-09 (`MIXED-EMBEDDING-SPACE`) alteraba los resultados de recuperación | `docs/experiments/resultado-rerun-a.md` |
 
-```bash
-# 1. Entorno de Python (uv resuelve e instala Python 3.11)
+Índice completo con estado de cada experimento (VALIDATED, NEGATIVE, INCONCLUSIVE,
+SUPERSEDED, NON-CANONICAL, PLANNED): [`docs/experiment-index.md`](docs/experiment-index.md).
+
+## 6. Qué se encontró
+
+Cifras de validación sobre datos sintéticos de un solo vehículo. Cada una procede del registro
+indicado; la lectura prudente es la del capítulo 5 de la memoria.
+
+- **Diagnóstico (PI.1).** El bosque aleatorio alcanza macro-F1 0,879 frente a 0,074 de la clase
+  mayoritaria, con una confianza mal calibrada (ECE 0,144; 0,085 tras calibración isotónica).
+  El modelo temporal GRU **no lo supera** en `synthetic_v2` (0,823) y lo supera por 0,0125 en
+  `synthetic_v3`, un margen que el propio informe declara inconcluso.
+- **Recuperación (PI.2).** La similitud semántica sin filtros no recupera el procedimiento
+  relevante en ningún caso (hit-rate 0,00); guiada por el diagnóstico y filtrada por motor y
+  autoridad lo recupera en los cinco casos puntuables (hit-rate 1,00, MRR 0,467). Seis casos
+  anotados; uno excluido de la métrica por no tener fichero relevante.
+- **Suficiencia y abstención (PI.3).** El verificador determinista v2.1 decide correctamente
+  15 de 17 casos; abstiene en los 3/3 con evidencia retirada y en los 3/3 con evidencia parcial;
+  falla en dos casos con evidencia completa. El resultado es idéntico sin canales de oráculo.
+  En un escenario adverso con seis ventanas mal clasificadas por el modelo, abstiene en las seis,
+  pero el análisis reveló una puerta de comprobación que se omitía en silencio.
+- **Distractores (PI.4).** Con el filtro de motor activo, la condición «distractor» resulta
+  redundante con la condición parcial en dos de los tres fallos: recupera los mismos fragmentos.
+  La subpregunta queda bajo diagnóstico, y la novedad que se reclamaba sobre ella es más
+  estrecha (L-10).
+- **Redactor (E13).** Con el adaptador LoRA, 9 de 9 explicaciones válidas, 9 de 9 con el
+  veredicto respetado y 0 citas inventadas; el modelo base produce 7 de 9 válidas. El ajuste
+  corrigió el formato, no el diagnóstico.
+- **RERUN-A.** Tras corregir la mezcla de espacios de embeddings, los conjuntos recuperados
+  cambian en 10 de 17 casos y las decisiones no cambian en ninguno. Por el criterio fijado en el
+  pre-registro, esto se lee como «sin efecto detectable con este instrumento», no como
+  validación del verificador.
+
+## 7. Qué no se pudo demostrar
+
+- Nada sobre vehículos reales: la telemetría es sintética y la validación externa (E3) no se
+  ejecutó (L-01, crítica).
+- Que el modelo temporal aporte algo sobre la línea base (E7, negativo o inconcluso).
+- Que la condición de distractor manipule una variable observable en los tres fallos
+  (redundante en dos); por eso no hay inferencia confirmatoria sobre PI.4 y **ningún valor p**
+  se publica (pre-registro de RERUN-A, ENM-S01/S02).
+- Que el verificador sea correcto cuando el diagnóstico no lleva códigos de avería asociados:
+  la puerta de códigos se omitía (`EMPTY-DTC-GATE-BYPASS`), la corrección v2.2 está
+  implementada y **sin medir** (RERUN-B).
+- Que el adaptador LoRA sea canónico: se entrenó sobre un conjunto generado con recuperación
+  de procedencia indeterminada y no se ha reentrenado.
+- Ninguna ablación (E18), ninguna evaluación final sobre test (E19).
+
+Registro completo: [`docs/limitations.md`](docs/limitations.md) y
+`research/limitations-register.md`. Hallazgos y correcciones documentadas:
+`docs/experiments/hallazgo-*.md`.
+
+## 8. Cómo reproducir
+
+Entorno verificado: macOS sobre Apple Silicon, `uv`, PostgreSQL 14+ con `pgvector`. El bloque
+de telemetría (E2 → E9, E15b) se reproduce sin base de datos ni manual:
+
+```
 uv sync --all-extras
+uv run mecanico-exp doctor --no-db
+bash scripts/reproduce_baseline.sh          # E2 → E5 → E6 sobre synthetic_v2, y diff con el registro versionado
+```
 
-# 2. Configuración
-cp .env.example .env      # y rellenar DATABASE_USER y el proveedor LLM
+El bloque documental (E11 → E15, E13) requiere el manual de taller del vehículo, que **no se
+redistribuye** desde este repositorio (`data/README.md` explica qué falta y cómo obtenerlo), y
+PostgreSQL con pgvector:
 
-# 3. Auditoría del entorno: intérprete, MPS, PostgreSQL, pgvector
-uv run mecanico-exp doctor
-
-# 4. Base de datos del laboratorio (crea solo lo suyo; no toca otras bases)
+```
 bash scripts/init_db.sh
-
-# 5. Gates de calidad
-uv run ruff check .
-uv run mypy src
-uv run pytest
-
-# 6. Capa de análisis
-uv run jupyter lab
+uv run python scripts/ingest_mazda.py multilingual
+bash scripts/reproduce_main_results.sh      # E12, E15 oracular y no oracular, E13 con LoRA v2
 ```
 
-Detalle paso a paso en [`docs/setup/macos-local.md`](docs/setup/macos-local.md)
-y [`docs/setup/postgres-local.md`](docs/setup/postgres-local.md).
+Versiones exactas, semillas, comandos y riesgos: [`docs/reproducibility.md`](docs/reproducibility.md).
+Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de calidad:
+`uv run ruff check . && uv run mypy src && uv run pytest`.
 
-## Portable Setup — cualquier máquina
-
-Para reproducir el experimento sin una instalación local de PostgreSQL:
-
-```bash
-docker compose up -d postgres        # PostgreSQL 16 + pgvector en el puerto 5433
-cp .env.example .env                 # DATABASE_PORT=5433
-uv sync --all-extras
-uv run mecanico-exp doctor
-```
-
-El LLM puede ser un proveedor remoto por API o, opcionalmente, un modelo local
-vía Ollama. El pipeline científico es idéntico en ambos modos; solo cambia de
-dónde salen la base de datos y el modelo de lenguaje. Ver
-[`docs/setup/docker-portable.md`](docs/setup/docker-portable.md),
-[`docs/setup/llm-providers.md`](docs/setup/llm-providers.md) y
-[`docs/setup/ollama-optional.md`](docs/setup/ollama-optional.md).
-
-Los resultados obtenidos con Ollama no se mezclan con los resultados oficiales.
-
-## Organización
+## Estructura del repositorio
 
 | Ruta | Contenido |
 |---|---|
-| `src/mecanico_ia_exp/` | Todo el código científico. Los notebooks importan de aquí |
-| `notebooks/` | Análisis, figuras y demostración. Sin lógica exclusiva |
-| `data/` | Datasets sintéticos y reales, con metadata de procedencia |
-| `corpus/` | Corpus documental para RAG y sus manifiestos |
-| `migrations/` | Esquema de PostgreSQL, versionado y reproducible |
-| `experiments/`, `results/`, `figures/`, `tables/` | Artefactos de cada ejecución |
-| `docs/` | Instalación, metodología y registro de experimentos |
+| `src/mecanico_ia_exp/` | Código científico: generador OBD-II, descriptores, modelos, XAI, RAG, verificador de suficiencia, agente SLM, un runner por experimento |
+| `experiments/` | Registros JSON de cada ejecución; `pre_mixed_embedding_fix/` conserva los anteriores a la corrección del 4-09 |
+| `artifacts/` | Figuras, tablas y métricas usadas en la memoria, con su procedencia (`artifacts/README.md`) |
+| `docs/experiments/` | Un informe por fase, los hallazgos (`hallazgo-*.md`) y el resultado de RERUN-A |
+| `docs/methodology/` | Políticas escritas antes de implementarse, criterios de umbral, pre-registros y enmiendas |
+| `docs/memoria/` | Texto fuente de la memoria por capítulos |
+| `docs/tfm/`, `docs/audits/` | Revisión integral, auditorías, plan de corrección e informes del tutor |
+| `research/` | Decisiones (ADR-001…004), matriz de trazabilidad, registro de limitaciones, referencias |
+| `configs/` | Calibración del generador, conjunto anotado, estado congelado de RERUN-A |
+| `data/` | Muestra redistribuible en `data/samples/`; el resto se regenera (`data/README.md`) |
+| `notebooks/` | Cuadernos generados por script que leen los artefactos; sin lógica propia |
+| `tests/` | 400 pruebas: políticas de suficiencia, aislamiento de embeddings, contrato de RERUN-A, cierre del test |
 
-## Estado
+## Trazabilidad
 
-Fase **E1 — entorno** cerrada. El plan por fases, con la clasificación de cada
-componente (nuevo, reutilizado, adaptado, opcional o futuro), está en
-[`docs/plan_experimental_macbook.md`](docs/plan_experimental_macbook.md).
+Pregunta (`cap1`) → subpreguntas e hipótesis (`research/traceability-matrix.md`) → objetivos
+(`cap2`) → política escrita antes de medir (`docs/methodology/`) → ejecución con commit y
+semilla (`experiments/*.json`) → tabla o figura (`artifacts/`) → sección del capítulo 5 →
+conclusión (`cap6`). Matriz que lo recorre: [`docs/tfm-traceability.md`](docs/tfm-traceability.md).
 
-## Relación con el proyecto de ingeniería
+El historial Git (170 commits del 1 al 13 de septiembre de 2026, más los de preparación para el
+tribunal) es la cronología real del trabajo. El 13-09 se normalizaron 69 mensajes para retirar
+metadatos automáticos de la herramienta de desarrollo; los SHA anteriores a esa fecha citados en
+registros y documentos se resuelven con `docs/git-sha-mapping.md` o directamente contra la rama
+de archivo `backup/pre-history-cleanup-20260913-1815`, que se conserva de forma permanente.
 
-Existe un proyecto hermano, `mecanico-ia`, que construye el sistema de
-diagnóstico como producto. Este laboratorio es independiente: no lo importa, no
-depende de rutas hacia él y no lo modifica. Cuando se reutiliza un componente se
-copia y se documenta su procedencia en `docs/`.
+## Relación con la memoria del TFM
+
+Este repositorio es el artefacto experimental asociado a la memoria. Ninguna cifra llega a la
+memoria sin proceder de un registro de `experiments/`. Las discrepancias detectadas entre
+documentos y registros, y cómo se resolvieron, están en `docs/experiment-index.md`
+§Discrepancias.
