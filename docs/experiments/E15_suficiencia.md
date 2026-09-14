@@ -68,6 +68,13 @@ abstención se provoca, no se encuentra.
 **7 de 9.** Las dos discrepancias son informativas y no se han corregido ajustando
 umbrales.
 
+> **Nota del 13-09-2026.** Esta cifra corresponde al verificador v1 sobre los 9 casos de la
+> primera pasada (1-09-2026) y se conserva como registro histórico. El conjunto anotado se
+> amplió a 17 casos y el verificador pasó por v2 y v2.1; el resultado vigente es **15 de 17**
+> (`experiments/E15_suficiencia.json`, reejecutado con recuperación canónica el 13-09-2026).
+> Secuencia completa: `docs/experiments/resultado-verificador-v2-1.md` y
+> `docs/experiments/resultado-rerun-a.md`.
+
 ### Las cuatro condiciones, sobre el mismo caso
 
 Confianza **idéntica** en las cuatro: 0,908. Lo único que cambia es el corpus.

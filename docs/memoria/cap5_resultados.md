@@ -109,11 +109,11 @@ El modelo de lenguaje se midió tres veces con el mismo motor de inferencia, los
 
 | Configuración | Salidas válidas | Respeta el veredicto | Citas inexistentes | Fallos de esquema | Latencia media |
 |---|---|---|---|---|---|
-| Base | 7/9 | 9/9 | 0 | 2 | 20,4 s |
-| Base con adaptador v1 | 7/9 | 9/9 | 0 | 2 | 14,7 s |
+| Base | 7/9 | 7/7 evaluables | 0 | 2 | 20,4 s |
+| Base con adaptador v1 | 7/9 | 7/7 evaluables | 0 | 2 | 14,7 s |
 | **Base con adaptador v2** | **9/9** | 9/9 | 0 | **0** | 13,1 s |
 
-Registros: `experiments/E13_agente_transformers*.json`. Los dos adaptadores modifican el 0,24 % de los parámetros, solo en las proyecciones de atención, con 55 ejemplos de entrenamiento derivados de ejecuciones del propio pipeline y cero fugas de texto del manual en las salidas de entrenamiento.
+Registros: `experiments/pre_mixed_embedding_fix/E13_agente_transformers*.json` (4-09-2026). *Corrección del 13-09-2026: la columna «Respeta el veredicto» decía 9/9 para las dos primeras configuraciones; el veredicto no es evaluable en las dos salidas con fallo de esquema de cada una, y la cifra correcta es 7 de 7 evaluables. La reejecución del 13/14-09-2026 con recuperación canónica y el conjunto ampliado a 17 casos da 17/17 válidas y 0 citas inexistentes para el adaptador v2, 15/17 para el base y 11/17 para el adaptador v1 (`docs/experiments/resultado-rerun-a.md`).* Los dos adaptadores modifican el 0,24 % de los parámetros, solo en las proyecciones de atención, con 55 ejemplos de entrenamiento derivados de ejecuciones del propio pipeline y cero fugas de texto del manual en las salidas de entrenamiento.
 
 Tres lecturas. Primera: **ninguna de las tres configuraciones produjo una cita inexistente**, y no lo consiguió el ajuste, lo garantiza la barrera externa que rechaza cualquier identificador que no corresponda a algo entregado. Segunda: el ajuste cambió la forma de la explicación hacia la buscada. El modelo base, en su único caso explicativo válido, cuelga las cinco observaciones de una misma afirmación y parafrasea el manual como si fuera afirmación propia; el ajustado produce tres afirmaciones, cada una con una observación y dos fragmentos, sin parafrasear y sin atribuir causa, en un tercio del tiempo máximo. Tercera: el primer adaptador no mejoró el recuento porque cambió los fallos de sitio, y la causa estaba en los datos de ajuste, no en el modelo. El objetivo de entrenamiento traducía el motivo de abstención a un vocabulario genérico mientras el prompt mostraba el literal; el modelo intentaba copiar el prompt y deformaba el identificador. El segundo adaptador cambia solo eso, y pasa de 7 a 9.
 

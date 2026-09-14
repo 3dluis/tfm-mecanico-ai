@@ -19,6 +19,9 @@ vin_prefix: null
 obd_protocol: null
 notes: >-
   Candidato para RAG y OBD-II. El manual de taller local menciona motores LF, Z6
-  y ZJ. El engine_code queda en null hasta que se determine sobre el vehículo
-  real del que se tomen los datos OBD-II: la aplicabilidad de un procedimiento
-  depende del motor, no solo del modelo y el año.
+  y ZJ. El engine_code se fijó en Z6 por decisión del autor al formalizar el
+  vehículo de referencia (docs/memoria/cap4_marco_metodologico.md, Tabla 4.1):
+  no procede de un vehículo real, porque no hay datos reales (E3 pendiente),
+  sino de la elección del motor para el que el generador sintético se calibró.
+  Hasta el 13-09-2026 esta nota decía que el campo quedaba en null hasta
+  determinarlo sobre el vehículo real; se corrige para que coincida con el valor.
