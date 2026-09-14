@@ -142,3 +142,25 @@ que ningún código recalculaba: por ese hueco pasó la omisión sin que nada fa
 **Refuerzo del principio.** No basta enumerar el estado: **cada pieza de ese inventario debe ser
 verificable contra su fuente y recomputable**. Un inventario copiado a mano es una cuarta
 variable esperando su turno.
+
+
+---
+
+## Cierre parcial tras RERUN-A (13 y 14 de septiembre de 2026)
+
+Añadido al final para no reescribir el estado del 4 de septiembre, que sigue siendo el
+registro de lo que se sabía entonces. Resultado y comparación en
+`docs/experiments/resultado-rerun-a.md`.
+
+| Elemento | Estado del 4-09 | Estado tras RERUN-A |
+|---|---|---|
+| `MIXED-EMBEDDING-SPACE` | corrección implementada · reejecución pendiente · NO cerrado | reejecutado: **cerrado para recuperación, suficiencia y agente**; abierto para el adaptador (no reentrenado) |
+| Resultados que dependen de recuperación | `SUPERSEDED_BY_EMBEDDING_SPACE_FIX` | registros canónicos del 13/14-09 en `experiments/`; los anteriores quedan en `pre_mixed_embedding_fix/` como `NON-CANONICAL` (históricos) |
+| `TRAINING_DATASET_V1` | `SUPERSEDED_PENDING_CONFIRMATION` | superseded por el conjunto del 13-09 (66 ejemplos); segunda variable (regla de reparto) declarada |
+| Adaptador vigente | `NON_CANONICAL_PENDING_REGENERATION` | sin cambios; medido sobre evidencia canónica con resultado idéntico en los 9 casos comunes y 17/17 sobre el conjunto ampliado |
+| Condición de distractor | `PENDING_CANONICAL_RETRIEVAL_DIAGNOSIS` | diagnosticada: `VALID_CONDITION` (C08) · `REDUNDANT_WITH_PARTIAL` (C12, C16) con filtro; válida en los tres fallos sin filtro |
+| Medición translingüe | `NOT_VERIFIABLE` | sin cambios (paso C no ejecutable sin código nuevo) |
+| Prevalencia de duplicados | `UNIT_UNDEFINED_IN_LEGACY_RESULT` | con la unidad del pre-registro §7: 0/300 en el artefacto canónico; el anterior sigue sin unidad |
+| Tabla de recuperación del capítulo 5 | `LEGACY_RESULT_WITHOUT_CANONICAL_ARTIFACT` | existe artefacto canónico (`experiments/E12_retrieval.json`, 13-09) con las mismas cinco cifras de hit-rate; la tabla puede regenerarse desde él |
+| Contradicción A/B sobre la condición sin filtro | registrada, sin resolver | resuelta a favor de **B**: en las tres condiciones sin filtro entra al menos un fragmento del fichero distractor (D-1 = sí) |
+| Memoria del TFM | actualización bloqueada | desbloqueada para las cifras de recuperación y suficiencia; el capítulo 5 sigue sin incorporar RERUN-A salvo la corrección de E13 |
