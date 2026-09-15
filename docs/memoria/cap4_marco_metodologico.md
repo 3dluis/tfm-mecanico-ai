@@ -1,9 +1,9 @@
 # Capítulo 4: Marco Metodológico
 El trabajo sigue el ciclo de la investigación en ciencias del diseño (Peffers et al., 2007, MET-16; Hevner et al., 2004, MET-17): identifica un problema, fija los objetivos de una solución, construye un artefacto, lo demuestra sobre casos, lo evalúa con criterios fijados de antemano y comunica el resultado. La elección no es de conveniencia. La pregunta de investigación no puede responderse observando sistemas existentes, porque ninguno de los revisados separa la decisión de explicar de la redacción de la explicación; hay que construir uno que lo haga y medir si esa separación produce el comportamiento que la pregunta interroga. El artefacto es el instrumento, no la contribución: la contribución es la evidencia experimental sobre su comportamiento bajo condiciones controladas de evidencia.
 
-Dos compromisos de método atraviesan todo el capítulo. El primero es que **el criterio de éxito de cada experimento se fija antes de ejecutarlo**, se escribe en el informe de fase y no se modifica después de ver el resultado; los resultados negativos se publican con el mismo detalle que los positivos. El segundo es que **toda cifra publicada procede de un registro de ejecución reproducible**, con su commit, semilla, versiones de datos, corpus, modelo y prompt. Lo que no se ha ejecutado se declara como no ejecutado.
+Dos compromisos de método atraviesan todo el capítulo. El primero es que **el criterio de éxito de cada experimento se fija antes de ejecutarlo**, se escribe antes de la ejecución y no se modifica después de ver el resultado; los resultados negativos se publican con el mismo detalle que los positivos. El segundo es que **toda cifra publicada procede de un registro de ejecución reproducible**, con su versión del código, semilla, versiones de datos, corpus, modelo y prompt. Lo que no se ha ejecutado se declara como no ejecutado.
 
-Todas las cifras de este capítulo proceden de registros versionados del repositorio o de la ficha de calibración del vehículo, y el diseño que describe se ejecutó sobre datos sintéticos. De las veinte fases planificadas, once están cerradas y tres quedan sin cerrar dentro del tramo ejecutado —la evaluación del modelo, el corpus documental, que tiene la infraestructura cerrada y el contenido vacío, y las condiciones de evidencia, cuyos resultados constan en el registro sin informe de fase—. Las seis restantes pertenecen al tramo pendiente: los datos reales, la trazabilidad, la abstención, las ablaciones, la evaluación final y la demostración.
+Todas las cifras de este capítulo proceden de registros de ejecución versionados o de la ficha de calibración del vehículo, y el diseño que describe se ejecutó sobre datos sintéticos. De las veinte fases planificadas se han ejecutado y registrado las de entorno y datos, las del modelo de diagnóstico salvo su evaluación sobre el conjunto de prueba, las de corpus y recuperación y las del agente y la suficiencia; la recuperación y la suficiencia se reejecutaron el 13 y el 14 de septiembre de 2026 tras corregir un defecto del índice documental, con un procedimiento fijado antes de medir. Quedan pendientes la validación externa con telemetría de vehículos reales, las ablaciones, la evaluación final sobre el conjunto de prueba y la demostración integrada.
 
 ## Población y muestra
 Se describen, por este orden, la población a la que se pretende generalizar, la muestra de telemetría con su procedencia, la muestra documental que constituye el corpus y los casos de referencia sobre los que se evalúa el agente.
@@ -116,22 +116,22 @@ El manual no se traduce. El trabajo se escribe en español y la documentación e
 Cada fragmento conserva su procedencia completa: documento, versión, sección, página, códigos de avería que contiene, sistema del vehículo y motores a los que aplica. Esa metadata es lo que permite construir las variantes del corpus del diseño experimental retirando o dejando fragmentos por código de avería o por fichero, sin tocar nada más.
 
 ### Casos de referencia
-La evaluación del agente se hace sobre un conjunto anotado de nueve casos, construidos a partir de ventanas de validación correctamente clasificadas, uno o dos por condición de fallo, cruzados con las condiciones de corpus. Cada caso lleva anotado, antes de ejecutar nada, el diagnóstico esperado, la consulta en los dos idiomas, los ficheros del manual que constituyen evidencia relevante, los de apoyo, los distractores, qué se retira del índice y la acción esperada, explicar o abstenerse. La anotación prevista en el diseño incluye además las señales y ventanas relevantes, los fragmentos a nivel de unidad documental, las afirmaciones admisibles y la evidencia mínima exigible a cada una; esos cuatro campos no están anotados todavía, de modo que las magnitudes que dependen de ellos no pueden calcularse sobre el conjunto actual.
+La evaluación del agente se hace sobre un conjunto anotado de diecisiete casos, construidos a partir de ventanas de validación correctamente clasificadas: cinco con evidencia completa, uno por condición de fallo, y doce que cruzan tres de esos fallos con las condiciones de evidencia ausente, parcial y con distractor, esta última con y sin filtro de motor. Una primera versión del conjunto tenía nueve casos, sobre un solo fallo para las condiciones distintas de la completa; la ampliación a tres fallos se hizo antes de la medición vigente. Cada caso lleva anotado, antes de ejecutar nada, el diagnóstico esperado, la consulta en los dos idiomas, los ficheros del manual que constituyen evidencia relevante, los de apoyo, los distractores, qué se retira del índice y la acción esperada, explicar o abstenerse. La anotación prevista en el diseño incluye además las señales y ventanas relevantes, los fragmentos a nivel de unidad documental, las afirmaciones admisibles y la evidencia mínima exigible a cada una; esos cuatro campos no están anotados todavía, de modo que las magnitudes que dependen de ellos no pueden calcularse sobre el conjunto actual.
 
-El conjunto de test de la telemetría **permanece cerrado** hasta la evaluación final. Los umbrales del criterio de suficiencia se calibraron únicamente sobre validación, y todas las cifras de esta memoria anteriores a E19 son de validación.
+El conjunto de test de la telemetría **permanece cerrado** hasta la evaluación final. Los umbrales del criterio de suficiencia se calibraron únicamente sobre validación, y todas las cifras de esta memoria son de validación.
 
 ## Objetivos de investigación
 La Tabla 4.5 lleva la correspondencia del capítulo 2 hasta las fases, las métricas y el estado de ejecución de cada objetivo. Declara también dónde el diseño todavía no alcanza al objetivo que dice desarrollar.
 
 **Tabla 4.5. Correspondencia entre objetivos, fases experimentales, métricas y estado de ejecución.**
 
-| Objetivo | Fases | Métricas | Estado a 10 de septiembre de 2026 |
+| Objetivo | Fases | Métricas | Estado a 14 de septiembre de 2026 |
 | --- | --- | --- | --- |
-| OE1 | revisión documental | — | en curso; flujo PRISMA formal pendiente de acceso institucional |
-| OE2 | E1, E2, E3, E4, E5, E10 | — | cuatro cerradas; E10 con la infraestructura cerrada y el corpus vacío; E3 pendiente como validación externa |
-| OE3 | E5, E6, E7, E8, E9 | M1 | cuatro cerradas sobre datos sintéticos; E8 pendiente |
-| OE4 | E11, E12, E13, E15; E14 y E16 pendientes | M2, M3, M4, M5 | M2, M3 y M5 calculadas sobre datos sintéticos; M4 implementada, sin calcular sus magnitudes agregadas; resultados no definitivos |
-| OE5 | E17, E18, E19, E20 | M1-M6 | E17 ejecutada sin informe de fase; E18 pendiente; E19 y E20 pendientes del conjunto de evaluación final |
+| OE1 | revisión documental | — | realizada; el procedimiento se declara inspirado en PRISMA y no como flujo PRISMA formal |
+| OE2 | E1, E2, E4, E5, E10, E11 | — | ejecutadas sobre telemetría sintética; la validación externa con datos reales (E3) queda fuera de esta versión |
+| OE3 | E5, E6, E7, E9 | M1 | ejecutadas sobre la partición de validación; la evaluación sobre el conjunto de prueba (E8) corresponde a la evaluación final |
+| OE4 | E11, E12, E13, E15 (E14 y E16 quedan integradas en E15) | M2, M3, M4, M5 | calculadas sobre validación y reejecutadas con recuperación canónica el 13 y 14 de septiembre; resultados parciales |
+| OE5 | E15 y E17 (condiciones de evidencia), E18, E19, E20 | M5 con sus dos tipos de error, M6 | condiciones completa, parcial y ausente evaluadas; la condición con distractor, diagnosticada; ablaciones (E18), evaluación final (E19) y demostración (E20) pendientes |
 
 *Fuente: elaboración propia.*
 
@@ -183,7 +183,15 @@ Se agrupan en seis familias. No todas se calculan en cada experimento; se report
 
 **M4, trazabilidad.** Corrección de las citas (existen y resuelven), completitud (proporción de afirmaciones con cita), tasa de soporte (proporción de afirmaciones cuya cita sostiene lo afirmado) y su complemento. La distancia entre completitud y soporte es informativa por sí misma: mide cuántas afirmaciones llevan una referencia que no las respalda, el fallo más difícil de ver porque el texto parece impecable. Todas se calculan de forma determinista.
 
-**M5, abstención.** Abstención correcta, abstención injustificada y explicación sin fundamento, siempre acompañadas de la cobertura, porque corrección y cobertura solo significan algo juntas. Los dos errores posibles se cuentan por separado y no se agregan en una sola tasa de acierto, porque no son intercambiables: la **falsa confianza** —explicar con seguridad un caso en el que la evidencia no bastaba— compromete al usuario que actúa sobre el vehículo, mientras que la **abstención innecesaria** —callar teniendo evidencia suficiente— solo cuesta utilidad. Un sistema de diagnóstico puede permitirse más de la segunda que de la primera, y esa asimetría debe verse en los resultados.
+**M5, abstención.** Abstención correcta, abstención injustificada y explicación sin fundamento, siempre acompañadas de la cobertura, porque corrección y cobertura solo significan algo juntas. Los dos errores posibles se cuentan por separado y no se agregan en una sola tasa de acierto, porque no son intercambiables. La **falsa confianza** es explicar un caso en el que la evidencia no bastaba y el sistema debía abstenerse; se mide como la proporción de casos que debían terminar en abstención y terminaron en explicación:
+
+T_FC = N(explica cuando debía abstenerse) / N(casos que debían abstenerse)
+
+La **abstención innecesaria** es callar teniendo evidencia suficiente; se mide como la proporción de casos que debían terminar en explicación y terminaron en abstención:
+
+T_AI = N(se abstiene cuando debía explicar) / N(casos que debían explicar)
+
+La primera compromete a quien actúa sobre el vehículo; la segunda solo cuesta cobertura. Un sistema que se abstuviera siempre tendría falsa confianza nula y sería inútil; uno que explicara siempre tendría cobertura total y sería inseguro. Las dos tasas se publican juntas, con sus denominadores, y no se combinan en una sola cifra.
 
 **M6, rendimiento.** Latencia por etapa y extremo a extremo, tamaño del modelo y coste de la recuperación, con el dispositivo real de cada etapa. Se reporta como **métrica descriptiva** y no como criterio de aceptación: el trabajo no fija un presupuesto de latencia, porque el despliegue embarcado que lo habría justificado quedó fuera del alcance ejecutado.
 
@@ -230,7 +238,7 @@ Entrenamiento, validación y test se separan por sesión, nunca por partición a
 ### Fases del agente y su instrumentación
 El agente se desarrolla en cuatro fases que recorren el camino de un caso por el sistema. Cada una recibe lo que la anterior produjo y deja escrito un artefacto que la siguiente consume, de modo que la cadena entre el dato observado y la decisión final queda reconstruible en cualquier punto.
 
-#### Fase 4.1 · Recuperación de información documental (E11, E12)
+#### Fase de recuperación de información documental (E11, E12)
 Esta fase proporciona la información documental que posteriormente será evaluada como posible evidencia para contrastar la hipótesis diagnóstica. La recuperación se realiza sobre el corpus técnico asociado al vehículo de referencia y bajo la variante documental definida para cada condición experimental. La Tabla 4.9 resume sus principales elementos.
 
 **Tabla 4.9. Diseño de la fase de recuperación de información documental.**
@@ -248,7 +256,7 @@ Esta fase proporciona la información documental que posteriormente será evalua
 
 La interpretación de esta fase requiere considerar una característica del diseño experimental. La consulta utiliza información diagnóstica para restringir la recuperación y, por tanto, la presencia o ausencia de determinados documentos está parcialmente controlada por la construcción de cada condición. En consecuencia, esta fase no pretende demostrar por sí sola la capacidad del recuperador para discriminar entre documentación correcta e incorrecta. Su función experimental es comprobar que la manipulación realizada sobre el corpus se propaga hasta la información disponible para las etapas posteriores de verificación. La pertinencia de los fragmentos recuperados, el soporte que proporcionan a las afirmaciones diagnósticas y su suficiencia se evalúan posteriormente mediante criterios independientes.
 
-#### Fase 4.2 · Construcción de la explicación (E13, E14)
+#### Fase de construcción de la explicación (E13, E14)
 Esta fase transforma la información producida por los componentes anteriores en una explicación estructurada. Su propósito no es determinar si una hipótesis es válida, sino construir una representación trazable que conserve la relación entre las observaciones de la telemetría, la inferencia diagnóstica y la información documental recuperada.
 
 **Tabla 4.10. Diseño de la fase de construcción de la explicación.**
@@ -265,7 +273,7 @@ Esta fase transforma la información producida por los componentes anteriores en
 
 El diseño distingue cuatro elementos que cumplen funciones diferentes: la **observación** corresponde al valor derivado de la telemetría; la **inferencia** procede del modelo especializado; la **información documental** se obtiene del corpus técnico; y la **explicación** expresa la relación establecida entre estos elementos. Mantener esta separación permite evaluar posteriormente si una afirmación está realmente respaldada por la documentación citada.
 
-#### Fase 4.3 · Verificación del soporte documental (E15)
+#### Fase de verificación del soporte documental (E15)
 La fase de verificación determina si los fragmentos documentales asociados a cada afirmación resultan aplicables al caso y proporcionan soporte para lo que se afirma. Esta comprobación se realiza mediante reglas independientes del modelo de lenguaje, con el propósito de evitar que la propia generación textual actúe como criterio de validación.
 
 **Tabla 4.11. Diseño de la fase de verificación del soporte documental.**
@@ -282,7 +290,7 @@ La fase de verificación determina si los fragmentos documentales asociados a ca
 
 La existencia de una cita no se considera equivalente a disponer de evidencia. Un fragmento puede haber sido recuperado y estar correctamente identificado y, aun así, no ser aplicable al vehículo, al motor o a la afirmación concreta. La verificación del soporte se mantiene separada, por tanto, de la recuperación documental y de la generación de la explicación.
 
-#### Fase 4.4 · Decisión entre explicar y abstenerse (E15, E16)
+#### Fase de decisión entre explicar y abstenerse (E15, E16)
 La última etapa determina si la evidencia disponible resulta suficiente para presentar la hipótesis diagnóstica como respaldada o si el sistema debe abstenerse. La decisión se adopta mediante un criterio explícito e independiente del modelo de lenguaje.
 
 **Tabla 4.12. Diseño de la fase de decisión entre explicar y abstenerse.**
@@ -334,9 +342,6 @@ Las ejecuciones correspondientes a distintas variantes del corpus sobre una mism
 
 La definición formal de cada magnitud —tasa de acierto entre los diez primeros, rango recíproco medio, ganancia acumulada descontada normalizada, cobertura y tasas de decisión— se recoge en el apartado de variables medidas.
 
-### Ablaciones
-Cada ablación cambia exactamente un factor: sin atribución, sin recuperación semántica, sin criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para saber qué parte del resultado aporta cada pieza. Su ejecución forma parte del trabajo experimental que queda por cerrar.
-
 ### Reproducibilidad, versionado y trazabilidad experimental
 Cada ejecución experimental registra un identificador único, la versión del conjunto de datos y del corpus documental, el modelo de embeddings utilizado, el proveedor y el modelo de lenguaje, la versión del prompt, la semilla de generación, los parámetros de configuración y las métricas obtenidas. Esta información se conserva en formatos estructurados, principalmente JSON y CSV, con el propósito de permitir la reconstrucción posterior de las condiciones bajo las que se obtuvo cada resultado.
 
@@ -348,7 +353,10 @@ Los artefactos de software, las configuraciones y los registros experimentales s
 
 La documentación técnica utilizada como corpus se identifica mediante metadatos y huellas criptográficas. La huella se calcula mediante SHA-256 sobre el fichero original completo, en su forma binaria, y no sobre el texto extraído ni sobre los fragmentos derivados de él; los fragmentos conservan además su propia huella, que identifica el resultado de la segmentación. Dado que las condiciones de distribución de algunos de estos documentos impiden incorporarlos directamente al repositorio del proyecto, sus huellas permiten comprobar que una ejecución reproducida utiliza exactamente el mismo documento sin necesidad de redistribuir el material original.
 
-La identificación del commit y de las versiones documentales en la cabecera de los registros está implantada solo en parte, y completarla es condición para dar por cerrada la fase de evaluación final.
+Los registros anteriores al 4 de septiembre de 2026 carecen de identificador de la versión del código y de fecha de ejecución; los posteriores los incluyen de forma obligatoria. Completar esa identificación para toda la evaluación es condición para dar por cerrada la evaluación final.
+
+### Ablaciones
+Cada ablación cambia exactamente un factor: sin atribución, sin recuperación semántica, sin criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para saber qué parte del resultado aporta cada pieza. Su ejecución forma parte del trabajo experimental que queda por cerrar.
 
 ### Trabajo experimental pendiente para el cierre del TFM
 Antes del cierre de la evaluación quedan previstas las ablaciones de los principales componentes, la apertura controlada del conjunto de prueba para la evaluación final y la demostración del experimento integrado sobre casos de la partición final.

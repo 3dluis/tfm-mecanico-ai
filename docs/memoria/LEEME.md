@@ -10,11 +10,11 @@ Este directorio es la **fuente de verdad del texto de la memoria**. Se escribe e
 |---|---|---|
 | `00_resumen.md` | Resumen (exigido por la sesión informativa 25-26) | redactado |
 | `cap1_introduccion.md` | Capítulo 1: Introducción · Justificación · Presentación | redactado |
-| `cap2_objetivos.md` | Capítulo 2: Objetivos · General · Específicos | redactado; **objetivos reformulados pendientes de consenso con el director** |
+| `cap2_objetivos.md` | Capítulo 2: Objetivos · General · Específicos | redactado; objetivo general y OE alineados con la pregunta acotada tras el feedback del director (septiembre de 2026) |
 | `cap3_marco_teorico.md` | Capítulo 3: Marco Teórico | estructura realineada y apartados con referencias verificadas; el resto marcado |
 | `cap4_marco_metodologico.md` | Capítulo 4: Población y muestra · Objetivos de investigación · Variables e instrumentos · Diseño experimental · Modelo de análisis | redactado sobre el diseño ejecutado |
-| `cap5_resultados.md` | Capítulo 5: Análisis descriptivo · Resultados · Discusión | **borrador sobre datos sintéticos**; se reescribe cuando haya E19 |
-| `cap6_conclusiones.md` | Capítulo 6: Limitaciones · Prospectiva · Consideraciones finales | limitaciones redactadas; el resto depende de E19 |
+| `cap5_resultados.md` | Capítulo 5: Análisis descriptivo · Resultados · Discusión | resultados parciales sobre validación, actualizados a la reejecución del 13/14-09-2026; se completa con E19 |
+| `cap6_conclusiones.md` | Capítulo 6: Limitaciones · Prospectiva · Consideraciones finales | conclusiones provisionales por objetivo; la respuesta definitiva depende de E19 |
 | `bibliografia.md` | Bibliografía (APA 6.ª, según la plantilla) | solo referencias verificadas en fuente primaria |
 
 ## Reglas que gobiernan este texto
@@ -58,9 +58,9 @@ Esta información encabezaba cada fichero como bloque de cita. Se traslada aquí
 |---|---|---|
 | `00_resumen.md` | redactado sobre resultados sintéticos; extensión orientativa 250–300 palabras | E19: se reescriben las cifras y la última frase |
 | `cap1_introduccion.md` | redactado; actualizado el 3 de septiembre de 2026 a la pregunta sin requisito de datos reales (ADR-003) | decisión sobre la reescritura sin confirmar que arrastró el commit `9c388d9` |
-| `cap2_objetivos.md` | redactado sobre `research/propuestas-objetivos.md`, opción A en los tres casos | consenso con el director: P-01, P-02, P-03 |
+| `cap2_objetivos.md` | OE3 y OE5 realineados el 14-09-2026 con la pregunta acotada; sin restos de la formulación amplia | P-03 (alcance ejecutado frente al aprobado) |
 | `cap3_marco_teorico.md` | estructura realineada al marco canónico; solo referencias verificadas | — |
 | `cap4_marco_metodologico.md` | redactado sobre el diseño ejecutado, E1–E17 sobre datos sintéticos | «Población y muestra» espera el conjunto de evaluación final |
-| `cap5_resultados.md` | **borrador congelado**; cifras de la partición de validación, test cerrado | reejecución canónica de la recuperación y sus auditorías; después E19 |
-| `cap6_conclusiones.md` | limitaciones y prospectiva redactadas; conclusiones en borrador condicionado | E19. Fuente: `research/limitations-register.md`, 20 entradas |
+| `cap5_resultados.md` | actualizado el 14-09-2026 con los registros de RERUN-A; cifras de validación, test cerrado; discrepancias del 10-09 resueltas | E19 |
+| `cap6_conclusiones.md` | conclusiones provisionales OE1→OE5→OG, limitaciones y prospectiva | E19. Fuente: `research/limitations-register.md`, 21 entradas |
 | `bibliografia.md` | solo las referencias citadas, verificadas en fuente primaria | edición de APA (P-04); sin marcas `[VERIFY_SOURCE]` pendientes |
