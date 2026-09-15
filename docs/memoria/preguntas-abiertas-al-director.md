@@ -68,3 +68,19 @@ Queda una cuestión menor: la plantilla remite a **APA 6.ª edición**, mientras
 |---|---|---|
 | Dos escenarios frente a cuatro condiciones en OE5 | `cap2_objetivos.md`, OE5 | El director valida expresamente «el diseño experimental de las cuatro condiciones (completa, parcial, ausente, distractor)». La marca se retira y el enunciado de cuatro condiciones queda como acordado |
 | Estilo de cita | `bibliografia.md` | La plantilla fija APA. Queda abierta solo la edición, en P-04 |
+
+
+## Estado tras el feedback escrito del director (septiembre de 2026)
+
+El director indicó por escrito que la formulación amplia de la pregunta está descartada, que
+el objetivo general debe ser el alineado con la pregunta acotada y que no deben quedar
+objetivos sin evaluación que los cubra. Con ello:
+
+- **P-01** queda resuelta: el objetivo general es el acotado, con un solo verbo.
+- **P-02** queda resuelta en otros términos: OE3 ya no habla de identificar patrones, sino de
+  evaluar el diagnóstico del modelo y caracterizar su confianza y sus señales (15-09-2026).
+- **P-03** queda resuelta: el alcance acotado es el acordado y no una desviación.
+- **P-04** sigue abierta: edición de APA.
+- **Nueva, P-05 · edición de ISO 15031-5.** La entrada de la bibliografía no lleva año; el DOI
+  disponible corresponde a la adopción BSI de 2015. Decidir si se cita la norma ISO con año
+  2015, tras comprobarlo en el catálogo de ISO, o la adopción BSI con su DOI.

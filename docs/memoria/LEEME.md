@@ -61,6 +61,62 @@ Esta información encabezaba cada fichero como bloque de cita. Se traslada aquí
 | `cap2_objetivos.md` | OE3 y OE5 realineados el 14-09-2026 con la pregunta acotada; sin restos de la formulación amplia | P-03 (alcance ejecutado frente al aprobado) |
 | `cap3_marco_teorico.md` | estructura realineada al marco canónico; solo referencias verificadas | — |
 | `cap4_marco_metodologico.md` | redactado sobre el diseño ejecutado, E1–E17 sobre datos sintéticos | «Población y muestra» espera el conjunto de evaluación final |
-| `cap5_resultados.md` | actualizado el 14-09-2026 con los registros de RERUN-A; cifras de validación, test cerrado; discrepancias del 10-09 resueltas | E19 |
-| `cap6_conclusiones.md` | conclusiones provisionales OE1→OE5→OG, limitaciones y prospectiva | E19. Fuente: `research/limitations-register.md`, 21 entradas |
+| `cap5_resultados.md` | revisado el 15-09-2026 tras seis auditorías: tablas 5.1–5.7 con rótulo; dos tipos de error con ejecuciones, ventanas y políticas de referencia; PI.4 no interpretable con el diseño actual | E19 |
+| `cap6_conclusiones.md` | conclusiones provisionales OE1→OE5→OG con grado de cumplimiento; limitaciones del agente añadidas el 15-09 | E19. Fuente: `research/limitations-register.md`, 21 entradas |
 | `bibliografia.md` | solo las referencias citadas, verificadas en fuente primaria | edición de APA (P-04); sin marcas `[VERIFY_SOURCE]` pendientes |
+
+
+## Numeración para la composición
+
+El texto fuente no numera los apartados: la numeración la aplica la plantilla al componer. La
+jerarquía de encabezados produce esta numeración, que es la que debe verse en el índice
+automático del documento Word tras actualizarlo. La versión en Word del 28-08-2026 tenía el
+capítulo 3 desplazado un nivel (3.2.3 como primer subapartado, 3.2.4 repetido, «Modelos de
+lenguaje y recuperación aumentada» como 3.3.1 y salto de 3.3.2 a 3.3.4); se corrige al volcar.
+
+```
+1   Introducción · 1.1 Justificación · 1.2 Presentación
+2   Objetivos · 2.1 General · 2.2 Específicos · 2.3 Correspondencia entre objetivos y evaluación
+3.1 Propósito y procedimiento de la revisión
+3.2 Diagnóstico vehicular a partir de OBD-II · 3.2.1 Puerto y señales · 3.2.2 Datos · 3.2.3 Modelos
+3.3 Explicabilidad de los modelos de diagnóstico
+3.4 Modelos de lenguaje y recuperación aumentada · 3.4.1 El problema · 3.4.2 Aplicaciones
+    · 3.4.3 Ajuste del modelo pequeño · 3.4.4 Recuperación semántica, léxica y filtrada
+3.5 Abstención ante evidencia insuficiente · 3.6 Vacío y posicionamiento
+4.1 Población y muestra · 4.1.1 Población · 4.1.2 Telemetría · 4.1.3 Corpus · 4.1.4 Casos
+4.2 Objetivos de investigación
+4.3 Variables e instrumentos · 4.3.1 Manipulada · 4.3.2 Controladas · 4.3.3 Medidas · 4.3.4 Instrumentos
+4.4 Diseño experimental · 4.4.1 Experimento central · 4.4.2 Particiones y cierre del test
+    · 4.4.3 Fases del agente (4.4.3.1 recuperación · 4.4.3.2 construcción · 4.4.3.3 verificación
+      · 4.4.3.4 decisión · 4.4.3.5 redacción) · 4.4.4 Unidades de análisis · 4.4.5 Métricas
+    · 4.4.6 Reproducibilidad · 4.4.7 Ablaciones · 4.4.8 Trabajo pendiente
+4.5 Modelo de análisis de datos
+5.1 Análisis descriptivo · 5.2 Resultados (5.2.1 PI.1 · 5.2.2 PI.2 · 5.2.3 PI.3 y PI.4
+    · 5.2.4 Modelo de lenguaje) · 5.3 Discusión (5.3.1 Lo que sostienen · 5.3.2 Lo que no
+    · 5.3.3 El patrón)
+6.1 Conclusiones provisionales · 6.2 Limitaciones · 6.3 Prospectiva · 6.4 Consideraciones finales
+```
+
+Tablas: 2.1; 4.1–4.14 (la 4.3 son las señales; la 4.13 incluye unidad de independencia y
+recuentos); 5.1–5.7. La memoria no contiene figuras.
+
+## Historial editorial del capítulo 5 (retirado del cuerpo el 15-09-2026)
+
+Una revisión del 10-09-2026 localizó cinco discrepancias entre el capítulo 5 y los registros
+que citaba: las cifras del modelo de diagnóstico, distintas de los informes de fase; la tabla
+de recuperación, que no se reproducía desde su registro; las latencias del modelo de lenguaje,
+que ningún registro producía; el umbral de confianza (0,80 publicado, 0,79 registrado tras la
+enmienda ENM-U01); y la matriz de decisiones, que recogía nueve de diecisiete casos y una
+celda de la versión v1 del verificador. El 15-09 se resolvieron citando el registro vigente.
+En la tabla del modelo de lenguaje se publicaba «9/9» de respeto al veredicto para el modelo
+base y el primer adaptador; la cifra correcta es 7 de 7 evaluables. El detalle está en
+`docs/experiment-index.md` §Discrepancias y en los informes de auditoría del 15-09.
+
+## Revisión del 15-09-2026 tras el feedback del director
+
+Correcciones aplicadas a partir de seis auditorías independientes del commit `ebca11e`
+(`TFM/experiment-reports/`, `evidence-reports/`, `rag-reports/`, `statistical-reports/`,
+`reference-reports/`, `authenticity-reports/`, todos `EXPERIMENT-AUDIT|…-20260915-memoria.md`)
+y de la auditoría diferencial `docs/audits/scope_change/DIFERENCIAL-v2.0-a-acotada-20260915.md`.
+No aplicado: la reescritura del apartado 4.4.1 que propone AUTH-MAJ-001, porque ese texto lo
+aprobó el autor el 14-09 y la propuesta reintroducía una frase que el autor retiró.
