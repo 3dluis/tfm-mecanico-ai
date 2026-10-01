@@ -203,8 +203,9 @@ trabajo posterior.
    convertiría la trazabilidad en una medición independiente del verificador.
 4. Cerrar el diseño y **abrir el conjunto de prueba** para la evaluación final, con la
    declaración explícita y la razón escrita que el propio código exige, y la demostración
-   integrada sobre esa partición. El plan, el orden de ejecución y el gate de siete comprobaciones
-   que debe estar superado antes de abrirlo están escritos y con su estado; el conjunto sigue
-   cerrado.
+   integrada sobre esa partición. El plan, el orden de ejecución y el gate de ocho
+   comprobaciones que debe estar superado antes de abrirlo están escritos y con su estado: siete en
+   PASS y una pendiente, la de congelar por escrito las reglas de selección y anotación de los casos
+   de prueba. El conjunto sigue cerrado y el gate, sin superar.
 5. Volcar la memoria en la plantilla oficial, regenerar el índice y resolver las dos decisiones
    abiertas con el director: el título definitivo y la edición de las normas APA.
