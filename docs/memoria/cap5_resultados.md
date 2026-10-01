@@ -43,7 +43,7 @@ La confianza del bosque estaba mal calibrada, y en la dirección menos habitual:
 | Sin calibrar | 0,144 | 0,738 | 0,878 | −0,140 |
 | Calibrado (isotónica, validación cruzada sobre entrenamiento) | 0,085 | 0,886 | 0,878 | +0,009 |
 
-*Fuente: elaboración propia a partir de `E15_suficiencia.json`.*
+*Fuente: elaboración propia a partir de *`E15_suficiencia.json`*.*
 
 El modelo estaba infraconfiado. Como esa confianza alimenta el criterio de suficiencia, un umbral sobre la confianza cruda habría hecho que el agente se abstuviera de más, y habría parecido prudencia cuando era mala medición. El error de calibración se calcula con diez intervalos sobre 98 ventanas y se publica sin incertidumbre; la mejora es clara en esta muestra, pero no se cuantifica su variabilidad.
 
@@ -62,7 +62,7 @@ La recuperación semántica pura no encuentra el procedimiento correcto del manu
 | Híbrida (semántica y léxica, fusión por rango recíproco) | 0,040 | 0,400 | 0,107 | 0,40 | 0,468 |
 | Guiada por el diagnóstico | 0,260 | 1,000 | 0,467 | 1,00 | 0,653 |
 
-*Fuente: elaboración propia a partir de `E12_retrieval.json`.*
+*Fuente: elaboración propia a partir de *`E12_retrieval.json`*.*
 
 La tabla procede de la reejecución del 13 de septiembre de 2026 sobre los seis casos anotados de esa fase, con la consulta en inglés y el mapa de códigos de avería congelado para esta comparación. Cinco casos se puntúan; el sexto, con la evidencia retirada del índice, se evalúa pero no entra en las métricas porque no tiene fichero relevante. El informe de fase del 1 de septiembre recogía cuatro estrategias con valores que no se reproducen desde el registro, y la tabla cita el registro. Respecto de la ejecución anterior a la corrección del índice cambiaron dos celdas de la estrategia guiada: la precisión, de 0,240 a 0,260, y el nDCG, de 0,642 a 0,653. Las métricas se publican por estrategia y no por condición de evidencia, porque los cinco casos puntuados tienen todos la evidencia completa. Sobre documentación técnica, la similitud semántica entre una consulta en lenguaje natural y un procedimiento de taller es baja, y lo que los une es un identificador exacto. El sistema final usa la estrategia guiada, con la híbrida como respaldo.
 
@@ -110,7 +110,7 @@ El criterio de suficiencia está en su tercera versión y se evalúa sobre dieci
 | C16 sonda, distractor | DISTRACTOR | 1,000 | 6 | 0,00 | ABSTAIN | ABSTAIN |
 | C17 sonda, distractor sin filtro | DISTRACTOR | 1,000 | 3 | 0,00 | ABSTAIN | ABSTAIN |
 
-*Fuente: elaboración propia a partir de `E15_suficiencia.json`, modo oracular.*
+*Fuente: elaboración propia a partir de *`E15_suficiencia.json`*, modo oracular.*
 
 Los diecisiete casos no son diecisiete observaciones independientes. Proceden de cinco ventanas de telemetría: cada uno de los cinco casos con evidencia completa tiene la suya, y los doce restantes aplican cuatro condiciones a las ventanas de la fuga de vacío, el termostato y la sonda de oxígeno. Por eso los dos tipos de error se publican con el número de ejecuciones y el de ventanas, y junto a dos políticas de referencia definidas el 4 de septiembre de 2026, después de medir las tres versiones del criterio sobre estos casos. Las filas de la condición con distractor y filtro de motor se cuentan aparte, porque el diagnóstico de esa condición, que se describe más abajo, las deja como diagnóstico y no como condición puntuable.
 
@@ -122,7 +122,7 @@ Los diecisiete casos no son diecisiete observaciones independientes. Proceden de
 | Abstenerse siempre | 0 de 9 (0 de 12) | 5 de 5 |
 | Explicar siempre que el modelo confía | 9 de 9 (12 de 12) | 2 de 5 |
 
-*Fuente: elaboración propia a partir de `E15_suficiencia.json`; las políticas de referencia se calculan sobre los mismos casos.*
+*Fuente: elaboración propia a partir de *`E15_suficiencia.json`*; las políticas de referencia se calculan sobre los mismos casos.*
 
 Ninguna de las tres filas se resume en una tasa de acierto única: el recuento de decisiones que coinciden con la anotada, 15 de 17, agrega dos errores que no son intercambiables y no se usa como resultado. Lo que la tabla muestra es que el verificador conserva la falsa confianza nula de la política que se abstiene siempre y la cobertura de la que explica siempre que el modelo confía: de las dos políticas triviales, cada una iguala al sistema en un error y lo empeora en el otro. Las tasas describen la muestra anotada y no estiman una tasa poblacional: con tres y cinco ventanas independientes no se publica ningún intervalo, porque ninguno acotaría lo que el diseño pretende afirmar.
 
@@ -154,7 +154,7 @@ El modelo de lenguaje recibe el diagnóstico, la confianza, la decisión del ver
 | Base con adaptador v1 | 17 | 11/17 | 11/11 evaluables | 0 | 6 | 11,1 s |
 | Base con adaptador v2 | 17 | 17/17 | 17/17 | 0 | 0 | 13,4 s |
 
-*Fuente: elaboración propia a partir de `E13_agente_transformers*.json`, versiones del 4 de septiembre (nueve casos) y del 14 de septiembre (diecisiete casos).*
+*Fuente: elaboración propia a partir de *`E13_agente_transformers*.json`*, versiones del 4 de septiembre (nueve casos) y del 14 de septiembre (diecisiete casos).*
 
 Sobre los nueve casos comunes, la segunda medición reproduce la primera para el modelo base y para el segundo adaptador, y el primer adaptador pierde una salida válida. El veredicto no es evaluable en una salida que no cumple el esquema: para el modelo base y el primer adaptador la cifra es 7 de 7 evaluables, no 9 de 9. «Respeta el veredicto» mide que la decisión escrita coincide con la que el modelo recibe en la entrada. Las latencias son medias de distribuciones muy asimétricas y las de las dos fechas no son comparables entre sí.
 
