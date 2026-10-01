@@ -164,3 +164,13 @@ registro de lo que se sabía entonces. Resultado y comparación en
 | Tabla de recuperación del capítulo 5 | `LEGACY_RESULT_WITHOUT_CANONICAL_ARTIFACT` | existe artefacto canónico (`experiments/E12_retrieval.json`, 13-09) con las mismas cinco cifras de hit-rate; la tabla puede regenerarse desde él |
 | Contradicción A/B sobre la condición sin filtro | registrada, sin resolver | resuelta a favor de **B**: en las tres condiciones sin filtro entra al menos un fragmento del fichero distractor (D-1 = sí) |
 | Memoria del TFM | actualización bloqueada | desbloqueada para las cifras de recuperación y suficiencia; el capítulo 5 sigue sin incorporar RERUN-A salvo la corrección de E13 |
+
+
+## Cierre de RERUN-B y de las ablaciones (1 de octubre de 2026)
+
+| Elemento | Estado anterior | Estado ahora |
+|---|---|---|
+| Política v2.2 | implementada, probada y **sin medir** | medida en los tres modos; decisiones idénticas a v2.1 en todos; cierra `EMPTY-DTC-GATE-BYPASS` |
+| Ablaciones (E18) | pendientes | ejecutadas: A1 sin efecto en la decisión, A3 y A4 cuantifican el criterio de suficiencia, A2 inconclusa con su enmienda |
+| Contribución de los componentes (OE5) | sin evidencia | con evidencia para el criterio de suficiencia y para la atribución; sin ella para la recuperación y para la separación decidir/redactar |
+| Política canónica del verificador | v2.1 | v2.1 sigue siendo la canónica; adoptar v2.2 es decisión del autor y se recomienda hacerlo con la evaluación final |

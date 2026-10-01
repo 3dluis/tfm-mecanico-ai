@@ -95,3 +95,19 @@ Una revisión del verificador que trate la ausencia de códigos asociados como *
 declarada** y no como ausencia de restricción, en la línea de `SIGNAL_MAPPING_UNAVAILABLE`. No
 se implementa ahora: cambiar el instrumento mientras se miden estas dimensiones invalidaría la
 comparación. Se propone, se registra y se decide después.
+
+
+---
+
+## Cierre, 1 de octubre de 2026
+
+Medido con la política v2.2 en los tres modos (`docs/experiments/resultado-rerun-b.md`). En los
+diecisiete casos anotados no cambia ninguna decisión ni ningún motivo, porque los cinco
+diagnósticos del conjunto están declarados con códigos y el requisito ya era el más estricto. En
+el escenario adverso, donde el diagnóstico es «sin fallo» y no está declarado en el mapa, el
+requisito pasa a declararse no aplicable y las dos ejecuciones con evidencia completa dejan de
+aceptar como soporte dos de sus tres afirmaciones: la cobertura cae de 0,67 a 0,00. Las seis
+ejecuciones se abstenían antes y se abstienen después; lo que desaparece es el soporte falso.
+
+El hallazgo queda **corregido y medido**. Qué política será la canónica para la evaluación final
+es una decisión pendiente del autor, registrada en el informe de RERUN-B.
