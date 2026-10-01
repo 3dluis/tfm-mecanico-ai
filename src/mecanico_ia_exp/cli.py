@@ -10,6 +10,7 @@ import argparse
 import json
 import sys
 
+from mecanico_ia_exp.abstention.sufficiency import POLITICAS, VERIFIER_VERSION
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.config.environment import audit
 
@@ -76,6 +77,39 @@ def main(argv: list[str] | None = None) -> int:
             "proveedor de lenguaje: echo, ollama, transformers (base), "
             "transformers-lora (ajustado) o transformers-lora@<subdir de models/>. "
             "Sin él, no se redacta"
+        ),
+    )
+    suf.add_argument(
+        "--policy",
+        choices=POLITICAS,
+        default=VERIFIER_VERSION,
+        help=(
+            "versión de la política de suficiencia. v2.1 es la canónica; v2.2 lee el "
+            "requisito de la puerta de códigos de la declaración del diagnóstico "
+            "(docs/methodology/politica-puerta-dtc.md) y escribe sus artefactos con "
+            "sufijo para no sobrescribir los registros vigentes"
+        ),
+    )
+    abl = subparsers.add_parser("ablations", help="ablaciones E18 sobre el conjunto anotado")
+    abl.add_argument("--dataset-id", default="synthetic_v2")
+    abl.add_argument(
+        "--ablation",
+        choices=("A1", "A2", "A3", "A4", "all"),
+        default="all",
+        help=(
+            "A1 sin atribución, A2 sin recuperación semántica, A3 sin criterio de "
+            "suficiencia, A4 umbral único. Definidas en "
+            "docs/methodology/preregistro-e18-ablaciones.md"
+        ),
+    )
+    abl.add_argument(
+        "--mode",
+        choices=("oracle", "non-oracle"),
+        default="oracle",
+        help=(
+            "oracle: los códigos que acotan la búsqueda y exige el verificador salen de la "
+            "etiqueta anotada. non-oracle: salen del diagnóstico del modelo. Las ablaciones "
+            "no tienen modo adverso: su variable es el componente retirado"
         ),
     )
 
@@ -168,6 +202,16 @@ def main(argv: list[str] | None = None) -> int:
             llm=args.llm,
             oracle=args.mode == "oracle",
             adverse=args.mode == "adverse",
+            policy=args.policy,
+        )
+
+    if args.command == "ablations":
+        from mecanico_ia_exp.experiments.ablation_runner import run_ablations
+
+        return run_ablations(
+            args.dataset_id,
+            ablation=args.ablation,
+            oracle=args.mode == "oracle",
         )
 
     return 2
