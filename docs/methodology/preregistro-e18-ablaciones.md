@@ -96,3 +96,36 @@ que es una decisión aparte con su coste declarado. Ninguna de las tres se adela
 
 Ningún criterio de este documento se modifica tras observar un resultado sin registrar una
 enmienda explícita, fechada y con su motivo, en la línea de `ENM-U01` y `ENM-A01`.
+
+---
+
+# Enmienda ENM-E18-01
+
+**Fecha:** 1 de octubre de 2026 · **Posterior a la medición**, y se dice: se escribe después de
+ver que `A2` no recupera ningún fragmento. · **Motivada por:** el resultado de `A2`.
+
+## E-1 · `A2` queda declarada inconclusa
+
+La ruta léxica no devolvió ningún fragmento en ninguno de los diecisiete casos. La causa está en
+la consulta, no en la ablación: la búsqueda de texto completo une los términos con conjunción, y
+una consulta de treinta palabras exige que las treinta aparezcan en el mismo fragmento. Se
+comprobó llamando a la búsqueda por separado, sin filtros de motor ni de código: cero resultados.
+
+En consecuencia, `A2` **no aísla la contribución de la similitud semántica** y su resultado se
+publica como inconcluso. No se reinterpreta como «la recuperación semántica aporta todo», que es
+lo que las cifras sugerirían leídas sin esta nota.
+
+## E-2 · La variante que lo mediría, pre-registrada y no ejecutada
+
+Para que la comparación tenga sentido, la ruta léxica debe recibir una consulta que la búsqueda
+léxica pueda satisfacer. La variante, que se declara ahora y no se ejecuta en esta entrega:
+
+| | |
+|---|---|
+| Identificador | `A2b` |
+| Cambio respecto de `A2` | la consulta léxica deja de ser la frase en prosa y pasa a ser la conjunción de los códigos de avería que documentan el diagnóstico y los nombres de las señales observadas |
+| Todo lo demás | idéntico: filtros de vehículo y motor, profundidad, `top_k`, reordenación por autoridad, política v2.1 |
+| Expectativa, registrada antes de medir | **ninguna dirección**. La consulta por códigos puede recuperar el procedimiento correcto, y en ese caso la comparación medirá de verdad qué añade la semántica; o puede recuperar las tablas de códigos y no los procedimientos, y entonces la ablación dirá que la semántica es la que distingue un procedimiento de una tabla |
+| Criterio de validez | `A2b` solo se interpreta si recupera al menos un fragmento aplicable en los cinco casos con evidencia completa. Si no lo hace, se declara inconclusa igual que `A2` y no se intenta una tercera formulación de la consulta |
+
+No se cambia nada de `A1`, `A3` ni `A4`, cuyos resultados quedan tal como se midieron.

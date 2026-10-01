@@ -1,0 +1,2611 @@
+{
+  "experiment_id": "E18_ablation_A2",
+  "commit": "d5fc372aade3c7c07168d84361d6f4da47300b7b",
+  "dirty": true,
+  "executed_at": "2026-10-01T17:10:37.092631+00:00",
+  "seed": 20260901,
+  "dataset_id": "synthetic_v2",
+  "dataset_type": "synthetic",
+  "goldset": "goldset_mazda3_bk.yaml",
+  "ablation_id": "A2",
+  "ablation": "sin recuperación semántica",
+  "operational_change": "la consulta no se vectoriza: recuperación léxica sobre el texto completo con los mismos filtros de vehículo, motor y códigos de avería y la misma profundidad",
+  "preregistration": "docs/methodology/preregistro-e18-ablaciones.md",
+  "mode": "oracle",
+  "oracle_channels_open": {
+    "O1_window_selection_requires_correct_prediction": true,
+    "O2_retrieval_scoped_by_annotated_label": true,
+    "O3_support_dtc_from_annotated_label": true
+  },
+  "evaluation_policy": "docs/methodology/politica-evaluacion-no-oracular.md",
+  "vehicle_id": "mazda-3-bk-2007",
+  "verifier_version": "v2.1",
+  "retrieval": {
+    "route": "lexical_full_text",
+    "query_vectorized": false,
+    "embedding_space_id": null,
+    "top_k": 10,
+    "depth": 60
+  },
+  "thresholds": {
+    "min_confidence": 0.79,
+    "min_retrieval_score": 0.0,
+    "min_supporting_chunks": 2,
+    "min_distinct_sources": 1,
+    "min_claim_coverage": 0.8,
+    "allow_compatible_applicability": false,
+    "accepted_applicability": [
+      "EXACT_MATCH"
+    ]
+  },
+  "calibration": {
+    "method": "isotonic, cv=5 sobre entrenamiento",
+    "partition": "validation",
+    "n_windows": 98,
+    "n_bins": 10,
+    "uncalibrated": {
+      "ece": 0.143882,
+      "mean_confidence": 0.738048,
+      "accuracy": 0.877551,
+      "bias": -0.139503
+    },
+    "calibrated": {
+      "ece": 0.085424,
+      "mean_confidence": 0.886464,
+      "accuracy": 0.877551,
+      "bias": 0.008913
+    }
+  },
+  "summary": {
+    "metric_definition": "docs/memoria/cap4_marco_metodologico.md, M5",
+    "n_cases": 17,
+    "false_confidence": {
+      "numerator": 0,
+      "denominator": 9,
+      "n_independent_windows": 3,
+      "rate": 0.0,
+      "including_distractor_with_filter": {
+        "numerator": 0,
+        "denominator": 12,
+        "n_independent_windows": 3,
+        "rate": 0.0
+      }
+    },
+    "unnecessary_abstention": {
+      "numerator": 5,
+      "denominator": 5,
+      "n_independent_windows": 5,
+      "rate": 1.0
+    },
+    "coverage_full_evidence": {
+      "numerator": 0,
+      "denominator": 5,
+      "n_independent_windows": 5,
+      "rate": 0.0
+    },
+    "decisions": {
+      "C01_maf_drift": "ABSTAIN",
+      "C02_thermostat_stuck": "ABSTAIN",
+      "C03_o2_slow_response": "ABSTAIN",
+      "C04_misfire": "ABSTAIN",
+      "C05_vacuum_leak": "ABSTAIN",
+      "C06_vacuum_leak_evidencia_retirada": "ABSTAIN",
+      "C07_partial": "ABSTAIN",
+      "C08_distractor": "ABSTAIN",
+      "C09_distractor_sin_filtro": "ABSTAIN",
+      "C10_thermostat_absent": "ABSTAIN",
+      "C11_thermostat_partial": "ABSTAIN",
+      "C12_thermostat_distractor": "ABSTAIN",
+      "C13_thermostat_distractor_sin_filtro": "ABSTAIN",
+      "C14_o2_absent": "ABSTAIN",
+      "C15_o2_partial": "ABSTAIN",
+      "C16_o2_distractor": "ABSTAIN",
+      "C17_o2_distractor_sin_filtro": "ABSTAIN"
+    }
+  },
+  "cases": [
+    {
+      "case_id": "C01_maf_drift",
+      "window_case_id": "F02_maf_drift__highway__01@120s",
+      "fault_id": "F02_maf_drift",
+      "condition": "FULL",
+      "diagnosis_used": "F02_maf_drift",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.5999,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "EXPLAIN",
+      "decision": "ABSTAIN",
+      "correct": false,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "LOW_MODEL_CONFIDENCE; NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F02_maf_drift__highway__01@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F02_maf_drift",
+        "model_confidence": 0.5922,
+        "calibrated_confidence": 0.5999,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 1.847569,
+            "direction": "increases",
+            "importance": 0.094481,
+            "session_id": "F02_maf_drift__highway__01",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "slope",
+            "value": 0.040551,
+            "direction": "increases",
+            "importance": 0.075481,
+            "session_id": "F02_maf_drift__highway__01",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 1.984188,
+            "direction": "increases",
+            "importance": 0.072171,
+            "session_id": "F02_maf_drift__highway__01",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 0.678208,
+            "direction": "increases",
+            "importance": 0.054781,
+            "session_id": "F02_maf_drift__highway__01",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "autocorr1",
+            "value": 0.999792,
+            "direction": "increases",
+            "importance": 0.050631,
+            "session_id": "F02_maf_drift__highway__01",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor ltft_bank1 (max) toma el valor 1.848 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor stft_bank1 (slope) toma el valor 0.04055 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor stft_bank1 (mean) toma el valor 1.984 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F02_maf_drift__highway__01@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "LOW_MODEL_CONFIDENCE",
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.5999,
+          "model_confidence": 0.5922,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "confianza 0.600 < 0.79",
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C02_thermostat_stuck",
+      "window_case_id": "F03_thermostat_stuck__urban__08@120s",
+      "fault_id": "F03_thermostat_stuck",
+      "condition": "FULL",
+      "diagnosis_used": "F03_thermostat_stuck",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "EXPLAIN",
+      "decision": "ABSTAIN",
+      "correct": false,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F03_thermostat_stuck",
+        "model_confidence": 0.9482,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 1.686241,
+            "direction": "increases",
+            "importance": 0.216096,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "autocorr1",
+            "value": 0.054903,
+            "direction": "increases",
+            "importance": 0.159767,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_min",
+            "value": -1.496284,
+            "direction": "increases",
+            "importance": 0.158051,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "crossings",
+            "value": 59.0,
+            "direction": "increases",
+            "importance": 0.13484,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "max",
+            "value": 72.242599,
+            "direction": "increases",
+            "importance": 0.072189,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor coolant_temperature (delta_max) toma el valor 1.686 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor coolant_temperature (autocorr1) toma el valor 0.0549 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor coolant_temperature (delta_min) toma el valor -1.496 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9482,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C03_o2_slow_response",
+      "window_case_id": "F04_o2_lag__idle__02@120s",
+      "fault_id": "F04_o2_lag",
+      "condition": "FULL",
+      "diagnosis_used": "F04_o2_lag",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "EXPLAIN",
+      "decision": "ABSTAIN",
+      "correct": false,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F04_o2_lag",
+        "model_confidence": 0.9546,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_max",
+            "value": 0.083801,
+            "direction": "increases",
+            "importance": 0.152296,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "std",
+            "value": 0.028741,
+            "direction": "increases",
+            "importance": 0.132406,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "max",
+            "value": 0.514747,
+            "direction": "increases",
+            "importance": 0.132105,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "min",
+            "value": 0.371341,
+            "direction": "increases",
+            "importance": 0.130654,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_min",
+            "value": -0.07565,
+            "direction": "increases",
+            "importance": 0.127027,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor oxygen_sensor (delta_max) toma el valor 0.0838 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor oxygen_sensor (std) toma el valor 0.02874 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor oxygen_sensor (max) toma el valor 0.5147 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9546,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C04_misfire",
+      "window_case_id": "F05_misfire__highway__09@180s",
+      "fault_id": "F05_misfire",
+      "condition": "FULL",
+      "diagnosis_used": "F05_misfire",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.4621,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "EXPLAIN",
+      "decision": "ABSTAIN",
+      "correct": false,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "LOW_MODEL_CONFIDENCE; NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F05_misfire__highway__09@180s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F05_misfire",
+        "model_confidence": 0.4652,
+        "calibrated_confidence": 0.4621,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "max",
+            "value": 0.95,
+            "direction": "increases",
+            "importance": 0.108803,
+            "session_id": "F05_misfire__highway__09",
+            "window_start_s": 180.0,
+            "window_end_s": 299.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "range",
+            "value": 0.9,
+            "direction": "increases",
+            "importance": 0.077627,
+            "session_id": "F05_misfire__highway__09",
+            "window_start_s": 180.0,
+            "window_end_s": 299.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "mean",
+            "value": 0.464677,
+            "direction": "increases",
+            "importance": 0.058769,
+            "session_id": "F05_misfire__highway__09",
+            "window_start_s": 180.0,
+            "window_end_s": 299.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 35.262032,
+            "direction": "decreases",
+            "importance": -0.019768,
+            "session_id": "F05_misfire__highway__09",
+            "window_start_s": 180.0,
+            "window_end_s": 299.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "rpm",
+            "statistic": "n_events",
+            "value": 4.0,
+            "direction": "increases",
+            "importance": 0.014456,
+            "session_id": "F05_misfire__highway__09",
+            "window_start_s": 180.0,
+            "window_end_s": 299.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor oxygen_sensor (max) toma el valor 0.95 entre los segundos 180 y 299 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor oxygen_sensor (range) toma el valor 0.9 entre los segundos 180 y 299 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor oxygen_sensor (mean) toma el valor 0.4647 entre los segundos 180 y 299 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F05_misfire__highway__09@180s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "LOW_MODEL_CONFIDENCE",
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.4621,
+          "model_confidence": 0.4652,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "confianza 0.462 < 0.79",
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C05_vacuum_leak",
+      "window_case_id": "F01_vacuum_leak__idle__10@120s",
+      "fault_id": "F01_vacuum_leak",
+      "condition": "FULL",
+      "diagnosis_used": "F01_vacuum_leak",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.9078,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "EXPLAIN",
+      "decision": "ABSTAIN",
+      "correct": false,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor ltft_bank1 (max) toma el valor 2.716 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor stft_bank1 (mean) toma el valor 7.077 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor ltft_bank1 (mean) toma el valor 1.294 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C06_vacuum_leak_evidencia_retirada",
+      "window_case_id": "F01_vacuum_leak__idle__10@120s",
+      "fault_id": "F01_vacuum_leak",
+      "condition": "ABSENT",
+      "diagnosis_used": "F01_vacuum_leak",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.9078,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor ltft_bank1 (max) toma el valor 2.716 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor stft_bank1 (mean) toma el valor 7.077 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor ltft_bank1 (mean) toma el valor 1.294 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C07_partial",
+      "window_case_id": "F01_vacuum_leak__idle__10@120s",
+      "fault_id": "F01_vacuum_leak",
+      "condition": "PARTIAL",
+      "diagnosis_used": "F01_vacuum_leak",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.9078,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor ltft_bank1 (max) toma el valor 2.716 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor stft_bank1 (mean) toma el valor 7.077 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor ltft_bank1 (mean) toma el valor 1.294 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C08_distractor",
+      "window_case_id": "F01_vacuum_leak__idle__10@120s",
+      "fault_id": "F01_vacuum_leak",
+      "condition": "DISTRACTOR",
+      "diagnosis_used": "F01_vacuum_leak",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.9078,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor ltft_bank1 (max) toma el valor 2.716 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor stft_bank1 (mean) toma el valor 7.077 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor ltft_bank1 (mean) toma el valor 1.294 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C09_distractor_sin_filtro",
+      "window_case_id": "F01_vacuum_leak__idle__10@120s",
+      "fault_id": "F01_vacuum_leak",
+      "condition": "DISTRACTOR_NO_FILTER",
+      "diagnosis_used": "F01_vacuum_leak",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 0.9078,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F01_vacuum_leak",
+        "model_confidence": 0.6851,
+        "calibrated_confidence": 0.9078,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "max",
+            "value": 2.716378,
+            "direction": "increases",
+            "importance": 0.109096,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "mean",
+            "value": 7.07748,
+            "direction": "increases",
+            "importance": 0.093491,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "ltft_bank1",
+            "statistic": "mean",
+            "value": 1.294458,
+            "direction": "increases",
+            "importance": 0.083251,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "stft_bank1",
+            "statistic": "min",
+            "value": 2.99643,
+            "direction": "increases",
+            "importance": 0.07083,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "map",
+            "statistic": "min",
+            "value": 26.630968,
+            "direction": "increases",
+            "importance": 0.056518,
+            "session_id": "F01_vacuum_leak__idle__10",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor ltft_bank1 (max) toma el valor 2.716 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor stft_bank1 (mean) toma el valor 7.077 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor ltft_bank1 (mean) toma el valor 1.294 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F01_vacuum_leak__idle__10@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 0.9078,
+          "model_confidence": 0.6851,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C10_thermostat_absent",
+      "window_case_id": "F03_thermostat_stuck__urban__08@120s",
+      "fault_id": "F03_thermostat_stuck",
+      "condition": "ABSENT",
+      "diagnosis_used": "F03_thermostat_stuck",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F03_thermostat_stuck",
+        "model_confidence": 0.9482,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 1.686241,
+            "direction": "increases",
+            "importance": 0.216096,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "autocorr1",
+            "value": 0.054903,
+            "direction": "increases",
+            "importance": 0.159767,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_min",
+            "value": -1.496284,
+            "direction": "increases",
+            "importance": 0.158051,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "crossings",
+            "value": 59.0,
+            "direction": "increases",
+            "importance": 0.13484,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "max",
+            "value": 72.242599,
+            "direction": "increases",
+            "importance": 0.072189,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor coolant_temperature (delta_max) toma el valor 1.686 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor coolant_temperature (autocorr1) toma el valor 0.0549 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor coolant_temperature (delta_min) toma el valor -1.496 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9482,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C11_thermostat_partial",
+      "window_case_id": "F03_thermostat_stuck__urban__08@120s",
+      "fault_id": "F03_thermostat_stuck",
+      "condition": "PARTIAL",
+      "diagnosis_used": "F03_thermostat_stuck",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F03_thermostat_stuck",
+        "model_confidence": 0.9482,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 1.686241,
+            "direction": "increases",
+            "importance": 0.216096,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "autocorr1",
+            "value": 0.054903,
+            "direction": "increases",
+            "importance": 0.159767,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_min",
+            "value": -1.496284,
+            "direction": "increases",
+            "importance": 0.158051,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "crossings",
+            "value": 59.0,
+            "direction": "increases",
+            "importance": 0.13484,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "max",
+            "value": 72.242599,
+            "direction": "increases",
+            "importance": 0.072189,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor coolant_temperature (delta_max) toma el valor 1.686 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor coolant_temperature (autocorr1) toma el valor 0.0549 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor coolant_temperature (delta_min) toma el valor -1.496 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9482,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C12_thermostat_distractor",
+      "window_case_id": "F03_thermostat_stuck__urban__08@120s",
+      "fault_id": "F03_thermostat_stuck",
+      "condition": "DISTRACTOR",
+      "diagnosis_used": "F03_thermostat_stuck",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F03_thermostat_stuck",
+        "model_confidence": 0.9482,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 1.686241,
+            "direction": "increases",
+            "importance": 0.216096,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "autocorr1",
+            "value": 0.054903,
+            "direction": "increases",
+            "importance": 0.159767,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_min",
+            "value": -1.496284,
+            "direction": "increases",
+            "importance": 0.158051,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "crossings",
+            "value": 59.0,
+            "direction": "increases",
+            "importance": 0.13484,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "max",
+            "value": 72.242599,
+            "direction": "increases",
+            "importance": 0.072189,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor coolant_temperature (delta_max) toma el valor 1.686 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor coolant_temperature (autocorr1) toma el valor 0.0549 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor coolant_temperature (delta_min) toma el valor -1.496 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9482,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C13_thermostat_distractor_sin_filtro",
+      "window_case_id": "F03_thermostat_stuck__urban__08@120s",
+      "fault_id": "F03_thermostat_stuck",
+      "condition": "DISTRACTOR_NO_FILTER",
+      "diagnosis_used": "F03_thermostat_stuck",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F03_thermostat_stuck",
+        "model_confidence": 0.9482,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_max",
+            "value": 1.686241,
+            "direction": "increases",
+            "importance": 0.216096,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "autocorr1",
+            "value": 0.054903,
+            "direction": "increases",
+            "importance": 0.159767,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "delta_min",
+            "value": -1.496284,
+            "direction": "increases",
+            "importance": 0.158051,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "crossings",
+            "value": 59.0,
+            "direction": "increases",
+            "importance": 0.13484,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "coolant_temperature",
+            "statistic": "max",
+            "value": 72.242599,
+            "direction": "increases",
+            "importance": 0.072189,
+            "session_id": "F03_thermostat_stuck__urban__08",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor coolant_temperature (delta_max) toma el valor 1.686 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor coolant_temperature (autocorr1) toma el valor 0.0549 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor coolant_temperature (delta_min) toma el valor -1.496 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F03_thermostat_stuck__urban__08@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9482,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C14_o2_absent",
+      "window_case_id": "F04_o2_lag__idle__02@120s",
+      "fault_id": "F04_o2_lag",
+      "condition": "ABSENT",
+      "diagnosis_used": "F04_o2_lag",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F04_o2_lag",
+        "model_confidence": 0.9546,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_max",
+            "value": 0.083801,
+            "direction": "increases",
+            "importance": 0.152296,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "std",
+            "value": 0.028741,
+            "direction": "increases",
+            "importance": 0.132406,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "max",
+            "value": 0.514747,
+            "direction": "increases",
+            "importance": 0.132105,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "min",
+            "value": 0.371341,
+            "direction": "increases",
+            "importance": 0.130654,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_min",
+            "value": -0.07565,
+            "direction": "increases",
+            "importance": 0.127027,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor oxygen_sensor (delta_max) toma el valor 0.0838 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor oxygen_sensor (std) toma el valor 0.02874 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor oxygen_sensor (max) toma el valor 0.5147 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9546,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C15_o2_partial",
+      "window_case_id": "F04_o2_lag__idle__02@120s",
+      "fault_id": "F04_o2_lag",
+      "condition": "PARTIAL",
+      "diagnosis_used": "F04_o2_lag",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F04_o2_lag",
+        "model_confidence": 0.9546,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_max",
+            "value": 0.083801,
+            "direction": "increases",
+            "importance": 0.152296,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "std",
+            "value": 0.028741,
+            "direction": "increases",
+            "importance": 0.132406,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "max",
+            "value": 0.514747,
+            "direction": "increases",
+            "importance": 0.132105,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "min",
+            "value": 0.371341,
+            "direction": "increases",
+            "importance": 0.130654,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_min",
+            "value": -0.07565,
+            "direction": "increases",
+            "importance": 0.127027,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor oxygen_sensor (delta_max) toma el valor 0.0838 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor oxygen_sensor (std) toma el valor 0.02874 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor oxygen_sensor (max) toma el valor 0.5147 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9546,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C16_o2_distractor",
+      "window_case_id": "F04_o2_lag__idle__02@120s",
+      "fault_id": "F04_o2_lag",
+      "condition": "DISTRACTOR",
+      "diagnosis_used": "F04_o2_lag",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F04_o2_lag",
+        "model_confidence": 0.9546,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_max",
+            "value": 0.083801,
+            "direction": "increases",
+            "importance": 0.152296,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "std",
+            "value": 0.028741,
+            "direction": "increases",
+            "importance": 0.132406,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "max",
+            "value": 0.514747,
+            "direction": "increases",
+            "importance": 0.132105,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "min",
+            "value": 0.371341,
+            "direction": "increases",
+            "importance": 0.130654,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_min",
+            "value": -0.07565,
+            "direction": "increases",
+            "importance": 0.127027,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor oxygen_sensor (delta_max) toma el valor 0.0838 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor oxygen_sensor (std) toma el valor 0.02874 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor oxygen_sensor (max) toma el valor 0.5147 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9546,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    },
+    {
+      "case_id": "C17_o2_distractor_sin_filtro",
+      "window_case_id": "F04_o2_lag__idle__02@120s",
+      "fault_id": "F04_o2_lag",
+      "condition": "DISTRACTOR_NO_FILTER",
+      "diagnosis_used": "F04_o2_lag",
+      "dtc_requirement": "DTC_REQUIRED",
+      "calibrated_confidence": 1.0,
+      "n_documents_applicable": 0,
+      "claim_coverage": 0.0,
+      "expected_action": "ABSTAIN",
+      "decision": "ABSTAIN",
+      "correct": true,
+      "sufficiency": "INSUFFICIENT_EVIDENCE",
+      "reasons": "NO_APPLICABLE_DOCUMENTARY_EVIDENCE; LOW_CLAIM_COVERAGE",
+      "chunk_ids_to_verifier": "",
+      "applicable_chunk_ids": "",
+      "bundle": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "vehicle_id": "mazda-3-bk-2007",
+        "predicted_class": "F04_o2_lag",
+        "model_confidence": 0.9546,
+        "calibrated_confidence": 1.0,
+        "observations": [
+          {
+            "observation_id": "OBS001",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_max",
+            "value": 0.083801,
+            "direction": "increases",
+            "importance": 0.152296,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS002",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "std",
+            "value": 0.028741,
+            "direction": "increases",
+            "importance": 0.132406,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS003",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "max",
+            "value": 0.514747,
+            "direction": "increases",
+            "importance": 0.132105,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS004",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "min",
+            "value": 0.371341,
+            "direction": "increases",
+            "importance": 0.130654,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          },
+          {
+            "observation_id": "OBS005",
+            "kind": "observational",
+            "signal": "oxygen_sensor",
+            "statistic": "delta_min",
+            "value": -0.07565,
+            "direction": "increases",
+            "importance": 0.127027,
+            "session_id": "F04_o2_lag__idle__02",
+            "window_start_s": 120.0,
+            "window_end_s": 239.0
+          }
+        ],
+        "documents": [],
+        "claims": [
+          {
+            "claim_id": "C01",
+            "text": "El descriptor oxygen_sensor (delta_max) toma el valor 0.0838 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS001"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C02",
+            "text": "El descriptor oxygen_sensor (std) toma el valor 0.02874 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS002"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          },
+          {
+            "claim_id": "C03",
+            "text": "El descriptor oxygen_sensor (max) toma el valor 0.5147 entre los segundos 120 y 239 de la sesión, y es uno de los descriptores que más contribuyen a la predicción del modelo, al alza.",
+            "observational_evidence": [
+              "OBS003"
+            ],
+            "documentary_evidence": [],
+            "support_status": "PARTIALLY_SUPPORTED",
+            "notes": "ningún fragmento aplicable sostiene esta afirmación: existen citas posibles, pero ninguna habla de la señal en contenido diagnóstico"
+          }
+        ]
+      },
+      "verdict": {
+        "case_id": "F04_o2_lag__idle__02@120s",
+        "sufficiency": "INSUFFICIENT_EVIDENCE",
+        "decision": "ABSTAIN",
+        "reasons": [
+          "NO_APPLICABLE_DOCUMENTARY_EVIDENCE",
+          "LOW_CLAIM_COVERAGE"
+        ],
+        "signals": {
+          "confidence": 1.0,
+          "model_confidence": 0.9546,
+          "calibrated": true,
+          "n_observations": 5,
+          "n_documents_retrieved": 0,
+          "n_documents_applicable": 0,
+          "n_distinct_sources": 0,
+          "best_retrieval_score": 0.0,
+          "claim_coverage": 0.0,
+          "n_claims": 3,
+          "contradictions": []
+        },
+        "missing_evidence": [
+          "ningún fragmento documental aplicable a este vehículo",
+          "cobertura 0.00 < 0.80"
+        ]
+      },
+      "support_checks": []
+    }
+  ]
+}
