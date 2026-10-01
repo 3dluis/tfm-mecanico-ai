@@ -131,7 +131,7 @@ La Tabla 4.5 lleva la correspondencia del capítulo 2 hasta las fases, las métr
 | OE2 | E1, E2, E4, E5, E10, E11 | — | ejecutadas sobre telemetría sintética; la validación externa con datos reales (E3) queda fuera de esta versión |
 | OE3 | E5, E6, E7, E9 | M1; para la atribución, concordancia descriptiva entre las señales atribuidas y las declaradas para cada fallo | ejecutadas sobre la partición de validación; la evaluación sobre el conjunto de prueba (E8) corresponde a la evaluación final |
 | OE4 | E11, E12, E13, E15 (E14 y E16 quedan integradas en E15) | M2, M3, M4, M5 | calculadas sobre validación y reejecutadas con recuperación canónica el 13 y 14 de septiembre; resultados parciales |
-| OE5 | E15 y E17 (condiciones de evidencia), E18, E19, E20 | M5 con sus dos tipos de error, M6 | condiciones completa, parcial y ausente evaluadas; la condición con distractor, diagnosticada; ablaciones (E18), evaluación final (E19) y demostración (E20) pendientes |
+| OE5 | E15 y E17 (condiciones de evidencia), E18 ablaciones, E19, E20 | M5 con sus dos tipos de error, M6 | condiciones completa, parcial y ausente evaluadas; la condición con distractor, diagnosticada; ablaciones ejecutadas el 1 de octubre de 2026, con una de las cuatro inconclusa; evaluación final (E19) y demostración (E20) pendientes |
 
 *Fuente: elaboración propia.*
 
@@ -358,10 +358,10 @@ La documentación técnica utilizada como corpus se identifica mediante metadato
 Los registros anteriores al 4 de septiembre de 2026 carecen de identificador de la versión del código y de fecha de ejecución; los posteriores los incluyen de forma obligatoria. Completar esa identificación para toda la evaluación es condición para dar por cerrada la evaluación final.
 
 ### Ablaciones
-Cada ablación cambia exactamente un factor: sin atribución, sin recuperación semántica, sin criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para saber qué parte del resultado aporta cada pieza. Su ejecución forma parte del trabajo experimental que queda por cerrar.
+Cada ablación cambia exactamente un factor: sin atribución, sin recuperación semántica, sin criterio de suficiencia, con un único umbral en lugar del criterio compuesto. Sirven para saber qué parte del resultado aporta cada pieza. Sus definiciones operativas, sus métricas y el criterio con que se interpretan se fijaron antes de medir, con las dos políticas triviales de referencia incluidas en la comparación; los resultados están en el capítulo 5.
 
 ### Trabajo experimental pendiente para el cierre del TFM
-Antes del cierre de la evaluación quedan previstas las ablaciones de los principales componentes, la apertura controlada del conjunto de prueba para la evaluación final y la demostración del experimento integrado sobre casos de la partición final.
+Antes del cierre de la evaluación quedan previstas la apertura controlada del conjunto de prueba para la evaluación final, la demostración del experimento integrado sobre casos de la partición final y el rediseño de la condición con distractor con su propio pre-registro.
 
 Todas estas actividades forman parte del diseño experimental del presente trabajo y no se consideran líneas futuras.
 

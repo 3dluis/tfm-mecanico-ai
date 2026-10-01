@@ -1,7 +1,7 @@
 # Capítulo 5: Presentación de análisis, resultados y discusión
 Todos los resultados de este capítulo proceden del vehículo de referencia definido en el capítulo 4, un Mazda 3 BK de 2007 con motor Z6, y de su corpus documental. No se han evaluado otros vehículos ni otras generaciones.
 
-Las cifras proceden de la partición de **validación** de la muestra sintética descrita en el capítulo 4; el conjunto de prueba permanece cerrado y no se ha consultado. La procedencia del dato es sintética, y su validez externa se discute en el capítulo 6. Cada tabla cita el registro de ejecución del que sale. Son resultados parciales: la evaluación final sobre el conjunto de prueba, las ablaciones y la demostración integrada quedan pendientes.
+Las cifras proceden de la partición de **validación** de la muestra sintética descrita en el capítulo 4; el conjunto de prueba permanece cerrado y no se ha consultado. La procedencia del dato es sintética, y su validez externa se discute en el capítulo 6. Cada tabla cita el registro de ejecución del que sale. Son resultados parciales: la evaluación final sobre el conjunto de prueba y la demostración integrada quedan pendientes.
 
 Las cifras de recuperación, de suficiencia y del modelo de lenguaje proceden de una reejecución realizada el 13 y el 14 de septiembre de 2026. El 4 de septiembre se detectó que el índice documental contenía dos representaciones vectoriales por fragmento y que ninguna búsqueda declaraba en cuál buscaba, de modo que la procedencia de cada fragmento recuperado era indeterminada. Se corrigió el defecto, se fijó por escrito y antes de medir qué se compararía y cómo se interpretaría, y se repitieron la recuperación, la suficiencia en sus dos modos, la generación del conjunto de ajuste y la redacción con el modelo de lenguaje con el mismo modelo, umbral y política. Ninguna de las diecisiete decisiones cambió; los conjuntos de fragmentos recuperados cambiaron en diez de los diecisiete casos, siempre por adición. Con arreglo al criterio fijado de antemano, ese resultado se lee como ausencia de efecto detectable con este instrumento, no como confirmación del criterio de suficiencia. Los registros anteriores se conservan como históricos; las filas de nueve casos de la Tabla 5.7 y el escenario adverso proceden de ellos, del 4 de septiembre.
 
@@ -15,7 +15,7 @@ El análisis exploratorio previo al modelado dejó dos hechos que condicionan la
 El estudio de ventana del capítulo 4 fijó 120 segundos como longitud en la que los descriptores separables coinciden con los mecanismos físicos declarados para cada fallo. En particular, la deriva del caudalímetro no se detecta en el caudal medido sino en las correcciones de combustible con que la centralita la compensa. Esto condiciona qué puede afirmar legítimamente el agente: «el caudalímetro deriva porque el caudal es bajo» sería falso, y las plantillas de afirmación del verificador no permiten formularlo.
 
 ## Resultados obtenidos
-Los resultados se presentan por subpregunta, PI.1 a PI.4, y se cierran con la medición del modelo de lenguaje. Primero lo observado; después su interpretación.
+Los resultados se presentan por subpregunta, PI.1 a PI.4, siguen con la medición del modelo de lenguaje y terminan con la contribución de cada componente. Primero lo observado; después su interpretación.
 
 ### PI.1 · Diagnóstico, calibración y atribución
 **Tabla 5.1. Rendimiento del modelo de diagnóstico sobre la partición de validación.**
@@ -162,6 +162,62 @@ Los adaptadores modifican el 0,24 % de los parámetros, solo en las proyecciones
 
 Tres lecturas. Primera: **ninguna configuración citó un fragmento que no se le hubiera entregado**, y eso no lo consiguió el ajuste; lo garantiza la barrera externa. Lo que la barrera no garantiza es que el modelo cite solo los fragmentos que el verificador aceptó como soporte: en los tres casos que el segundo adaptador explica, seis de sus nueve afirmaciones citan algún fragmento aplicable que el verificador no había asignado a ninguna afirmación. La correspondencia verificada entre afirmación y evidencia es, por tanto, la de las afirmaciones del verificador, y no se extiende sin más al texto que redacta el modelo. Segunda: el ajuste cambió la forma de la explicación hacia la buscada. El modelo base, en su único caso explicativo válido de la primera medición, cuelga las cinco observaciones de una misma afirmación y parafrasea el manual como si fuera afirmación propia; el ajustado produce tres afirmaciones, cada una con una observación y dos fragmentos, y sin atribuir causa. Pero sus afirmaciones califican el valor observado, «por encima de lo esperable», cuando la observación solo registra hacia dónde empuja la predicción del modelo; la calificación procede de las plantillas del conjunto de ajuste y no está sostenida por el dato. Tercera: el primer adaptador no mejoró el recuento porque cambió los fallos de sitio, y la causa estaba en los datos de ajuste. El objetivo de entrenamiento traducía el motivo de abstención a un vocabulario genérico mientras la entrada mostraba el literal; el modelo intentaba copiar la entrada y deformaba el identificador. El segundo adaptador cambia solo eso y pasa de 7 a 9 salidas válidas; sobre los diecisiete casos, el defecto del primero se manifiesta en seis salidas y el segundo mantiene las diecisiete válidas.
 
+### Contribución de cada componente
+Cuatro ablaciones, pre-registradas y ejecutadas el 1 de octubre de 2026 sobre los mismos
+diecisiete casos, cambian una pieza cada una y dejan el resto idéntico. Ninguna redacta: miden la
+decisión y la evidencia, no el texto.
+
+**Tabla 5.8. Efecto de retirar o degradar cada componente.**
+
+| Configuración | Falsa confianza | Abstención innecesaria | Cobertura con evidencia completa | Decisiones distintas de la canónica |
+| --- | --- | --- | --- | --- |
+| Canónica: criterio compuesto, umbral 0,79 | 0 de 9 | 2 de 5 | 3 de 5 | — |
+| A1 sin atribución: observaciones por desviación tipificada | 0 de 9 | 2 de 5 | 3 de 5 | 0 de 17 |
+| A2 sin recuperación semántica: solo búsqueda léxica | 0 de 9 | 5 de 5 | 0 de 5 | 3 de 17 |
+| A3 sin criterio de suficiencia: explicar si hay fragmento aplicable | 6 de 9 | 0 de 5 | 5 de 5 | 11 de 17 |
+| A4 umbral único: solo confianza calibrada | 9 de 9 | 2 de 5 | 3 de 5 | 12 de 17 |
+
+*Fuente: elaboración propia a partir de `E18_ablacion_A1.json` a `E18_ablacion_A4.json`.*
+
+Sustituir la atribución por un criterio estadístico simple no cambió ninguna decisión ni ningún
+conjunto de evidencia. La explicación está en el diseño: la recuperación la guía el diagnóstico y
+no la atribución, y el soporte se comprueba sobre la señal y no sobre el estadístico, de modo que
+dos rutas que eligen distintos descriptores de las mismas señales llegan al mismo sitio. Lo que
+puede afirmarse es que, para la decisión y en esta muestra, la atribución de Shapley es
+sustituible; no que sea prescindible, porque es la evidencia observacional que el lector recibe y
+esa dimensión no se ha evaluado.
+
+La ablación de la recuperación semántica quedó **inconclusa**, y conviene decir por qué. La ruta
+léxica no recuperó ningún fragmento en ninguno de los diecisiete casos, pero la causa no es la
+ablación sino la consulta: la búsqueda de texto completo une los términos con conjunción y una
+consulta de treinta palabras exige que las treinta aparezcan en el mismo fragmento. Se comprobó
+por separado, sin filtros, y devuelve cero resultados. La comparación no aísla, por tanto, la
+contribución de la similitud semántica, y la enmienda `ENM-E18-01` declara la variante que lo
+mediría, con la consulta formada por los códigos de avería y los nombres de las señales.
+
+Las dos ablaciones de la regla de decisión son las que dan sentido al criterio compuesto. Sin él,
+explicando siempre que hay un fragmento aplicable, aparecen **seis explicaciones sin soporte** de
+las nueve ejecuciones que debían terminar en abstención, nueve de doce contando la condición con
+distractor y filtro; con una puerta de confianza sola, **las doce**, porque la confianza del
+modelo no sabe nada del corpus y explica incluso donde la recuperación no devuelve nada. Esas
+cifras de A4 coinciden celda a celda con la política de referencia que la Tabla 5.6 publica,
+calculada por otro camino sobre el registro; el pre-registro fijaba que una discrepancia obligaría
+a parar, y no la hubo.
+
+Ninguna de las cuatro dice nada sobre la separación entre decidir y redactar, que no se ablaciona,
+y todas se miden sobre el conjunto con el que el criterio fue ajustado.
+
+Por último, la corrección de la puerta de códigos de avería, implementada en septiembre y sin
+medir hasta ahora, se midió con la política v2.2 en los tres modos. En los diecisiete casos no
+cambia ninguna decisión ni ningún motivo, porque los cinco diagnósticos del conjunto están
+declarados con códigos y el requisito era ya el más estricto. Donde cambia es en el escenario
+adverso: el diagnóstico «sin fallo» no está declarado en el mapa, el requisito pasa a declararse
+no aplicable y las dos ejecuciones con evidencia completa dejan de aceptar como soporte dos de sus
+tres afirmaciones, de modo que la cobertura cae de 0,67 a 0,00. Las seis ejecuciones se abstenían
+antes y se abstienen ahora; lo que desaparece es un soporte falso para un diagnóstico incorrecto
+(`resultado-rerun-b.md`). Qué política pasa a ser la canónica para la evaluación final es una
+decisión pendiente.
+
 ## Discusión y análisis de los resultados
 La discusión separa lo que los resultados sostienen de lo que no sostienen, y termina con el patrón que atraviesa el trabajo.
 
@@ -179,9 +235,9 @@ Sobre datos sintéticos parametrizados con el manual del vehículo y sobre la pa
 Aplicada la regla que el capítulo 4 fijó para la respuesta global, con PI.1, PI.2 y PI.3 en su forma actual y PI.4 sin sostener, la respuesta a la pregunta de investigación es **parcialmente sostenida**, con carácter provisional y sobre validación. La calificación descansa en criterios reescritos tras los primeros resultados, en una PI.2 que se cumple por construcción y en cifras de desarrollo; la evaluación final puede cambiarla. De los cinco desenlaces que la refutarían, el de la abstención trivial no se produjo: el sistema se abstiene en catorce de diecisiete casos, pero doce debían terminar en abstención y en los cinco con evidencia completa explica tres.
 
 ### Lo que no sostienen
-No sostienen nada sobre el comportamiento en un vehículo real: caracterizan el mecanismo ante los fallos representados en el generador. Es la primera limitación del capítulo 6. No sostienen el comportamiento del agente cuando el diagnóstico de partida es erróneo, salvo en el escenario adverso descrito, anterior a la corrección del índice y construido sobre dos ventanas. Tampoco sostienen que la abstención sea barata: dos de cinco casos con evidencia completa terminan en abstención, y esa cobertura, 3 de 5, es el precio de una falsa confianza nula en esta muestra. Un criterio más laxo en la confianza habría explicado cuatro de los cinco casos, entre ellos C01, cuyo diagnóstico el modelo acierta pero con una confianza calibrada de 0,60; la elección del umbral es una elección de política y se declara como tal. Ni sostienen que el adaptador del modelo de lenguaje generalice: se entrenó sobre ejemplos generados con la recuperación anterior a la corrección del índice y con ventanas que incluyen las de tres casos evaluados, dos en entrenamiento y una en validación, y no se ha reentrenado. Tampoco sostienen que el comportamiento observado se deba a separar la decisión de la redacción: sin ablaciones y sin una comparación con una abstención decidida por el propio modelo de lenguaje, lo medido es el comportamiento de un sistema que implementa esa separación.
+No sostienen nada sobre el comportamiento en un vehículo real: caracterizan el mecanismo ante los fallos representados en el generador. Es la primera limitación del capítulo 6. No sostienen el comportamiento del agente cuando el diagnóstico de partida es erróneo, salvo en el escenario adverso descrito, anterior a la corrección del índice y construido sobre dos ventanas; con la política v2.2 ese escenario deja de aceptar soporte falso, y sigue siendo de dos ventanas. Tampoco sostienen que la abstención sea barata: dos de cinco casos con evidencia completa terminan en abstención, y esa cobertura, 3 de 5, es el precio de una falsa confianza nula en esta muestra. Un criterio más laxo en la confianza habría explicado cuatro de los cinco casos, entre ellos C01, cuyo diagnóstico el modelo acierta pero con una confianza calibrada de 0,60; la elección del umbral es una elección de política y se declara como tal. Ni sostienen que el adaptador del modelo de lenguaje generalice: se entrenó sobre ejemplos generados con la recuperación anterior a la corrección del índice y con ventanas que incluyen las de tres casos evaluados, dos en entrenamiento y una en validación, y no se ha reentrenado. Tampoco sostienen que el comportamiento observado se deba a separar la decisión de la redacción: sin ablaciones y sin una comparación con una abstención decidida por el propio modelo de lenguaje, lo medido es el comportamiento de un sistema que implementa esa separación.
 
 ### El patrón que atraviesa el trabajo
 Varios de los errores relevantes del trabajo se detectaron mirando cifras que no cuadraban, no ejecutando pruebas automáticas: una exactitud de cero por un tipo de dato, una puntuación de fusión en otra escala, una condición ABSENT que seguía explicando, un código genérico que hacía parecer que la evidencia no existía, un efecto aparente del idioma que el filtro tapaba, un esquema que rechazaba respuestas correctas, un índice que mezclaba dos espacios vectoriales. Cada uno quedó registrado con su consecuencia si no se hubiera detectado, y varios habrían producido resultados falsos que parecían correctos. Es la misma observación que motiva la pregunta de investigación, aplicada al propio proceso de investigarla: la evidencia aparente no sobrevive siempre al escrutinio, y un sistema, o un investigador, que no distinga entre tener una referencia y tener soporte producirá afirmaciones con referencia y sin soporte.
 
-Quedan para la evaluación final tres cosas que este capítulo no puede ofrecer todavía: las ablaciones, que atribuirán el resultado a cada componente; la medición sobre el conjunto de prueba, que dirá si las cifras de validación se mantienen sobre datos no usados para fijar ningún umbral ni revisar el criterio; y la comparación con los trabajos del capítulo 3, que solo tiene sentido sobre resultados finales.
+Quedan para la evaluación final dos cosas que este capítulo no puede ofrecer todavía: la medición sobre el conjunto de prueba, que dirá si las cifras de validación se mantienen sobre datos no usados para fijar ningún umbral ni revisar el criterio, y la comparación con los trabajos del capítulo 3, que solo tiene sentido sobre resultados finales. De las ablaciones queda pendiente la variante de la recuperación léxica que la enmienda declara.

@@ -115,10 +115,32 @@ no se ha abierto.
 | PI.4 distractores | condición con evidencia parecida pero no aplicable | **no sostenida con el diseño actual**: con el filtro de motor la condición no añade ningún distractor que la condición parcial no tuviera |
 | Modelo de lenguaje | tres configuraciones, 17 casos | con adaptador: 17 de 17 salidas válidas, 0 citas inexistentes; cita, eso sí, fragmentos que el verificador no aceptó en 6 de 9 afirmaciones |
 
-**E18, ablaciones.** `[PENDIENTE: resultado de la ejecución de esta entrega]`
+**E18, ablaciones.** Cuatro ablaciones pre-registradas sobre los mismos diecisiete casos, cada
+una cambiando una pieza:
 
-**RERUN-B, política v2.2 de la puerta de códigos.** `[PENDIENTE: resultado de la ejecución de
-esta entrega]`
+| Configuración | Falsa confianza | Abstención innecesaria | Cobertura |
+|---|---|---|---|
+| Canónica | 0 de 9 | 2 de 5 | 3 de 5 |
+| Sin atribución | 0 de 9 | 2 de 5 | 3 de 5 |
+| Sin recuperación semántica | 0 de 9 | 5 de 5 | 0 de 5 |
+| Sin criterio de suficiencia | **6 de 9** | 0 de 5 | 5 de 5 |
+| Solo umbral de confianza | **9 de 9** | 2 de 5 | 3 de 5 |
+
+El criterio compuesto de suficiencia es lo que sostiene el resultado: sin él aparecen seis
+explicaciones sin soporte, y con una puerta de confianza sola, las doce. La atribución resultó
+sustituible por un criterio estadístico simple sin que cambiara ninguna decisión ni ningún
+conjunto de evidencia. La ablación de la recuperación semántica quedó **inconclusa**: la ruta
+léxica no recupera nada con una consulta en prosa, por cómo la búsqueda de texto completo combina
+los términos, y la variante que lo mediría está declarada en una enmienda y sin ejecutar.
+
+**RERUN-B, política v2.2 de la puerta de códigos.** La corrección del hallazgo
+`EMPTY-DTC-GATE-BYPASS`, implementada en septiembre y hasta ahora sin medir, se midió en los tres
+modos. En los diecisiete casos no cambia ninguna decisión ni ningún motivo. En el escenario
+adverso, donde el diagnóstico del modelo es «sin fallo» y no está declarado con códigos, las dos
+ejecuciones con evidencia completa dejan de aceptar como soporte dos de sus tres afirmaciones y la
+cobertura cae de 0,67 a 0,00: desaparece un soporte falso para un diagnóstico incorrecto. El
+hallazgo queda corregido y medido; qué política pasa a ser la canónica es una decisión del autor
+que se recomienda tomar con la evaluación final.
 
 Aplicada la regla de decisión fijada antes de evaluar, la respuesta a la pregunta queda
 **parcialmente sostenida**, con carácter provisional: las cifras del agente son de desarrollo,
