@@ -1,0 +1,206 @@
+{
+ "A1": {
+  "ablation": "sin atribución",
+  "cambio": "las tres observaciones se eligen por |z| del descriptor frente a la media y desviación de la clase F00_normal en entrenamiento, no por importancia de Shapley",
+  "summary": {
+   "metric_definition": "docs/memoria/cap4_marco_metodologico.md, M5",
+   "n_cases": 17,
+   "false_confidence": {
+    "numerator": 0,
+    "denominator": 9,
+    "n_independent_windows": 3,
+    "rate": 0.0,
+    "including_distractor_with_filter": {
+     "numerator": 0,
+     "denominator": 12,
+     "n_independent_windows": 3,
+     "rate": 0.0
+    }
+   },
+   "unnecessary_abstention": {
+    "numerator": 2,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 0.4
+   },
+   "coverage_full_evidence": {
+    "numerator": 3,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 0.6
+   },
+   "decisions": {
+    "C01_maf_drift": "ABSTAIN",
+    "C02_thermostat_stuck": "EXPLAIN",
+    "C03_o2_slow_response": "EXPLAIN",
+    "C04_misfire": "ABSTAIN",
+    "C05_vacuum_leak": "EXPLAIN",
+    "C06_vacuum_leak_evidencia_retirada": "ABSTAIN",
+    "C07_partial": "ABSTAIN",
+    "C08_distractor": "ABSTAIN",
+    "C09_distractor_sin_filtro": "ABSTAIN",
+    "C10_thermostat_absent": "ABSTAIN",
+    "C11_thermostat_partial": "ABSTAIN",
+    "C12_thermostat_distractor": "ABSTAIN",
+    "C13_thermostat_distractor_sin_filtro": "ABSTAIN",
+    "C14_o2_absent": "ABSTAIN",
+    "C15_o2_partial": "ABSTAIN",
+    "C16_o2_distractor": "ABSTAIN",
+    "C17_o2_distractor_sin_filtro": "ABSTAIN"
+   }
+  }
+ },
+ "A2": {
+  "ablation": "sin recuperación semántica",
+  "cambio": "la consulta no se vectoriza: recuperación léxica sobre el texto completo con los mismos filtros de vehículo, motor y códigos de avería y la misma profundidad",
+  "summary": {
+   "metric_definition": "docs/memoria/cap4_marco_metodologico.md, M5",
+   "n_cases": 17,
+   "false_confidence": {
+    "numerator": 0,
+    "denominator": 9,
+    "n_independent_windows": 3,
+    "rate": 0.0,
+    "including_distractor_with_filter": {
+     "numerator": 0,
+     "denominator": 12,
+     "n_independent_windows": 3,
+     "rate": 0.0
+    }
+   },
+   "unnecessary_abstention": {
+    "numerator": 5,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 1.0
+   },
+   "coverage_full_evidence": {
+    "numerator": 0,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 0.0
+   },
+   "decisions": {
+    "C01_maf_drift": "ABSTAIN",
+    "C02_thermostat_stuck": "ABSTAIN",
+    "C03_o2_slow_response": "ABSTAIN",
+    "C04_misfire": "ABSTAIN",
+    "C05_vacuum_leak": "ABSTAIN",
+    "C06_vacuum_leak_evidencia_retirada": "ABSTAIN",
+    "C07_partial": "ABSTAIN",
+    "C08_distractor": "ABSTAIN",
+    "C09_distractor_sin_filtro": "ABSTAIN",
+    "C10_thermostat_absent": "ABSTAIN",
+    "C11_thermostat_partial": "ABSTAIN",
+    "C12_thermostat_distractor": "ABSTAIN",
+    "C13_thermostat_distractor_sin_filtro": "ABSTAIN",
+    "C14_o2_absent": "ABSTAIN",
+    "C15_o2_partial": "ABSTAIN",
+    "C16_o2_distractor": "ABSTAIN",
+    "C17_o2_distractor_sin_filtro": "ABSTAIN"
+   }
+  }
+ },
+ "A3": {
+  "ablation": "sin criterio de suficiencia",
+  "cambio": "se retira el criterio compuesto: EXPLAIN si hay al menos un fragmento aplicable, ABSTAIN si no hay ninguno",
+  "summary": {
+   "metric_definition": "docs/memoria/cap4_marco_metodologico.md, M5",
+   "n_cases": 17,
+   "false_confidence": {
+    "numerator": 6,
+    "denominator": 9,
+    "n_independent_windows": 3,
+    "rate": 0.6667,
+    "including_distractor_with_filter": {
+     "numerator": 9,
+     "denominator": 12,
+     "n_independent_windows": 3,
+     "rate": 0.75
+    }
+   },
+   "unnecessary_abstention": {
+    "numerator": 0,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 0.0
+   },
+   "coverage_full_evidence": {
+    "numerator": 5,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 1.0
+   },
+   "decisions": {
+    "C01_maf_drift": "EXPLAIN",
+    "C02_thermostat_stuck": "EXPLAIN",
+    "C03_o2_slow_response": "EXPLAIN",
+    "C04_misfire": "EXPLAIN",
+    "C05_vacuum_leak": "EXPLAIN",
+    "C06_vacuum_leak_evidencia_retirada": "ABSTAIN",
+    "C07_partial": "EXPLAIN",
+    "C08_distractor": "EXPLAIN",
+    "C09_distractor_sin_filtro": "EXPLAIN",
+    "C10_thermostat_absent": "ABSTAIN",
+    "C11_thermostat_partial": "EXPLAIN",
+    "C12_thermostat_distractor": "EXPLAIN",
+    "C13_thermostat_distractor_sin_filtro": "EXPLAIN",
+    "C14_o2_absent": "ABSTAIN",
+    "C15_o2_partial": "EXPLAIN",
+    "C16_o2_distractor": "EXPLAIN",
+    "C17_o2_distractor_sin_filtro": "EXPLAIN"
+   }
+  }
+ },
+ "A4": {
+  "ablation": "umbral único",
+  "cambio": "la decisión se toma solo con la confianza calibrada frente al umbral, ignorando cobertura, número de fragmentos y de fuentes y contradicciones",
+  "summary": {
+   "metric_definition": "docs/memoria/cap4_marco_metodologico.md, M5",
+   "n_cases": 17,
+   "false_confidence": {
+    "numerator": 9,
+    "denominator": 9,
+    "n_independent_windows": 3,
+    "rate": 1.0,
+    "including_distractor_with_filter": {
+     "numerator": 12,
+     "denominator": 12,
+     "n_independent_windows": 3,
+     "rate": 1.0
+    }
+   },
+   "unnecessary_abstention": {
+    "numerator": 2,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 0.4
+   },
+   "coverage_full_evidence": {
+    "numerator": 3,
+    "denominator": 5,
+    "n_independent_windows": 5,
+    "rate": 0.6
+   },
+   "decisions": {
+    "C01_maf_drift": "ABSTAIN",
+    "C02_thermostat_stuck": "EXPLAIN",
+    "C03_o2_slow_response": "EXPLAIN",
+    "C04_misfire": "ABSTAIN",
+    "C05_vacuum_leak": "EXPLAIN",
+    "C06_vacuum_leak_evidencia_retirada": "EXPLAIN",
+    "C07_partial": "EXPLAIN",
+    "C08_distractor": "EXPLAIN",
+    "C09_distractor_sin_filtro": "EXPLAIN",
+    "C10_thermostat_absent": "EXPLAIN",
+    "C11_thermostat_partial": "EXPLAIN",
+    "C12_thermostat_distractor": "EXPLAIN",
+    "C13_thermostat_distractor_sin_filtro": "EXPLAIN",
+    "C14_o2_absent": "EXPLAIN",
+    "C15_o2_partial": "EXPLAIN",
+    "C16_o2_distractor": "EXPLAIN",
+    "C17_o2_distractor_sin_filtro": "EXPLAIN"
+   }
+  }
+ }
+}
