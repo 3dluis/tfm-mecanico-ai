@@ -54,18 +54,28 @@ variante léxica de la ablación, que es una medición nueva y no entra en la ev
 
 ## 4. Orden de ejecución
 
-1. Construir los casos anotados sobre ventanas de la partición de prueba, con la misma estructura
-   del conjunto actual y las condiciones de evidencia completa, parcial y ausente. La anotación se
-   cierra **antes** de ejecutar nada.
-2. Declarar la apertura del conjunto de prueba con su razón escrita, y registrarla.
-3. Medir el diagnóstico y la calibración sobre prueba.
-4. Medir suficiencia y redacción, con la política nueva, en modo oracular y no oracular.
-5. Escribir el informe de fase y llevar las cifras al capítulo 5 con su procedencia, su semilla, su
+1. **Congelar las reglas de anotación sin mirar el conjunto.** Se escriben el procedimiento con que
+   se elegirán las ventanas —cuántas por condición de fallo, cómo se construyen las condiciones de
+   evidencia completa, parcial y ausente, qué ficheros del manual son evidencia relevante de cada
+   fallo y cuál es la acción esperada—, los umbrales, que no cambian, y la política del verificador.
+   Nada de esto requiere leer una sola ventana de prueba, y es lo único que puede fijarse antes.
+2. **Declarar la apertura del conjunto de prueba** con su razón escrita y registrarla. El cargador
+   exige ambas cosas de forma explícita y las imprime en la salida de la ejecución. Hasta aquí no se
+   ha leído ninguna ventana de la partición.
+3. **Instanciar la anotación** aplicando las reglas del paso 1 a las ventanas ya accesibles, y
+   cerrarla antes de medir nada. La instanciación no puede cambiar las reglas: si una regla resulta
+   inaplicable, se declara y la anotación se queda sin ese caso en lugar de reescribirse.
+4. Medir el diagnóstico y la calibración sobre prueba.
+5. Medir suficiencia y redacción, con la política nueva, en modo oracular y no oracular.
+6. Escribir el informe de fase y llevar las cifras al capítulo 5 con su procedencia, su semilla, su
    versión, sus parámetros y su unidad de análisis.
-6. Reevaluar con los auditores independientes y el tribunal simulado, y cerrar el capítulo 6.
+7. Reevaluar con los auditores independientes y el tribunal simulado, y cerrar el capítulo 6.
 
-Entre el paso 1 y el 2 hay un punto de no retorno: una vez abierto el conjunto, ningún umbral,
-criterio ni anotación puede ajustarse. Lo que esté mal ajustado se queda así y se declara.
+El punto de no retorno está entre el paso 1 y el paso 2: cuando el conjunto se abre, ningún umbral,
+criterio ni regla de anotación puede ajustarse. Lo que esté mal ajustado se queda así y se declara.
+Este orden corrige el de un borrador anterior de este plan, que pedía anotar las ventanas antes de
+declarar la apertura: era inviable, porque leerlas exige la declaración, y hacerlo de otro modo
+habría rodeado el cierre técnico que el propio diseño impone.
 
 ## 5. Qué queda fuera de E19
 
