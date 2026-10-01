@@ -1,0 +1,263 @@
+{
+  "manifest_id": "E19",
+  "version": "1.0.0",
+  "anchor_file": "configs/congelacion-e19.anchor.json",
+  "note": "Estado congelado de la evaluacion final. Enumera lo que no puede cambiar desde la congelacion de las reglas de anotacion hasta el final de E19. El conjunto de prueba sigue CERRADO: este manifiesto no lo abre.",
+  "test_set": {
+    "status": "CLOSED",
+    "opened": false,
+    "opening_requires": "declaracion explicita del autor con razon por escrito, posterior a la revision del diff con veredicto PASS",
+    "what_was_read_to_freeze": [
+      "data/processed/synthetic_v2_preprocess.json :: split_assignment (sesion -> particion)",
+      "recuentos derivados de ese reparto: 12 sesiones y 98 ventanas de prueba, 2 sesiones por condicion"
+    ],
+    "what_was_not_read": [
+      "senales, ventanas y descriptores de la particion de prueba",
+      "etiquetas por ventana de la particion de prueba",
+      "cualquier salida del modelo sobre la particion de prueba"
+    ]
+  },
+  "frozen_rules": {
+    "file": "docs/methodology/congelacion-anotacion-e19.md",
+    "anchor": "configs/congelacion-e19.anchor.json, escrito despues del commit de congelacion y que por tanto puede nombrarlo; cubre este manifiesto y el documento de reglas, porque anclar solo las reglas dejaria libre el estado congelado",
+    "enforced_by": "tests/test_congelacion_e19.py compara cada fichero con el objeto del commit de congelacion y comprueba que ningun commit posterior lo toca",
+    "frozen_before": "cualquier medicion sobre la particion de prueba"
+  },
+  "canonical_policy": {
+    "verifier_version": "v2.2",
+    "becomes_canonical_with": "la evaluacion final, y solo con ella",
+    "published_results_stay_under": "v2.1",
+    "reason": "no se reabren cifras publicadas; la transicion entra con el conjunto de prueba"
+  },
+  "thresholds": {
+    "min_confidence": 0.79,
+    "min_retrieval_score": 0.0,
+    "min_supporting_chunks": 2,
+    "min_distinct_sources": 1,
+    "min_claim_coverage": 0.8,
+    "allow_compatible_applicability": false,
+    "accepted_applicability": ["EXACT_MATCH"],
+    "frozen": "no se modifican en respuesta a ningun resultado de prueba"
+  },
+  "controlled_state": {
+    "seed": 20260901,
+    "dataset": {
+      "dataset_id": "synthetic_v2",
+      "dataset_type": "synthetic",
+      "n_windows_total": 588,
+      "window_length_s": 120.0,
+      "window_stride_s": 60.0,
+      "n_signals": 12,
+      "n_features": 139,
+      "split_seed": 20260901,
+      "partitions": {
+        "train": {"sessions": 48, "windows": 392},
+        "validation": {"sessions": 12, "windows": 98},
+        "test": {"sessions": 12, "windows": 98}
+      }
+    },
+    "diagnosis_model": {
+      "model": "RandomForestClassifier",
+      "n_estimators": 400,
+      "min_samples_leaf": 2,
+      "class_weight": "balanced",
+      "calibration": "isotonica, cv=5, ajustada sobre entrenamiento",
+      "prediction_source": "el diagnostico es el argumento maximo del bosque SIN calibrar (predicted_class de la atribucion); la confianza comparada con el umbral es la probabilidad calibrada de esa misma clase",
+      "why_it_matters": "la calibracion isotonica puede reordenar clases; anotar con el modelo calibrado declararia esperada una clase que el recorrido no usa y falsearia los denominadores",
+      "retrain": "no se reentrena para E19"
+    },
+    "annotated_set": {
+      "file": "configs/goldset_mazda3_bk.yaml",
+      "file_sha256_16": "7fadc49fc7daaad1",
+      "queries": "se reutilizan literalmente; no se escribe ninguna consulta nueva",
+      "declared_limitation": "las consultas las escribio una persona que conocia el fallo; describen sintomas y no nombran diagnostico ni codigo, pero no son ciegas"
+    },
+    "corpus": {
+      "vehicle_id": "mazda-3-bk-2007",
+      "engine_code": "Z6",
+      "corpus_version": "0.1.0",
+      "n_chunks": 6158,
+      "n_source_files": 3055,
+      "reindex": "no"
+    },
+    "embedding": {
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "dimension": 384,
+      "space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+      "device_requirement": "el mismo dispositivo que produjo los vectores indexados"
+    },
+    "oracle_channels": {
+      "O2_retrieval_scoped_by": "clase predicha, nunca la etiqueta anotada",
+      "O3_support_dtc_from": "clase predicha, nunca la etiqueta anotada",
+      "O1_window_selection": {
+        "primary_stratum": "cerrado: la seleccion no consulta al modelo",
+        "comparative_stratum": "abierto por definicion: la ventana es la primera que el modelo clasifica bien",
+        "adverse_stratum": "invertido: la ventana es una que el modelo clasifica mal"
+      }
+    },
+    "retrieval": {
+      "strategy": "diagnosis-guided",
+      "top_k": 10,
+      "filters": ["vehicle_id", "engine_code", "dtc del diagnostico"],
+      "reordering": "por nivel de autoridad"
+    },
+    "writer": {
+      "llm": "transformers-lora@slm_lora_v2",
+      "prompt_version": "agent-2026-09-04",
+      "retrain": "no se reentrena el adaptador para E19"
+    },
+    "tree_state": "limpio; si no fuera posible, el motivo se escribe en el informe de fase"
+  },
+  "eligible_cases": {
+    "n": 11,
+    "source": "los 17 casos del conjunto anotado, menos los 6 de la condicion con distractor",
+    "by_evidence_condition": {
+      "FULL": ["C01_maf_drift", "C02_thermostat_stuck", "C03_o2_slow_response", "C04_misfire", "C05_vacuum_leak"],
+      "PARTIAL": ["C07_partial", "C11_thermostat_partial", "C15_o2_partial"],
+      "ABSENT": ["C06_vacuum_leak_evidencia_retirada", "C10_thermostat_absent", "C14_o2_absent"]
+    },
+    "excluded": {
+      "DISTRACTOR": {
+        "cases": ["C08_distractor", "C09_distractor_sin_filtro", "C12_thermostat_distractor", "C13_thermostat_distractor_sin_filtro", "C16_o2_distractor", "C17_o2_distractor_sin_filtro"],
+        "reason": "con el filtro de motor no anaden ningun distractor que la condicion parcial no tuviera; PI.4 no puede interpretarse hasta el rediseno"
+      },
+      "new_partial_absent_for_F02_F05": {
+        "reason": "sus listas de exclusion no existen; escribirlas ahora seria decidir que cuenta como evidencia insuficiente en la misma semana en que se mide"
+      }
+    },
+    "declared_imbalance": "tres condiciones de fallo con las tres condiciones de evidencia y dos solo con evidencia completa; el desequilibrio viene de validacion"
+  },
+  "window_selection": {
+    "canonical_order": "session_id ascendente, luego t_start ascendente",
+    "primary_stratum": {
+      "name": "operativo",
+      "rule": "la primera ventana en orden canonico de cada una de las dos sesiones de prueba de cada condicion de fallo",
+      "consults_model": false,
+      "n_windows": 10,
+      "n_sessions": 10,
+      "n_runs": 22,
+      "answers_pi": true,
+      "difference_from_validation": "en validacion la ventana era la primera que el modelo clasificaba bien (canal de oraculo O-1); aqui la seleccion no pregunta al modelo"
+    },
+    "comparative_stratum": {
+      "name": "comparativo",
+      "rule": "la primera ventana en orden canonico que el modelo clasifica correctamente, igual que en validacion",
+      "consults_model": true,
+      "purpose": "separar el efecto de la particion del efecto de haber cambiado la regla de seleccion",
+      "answers_pi": false,
+      "descriptive": true
+    },
+    "adverse_stratum": {
+      "name": "adverso",
+      "rule": "entre las ventanas que el modelo clasifica mal, la de mayor confianza calibrada (regla A-1); desempate por menor session_id y luego menor t_start",
+      "evidence_conditions": ["FULL"],
+      "answers_pi": false,
+      "descriptive": true,
+      "if_no_window": "caso no evaluable por ausencia de ventanas; no entra en ningun numerador ni denominador"
+    },
+    "excluded_sessions": {
+      "F00_normal": "no genera casos anotados; sus ventanas entran en las metricas de diagnostico y calibracion"
+    },
+    "no_overlap": "una sola ventana por sesion, de modo que entre las ventanas elegidas no hay solape"
+  },
+  "expected_decision": {
+    "rule": "EXPLICA si y solo si (1) el indice contiene evidencia documental admisible para la condicion que genero la ventana y (2) la clase predicha coincide con la etiqueta; ABSTIENE en cualquier otro caso",
+    "admissible_evidence": "el procedimiento diagnostico que Mazda publica para el DTC de la condicion en la variante del motor Z6",
+    "allowed_inputs": ["meta.label (etiqueta verdadera)", "clase predicha por el recorrido evaluado: predicted_class de la atribucion, del bosque sin calibrar", "corpus_variant del caso anotado"],
+    "forbidden_inputs": [
+      "veredicto del verificador de suficiencia",
+      "motivos de la decision",
+      "cobertura de afirmaciones",
+      "numero de fragmentos aplicables",
+      "numero de fuentes distintas",
+      "resultado de las cuatro comprobaciones de soporte",
+      "requisito de la puerta de codigos"
+    ],
+    "non_circularity": "la anotacion es el referente contra el que se mide la politica; si se derivara de sus salidas, el acuerdo seria una tautologia",
+    "instantiation_order": [
+      "abrir la particion con declaracion y razon escrita",
+      "calcular las predicciones del modelo",
+      "escribir la anotacion completa a un artefacto y registrar su huella",
+      "solo entonces ejecutar la verificacion de suficiencia"
+    ]
+  },
+  "error_rates": {
+    "T_FC": {
+      "name": "falsa confianza",
+      "numerator": "ejecuciones que explican entre las que debian abstenerse",
+      "denominator": "ejecuciones cuya decision esperada es ABSTIENE",
+      "reported_with": ["ejecuciones", "ventanas distintas", "sesiones distintas"]
+    },
+    "T_AI": {
+      "name": "abstencion innecesaria",
+      "numerator": "ejecuciones que se abstienen entre las que debian explicar",
+      "denominator": "ejecuciones cuya decision esperada es EXPLICA",
+      "reported_with": ["ejecuciones", "ventanas distintas", "sesiones distintas"]
+    },
+    "never": "no se suman ni se promedian en un unico numero de acierto",
+    "denominators_known_now": false,
+    "why": "dependen de cuantas ventanas clasifique bien el modelo sobre prueba, que es lo que no se ha mirado",
+    "reference_policies": ["abstenerse siempre", "explicar si el modelo confia"]
+  },
+  "published_metrics": {
+    "diagnosis": ["exactitud", "f1_macro", "f1_ponderado", "exactitud_equilibrada", "por_clase", "frente a la clase mayoritaria de la propia particion"],
+    "calibration": ["ece con 10 tramos", "confianza media", "acierto", "sesgo", "sin calibrar y calibrado"],
+    "sufficiency": ["vector de decisiones", "motivo de cada abstencion", "T_FC", "T_AI", "cobertura de afirmaciones en evidencia completa", "fragmentos aplicables", "fuentes distintas", "las dos politicas de referencia"],
+    "traceability": ["afirmaciones con observacion", "con cita", "con soporte"],
+    "writing": ["salidas validas frente al esquema", "respeto del veredicto", "citas fuera de lo entregado"]
+  },
+  "allowed_aggregations": [
+    "recuentos y proporciones con denominador explicito",
+    "desglose por condicion de fallo y por condicion de evidencia",
+    "promedio no ponderado entre condiciones de fallo, declarado como tal"
+  ],
+  "forbidden_aggregations": [
+    "mezclar ejecuciones que comparten ventana como si fueran independientes",
+    "agregar las dos tasas de error en un unico numero de acierto",
+    "mezclar validacion y prueba en una misma media",
+    "comparar una cifra del estrato operativo con una de validacion sin advertir que la regla de seleccion es distinta",
+    "intervalos que presupongan ejecuciones independientes"
+  ],
+  "non_evaluable_and_errors": {
+    "schema_rejected_output": "la ejecucion cuenta y su decision de suficiencia es valida; el fallo se registra en salidas validas; no se reintenta la generacion",
+    "citation_outside_bundle": "la ejecucion cuenta y la cita indebida se registra en su metrica",
+    "no_window_of_the_required_kind": "no evaluable por ausencia de ventanas; no se sustituye por otra ventana",
+    "missing_input_artifact": "fallo de preparacion, no resultado; se resuelve antes de ejecutar",
+    "exception": "caso no completado, con traza y causa; se aplica el criterio de invalidez"
+  },
+  "invalidation": {
+    "may_invalidate": [
+      "version de una pieza distinta de la congelada",
+      "indice incompleto o en un espacio vectorial distinto del declarado",
+      "dispositivo de embeddings distinto del que produjo los vectores",
+      "artefacto de entrada ausente o corrupto",
+      "interrupcion del proceso",
+      "defecto demostrable en el codigo de instrumentacion que no afecta a la politica evaluada"
+    ],
+    "never_invalidates": [
+      "que las cifras sean peores de lo esperado",
+      "que una hipotesis no se sostenga",
+      "que aparezca un defecto en el sistema evaluado"
+    ],
+    "on_repetition": "el registro invalido se conserva con su motivo; la repeticion se publica como nueva version experimental con su propio identificador"
+  },
+  "point_of_no_return": {
+    "chain": [
+      "reglas congeladas",
+      "huella y versionado",
+      "revision del diff contra main",
+      "PASS sin hallazgos bloqueantes ni mayores",
+      "declaracion formal de apertura con razon escrita",
+      "ejecucion de E19"
+    ],
+    "code_before_opening": "el codigo que parametriza la particion y la regla de seleccion se escribe y se revisa antes de la declaracion de apertura",
+    "frozen_after_opening": ["umbrales", "reglas de anotacion", "seleccion de casos", "conjunto elegible", "politica canonica", "metricas publicables"]
+  },
+  "not_resolved_by_this_freeze": [
+    "las consultas del conjunto anotado no son ciegas",
+    "el desequilibrio entre condiciones de fallo",
+    "la condicion con distractor queda fuera y PI.4 sigue sin poder interpretarse",
+    "la cobertura de afirmaciones sigue siendo una propiedad del verificador y no una anotacion independiente",
+    "los datos siguen siendo sinteticos"
+  ]
+}

@@ -23,15 +23,13 @@ su evidencia.
 | 5 | La condición con distractor sigue declarada bajo diagnóstico | **PASS** | no se ha rediseñado: el capítulo 5 dice que con el filtro de motor no añade ningún distractor que la condición parcial no tuviera, y PI.4 figura como no sostenida con el diseño actual |
 | 6 | Segunda versión de la política preparada para congelarse | **PASS** | implementada, probada, medida en los tres modos y seleccionable por parámetro, con artefactos que no pueden sobrescribir los de la política anterior |
 | 7 | Conjunto de prueba cerrado | **PASS** | ninguna cifra de la memoria procede de él; tres pruebas comprueban el cierre y el mensaje de la excepción |
-| 8 | Reglas de selección y anotación de los casos de prueba, congeladas por escrito | **PENDIENTE** | es el paso 1 del orden de ejecución y todavía no está escrito: hasta que lo esté, el gate no está superado |
+| 8 | Reglas de selección y anotación de los casos de prueba, congeladas por escrito | **PASS** | `docs/methodology/congelacion-anotacion-e19.md`, con su huella y el estado congelado en `configs/manifest_e19.json`; veintiuna pruebas comprueban que el documento no ha cambiado desde que se congeló y que los umbrales, el conjunto elegible y el reparto declarado son los reales |
 
-Siete de las ocho comprobaciones están en PASS y la octava, no. **El gate no está superado**, y por
-tanto este documento no autoriza abrir el conjunto de prueba: falta congelar por escrito las reglas
-con que se seleccionarán y anotarán los casos, que es el paso 1 del orden de ejecución y lo único
-que puede fijarse sin mirar la partición. Cuando esas reglas estén escritas y registradas, la octava
-comprobación pasa a PASS y lo que queda es la decisión del autor de abrir el conjunto y la ejecución
-misma. Usar las siete comprobaciones anteriores como autorización dejaría la anotación a merced de lo
-que se viera al abrir, que es exactamente lo que el punto de no retorno pretende evitar.
+Las ocho comprobaciones están en PASS. **Lo que eso no significa:** el gate superado no abre el
+conjunto de prueba ni autoriza abrirlo. Lo que queda es la **declaración formal de apertura** del
+autor, con su razón por escrito, que es el paso 2 del orden de ejecución y el punto de no retorno.
+Usar el gate como autorización implícita dejaría la anotación a merced de lo que se viera al abrir,
+que es exactamente lo que ese punto pretende evitar.
 
 ## 2. Qué se mide en E19, y con qué se compara
 
@@ -42,7 +40,7 @@ como canónica.
 | Bloque | Qué se mide | Comparación |
 |---|---|---|
 | Diagnóstico | exactitud, F1 macro y calibración del bosque sobre las 98 ventanas de prueba | frente a la clase mayoritaria de esa partición y frente a las cifras de validación |
-| Suficiencia | las dos tasas de error con sus denominadores y unidades, y la cobertura, sobre los casos anotados que se construyan con ventanas de prueba | frente a las dos políticas triviales de referencia, recalculadas sobre la misma partición |
+| Suficiencia | las dos tasas de error con sus denominadores y unidades, y la cobertura, sobre las veintidós ejecuciones del estrato operativo: once condiciones de evidencia por las dos sesiones de prueba de cada fallo | frente a las dos políticas triviales de referencia, recalculadas sobre las mismas ejecuciones |
 | Trazabilidad | afirmaciones con observación, con cita y con soporte | frente a validación, declarando que el soporte sigue siendo una propiedad del verificador mientras no haya anotación independiente |
 | Redactor | salidas válidas, respeto del veredicto y citas fuera de lo entregado | frente a validación, con el adaptador que esté vigente y declarando si se reentrenó |
 
@@ -60,25 +58,37 @@ variante léxica de la ablación, que es una medición nueva y no entra en la ev
 
 ## 4. Orden de ejecución
 
-1. **Congelar las reglas de anotación sin mirar el conjunto.** Se escriben el procedimiento con que
-   se elegirán las ventanas —cuántas por condición de fallo, cómo se construyen las condiciones de
-   evidencia completa, parcial y ausente, qué ficheros del manual son evidencia relevante de cada
-   fallo y cuál es la acción esperada—, los umbrales, que no cambian, y la política del verificador.
-   Nada de esto requiere leer una sola ventana de prueba, y es lo único que puede fijarse antes.
+1. **Congelar las reglas de anotación sin mirar el conjunto.** Hecho:
+   `docs/methodology/congelacion-anotacion-e19.md` fija la unidad experimental, el conjunto elegible
+   de once casos, la regla de selección de ventana —la primera de cada sesión en orden canónico, sin
+   preguntar al modelo—, el tratamiento de las ventanas repetidas, la decisión esperada con sus tres
+   entradas permitidas, las dos tasas de error, las métricas publicables y las agregaciones
+   prohibidas, las versiones exactas y el criterio de invalidez. Nada de esto requirió leer una sola
+   ventana de prueba: solo el reparto de sesiones, que el propio diseño del reparto ya fijaba.
 2. **Declarar la apertura del conjunto de prueba** con su razón escrita y registrarla. El cargador
    exige ambas cosas de forma explícita y las imprime en la salida de la ejecución. Hasta aquí no se
    ha leído ninguna ventana de la partición.
-3. **Instanciar la anotación** aplicando las reglas del paso 1 a las ventanas ya accesibles, y
-   cerrarla antes de medir nada. La instanciación no puede cambiar las reglas: si una regla resulta
-   inaplicable, se declara y la anotación se queda sin ese caso en lugar de reescribirse.
+3. **Instanciar la anotación** aplicando las reglas del paso 1 a las ventanas ya accesibles:
+   calcular las predicciones, escribir la anotación completa a un artefacto y **registrar su
+   huella** antes de ejecutar la verificación de suficiencia. Así, que la anotación no se ajustó a
+   los resultados es verificable y no una cuestión de palabra. La instanciación no puede cambiar las
+   reglas: si una regla resulta inaplicable, se declara y la anotación se queda sin ese caso en
+   lugar de reescribirse.
 4. Medir el diagnóstico y la calibración sobre prueba.
-5. Medir suficiencia y redacción, con la política nueva, en modo oracular y no oracular.
+5. Medir suficiencia y redacción con la política nueva, sobre los tres estratos declarados: el
+   operativo, que es el que responde a la pregunta, y los dos descriptivos, el comparativo y el
+   adverso. Los canales de oráculo `O-2` y `O-3` quedan cerrados: la recuperación y la verificación
+   del soporte se derivan de la clase predicha.
 6. Escribir el informe de fase y llevar las cifras al capítulo 5 con su procedencia, su semilla, su
    versión, sus parámetros y su unidad de análisis.
 7. Reevaluar con los auditores independientes y el tribunal simulado, y cerrar el capítulo 6.
 
-El punto de no retorno está entre el paso 1 y el paso 2: cuando el conjunto se abre, ningún umbral,
-criterio ni regla de anotación puede ajustarse. Lo que esté mal ajustado se queda así y se declara.
+El punto de no retorno está entre el paso 1 y el paso 2, y su cadena completa es: reglas congeladas
+→ huella y versionado → revisión del diff contra `main` → PASS sin hallazgos bloqueantes ni mayores
+→ declaración formal de apertura con razón escrita → ejecución. El código que E19 necesita
+—parametrizar la partición y la regla de selección de ventana— se escribe y se revisa **antes** de
+la declaración, para que ninguna línea se escriba teniendo delante un resultado de prueba. Cuando el
+conjunto se abre, ningún umbral, criterio ni regla de anotación puede ajustarse. Lo que esté mal ajustado se queda así y se declara.
 Este orden corrige el de un borrador anterior de este plan, que pedía anotar las ventanas antes de
 declarar la apertura: era inviable, porque leerlas exige la declaración, y hacerlo de otro modo
 habría rodeado el cierre técnico que el propio diseño impone.

@@ -204,8 +204,9 @@ trabajo posterior.
 4. Cerrar el diseño y **abrir el conjunto de prueba** para la evaluación final, con la
    declaración explícita y la razón escrita que el propio código exige, y la demostración
    integrada sobre esa partición. El plan, el orden de ejecución y el gate de ocho
-   comprobaciones que debe estar superado antes de abrirlo están escritos y con su estado: siete en
-   PASS y una pendiente, la de congelar por escrito las reglas de selección y anotación de los casos
-   de prueba. El conjunto sigue cerrado y el gate, sin superar.
+   comprobaciones están escritos, y las ocho en PASS: la última era congelar por escrito las reglas
+   de selección y anotación de los casos, que quedan fijadas con su huella y comprobadas por pruebas.
+   El conjunto **sigue cerrado**: lo que falta no es una comprobación más, sino la declaración formal
+   de apertura con su razón escrita, que es el punto de no retorno.
 5. Volcar la memoria en la plantilla oficial, regenerar el índice y resolver las dos decisiones
    abiertas con el director: el título definitivo y la edición de las normas APA.
