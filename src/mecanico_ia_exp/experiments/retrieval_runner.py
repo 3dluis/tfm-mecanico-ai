@@ -78,7 +78,7 @@ DIAGNOSTICO_A_DTC: dict[str, tuple[str, ...]] = {
 }
 
 
-def _reordenar_por_autoridad(resultados: list[RetrievedChunk], top_k: int) -> list[RetrievedChunk]:
+def reordenar_por_autoridad(resultados: list[RetrievedChunk], top_k: int) -> list[RetrievedChunk]:
     """Ordena por jerarquía de evidencia y, dentro de cada nivel, por similitud.
 
     La autoridad manda sobre la puntuación del vector: un procedimiento de taller
@@ -172,7 +172,7 @@ def recuperar(
             exclude_chunks=exclude_chunks,
             embedding_model=embedding_model,
         )
-        return _reordenar_por_autoridad(amplio, top_k)
+        return reordenar_por_autoridad(amplio, top_k)
 
     if estrategia == "diagnosis-guided":
         # La estrategia que el pipeline realmente puede ejecutar: el modelo
@@ -212,7 +212,7 @@ def recuperar(
             exclude_chunks=exclude_chunks,
             embedding_model=embedding_model,
         )
-        return _reordenar_por_autoridad(acotado, top_k)
+        return reordenar_por_autoridad(acotado, top_k)
 
     if estrategia == "hybrid":
         semantica = store.search(
@@ -235,7 +235,7 @@ def recuperar(
             if r.chunk_id not in set(exclude_chunks)
         ]
         fusion = reciprocal_rank_fusion([semantica, lexica], top_k=PROFUNDIDAD)
-        return _reordenar_por_autoridad(fusion, top_k)
+        return reordenar_por_autoridad(fusion, top_k)
 
     msg = f"Estrategia desconocida: {estrategia!r}"
     raise ValueError(msg)
