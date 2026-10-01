@@ -128,7 +128,7 @@ Ninguna de las tres filas se resume en una tasa de acierto única: el recuento d
 
 El modo no oracular, en el que los códigos de avería que acotan la búsqueda y exige el verificador salen del diagnóstico del modelo y no de la anotación, produjo exactamente el mismo vector de decisiones (registro `E15_suficiencia_non_oracle.json`). Esa identidad era forzosa: como las diecisiete ventanas se eligieron entre las bien clasificadas, el diagnóstico del modelo coincide con la etiqueta en todas y los códigos derivados de uno y de otra son los mismos. Confirma que la implementación no oracular no introduce diferencias, no que el sistema resista un diagnóstico erróneo.
 
-Ese segundo aspecto solo se ha examinado en un escenario adverso registrado el 4 de septiembre, antes de la corrección del índice, sobre las dos ventanas de validación que el modelo clasifica mal con mayor confianza: una del termostato, evaluada bajo cinco condiciones de evidencia, y una del fallo de encendido, ambas diagnosticadas como funcionamiento sin fallo. El sistema se abstuvo en las seis ejecuciones. En las dos con evidencia completa, sin embargo, aceptó fragmentos como soporte de dos de las tres afirmaciones construidas para el diagnóstico erróneo, y se abstuvo solo porque la cobertura, 0,67, no alcanzó el umbral de 0,80. El análisis de ese escenario reveló además que, cuando el diagnóstico no tiene códigos de avería asociados, una de las cuatro comprobaciones de soporte se omite; el defecto está registrado y su corrección no se ha medido. El escenario prueba el error por omisión y no el de sustitución de un fallo por otro, porque en validación no existe ningún error de ese segundo tipo por encima del umbral.
+Ese segundo aspecto solo se ha examinado en un escenario adverso registrado el 4 de septiembre, antes de la corrección del índice, sobre las dos ventanas de validación que el modelo clasifica mal con mayor confianza: una del termostato, evaluada bajo cinco condiciones de evidencia, y una del fallo de encendido, ambas diagnosticadas como funcionamiento sin fallo. El sistema se abstuvo en las seis ejecuciones. En las dos con evidencia completa, sin embargo, aceptó fragmentos como soporte de dos de las tres afirmaciones construidas para el diagnóstico erróneo, y se abstuvo solo porque la cobertura, 0,67, no alcanzó el umbral de 0,80. El análisis de ese escenario reveló además que, cuando el diagnóstico no tiene códigos de avería asociados, una de las cuatro comprobaciones de soporte se omitía; ese defecto está corregido y su corrección, medida, como se recoge al final de este apartado. El escenario prueba el error por omisión y no el de sustitución de un fallo por otro, porque en validación no existe ningún error de ese segundo tipo por encima del umbral.
 
 Las filas C05 a C08 y sus equivalentes para el termostato y la sonda comparten ventana, modelo, atribución y confianza calibrada; lo único que cambia entre ellas es el contenido del índice, y la decisión cambia con él. Con la evidencia completa, el agente explica. Con la evidencia retirada, la recuperación devuelve cero fragmentos, porque la condición excluye del índice los fragmentos con los códigos de avería de la condición, y el agente se abstiene por ausencia de evidencia documental aplicable; esa abstención está determinada por la construcción de la condición y no pone a prueba el criterio de soporte. La condición informativa es la parcial: el agente tiene delante cinco, siete o seis fragmentos aplicables, y se abstiene igual, porque ninguno sostiene las afirmaciones y la cobertura es 0,00.
 
@@ -165,7 +165,10 @@ Tres lecturas. Primera: **ninguna configuración citó un fragmento que no se le
 ### Contribución de cada componente
 Cuatro ablaciones, pre-registradas y ejecutadas el 1 de octubre de 2026 sobre los mismos
 diecisiete casos, cambian una pieza cada una y dejan el resto idéntico. Ninguna redacta: miden la
-decisión y la evidencia, no el texto.
+decisión y la evidencia, no el texto. Las unidades de análisis son las de la Tabla 5.6: la falsa
+confianza se cuenta sobre nueve ejecuciones procedentes de tres ventanas de telemetría, y la
+abstención innecesaria sobre cinco ejecuciones de cinco ventanas; entre paréntesis, el recuento
+que incluye las tres ejecuciones de la condición con distractor y filtro de motor.
 
 **Tabla 5.8. Efecto de retirar o degradar cada componente.**
 
@@ -182,41 +185,60 @@ decisión y la evidencia, no el texto.
 Sustituir la atribución por un criterio estadístico simple no cambió ninguna decisión ni ningún
 conjunto de evidencia. La explicación está en el diseño: la recuperación la guía el diagnóstico y
 no la atribución, y el soporte se comprueba sobre la señal y no sobre el estadístico, de modo que
-dos rutas que eligen distintos descriptores de las mismas señales llegan al mismo sitio. Lo que
-puede afirmarse es que, para la decisión y en esta muestra, la atribución de Shapley es
-sustituible; no que sea prescindible, porque es la evidencia observacional que el lector recibe y
-esa dimensión no se ha evaluado.
+dos rutas que eligen distintos descriptores de las mismas señales llegan al mismo sitio.
+
+La lectura correcta de ese cero es estrecha y conviene fijarla, porque admite una mala. La
+atribución **no interviene en la política de abstención**: para decidir si se explica o no, en
+esta muestra, es sustituible por un criterio estadístico simple. Su contribución está en otro
+plano, el de la trazabilidad y la explicación de la predicción: es la que nombra qué señal, con
+qué estadístico, en qué dirección y en qué ventana temporal sostiene cada afirmación, y es lo que
+el lector de la explicación recibe y puede comprobar. Esa dimensión no se ha evaluado aquí, y el
+resultado de la ablación no dice nada sobre ella.
 
 La ablación de la recuperación semántica quedó **inconclusa**, y conviene decir por qué. La ruta
 léxica no recuperó ningún fragmento en ninguno de los diecisiete casos, pero la causa no es la
 ablación sino la consulta: la búsqueda de texto completo une los términos con conjunción y una
 consulta de treinta palabras exige que las treinta aparezcan en el mismo fragmento. Se comprobó
 por separado, sin filtros, y devuelve cero resultados. La comparación no aísla, por tanto, la
-contribución de la similitud semántica, y la enmienda `ENM-E18-01` declara la variante que lo
-mediría, con la consulta formada por los códigos de avería y los nombres de las señales.
+contribución de la similitud semántica. El resultado se conserva como inconcluso, sin reformular
+la ablación a posteriori: una enmienda fechada y separada del pre-registro original declara una
+variante con la consulta formada por los códigos de avería y los nombres de las señales, que será
+una **medición nueva** con su propio criterio de validez, y no una corrección de esta.
 
-Las dos ablaciones de la regla de decisión son las que dan sentido al criterio compuesto. Sin él,
-explicando siempre que hay un fragmento aplicable, aparecen **seis explicaciones sin soporte** de
-las nueve ejecuciones que debían terminar en abstención, nueve de doce contando la condición con
-distractor y filtro; con una puerta de confianza sola, **las doce**, porque la confianza del
-modelo no sabe nada del corpus y explica incluso donde la recuperación no devuelve nada. Esas
-cifras de A4 coinciden celda a celda con la política de referencia que la Tabla 5.6 publica,
-calculada por otro camino sobre el registro; el pre-registro fijaba que una discrepancia obligaría
-a parar, y no la hubo.
+Las dos ablaciones de la regla de decisión son las que dan sentido al criterio compuesto, y lo que
+muestran se enuncia mejor al revés de como suele pensarse un sistema de diagnóstico: **una
+confianza diagnóstica alta no basta para sostener una explicación si la evidencia documental no la
+sostiene**. Con una puerta de confianza sola, el sistema explica **las doce ejecuciones que debían
+terminar en abstención**, incluidas las tres en que la recuperación no devuelve ningún fragmento:
+la confianza del modelo mide cuán seguro está de su diagnóstico y no sabe nada de si el manual lo
+documenta. Sin criterio compuesto pero con la exigencia de que exista algún fragmento aplicable,
+las explicaciones sin soporte bajan a **seis de nueve**, nueve de doce contando la condición con
+distractor y filtro: tener documentación delante tampoco equivale a tener soporte. Las cifras de
+la puerta de confianza sola coinciden celda a celda con la política de referencia que la Tabla 5.6
+publica, calculada por otro camino; el pre-registro fijaba que una discrepancia obligaría a parar,
+y no la hubo.
 
 Ninguna de las cuatro dice nada sobre la separación entre decidir y redactar, que no se ablaciona,
 y todas se miden sobre el conjunto con el que el criterio fue ajustado.
 
 Por último, la corrección de la puerta de códigos de avería, implementada en septiembre y sin
-medir hasta ahora, se midió con la política v2.2 en los tres modos. En los diecisiete casos no
-cambia ninguna decisión ni ningún motivo, porque los cinco diagnósticos del conjunto están
-declarados con códigos y el requisito era ya el más estricto. Donde cambia es en el escenario
-adverso: el diagnóstico «sin fallo» no está declarado en el mapa, el requisito pasa a declararse
-no aplicable y las dos ejecuciones con evidencia completa dejan de aceptar como soporte dos de sus
-tres afirmaciones, de modo que la cobertura cae de 0,67 a 0,00. Las seis ejecuciones se abstenían
-antes y se abstienen ahora; lo que desaparece es un soporte falso para un diagnóstico incorrecto
-(`resultado-rerun-b.md`). Qué política pasa a ser la canónica para la evaluación final es una
-decisión pendiente.
+medir hasta ahora, se midió con una segunda versión de la política en los tres modos. El cambio es
+uno: el requisito de que el fragmento porte un código de avería del diagnóstico deja de exigirse
+siempre y pasa a leerse de cómo esté declarado ese diagnóstico, que puede estar documentado con
+códigos, documentado sin ellos o no estar declarado en absoluto.
+
+Sobre los diecisiete casos no cambia ninguna decisión ni ningún motivo, porque los cinco
+diagnósticos del conjunto están documentados con códigos y el requisito era ya el más estricto. Lo
+que la nueva versión mejora es el **control de aplicabilidad ante un diagnóstico incorrecto**, y
+ahí el efecto es grande. En el escenario adverso el modelo diagnostica «sin fallo», que el mapa no
+declara: con la regla anterior la comprobación del código simplemente no se ejecutaba, y el
+sistema aceptaba como soporte dos de las tres afirmaciones que había construido para un
+diagnóstico equivocado, con una cobertura de 0,67; con la regla nueva el requisito se declara no
+aplicable y ninguna afirmación obtiene soporte, de modo que la cobertura pasa a 0,00. Las seis
+ejecuciones se abstenían antes y se abstienen después, pero antes se abstenían por un margen
+—0,67 frente al umbral de 0,80— sobre evidencia que no debía haberse aceptado, y ahora se
+abstienen porque no hay evidencia aplicable que aceptar. La prueba de regresión del repositorio
+conserva las dos conductas a la vista, la anterior y la corregida.
 
 ## Discusión y análisis de los resultados
 La discusión separa lo que los resultados sostienen de lo que no sostienen, y termina con el patrón que atraviesa el trabajo.
