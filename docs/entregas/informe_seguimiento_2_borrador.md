@@ -7,11 +7,11 @@
 > están en el mosaico *Documentación* del campus; aquí está el contenido, el continente es del
 > campus. El informe se entrega por el campus y se comunica al director su disponibilidad.
 >
-> **Fechas del informe 2:** 15/10/2026 para la convocatoria de noviembre, 06/11/2026 para la de
-> diciembre. Depósito: 13/11/2026 o 04/12/2026.
->
-> `[AUTHOR_DECISION_REQUIRED]` — a qué convocatoria se opta. De esa decisión depende el plan de
-> la sección 6: con noviembre quedan dos semanas hasta el informe y seis hasta el depósito.
+> **Convocatoria objetivo: diciembre de 2026.** El informe 2 se entrega el **06/11/2026** y el
+> depósito es el **04/12/2026**. La decisión, tomada el 1 de octubre, busca margen para cerrar la
+> evaluación final sin abrir el conjunto de prueba con prisa y para revisar la memoria completa
+> después; la alternativa de noviembre dejaba dos semanas hasta el informe y seis hasta el
+> depósito.
 
 ---
 
@@ -116,7 +116,8 @@ no se ha abierto.
 | Modelo de lenguaje | tres configuraciones, 17 casos | con adaptador: 17 de 17 salidas válidas, 0 citas inexistentes; cita, eso sí, fragmentos que el verificador no aceptó en 6 de 9 afirmaciones |
 
 **E18, ablaciones.** Cuatro ablaciones pre-registradas sobre los mismos diecisiete casos, cada
-una cambiando una pieza:
+una cambiando una pieza. La falsa confianza se cuenta sobre nueve ejecuciones de tres ventanas de
+telemetría y la abstención innecesaria sobre cinco de cinco ventanas:
 
 | Configuración | Falsa confianza | Abstención innecesaria | Cobertura |
 |---|---|---|---|
@@ -126,21 +127,29 @@ una cambiando una pieza:
 | Sin criterio de suficiencia | **6 de 9** | 0 de 5 | 5 de 5 |
 | Solo umbral de confianza | **9 de 9** | 2 de 5 | 3 de 5 |
 
-El criterio compuesto de suficiencia es lo que sostiene el resultado: sin él aparecen seis
-explicaciones sin soporte, y con una puerta de confianza sola, las doce. La atribución resultó
-sustituible por un criterio estadístico simple sin que cambiara ninguna decisión ni ningún
-conjunto de evidencia. La ablación de la recuperación semántica quedó **inconclusa**: la ruta
-léxica no recupera nada con una consulta en prosa, por cómo la búsqueda de texto completo combina
-los términos, y la variante que lo mediría está declarada en una enmienda y sin ejecutar.
+La lección es que **una confianza diagnóstica alta no basta si la evidencia documental no sostiene
+la explicación**: con una puerta de confianza sola el sistema explica las doce ejecuciones que
+debían terminar en abstención, incluidas las tres en que la recuperación no devuelve nada, y
+exigiendo solo que exista algún fragmento aplicable aparecen seis explicaciones sin soporte de
+nueve. La atribución resultó sustituible por un criterio estadístico simple sin que cambiara
+ninguna decisión ni ninguna evidencia: no interviene en la política de abstención, y su
+contribución está en la trazabilidad y en la explicación de la predicción, que es una dimensión no
+evaluada aquí. La ablación de la recuperación semántica quedó **inconclusa**, porque la ruta léxica
+no recupera nada con una consulta en prosa; se conserva como tal, y la variante que lo mediría
+queda declarada en una enmienda fechada como medición nueva, no como corrección de esta.
 
-**RERUN-B, política v2.2 de la puerta de códigos.** La corrección del hallazgo
-`EMPTY-DTC-GATE-BYPASS`, implementada en septiembre y hasta ahora sin medir, se midió en los tres
-modos. En los diecisiete casos no cambia ninguna decisión ni ningún motivo. En el escenario
-adverso, donde el diagnóstico del modelo es «sin fallo» y no está declarado con códigos, las dos
-ejecuciones con evidencia completa dejan de aceptar como soporte dos de sus tres afirmaciones y la
-cobertura cae de 0,67 a 0,00: desaparece un soporte falso para un diagnóstico incorrecto. El
-hallazgo queda corregido y medido; qué política pasa a ser la canónica es una decisión del autor
-que se recomienda tomar con la evaluación final.
+**Segunda versión de la política de suficiencia.** La corrección del defecto de la puerta de
+códigos de avería, implementada en septiembre y hasta ahora sin medir, se midió en los tres modos.
+Sobre los diecisiete casos no cambia ninguna decisión ni ningún motivo. Lo que mejora es el
+**control de aplicabilidad ante un diagnóstico incorrecto**: en el escenario adverso el diagnóstico
+del modelo es «sin fallo», que el mapa de códigos no declara, y con la regla anterior el sistema
+aceptaba como soporte dos de las tres afirmaciones construidas para ese diagnóstico equivocado, con
+una cobertura de 0,67; con la regla nueva ninguna obtiene soporte y la cobertura pasa a 0,00. Las
+seis ejecuciones se abstenían antes y se abstienen después, pero antes lo hacían por un margen
+sobre evidencia que no debía haberse aceptado. El defecto queda corregido y medido, con dos pruebas
+de regresión que reproducen la conducta anterior y su cierre. La nueva política pasará a ser la
+canónica **con la evaluación final**, de modo que los resultados ya publicados quedan bajo la
+política previa y la evaluación final bajo la nueva, cada uno con su registro.
 
 Aplicada la regla de decisión fijada antes de evaluar, la respuesta a la pregunta queda
 **parcialmente sostenida**, con carácter provisional: las cifras del agente son de desarrollo,
@@ -157,9 +166,14 @@ si se mantienen.
 | Trabajo experimental | 80 % | ejecutadas y registradas las fases de datos, modelo, corpus, recuperación, agente, suficiencia y ablaciones; faltan la evaluación final sobre test y el rediseño de la condición con distractor |
 | Resultados y discusión | 75 % | capítulo 5 completo sobre validación; faltan las cifras de test y la comparación final con los trabajos revisados |
 | Conclusiones | 70 % | conclusiones provisionales por objetivo; la respuesta definitiva depende de la evaluación final |
-| **Global** | **≈ 80 %** | |
+| **Global** | **≈ 80 %, provisional** | estimación sujeta a revisión según las fases que falten realmente antes de la evaluación final |
 
-`[AUTHOR_DECISION_REQUIRED]` — la estimación es del autor; el director la valida y la califica.
+`[AUTHOR_DECISION_REQUIRED]` — la estimación es provisional y del autor; el director la valida y la
+califica. Lo que queda antes de la evaluación final, y que condiciona el porcentaje: construir y
+cerrar la anotación de los casos sobre la partición de prueba, abrir el conjunto con su declaración,
+medir, llevar las cifras a la memoria y reevaluar con los auditores. El rediseño de la condición con
+distractor y el reentrenamiento del adaptador no condicionan la evaluación final y se declaran como
+trabajo posterior.
 
 ## 5. Dificultades encontradas
 
@@ -189,6 +203,8 @@ si se mantienen.
    convertiría la trazabilidad en una medición independiente del verificador.
 4. Cerrar el diseño y **abrir el conjunto de prueba** para la evaluación final, con la
    declaración explícita y la razón escrita que el propio código exige, y la demostración
-   integrada sobre esa partición.
+   integrada sobre esa partición. El plan, el orden de ejecución y el gate de siete comprobaciones
+   que debe estar superado antes de abrirlo están escritos y con su estado; el conjunto sigue
+   cerrado.
 5. Volcar la memoria en la plantilla oficial, regenerar el índice y resolver las dos decisiones
    abiertas con el director: el título definitivo y la edición de las normas APA.

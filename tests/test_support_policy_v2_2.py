@@ -235,3 +235,46 @@ def test_el_registro_publica_papel_correspondencia_y_requisito() -> None:
     for campo in ("chunk_role", "signal_mapping", "dtc_requirement", "supports", "reason"):
         assert campo in d, campo
     assert d["dtc_requirement"] == DtcRequirement.DTC_REQUIRED.value
+
+
+# --- 9 · Regresión: el bypass, reproducido y cerrado ---------------------------
+
+
+def test_regresion_el_bypass_se_reproduce_bajo_la_regla_anterior() -> None:
+    """`EMPTY-DTC-GATE-BYPASS`, reproducido tal como ocurría.
+
+    La regla anterior exigía `DTC_REQUIRED` siempre. Con la lista de códigos vacía
+    la comprobación no se ejecutaba, de modo que un fragmento sostenía la
+    afirmación cumpliendo tres de las cuatro condiciones. Esta prueba conserva ese
+    comportamiento a la vista: sin ella, el cierre del hallazgo descansaría solo en
+    la descripción de un registro.
+    """
+    bypass = check_support(
+        CLAIM,
+        _frag(texto=f"B1234 throttle position sensor.\n{PASOS}"),
+        signal="throttle_position",
+        expected_dtc=(),
+        requisito=DtcRequirement.DTC_REQUIRED,
+    )
+    assert bypass.supports
+    assert bypass.carries_expected_dtc is None
+
+
+def test_regresion_el_requisito_derivado_cierra_el_bypass() -> None:
+    """Y queda cerrado cuando el requisito se deriva de la declaración.
+
+    Mismo fragmento, misma señal, misma lista vacía: lo único que cambia es de
+    dónde sale el requisito. Un diagnóstico que el mapa no declara produce
+    `DTC_MAPPING_UNAVAILABLE`, y entonces no hay soporte.
+    """
+    mapa = {"F01_declarado": ("B1234",)}
+    requisito = dtc_requirement("F00_normal", mapa)
+    assert requisito is DtcRequirement.DTC_MAPPING_UNAVAILABLE
+    cerrado = check_support(
+        CLAIM,
+        _frag(texto=f"B1234 throttle position sensor.\n{PASOS}"),
+        signal="throttle_position",
+        expected_dtc=(),
+        requisito=requisito,
+    )
+    assert not cerrado.supports
