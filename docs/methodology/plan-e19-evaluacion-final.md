@@ -23,9 +23,15 @@ su evidencia.
 | 5 | La condición con distractor sigue declarada bajo diagnóstico | **PASS** | no se ha rediseñado: el capítulo 5 dice que con el filtro de motor no añade ningún distractor que la condición parcial no tuviera, y PI.4 figura como no sostenida con el diseño actual |
 | 6 | Segunda versión de la política preparada para congelarse | **PASS** | implementada, probada, medida en los tres modos y seleccionable por parámetro, con artefactos que no pueden sobrescribir los de la política anterior |
 | 7 | Conjunto de prueba cerrado | **PASS** | ninguna cifra de la memoria procede de él; tres pruebas comprueban el cierre y el mensaje de la excepción |
+| 8 | Reglas de selección y anotación de los casos de prueba, congeladas por escrito | **PENDIENTE** | es el paso 1 del orden de ejecución y todavía no está escrito: hasta que lo esté, el gate no está superado |
 
-Con los siete en PASS, lo que falta para E19 no es verificación: es la decisión del autor de abrir
-el conjunto y la ejecución misma.
+Siete de las ocho comprobaciones están en PASS y la octava, no. **El gate no está superado**, y por
+tanto este documento no autoriza abrir el conjunto de prueba: falta congelar por escrito las reglas
+con que se seleccionarán y anotarán los casos, que es el paso 1 del orden de ejecución y lo único
+que puede fijarse sin mirar la partición. Cuando esas reglas estén escritas y registradas, la octava
+comprobación pasa a PASS y lo que queda es la decisión del autor de abrir el conjunto y la ejecución
+misma. Usar las siete comprobaciones anteriores como autorización dejaría la anotación a merced de lo
+que se viera al abrir, que es exactamente lo que el punto de no retorno pretende evitar.
 
 ## 2. Qué se mide en E19, y con qué se compara
 
