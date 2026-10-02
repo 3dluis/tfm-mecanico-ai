@@ -89,8 +89,10 @@ excusa para cambiar nada: ni umbrales, ni casos, ni reglas, ni modelos, ni consu
    experimental nueva** con su propio identificador de intento, y no sustituye a esta: el nombre
    `E19_anotacion.json` está ocupado, de modo que el ejecutor se detendrá si alguien lo intenta sin
    identificador. Es la sección 11 funcionando.
-3. La repetición no reabre ninguna decisión. La declaración de apertura sigue aprobada y el diseño
-   sigue congelado; lo único que cambia es el identificador del intento.
+3. La repetición no reabre ninguna decisión. La declaración de apertura quedó aprobada por el autor
+   el 1 de octubre de 2026 con la autorización `OPEN_TEST_AND_RUN_E19`, su aprobación consta en la
+   propia declaración y el diseño sigue congelado; lo único que cambia es el identificador del
+   intento.
 4. Para que no vuelva a ocurrir, la repetición debe lanzarse de forma que sobreviva al cierre de la
    sesión de trabajo, y su salida de consola debe guardarse en un fichero del repositorio o fuera del
    directorio temporal de la sesión.
