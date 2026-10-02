@@ -50,6 +50,13 @@
       "n_signals": 12,
       "n_features": 139,
       "split_seed": 20260901,
+      "files": {
+        "data/processed/synthetic_v2_x.npy": "42e3031653498bf4",
+        "data/processed/synthetic_v2_features.npy": "c8fa7068c13a274e",
+        "data/processed/synthetic_v2_meta.parquet": "ffef0c525d441988",
+        "data/processed/synthetic_v2_preprocess.json": "e63be72934a75f7c"
+      },
+      "why_the_files_are_hashed": "estan fuera del control de versiones, de modo que la comprobacion del arbol de trabajo no puede verlos: sustituir uno dejando los recuentos declarados pasaria inadvertido y la evaluacion final mediria otros datos creyendolos los congelados",
       "partitions": {
         "train": {"sessions": 48, "windows": 392},
         "validation": {"sessions": 12, "windows": 98},

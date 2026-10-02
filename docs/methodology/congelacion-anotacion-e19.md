@@ -298,7 +298,7 @@ intervalos que presupongan ejecuciones independientes.
 | Política del verificador | **v2.2**, que pasa a canónica **con esta evaluación** y solo con ella |
 | Umbrales | confianza 0,79; fragmentos de soporte 2; fuentes distintas 1; cobertura de afirmaciones 0,80; puntuación de recuperación desactivada en 0,0; aplicabilidad aceptada, solo coincidencia exacta |
 | Semilla | 20260901, única, en reparto, bosque, fondo de atribución y muestreos |
-| Conjunto de datos | `synthetic_v2`, 588 ventanas, 139 descriptores, `dataset_type: synthetic` |
+| Conjunto de datos | `synthetic_v2`, 588 ventanas, 139 descriptores, `dataset_type: synthetic`, con la **huella de los cuatro ficheros** que la ejecución lee |
 | Modelo de diagnóstico | bosque aleatorio, 400 árboles, hoja mínima 2, pesos equilibrados, calibración isotónica con validación cruzada de 5 pliegues ajustada **sobre entrenamiento** |
 | Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar |
 | Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados |
@@ -317,6 +317,13 @@ definición, en el comparativo; en el adverso se invierte.
 
 El manifiesto `configs/manifest_e19.json` enumera estos valores con sus huellas, incluida la de
 este documento, y las pruebas comprueban que el documento no ha cambiado desde que se congeló.
+
+**Por qué el conjunto lleva huella propia.** Los ficheros preprocesados están fuera del control de
+versiones --son binarios de varios megabytes-- de modo que la comprobación del árbol de trabajo no
+puede verlos: sustituir uno dejando el manifiesto de preprocesado con sus recuentos declarados
+pasaría inadvertido y la evaluación final mediría otros datos creyéndolos los congelados. Sus cuatro
+huellas quedan en el manifiesto y se comprueban antes de abrir la partición. Lo añadió la revisión
+del diff, con el conjunto de prueba todavía cerrado.
 
 **Árbol limpio.** Los artefactos anteriores se produjeron con `dirty: true` y eso quedó
 registrado. Los de E19 se producirán con el árbol limpio; si no fuera posible, el motivo se
