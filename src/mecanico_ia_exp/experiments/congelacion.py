@@ -24,7 +24,7 @@ import hashlib
 import json
 import subprocess
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -616,6 +616,36 @@ def exigir_corpus_congelado(
         raise CongelacionInvalidaError(msg)
     print(f"AVISO: {msg} En un ensayo se admite; en la evaluación final detendría.")
     return resultado
+
+
+def exigir_espacio_identificado_por_su_nombre(
+    espacios: Sequence[tuple[str, int, str]], *, modelo: str, estricto: bool
+) -> tuple[tuple[str, int, str], ...]:
+    """El nombre del modelo tiene que identificar **un solo** espacio indexado.
+
+    La búsqueda acota por nombre de modelo, que es lo que RERUN-A impuso para no
+    mezclar dos modelos en una ordenación. Pero la identidad de un espacio incluye
+    el proveedor con su dispositivo, la dimensión y la versión: si dos espacios
+    compartieran nombre, acotar por nombre dejaría de identificar uno y la
+    ordenación volvería a mezclar vectores de espacios distintos, que es
+    exactamente `MIXED-EMBEDDING-SPACE`.
+
+    Se comprueba en lugar de cambiar el filtro de la búsqueda: mientras el nombre
+    identifique un único espacio, acotar por nombre y acotar por identidad son la
+    misma cosa, y las fases ya medidas no cambian de comportamiento.
+    """
+    if len(espacios) == 1:
+        return tuple(espacios)
+    detalle = "; ".join(f"{p}/d{d}/v{v}" for p, d, v in espacios)
+    msg = (
+        f"el nombre de modelo {modelo!r} identifica {len(espacios)} espacios en el "
+        f"índice ({detalle or 'ninguno'}), y la búsqueda acota por nombre: la "
+        "ordenación mezclaría vectores de espacios distintos."
+    )
+    if estricto:
+        raise CongelacionInvalidaError(msg)
+    print(f"AVISO: {msg} En un ensayo se admite; en la evaluación final detendría.")
+    return tuple(espacios)
 
 
 def ficheros_con_seguimiento_modificados() -> tuple[str, ...] | None:
