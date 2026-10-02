@@ -113,6 +113,49 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
 
+    fin = subparsers.add_parser(
+        "final-evaluation",
+        help="E19, la evaluación final bajo las reglas congeladas",
+    )
+    fin.add_argument("--dataset-id", default="synthetic_v2")
+    fin.add_argument(
+        "--partition",
+        choices=("validation", "test"),
+        default="validation",
+        help=(
+            "sobre qué se mide. validation recorre el ejecutor sobre una partición ya "
+            "conocida y escribe artefactos con sufijo: sirve para comprobarlo sin abrir "
+            "nada. test es la evaluación final y exige --open-test con --reason"
+        ),
+    )
+    fin.add_argument(
+        "--open-test",
+        action="store_true",
+        help=(
+            "declara la apertura del conjunto de prueba. Sin esto y sin --reason, pedir "
+            "la partición de prueba es un error, no un resultado"
+        ),
+    )
+    fin.add_argument(
+        "--reason",
+        default="",
+        help="razón por escrito de la apertura; queda impresa en la salida de la ejecución",
+    )
+    fin.add_argument(
+        "--stratum",
+        choices=("operativo", "comparativo", "adverso", "all"),
+        default="all",
+        help=(
+            "operativo es el que responde a la pregunta; comparativo y adverso son "
+            "descriptivos. Definidos en docs/methodology/congelacion-anotacion-e19.md"
+        ),
+    )
+    fin.add_argument(
+        "--llm",
+        default=None,
+        help="proveedor de lenguaje para medir la redacción. Sin él, no se redacta",
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "doctor":
@@ -212,6 +255,18 @@ def main(argv: list[str] | None = None) -> int:
             args.dataset_id,
             ablation=args.ablation,
             oracle=args.mode == "oracle",
+        )
+
+    if args.command == "final-evaluation":
+        from mecanico_ia_exp.experiments.final_runner import ESTRATOS, run_final_evaluation
+
+        return run_final_evaluation(
+            args.dataset_id,
+            llm=args.llm,
+            particion=args.partition,
+            open_test=args.open_test,
+            reason=args.reason,
+            estratos=ESTRATOS if args.stratum == "all" else (args.stratum,),
         )
 
     return 2

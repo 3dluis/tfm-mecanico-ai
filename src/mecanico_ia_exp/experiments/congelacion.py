@@ -1,0 +1,410 @@
+"""Verificación de la congelación de E19, con **fallo cerrado**.
+
+Las reglas y el estado de la evaluación final están congelados en dos ficheros
+--`docs/methodology/congelacion-anotacion-e19.md` y `configs/manifest_e19.json`--
+y anclados en el commit que los introdujo, declarado aparte en
+`configs/congelacion-e19.anchor.json`.
+
+Este módulo comprueba ese anclaje y lo hace **antes** de que el ejecutor toque
+una partición. La política es cerrada por una razón concreta: una ejecución de
+E19 que no pueda demostrar bajo qué reglas se midió no vale menos que otra, vale
+nada, y el momento de descubrirlo es antes de abrir el conjunto de prueba, no al
+escribir el informe.
+
+Una comprobación que el entorno no puede realizar --una copia sin historial de
+Git, una clonación superficial-- se marca `NO_VERIFICABLE` y **también** detiene
+la ejecución. Quien ejecute la evaluación final en una copia así tendrá que
+clonar el repositorio completo; lo que no puede es medir sin anclaje y enterarse
+después.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+from collections import Counter
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+from mecanico_ia_exp.config import paths
+
+#: Fichero que declara el commit de congelación y las huellas de lo congelado.
+RUTA_ANCLAJE = paths.CONFIGS / "congelacion-e19.anchor.json"
+
+PASS = "PASS"
+FALLA = "FALLA"
+NO_VERIFICABLE = "NO_VERIFICABLE"
+
+CONDICIONES = (
+    "F00_normal",
+    "F01_vacuum_leak",
+    "F02_maf_drift",
+    "F03_thermostat_stuck",
+    "F04_o2_lag",
+    "F05_misfire",
+)
+
+
+class CongelacionInvalidaError(RuntimeError):
+    """La congelación no se puede verificar, y por tanto no se ejecuta nada."""
+
+
+@dataclass(frozen=True)
+class Comprobacion:
+    """Una comprobación con su estado y el detalle que la justifica."""
+
+    nombre: str
+    estado: str
+    detalle: str
+
+    @property
+    def ok(self) -> bool:
+        return self.estado == PASS
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"check": self.nombre, "status": self.estado, "detail": self.detalle}
+
+
+@dataclass(frozen=True)
+class Verificacion:
+    """Resultado completo, para registrar entero y no solo su veredicto."""
+
+    comprobaciones: tuple[Comprobacion, ...]
+
+    @property
+    def ok(self) -> bool:
+        return all(c.ok for c in self.comprobaciones)
+
+    @property
+    def fallidas(self) -> tuple[Comprobacion, ...]:
+        return tuple(c for c in self.comprobaciones if not c.ok)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "status": PASS if self.ok else FALLA,
+            "checks": [c.to_dict() for c in self.comprobaciones],
+        }
+
+    def exigir(self) -> Verificacion:
+        """Devuelve la verificación, o la convierte en excepción si algo falla."""
+        if self.ok:
+            return self
+        detalle = "\n".join(f"  - {c.nombre} [{c.estado}]: {c.detalle}" for c in self.fallidas)
+        msg = (
+            "la congelación de E19 no se puede verificar y la ejecución se "
+            f"detiene:\n{detalle}\n"
+            "Ninguna medición sobre el conjunto de prueba es interpretable sin "
+            "este anclaje."
+        )
+        raise CongelacionInvalidaError(msg)
+
+    def __str__(self) -> str:
+        return "\n".join(f"[{c.estado:<14}] {c.nombre}: {c.detalle}" for c in self.comprobaciones)
+
+
+def huella(ruta: Path) -> str:
+    """Las dieciséis primeras cifras del sha256, como en el manifiesto de RERUN-A."""
+    return hashlib.sha256(ruta.read_bytes()).hexdigest()[:16]
+
+
+def _git(*argumentos: str) -> subprocess.CompletedProcess[bytes] | None:
+    """Ejecuta Git en la raíz del repositorio, o ``None`` si no está disponible."""
+    try:
+        return subprocess.run(
+            ["git", "-C", str(paths.ROOT), *argumentos],
+            capture_output=True,
+            timeout=30,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def cargar_anclaje(ruta: Path = RUTA_ANCLAJE) -> dict[str, Any]:
+    """Lee el fichero de anclaje, o falla diciendo qué falta."""
+    if not ruta.is_file():
+        msg = f"falta el fichero de anclaje de la congelación: {ruta}"
+        raise CongelacionInvalidaError(msg)
+    datos: dict[str, Any] = json.loads(ruta.read_text(encoding="utf-8"))
+    for clave in ("frozen_at_commit", "files"):
+        if clave not in datos:
+            msg = f"el anclaje no declara {clave!r}"
+            raise CongelacionInvalidaError(msg)
+    return datos
+
+
+def cargar_manifiesto(anclaje: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Lee el manifiesto que el anclaje cubre, no uno cualquiera con ese nombre."""
+    datos_anclaje = anclaje or cargar_anclaje()
+    candidatos = [r for r in datos_anclaje["files"] if r.endswith("manifest_e19.json")]
+    if len(candidatos) != 1:
+        msg = f"el anclaje debe cubrir un único manifiesto; cubre {candidatos}"
+        raise CongelacionInvalidaError(msg)
+    manifiesto: dict[str, Any] = json.loads(
+        (paths.ROOT / candidatos[0]).read_text(encoding="utf-8")
+    )
+    return manifiesto
+
+
+# ---------------------------------------------------------------------------
+# Las comprobaciones, una función por cosa que puede haberse movido
+# ---------------------------------------------------------------------------
+
+
+def _comprobar_huellas(anclaje: dict[str, Any]) -> Comprobacion:
+    problemas = []
+    for ruta, declarada in anclaje["files"].items():
+        fichero = paths.ROOT / ruta
+        if not fichero.is_file():
+            problemas.append(f"{ruta} no existe")
+            continue
+        actual = huella(fichero)
+        if actual != declarada:
+            problemas.append(f"{ruta}: huella {actual}, declarada {declarada}")
+    if problemas:
+        return Comprobacion("huellas_de_lo_congelado", FALLA, "; ".join(problemas))
+    return Comprobacion(
+        "huellas_de_lo_congelado",
+        PASS,
+        f"{len(anclaje['files'])} fichero(s) con la huella declarada",
+    )
+
+
+def _comprobar_commit(anclaje: dict[str, Any]) -> tuple[Comprobacion, Comprobacion]:
+    """El anclaje de verdad, y la comprobación de que nada posterior lo toca.
+
+    Se devuelven las dos juntas porque comparten el mismo trabajo previo: si el
+    entorno no puede resolver el commit, ninguna de las dos es verificable y
+    decirlo una sola vez sería menos claro en el registro.
+    """
+    commit = str(anclaje["frozen_at_commit"])
+    cabeza = _git("rev-parse", "--verify", "HEAD")
+    if cabeza is None or cabeza.returncode != 0:
+        detalle = "esta copia no tiene historial de Git: el anclaje no se puede resolver"
+        return (
+            Comprobacion("objeto_del_commit_de_congelacion", NO_VERIFICABLE, detalle),
+            Comprobacion("sin_commits_posteriores_a_la_congelacion", NO_VERIFICABLE, detalle),
+        )
+
+    existe = _git("cat-file", "-e", f"{commit}^{{commit}}")
+    if existe is None or existe.returncode != 0:
+        superficial = _git("rev-parse", "--is-shallow-repository")
+        es_superficial = superficial is not None and superficial.stdout.strip() == b"true"
+        detalle = f"el commit de congelación {commit} no está en esta copia" + (
+            " (clonación superficial)" if es_superficial else ""
+        )
+        estado = NO_VERIFICABLE if es_superficial else FALLA
+        return (
+            Comprobacion("objeto_del_commit_de_congelacion", estado, detalle),
+            Comprobacion("sin_commits_posteriores_a_la_congelacion", estado, detalle),
+        )
+
+    problemas: list[str] = []
+    posteriores: list[str] = []
+    for ruta in anclaje["files"]:
+        objeto = _git("cat-file", "blob", f"{commit}:{ruta}")
+        if objeto is None or objeto.returncode != 0:
+            problemas.append(f"{ruta} no está en el commit {commit}")
+            continue
+        congelado = hashlib.sha256(objeto.stdout).hexdigest()[:16]
+        actual = huella(paths.ROOT / ruta)
+        if congelado != actual:
+            problemas.append(f"{ruta}: el árbol de trabajo no es el del commit {commit}")
+        registro = _git("log", "--oneline", f"{commit}..HEAD", "--", ruta)
+        if registro is not None and registro.stdout.strip():
+            posteriores.append(f"{ruta}: {registro.stdout.decode().strip().splitlines()[0]}")
+
+    primera = (
+        Comprobacion("objeto_del_commit_de_congelacion", FALLA, "; ".join(problemas))
+        if problemas
+        else Comprobacion(
+            "objeto_del_commit_de_congelacion",
+            PASS,
+            f"lo congelado coincide con el objeto del commit {commit}",
+        )
+    )
+    segunda = (
+        Comprobacion(
+            "sin_commits_posteriores_a_la_congelacion",
+            FALLA,
+            "hay commits posteriores que tocan lo congelado: " + "; ".join(posteriores),
+        )
+        if posteriores
+        else Comprobacion(
+            "sin_commits_posteriores_a_la_congelacion",
+            PASS,
+            f"ningún commit posterior a {commit} toca lo congelado",
+        )
+    )
+    return primera, segunda
+
+
+def _comprobar_politica(manifiesto: dict[str, Any]) -> Comprobacion:
+    from mecanico_ia_exp.abstention.sufficiency import POLITICAS
+
+    declarada = str(manifiesto["canonical_policy"]["verifier_version"])
+    if declarada not in POLITICAS:
+        return Comprobacion(
+            "politica_canonica_declarada",
+            FALLA,
+            f"la política {declarada!r} no está entre las implementadas {POLITICAS}",
+        )
+    return Comprobacion(
+        "politica_canonica_declarada", PASS, f"la evaluación final se mide con {declarada}"
+    )
+
+
+def _comprobar_umbrales(manifiesto: dict[str, Any]) -> Comprobacion:
+    from mecanico_ia_exp.abstention.sufficiency import SufficiencyThresholds
+
+    vigentes = SufficiencyThresholds().to_dict()
+    congelados = manifiesto["thresholds"]
+    diferencias = [
+        f"{clave}: código {valor!r}, congelado {congelados.get(clave)!r}"
+        for clave, valor in vigentes.items()
+        if congelados.get(clave) != valor
+    ]
+    if diferencias:
+        return Comprobacion("umbrales", FALLA, "; ".join(diferencias))
+    return Comprobacion("umbrales", PASS, "los umbrales del código son los congelados")
+
+
+def _comprobar_modelo(manifiesto: dict[str, Any]) -> Comprobacion:
+    from mecanico_ia_exp.models.baseline import BaselineConfig
+
+    configuracion = BaselineConfig()
+    estado = manifiesto["controlled_state"]
+    modelo = estado["diagnosis_model"]
+    diferencias = []
+    if estado["seed"] != configuracion.seed:
+        diferencias.append(f"semilla: código {configuracion.seed}, congelada {estado['seed']}")
+    for clave, valor in (
+        ("n_estimators", configuracion.n_estimators),
+        ("min_samples_leaf", configuracion.min_samples_leaf),
+        ("class_weight", configuracion.class_weight),
+    ):
+        if modelo.get(clave) != valor:
+            diferencias.append(f"{clave}: código {valor!r}, congelado {modelo.get(clave)!r}")
+    if diferencias:
+        return Comprobacion("semilla_y_modelo", FALLA, "; ".join(diferencias))
+    return Comprobacion(
+        "semilla_y_modelo", PASS, f"semilla {configuracion.seed} y bosque como el congelado"
+    )
+
+
+def _comprobar_conjunto_anotado(manifiesto: dict[str, Any]) -> Comprobacion:
+    anotado = manifiesto["controlled_state"]["annotated_set"]
+    fichero = paths.ROOT / anotado["file"]
+    if not fichero.is_file():
+        return Comprobacion("conjunto_anotado", FALLA, f"falta {anotado['file']}")
+    actual = huella(fichero)
+    if actual != anotado["file_sha256_16"]:
+        return Comprobacion(
+            "conjunto_anotado",
+            FALLA,
+            f"{anotado['file']}: huella {actual}, declarada {anotado['file_sha256_16']}",
+        )
+    return Comprobacion(
+        "conjunto_anotado",
+        PASS,
+        f"{anotado['file']} con la huella declarada; consultas reutilizadas",
+    )
+
+
+def casos_elegibles(manifiesto: dict[str, Any]) -> dict[str, str]:
+    """Identificador de caso elegible -> condición de evidencia congelada."""
+    elegibles: dict[str, str] = {}
+    for variante, ids in manifiesto["eligible_cases"]["by_evidence_condition"].items():
+        for case_id in ids:
+            elegibles[str(case_id)] = str(variante)
+    return elegibles
+
+
+def _comprobar_casos_elegibles(manifiesto: dict[str, Any]) -> Comprobacion:
+    anotado = paths.ROOT / manifiesto["controlled_state"]["annotated_set"]["file"]
+    gold = yaml.safe_load(anotado.read_text(encoding="utf-8"))
+    por_id = {str(c["case_id"]): c for c in gold["cases"]}
+    elegibles = casos_elegibles(manifiesto)
+
+    problemas = []
+    if len(elegibles) != int(manifiesto["eligible_cases"]["n"]):
+        problemas.append(
+            f"el manifiesto declara {manifiesto['eligible_cases']['n']} casos y enumera "
+            f"{len(elegibles)}"
+        )
+    for case_id, variante in elegibles.items():
+        caso = por_id.get(case_id)
+        if caso is None:
+            problemas.append(f"{case_id} no está en el conjunto anotado")
+            continue
+        real = str(caso.get("corpus_variant", "FULL"))
+        if real != variante:
+            problemas.append(f"{case_id}: declarado {variante}, anotado {real}")
+        if real.startswith("DISTRACTOR"):
+            problemas.append(f"{case_id} es de la condición con distractor y E19 la excluye")
+    if problemas:
+        return Comprobacion("casos_elegibles", FALLA, "; ".join(problemas))
+    return Comprobacion(
+        "casos_elegibles",
+        PASS,
+        f"{len(elegibles)} casos elegibles, con la condición de evidencia que el conjunto anota",
+    )
+
+
+def _comprobar_reparto(manifiesto: dict[str, Any]) -> Comprobacion:
+    datos = manifiesto["controlled_state"]["dataset"]
+    ruta = paths.DATA_PROCESSED / f"{datos['dataset_id']}_preprocess.json"
+    if not ruta.is_file():
+        return Comprobacion("reparto_declarado", FALLA, f"falta {ruta.name}")
+    preprocesado = json.loads(ruta.read_text(encoding="utf-8"))
+    reparto = preprocesado["split_assignment"]
+    sesiones = Counter(reparto.values())
+
+    problemas = []
+    if preprocesado["split_seed"] != datos["split_seed"]:
+        problemas.append("la semilla del reparto no es la congelada")
+    if preprocesado["n_windows"] != datos["n_windows_total"]:
+        problemas.append("el número total de ventanas no es el congelado")
+    for particion, cifras in datos["partitions"].items():
+        if sesiones[particion] != cifras["sessions"]:
+            problemas.append(
+                f"{particion}: {sesiones[particion]} sesiones, congeladas {cifras['sessions']}"
+            )
+    if sum(c["windows"] for c in datos["partitions"].values()) != preprocesado["n_windows"]:
+        problemas.append("las ventanas por partición no suman el total")
+    if problemas:
+        return Comprobacion("reparto_declarado", FALLA, "; ".join(problemas))
+    return Comprobacion(
+        "reparto_declarado",
+        PASS,
+        "el reparto de sesiones es el congelado, sin leer ninguna ventana",
+    )
+
+
+def verificar(ruta_anclaje: Path = RUTA_ANCLAJE) -> Verificacion:
+    """Todas las comprobaciones, en un orden que no esconde ninguna.
+
+    No lanza por un fallo de comprobación: devuelve el resultado completo, para
+    que el registro de la ejecución pueda llevarlo entero. Quien decide detener
+    la ejecución es `Verificacion.exigir`.
+    """
+    anclaje = cargar_anclaje(ruta_anclaje)
+    manifiesto = cargar_manifiesto(anclaje)
+    objeto, posteriores = _comprobar_commit(anclaje)
+    return Verificacion(
+        (
+            _comprobar_huellas(anclaje),
+            objeto,
+            posteriores,
+            _comprobar_politica(manifiesto),
+            _comprobar_umbrales(manifiesto),
+            _comprobar_modelo(manifiesto),
+            _comprobar_conjunto_anotado(manifiesto),
+            _comprobar_casos_elegibles(manifiesto),
+            _comprobar_reparto(manifiesto),
+        )
+    )
