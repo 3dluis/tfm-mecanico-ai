@@ -63,6 +63,7 @@ from mecanico_ia_exp.experiments.final_runner import (
     run_final_evaluation,
     sufijo_de,
     tasas,
+    trazabilidad,
     ventana_adversa,
     ventana_comparativa,
     ventanas_operativas,
@@ -860,3 +861,96 @@ def test_el_redactor_se_construye_una_vez_por_ejecucion() -> None:
     assert "redactor" in inspect.signature(final_runner.ejecutar_caso).parameters
     fuente = inspect.getsource(final_runner.ejecutar_caso)
     assert "get_llm" not in fuente, "el proveedor no puede construirse dentro del caso"
+
+
+def test_el_indice_incompleto_detiene_la_evaluacion_final(manifiesto: dict[str, Any]) -> None:
+    """Un índice incompleto no da error: da menos evidencia, y menos evidencia se
+    cuenta como una abstención legítima. Sería el peor fallo posible de esta
+    evaluación, porque confirmaría la hipótesis por la razón equivocada."""
+    from mecanico_ia_exp.experiments.congelacion import exigir_corpus_congelado
+
+    congelado = manifiesto["controlled_state"]["corpus"]
+    completo = {
+        "n_chunks": congelado["n_chunks"],
+        "n_source_files": congelado["n_source_files"],
+        "n_vectors_in_space": congelado["n_chunks"],
+    }
+    assert exigir_corpus_congelado(manifiesto, completo, estricto=True)["matches"]
+
+    incompleto = {**completo, "n_chunks": congelado["n_chunks"] - 7}
+    with pytest.raises(CongelacionInvalidaError, match="corpus congelado completo"):
+        exigir_corpus_congelado(manifiesto, incompleto, estricto=True)
+    assert not exigir_corpus_congelado(manifiesto, incompleto, estricto=False)["matches"]
+
+    sin_vectores = {**completo, "n_vectors_in_space": 0}
+    with pytest.raises(CongelacionInvalidaError, match="vectores en el espacio declarado"):
+        exigir_corpus_congelado(manifiesto, sin_vectores, estricto=True)
+
+
+def test_el_identificador_de_ejecucion_distingue_los_estratos(
+    manifiesto: dict[str, Any], casos_gold: dict[str, dict[str, Any]]
+) -> None:
+    """El estrato comparativo puede elegir la misma ventana que el operativo: sin
+    el estrato en el identificador, dos ejecuciones distintas lo compartirían y los
+    cruces entre la anotación, la tabla y el registro quedarían ambiguos."""
+    meta, _ = rejilla()
+    aciertos = np.ones(len(meta), dtype=bool)
+    operativo, _ = _casos("operativo", manifiesto, casos_gold, aciertos=aciertos)
+    comparativo, _ = _casos("comparativo", manifiesto, casos_gold, aciertos=aciertos)
+
+    ventanas_compartidas = {c.ventana.case_id for c in operativo} & {
+        c.ventana.case_id for c in comparativo
+    }
+    assert ventanas_compartidas, "el escenario del hallazgo tiene que darse aquí"
+    todos = operativo + comparativo
+    assert len({c.ejecucion_id for c in todos}) == len(todos)
+    assert all(c.ejecucion_id.startswith(f"{c.estrato}:") for c in todos)
+
+
+def test_la_trazabilidad_se_publica_agregada_y_con_su_denominador() -> None:
+    """La sección 9 enumera las tres cuentas entre las métricas publicables, y
+    dejar que el lector las derive de un JSON de miles de líneas es, para el caso,
+    no publicarlas."""
+    from mecanico_ia_exp.evidence.model import Claim, EvidenceBundle, SupportStatus
+
+    def verificado(claims: list[Claim]) -> Any:
+        bundle = EvidenceBundle(
+            case_id="s1@0s",
+            vehicle_id="mazda-3-bk-2007",
+            predicted_class="F01_vacuum_leak",
+            model_confidence=0.9,
+            claims=claims,
+        )
+        return type("V", (), {"bundle": bundle})()
+
+    pares = [
+        (
+            _caso("FULL", "s1", 0.0, EXPLICA),
+            verificado(
+                [
+                    Claim(
+                        claim_id="C01",
+                        text="",
+                        observation_ids=("O1",),
+                        chunk_ids=("k1",),
+                        support_status=SupportStatus.SUPPORTED,
+                    ),
+                    Claim(claim_id="C02", text="", observation_ids=("O2",)),
+                ]
+            ),
+        ),
+        (
+            _caso("ABSENT", "s2", 0.0, ABSTIENE),
+            verificado([Claim(claim_id="C03", text="", chunk_ids=("k2",))]),
+        ),
+    ]
+    resultado = trazabilidad(pares)
+
+    assert resultado["denominator_claims"] == 3
+    assert resultado["with_observation"] == 2
+    assert resultado["with_citation"] == 2
+    assert resultado["with_support"] == 1
+    assert resultado["rates"]["with_support"] == pytest.approx(1 / 3, abs=1e-4)
+    assert resultado["n_runs"] == 2
+    assert resultado["n_sessions"] == 2
+    assert "propiedad del verificador" in resultado["note"]

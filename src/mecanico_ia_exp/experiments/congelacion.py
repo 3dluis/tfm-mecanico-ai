@@ -468,6 +468,50 @@ def exigir_espacio_congelado(
     return space_id
 
 
+def exigir_corpus_congelado(
+    manifiesto: Mapping[str, Any], recuentos: Mapping[str, int], *, estricto: bool
+) -> dict[str, Any]:
+    """El índice tiene que tener el corpus congelado completo.
+
+    Un índice incompleto no da error: da **menos evidencia**, y menos evidencia se
+    cuenta como una abstención legítima. Sería el peor fallo posible de esta
+    evaluación, porque confirmaría la hipótesis por la razón equivocada y las
+    cifras parecerían buenas. La sección 11 lo trata como motivo de invalidez.
+    """
+    congelado = manifiesto["controlled_state"]["corpus"]
+    esperado = {
+        "n_chunks": int(congelado["n_chunks"]),
+        "n_source_files": int(congelado["n_source_files"]),
+    }
+    diferencias = [
+        f"{clave}: indexado {recuentos.get(clave)}, congelado {valor}"
+        for clave, valor in esperado.items()
+        if recuentos.get(clave) != valor
+    ]
+    vectores = recuentos.get("n_vectors_in_space")
+    if vectores != esperado["n_chunks"]:
+        diferencias.append(
+            f"vectores en el espacio declarado: {vectores}, fragmentos {esperado['n_chunks']}"
+        )
+    resultado = {
+        "declared": esperado,
+        "indexed": dict(recuentos),
+        "matches": not diferencias,
+    }
+    if not diferencias:
+        return resultado
+    msg = (
+        "el indice no contiene el corpus congelado completo: "
+        + "; ".join(diferencias)
+        + ". Un indice incompleto no da error, da menos evidencia, y menos evidencia "
+        "se cuenta como una abstencion legitima."
+    )
+    if estricto:
+        raise CongelacionInvalidaError(msg)
+    print(f"AVISO: {msg} En un ensayo se admite; en la evaluación final detendría.")
+    return resultado
+
+
 def ficheros_con_seguimiento_modificados() -> tuple[str, ...]:
     """Ficheros **con seguimiento** que están modificados en el árbol de trabajo.
 

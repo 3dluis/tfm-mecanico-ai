@@ -57,6 +57,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     cargar_manifiesto,
     casos_elegibles,
     exigir_arbol_limpio,
+    exigir_corpus_congelado,
     exigir_dataset_congelado,
     exigir_espacio_congelado,
     exigir_politica_canonica,
@@ -362,11 +363,14 @@ class CasoFinal:
     def ejecucion_id(self) -> str:
         """Identificador único de la ejecución.
 
-        Hace falta porque varias condiciones de evidencia del mismo fallo se
-        ejecutan sobre la **misma** ventana --es el experimento central-- y el
-        identificador de ventana solo no las distinguiría.
+        Lleva el estrato, el caso y la ventana, y los tres hacen falta. Varias
+        condiciones de evidencia del mismo fallo se ejecutan sobre la **misma**
+        ventana --es el experimento central--, y el estrato comparativo puede elegir
+        la misma ventana que el operativo: sin el estrato, dos ejecuciones distintas
+        compartirían identificador y los cruces entre la anotación, la tabla y el
+        registro quedarían ambiguos.
         """
-        return f"{self.case_id_gold}@{self.ventana.case_id}"
+        return f"{self.estrato}:{self.case_id_gold}@{self.ventana.case_id}"
 
     @property
     def prediction_correct(self) -> bool:
@@ -537,6 +541,43 @@ def tasas(pares: Sequence[tuple[CasoFinal, str]]) -> dict[str, Any]:
         "false_confidence": _tasa(debian_abstenerse, EXPLICA).to_dict(),
         "unnecessary_abstention": _tasa(debian_explicar, ABSTIENE).to_dict(),
         "coverage_full_evidence": _tasa(evidencia_completa, EXPLICA).to_dict(),
+    }
+
+
+def trazabilidad(pares: Sequence[tuple[CasoFinal, CasoVerificado]]) -> dict[str, Any]:
+    """Afirmaciones con observación, con cita y con soporte, con su denominador.
+
+    La sección 9 de las reglas congeladas las enumera entre las métricas
+    publicables, y el registro guardaba los paquetes de evidencia sin agregarlas:
+    dejar que el lector las derive de un JSON de miles de líneas es, para el caso,
+    no publicarlas.
+
+    El soporte sigue siendo una propiedad del **verificador** y no una anotación
+    independiente. Mientras no haya anotación humana de afirmaciones admisibles,
+    esta cifra describe el comportamiento del verificador y no acredita la verdad
+    de lo afirmado.
+    """
+    from mecanico_ia_exp.evidence.model import SupportStatus
+
+    afirmaciones = [c for _, v in pares for c in v.bundle.claims]
+    total = len(afirmaciones)
+    cuentas = {
+        "with_observation": sum(1 for c in afirmaciones if c.has_observational),
+        "with_citation": sum(1 for c in afirmaciones if c.has_documentary),
+        "with_support": sum(1 for c in afirmaciones if c.support_status is SupportStatus.SUPPORTED),
+    }
+    return {
+        "note": (
+            "el soporte es una propiedad del verificador; no hay anotación "
+            "independiente de afirmaciones admisibles"
+        ),
+        "denominator_claims": total,
+        **recuento([c for c, _ in pares]),
+        **cuentas,
+        "rates": {
+            clave: None if total == 0 else round(valor / total, 4)
+            for clave, valor in cuentas.items()
+        },
     }
 
 
@@ -895,6 +936,7 @@ def documento_final(
     verificacion: Mapping[str, Any],
     diagnostico: Mapping[str, Any],
     cotejo: Mapping[str, Any],
+    corpus: Mapping[str, Any],
     por_estrato: Mapping[str, list[tuple[CasoFinal, CasoVerificado]]],
     confianzas: Mapping[str, float],
     llm: str | None = None,
@@ -910,6 +952,7 @@ def documento_final(
             "reference_policies": politicas_de_referencia(
                 decisiones, confianzas, min_confidence=umbrales.min_confidence
             ),
+            "traceability": trazabilidad(pares),
             **(
                 {"writing": resumen_de_redaccion(pares, llm=llm)}
                 if llm and any(v.agente is not None for _, v in pares)
@@ -951,6 +994,7 @@ def documento_final(
             "written_before_any_measurement": True,
         },
         "freeze_verification": dict(verificacion),
+        "corpus": dict(corpus),
         "declared_vs_observed": dict(cotejo),
         "diagnosis": dict(diagnostico),
         "strata": bloques,
@@ -1054,7 +1098,22 @@ def run_final_evaluation(
     # vectorial es una de las piezas congeladas y comprobarlo después significaría
     # haber abierto el conjunto de prueba para descubrir que no se podía medir.
     provider = get_provider("multilingual")
-    exigir_espacio_congelado(manifiesto, espacio_de(provider), estricto=particion == "test")
+    espacio = espacio_de(provider)
+    exigir_espacio_congelado(manifiesto, espacio, estricto=particion == "test")
+
+    # Y el índice, también antes: un índice incompleto no da error, da menos
+    # evidencia, y menos evidencia se cuenta como una abstención legítima.
+    # Descubrirlo después de abrir el conjunto sería descubrirlo tarde.
+    sonda = PgVectorStore()
+    try:
+        corpus = exigir_corpus_congelado(
+            manifiesto,
+            sonda.corpus_counts(vehicle_id=VEHICULO, embedding_model=provider.identity.model),
+            estricto=particion == "test",
+        )
+    finally:
+        sonda.dispose()
+    print(f"índice: {json.dumps(corpus['indexed'], sort_keys=True)}\n")
 
     ctx = preparar(dataset_id, particion=particion, allow_test=open_test, reason=reason)
     meta = ctx.evaluacion.meta
@@ -1248,6 +1307,7 @@ def run_final_evaluation(
             verificacion=verificacion.to_dict(),
             diagnostico=diagnostico,
             cotejo=cotejo,
+            corpus=corpus,
             por_estrato=por_estrato,
             confianzas=confianza_del_diagnostico,
             llm=llm,
