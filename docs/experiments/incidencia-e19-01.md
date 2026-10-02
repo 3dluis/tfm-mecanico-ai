@@ -1,6 +1,9 @@
 # Incidencia `INC-E19-01`: la primera ejecución de E19 quedó interrumpida
 
-**Fecha de la ejecución:** 2 de octubre de 2026, 02:31:30 UTC · **Commit:** `5b64504`, árbol limpio ·
+**Fecha de la ejecución:** 2 de octubre de 2026; la única marca de tiempo que quedó es la del sellado
+de la anotación, **02:31:30 UTC**, de modo que la apertura de la partición ocurrió poco antes y su
+instante exacto no consta: el cargador la imprime sin marca y esa salida se perdió ·
+**Commit:** `5b64504`, árbol limpio ·
 **Estado: NO COMPLETADA.** No hay ninguna medición de suficiencia, de trazabilidad ni de redacción
 sobre el conjunto de prueba. · **Causa:** interrupción del proceso, que es una de las condiciones de
 invalidez previstas en la sección 6 de `docs/methodology/declaracion-apertura-e19.md`.
@@ -22,7 +25,7 @@ en que un caso lance una excepción, y aquí el proceso no falló, lo mataron.
 | **Apertura de la partición de prueba** | **ocurrió**, con su razón escrita |
 | Predicciones del bosque sobre las 98 ventanas | completadas |
 | Generación de las ejecuciones de los tres estratos | completada |
-| **Sellado de la anotación** | **completado**, `experiments/E19_anotacion.json`, huella `57d0e3c33e9ef82f` |
+| **Sellado de la anotación** | **completado** a las 02:31:30 UTC, `experiments/E19_anotacion.json`, huella `57d0e3c33e9ef82f` |
 | Recorrido de los casos: recuperación, verificación, redacción | **interrumpido** |
 | Registro de la evaluación, tabla de resultados | **no se escribieron** |
 
@@ -94,7 +97,9 @@ excusa para cambiar nada: ni umbrales, ni casos, ni reglas, ni modelos, ni consu
    propia declaración y el diseño sigue congelado; lo único que cambia es el identificador del
    intento.
 4. Para que no vuelva a ocurrir, la repetición debe lanzarse de forma que sobreviva al cierre de la
-   sesión de trabajo, y su salida de consola debe guardarse en un fichero del repositorio o fuera del
-   directorio temporal de la sesión.
+   sesión de trabajo, y su salida de consola debe guardarse fuera del directorio temporal de la
+   sesión. Eso resuelve además lo que aquí faltó: la línea con que el cargador anuncia la apertura no
+   lleva marca de tiempo, y un fichero de salida permite acotar el instante. **No se toca el código
+   para añadirla:** el diseño está congelado y la declaración fija el commit con el que se mide.
 
 `[AUTHOR_DECISION_REQUIRED]` — autorizar o no el intento `v2`. Sin esa autorización no se ejecuta nada.

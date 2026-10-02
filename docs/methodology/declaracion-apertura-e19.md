@@ -1,6 +1,7 @@
 # Declaración formal de apertura del conjunto de prueba (E19)
 
-**Estado: APROBADA. El conjunto de prueba se abrió el 2 de octubre de 2026 a las 02:31:30 UTC.**
+**Estado: APROBADA. El conjunto de prueba se abrió el 2 de octubre de 2026, poco antes de las
+02:31:30 UTC.**
 
 Este documento no abría nada por existir: era el texto que el autor tenía que aprobar, y su
 aprobación es lo que autorizó ejecutar E19. La sección 10 registra qué pasó con esa ejecución.
@@ -9,7 +10,7 @@ aprobación es lo que autorizó ejecutar E19. La sección 10 registra qué pasó
 |---|---|
 | **Redactada** | 1 de octubre de 2026 |
 | **Aprobada** | 1 de octubre de 2026, por el autor, con la autorización literal `OPEN_TEST_AND_RUN_E19` y la instrucción de ejecutar **una sola vez** siguiendo exactamente la orden de la sección 9 |
-| **Ejecutada** | 2 de octubre de 2026, 02:31:30 UTC —22:31:30 del 1 de octubre en la zona del autor—, en el commit `5b64504` con el árbol limpio. La marca la escribe el propio artefacto en su campo `executed_at` |
+| **Ejecutada** | 2 de octubre de 2026, en el commit `5b64504` con el árbol limpio. La marca registrada, **02:31:30 UTC**, es la del **sellado de la anotación**, que es lo que el artefacto escribe en su campo `executed_at`. La apertura de la partición ocurre antes, en el mismo recorrido: el cargador la imprime sin marca de tiempo y esa salida de consola se perdió, de modo que 02:31:30 UTC es la cota superior disponible y no un instante observado |
 
 ## 1. Qué se abre y por qué
 
@@ -153,18 +154,21 @@ y no una corrección de esta.
 Que se abra la partición de prueba una vez, en las condiciones de la sección 2, para medir lo de la
 sección 4, con la razón escrita de la sección 1, sabiendo lo de las secciones 6 a 8.
 
-La orden que ejecuta esta declaración, una vez aprobada:
+La orden que ejecutó esta declaración, tal como se lanzó el 1 de octubre de 2026:
 
 ```
 uv run mecanico-exp final-evaluation \
   --partition test \
   --open-test \
-  --reason "Evaluacion final E19 autorizada por el autor el <fecha>; declaracion en docs/methodology/declaracion-apertura-e19.md; reglas congeladas en el commit de6207f" \
+  --reason "Evaluacion final E19 autorizada por el autor el 2026-10-01; declaracion en docs/methodology/declaracion-apertura-e19.md; reglas congeladas en el commit de6207f" \
   --llm transformers-lora@slm_lora_v2
 ```
 
-`[AUTHOR_DECISION_REQUIRED]` — aprobación, fecha y hora. Sin eso, este documento es un borrador y
-el conjunto de prueba sigue cerrado.
+**Aprobación registrada:** el autor aprobó esta declaración el 1 de octubre de 2026 con la
+autorización literal `OPEN_TEST_AND_RUN_E19` y la instrucción de ejecutar una sola vez con esta
+orden. Esa aprobación es la base documental de la apertura y no caduca: la sección 10 explica por qué
+no produjo mediciones y qué exige el procedimiento para el intento siguiente, que **sí** necesita una
+autorización nueva, porque es una versión experimental nueva.
 
 ## 10. Qué ocurrió con la ejecución autorizada
 
@@ -174,7 +178,8 @@ el conjunto de prueba sigue cerrado.
 En resumen: las diez comprobaciones de la congelación pasaron, el índice y los modelos coincidieron
 con lo congelado, el redactor se cargó antes de abrir, la partición se abrió con su razón escrita, el
 bosque predijo sobre las 98 ventanas, se generaron las ejecuciones de los tres estratos y **se selló
-la anotación** —`experiments/E19_anotacion.json`, huella `57d0e3c33e9ef82f`—. El proceso terminó
+la anotación** —`experiments/E19_anotacion.json`, huella `57d0e3c33e9ef82f`, sellada a las 02:31:30
+UTC, que es la única marca de tiempo que quedó de la ejecución—. El proceso terminó
 después de eso, al cerrarse la sesión de trabajo, antes de completar el recorrido de los casos. No
 hay cifras de suficiencia, de trazabilidad ni de redacción, y no sobrevivió nada parcial.
 
