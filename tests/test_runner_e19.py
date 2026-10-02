@@ -28,6 +28,8 @@ from mecanico_ia_exp.experiments.congelacion import (
     cargar_anclaje,
     cargar_manifiesto,
     casos_elegibles,
+    exigir_dataset_congelado,
+    exigir_politica_canonica,
     verificar,
 )
 from mecanico_ia_exp.experiments.final_runner import (
@@ -51,6 +53,7 @@ from mecanico_ia_exp.experiments.final_runner import (
     orden_canonico,
     politicas_de_referencia,
     recuento,
+    resumen_de_redaccion,
     run_final_evaluation,
     sufijo_de,
     tasas,
@@ -589,3 +592,92 @@ def test_un_ensayo_dice_dentro_del_artefacto_que_no_es_un_resultado_de_e19() -> 
     assert final["status"] == ES_EVALUACION_FINAL
     assert ensayo["status"] == ES_ENSAYO
     assert "NO es un resultado de E19" in ensayo["note"]
+
+
+# --- Lo que el anclaje solo no puede ver -------------------------------------
+
+
+def test_e19_no_mide_un_conjunto_que_no_este_congelado(manifiesto: dict[str, Any]) -> None:
+    """Sin esto, pedir otro conjunto producía un artefacto que declaraba una
+    congelación verificada sobre datos que nunca se congelaron."""
+    assert exigir_dataset_congelado(manifiesto, "synthetic_v2") == "synthetic_v2"
+    with pytest.raises(CongelacionInvalidaError, match="el conjunto congelado para E19"):
+        exigir_dataset_congelado(manifiesto, "synthetic_v3")
+
+
+def test_e19_no_admite_otra_politica_que_la_canonica(manifiesto: dict[str, Any]) -> None:
+    """La verificación del anclaje solo comprueba que la política del manifiesto
+    existe: un parámetro que permitiera otra versión escribiría un registro con la
+    política equivocada bajo un anclaje correcto."""
+    assert exigir_politica_canonica(manifiesto, "v2.2") == "v2.2"
+    with pytest.raises(CongelacionInvalidaError, match="política canónica congelada"):
+        exigir_politica_canonica(manifiesto, "v2.1")
+
+
+def test_la_politica_no_es_un_parametro_del_ejecutor() -> None:
+    parametros = set(inspect.signature(run_final_evaluation).parameters)
+    assert "policy" not in parametros
+    assert {"particion", "open_test", "reason", "estratos"} <= parametros
+
+
+def test_el_arbol_sucio_detiene_la_evaluacion_final_y_solo_avisa_en_un_ensayo(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """El manifiesto congela el código por su commit, y esa declaración no vale
+    nada si hay cambios sin comitear: la ejecución usaría una recuperación o un
+    verificador que ese commit no contiene."""
+    from mecanico_ia_exp.experiments import congelacion
+
+    monkeypatch.setattr(
+        congelacion,
+        "ficheros_con_seguimiento_modificados",
+        lambda: ("src/mecanico_ia_exp/rag/store.py",),
+    )
+    assert congelacion.exigir_arbol_limpio(estricto=False) == ("src/mecanico_ia_exp/rag/store.py",)
+    with pytest.raises(CongelacionInvalidaError, match="ficheros con seguimiento modificados"):
+        congelacion.exigir_arbol_limpio(estricto=True)
+
+    monkeypatch.setattr(congelacion, "ficheros_con_seguimiento_modificados", lambda: ())
+    assert congelacion.exigir_arbol_limpio(estricto=True) == ()
+
+
+# --- La redacción se guarda, no se pierde ------------------------------------
+
+
+def test_el_resumen_de_redaccion_conserva_las_salidas_y_sus_recuentos() -> None:
+    """La primera versión ejecutaba el redactor y tiraba su salida: las métricas
+    que la congelación manda publicar no podían auditarse después."""
+
+    class EjecucionFalsa:
+        def __init__(self, *, valid: bool, respected: bool | None, falsas: int, esquema: bool):
+            self.valid = valid
+            self.respected_verdict = respected
+            self.fake_citations = ["c1"] * falsas
+            self.schema_error = esquema
+            self.raw = None
+
+        def to_dict(self) -> dict[str, Any]:
+            return {"valid": self.valid, "schema_error": self.schema_error}
+
+    def par(ejecucion: Any) -> tuple[CasoFinal, Any]:
+        caso = _caso("FULL", "s1", 0.0, EXPLICA)
+        verificado = type("V", (), {"agente": ejecucion})()
+        return caso, verificado
+
+    pares = [
+        par(EjecucionFalsa(valid=True, respected=True, falsas=0, esquema=False)),
+        par(EjecucionFalsa(valid=True, respected=False, falsas=2, esquema=False)),
+        par(EjecucionFalsa(valid=False, respected=None, falsas=0, esquema=True)),
+    ]
+    resumen = resumen_de_redaccion(pares, llm="echo")
+
+    assert resumen["summary"] == {
+        "n_runs": 3,
+        "valid_outputs": 2,
+        "respected_verdict": 1,
+        "n_evaluable_for_verdict": 2,
+        "fake_citations": 2,
+        "schema_errors": 1,
+    }
+    assert len(resumen["runs"]) == 3
+    assert resumen["prompt_version"]

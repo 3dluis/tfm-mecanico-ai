@@ -55,6 +55,9 @@ from mecanico_ia_exp.experiments.congelacion import (
     cargar_anclaje,
     cargar_manifiesto,
     casos_elegibles,
+    exigir_arbol_limpio,
+    exigir_dataset_congelado,
+    exigir_politica_canonica,
     verificar,
 )
 from mecanico_ia_exp.experiments.registro import escribir
@@ -725,6 +728,38 @@ def fila_de(caso: CasoFinal, verificado: CasoVerificado) -> dict[str, Any]:
     }
 
 
+def resumen_de_redaccion(
+    pares: Sequence[tuple[CasoFinal, CasoVerificado]], *, llm: str
+) -> dict[str, Any]:
+    """Las salidas del redactor, con sus recuentos y **con su texto**.
+
+    La primera versión ejecutaba el redactor y tiraba su salida: el registro
+    guardaba el veredicto del verificador y nada de la redacción, de modo que las
+    métricas que la congelación manda publicar --salidas válidas, respeto del
+    veredicto, citas fuera de lo entregado-- no podían auditarse después. Lo
+    encontró la revisión del diff.
+    """
+    from mecanico_ia_exp.llm.agent import PROMPT_VERSION
+
+    ejecuciones = [v.agente for _, v in pares if v.agente is not None]
+    evaluables = [a for a in ejecuciones if a.respected_verdict is not None]
+    identidad = next((a.raw.identity.as_dict() for a in ejecuciones if a.raw is not None), None)
+    return {
+        "llm": llm,
+        "prompt_version": PROMPT_VERSION,
+        "identity": identidad,
+        "summary": {
+            "n_runs": len(ejecuciones),
+            "valid_outputs": sum(1 for a in ejecuciones if a.valid),
+            "respected_verdict": sum(1 for a in evaluables if a.respected_verdict),
+            "n_evaluable_for_verdict": len(evaluables),
+            "fake_citations": sum(len(a.fake_citations) for a in ejecuciones),
+            "schema_errors": sum(1 for a in ejecuciones if a.schema_error),
+        },
+        "runs": [a.to_dict() for a in ejecuciones],
+    }
+
+
 def documento_final(
     *,
     particion: str,
@@ -739,6 +774,7 @@ def documento_final(
     cotejo: Mapping[str, Any],
     por_estrato: Mapping[str, list[tuple[CasoFinal, CasoVerificado]]],
     confianzas: Mapping[str, float],
+    llm: str | None = None,
 ) -> dict[str, Any]:
     """El registro de E19, construido aparte para poder comprobar su forma."""
     bloques: dict[str, Any] = {}
@@ -750,6 +786,11 @@ def documento_final(
             "rates": tasas(decisiones),
             "reference_policies": politicas_de_referencia(
                 decisiones, confianzas, min_confidence=umbrales.min_confidence
+            ),
+            **(
+                {"writing": resumen_de_redaccion(pares, llm=llm)}
+                if llm and any(v.agente is not None for _, v in pares)
+                else {}
             ),
             "cases": [
                 {
@@ -802,7 +843,6 @@ def run_final_evaluation(
     open_test: bool = False,
     reason: str = "",
     estratos: Sequence[str] = ESTRATOS,
-    policy: str | None = None,
 ) -> int:
     """Ejecuta E19 sobre la partición indicada, bajo las reglas congeladas.
 
@@ -812,14 +852,29 @@ def run_final_evaluation(
 
     Con `particion="test"` exige `open_test` y una razón por escrito. La razón es
     la declaración formal de apertura, y el cargador la imprime en la salida de
-    la ejecución.
+    la ejecución. Exige además el árbol de trabajo limpio en los ficheros con
+    seguimiento: el manifiesto congela el código por su commit, y esa declaración
+    no vale nada si hay cambios sin comitear.
+
+    La política no es un parámetro. E19 se mide con la canónica congelada, y uno
+    que permitiera otra versión escribiría un registro con la política equivocada
+    bajo un anclaje correcto.
     """
     verificacion = verificar().exigir()
     print(verificacion, "\n")
     anclaje = cargar_anclaje()
     manifiesto = cargar_manifiesto(anclaje)
-    policy = validar_politica(policy or str(manifiesto["canonical_policy"]["verifier_version"]))
 
+    # Lo que la verificación del anclaje no puede ver por sí sola: que se esté
+    # midiendo el conjunto congelado, con la política congelada y con el código
+    # congelado. Sin las tres cosas, un artefacto podría declarar una congelación
+    # correcta y haber medido otra cosa.
+    dataset_id = exigir_dataset_congelado(manifiesto, dataset_id)
+    policy = validar_politica(
+        exigir_politica_canonica(
+            manifiesto, str(manifiesto["canonical_policy"]["verifier_version"])
+        )
+    )
     if particion == "test" and (not open_test or not reason.strip()):
         msg = (
             "E19 mide sobre el conjunto de prueba, que está cerrado. Hace falta la "
@@ -828,6 +883,12 @@ def run_final_evaluation(
             "ejecutor sin abrir nada, usa particion='validation'."
         )
         raise AperturaNoDeclaradaError(msg)
+
+    # Después de la declaración, y antes de cargar nada: el árbol tiene que estar
+    # limpio en los ficheros con seguimiento. El orden importa, porque pedir la
+    # partición de prueba sin declaración debe fallar por eso y no por el estado
+    # del árbol de quien lo intente.
+    exigir_arbol_limpio(estricto=particion == "test")
 
     desconocidos = [e for e in estratos if e not in ESTRATOS]
     if desconocidos:
@@ -979,6 +1040,7 @@ def run_final_evaluation(
             cotejo=cotejo,
             por_estrato=por_estrato,
             confianzas=confianzas,
+            llm=llm,
         ),
         seed=ctx.configuracion.seed,
         dataset_id=dataset_id,
