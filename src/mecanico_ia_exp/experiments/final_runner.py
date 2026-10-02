@@ -705,12 +705,21 @@ def sellar_anotacion(documento: Mapping[str, Any], *, sufijo: str = "") -> tuple
 def metricas_de_diagnostico(ctx: Contexto, particion: str) -> dict[str, Any]:
     """Diagnóstico y calibración sobre la partición, frente a la clase mayoritaria.
 
-    La referencia es la clase mayoritaria **de esta partición**, no la de
-    validación: comparar con la referencia de otra partición mezclaría dos cosas.
+    Las reglas congeladas piden la clase mayoritaria **de la propia partición**, y
+    eso es lo que se publica. Conviene decir qué significa: elegir esa clase mira
+    las etiquetas de lo que se está evaluando, de modo que es una referencia
+    asistida y, por tanto, más exigente de lo que sería en funcionamiento.
+
+    Se añade la misma métrica con la referencia que el sistema sí podría haber
+    elegido sin mirar: la clase mayoritaria de **entrenamiento**, que es como se
+    calculó la de E6. Son la misma medida bajo dos referencias, y decirlo evita la
+    duda de si la comparación se eligió a conveniencia.
     """
     clases = tuple(sorted(set(ctx.entrenamiento.y.tolist())))
-    mayoritaria = train_majority_baseline(ctx.entrenamiento.y)
     y = ctx.evaluacion.y
+    etiquetas, frecuencias = np.unique(y, return_counts=True)
+    mayoritaria = str(etiquetas[int(np.argmax(frecuencias))])
+    mayoritaria_entrenamiento = train_majority_baseline(ctx.entrenamiento.y)
 
     probabilidades = np.asarray(ctx.modelo.predict_proba(ctx.evaluacion.features), dtype=np.float64)
     orden = [list(ctx.modelo.classes_).index(c) for c in clases]
@@ -729,10 +738,23 @@ def metricas_de_diagnostico(ctx: Contexto, particion: str) -> dict[str, Any]:
         partition=particion,
         class_order=clases,
     )
+    trivial_entrenamiento = evaluate_classification(
+        y,
+        np.full(y.shape, mayoritaria_entrenamiento, dtype=y.dtype),
+        partition=particion,
+        class_order=clases,
+    )
     return {
         "partition": particion,
         "majority_class": mayoritaria,
+        "majority_class_source": (
+            "la clase mas frecuente de la propia particion, como piden las reglas "
+            "congeladas; elegirla mira las etiquetas de lo que se evalua, de modo que "
+            "es una referencia asistida"
+        ),
         "majority_baseline": trivial.to_dict(),
+        "majority_class_from_train": mayoritaria_entrenamiento,
+        "majority_baseline_from_train": trivial_entrenamiento.to_dict(),
         "forest": informe.to_dict(),
         "calibration": ctx.calibracion,
     }
