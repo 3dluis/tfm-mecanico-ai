@@ -1,16 +1,17 @@
 {
   "anchor_id": "E19",
-  "frozen_at_commit": "af26819",
+  "frozen_at_commit": "e77d730",
   "note": "Anclaje de la congelacion de E19. Se escribe DESPUES del commit de congelacion, que es lo que le permite nombrarlo: una huella guardada dentro del fichero que certifica no prueba nada, porque editar los dos a la vez pasaria cualquier comprobacion. Cubre las reglas y el estado congelado, no solo las reglas: un umbral o un caso elegible viven en el manifiesto.",
   "guarantee": "no impide un cambio posterior; impide que sea silencioso. Todo cambio despues de la congelacion exige dos commits visibles, el que edita el fichero y el que mueve este anclaje.",
   "supersedes": {
-    "frozen_at_commit": "345beba",
-    "reason": "la regla primaria decia 'la primera ventana en orden canonico' de cada sesion y era ambigua: en una sesion con averia las primeras ventanas llevan etiqueta de funcionamiento normal. Pasa a decir 'la primera ventana etiquetada con esa condicion'. Con el conjunto de prueba cerrado, sin cambio en el numero de ejecuciones y sin ningun resultado delante.",
-    "date": "2026-10-01"
+    "frozen_at_commit": "af26819",
+    "reason": "los cuatro ficheros del conjunto preprocesado pasan a estar anclados por huella. Estan fuera del control de versiones, de modo que la comprobacion del arbol no los ve y sustituir uno pasaba inadvertido. Con el conjunto de prueba cerrado y sin ningun resultado delante.",
+    "date": "2026-10-01",
+    "chain": ["345beba", "af26819", "e77d730"]
   },
   "files": {
-    "docs/methodology/congelacion-anotacion-e19.md": "62c6dabbf632ea30",
-    "configs/manifest_e19.json": "df4e646ac0d08c64"
+    "docs/methodology/congelacion-anotacion-e19.md": "f1173b3656887b94",
+    "configs/manifest_e19.json": "5a919748c22b0d07"
   },
   "enforced_by": "tests/test_congelacion_e19.py"
 }
