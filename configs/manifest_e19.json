@@ -85,6 +85,8 @@
       "corpus_version": "0.1.0",
       "n_chunks": 6158,
       "n_source_files": 3055,
+      "content_fingerprint_16": "14aaa3a4962b493b",
+      "fingerprint_definition": "sha256 de chunk_id|content_hash|source_file|dtc_codes|engine_codes de cada fragmento del vehiculo, en orden de chunk_id; los recuentos no detectan una sustitucion y un indice que devuelve menos evidencia produce abstenciones que parecen legitimas",
       "reindex": "no"
     },
     "embedding": {
