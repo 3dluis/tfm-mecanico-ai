@@ -1056,12 +1056,15 @@ def run_final_evaluation(
         )
         raise AperturaNoDeclaradaError(msg)
 
-    if particion == "test" and ESTRATO_PRIMARIO not in estratos:
+    if particion == "test" and set(estratos) != set(ESTRATOS):
         msg = (
-            f"la evaluación final tiene que incluir el estrato {ESTRATO_PRIMARIO!r}, que es "
-            "el único que responde a la pregunta. Los otros dos son descriptivos, y un "
-            "artefacto marcado como evaluación final que solo los contuviera sustituiría "
-            "el resultado por un análisis de sensibilidad."
+            f"la evaluación final mide los tres estratos congelados {ESTRATOS}, y se han "
+            f"pedido {tuple(estratos)}. El operativo es el que responde a la pregunta, y "
+            "los otros dos no son opcionales: sin el comparativo, una diferencia con las "
+            "cifras de validación confundiría el efecto de la partición con el de haber "
+            "cambiado la regla de selección, y sin el adverso no se mide el escenario del "
+            "diagnóstico incorrecto. Un subconjunto puede ejecutarse sobre validación, "
+            "cuyos artefactos llevan sufijo y no se publican."
         )
         raise ValueError(msg)
 

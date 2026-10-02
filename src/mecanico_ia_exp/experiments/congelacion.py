@@ -512,16 +512,20 @@ def exigir_corpus_congelado(
     return resultado
 
 
-def ficheros_con_seguimiento_modificados() -> tuple[str, ...]:
-    """Ficheros **con seguimiento** que están modificados en el árbol de trabajo.
+def ficheros_con_seguimiento_modificados() -> tuple[str, ...] | None:
+    """Ficheros **con seguimiento** modificados, o `None` si no se puede saber.
 
     Deja fuera los que no tienen seguimiento a propósito: la anotación de E19 se
     sella antes del registro y en ese momento es uno de ellos, de modo que exigir
     un árbol sin nada pendiente sería imposible de cumplir.
+
+    La distinción entre «no hay ninguno» y «no se ha podido averiguar» es la que
+    importa, y la primera versión las confundía: devolvía la tupla vacía cuando
+    Git fallaba, y un árbol que no se podía comprobar pasaba por limpio.
     """
     resultado = _git("status", "--porcelain", "--untracked-files=no")
     if resultado is None or resultado.returncode != 0:
-        return ()
+        return None
     lineas = resultado.stdout.decode("utf-8", errors="replace").splitlines()
     return tuple(linea[3:].strip() for linea in lineas if linea.strip())
 
@@ -536,6 +540,15 @@ def exigir_arbol_limpio(*, estricto: bool) -> tuple[str, ...]:
     estar desarrollando.
     """
     modificados = ficheros_con_seguimiento_modificados()
+    if modificados is None:
+        detalle = (
+            "no se ha podido averiguar el estado del árbol de trabajo: sin Git no hay "
+            "forma de comprobar que el código es el del commit que el manifiesto declara"
+        )
+        if estricto:
+            raise CongelacionInvalidaError(detalle)
+        print(f"AVISO: {detalle}")
+        return ()
     if not modificados:
         return ()
     if estricto:
