@@ -1,22 +1,23 @@
 {
   "anchor_id": "E19",
-  "frozen_at_commit": "8d3bd5c",
+  "frozen_at_commit": "163df72",
   "note": "Anclaje de la congelacion de E19. Se escribe DESPUES del commit de congelacion, que es lo que le permite nombrarlo: una huella guardada dentro del fichero que certifica no prueba nada, porque editar los dos a la vez pasaria cualquier comprobacion. Cubre las reglas y el estado congelado, no solo las reglas: un umbral o un caso elegible viven en el manifiesto.",
   "guarantee": "no impide un cambio posterior; impide que sea silencioso. Todo cambio despues de la congelacion exige dos commits visibles, el que edita el fichero y el que mueve este anclaje.",
   "supersedes": {
-    "frozen_at_commit": "e77d730",
-    "reason": "el indice pasa a estar anclado por huella de contenido y no solo por recuentos: un fragmento sustituido deja el numero de filas igual y cambia lo que el sistema encuentra. Con el conjunto de prueba cerrado y sin ningun resultado delante.",
+    "frozen_at_commit": "8d3bd5c",
+    "reason": "los pesos del adaptador pasan a estar anclados por huella y la huella del indice cubre el texto, el tipo de documento y el nivel de autoridad. Las dos cosas viven fuera del control de versiones y la comprobacion del arbol no las ve. Con el conjunto de prueba cerrado y sin ningun resultado delante.",
     "date": "2026-10-01",
     "chain": [
       "345beba",
       "af26819",
       "e77d730",
-      "8d3bd5c"
+      "8d3bd5c",
+      "163df72"
     ]
   },
   "files": {
-    "docs/methodology/congelacion-anotacion-e19.md": "d8c938d736033f84",
-    "configs/manifest_e19.json": "d04c43e459a382d0"
+    "docs/methodology/congelacion-anotacion-e19.md": "0f83ed8cba84782f",
+    "configs/manifest_e19.json": "1e3ff643a19a0d02"
   },
   "enforced_by": "tests/test_congelacion_e19.py"
 }
