@@ -131,10 +131,19 @@ class SentenceTransformerProvider(EmbeddingProvider):
         model_name: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
         device: str | None = None,
         batch_size: int = 64,
+        revision: str | None = None,
     ) -> None:
         self._model_name = model_name
         self._device = device
         self._batch_size = batch_size
+        self._revision = revision
+        """Revisión exacta de los pesos, cuando quien llama la exige.
+
+        Por omisión es `None` y el modelo se carga por nombre, que es el
+        comportamiento con que se midieron las fases anteriores. La evaluación final
+        la pasa: cargar por nombre resuelve la rama principal, y si esa rama avanza,
+        la misma orden carga otros pesos.
+        """
         self._modelo: object | None = None
         self._dimension: int | None = None
 
@@ -146,7 +155,11 @@ class SentenceTransformerProvider(EmbeddingProvider):
                 import torch
 
                 self._device = "mps" if torch.backends.mps.is_available() else "cpu"
-            modelo = SentenceTransformer(self._model_name, device=self._device)
+            modelo = (
+                SentenceTransformer(self._model_name, device=self._device, revision=self._revision)
+                if self._revision
+                else SentenceTransformer(self._model_name, device=self._device)
+            )
             # El nombre del método cambió entre versiones; se prueban ambos en
             # lugar de fijar una versión concreta de la librería.
             obtener = getattr(

@@ -725,11 +725,15 @@ def metricas_de_diagnostico(ctx: Contexto, particion: str) -> dict[str, Any]:
     }
 
 
-def _redactor(llm: str) -> Any:
-    """El proveedor de lenguaje, construido una sola vez por ejecución."""
+def _redactor(llm: str, revision: str | None = None) -> Any:
+    """El proveedor de lenguaje, construido una sola vez por ejecución.
+
+    Con `revision` carga esos pesos exactos. Sin ella carga por nombre, que resuelve
+    la rama principal: si esa rama avanza, la misma orden carga otro modelo.
+    """
     from mecanico_ia_exp.llm.provider import get_llm
 
-    return get_llm(llm)
+    return get_llm(llm, **({"revision": revision} if revision else {}))
 
 
 def ejecutar_caso(
@@ -1110,7 +1114,14 @@ def run_final_evaluation(
     # cargan por nombre y sus pesos los administra una caché de terceros.
     revisiones = exigir_revisiones_congeladas(manifiesto, estricto=particion == "test")
 
-    provider = get_provider("multilingual")
+    provider = get_provider(
+        "multilingual",
+        **(
+            {"revision": manifiesto["controlled_state"]["embedding"]["revision"]}
+            if manifiesto["controlled_state"]["embedding"].get("revision")
+            else {}
+        ),
+    )
     espacio = espacio_de(provider)
     exigir_espacio_congelado(manifiesto, espacio, estricto=particion == "test")
 
@@ -1167,7 +1178,11 @@ def run_final_evaluation(
 
     # El redactor, antes de sellar: si faltara su adaptador, el fallo tiene que ser
     # de preparación y no una ejecución no completada con la anotación ya sellada.
-    redactor = _redactor(llm) if llm else None
+    redactor = (
+        _redactor(llm, manifiesto["controlled_state"]["writer"].get("base_model_revision"))
+        if llm
+        else None
+    )
 
     sufijo = sufijo_de(particion, intento)
     if particion == "test":
