@@ -1,16 +1,16 @@
 # Declaración formal de apertura del conjunto de prueba (E19)
 
-**Estado: BORRADOR, pendiente de aprobación del autor. El conjunto de prueba sigue cerrado.**
+**Estado: APROBADA. El conjunto de prueba se abrió el 2 de octubre de 2026, poco antes de las
+02:31:30 UTC.**
 
-Este documento no abre nada por existir. Es el texto que el autor aprueba y firma, y la
-aprobación es lo que autoriza ejecutar E19. Hasta entonces el cargador sigue lanzando una
-excepción y ninguna cifra de la memoria procede de la partición de prueba.
+Este documento no abría nada por existir: era el texto que el autor tenía que aprobar, y su
+aprobación es lo que autorizó ejecutar E19. La sección 10 registra qué pasó con esa ejecución.
 
 | | |
 |---|---|
 | **Redactada** | 1 de octubre de 2026 |
-| **Aprobada** | `[PENDIENTE: fecha y hora que el autor escriba al aprobarla]` |
-| **Ejecutada** | la marca de tiempo exacta la escribe el propio registro en su campo `executed_at`, en UTC, junto al commit y al estado del árbol |
+| **Aprobada** | 1 de octubre de 2026, por el autor, con la autorización literal `OPEN_TEST_AND_RUN_E19` y la instrucción de ejecutar **una sola vez** siguiendo exactamente la orden de la sección 9 |
+| **Ejecutada** | 2 de octubre de 2026, en el commit `5b64504` con el árbol limpio. La marca registrada, **02:31:30 UTC**, es la del **sellado de la anotación**, que es lo que el artefacto escribe en su campo `executed_at`. La apertura de la partición ocurre antes, en el mismo recorrido: el cargador la imprime sin marca de tiempo y esa salida de consola se perdió, de modo que 02:31:30 UTC es la cota superior disponible y no un instante observado |
 
 ## 1. Qué se abre y por qué
 
@@ -27,7 +27,7 @@ antes de mirar la partición. Lo único que queda por hacer con el conjunto de p
 
 | Pieza | Valor |
 |---|---|
-| **Commit de la ejecución** | `4fd2be8` en el momento de redactar esta declaración. Si al ejecutar fuera otro, el registro lo dirá y habrá que justificar la diferencia |
+| **Commit de la ejecución** | `4fd2be8` al redactar la declaración; `5b64504` al ejecutarla. La diferencia son dos commits y ninguno toca código ni ficheros congelados: el que añade esta declaración y el que apunta a ella desde el plan de E19. Queda justificada aquí y comprobable con `git diff --stat 4fd2be8..5b64504` |
 | **Reglas congeladas** | `docs/methodology/congelacion-anotacion-e19.md`, huella `7ef74d8a6ffa45fa` |
 | **Estado congelado** | `configs/manifest_e19.json`, huella `6ddaf83854e23a54` |
 | **Anclaje** | `configs/congelacion-e19.anchor.json`, commit de congelación `de6207f` |
@@ -154,15 +154,41 @@ y no una corrección de esta.
 Que se abra la partición de prueba una vez, en las condiciones de la sección 2, para medir lo de la
 sección 4, con la razón escrita de la sección 1, sabiendo lo de las secciones 6 a 8.
 
-La orden que ejecuta esta declaración, una vez aprobada:
+La orden que ejecutó esta declaración, tal como se lanzó el 1 de octubre de 2026:
 
 ```
 uv run mecanico-exp final-evaluation \
   --partition test \
   --open-test \
-  --reason "Evaluacion final E19 autorizada por el autor el <fecha>; declaracion en docs/methodology/declaracion-apertura-e19.md; reglas congeladas en el commit de6207f" \
+  --reason "Evaluacion final E19 autorizada por el autor el 2026-10-01; declaracion en docs/methodology/declaracion-apertura-e19.md; reglas congeladas en el commit de6207f" \
   --llm transformers-lora@slm_lora_v2
 ```
 
-`[AUTHOR_DECISION_REQUIRED]` — aprobación, fecha y hora. Sin eso, este documento es un borrador y
-el conjunto de prueba sigue cerrado.
+**Aprobación registrada:** el autor aprobó esta declaración el 1 de octubre de 2026 con la
+autorización literal `OPEN_TEST_AND_RUN_E19` y la instrucción de ejecutar una sola vez con esta
+orden. Esa aprobación es la base documental de la apertura y no caduca: la sección 10 explica por qué
+no produjo mediciones y qué exige el procedimiento para el intento siguiente, que **sí** necesita una
+autorización nueva, porque es una versión experimental nueva.
+
+## 10. Qué ocurrió con la ejecución autorizada
+
+**La ejecución quedó interrumpida y no produjo ninguna medición.** Está registrada en
+`docs/experiments/incidencia-e19-01.md`, con la causa y con lo que sí se conserva.
+
+En resumen: las diez comprobaciones de la congelación pasaron, el índice y los modelos coincidieron
+con lo congelado, el redactor se cargó antes de abrir, la partición se abrió con su razón escrita, el
+bosque predijo sobre las 98 ventanas, se generaron las ejecuciones de los tres estratos y **se selló
+la anotación** —`experiments/E19_anotacion.json`, huella `57d0e3c33e9ef82f`, sellada a las 02:31:30
+UTC, que es la única marca de tiempo que quedó de la ejecución—. El proceso terminó
+después de eso, al cerrarse la sesión de trabajo, antes de completar el recorrido de los casos. No
+hay cifras de suficiencia, de trazabilidad ni de redacción, y no sobrevivió nada parcial.
+
+Es la condición de invalidez «interrupción del proceso» de la sección 6, de modo que se aplica lo que
+esta declaración ya ordenaba: la ejecución se conserva con su motivo documentado, y una repetición es
+una **versión experimental nueva** con su propio identificador de intento que no sustituye a esta. El
+nombre `E19_anotacion.json` está ocupado y el ejecutor se detiene si alguien lo intenta sin
+identificador.
+
+Lo que **no** cambia: ni los umbrales, ni los casos, ni las reglas, ni los modelos, ni las consultas,
+ni la política. La aprobación de esta declaración sigue siendo válida y el diseño sigue congelado.
+Lo único que falta para medir es que el autor autorice el intento siguiente.
