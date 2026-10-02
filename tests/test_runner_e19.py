@@ -669,6 +669,9 @@ def test_el_resumen_de_redaccion_conserva_las_salidas_y_sus_recuentos() -> None:
             self.fake_citations = ["c1"] * falsas
             self.schema_error = esquema
             self.raw = None
+            # `output` es lo que distingue una salida bien formada de una que el
+            # esquema rechazó, al margen de sus citas.
+            self.output = None if esquema else object()
 
         def to_dict(self) -> dict[str, Any]:
             return {"valid": self.valid, "schema_error": self.schema_error}
@@ -680,18 +683,23 @@ def test_el_resumen_de_redaccion_conserva_las_salidas_y_sus_recuentos() -> None:
 
     pares = [
         par(EjecucionFalsa(valid=True, respected=True, falsas=0, esquema=False)),
-        par(EjecucionFalsa(valid=True, respected=False, falsas=2, esquema=False)),
+        # Bien formada y con una cita fuera de lo entregado: la propiedad `valid`
+        # del agente la da por inválida, y la sección 9 publica las dos cosas por
+        # separado.
+        par(EjecucionFalsa(valid=False, respected=False, falsas=2, esquema=False)),
         par(EjecucionFalsa(valid=False, respected=None, falsas=0, esquema=True)),
     ]
     resumen = resumen_de_redaccion(pares, llm="echo")
 
     assert resumen["summary"] == {
         "n_runs": 3,
-        "valid_outputs": 2,
+        "schema_valid_outputs": 2,
+        "schema_errors": 1,
+        "runs_with_fake_citations": 1,
+        "fake_citations": 2,
         "respected_verdict": 1,
         "n_evaluable_for_verdict": 2,
-        "fake_citations": 2,
-        "schema_errors": 1,
+        "schema_valid_and_without_fake_citations": 1,
     }
     assert len(resumen["runs"]) == 3
     assert resumen["prompt_version"]
