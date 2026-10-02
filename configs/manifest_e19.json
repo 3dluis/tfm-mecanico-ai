@@ -85,8 +85,8 @@
       "corpus_version": "0.1.0",
       "n_chunks": 6158,
       "n_source_files": 3055,
-      "content_fingerprint_16": "7b2768ded087fd20",
-      "fingerprint_definition": "sha256 de chunk_id|sha256(text)|source_file|dtc_codes|engine_codes|document_type|authority_level de cada fragmento del vehiculo, en orden de chunk_id. Se usa el texto y no la columna que lo resume, que podria quedarse igual mientras el texto cambia, y se incluyen el tipo de documento y el nivel de autoridad porque la reordenacion por autoridad manda sobre la similitud",
+      "content_fingerprint_16": "7ac722bdda12595d",
+      "fingerprint_definition": "sha256 de chunk_id|row_to_json(fragmento)|row_to_json(documento) de cada fragmento del vehiculo, en orden de chunk_id. Se incluye la fila completa y no una seleccion de campos: elegir campos obliga a acertar la lista, y la lista crece (texto, fichero, codigos de averia y de motor, tipo de documento y nivel de autoridad para la reordenacion, seccion para la clasificacion del fragmento, document_id para el recuento de fuentes distintas). Una migracion del esquema cambia la huella, y debe cambiarla",
       "reindex": "no"
     },
     "embedding": {
