@@ -1321,3 +1321,28 @@ def test_un_estrato_repetido_no_se_mide_dos_veces() -> None:
             estratos=("operativo", "comparativo", "adverso", "operativo"),
             llm="transformers-lora@slm_lora_v2",
         )
+
+
+def test_la_version_del_prompt_tiene_que_ser_la_congelada(manifiesto: dict[str, Any]) -> None:
+    """Las comprobaciones del redactor cubrían su nombre, su adaptador y los pesos
+    de su base, y no esto: el prompt es parte de lo que produce la salida."""
+    from mecanico_ia_exp.experiments.congelacion import exigir_prompt_congelado
+    from mecanico_ia_exp.llm.agent import PROMPT_VERSION
+
+    assert exigir_prompt_congelado(manifiesto) == PROMPT_VERSION
+
+    falseado = json.loads(json.dumps(manifiesto))
+    falseado["controlled_state"]["writer"]["prompt_version"] = "agent-2099-01-01"
+    with pytest.raises(CongelacionInvalidaError, match="versión de prompt congelada"):
+        exigir_prompt_congelado(falseado)
+
+
+def test_el_redactor_se_carga_antes_de_abrir_la_particion() -> None:
+    """Un modelo base incompleto fallaría con la partición ya abierta: sería una
+    apertura del conjunto reservado que no hacía falta."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+
+    fuente = inspeccion.getsource(final_runner.run_final_evaluation)
+    assert fuente.index("redactor.warmup()") < fuente.index("ctx = preparar(")
