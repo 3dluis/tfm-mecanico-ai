@@ -458,6 +458,41 @@ class PgVectorStore(VectorStore):
             huella.update(b"\n")
         return huella.hexdigest()[:16]
 
+    def vectors_fingerprint(self, *, vehicle_id: str, identidad: EmbeddingIdentity) -> str:
+        """Huella de los **vectores** indexados del espacio declarado.
+
+        Es la última pieza que decidía el resultado y no estaba cubierta: la
+        búsqueda ordena por distancia al vector, de modo que sustituir un vector
+        --dejando intactos el fragmento, sus metadatos y la identidad del espacio--
+        cambia qué evidencia se recupera y, con ella, las tasas de abstención, sin
+        que ningún recuento ni la huella del contenido se muevan.
+
+        El vector se lee como texto para que la huella no dependa de cómo el
+        controlador materialice el tipo.
+        """
+        huella = hashlib.sha256()
+        with self._engine.connect() as cx:
+            filas = cx.execute(
+                sa.text(
+                    "SELECT e.chunk_id, e.vector::text "
+                    f"FROM {ESQUEMA}.embedding e "
+                    f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                    "WHERE c.vehicle_id = :v AND e.embedding_provider = :p "
+                    "AND e.embedding_model = :m AND e.embedding_dimension = :d "
+                    "AND e.embedding_version = :r ORDER BY e.chunk_id"
+                ),
+                {
+                    "v": vehicle_id,
+                    "p": identidad.provider,
+                    "m": identidad.model,
+                    "d": identidad.dimension,
+                    "r": identidad.version,
+                },
+            ).all()
+        for chunk_id, vector in filas:
+            huella.update(f"{chunk_id}|{vector}\n".encode())
+        return huella.hexdigest()[:16]
+
     def search(
         self,
         query_vector: npt.NDArray[np.float32],

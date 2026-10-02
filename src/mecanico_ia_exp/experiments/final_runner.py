@@ -1116,6 +1116,9 @@ def run_final_evaluation(
             sonda.corpus_counts(vehicle_id=VEHICULO, identidad=provider.identity),
             estricto=particion == "test",
             fingerprint=sonda.corpus_fingerprint(vehicle_id=VEHICULO),
+            vectors_fingerprint=sonda.vectors_fingerprint(
+                vehicle_id=VEHICULO, identidad=provider.identity
+            ),
         )
     finally:
         sonda.dispose()

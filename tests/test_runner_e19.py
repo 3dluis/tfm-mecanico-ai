@@ -1097,3 +1097,48 @@ def test_el_redactor_se_valida_antes_de_sellar_la_anotacion() -> None:
     fuente = inspeccion.getsource(final_runner.run_final_evaluation)
     assert fuente.index("_redactor(llm)") < fuente.index("sellar_anotacion(")
     assert fuente.index("exigir_redactor_disponible(") < fuente.index("sellar_anotacion(")
+
+
+def test_un_vector_sustituido_tambien_detiene(manifiesto: dict[str, Any]) -> None:
+    """La búsqueda ordena por distancia al vector: sustituir uno cambia qué
+    evidencia se recupera sin que ningún recuento ni la huella del contenido se
+    muevan. Era la última pieza que decidía el resultado y no estaba cubierta."""
+    from mecanico_ia_exp.experiments.congelacion import exigir_corpus_congelado
+
+    congelado = manifiesto["controlled_state"]["corpus"]
+    completo = {
+        "n_chunks": congelado["n_chunks"],
+        "n_source_files": congelado["n_source_files"],
+        "n_vectors_in_space": congelado["n_chunks"],
+    }
+    vectores = manifiesto["controlled_state"]["embedding"]["vectors_fingerprint_16"]
+    assert exigir_corpus_congelado(
+        manifiesto,
+        completo,
+        estricto=True,
+        fingerprint=congelado["content_fingerprint_16"],
+        vectors_fingerprint=vectores,
+    )["matches"]
+
+    with pytest.raises(CongelacionInvalidaError, match="huella de los vectores"):
+        exigir_corpus_congelado(
+            manifiesto,
+            completo,
+            estricto=True,
+            fingerprint=congelado["content_fingerprint_16"],
+            vectors_fingerprint="0" * 16,
+        )
+
+
+def test_la_huella_de_los_vectores_los_lee_del_espacio_declarado() -> None:
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.store import PgVectorStore
+
+    fuente = inspeccion.getsource(PgVectorStore.vectors_fingerprint)
+    assert "e.vector::text" in fuente, (
+        "el vector se lee como texto, no como lo materialice el driver"
+    )
+    for columna in ("embedding_provider", "embedding_dimension", "embedding_version"):
+        assert columna in fuente, f"la huella debe acotarse al espacio por {columna}"
+    assert "ORDER BY e.chunk_id" in fuente
