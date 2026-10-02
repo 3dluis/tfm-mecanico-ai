@@ -545,6 +545,7 @@ def exigir_corpus_congelado(
     *,
     estricto: bool,
     fingerprint: str | None = None,
+    vectors_fingerprint: str | None = None,
 ) -> dict[str, Any]:
     """El índice tiene que tener el corpus congelado completo.
 
@@ -576,9 +577,31 @@ def exigir_corpus_congelado(
         diferencias.append(
             f"huella de contenido: indexada {fingerprint}, congelada {huella_congelada}"
         )
+
+    # Y los vectores: la búsqueda ordena por distancia al vector, de modo que
+    # sustituir uno cambia qué evidencia se recupera sin mover ningún recuento.
+    vectores_congelados = manifiesto["controlled_state"]["embedding"].get("vectors_fingerprint_16")
+    if (
+        vectores_congelados
+        and vectors_fingerprint is not None
+        and vectors_fingerprint != vectores_congelados
+    ):
+        diferencias.append(
+            f"huella de los vectores: indexada {vectors_fingerprint}, "
+            f"congelada {vectores_congelados}"
+        )
+
     resultado = {
-        "declared": {**esperado, "content_fingerprint_16": huella_congelada},
-        "indexed": {**dict(recuentos), "content_fingerprint_16": fingerprint},
+        "declared": {
+            **esperado,
+            "content_fingerprint_16": huella_congelada,
+            "vectors_fingerprint_16": vectores_congelados,
+        },
+        "indexed": {
+            **dict(recuentos),
+            "content_fingerprint_16": fingerprint,
+            "vectors_fingerprint_16": vectors_fingerprint,
+        },
         "matches": not diferencias,
     }
     if not diferencias:
