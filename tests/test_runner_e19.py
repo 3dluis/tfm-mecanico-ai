@@ -1515,3 +1515,18 @@ def test_el_registro_declara_que_el_texto_de_consulta_no_es_ciego() -> None:
     fuente = inspeccion.getsource(final_runner.documento_final)
     assert '"query_text_not_blind": True' in fuente
     assert '"declared_limitation"' in fuente
+
+
+def test_la_referencia_mayoritaria_sale_de_la_particion_evaluada_y_se_declara() -> None:
+    """Las reglas congeladas piden la clase mayoritaria de la propia partición, y
+    elegirla mira las etiquetas de lo que se evalúa: es una referencia asistida y hay
+    que decirlo. Se publica además la misma medida con la clase mayoritaria de
+    entrenamiento, que es la que el sistema podría haber elegido sin mirar."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+
+    fuente = inspeccion.getsource(final_runner.metricas_de_diagnostico)
+    assert "np.unique(y, return_counts=True)" in fuente, "la mayoritaria sale de la partición"
+    assert "majority_class_source" in fuente, "la referencia asistida se declara"
+    assert "majority_baseline_from_train" in fuente

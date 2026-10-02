@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_final_evaluation",
-  "commit": "530f87adfe489b0ffa999b5c6eb8a86ff827cd86",
+  "commit": "2552dee5ed68748bd305f1572e636e8d69d2f20e",
   "dirty": true,
-  "executed_at": "2026-10-02T02:14:34.869440+00:00",
+  "executed_at": "2026-10-02T02:17:18.389894+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -37,7 +37,7 @@
   },
   "annotation": {
     "file": "E19_anotacion_validation.json",
-    "sha256_16": "67e599fc1df84ad3",
+    "sha256_16": "ec380c1ab15d1f4f",
     "written_before_any_measurement": true
   },
   "freeze_verification": {
@@ -142,7 +142,62 @@
   "diagnosis": {
     "partition": "validation",
     "majority_class": "F00_normal",
+    "majority_class_source": "la clase mas frecuente de la propia particion, como piden las reglas congeladas; elegirla mira las etiquetas de lo que se evalua, de modo que es una referencia asistida",
     "majority_baseline": {
+      "partition": "validation",
+      "n": 98,
+      "accuracy": 0.2857,
+      "macro_f1": 0.0741,
+      "weighted_f1": 0.127,
+      "balanced_accuracy": 0.1667,
+      "calibration": {},
+      "per_class": [
+        {
+          "label": "F00_normal",
+          "precision": 0.2857,
+          "recall": 1.0,
+          "f1": 0.4444,
+          "support": 28
+        },
+        {
+          "label": "F01_vacuum_leak",
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 14
+        },
+        {
+          "label": "F02_maf_drift",
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 14
+        },
+        {
+          "label": "F03_thermostat_stuck",
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 14
+        },
+        {
+          "label": "F04_o2_lag",
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 14
+        },
+        {
+          "label": "F05_misfire",
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 14
+        }
+      ]
+    },
+    "majority_class_from_train": "F00_normal",
+    "majority_baseline_from_train": {
       "partition": "validation",
       "n": 98,
       "accuracy": 0.2857,
