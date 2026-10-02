@@ -65,9 +65,13 @@ variante léxica de la ablación, que es una medición nueva y no entra en la ev
    entradas permitidas, las dos tasas de error, las métricas publicables y las agregaciones
    prohibidas, las versiones exactas y el criterio de invalidez. Nada de esto requirió leer una sola
    ventana de prueba: solo el reparto de sesiones, que el propio diseño del reparto ya fijaba.
-2. **Declarar la apertura del conjunto de prueba** con su razón escrita y registrarla. El cargador
-   exige ambas cosas de forma explícita y las imprime en la salida de la ejecución. Hasta aquí no se
-   ha leído ninguna ventana de la partición.
+2. **Declarar la apertura del conjunto de prueba** con su razón escrita y registrarla. El texto
+   está redactado en `docs/methodology/declaracion-apertura-e19.md`, con el estado congelado, los
+   recuentos esperados, las métricas que se publicarán, la confirmación de que el conjunto no se ha
+   usado, lo que invalidaría la ejecución y la regla de que un resultado desfavorable no la repite;
+   falta la aprobación del autor, que es lo que autoriza ejecutar. El cargador exige la declaración
+   y la razón de forma explícita y las imprime en la salida de la ejecución. Hasta aquí no se ha
+   leído ninguna ventana de la partición.
 3. **Instanciar la anotación** aplicando las reglas del paso 1 a las ventanas ya accesibles:
    calcular las predicciones, escribir la anotación completa a un artefacto y **registrar su
    huella** antes de ejecutar la verificación de suficiencia. Así, que la anotación no se ajustó a
