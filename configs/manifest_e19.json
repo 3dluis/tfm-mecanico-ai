@@ -93,7 +93,9 @@
       "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
       "dimension": 384,
       "space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
-      "device_requirement": "el mismo dispositivo que produjo los vectores indexados"
+      "device_requirement": "el mismo dispositivo que produjo los vectores indexados",
+      "vectors_fingerprint_16": "ad0b27a17798d042",
+      "fingerprint_definition": "sha256 de chunk_id|vector::text de cada vector del espacio declarado, en orden de chunk_id. La busqueda ordena por distancia al vector: sustituir uno cambia que evidencia se recupera sin que ningun recuento ni la huella del contenido se muevan"
     },
     "oracle_channels": {
       "O2_retrieval_scoped_by": "clase predicha, nunca la etiqueta anotada",

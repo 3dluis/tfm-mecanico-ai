@@ -301,7 +301,7 @@ intervalos que presupongan ejecuciones independientes.
 | Conjunto de datos | `synthetic_v2`, 588 ventanas, 139 descriptores, `dataset_type: synthetic`, con la **huella de los cuatro ficheros** que la ejecución lee |
 | Modelo de diagnóstico | bosque aleatorio, 400 árboles, hoja mínima 2, pesos equilibrados, calibración isotónica con validación cruzada de 5 pliegues ajustada **sobre entrenamiento** |
 | Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar, con **huella de contenido** del índice |
-| Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados |
+| Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados, con la **huella de los vectores** |
 | Recuperación | guiada por el diagnóstico, profundidad 10, filtros de vehículo y motor, reordenación por autoridad |
 | Redactor | `transformers-lora@slm_lora_v2`, prompt `agent-2026-09-04`, sin reentrenar, con la **huella de sus pesos** |
 | Código | el commit que se registre en el artefacto, con el árbol limpio |
@@ -328,6 +328,11 @@ que lo resume, que podría quedarse igual mientras el texto cambia--, fichero de
 avería, códigos de motor, y el tipo de documento y el nivel de autoridad, porque la reordenación por
 autoridad manda sobre la similitud y cambiarlos cambia qué evidencia llega al verificador sin tocar
 un solo fragmento.
+
+**Y por qué también los vectores.** La búsqueda ordena por distancia al vector, de modo que
+sustituir un vector --dejando intactos el fragmento, sus metadatos y la identidad del espacio--
+cambia qué evidencia se recupera y, con ella, las tasas, sin que ningún recuento ni la huella del
+contenido se muevan. Era la última pieza que decidía el resultado y no estaba cubierta.
 
 **Y por qué el adaptador también.** Los pesos están fuera del control de versiones, de modo que la
 comprobación del árbol no los ve: sustituirlos por otros válidos habría publicado las métricas de
