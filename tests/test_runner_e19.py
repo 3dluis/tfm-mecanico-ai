@@ -1300,3 +1300,16 @@ def test_la_comprobacion_del_espacio_se_acota_al_vehiculo_evaluado() -> None:
     assert "vehicle_id" in inspeccion.signature(PgVectorStore.spaces_for_model).parameters
     fuente = inspeccion.getsource(PgVectorStore.spaces_for_model)
     assert "c.vehicle_id = :v" in fuente
+
+
+def test_un_estrato_repetido_no_se_mide_dos_veces() -> None:
+    """Ejecutaría sus casos dos veces con el mismo identificador, duplicando
+    denominadores y tasas en un artefacto que se declara evaluación final."""
+    with pytest.raises(ValueError, match="estratos repetidos"):
+        run_final_evaluation(
+            particion="test",
+            open_test=True,
+            reason="declaración de apertura de prueba",
+            estratos=("operativo", "comparativo", "adverso", "operativo"),
+            llm="transformers-lora@slm_lora_v2",
+        )
