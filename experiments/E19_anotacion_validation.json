@@ -1,0 +1,689 @@
+{
+  "experiment_id": "E19_anotacion",
+  "commit": "daa48097c5c6f6a9c873d05eccaf90ddae175f1e",
+  "dirty": true,
+  "executed_at": "2026-10-02T00:35:30.618296+00:00",
+  "seed": 20260901,
+  "dataset_id": "synthetic_v2",
+  "dataset_type": "synthetic",
+  "goldset": "goldset_mazda3_bk.yaml",
+  "status": "ENSAYO_DEL_EJECUTOR",
+  "note": "ensayo del ejecutor sobre la particion validation: NO es un resultado de E19 y la memoria no lo cita. Existe para auditar el recorrido antes de abrir el conjunto de prueba",
+  "partition": "validation",
+  "verifier_version": "v2.2",
+  "frozen_rules": {
+    "file": "docs/methodology/congelacion-anotacion-e19.md",
+    "anchor_file": "configs/congelacion-e19.anchor.json",
+    "frozen_at_commit": "af26819",
+    "files": {
+      "docs/methodology/congelacion-anotacion-e19.md": "62c6dabbf632ea30",
+      "configs/manifest_e19.json": "df4e646ac0d08c64"
+    }
+  },
+  "freeze_verification": {
+    "status": "PASS",
+    "checks": [
+      {
+        "check": "huellas_de_lo_congelado",
+        "status": "PASS",
+        "detail": "2 fichero(s) con la huella declarada"
+      },
+      {
+        "check": "objeto_del_commit_de_congelacion",
+        "status": "PASS",
+        "detail": "lo congelado coincide con el objeto del commit af26819"
+      },
+      {
+        "check": "sin_commits_posteriores_a_la_congelacion",
+        "status": "PASS",
+        "detail": "ningún commit posterior a af26819 toca lo congelado"
+      },
+      {
+        "check": "politica_canonica_declarada",
+        "status": "PASS",
+        "detail": "la evaluación final se mide con v2.2"
+      },
+      {
+        "check": "umbrales",
+        "status": "PASS",
+        "detail": "los umbrales del código son los congelados"
+      },
+      {
+        "check": "semilla_y_modelo",
+        "status": "PASS",
+        "detail": "semilla 20260901 y bosque como el congelado"
+      },
+      {
+        "check": "conjunto_anotado",
+        "status": "PASS",
+        "detail": "configs/goldset_mazda3_bk.yaml con la huella declarada; consultas reutilizadas"
+      },
+      {
+        "check": "casos_elegibles",
+        "status": "PASS",
+        "detail": "11 casos elegibles, con la condición de evidencia que el conjunto anota"
+      },
+      {
+        "check": "reparto_declarado",
+        "status": "PASS",
+        "detail": "el reparto de sesiones es el congelado, sin leer ninguna ventana"
+      }
+    ]
+  },
+  "expected_decision_rule": {
+    "rule": "EXPLICA si y solo si (1) el indice contiene evidencia documental admisible para la condicion que genero la ventana y (2) la clase predicha coincide con la etiqueta; ABSTIENE en cualquier otro caso",
+    "admissible_evidence": "el procedimiento diagnostico que Mazda publica para el DTC de la condicion en la variante del motor Z6",
+    "allowed_inputs": [
+      "meta.label (etiqueta verdadera)",
+      "clase predicha por el recorrido evaluado: predicted_class de la atribucion, del bosque sin calibrar",
+      "corpus_variant del caso anotado"
+    ],
+    "forbidden_inputs": [
+      "veredicto del verificador de suficiencia",
+      "motivos de la decision",
+      "cobertura de afirmaciones",
+      "numero de fragmentos aplicables",
+      "numero de fuentes distintas",
+      "resultado de las cuatro comprobaciones de soporte",
+      "requisito de la puerta de codigos"
+    ],
+    "non_circularity": "la anotacion es el referente contra el que se mide la politica; si se derivara de sus salidas, el acuerdo seria una tautologia",
+    "instantiation_order": [
+      "abrir la particion con declaracion y razon escrita",
+      "calcular las predicciones del modelo",
+      "escribir la anotacion completa a un artefacto y registrar su huella",
+      "solo entonces ejecutar la verificacion de suficiencia"
+    ]
+  },
+  "primary_stratum": "operativo",
+  "strata": {
+    "operativo": {
+      "answers_pi": true,
+      "denominators": {
+        "total": {
+          "n_runs": 22,
+          "n_windows": 10,
+          "n_sessions": 10
+        },
+        "expected_explain": {
+          "n_runs": 8,
+          "n_windows": 8,
+          "n_sessions": 8
+        },
+        "expected_abstain": {
+          "n_runs": 14,
+          "n_windows": 7,
+          "n_sessions": 7
+        },
+        "full_evidence": {
+          "n_runs": 10,
+          "n_windows": 10,
+          "n_sessions": 10
+        }
+      },
+      "runs": [
+        {
+          "run_id": "C01_maf_drift@F02_maf_drift__highway__01@120s",
+          "case_id_gold": "C01_maf_drift",
+          "stratum": "operativo",
+          "fault_id": "F02_maf_drift",
+          "corpus_variant": "FULL",
+          "window_id": "F02_maf_drift__highway__01@120s",
+          "session_id": "F02_maf_drift__highway__01",
+          "t_start": 120.0,
+          "label": "F02_maf_drift",
+          "predicted_class": "F02_maf_drift",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C01_maf_drift@F02_maf_drift__urban__04@120s",
+          "case_id_gold": "C01_maf_drift",
+          "stratum": "operativo",
+          "fault_id": "F02_maf_drift",
+          "corpus_variant": "FULL",
+          "window_id": "F02_maf_drift__urban__04@120s",
+          "session_id": "F02_maf_drift__urban__04",
+          "t_start": 120.0,
+          "label": "F02_maf_drift",
+          "predicted_class": "F02_maf_drift",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
+          "case_id_gold": "C02_thermostat_stuck",
+          "stratum": "operativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "FULL",
+          "window_id": "F03_thermostat_stuck__urban__08@120s",
+          "session_id": "F03_thermostat_stuck__urban__08",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F03_thermostat_stuck",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@120s",
+          "case_id_gold": "C02_thermostat_stuck",
+          "stratum": "operativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "FULL",
+          "window_id": "F03_thermostat_stuck__warmup__03@120s",
+          "session_id": "F03_thermostat_stuck__warmup__03",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F00_normal",
+          "prediction_correct": false,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C03_o2_slow_response@F04_o2_lag__idle__02@120s",
+          "case_id_gold": "C03_o2_slow_response",
+          "stratum": "operativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "FULL",
+          "window_id": "F04_o2_lag__idle__02@120s",
+          "session_id": "F04_o2_lag__idle__02",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C03_o2_slow_response@F04_o2_lag__urban__00@120s",
+          "case_id_gold": "C03_o2_slow_response",
+          "stratum": "operativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "FULL",
+          "window_id": "F04_o2_lag__urban__00@120s",
+          "session_id": "F04_o2_lag__urban__00",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C04_misfire@F05_misfire__highway__09@120s",
+          "case_id_gold": "C04_misfire",
+          "stratum": "operativo",
+          "fault_id": "F05_misfire",
+          "corpus_variant": "FULL",
+          "window_id": "F05_misfire__highway__09@120s",
+          "session_id": "F05_misfire__highway__09",
+          "t_start": 120.0,
+          "label": "F05_misfire",
+          "predicted_class": "F00_normal",
+          "prediction_correct": false,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C04_misfire@F05_misfire__urban__00@120s",
+          "case_id_gold": "C04_misfire",
+          "stratum": "operativo",
+          "fault_id": "F05_misfire",
+          "corpus_variant": "FULL",
+          "window_id": "F05_misfire__urban__00@120s",
+          "session_id": "F05_misfire__urban__00",
+          "t_start": 120.0,
+          "label": "F05_misfire",
+          "predicted_class": "F05_misfire",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
+          "case_id_gold": "C05_vacuum_leak",
+          "stratum": "operativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "FULL",
+          "window_id": "F01_vacuum_leak__idle__10@120s",
+          "session_id": "F01_vacuum_leak__idle__10",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C05_vacuum_leak@F01_vacuum_leak__warmup__03@120s",
+          "case_id_gold": "C05_vacuum_leak",
+          "stratum": "operativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "FULL",
+          "window_id": "F01_vacuum_leak__warmup__03@120s",
+          "session_id": "F01_vacuum_leak__warmup__03",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
+          "case_id_gold": "C06_vacuum_leak_evidencia_retirada",
+          "stratum": "operativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "ABSENT",
+          "window_id": "F01_vacuum_leak__idle__10@120s",
+          "session_id": "F01_vacuum_leak__idle__10",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__warmup__03@120s",
+          "case_id_gold": "C06_vacuum_leak_evidencia_retirada",
+          "stratum": "operativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "ABSENT",
+          "window_id": "F01_vacuum_leak__warmup__03@120s",
+          "session_id": "F01_vacuum_leak__warmup__03",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C07_partial@F01_vacuum_leak__idle__10@120s",
+          "case_id_gold": "C07_partial",
+          "stratum": "operativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F01_vacuum_leak__idle__10@120s",
+          "session_id": "F01_vacuum_leak__idle__10",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C07_partial@F01_vacuum_leak__warmup__03@120s",
+          "case_id_gold": "C07_partial",
+          "stratum": "operativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F01_vacuum_leak__warmup__03@120s",
+          "session_id": "F01_vacuum_leak__warmup__03",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
+          "case_id_gold": "C10_thermostat_absent",
+          "stratum": "operativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "ABSENT",
+          "window_id": "F03_thermostat_stuck__urban__08@120s",
+          "session_id": "F03_thermostat_stuck__urban__08",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F03_thermostat_stuck",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__warmup__03@120s",
+          "case_id_gold": "C10_thermostat_absent",
+          "stratum": "operativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "ABSENT",
+          "window_id": "F03_thermostat_stuck__warmup__03@120s",
+          "session_id": "F03_thermostat_stuck__warmup__03",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F00_normal",
+          "prediction_correct": false,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
+          "case_id_gold": "C11_thermostat_partial",
+          "stratum": "operativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F03_thermostat_stuck__urban__08@120s",
+          "session_id": "F03_thermostat_stuck__urban__08",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F03_thermostat_stuck",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__warmup__03@120s",
+          "case_id_gold": "C11_thermostat_partial",
+          "stratum": "operativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F03_thermostat_stuck__warmup__03@120s",
+          "session_id": "F03_thermostat_stuck__warmup__03",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F00_normal",
+          "prediction_correct": false,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C14_o2_absent@F04_o2_lag__idle__02@120s",
+          "case_id_gold": "C14_o2_absent",
+          "stratum": "operativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "ABSENT",
+          "window_id": "F04_o2_lag__idle__02@120s",
+          "session_id": "F04_o2_lag__idle__02",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C14_o2_absent@F04_o2_lag__urban__00@120s",
+          "case_id_gold": "C14_o2_absent",
+          "stratum": "operativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "ABSENT",
+          "window_id": "F04_o2_lag__urban__00@120s",
+          "session_id": "F04_o2_lag__urban__00",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C15_o2_partial@F04_o2_lag__idle__02@120s",
+          "case_id_gold": "C15_o2_partial",
+          "stratum": "operativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F04_o2_lag__idle__02@120s",
+          "session_id": "F04_o2_lag__idle__02",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C15_o2_partial@F04_o2_lag__urban__00@120s",
+          "case_id_gold": "C15_o2_partial",
+          "stratum": "operativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F04_o2_lag__urban__00@120s",
+          "session_id": "F04_o2_lag__urban__00",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        }
+      ]
+    },
+    "comparativo": {
+      "answers_pi": false,
+      "denominators": {
+        "total": {
+          "n_runs": 11,
+          "n_windows": 5,
+          "n_sessions": 5
+        },
+        "expected_explain": {
+          "n_runs": 5,
+          "n_windows": 5,
+          "n_sessions": 5
+        },
+        "expected_abstain": {
+          "n_runs": 6,
+          "n_windows": 3,
+          "n_sessions": 3
+        },
+        "full_evidence": {
+          "n_runs": 5,
+          "n_windows": 5,
+          "n_sessions": 5
+        }
+      },
+      "runs": [
+        {
+          "run_id": "C01_maf_drift@F02_maf_drift__highway__01@120s",
+          "case_id_gold": "C01_maf_drift",
+          "stratum": "comparativo",
+          "fault_id": "F02_maf_drift",
+          "corpus_variant": "FULL",
+          "window_id": "F02_maf_drift__highway__01@120s",
+          "session_id": "F02_maf_drift__highway__01",
+          "t_start": 120.0,
+          "label": "F02_maf_drift",
+          "predicted_class": "F02_maf_drift",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
+          "case_id_gold": "C02_thermostat_stuck",
+          "stratum": "comparativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "FULL",
+          "window_id": "F03_thermostat_stuck__urban__08@120s",
+          "session_id": "F03_thermostat_stuck__urban__08",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F03_thermostat_stuck",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C03_o2_slow_response@F04_o2_lag__idle__02@120s",
+          "case_id_gold": "C03_o2_slow_response",
+          "stratum": "comparativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "FULL",
+          "window_id": "F04_o2_lag__idle__02@120s",
+          "session_id": "F04_o2_lag__idle__02",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C04_misfire@F05_misfire__highway__09@180s",
+          "case_id_gold": "C04_misfire",
+          "stratum": "comparativo",
+          "fault_id": "F05_misfire",
+          "corpus_variant": "FULL",
+          "window_id": "F05_misfire__highway__09@180s",
+          "session_id": "F05_misfire__highway__09",
+          "t_start": 180.0,
+          "label": "F05_misfire",
+          "predicted_class": "F05_misfire",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
+          "case_id_gold": "C05_vacuum_leak",
+          "stratum": "comparativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "FULL",
+          "window_id": "F01_vacuum_leak__idle__10@120s",
+          "session_id": "F01_vacuum_leak__idle__10",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "EXPLAIN"
+        },
+        {
+          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
+          "case_id_gold": "C06_vacuum_leak_evidencia_retirada",
+          "stratum": "comparativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "ABSENT",
+          "window_id": "F01_vacuum_leak__idle__10@120s",
+          "session_id": "F01_vacuum_leak__idle__10",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C07_partial@F01_vacuum_leak__idle__10@120s",
+          "case_id_gold": "C07_partial",
+          "stratum": "comparativo",
+          "fault_id": "F01_vacuum_leak",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F01_vacuum_leak__idle__10@120s",
+          "session_id": "F01_vacuum_leak__idle__10",
+          "t_start": 120.0,
+          "label": "F01_vacuum_leak",
+          "predicted_class": "F01_vacuum_leak",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
+          "case_id_gold": "C10_thermostat_absent",
+          "stratum": "comparativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "ABSENT",
+          "window_id": "F03_thermostat_stuck__urban__08@120s",
+          "session_id": "F03_thermostat_stuck__urban__08",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F03_thermostat_stuck",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
+          "case_id_gold": "C11_thermostat_partial",
+          "stratum": "comparativo",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F03_thermostat_stuck__urban__08@120s",
+          "session_id": "F03_thermostat_stuck__urban__08",
+          "t_start": 120.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F03_thermostat_stuck",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C14_o2_absent@F04_o2_lag__idle__02@120s",
+          "case_id_gold": "C14_o2_absent",
+          "stratum": "comparativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "ABSENT",
+          "window_id": "F04_o2_lag__idle__02@120s",
+          "session_id": "F04_o2_lag__idle__02",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C15_o2_partial@F04_o2_lag__idle__02@120s",
+          "case_id_gold": "C15_o2_partial",
+          "stratum": "comparativo",
+          "fault_id": "F04_o2_lag",
+          "corpus_variant": "PARTIAL",
+          "window_id": "F04_o2_lag__idle__02@120s",
+          "session_id": "F04_o2_lag__idle__02",
+          "t_start": 120.0,
+          "label": "F04_o2_lag",
+          "predicted_class": "F04_o2_lag",
+          "prediction_correct": true,
+          "expected_decision": "ABSTAIN"
+        }
+      ]
+    },
+    "adverso": {
+      "answers_pi": false,
+      "denominators": {
+        "total": {
+          "n_runs": 2,
+          "n_windows": 2,
+          "n_sessions": 2
+        },
+        "expected_explain": {
+          "n_runs": 0,
+          "n_windows": 0,
+          "n_sessions": 0
+        },
+        "expected_abstain": {
+          "n_runs": 2,
+          "n_windows": 2,
+          "n_sessions": 2
+        },
+        "full_evidence": {
+          "n_runs": 2,
+          "n_windows": 2,
+          "n_sessions": 2
+        }
+      },
+      "runs": [
+        {
+          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@300s",
+          "case_id_gold": "C02_thermostat_stuck",
+          "stratum": "adverso",
+          "fault_id": "F03_thermostat_stuck",
+          "corpus_variant": "FULL",
+          "window_id": "F03_thermostat_stuck__warmup__03@300s",
+          "session_id": "F03_thermostat_stuck__warmup__03",
+          "t_start": 300.0,
+          "label": "F03_thermostat_stuck",
+          "predicted_class": "F00_normal",
+          "prediction_correct": false,
+          "expected_decision": "ABSTAIN"
+        },
+        {
+          "run_id": "C04_misfire@F05_misfire__highway__09@480s",
+          "case_id_gold": "C04_misfire",
+          "stratum": "adverso",
+          "fault_id": "F05_misfire",
+          "corpus_variant": "FULL",
+          "window_id": "F05_misfire__highway__09@480s",
+          "session_id": "F05_misfire__highway__09",
+          "t_start": 480.0,
+          "label": "F05_misfire",
+          "predicted_class": "F00_normal",
+          "prediction_correct": false,
+          "expected_decision": "ABSTAIN"
+        }
+      ]
+    }
+  },
+  "non_evaluable": [
+    {
+      "case_id_gold": "C01_maf_drift",
+      "stratum": "adverso",
+      "reason": "no evaluable por ausencia de ventanas del tipo que la regla pide"
+    },
+    {
+      "case_id_gold": "C03_o2_slow_response",
+      "stratum": "adverso",
+      "reason": "no evaluable por ausencia de ventanas del tipo que la regla pide"
+    },
+    {
+      "case_id_gold": "C05_vacuum_leak",
+      "stratum": "adverso",
+      "reason": "no evaluable por ausencia de ventanas del tipo que la regla pide"
+    }
+  ]
+}

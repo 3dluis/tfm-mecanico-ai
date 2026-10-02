@@ -21,6 +21,12 @@ mirado:
 
 Reglas: `docs/methodology/congelacion-anotacion-e19.md`. Estado congelado:
 `configs/manifest_e19.json`. Ninguna de las dos cosas se reescribe desde aquí.
+
+Un detalle del registro, para que no se lea como lo que no es: el campo `dirty`
+de la cabecera saldrá **cierto** incluso con el árbol limpio, porque la anotación
+se escribe --y se sella-- antes del registro y en ese momento es un fichero sin
+seguimiento. La condición que hay que comprobar antes de ejecutar es que ningún
+fichero **con seguimiento** esté modificado.
 """
 
 from __future__ import annotations
