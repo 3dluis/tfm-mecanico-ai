@@ -85,8 +85,8 @@
       "corpus_version": "0.1.0",
       "n_chunks": 6158,
       "n_source_files": 3055,
-      "content_fingerprint_16": "14aaa3a4962b493b",
-      "fingerprint_definition": "sha256 de chunk_id|content_hash|source_file|dtc_codes|engine_codes de cada fragmento del vehiculo, en orden de chunk_id; los recuentos no detectan una sustitucion y un indice que devuelve menos evidencia produce abstenciones que parecen legitimas",
+      "content_fingerprint_16": "7b2768ded087fd20",
+      "fingerprint_definition": "sha256 de chunk_id|sha256(text)|source_file|dtc_codes|engine_codes|document_type|authority_level de cada fragmento del vehiculo, en orden de chunk_id. Se usa el texto y no la columna que lo resume, que podria quedarse igual mientras el texto cambia, y se incluyen el tipo de documento y el nivel de autoridad porque la reordenacion por autoridad manda sobre la similitud",
       "reindex": "no"
     },
     "embedding": {
@@ -113,6 +113,11 @@
     "writer": {
       "llm": "transformers-lora@slm_lora_v2",
       "prompt_version": "agent-2026-09-04",
+      "files": {
+        "models/slm_lora_v2/adapter_config.json": "14e9db475a79943f",
+        "models/slm_lora_v2/adapter_model.safetensors": "e6fccee67dc370bd"
+      },
+      "why_the_weights_are_hashed": "estan fuera del control de versiones, de modo que la comprobacion del arbol no los ve: sustituirlos por otros validos habria publicado las metricas de redaccion de otro modelo bajo el nombre del congelado",
       "retrain": "no se reentrena el adaptador para E19"
     },
     "tree_state": "limpio; si no fuera posible, el motivo se escribe en el informe de fase"

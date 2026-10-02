@@ -303,7 +303,7 @@ intervalos que presupongan ejecuciones independientes.
 | Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar, con **huella de contenido** del índice |
 | Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados |
 | Recuperación | guiada por el diagnóstico, profundidad 10, filtros de vehículo y motor, reordenación por autoridad |
-| Redactor | `transformers-lora@slm_lora_v2`, prompt `agent-2026-09-04`, sin reentrenar |
+| Redactor | `transformers-lora@slm_lora_v2`, prompt `agent-2026-09-04`, sin reentrenar, con la **huella de sus pesos** |
 | Código | el commit que se registre en el artefacto, con el árbol limpio |
 
 **Canales de oráculo, cerrados.** E19 se ejecuta con el recorrido no oracular: los códigos que
@@ -323,8 +323,16 @@ código de avería cambiado, deja el número de filas igual y cambia lo que el s
 índice que devuelve menos evidencia no da error: produce abstenciones que parecen legítimas, de modo
 que confirmaría la hipótesis por la razón equivocada y las cifras parecerían buenas. Es el fallo más
 peligroso de esta evaluación, y por eso el índice se comprueba por recuentos **y** por una huella
-construida sobre lo que decide una recuperación: identificador, huella del texto, fichero de origen,
-códigos de avería y códigos de motor de cada fragmento.
+construida sobre lo que decide una recuperación: identificador, huella del **texto** --no la columna
+que lo resume, que podría quedarse igual mientras el texto cambia--, fichero de origen, códigos de
+avería, códigos de motor, y el tipo de documento y el nivel de autoridad, porque la reordenación por
+autoridad manda sobre la similitud y cambiarlos cambia qué evidencia llega al verificador sin tocar
+un solo fragmento.
+
+**Y por qué el adaptador también.** Los pesos están fuera del control de versiones, de modo que la
+comprobación del árbol no los ve: sustituirlos por otros válidos habría publicado las métricas de
+redacción de otro modelo bajo el nombre del congelado. Se comprueban por huella, igual que el
+conjunto y el índice.
 
 **Por qué el conjunto lleva huella propia.** Los ficheros preprocesados están fuera del control de
 versiones --son binarios de varios megabytes-- de modo que la comprobación del árbol de trabajo no
