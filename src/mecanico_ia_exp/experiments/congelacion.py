@@ -468,14 +468,21 @@ def exigir_espacio_congelado(
     return space_id
 
 
-def exigir_redactor_disponible(llm: str) -> Path | None:
-    """El adaptador del redactor tiene que existir **antes** de sellar la anotación.
+def exigir_redactor_disponible(
+    llm: str, manifiesto: Mapping[str, Any] | None = None
+) -> Path | None:
+    """El adaptador del redactor, presente y **el congelado**, antes de sellar.
 
     La sección 8 clasifica un artefacto de entrada ausente como fallo de
     preparación, que se resuelve antes de ejecutar y no es un resultado. Si se
     descubriera después de sellar, el fallo quedaría registrado como una ejecución
     no completada y repetir exigiría un identificador de intento nuevo, cuando lo
     único que pasaba era que faltaba un fichero.
+
+    Con `manifiesto` se comprueba además la **huella de los pesos**. Están fuera del
+    control de versiones, de modo que la comprobación del árbol no los ve:
+    sustituirlos por otros válidos publicaría las métricas de redacción de otro
+    modelo bajo el nombre del congelado.
     """
     from mecanico_ia_exp.llm.provider import adapter_dir_from_name
 
@@ -509,6 +516,26 @@ def exigir_redactor_disponible(llm: str) -> Path | None:
             "sección 8 clasifica esto como fallo de preparación, no como resultado."
         )
         raise CongelacionInvalidaError(msg)
+
+    if manifiesto is not None:
+        declarados = manifiesto["controlled_state"]["writer"].get("files") or {}
+        distintos = []
+        for ruta, declarada in declarados.items():
+            fichero = paths.ROOT / ruta
+            if not fichero.is_file():
+                distintos.append(f"{ruta} no existe")
+                continue
+            actual = huella(fichero)
+            if actual != declarada:
+                distintos.append(f"{ruta}: huella {actual}, declarada {declarada}")
+        if distintos:
+            msg = (
+                "los pesos del redactor no son los congelados: "
+                + "; ".join(distintos)
+                + ". Las métricas de redacción describirían otro modelo bajo el nombre "
+                "del congelado."
+            )
+            raise CongelacionInvalidaError(msg)
     return directorio
 
 

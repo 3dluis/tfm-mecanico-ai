@@ -1080,7 +1080,7 @@ def run_final_evaluation(
             )
             raise RedactorRequeridoError(msg)
         exigir_redactor_congelado(manifiesto, llm)
-        exigir_redactor_disponible(llm)
+        exigir_redactor_disponible(llm, manifiesto)
 
     # Después de la declaración, y antes de cargar nada: el árbol tiene que estar
     # limpio en los ficheros con seguimiento. El orden importa, porque pedir la
