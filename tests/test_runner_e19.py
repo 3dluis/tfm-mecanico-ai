@@ -32,6 +32,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     exigir_espacio_congelado,
     exigir_politica_canonica,
     exigir_redactor_congelado,
+    exigir_redactor_disponible,
     verificar,
 )
 from mecanico_ia_exp.experiments.final_runner import (
@@ -965,3 +966,53 @@ def test_la_trazabilidad_se_publica_agregada_y_con_su_denominador() -> None:
     assert resultado["n_runs"] == 2
     assert resultado["n_sessions"] == 2
     assert "propiedad del verificador" in resultado["note"]
+
+
+def test_el_recuento_de_vectores_filtra_por_la_identidad_completa_del_espacio() -> None:
+    """Filtrar por nombre de modelo dejaba pasar un índice con vectores producidos
+    en CPU bajo el mismo nombre mientras la consulta se vectoriza en otro espacio:
+    es la forma que tendría de reaparecer `MIXED-EMBEDDING-SPACE`."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.store import PgVectorStore
+
+    firma = inspeccion.signature(PgVectorStore.corpus_counts).parameters
+    assert "identidad" in firma
+    assert "embedding_model" not in firma
+    fuente = inspeccion.getsource(PgVectorStore.corpus_counts)
+    for columna in (
+        "embedding_provider",
+        "embedding_model",
+        "embedding_dimension",
+        "embedding_version",
+    ):
+        assert columna in fuente, f"el recuento debe filtrar por {columna}"
+
+
+def test_el_adaptador_que_falta_es_un_fallo_de_preparacion(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """La sección 8 lo clasifica así: se resuelve antes de ejecutar y no es un
+    resultado. Descubrirlo después de sellar la anotación lo habría convertido en
+    una ejecución no completada, y repetir habría exigido un intento nuevo."""
+    from mecanico_ia_exp.experiments import congelacion
+
+    assert exigir_redactor_disponible("echo") is None
+    assert exigir_redactor_disponible("transformers-lora@slm_lora_v2") is not None
+
+    monkeypatch.setattr(congelacion.paths, "ROOT", tmp_path)
+    with pytest.raises(CongelacionInvalidaError, match="fallo de preparación"):
+        congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2")
+
+
+def test_el_redactor_se_valida_antes_de_sellar_la_anotacion() -> None:
+    """El orden importa: la anotación sellada es el referente de la ejecución, y
+    sellarla para descubrir después que falta un fichero deja un rastro que habla
+    de un fallo del sistema cuando era un fallo de preparación."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+
+    fuente = inspeccion.getsource(final_runner.run_final_evaluation)
+    assert fuente.index("_redactor(llm)") < fuente.index("sellar_anotacion(")
+    assert fuente.index("exigir_redactor_disponible(") < fuente.index("sellar_anotacion(")

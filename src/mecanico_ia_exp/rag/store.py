@@ -368,7 +368,7 @@ class PgVectorStore(VectorStore):
             filas = conexion.execute(sa.text("SELECT DISTINCT embedding_model FROM rag.embedding"))
             return frozenset(str(f[0]) for f in filas)
 
-    def corpus_counts(self, *, vehicle_id: str, embedding_model: str) -> dict[str, int]:
+    def corpus_counts(self, *, vehicle_id: str, identidad: EmbeddingIdentity) -> dict[str, int]:
         """Fragmentos, ficheros de origen y vectores indexados de un vehículo.
 
         Existe para una comprobación que no puede hacerse de otra manera: un índice
@@ -376,6 +376,12 @@ class PgVectorStore(VectorStore):
         como una abstención legítima. La evaluación final compara estos recuentos
         con los congelados antes de medir, porque la sección 11 del documento de
         congelación trata un índice incompleto como motivo de invalidez.
+
+        Los vectores se cuentan por la identidad **completa** del espacio y no por
+        el nombre del modelo: el proveedor incluye el dispositivo, y un índice con
+        vectores producidos en CPU bajo el mismo nombre de modelo pasaría un filtro
+        por nombre mientras la consulta se vectoriza en otro espacio. Es la forma
+        que tendría de reaparecer `MIXED-EMBEDDING-SPACE`.
         """
         with self._engine.connect() as cx:
             fragmentos, ficheros = cx.execute(
@@ -389,9 +395,17 @@ class PgVectorStore(VectorStore):
                 sa.text(
                     f"SELECT count(*) FROM {ESQUEMA}.embedding e "
                     f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
-                    "WHERE c.vehicle_id = :v AND e.embedding_model = :m"
+                    "WHERE c.vehicle_id = :v AND e.embedding_provider = :p "
+                    "AND e.embedding_model = :m AND e.embedding_dimension = :d "
+                    "AND e.embedding_version = :r"
                 ),
-                {"v": vehicle_id, "m": embedding_model},
+                {
+                    "v": vehicle_id,
+                    "p": identidad.provider,
+                    "m": identidad.model,
+                    "d": identidad.dimension,
+                    "r": identidad.version,
+                },
             ).scalar_one()
         return {
             "n_chunks": int(fragmentos),

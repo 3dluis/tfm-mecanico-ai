@@ -468,6 +468,32 @@ def exigir_espacio_congelado(
     return space_id
 
 
+def exigir_redactor_disponible(llm: str) -> Path | None:
+    """El adaptador del redactor tiene que existir **antes** de sellar la anotación.
+
+    La sección 8 clasifica un artefacto de entrada ausente como fallo de
+    preparación, que se resuelve antes de ejecutar y no es un resultado. Si se
+    descubriera después de sellar, el fallo quedaría registrado como una ejecución
+    no completada y repetir exigiría un identificador de intento nuevo, cuando lo
+    único que pasaba era que faltaba un fichero.
+    """
+    from mecanico_ia_exp.llm.provider import adapter_dir_from_name
+
+    relativo = adapter_dir_from_name(llm)
+    if relativo is None:
+        return None
+    directorio = paths.ROOT / relativo
+    configuracion = directorio / "adapter_config.json"
+    if not directorio.is_dir() or not configuracion.is_file():
+        msg = (
+            f"el redactor {llm!r} necesita el adaptador de {relativo}, y ahí no hay "
+            f"{'directorio' if not directorio.is_dir() else 'adapter_config.json'}. "
+            "Es un fallo de preparación: se resuelve antes de ejecutar."
+        )
+        raise CongelacionInvalidaError(msg)
+    return directorio
+
+
 def exigir_corpus_congelado(
     manifiesto: Mapping[str, Any], recuentos: Mapping[str, int], *, estricto: bool
 ) -> dict[str, Any]:
