@@ -928,8 +928,10 @@ def test_la_huella_del_indice_cubre_lo_que_decide_una_recuperacion() -> None:
     from mecanico_ia_exp.rag.store import PgVectorStore
 
     fuente = inspeccion.getsource(PgVectorStore.corpus_fingerprint)
-    for columna in ("chunk_id", "text", "source_file", "dtc_codes", "engine_codes"):
-        assert columna in fuente, f"la huella del índice debe cubrir {columna}"
+    assert "row_to_json(c)" in fuente and "row_to_json(d)" in fuente, (
+        "la huella cubre la fila completa del fragmento y la de su documento: elegir "
+        "campos obliga a acertar la lista, y la lista crece"
+    )
     assert "ORDER BY c.chunk_id" in fuente, "sin orden total la huella no es reproducible"
 
 
@@ -1080,10 +1082,9 @@ def test_la_huella_del_indice_cubre_el_texto_y_la_autoridad() -> None:
     from mecanico_ia_exp.rag.store import PgVectorStore
 
     fuente = inspeccion.getsource(PgVectorStore.corpus_fingerprint)
-    assert "c.text" in fuente
+    assert "row_to_json" in fuente, "la fila entera cubre el texto, la sección y la autoridad"
     assert "c.content_hash" not in fuente, "la huella no puede fiarse de la columna resumen"
-    for columna in ("d.document_type", "d.authority_level"):
-        assert columna in fuente, f"la huella del índice debe cubrir {columna}"
+    assert "JOIN" in fuente, "el documento aporta el tipo y el nivel de autoridad"
 
 
 def test_el_redactor_se_valida_antes_de_sellar_la_anotacion() -> None:
