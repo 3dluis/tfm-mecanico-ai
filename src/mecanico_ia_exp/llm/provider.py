@@ -95,6 +95,18 @@ class LLMProvider(ABC):
     ) -> LLMResponse:
         """Genera una respuesta a partir de la conversación."""
 
+    def warmup(self) -> None:  # noqa: B027 - un proveedor sin estado no carga nada
+        """Carga lo que haga falta, para que un fallo de carga ocurra **aquí**.
+
+        Los proveedores cargan de forma diferida, y eso es lo correcto: importar un
+        módulo no debe disparar la descarga de un modelo de tres mil millones de
+        parámetros. Pero en la evaluación final la carga diferida convierte un
+        artefacto de entrada ausente en una ejecución a medias, con la anotación ya
+        sellada, cuando lo que había era un fallo de preparación.
+
+        Por omisión no hace nada: un proveedor sin estado no tiene qué cargar.
+        """
+
 
 class EchoProvider(LLMProvider):
     """Proveedor determinista, sin red.
@@ -356,6 +368,10 @@ class TransformersProvider(LLMProvider):
         modelo.to(self._device)
         modelo.eval()
         self._modelo = modelo
+
+    def warmup(self) -> None:
+        """Carga el modelo base, funde el adaptador y deja todo listo."""
+        self._cargar()
 
     @property
     def identity(self) -> LLMIdentity:
