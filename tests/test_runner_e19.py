@@ -42,6 +42,7 @@ from mecanico_ia_exp.experiments.final_runner import (
     AnotacionIncoherenteError,
     AperturaNoDeclaradaError,
     CasoFinal,
+    RedactorRequeridoError,
     Ventana,
     casos_del_estrato,
     comparar_con_lo_declarado,
@@ -50,6 +51,7 @@ from mecanico_ia_exp.experiments.final_runner import (
     decision_esperada,
     denominadores,
     documento_anotacion,
+    documento_incidencias,
     orden_canonico,
     politicas_de_referencia,
     recuento,
@@ -681,3 +683,51 @@ def test_el_resumen_de_redaccion_conserva_las_salidas_y_sus_recuentos() -> None:
     }
     assert len(resumen["runs"]) == 3
     assert resumen["prompt_version"]
+
+
+def test_la_evaluacion_final_no_se_mide_sin_redactor() -> None:
+    """La sección 9 de las reglas congeladas no admite omitir ninguna de las
+    métricas que enumera, y tres son de redacción. Sin redactor el artefacto
+    quedaría incompleto declarándose completo."""
+    with pytest.raises(RedactorRequeridoError, match="métricas de redacción"):
+        run_final_evaluation(
+            particion="test", open_test=True, reason="declaración de apertura de prueba"
+        )
+
+
+def test_un_ensayo_si_puede_medirse_sin_redactor() -> None:
+    """La exigencia es de la evaluación final, no del ejecutor: un ensayo sobre
+    validación no publica nada."""
+    parametros = inspect.signature(run_final_evaluation).parameters
+    assert parametros["llm"].default is None
+
+
+def test_un_caso_que_no_termina_deja_su_traza_y_su_causa(tmp_path: Path) -> None:
+    """Sin este artefacto, un fallo a mitad de la evaluación final dejaría la
+    anotación sellada y ningún rastro de qué pasó después."""
+    completado = _caso("FULL", "s1", 0.0, EXPLICA)
+    documento = documento_incidencias(
+        particion="test",
+        dataset_id="synthetic_v2",
+        policy="v2.2",
+        ruta_anotacion=tmp_path / "E19_anotacion.json",
+        huella_anotacion="0123456789abcdef",
+        incidencias=[
+            {
+                "run_id": "C05_vacuum_leak@s2@0s",
+                "stratum": "operativo",
+                "cause": "OperationalError: la conexión se cerró",
+                "traceback": "Traceback (most recent call last): ...",
+            }
+        ],
+        completados=[completado],
+    )
+
+    assert documento["experiment_id"] == "E19_ejecucion_no_completada"
+    assert documento["n_completed_before_failure"] == 1
+    assert documento["completed_runs"] == [completado.ejecucion_id]
+    assert documento["annotation"]["sha256_16"] == "0123456789abcdef"
+    assert "secciones 8 y 11" in documento["validity_criterion"]
+    incidencia = documento["incidents"][0]
+    assert incidencia["cause"].startswith("OperationalError")
+    assert incidencia["traceback"]

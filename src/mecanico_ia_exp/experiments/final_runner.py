@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import traceback
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -130,6 +131,14 @@ class AperturaNoDeclaradaError(RuntimeError):
 
 class AnotacionIncoherenteError(RuntimeError):
     """Los denominadores de las tasas no son los que la anotación fijó."""
+
+
+class RedactorRequeridoError(RuntimeError):
+    """La evaluación final se ha pedido sin redactor, y sus métricas se publican."""
+
+
+class EjecucionNoCompletadaError(RuntimeError):
+    """Un caso no llegó a terminar; queda registrado y la ejecución se detiene."""
 
 
 # ---------------------------------------------------------------------------
@@ -760,6 +769,39 @@ def resumen_de_redaccion(
     }
 
 
+def documento_incidencias(
+    *,
+    particion: str,
+    dataset_id: str,
+    policy: str,
+    ruta_anotacion: Path,
+    huella_anotacion: str,
+    incidencias: Sequence[Mapping[str, Any]],
+    completados: Sequence[CasoFinal],
+) -> dict[str, Any]:
+    """El rastro de una ejecución que no terminó.
+
+    La regla congelada lo exige por escrito: un caso que produce una excepción se
+    registra como **no completado**, con su traza y su causa, antes de aplicar el
+    criterio de validez. Sin este artefacto, un fallo a mitad de la evaluación
+    final dejaría la anotación sellada y ningún rastro de qué pasó después, que es
+    la peor combinación posible para quien tenga que decidir si la ejecución fue
+    válida.
+    """
+    return {
+        "experiment_id": "E19_ejecucion_no_completada",
+        **condicion_del_artefacto(particion),
+        "partition": particion,
+        "dataset_id": dataset_id,
+        "verifier_version": policy,
+        "annotation": {"file": ruta_anotacion.name, "sha256_16": huella_anotacion},
+        "validity_criterion": "docs/methodology/congelacion-anotacion-e19.md, secciones 8 y 11",
+        "n_completed_before_failure": len(completados),
+        "completed_runs": [c.ejecucion_id for c in completados],
+        "incidents": [dict(i) for i in incidencias],
+    }
+
+
 def documento_final(
     *,
     particion: str,
@@ -884,6 +926,16 @@ def run_final_evaluation(
         )
         raise AperturaNoDeclaradaError(msg)
 
+    if particion == "test" and not llm:
+        msg = (
+            "la evaluación final publica las métricas de redacción --salidas válidas, "
+            "respeto del veredicto y citas fuera de lo entregado-- y la sección 9 de "
+            "las reglas congeladas no admite omitir ninguna de las que enumera. Sin "
+            "redactor, el artefacto quedaría incompleto declarándose completo. En un "
+            "ensayo sobre validación sí puede omitirse."
+        )
+        raise RedactorRequeridoError(msg)
+
     # Después de la declaración, y antes de cargar nada: el árbol tiene que estar
     # limpio en los ficheros con seguimiento. El orden importa, porque pedir la
     # partición de prueba sin declaración debe fallar por eso y no por el estado
@@ -969,23 +1021,70 @@ def run_final_evaluation(
     por_estrato: dict[str, list[tuple[CasoFinal, CasoVerificado]]] = {e: [] for e in estratos}
     confianzas: dict[str, float] = {}
     filas: list[dict[str, Any]] = []
+    completados: list[CasoFinal] = []
+    incidencias: list[dict[str, Any]] = []
     try:
         for caso in casos:
-            verificado, confianza = ejecutar_caso(
-                caso,
-                ctx=ctx,
-                store=store,
-                provider=provider,
-                verificador=verificador,
-                umbrales=umbrales,
-                policy=policy,
-                llm=llm,
-            )
+            try:
+                verificado, confianza = ejecutar_caso(
+                    caso,
+                    ctx=ctx,
+                    store=store,
+                    provider=provider,
+                    verificador=verificador,
+                    umbrales=umbrales,
+                    policy=policy,
+                    llm=llm,
+                )
+            except Exception as error:
+                # La regla congelada manda registrar el caso como no completado,
+                # con su traza y su causa, antes de aplicar el criterio de validez.
+                # Seguir con los demás daría tasas con denominadores que ya no son
+                # los anotados; pararse sin registrar perdería el rastro.
+                incidencias.append(
+                    {
+                        "run_id": caso.ejecucion_id,
+                        "stratum": caso.estrato,
+                        "cause": f"{type(error).__name__}: {error}",
+                        "traceback": traceback.format_exc(),
+                    }
+                )
+                break
             por_estrato[caso.estrato].append((caso, verificado))
             confianzas[caso.ejecucion_id] = confianza
             filas.append(fila_de(caso, verificado))
+            completados.append(caso)
     finally:
         store.dispose()
+
+    if incidencias:
+        destino = paths.ensure(paths.EXPERIMENTS) / f"E19_ejecucion_no_completada{sufijo}.json"
+        escribir(
+            destino,
+            documento_incidencias(
+                particion=particion,
+                dataset_id=dataset_id,
+                policy=policy,
+                ruta_anotacion=ruta_anotacion,
+                huella_anotacion=huella_anotacion,
+                incidencias=incidencias,
+                completados=completados,
+            ),
+            seed=ctx.configuracion.seed,
+            dataset_id=dataset_id,
+            dataset_type="synthetic",
+            goldset=GOLDSET.name,
+        )
+        msg = (
+            f"la ejecución se detuvo en {incidencias[0]['run_id']} tras completar "
+            f"{len(completados)} de {len(casos)} casos. El rastro queda en "
+            f"experiments/{destino.name}, con la traza y la causa, y la anotación "
+            f"sellada en {ruta_anotacion.name} sigue siendo el referente. Aplica el "
+            "criterio de validez de la sección 11 antes de repetir: el registro de una "
+            "ejecución inválida se conserva y la repetición es una versión nueva.\n"
+            f"{incidencias[0]['cause']}"
+        )
+        raise EjecucionNoCompletadaError(msg)
 
     for estrato in estratos:
         comprobar_denominadores(anotacion, [c for c, _ in por_estrato[estrato]], estrato)
