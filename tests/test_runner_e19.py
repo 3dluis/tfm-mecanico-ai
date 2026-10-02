@@ -1190,15 +1190,54 @@ def test_las_revisiones_de_los_modelos_de_inferencia_estan_congeladas(
 
     resultado = exigir_revisiones_congeladas(manifiesto, estricto=True)
     assert resultado["matches"]
-    assert resultado["in_cache"][embeddings["model"]] == embeddings["revision"]
+    assert resultado["snapshot_available"][embeddings["model"]] is True
 
     falseado = json.loads(json.dumps(manifiesto))
     falseado["controlled_state"]["embedding"]["revision"] = "f" * 40
-    with pytest.raises(CongelacionInvalidaError, match="no son las congeladas"):
+    with pytest.raises(CongelacionInvalidaError, match="no está descargada"):
         exigir_revisiones_congeladas(falseado, estricto=True)
     assert not exigir_revisiones_congeladas(falseado, estricto=False)["matches"]
 
     assert revision_en_cache("organizacion/modelo-que-no-existe") is None
+
+
+def test_lo_que_decide_es_la_instantanea_fijada_y_no_la_rama_principal(
+    manifiesto: dict[str, Any],
+) -> None:
+    """Los dos cargadores reciben la revisión congelada, de modo que una rama
+    principal que haya avanzado es irrelevante mientras la instantánea siga ahí.
+    Exigir que coincidieran habría bloqueado la evaluación final por un motivo
+    falso."""
+    from mecanico_ia_exp.experiments.congelacion import (
+        exigir_revisiones_congeladas,
+        instantanea_disponible,
+    )
+
+    embeddings = manifiesto["controlled_state"]["embedding"]
+    assert instantanea_disponible(embeddings["model"], embeddings["revision"])
+    assert not instantanea_disponible(embeddings["model"], "f" * 40)
+
+    resultado = exigir_revisiones_congeladas(manifiesto, estricto=True)
+    assert resultado["matches"]
+    assert "main_ref_in_cache" in resultado, "la rama principal se registra, no decide"
+
+
+def test_el_redactor_se_carga_antes_de_sellar_no_solo_se_construye() -> None:
+    """Construirlo no basta: los proveedores cargan de forma diferida, y un modelo
+    base incompleto fallaría en el primer caso, con la partición abierta y la
+    anotación sellada, convirtiendo un fallo de preparación en una ejecución a
+    medias."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+    from mecanico_ia_exp.llm.provider import EchoProvider, LLMProvider, TransformersProvider
+
+    assert hasattr(LLMProvider, "warmup")
+    EchoProvider().warmup()  # el proveedor sin estado no tiene qué cargar
+    assert "self._cargar()" in inspeccion.getsource(TransformersProvider.warmup)
+
+    fuente = inspeccion.getsource(final_runner.run_final_evaluation)
+    assert fuente.index("redactor.warmup()") < fuente.index("sellar_anotacion(")
 
 
 def test_los_dos_cargadores_reciben_la_revision_congelada() -> None:

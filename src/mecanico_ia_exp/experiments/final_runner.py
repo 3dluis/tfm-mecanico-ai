@@ -1176,13 +1176,18 @@ def run_final_evaluation(
         casos.extend(del_estrato)
         no_evaluables.extend(sin_ventana)
 
-    # El redactor, antes de sellar: si faltara su adaptador, el fallo tiene que ser
-    # de preparación y no una ejecución no completada con la anotación ya sellada.
+    # El redactor, **cargado** antes de sellar. Construirlo no basta: los
+    # proveedores cargan de forma diferida, y un modelo base incompleto fallaría en
+    # el primer caso, con la partición abierta y la anotación sellada, convirtiendo
+    # un fallo de preparación en una ejecución a medias.
     redactor = (
         _redactor(llm, manifiesto["controlled_state"]["writer"].get("base_model_revision"))
         if llm
         else None
     )
+    if redactor is not None:
+        print("cargando el redactor antes de sellar la anotación...")
+        redactor.warmup()
 
     sufijo = sufijo_de(particion, intento)
     if particion == "test":

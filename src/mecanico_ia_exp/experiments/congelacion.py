@@ -468,24 +468,24 @@ def exigir_espacio_congelado(
     return space_id
 
 
-def revision_en_cache(modelo: str) -> str | None:
-    """Revisión del modelo descargado, tal como la guarda la caché local.
-
-    Los dos modelos que intervienen en la inferencia --el que vectoriza la consulta
-    y el que redacta-- se cargan **por nombre**, sin revisión fijada. Si los pesos
-    cacheados cambiasen manteniendo el nombre, la evaluación final mediría otro
-    modelo bajo el nombre del congelado: ordenaría los vectores del índice con
-    consultas de otro espacio, o atribuiría las métricas de redacción a otro
-    adaptador fundido sobre otra base.
-
-    No se descarga nada aquí ni se consulta la red: se lee lo que hay. Devolver
-    `None` significa «no está en la caché local», que es distinto de «es otro».
-    """
+def _carpeta_en_cache(modelo: str) -> Path | None:
     try:
         from huggingface_hub import constants
     except ImportError:  # pragma: no cover - entorno sin la biblioteca
         return None
-    carpeta = Path(constants.HF_HUB_CACHE) / f"models--{modelo.replace('/', '--')}"
+    return Path(constants.HF_HUB_CACHE) / f"models--{modelo.replace('/', '--')}"
+
+
+def revision_en_cache(modelo: str) -> str | None:
+    """Revisión a la que apunta la rama principal en la caché local.
+
+    Es **informativa**: la rama principal se mueve, y lo que la ejecución carga es
+    la revisión que se le pasa al cargador. Se registra para poder decir, si alguna
+    vez hiciera falta, qué había en la máquina el día de la medición.
+    """
+    carpeta = _carpeta_en_cache(modelo)
+    if carpeta is None:
+        return None
     referencia = carpeta / "refs" / "main"
     if referencia.is_file():
         return referencia.read_text(encoding="utf-8").strip() or None
@@ -497,38 +497,64 @@ def revision_en_cache(modelo: str) -> str | None:
     return None
 
 
+def instantanea_disponible(modelo: str, revision: str) -> bool:
+    """Si la revisión **congelada** está descargada en la caché local.
+
+    Es lo que hay que comprobar, y no que la rama principal coincida con ella: los
+    dos cargadores reciben la revisión congelada, de modo que una rama principal que
+    haya avanzado es irrelevante mientras la instantánea fijada siga ahí. Exigir que
+    coincidieran habría bloqueado la evaluación final por un motivo falso.
+
+    No se descarga nada ni se consulta la red: se mira lo que hay.
+    """
+    carpeta = _carpeta_en_cache(modelo)
+    if carpeta is None:
+        return False
+    instantanea = carpeta / "snapshots" / revision
+    return instantanea.is_dir() and any(instantanea.iterdir())
+
+
 def exigir_revisiones_congeladas(
     manifiesto: Mapping[str, Any], *, estricto: bool
 ) -> dict[str, Any]:
-    """Las revisiones de los dos modelos de inferencia, contra las congeladas.
+    """Las revisiones congeladas de los dos modelos tienen que estar descargadas.
 
     Es la última dependencia que quedaba sin fijar, y la que menos se ve: el
     código está anclado por su commit, el índice y el adaptador por sus huellas, y
     los pesos que descarga una biblioteca de terceros no estaban en ninguna parte.
+
+    Lo que se comprueba es que **la instantánea fijada** está en la caché, no que la
+    rama principal coincida con ella: los dos cargadores reciben la revisión
+    congelada, de modo que una rama principal que haya avanzado es irrelevante.
     """
     estado = manifiesto["controlled_state"]
     declaradas = {
         estado["embedding"]["model"]: estado["embedding"].get("revision"),
         estado["writer"]["base_model"]: estado["writer"].get("base_model_revision"),
     }
-    observadas = {modelo: revision_en_cache(modelo) for modelo in declaradas}
-    diferencias = [
-        f"{modelo}: en caché {observadas[modelo]}, congelada {esperada}"
+    disponibles = {
+        modelo: (instantanea_disponible(modelo, esperada) if esperada else None)
         for modelo, esperada in declaradas.items()
-        if esperada and observadas[modelo] != esperada
+    }
+    diferencias = [
+        f"{modelo}: la revisión congelada {esperada} no está descargada"
+        for modelo, esperada in declaradas.items()
+        if esperada and not disponibles[modelo]
     ]
     resultado = {
         "declared": declaradas,
-        "in_cache": observadas,
+        "snapshot_available": disponibles,
+        # La rama principal se registra pero no decide: lo que se carga es la
+        # revisión congelada, que se le pasa al cargador.
+        "main_ref_in_cache": {modelo: revision_en_cache(modelo) for modelo in declaradas},
         "matches": not diferencias,
     }
     if not diferencias:
         return resultado
     msg = (
-        "las revisiones de los modelos de inferencia no son las congeladas: "
-        + "; ".join(diferencias)
-        + ". Se cargan por nombre, de modo que la ejecución mediría otro modelo bajo "
-        "el nombre del congelado."
+        "faltan en la caché local las revisiones congeladas de los modelos de "
+        "inferencia: " + "; ".join(diferencias) + ". Es un fallo de preparación: se "
+        "descargan antes de ejecutar."
     )
     if estricto:
         raise CongelacionInvalidaError(msg)
