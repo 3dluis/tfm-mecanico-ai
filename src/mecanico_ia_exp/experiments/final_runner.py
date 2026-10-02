@@ -58,7 +58,9 @@ from mecanico_ia_exp.experiments.congelacion import (
     casos_elegibles,
     exigir_arbol_limpio,
     exigir_dataset_congelado,
+    exigir_espacio_congelado,
     exigir_politica_canonica,
+    exigir_redactor_congelado,
     verificar,
 )
 from mecanico_ia_exp.experiments.registro import escribir
@@ -113,6 +115,16 @@ def condicion_del_artefacto(particion: str) -> dict[str, str]:
             "abrir el conjunto de prueba"
         ),
     }
+
+
+def espacio_de(provider: Any) -> str:
+    """Identificador del espacio vectorial del proveedor, con su dispositivo.
+
+    Se compone igual que en los registros de recuperación y de las ablaciones, para
+    que las tres cosas puedan compararse entre sí sin traducir nada.
+    """
+    identidad = provider.identity
+    return f"{identidad.provider}/{identidad.model}/d{identidad.dimension}/v{identidad.version}"
 
 
 def sufijo_de(particion: str, intento: str = "") -> str:
@@ -530,7 +542,7 @@ def tasas(pares: Sequence[tuple[CasoFinal, str]]) -> dict[str, Any]:
 
 def politicas_de_referencia(
     pares: Sequence[tuple[CasoFinal, str]],
-    confianzas: Mapping[str, float],
+    confianza_del_diagnostico: Mapping[str, float],
     *,
     min_confidence: float,
 ) -> dict[str, Any]:
@@ -539,10 +551,20 @@ def politicas_de_referencia(
     Sin ellas una tasa no dice nada: abstenerse siempre da falsa confianza cero,
     y explicar cuando el modelo confía es la puerta de confianza sola, que es lo
     que el criterio compuesto tiene que mejorar.
+
+    La confianza que entra aquí es la **probabilidad calibrada de la clase
+    predicha**, la misma que el criterio compara con el umbral. No es el máximo por
+    ventana: la calibración isotónica puede reordenar clases, y usar el máximo haría
+    que la política de referencia explicara casos que la puerta de confianza
+    rechaza, con lo que la referencia dejaría de ser la referencia.
     """
     siempre = [(c, ABSTIENE) for c, _ in pares]
     confia = [
-        (c, EXPLICA if confianzas[c.ejecucion_id] >= min_confidence else ABSTIENE) for c, _ in pares
+        (
+            c,
+            EXPLICA if confianza_del_diagnostico[c.ejecucion_id] >= min_confidence else ABSTIENE,
+        )
+        for c, _ in pares
     ]
     return {
         "abstain_always": tasas(siempre),
@@ -989,15 +1011,17 @@ def run_final_evaluation(
         )
         raise ValueError(msg)
 
-    if particion == "test" and not llm:
-        msg = (
-            "la evaluación final publica las métricas de redacción --salidas válidas, "
-            "respeto del veredicto y citas fuera de lo entregado-- y la sección 9 de "
-            "las reglas congeladas no admite omitir ninguna de las que enumera. Sin "
-            "redactor, el artefacto quedaría incompleto declarándose completo. En un "
-            "ensayo sobre validación sí puede omitirse."
-        )
-        raise RedactorRequeridoError(msg)
+    if particion == "test":
+        if not llm:
+            msg = (
+                "la evaluación final publica las métricas de redacción --salidas "
+                "válidas, respeto del veredicto y citas fuera de lo entregado-- y la "
+                "sección 9 de las reglas congeladas no admite omitir ninguna de las que "
+                "enumera. Sin redactor, el artefacto quedaría incompleto declarándose "
+                "completo. En un ensayo sobre validación sí puede omitirse."
+            )
+            raise RedactorRequeridoError(msg)
+        exigir_redactor_congelado(manifiesto, llm)
 
     # Después de la declaración, y antes de cargar nada: el árbol tiene que estar
     # limpio en los ficheros con seguimiento. El orden importa, porque pedir la
@@ -1016,9 +1040,20 @@ def run_final_evaluation(
     casos_gold = {str(c["case_id"]): c for c in gold["cases"]}
     elegibles = casos_elegibles(manifiesto)
 
+    # El proveedor se construye **antes** de cargar la partición, porque su espacio
+    # vectorial es una de las piezas congeladas y comprobarlo después significaría
+    # haber abierto el conjunto de prueba para descubrir que no se podía medir.
+    provider = get_provider("multilingual")
+    exigir_espacio_congelado(manifiesto, espacio_de(provider), estricto=particion == "test")
+
     ctx = preparar(dataset_id, particion=particion, allow_test=open_test, reason=reason)
     meta = ctx.evaluacion.meta
     predicciones = np.asarray(ctx.modelo.predict(ctx.evaluacion.features), dtype=np.str_)
+    # Dos confianzas distintas, y conviene no confundirlas: esta es el máximo por
+    # ventana, que es lo que la regla `A-1` usa para elegir el error más adverso. La
+    # que el criterio compara con el umbral, y la que las políticas de referencia
+    # necesitan, es la probabilidad calibrada **de la clase predicha**, que se
+    # recoge caso a caso en `confianza_del_diagnostico`.
     confianzas_ventana = np.asarray(
         ctx.calibrado.predict_proba(ctx.evaluacion.features), dtype=np.float64
     ).max(axis=1)
@@ -1081,10 +1116,9 @@ def run_final_evaluation(
     umbrales = SufficiencyThresholds()
     verificador = EvidenceVerifier(umbrales)
     store = PgVectorStore()
-    provider = get_provider("multilingual")
 
     por_estrato: dict[str, list[tuple[CasoFinal, CasoVerificado]]] = {e: [] for e in estratos}
-    confianzas: dict[str, float] = {}
+    confianza_del_diagnostico: dict[str, float] = {}
     filas: list[dict[str, Any]] = []
     completados: list[CasoFinal] = []
     incidencias: list[dict[str, Any]] = []
@@ -1116,7 +1150,7 @@ def run_final_evaluation(
                 )
                 break
             por_estrato[caso.estrato].append((caso, verificado))
-            confianzas[caso.ejecucion_id] = confianza
+            confianza_del_diagnostico[caso.ejecucion_id] = confianza
             filas.append(fila_de(caso, verificado))
             completados.append(caso)
     finally:
@@ -1203,7 +1237,7 @@ def run_final_evaluation(
             diagnostico=diagnostico,
             cotejo=cotejo,
             por_estrato=por_estrato,
-            confianzas=confianzas,
+            confianzas=confianza_del_diagnostico,
             llm=llm,
         ),
         seed=ctx.configuracion.seed,

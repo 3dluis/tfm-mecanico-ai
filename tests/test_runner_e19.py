@@ -29,7 +29,9 @@ from mecanico_ia_exp.experiments.congelacion import (
     cargar_manifiesto,
     casos_elegibles,
     exigir_dataset_congelado,
+    exigir_espacio_congelado,
     exigir_politica_canonica,
+    exigir_redactor_congelado,
     verificar,
 )
 from mecanico_ia_exp.experiments.final_runner import (
@@ -776,3 +778,48 @@ def test_la_evaluacion_final_no_puede_prescindir_del_estrato_primario() -> None:
             estratos=("comparativo",),
             llm="echo",
         )
+
+
+def test_la_evaluacion_final_exige_el_redactor_congelado(manifiesto: dict[str, Any]) -> None:
+    """Cualquier proveedor no vacío pasaba la comprobación de que hay redactor, de
+    modo que un `echo` --que ni razona ni respeta el veredicto-- podía producir las
+    métricas de redacción de la evaluación final."""
+    congelado = manifiesto["controlled_state"]["writer"]["llm"]
+    assert exigir_redactor_congelado(manifiesto, congelado) == congelado
+    with pytest.raises(CongelacionInvalidaError, match="el redactor congelado para E19"):
+        exigir_redactor_congelado(manifiesto, "echo")
+    with pytest.raises(CongelacionInvalidaError):
+        exigir_redactor_congelado(manifiesto, None)
+
+
+def test_el_espacio_vectorial_incluye_el_dispositivo_y_se_comprueba(
+    manifiesto: dict[str, Any],
+) -> None:
+    """En una máquina sin MPS el proveedor resuelve a CPU y produce vectores de otro
+    espacio. La recuperación filtra por nombre de modelo, de modo que compararía
+    espacios distintos sin avisar: es `MIXED-EMBEDDING-SPACE` otra vez."""
+    congelado = manifiesto["controlled_state"]["embedding"]["space_id"]
+    assert exigir_espacio_congelado(manifiesto, congelado, estricto=True) == congelado
+
+    en_cpu = congelado.replace("[mps]", "[cpu]")
+    with pytest.raises(CongelacionInvalidaError, match="espacio vectorial congelado"):
+        exigir_espacio_congelado(manifiesto, en_cpu, estricto=True)
+    # En un ensayo avisa y sigue: ahí no se publica nada.
+    assert exigir_espacio_congelado(manifiesto, en_cpu, estricto=False) == en_cpu
+
+
+def test_la_politica_de_referencia_usa_la_confianza_de_la_clase_predicha() -> None:
+    """La calibración isotónica puede reordenar clases: con el máximo por ventana,
+    la referencia explicaría casos que la puerta de confianza rechaza."""
+    caso = _caso("FULL", "s1", 0.0, EXPLICA)
+    pares = [(caso, ABSTIENE)]
+
+    bajo = politicas_de_referencia(pares, {caso.ejecucion_id: 0.60}, min_confidence=0.79)[
+        "explain_if_model_is_confident"
+    ]
+    alto = politicas_de_referencia(pares, {caso.ejecucion_id: 0.95}, min_confidence=0.79)[
+        "explain_if_model_is_confident"
+    ]
+
+    assert bajo["unnecessary_abstention"]["numerator"] == 1
+    assert alto["unnecessary_abstention"]["numerator"] == 0

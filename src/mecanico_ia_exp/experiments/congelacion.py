@@ -424,6 +424,50 @@ def exigir_politica_canonica(manifiesto: Mapping[str, Any], policy: str) -> str:
     return canonica
 
 
+def exigir_redactor_congelado(manifiesto: Mapping[str, Any], llm: str | None) -> str:
+    """El redactor de la evaluación final es el congelado, y no otro cualquiera.
+
+    Cualquier proveedor no vacío pasaba la comprobación de que hay redactor, de
+    modo que un `echo` --que ni razona ni respeta el veredicto-- podía producir las
+    métricas de redacción de un artefacto marcado como evaluación final.
+    """
+    congelado = str(manifiesto["controlled_state"]["writer"]["llm"])
+    if llm != congelado:
+        msg = (
+            f"el redactor congelado para E19 es {congelado!r} y se ha pedido {llm!r}. "
+            "Las métricas de redacción de la evaluación final describen ese adaptador "
+            "con ese prompt, no otro proveedor."
+        )
+        raise CongelacionInvalidaError(msg)
+    return congelado
+
+
+def exigir_espacio_congelado(
+    manifiesto: Mapping[str, Any], space_id: str, *, estricto: bool
+) -> str:
+    """El espacio vectorial de la consulta tiene que ser el del índice.
+
+    La identidad del proveedor incluye el **dispositivo**, y con razón: en una
+    máquina sin MPS el proveedor resuelve a CPU y produce vectores de otro espacio.
+    La recuperación filtra por nombre de modelo, de modo que compararía vectores de
+    consulta de un espacio con vectores indexados de otro y devolvería resultados
+    sin avisar. Es el mismo defecto que `MIXED-EMBEDDING-SPACE`, que ya obligó a
+    repetir una fase entera.
+    """
+    congelado = str(manifiesto["controlled_state"]["embedding"]["space_id"])
+    if space_id == congelado:
+        return congelado
+    msg = (
+        f"el espacio vectorial congelado es {congelado!r} y el proveedor resuelve a "
+        f"{space_id!r}. La identidad incluye el dispositivo: medir asi compararia "
+        "vectores de consulta de un espacio con vectores indexados de otro."
+    )
+    if estricto:
+        raise CongelacionInvalidaError(msg)
+    print(f"AVISO: {msg} En un ensayo se admite; en la evaluación final detendría.")
+    return space_id
+
+
 def ficheros_con_seguimiento_modificados() -> tuple[str, ...]:
     """Ficheros **con seguimiento** que están modificados en el árbol de trabajo.
 
