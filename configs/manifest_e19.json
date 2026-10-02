@@ -131,7 +131,7 @@
     "canonical_order": "session_id ascendente, luego t_start ascendente",
     "primary_stratum": {
       "name": "operativo",
-      "rule": "la primera ventana en orden canonico de cada una de las dos sesiones de prueba de cada condicion de fallo",
+      "rule": "la primera ventana en orden canonico, ENTRE LAS ETIQUETADAS CON ESA CONDICION, de cada una de las dos sesiones de prueba de cada condicion de fallo; en una sesion con averia las primeras ventanas llevan etiqueta de funcionamiento normal porque el fallo se inyecta tras un calentamiento",
       "consults_model": false,
       "n_windows": 10,
       "n_sessions": 10,

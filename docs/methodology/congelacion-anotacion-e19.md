@@ -6,6 +6,16 @@ gate de `docs/methodology/plan-e19-evaluacion-final.md`, la única que faltaba. 
 hace:** no abre el conjunto de prueba ni autoriza abrirlo. La apertura es una declaración
 posterior del autor, y este documento es uno de sus requisitos, no su sustituto.
 
+**Una precisión posterior, del 1 de octubre de 2026 y anterior a cualquier medición.** La regla
+primaria decía «la primera ventana en orden canónico» de cada sesión, y al implementarla apareció
+una ambigüedad real: en una sesión con fallo, las primeras ventanas están etiquetadas como
+funcionamiento normal, porque la avería se inyecta después de un calentamiento. La regla pasa a
+decir **la primera ventana etiquetada con esa condición**, que es la única lectura con sentido:
+una ventana sin el fallo no puede explicarse con la documentación de ese fallo. El cambio se hace
+con el conjunto de prueba cerrado, el número de ejecuciones no varía, y se ve en el historial como
+dos commits —el que edita lo congelado y el que mueve el anclaje—, que es exactamente el
+procedimiento que la sección 12 describe.
+
 **Tres correcciones de la revisión previa a la congelación** quedan incorporadas en esta versión,
 que es la revisada y la que el anclaje fija: la fuente de la clase predicha, que debe ser la que
 usa el recorrido evaluado y no la del modelo calibrado (sección 5); el anclaje de las huellas, que
@@ -97,8 +107,11 @@ La selección es determinista y no consulta al modelo. **Orden canónico:** `ses
 ascendente y, dentro de cada sesión, `t_start` ascendente.
 
 **Regla primaria (estrato operativo).** De cada una de las dos sesiones de prueba de cada
-condición de fallo se toma **la primera ventana en orden canónico**. Son diez ventanas, de diez
-sesiones distintas, dos por condición. Cada una se ejecuta bajo todas las condiciones de
+condición de fallo se toma **la primera ventana, en orden canónico, que esté etiquetada con esa
+condición**. La precisión importa: en una sesión con avería las primeras ventanas llevan etiqueta
+de funcionamiento normal, porque el fallo se inyecta tras un calentamiento, y una ventana sin el
+fallo no puede explicarse con la documentación de ese fallo. Son diez ventanas, de diez sesiones
+distintas, dos por condición. Cada una se ejecuta bajo todas las condiciones de
 evidencia que su fallo tenga en la tabla anterior: las de `F01`, `F03` y `F04` dan tres
 ejecuciones cada una, y las de `F02` y `F05`, una. Total: **veintidós ejecuciones sobre diez
 ventanas de diez sesiones**.
