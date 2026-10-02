@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_final_evaluation",
-  "commit": "fec867fd38405b76da9c883f1492695a5bf52f7b",
+  "commit": "e55fa7f80049193e650567772545903ba8a4c551",
   "dirty": true,
-  "executed_at": "2026-10-02T01:30:50.104850+00:00",
+  "executed_at": "2026-10-02T01:34:07.216869+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -35,7 +35,7 @@
   },
   "annotation": {
     "file": "E19_anotacion_validation.json",
-    "sha256_16": "c56a3db5f7ad022c",
+    "sha256_16": "1bfdf8ee70d6e359",
     "written_before_any_measurement": true
   },
   "freeze_verification": {
@@ -49,12 +49,12 @@
       {
         "check": "objeto_del_commit_de_congelacion",
         "status": "PASS",
-        "detail": "lo congelado coincide con el objeto del commit 9f33dbe"
+        "detail": "lo congelado coincide con el objeto del commit 4705a3f"
       },
       {
         "check": "sin_commits_posteriores_a_la_congelacion",
         "status": "PASS",
-        "detail": "ningún commit posterior a 9f33dbe toca lo congelado"
+        "detail": "ningún commit posterior a 4705a3f toca lo congelado"
       },
       {
         "check": "politica_canonica_declarada",
@@ -97,14 +97,14 @@
     "declared": {
       "n_chunks": 6158,
       "n_source_files": 3055,
-      "content_fingerprint_16": "7b2768ded087fd20",
+      "content_fingerprint_16": "7ac722bdda12595d",
       "vectors_fingerprint_16": "ad0b27a17798d042"
     },
     "indexed": {
       "n_chunks": 6158,
       "n_source_files": 3055,
       "n_vectors_in_space": 6158,
-      "content_fingerprint_16": "7b2768ded087fd20",
+      "content_fingerprint_16": "7ac722bdda12595d",
       "vectors_fingerprint_16": "ad0b27a17798d042"
     },
     "matches": true
