@@ -1096,6 +1096,12 @@ def run_final_evaluation(
     # del árbol de quien lo intente.
     exigir_arbol_limpio(estricto=particion == "test")
 
+    # Los destinos, antes de abrir nada: una invocación que no puede producir
+    # artefacto no debe leer el conjunto reservado para descubrirlo después.
+    sufijo = sufijo_de(particion, intento)
+    if particion == "test":
+        exigir_destinos_libres(sufijo, intento=intento)
+
     desconocidos = [e for e in estratos if e not in ESTRATOS]
     if desconocidos:
         msg = f"estratos desconocidos: {desconocidos}; declarados {ESTRATOS}"
@@ -1131,7 +1137,7 @@ def run_final_evaluation(
     sonda = PgVectorStore()
     try:
         exigir_espacio_identificado_por_su_nombre(
-            sonda.spaces_for_model(embedding_model=provider.identity.model),
+            sonda.spaces_for_model(embedding_model=provider.identity.model, vehicle_id=VEHICULO),
             modelo=provider.identity.model,
             estricto=particion == "test",
         )
@@ -1189,9 +1195,6 @@ def run_final_evaluation(
         print("cargando el redactor antes de sellar la anotación...")
         redactor.warmup()
 
-    sufijo = sufijo_de(particion, intento)
-    if particion == "test":
-        exigir_destinos_libres(sufijo, intento=intento)
     anotacion = documento_anotacion(
         particion=particion,
         dataset_id=dataset_id,

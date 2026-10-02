@@ -1275,3 +1275,28 @@ def test_sin_revision_el_comportamiento_es_el_de_las_fases_anteriores() -> None:
     )
     carga = inspeccion.getsource(SentenceTransformerProvider._cargar)
     assert "if self._revision" in carga, "sin revisión se llama como antes"
+
+
+def test_los_destinos_se_comprueban_antes_de_abrir_la_particion() -> None:
+    """Una invocación que no puede producir artefacto no debe leer el conjunto
+    reservado para descubrirlo después: en una repetición sin identificador nuevo,
+    `preparar` leía la partición y calculaba las predicciones antes del rechazo."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+
+    fuente = inspeccion.getsource(final_runner.run_final_evaluation)
+    assert fuente.index("exigir_destinos_libres(") < fuente.index("ctx = preparar(")
+
+
+def test_la_comprobacion_del_espacio_se_acota_al_vehiculo_evaluado() -> None:
+    """La búsqueda filtra por vehículo, de modo que los vectores de otro no pueden
+    mezclarse en esta evaluación: exigir que todo el índice tuviera un solo espacio
+    por nombre habría bloqueado la ejecución por un motivo falso."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.store import PgVectorStore
+
+    assert "vehicle_id" in inspeccion.signature(PgVectorStore.spaces_for_model).parameters
+    fuente = inspeccion.getsource(PgVectorStore.spaces_for_model)
+    assert "c.vehicle_id = :v" in fuente

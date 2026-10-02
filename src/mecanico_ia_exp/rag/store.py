@@ -485,7 +485,9 @@ class PgVectorStore(VectorStore):
             huella.update(f"{chunk_id}|{vector}\n".encode())
         return huella.hexdigest()[:16]
 
-    def spaces_for_model(self, *, embedding_model: str) -> tuple[tuple[str, int, str], ...]:
+    def spaces_for_model(
+        self, *, embedding_model: str, vehicle_id: str
+    ) -> tuple[tuple[str, int, str], ...]:
         """Espacios indexados que comparten un nombre de modelo.
 
         La búsqueda acota por `embedding_model`, que es lo que RERUN-A impuso para
@@ -497,16 +499,22 @@ class PgVectorStore(VectorStore):
         Saberlo permite exigir, antes de medir, que el nombre identifique un único
         espacio; mientras lo haga, acotar por nombre y acotar por identidad son la
         misma cosa.
+
+        Se acota al vehículo evaluado, como los demás recuentos: la búsqueda filtra
+        por vehículo, de modo que los vectores de otro no pueden mezclarse en esta
+        evaluación y exigir que todo el índice tuviera un solo espacio por nombre
+        habría bloqueado la ejecución por un motivo falso.
         """
         with self._engine.connect() as cx:
             filas = cx.execute(
                 sa.text(
-                    "SELECT DISTINCT embedding_provider, embedding_dimension, "
-                    f"embedding_version FROM {ESQUEMA}.embedding "
-                    "WHERE embedding_model = :m "
-                    "ORDER BY embedding_provider, embedding_dimension, embedding_version"
+                    "SELECT DISTINCT e.embedding_provider, e.embedding_dimension, "
+                    f"e.embedding_version FROM {ESQUEMA}.embedding e "
+                    f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                    "WHERE e.embedding_model = :m AND c.vehicle_id = :v "
+                    "ORDER BY e.embedding_provider, e.embedding_dimension, e.embedding_version"
                 ),
-                {"m": embedding_model},
+                {"m": embedding_model, "v": vehicle_id},
             ).all()
         return tuple((str(p), int(d), str(v)) for p, d, v in filas)
 
