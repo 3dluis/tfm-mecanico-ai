@@ -300,7 +300,7 @@ intervalos que presupongan ejecuciones independientes.
 | Semilla | 20260901, única, en reparto, bosque, fondo de atribución y muestreos |
 | Conjunto de datos | `synthetic_v2`, 588 ventanas, 139 descriptores, `dataset_type: synthetic`, con la **huella de los cuatro ficheros** que la ejecución lee |
 | Modelo de diagnóstico | bosque aleatorio, 400 árboles, hoja mínima 2, pesos equilibrados, calibración isotónica con validación cruzada de 5 pliegues ajustada **sobre entrenamiento** |
-| Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar |
+| Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar, con **huella de contenido** del índice |
 | Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados |
 | Recuperación | guiada por el diagnóstico, profundidad 10, filtros de vehículo y motor, reordenación por autoridad |
 | Redactor | `transformers-lora@slm_lora_v2`, prompt `agent-2026-09-04`, sin reentrenar |
@@ -317,6 +317,14 @@ definición, en el comparativo; en el adverso se invierte.
 
 El manifiesto `configs/manifest_e19.json` enumera estos valores con sus huellas, incluida la de
 este documento, y las pruebas comprueban que el documento no ha cambiado desde que se congeló.
+
+**Por qué el corpus lleva huella de contenido y no solo recuentos.** Un fragmento sustituido, o un
+código de avería cambiado, deja el número de filas igual y cambia lo que el sistema encuentra. Y un
+índice que devuelve menos evidencia no da error: produce abstenciones que parecen legítimas, de modo
+que confirmaría la hipótesis por la razón equivocada y las cifras parecerían buenas. Es el fallo más
+peligroso de esta evaluación, y por eso el índice se comprueba por recuentos **y** por una huella
+construida sobre lo que decide una recuperación: identificador, huella del texto, fichero de origen,
+códigos de avería y códigos de motor de cada fragmento.
 
 **Por qué el conjunto lleva huella propia.** Los ficheros preprocesados están fuera del control de
 versiones --son binarios de varios megabytes-- de modo que la comprobación del árbol de trabajo no
