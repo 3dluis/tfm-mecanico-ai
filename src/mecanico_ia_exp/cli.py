@@ -153,7 +153,19 @@ def main(argv: list[str] | None = None) -> int:
     fin.add_argument(
         "--llm",
         default=None,
-        help="proveedor de lenguaje para medir la redacción. Sin él, no se redacta",
+        help=(
+            "proveedor de lenguaje para medir la redacción. En la evaluación final es "
+            "obligatorio, porque sus métricas se publican; en un ensayo, opcional"
+        ),
+    )
+    fin.add_argument(
+        "--attempt",
+        default="",
+        help=(
+            "identificador de una repetición sobre prueba, por ejemplo v2. Sin él, una "
+            "segunda ejecución sobrescribiría la anotación sellada de la primera, que es "
+            "lo que la sección 11 de las reglas congeladas prohíbe"
+        ),
     )
 
     args = parser.parse_args(argv)
@@ -267,6 +279,7 @@ def main(argv: list[str] | None = None) -> int:
             open_test=args.open_test,
             reason=args.reason,
             estratos=ESTRATOS if args.stratum == "all" else (args.stratum,),
+            intento=args.attempt,
         )
 
     return 2

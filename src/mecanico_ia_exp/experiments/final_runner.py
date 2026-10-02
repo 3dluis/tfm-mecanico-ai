@@ -115,14 +115,59 @@ def condicion_del_artefacto(particion: str) -> dict[str, str]:
     }
 
 
-def sufijo_de(particion: str) -> str:
+def sufijo_de(particion: str, intento: str = "") -> str:
     """Sufijo de los artefactos de una ejecución.
 
     Solo la evaluación final escribe sin sufijo. Un recorrido de prueba sobre
     validación **no puede** sobrescribir el registro de E19: si pudiera, bastaría
     un ensayo para borrar la única medición que el conjunto de prueba admite.
+
+    `intento` identifica una repetición. La regla congelada no permite que una
+    repetición sustituya a la ejecución anterior: el registro de la inválida se
+    conserva y la nueva es una versión experimental con su propio identificador.
     """
-    return "" if particion == "test" else f"_{particion}"
+    etiqueta = "" if particion == "test" else f"_{particion}"
+    return f"{etiqueta}_{intento}" if intento else etiqueta
+
+
+def destinos_de(sufijo: str) -> dict[str, Path]:
+    """Los ficheros que una ejecución escribe, todos juntos y antes de escribirlos.
+
+    Hacen falta de antemano para poder comprobar que ninguno existe: la anotación
+    se sella al principio, y descubrir a mitad de la ejecución que se está pisando
+    una medición anterior ya sería tarde.
+    """
+    return {
+        "anotacion": paths.EXPERIMENTS / f"E19_anotacion{sufijo}.json",
+        "registro": paths.EXPERIMENTS / f"E19_evaluacion_final{sufijo}.json",
+        "incidencias": paths.EXPERIMENTS / f"E19_ejecucion_no_completada{sufijo}.json",
+        "tabla": paths.TABLES / f"E19_evaluacion_final{sufijo}.csv",
+    }
+
+
+def exigir_destinos_libres(sufijo: str, *, intento: str) -> dict[str, Path]:
+    """Ninguna ejecución sobre prueba puede sobrescribir a otra.
+
+    La sección 11 de las reglas congeladas es explícita: cuando una ejecución se
+    repite, el registro anterior **se conserva** --con su motivo y su causa-- y la
+    repetición se publica como versión nueva con su propio identificador. Con
+    nombres fijos, repetir habría borrado la anotación sellada de la ejecución
+    anterior y con ella la huella que la hacía auditable.
+    """
+    destinos = destinos_de(sufijo)
+    ocupados = {clave: ruta for clave, ruta in destinos.items() if ruta.exists()}
+    if ocupados:
+        listado = "\n".join(f"  - {clave}: {ruta.name}" for clave, ruta in ocupados.items())
+        msg = (
+            "ya hay artefactos de una ejecución sobre el conjunto de prueba y la regla "
+            f"congelada no permite sustituirlos:\n{listado}\n"
+            "Si esta es una repetición, dale su propio identificador --por ejemplo "
+            f"intento='v2'{', porque ' + intento + ' ya está usado' if intento else ''}-- "
+            "y escribe el motivo de la anterior en el informe de fase. El registro de "
+            "una ejecución inválida se conserva."
+        )
+        raise RepeticionSinIdentificadorError(msg)
+    return destinos
 
 
 class AperturaNoDeclaradaError(RuntimeError):
@@ -131,6 +176,10 @@ class AperturaNoDeclaradaError(RuntimeError):
 
 class AnotacionIncoherenteError(RuntimeError):
     """Los denominadores de las tasas no son los que la anotación fijó."""
+
+
+class RepeticionSinIdentificadorError(RuntimeError):
+    """Repetir una ejecución sobre prueba habría sobrescrito la anterior."""
 
 
 class RedactorRequeridoError(RuntimeError):
@@ -885,6 +934,7 @@ def run_final_evaluation(
     open_test: bool = False,
     reason: str = "",
     estratos: Sequence[str] = ESTRATOS,
+    intento: str = "",
 ) -> int:
     """Ejecuta E19 sobre la partición indicada, bajo las reglas congeladas.
 
@@ -901,6 +951,10 @@ def run_final_evaluation(
     La política no es un parámetro. E19 se mide con la canónica congelada, y uno
     que permitiera otra versión escribiría un registro con la política equivocada
     bajo un anclaje correcto.
+
+    `intento` identifica una repetición sobre prueba. Sin él, una segunda ejecución
+    sobrescribiría la anotación sellada de la primera y con ella la huella que la
+    hacía auditable, que es justo lo que la sección 11 prohíbe.
     """
     verificacion = verificar().exigir()
     print(verificacion, "\n")
@@ -925,6 +979,15 @@ def run_final_evaluation(
             "ejecutor sin abrir nada, usa particion='validation'."
         )
         raise AperturaNoDeclaradaError(msg)
+
+    if particion == "test" and ESTRATO_PRIMARIO not in estratos:
+        msg = (
+            f"la evaluación final tiene que incluir el estrato {ESTRATO_PRIMARIO!r}, que es "
+            "el único que responde a la pregunta. Los otros dos son descriptivos, y un "
+            "artefacto marcado como evaluación final que solo los contuviera sustituiría "
+            "el resultado por un análisis de sensibilidad."
+        )
+        raise ValueError(msg)
 
     if particion == "test" and not llm:
         msg = (
@@ -976,7 +1039,9 @@ def run_final_evaluation(
         casos.extend(del_estrato)
         no_evaluables.extend(sin_ventana)
 
-    sufijo = sufijo_de(particion)
+    sufijo = sufijo_de(particion, intento)
+    if particion == "test":
+        exigir_destinos_libres(sufijo, intento=intento)
     anotacion = documento_anotacion(
         particion=particion,
         dataset_id=dataset_id,

@@ -43,6 +43,7 @@ from mecanico_ia_exp.experiments.final_runner import (
     AperturaNoDeclaradaError,
     CasoFinal,
     RedactorRequeridoError,
+    RepeticionSinIdentificadorError,
     Ventana,
     casos_del_estrato,
     comparar_con_lo_declarado,
@@ -52,6 +53,7 @@ from mecanico_ia_exp.experiments.final_runner import (
     denominadores,
     documento_anotacion,
     documento_incidencias,
+    exigir_destinos_libres,
     orden_canonico,
     politicas_de_referencia,
     recuento,
@@ -731,3 +733,46 @@ def test_un_caso_que_no_termina_deja_su_traza_y_su_causa(tmp_path: Path) -> None
     incidencia = documento["incidents"][0]
     assert incidencia["cause"].startswith("OperationalError")
     assert incidencia["traceback"]
+
+
+def test_una_repeticion_sobre_prueba_no_sustituye_a_la_anterior(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """La sección 11 es explícita: el registro de una ejecución inválida se
+    conserva y la repetición es una versión nueva con su propio identificador.
+
+    Con nombres fijos, repetir habría borrado la anotación sellada de la ejecución
+    anterior y con ella la huella que la hacía auditable.
+    """
+    from mecanico_ia_exp.experiments import final_runner
+
+    monkeypatch.setattr(final_runner.paths, "EXPERIMENTS", tmp_path)
+    monkeypatch.setattr(final_runner.paths, "TABLES", tmp_path)
+
+    assert exigir_destinos_libres("", intento="")
+    (tmp_path / "E19_anotacion.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(RepeticionSinIdentificadorError, match="no permite sustituirlos"):
+        exigir_destinos_libres("", intento="")
+
+    # El identificador de la repetición despeja los destinos.
+    assert exigir_destinos_libres(sufijo_de("test", "v2"), intento="v2")
+
+
+def test_el_sufijo_distingue_la_particion_y_el_intento() -> None:
+    assert sufijo_de("test") == ""
+    assert sufijo_de("test", "v2") == "_v2"
+    assert sufijo_de("validation") == "_validation"
+    assert sufijo_de("validation", "v2") == "_validation_v2"
+
+
+def test_la_evaluacion_final_no_puede_prescindir_del_estrato_primario() -> None:
+    """Un artefacto marcado como evaluación final que solo contuviera los estratos
+    descriptivos sustituiría el resultado por un análisis de sensibilidad."""
+    with pytest.raises(ValueError, match="tiene que incluir el estrato"):
+        run_final_evaluation(
+            particion="test",
+            open_test=True,
+            reason="declaración de apertura de prueba",
+            estratos=("comparativo",),
+            llm="echo",
+        )
