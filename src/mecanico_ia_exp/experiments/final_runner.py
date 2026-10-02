@@ -1065,6 +1065,18 @@ def run_final_evaluation(
         )
         raise AperturaNoDeclaradaError(msg)
 
+    desconocidos = [e for e in estratos if e not in ESTRATOS]
+    if desconocidos:
+        msg = f"estratos desconocidos: {desconocidos}; declarados {ESTRATOS}"
+        raise ValueError(msg)
+
+    if len(set(estratos)) != len(estratos):
+        # Repetir un estrato ejecutaría sus casos dos veces con el mismo
+        # identificador, duplicando denominadores y tasas en un artefacto que se
+        # declara evaluación final. La comparación por conjuntos no lo veía.
+        msg = f"estratos repetidos: {tuple(estratos)}. Cada uno se mide una vez."
+        raise ValueError(msg)
+
     if particion == "test" and set(estratos) != set(ESTRATOS):
         msg = (
             f"la evaluación final mide los tres estratos congelados {ESTRATOS}, y se han "
@@ -1101,11 +1113,6 @@ def run_final_evaluation(
     sufijo = sufijo_de(particion, intento)
     if particion == "test":
         exigir_destinos_libres(sufijo, intento=intento)
-
-    desconocidos = [e for e in estratos if e not in ESTRATOS]
-    if desconocidos:
-        msg = f"estratos desconocidos: {desconocidos}; declarados {ESTRATOS}"
-        raise ValueError(msg)
 
     import yaml
 
