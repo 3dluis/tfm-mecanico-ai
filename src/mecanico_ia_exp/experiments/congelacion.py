@@ -562,6 +562,26 @@ def exigir_revisiones_congeladas(
     return resultado
 
 
+def exigir_prompt_congelado(manifiesto: Mapping[str, Any]) -> str:
+    """La versión del prompt tiene que ser la congelada.
+
+    Las comprobaciones del redactor cubrían su nombre, su adaptador y los pesos de
+    su base, y no esto: el prompt es parte de lo que produce la salida, y una
+    versión distinta habría publicado las métricas de redacción de una
+    configuración que la ejecución no usó.
+    """
+    from mecanico_ia_exp.llm.agent import PROMPT_VERSION
+
+    congelada = str(manifiesto["controlled_state"]["writer"]["prompt_version"])
+    if congelada != PROMPT_VERSION:
+        msg = (
+            f"la versión de prompt congelada es {congelada!r} y el código usa "
+            f"{PROMPT_VERSION!r}. El prompt es parte de lo que produce la salida."
+        )
+        raise CongelacionInvalidaError(msg)
+    return congelada
+
+
 def exigir_redactor_disponible(
     llm: str, manifiesto: Mapping[str, Any] | None = None
 ) -> Path | None:

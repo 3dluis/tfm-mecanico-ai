@@ -62,6 +62,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     exigir_espacio_congelado,
     exigir_espacio_identificado_por_su_nombre,
     exigir_politica_canonica,
+    exigir_prompt_congelado,
     exigir_redactor_congelado,
     exigir_redactor_disponible,
     exigir_revisiones_congeladas,
@@ -1108,6 +1109,7 @@ def run_final_evaluation(
             raise RedactorRequeridoError(msg)
         exigir_redactor_congelado(manifiesto, llm)
         exigir_redactor_disponible(llm, manifiesto)
+        exigir_prompt_congelado(manifiesto)
 
     # Después de la declaración, y antes de cargar nada: el árbol tiene que estar
     # limpio en los ficheros con seguimiento. El orden importa, porque pedir la
@@ -1168,6 +1170,19 @@ def run_final_evaluation(
         sonda.dispose()
     print(f"índice: {json.dumps(corpus['indexed'], sort_keys=True)}\n")
 
+    # El redactor, **cargado** antes de abrir la partición. Construirlo no basta:
+    # los proveedores cargan de forma diferida, y un modelo base incompleto fallaría
+    # con la partición ya abierta y la anotación sellada, convirtiendo un fallo de
+    # preparación en una apertura del conjunto reservado que no hacía falta.
+    redactor = (
+        _redactor(llm, manifiesto["controlled_state"]["writer"].get("base_model_revision"))
+        if llm
+        else None
+    )
+    if redactor is not None:
+        print("cargando el redactor antes de abrir la partición...")
+        redactor.warmup()
+
     ctx = preparar(dataset_id, particion=particion, allow_test=open_test, reason=reason)
     meta = ctx.evaluacion.meta
     predicciones = np.asarray(ctx.modelo.predict(ctx.evaluacion.features), dtype=np.str_)
@@ -1195,19 +1210,6 @@ def run_final_evaluation(
         )
         casos.extend(del_estrato)
         no_evaluables.extend(sin_ventana)
-
-    # El redactor, **cargado** antes de sellar. Construirlo no basta: los
-    # proveedores cargan de forma diferida, y un modelo base incompleto fallaría en
-    # el primer caso, con la partición abierta y la anotación sellada, convirtiendo
-    # un fallo de preparación en una ejecución a medias.
-    redactor = (
-        _redactor(llm, manifiesto["controlled_state"]["writer"].get("base_model_revision"))
-        if llm
-        else None
-    )
-    if redactor is not None:
-        print("cargando el redactor antes de sellar la anotación...")
-        redactor.warmup()
 
     anotacion = documento_anotacion(
         particion=particion,
