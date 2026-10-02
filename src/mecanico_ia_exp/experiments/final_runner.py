@@ -62,6 +62,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     exigir_espacio_congelado,
     exigir_politica_canonica,
     exigir_redactor_congelado,
+    exigir_redactor_disponible,
     verificar,
 )
 from mecanico_ia_exp.experiments.registro import escribir
@@ -1079,6 +1080,7 @@ def run_final_evaluation(
             )
             raise RedactorRequeridoError(msg)
         exigir_redactor_congelado(manifiesto, llm)
+        exigir_redactor_disponible(llm)
 
     # Después de la declaración, y antes de cargar nada: el árbol tiene que estar
     # limpio en los ficheros con seguimiento. El orden importa, porque pedir la
@@ -1111,7 +1113,7 @@ def run_final_evaluation(
     try:
         corpus = exigir_corpus_congelado(
             manifiesto,
-            sonda.corpus_counts(vehicle_id=VEHICULO, embedding_model=provider.identity.model),
+            sonda.corpus_counts(vehicle_id=VEHICULO, identidad=provider.identity),
             estricto=particion == "test",
         )
     finally:
@@ -1145,6 +1147,10 @@ def run_final_evaluation(
         )
         casos.extend(del_estrato)
         no_evaluables.extend(sin_ventana)
+
+    # El redactor, antes de sellar: si faltara su adaptador, el fallo tiene que ser
+    # de preparación y no una ejecución no completada con la anotación ya sellada.
+    redactor = _redactor(llm) if llm else None
 
     sufijo = sufijo_de(particion, intento)
     if particion == "test":
@@ -1188,7 +1194,6 @@ def run_final_evaluation(
     umbrales = SufficiencyThresholds()
     verificador = EvidenceVerifier(umbrales)
     store = PgVectorStore()
-    redactor = _redactor(llm) if llm else None
 
     por_estrato: dict[str, list[tuple[CasoFinal, CasoVerificado]]] = {e: [] for e in estratos}
     confianza_del_diagnostico: dict[str, float] = {}
