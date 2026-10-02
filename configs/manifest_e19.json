@@ -91,6 +91,7 @@
     },
     "embedding": {
       "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
       "dimension": 384,
       "space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
       "device_requirement": "el mismo dispositivo que produjo los vectores indexados",
@@ -114,6 +115,9 @@
     },
     "writer": {
       "llm": "transformers-lora@slm_lora_v2",
+      "base_model": "Qwen/Qwen2.5-3B-Instruct",
+      "base_model_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "why_the_revisions_are_pinned": "los dos modelos se cargan por nombre, sin revision fijada, y sus pesos los administra una biblioteca de terceros en una cache local: si cambiaran manteniendo el nombre, la evaluacion mediria otro modelo bajo el nombre del congelado",
       "prompt_version": "agent-2026-09-04",
       "files": {
         "models/slm_lora_v2/adapter_config.json": "14e9db475a79943f",

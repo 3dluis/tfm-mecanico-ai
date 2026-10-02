@@ -303,7 +303,7 @@ intervalos que presupongan ejecuciones independientes.
 | Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar, con **huella de contenido** del índice |
 | Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados, con la **huella de los vectores** |
 | Recuperación | guiada por el diagnóstico, profundidad 10, filtros de vehículo y motor, reordenación por autoridad |
-| Redactor | `transformers-lora@slm_lora_v2`, prompt `agent-2026-09-04`, sin reentrenar, con la **huella de sus pesos** |
+| Redactor | `transformers-lora@slm_lora_v2` sobre `Qwen/Qwen2.5-3B-Instruct`, prompt `agent-2026-09-04`, sin reentrenar, con la **huella de sus pesos** y la **revisión de la base** |
 | Código | el commit que se registre en el artefacto, con el árbol limpio |
 
 **Canales de oráculo, cerrados.** E19 se ejecuta con el recorrido no oracular: los códigos que
@@ -335,6 +335,13 @@ es un cambio visible del substrato sobre el que se mide.
 sustituir un vector --dejando intactos el fragmento, sus metadatos y la identidad del espacio--
 cambia qué evidencia se recupera y, con ella, las tasas, sin que ningún recuento ni la huella del
 contenido se muevan. Era la última pieza que decidía el resultado y no estaba cubierta.
+
+**Y por qué también la revisión de los dos modelos.** El que vectoriza la consulta y el que redacta
+se cargan **por nombre**, sin revisión fijada, y sus pesos los administra una biblioteca de terceros
+en una caché local. Si cambiaran manteniendo el nombre, la evaluación final ordenaría los vectores
+del índice con consultas de otro espacio, o atribuiría las métricas de redacción a otro adaptador
+fundido sobre otra base. Las dos revisiones quedan declaradas y se comprueban contra la caché, sin
+descargar nada.
 
 **Y por qué el adaptador también.** Los pesos están fuera del control de versiones, de modo que la
 comprobación del árbol no los ve: sustituirlos por otros válidos habría publicado las métricas de
