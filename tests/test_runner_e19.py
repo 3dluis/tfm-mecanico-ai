@@ -368,7 +368,14 @@ def test_un_estrato_desconocido_no_se_ejecuta(
 
 def _caso(variante: str, sesion: str, t: float, esperada: str) -> CasoFinal:
     return CasoFinal(
-        gold={"case_id": f"C_{variante}_{sesion}_{t:.0f}", "fault_id": "F01_vacuum_leak"},
+        gold={
+            "case_id": f"C_{variante}_{sesion}_{t:.0f}",
+            "fault_id": "F01_vacuum_leak",
+            # La variante va en el caso anotado, que es de donde el ejecutor la lee.
+            # Nombrarla solo en el identificador dejaba todas las ejecuciones como
+            # evidencia completa y una prueba de cobertura pasaba por casualidad.
+            "corpus_variant": variante,
+        },
         estrato="operativo",
         ventana=Ventana(indice=0, session_id=sesion, t_start=t),
         label="F01_vacuum_leak",
@@ -1011,6 +1018,16 @@ def test_la_trazabilidad_se_publica_agregada_y_con_su_denominador() -> None:
     assert resultado["n_sessions"] == 2
     assert "propiedad del verificador" in resultado["note"]
 
+    # La sección 9 pide además la cobertura **en las ejecuciones con evidencia
+    # completa**: el agregado de todas las variantes mezcla condiciones en que el
+    # índice no tenía la evidencia a propósito, y ahí una afirmación sin soporte es
+    # el resultado esperado.
+    completa = resultado["full_evidence"]
+    assert completa["n_runs"] == 1
+    assert completa["denominator_claims"] == 2
+    assert completa["with_support"] == 1
+    assert completa["rates"]["with_support"] == pytest.approx(0.5, abs=1e-4)
+
 
 def test_el_recuento_de_vectores_filtra_por_la_identidad_completa_del_espacio() -> None:
     """Filtrar por nombre de modelo dejaba pasar un índice con vectores producidos
@@ -1480,3 +1497,21 @@ def test_las_comprobaciones_del_indice_acotan_el_vehiculo_en_las_dos_tablas() ->
         fuente = inspeccion.getsource(metodo)
         assert "e.vehicle_id = :v" in fuente, f"{metodo.__name__} debe acotar el del vector"
         assert "c.vehicle_id = :v" in fuente, f"{metodo.__name__} debe acotar el del fragmento"
+
+
+def test_el_registro_declara_que_el_texto_de_consulta_no_es_ciego() -> None:
+    """Cerrar los canales `O-2` y `O-3` no cubre el texto de la consulta: lo
+    escribió una persona que conocía el fallo, de modo que en una ventana mal
+    clasificada la consulta sigue describiendo la condición verdadera.
+
+    No es un canal que pueda cerrarse sin reescribir el conjunto anotado, y
+    reescribirlo haría incomparables estas cifras con las de validación. Lo que sí
+    puede, y debe, es decirlo en el propio artefacto.
+    """
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+
+    fuente = inspeccion.getsource(final_runner.documento_final)
+    assert '"query_text_not_blind": True' in fuente
+    assert '"declared_limitation"' in fuente

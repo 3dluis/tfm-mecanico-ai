@@ -563,25 +563,37 @@ def trazabilidad(pares: Sequence[tuple[CasoFinal, CasoVerificado]]) -> dict[str,
     """
     from mecanico_ia_exp.evidence.model import SupportStatus
 
-    afirmaciones = [c for _, v in pares for c in v.bundle.claims]
-    total = len(afirmaciones)
-    cuentas = {
-        "with_observation": sum(1 for c in afirmaciones if c.has_observational),
-        "with_citation": sum(1 for c in afirmaciones if c.has_documentary),
-        "with_support": sum(1 for c in afirmaciones if c.support_status is SupportStatus.SUPPORTED),
-    }
+    def bloque(seleccion: Sequence[tuple[CasoFinal, CasoVerificado]]) -> dict[str, Any]:
+        afirmaciones = [c for _, v in seleccion for c in v.bundle.claims]
+        total = len(afirmaciones)
+        cuentas = {
+            "with_observation": sum(1 for c in afirmaciones if c.has_observational),
+            "with_citation": sum(1 for c in afirmaciones if c.has_documentary),
+            "with_support": sum(
+                1 for c in afirmaciones if c.support_status is SupportStatus.SUPPORTED
+            ),
+        }
+        return {
+            "denominator_claims": total,
+            **recuento([c for c, _ in seleccion]),
+            **cuentas,
+            "rates": {
+                clave: None if total == 0 else round(valor / total, 4)
+                for clave, valor in cuentas.items()
+            },
+        }
+
     return {
         "note": (
             "el soporte es una propiedad del verificador; no hay anotación "
             "independiente de afirmaciones admisibles"
         ),
-        "denominator_claims": total,
-        **recuento([c for c, _ in pares]),
-        **cuentas,
-        "rates": {
-            clave: None if total == 0 else round(valor / total, 4)
-            for clave, valor in cuentas.items()
-        },
+        **bloque(pares),
+        # La sección 9 pide además la cobertura de afirmaciones **en las ejecuciones
+        # con evidencia completa**. El agregado de todas las variantes mezcla
+        # condiciones en que el índice no tenía la evidencia a propósito, y ahí una
+        # afirmación sin soporte es el resultado esperado, no una carencia.
+        "full_evidence": bloque([p for p in pares if p[0].corpus_variant == "FULL"]),
     }
 
 
@@ -1003,6 +1015,18 @@ def documento_final(
             },
             "O2_retrieval_scoped_by_annotated_label": False,
             "O3_support_dtc_from_annotated_label": False,
+            # Lo que cerrar O-2 y O-3 **no** cubre, y la congelación declara: el
+            # texto de consulta de cada caso lo escribió una persona que conocía el
+            # fallo. Describe síntomas y no nombra el diagnóstico ni el código, pero
+            # su redacción no es ciega, de modo que en una ventana mal clasificada la
+            # consulta sigue describiendo la condición verdadera. No es un canal que
+            # se pueda cerrar sin reescribir el conjunto anotado, y reescribirlo
+            # haría incomparables estas cifras con las de validación: se declara.
+            "query_text_not_blind": True,
+            "declared_limitation": (
+                "docs/methodology/congelacion-anotacion-e19.md, seccion 2: las consultas se "
+                "reutilizan literalmente y las escribio una persona que conocia el fallo"
+            ),
         },
         "annotation": {
             "file": ruta_anotacion.name,
