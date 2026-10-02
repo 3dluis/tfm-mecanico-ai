@@ -13,6 +13,7 @@ quedaría en una afirmación.
 
 from __future__ import annotations
 
+import hashlib
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -412,6 +413,39 @@ class PgVectorStore(VectorStore):
             "n_source_files": int(ficheros),
             "n_vectors_in_space": int(vectores),
         }
+
+    def corpus_fingerprint(self, *, vehicle_id: str) -> str:
+        """Huella del **contenido** indexado de un vehículo, no de su recuento.
+
+        Los recuentos no detectan una sustitución: cambiar el texto de un fragmento,
+        o los códigos por los que la recuperación filtra, deja el número de filas
+        igual y cambia lo que el sistema encuentra. La huella se construye sobre lo
+        que decide una recuperación --identificador, huella del texto, fichero de
+        origen, códigos de avería y de motor-- en orden de `chunk_id`, que es total.
+        """
+        huella = hashlib.sha256()
+        with self._engine.connect() as cx:
+            filas = cx.execute(
+                sa.text(
+                    "SELECT chunk_id, content_hash, source_file, dtc_codes, engine_codes "
+                    f"FROM {ESQUEMA}.document_chunk WHERE vehicle_id = :v ORDER BY chunk_id"
+                ),
+                {"v": vehicle_id},
+            ).all()
+        for chunk_id, content_hash, source_file, dtc, motores in filas:
+            huella.update(
+                "|".join(
+                    [
+                        str(chunk_id),
+                        str(content_hash),
+                        str(source_file),
+                        ",".join(sorted(dtc or ())),
+                        ",".join(sorted(motores or ())),
+                    ]
+                ).encode("utf-8")
+            )
+            huella.update(b"\n")
+        return huella.hexdigest()[:16]
 
     def search(
         self,
