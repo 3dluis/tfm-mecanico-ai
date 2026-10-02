@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_anotacion",
-  "commit": "1bcc028b6e28f6d42c82f90102b4c9e5fdb8a977",
+  "commit": "c8ab4ecb5305a142648e03754d68c19b442076df",
   "dirty": false,
-  "executed_at": "2026-10-02T00:41:43.474679+00:00",
+  "executed_at": "2026-10-02T00:58:37.142039+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -14,10 +14,10 @@
   "frozen_rules": {
     "file": "docs/methodology/congelacion-anotacion-e19.md",
     "anchor_file": "configs/congelacion-e19.anchor.json",
-    "frozen_at_commit": "af26819",
+    "frozen_at_commit": "e77d730",
     "files": {
-      "docs/methodology/congelacion-anotacion-e19.md": "62c6dabbf632ea30",
-      "configs/manifest_e19.json": "df4e646ac0d08c64"
+      "docs/methodology/congelacion-anotacion-e19.md": "f1173b3656887b94",
+      "configs/manifest_e19.json": "5a919748c22b0d07"
     }
   },
   "freeze_verification": {
@@ -31,12 +31,12 @@
       {
         "check": "objeto_del_commit_de_congelacion",
         "status": "PASS",
-        "detail": "lo congelado coincide con el objeto del commit af26819"
+        "detail": "lo congelado coincide con el objeto del commit e77d730"
       },
       {
         "check": "sin_commits_posteriores_a_la_congelacion",
         "status": "PASS",
-        "detail": "ningún commit posterior a af26819 toca lo congelado"
+        "detail": "ningún commit posterior a e77d730 toca lo congelado"
       },
       {
         "check": "politica_canonica_declarada",
@@ -67,6 +67,11 @@
         "check": "reparto_declarado",
         "status": "PASS",
         "detail": "el reparto de sesiones es el congelado, sin leer ninguna ventana"
+      },
+      {
+        "check": "ficheros_del_conjunto",
+        "status": "PASS",
+        "detail": "4 fichero(s) preprocesados con la huella congelada"
       }
     ]
   },
