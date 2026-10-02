@@ -13,6 +13,7 @@ quedaría en una afirmación.
 
 from __future__ import annotations
 
+import hashlib
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -367,6 +368,185 @@ class PgVectorStore(VectorStore):
         with self._engine.connect() as conexion:
             filas = conexion.execute(sa.text("SELECT DISTINCT embedding_model FROM rag.embedding"))
             return frozenset(str(f[0]) for f in filas)
+
+    def corpus_counts(self, *, vehicle_id: str, identidad: EmbeddingIdentity) -> dict[str, int]:
+        """Fragmentos, ficheros de origen y vectores indexados de un vehículo.
+
+        Existe para una comprobación que no puede hacerse de otra manera: un índice
+        **incompleto** no da error, da menos evidencia, y menos evidencia se cuenta
+        como una abstención legítima. La evaluación final compara estos recuentos
+        con los congelados antes de medir, porque la sección 11 del documento de
+        congelación trata un índice incompleto como motivo de invalidez.
+
+        Los vectores se acotan por el vehículo **en las dos tablas**, porque la
+        búsqueda filtra por el del vector y las comprobaciones filtraban por el del
+        fragmento: el esquema no obliga a que coincidan, y si no coincidieran la
+        búsqueda recuperaría menos evidencia de la que esta comprobación da por
+        completa. Menos evidencia se cuenta como una abstención legítima.
+
+        Los vectores se cuentan por la identidad **completa** del espacio y no por
+        el nombre del modelo: el proveedor incluye el dispositivo, y un índice con
+        vectores producidos en CPU bajo el mismo nombre de modelo pasaría un filtro
+        por nombre mientras la consulta se vectoriza en otro espacio. Es la forma
+        que tendría de reaparecer `MIXED-EMBEDDING-SPACE`.
+        """
+        with self._engine.connect() as cx:
+            fragmentos, ficheros = cx.execute(
+                sa.text(
+                    f"SELECT count(*), count(DISTINCT source_file) "
+                    f"FROM {ESQUEMA}.document_chunk WHERE vehicle_id = :v"
+                ),
+                {"v": vehicle_id},
+            ).one()
+            vectores = cx.execute(
+                sa.text(
+                    f"SELECT count(*) FROM {ESQUEMA}.embedding e "
+                    f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                    "WHERE e.vehicle_id = :v AND c.vehicle_id = :v "
+                    "AND e.embedding_provider = :p "
+                    "AND e.embedding_model = :m AND e.embedding_dimension = :d "
+                    "AND e.embedding_version = :r"
+                ),
+                {
+                    "v": vehicle_id,
+                    "p": identidad.provider,
+                    "m": identidad.model,
+                    "d": identidad.dimension,
+                    "r": identidad.version,
+                },
+            ).scalar_one()
+        return {
+            "n_chunks": int(fragmentos),
+            "n_source_files": int(ficheros),
+            "n_vectors_in_space": int(vectores),
+        }
+
+    def corpus_fingerprint(self, *, vehicle_id: str) -> str:
+        """Huella del **contenido indexado** de un vehículo, fila a fila y entera.
+
+        Los recuentos no detectan una sustitución: cambiar el texto de un fragmento,
+        o un código por el que la recuperación filtra, o el encabezado de sección por
+        el que el verificador decide si un fragmento es un procedimiento, deja el
+        número de filas igual y cambia lo que el sistema encuentra y lo que acepta
+        como soporte. Y un índice que devuelve menos evidencia no da error: produce
+        abstenciones que parecen legítimas.
+
+        Por eso la huella no elige campos. Se construye sobre la **fila completa**
+        de cada fragmento y la de su documento, serializadas por la propia base de
+        datos, en orden de `chunk_id`. Elegir campos obliga a acertar la lista, y la
+        lista crece: el texto, el fichero, los códigos de avería y de motor, el tipo
+        de documento y el nivel de autoridad para la reordenación, la sección para la
+        clasificación del fragmento, el identificador de documento para el recuento
+        de fuentes distintas. Incluirlo todo convierte un acierto en una propiedad.
+
+        Una migración del esquema cambia la huella, y debe cambiarla: es un cambio
+        visible del substrato sobre el que se mide.
+        """
+        huella = hashlib.sha256()
+        with self._engine.connect() as cx:
+            filas = cx.execute(
+                sa.text(
+                    "SELECT c.chunk_id, row_to_json(c)::text, row_to_json(d)::text "
+                    f"FROM {ESQUEMA}.document_chunk c "
+                    f"JOIN {ESQUEMA}.document d ON d.document_id = c.document_id "
+                    "WHERE c.vehicle_id = :v ORDER BY c.chunk_id"
+                ),
+                {"v": vehicle_id},
+            ).all()
+        for chunk_id, fragmento, documento in filas:
+            huella.update(f"{chunk_id}|{fragmento}|{documento}\n".encode())
+        return huella.hexdigest()[:16]
+
+    def vectors_fingerprint(self, *, vehicle_id: str, identidad: EmbeddingIdentity) -> str:
+        """Huella de los **vectores** indexados del espacio declarado.
+
+        Es la última pieza que decidía el resultado y no estaba cubierta: la
+        búsqueda ordena por distancia al vector, de modo que sustituir un vector
+        --dejando intactos el fragmento, sus metadatos y la identidad del espacio--
+        cambia qué evidencia se recupera y, con ella, las tasas de abstención, sin
+        que ningún recuento ni la huella del contenido se muevan.
+
+        El vector se lee como texto para que la huella no dependa de cómo el
+        controlador materialice el tipo.
+        """
+        huella = hashlib.sha256()
+        with self._engine.connect() as cx:
+            filas = cx.execute(
+                sa.text(
+                    "SELECT e.chunk_id, e.vector::text "
+                    f"FROM {ESQUEMA}.embedding e "
+                    f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                    "WHERE e.vehicle_id = :v AND c.vehicle_id = :v "
+                    "AND e.embedding_provider = :p "
+                    "AND e.embedding_model = :m AND e.embedding_dimension = :d "
+                    "AND e.embedding_version = :r ORDER BY e.chunk_id"
+                ),
+                {
+                    "v": vehicle_id,
+                    "p": identidad.provider,
+                    "m": identidad.model,
+                    "d": identidad.dimension,
+                    "r": identidad.version,
+                },
+            ).all()
+        for chunk_id, vector in filas:
+            huella.update(f"{chunk_id}|{vector}\n".encode())
+        return huella.hexdigest()[:16]
+
+    def spaces_for_model(
+        self, *, embedding_model: str, vehicle_id: str
+    ) -> tuple[tuple[str, int, str], ...]:
+        """Espacios indexados que comparten un nombre de modelo.
+
+        La búsqueda acota por `embedding_model`, que es lo que RERUN-A impuso para
+        no mezclar dos modelos en una misma ordenación. Pero la identidad de un
+        espacio es más que el nombre: incluye el proveedor con su dispositivo, la
+        dimensión y la versión. Si dos espacios compartieran nombre, acotar por
+        nombre dejaría de identificar uno solo y la ordenación volvería a mezclar.
+
+        Saberlo permite exigir, antes de medir, que el nombre identifique un único
+        espacio; mientras lo haga, acotar por nombre y acotar por identidad son la
+        misma cosa.
+
+        Se acota al vehículo evaluado, como los demás recuentos: la búsqueda filtra
+        por vehículo, de modo que los vectores de otro no pueden mezclarse en esta
+        evaluación y exigir que todo el índice tuviera un solo espacio por nombre
+        habría bloqueado la ejecución por un motivo falso.
+        """
+        with self._engine.connect() as cx:
+            filas = cx.execute(
+                sa.text(
+                    "SELECT DISTINCT e.embedding_provider, e.embedding_dimension, "
+                    f"e.embedding_version FROM {ESQUEMA}.embedding e "
+                    f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                    "WHERE e.embedding_model = :m AND e.vehicle_id = :v AND c.vehicle_id = :v "
+                    "ORDER BY e.embedding_provider, e.embedding_dimension, e.embedding_version"
+                ),
+                {"m": embedding_model, "v": vehicle_id},
+            ).all()
+        return tuple((str(p), int(d), str(v)) for p, d, v in filas)
+
+    def vehicle_id_mismatches(self, *, vehicle_id: str) -> int:
+        """Vectores cuyo vehículo no es el del fragmento al que apuntan.
+
+        La búsqueda filtra por el vehículo **del vector** y las comprobaciones del
+        índice exigen que los dos coincidan. Mientras no haya desajustes, las dos
+        cosas son equivalentes; si los hubiera, la búsqueda podría recuperar un
+        vector que ninguna comprobación miró. El esquema no lo impide, así que se
+        cuenta.
+        """
+        with self._engine.connect() as cx:
+            return int(
+                cx.execute(
+                    sa.text(
+                        f"SELECT count(*) FROM {ESQUEMA}.embedding e "
+                        f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                        "WHERE (e.vehicle_id = :v OR c.vehicle_id = :v) "
+                        "AND e.vehicle_id <> c.vehicle_id"
+                    ),
+                    {"v": vehicle_id},
+                ).scalar_one()
+            )
 
     def search(
         self,

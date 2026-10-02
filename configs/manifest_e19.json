@@ -50,6 +50,13 @@
       "n_signals": 12,
       "n_features": 139,
       "split_seed": 20260901,
+      "files": {
+        "data/processed/synthetic_v2_x.npy": "42e3031653498bf4",
+        "data/processed/synthetic_v2_features.npy": "c8fa7068c13a274e",
+        "data/processed/synthetic_v2_meta.parquet": "ffef0c525d441988",
+        "data/processed/synthetic_v2_preprocess.json": "e63be72934a75f7c"
+      },
+      "why_the_files_are_hashed": "estan fuera del control de versiones, de modo que la comprobacion del arbol de trabajo no puede verlos: sustituir uno dejando los recuentos declarados pasaria inadvertido y la evaluacion final mediria otros datos creyendolos los congelados",
       "partitions": {
         "train": {"sessions": 48, "windows": 392},
         "validation": {"sessions": 12, "windows": 98},
@@ -78,13 +85,18 @@
       "corpus_version": "0.1.0",
       "n_chunks": 6158,
       "n_source_files": 3055,
+      "content_fingerprint_16": "7ac722bdda12595d",
+      "fingerprint_definition": "sha256 de chunk_id|row_to_json(fragmento)|row_to_json(documento) de cada fragmento del vehiculo, en orden de chunk_id. Se incluye la fila completa y no una seleccion de campos: elegir campos obliga a acertar la lista, y la lista crece (texto, fichero, codigos de averia y de motor, tipo de documento y nivel de autoridad para la reordenacion, seccion para la clasificacion del fragmento, document_id para el recuento de fuentes distintas). Una migracion del esquema cambia la huella, y debe cambiarla",
       "reindex": "no"
     },
     "embedding": {
       "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
       "dimension": 384,
       "space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
-      "device_requirement": "el mismo dispositivo que produjo los vectores indexados"
+      "device_requirement": "el mismo dispositivo que produjo los vectores indexados",
+      "vectors_fingerprint_16": "ad0b27a17798d042",
+      "fingerprint_definition": "sha256 de chunk_id|vector::text de cada vector del espacio declarado, en orden de chunk_id. La busqueda ordena por distancia al vector: sustituir uno cambia que evidencia se recupera sin que ningun recuento ni la huella del contenido se muevan"
     },
     "oracle_channels": {
       "O2_retrieval_scoped_by": "clase predicha, nunca la etiqueta anotada",
@@ -103,7 +115,15 @@
     },
     "writer": {
       "llm": "transformers-lora@slm_lora_v2",
+      "base_model": "Qwen/Qwen2.5-3B-Instruct",
+      "base_model_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "why_the_revisions_are_pinned": "los dos modelos se cargan por nombre, sin revision fijada, y sus pesos los administra una biblioteca de terceros en una cache local: si cambiaran manteniendo el nombre, la evaluacion mediria otro modelo bajo el nombre del congelado",
       "prompt_version": "agent-2026-09-04",
+      "files": {
+        "models/slm_lora_v2/adapter_config.json": "14e9db475a79943f",
+        "models/slm_lora_v2/adapter_model.safetensors": "e6fccee67dc370bd"
+      },
+      "why_the_weights_are_hashed": "estan fuera del control de versiones, de modo que la comprobacion del arbol no los ve: sustituirlos por otros validos habria publicado las metricas de redaccion de otro modelo bajo el nombre del congelado",
       "retrain": "no se reentrena el adaptador para E19"
     },
     "tree_state": "limpio; si no fuera posible, el motivo se escribe en el informe de fase"
@@ -131,7 +151,7 @@
     "canonical_order": "session_id ascendente, luego t_start ascendente",
     "primary_stratum": {
       "name": "operativo",
-      "rule": "la primera ventana en orden canonico de cada una de las dos sesiones de prueba de cada condicion de fallo",
+      "rule": "la primera ventana en orden canonico, ENTRE LAS ETIQUETADAS CON ESA CONDICION, de cada una de las dos sesiones de prueba de cada condicion de fallo; en una sesion con averia las primeras ventanas llevan etiqueta de funcionamiento normal porque el fallo se inyecta tras un calentamiento",
       "consults_model": false,
       "n_windows": 10,
       "n_sessions": 10,
