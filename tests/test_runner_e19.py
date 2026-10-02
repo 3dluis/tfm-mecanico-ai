@@ -1168,3 +1168,34 @@ def test_el_nombre_del_modelo_tiene_que_identificar_un_solo_espacio() -> None:
 
     with pytest.raises(CongelacionInvalidaError, match="identifica 0 espacios"):
         exigir_espacio_identificado_por_su_nombre((), modelo="m", estricto=True)
+
+
+def test_las_revisiones_de_los_modelos_de_inferencia_estan_congeladas(
+    manifiesto: dict[str, Any],
+) -> None:
+    """Era la última dependencia sin fijar: los dos modelos se cargan por nombre y
+    sus pesos los administra una caché de terceros. Si cambiaran manteniendo el
+    nombre, la evaluación ordenaría los vectores del índice con consultas de otro
+    espacio, o atribuiría las métricas de redacción a otra base."""
+    from mecanico_ia_exp.experiments.congelacion import (
+        exigir_revisiones_congeladas,
+        revision_en_cache,
+    )
+
+    embeddings = manifiesto["controlled_state"]["embedding"]
+    redactor = manifiesto["controlled_state"]["writer"]
+    assert len(embeddings["revision"]) == 40
+    assert len(redactor["base_model_revision"]) == 40
+    assert redactor["base_model"] == "Qwen/Qwen2.5-3B-Instruct"
+
+    resultado = exigir_revisiones_congeladas(manifiesto, estricto=True)
+    assert resultado["matches"]
+    assert resultado["in_cache"][embeddings["model"]] == embeddings["revision"]
+
+    falseado = json.loads(json.dumps(manifiesto))
+    falseado["controlled_state"]["embedding"]["revision"] = "f" * 40
+    with pytest.raises(CongelacionInvalidaError, match="no son las congeladas"):
+        exigir_revisiones_congeladas(falseado, estricto=True)
+    assert not exigir_revisiones_congeladas(falseado, estricto=False)["matches"]
+
+    assert revision_en_cache("organizacion/modelo-que-no-existe") is None
