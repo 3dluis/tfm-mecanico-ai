@@ -468,6 +468,74 @@ def exigir_espacio_congelado(
     return space_id
 
 
+def revision_en_cache(modelo: str) -> str | None:
+    """Revisión del modelo descargado, tal como la guarda la caché local.
+
+    Los dos modelos que intervienen en la inferencia --el que vectoriza la consulta
+    y el que redacta-- se cargan **por nombre**, sin revisión fijada. Si los pesos
+    cacheados cambiasen manteniendo el nombre, la evaluación final mediría otro
+    modelo bajo el nombre del congelado: ordenaría los vectores del índice con
+    consultas de otro espacio, o atribuiría las métricas de redacción a otro
+    adaptador fundido sobre otra base.
+
+    No se descarga nada aquí ni se consulta la red: se lee lo que hay. Devolver
+    `None` significa «no está en la caché local», que es distinto de «es otro».
+    """
+    try:
+        from huggingface_hub import constants
+    except ImportError:  # pragma: no cover - entorno sin la biblioteca
+        return None
+    carpeta = Path(constants.HF_HUB_CACHE) / f"models--{modelo.replace('/', '--')}"
+    referencia = carpeta / "refs" / "main"
+    if referencia.is_file():
+        return referencia.read_text(encoding="utf-8").strip() or None
+    instantaneas = carpeta / "snapshots"
+    if instantaneas.is_dir():
+        disponibles = sorted(d.name for d in instantaneas.iterdir() if d.is_dir())
+        if len(disponibles) == 1:
+            return disponibles[0]
+    return None
+
+
+def exigir_revisiones_congeladas(
+    manifiesto: Mapping[str, Any], *, estricto: bool
+) -> dict[str, Any]:
+    """Las revisiones de los dos modelos de inferencia, contra las congeladas.
+
+    Es la última dependencia que quedaba sin fijar, y la que menos se ve: el
+    código está anclado por su commit, el índice y el adaptador por sus huellas, y
+    los pesos que descarga una biblioteca de terceros no estaban en ninguna parte.
+    """
+    estado = manifiesto["controlled_state"]
+    declaradas = {
+        estado["embedding"]["model"]: estado["embedding"].get("revision"),
+        estado["writer"]["base_model"]: estado["writer"].get("base_model_revision"),
+    }
+    observadas = {modelo: revision_en_cache(modelo) for modelo in declaradas}
+    diferencias = [
+        f"{modelo}: en caché {observadas[modelo]}, congelada {esperada}"
+        for modelo, esperada in declaradas.items()
+        if esperada and observadas[modelo] != esperada
+    ]
+    resultado = {
+        "declared": declaradas,
+        "in_cache": observadas,
+        "matches": not diferencias,
+    }
+    if not diferencias:
+        return resultado
+    msg = (
+        "las revisiones de los modelos de inferencia no son las congeladas: "
+        + "; ".join(diferencias)
+        + ". Se cargan por nombre, de modo que la ejecución mediría otro modelo bajo "
+        "el nombre del congelado."
+    )
+    if estricto:
+        raise CongelacionInvalidaError(msg)
+    print(f"AVISO: {msg} En un ensayo se admite; en la evaluación final detendría.")
+    return resultado
+
+
 def exigir_redactor_disponible(
     llm: str, manifiesto: Mapping[str, Any] | None = None
 ) -> Path | None:

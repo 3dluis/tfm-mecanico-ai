@@ -64,6 +64,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     exigir_politica_canonica,
     exigir_redactor_congelado,
     exigir_redactor_disponible,
+    exigir_revisiones_congeladas,
     verificar,
 )
 from mecanico_ia_exp.experiments.registro import escribir
@@ -939,6 +940,7 @@ def documento_final(
     diagnostico: Mapping[str, Any],
     cotejo: Mapping[str, Any],
     corpus: Mapping[str, Any],
+    revisiones: Mapping[str, Any],
     por_estrato: Mapping[str, list[tuple[CasoFinal, CasoVerificado]]],
     confianzas: Mapping[str, float],
     llm: str | None = None,
@@ -997,6 +999,7 @@ def documento_final(
         },
         "freeze_verification": dict(verificacion),
         "corpus": dict(corpus),
+        "model_revisions": dict(revisiones),
         "declared_vs_observed": dict(cotejo),
         "diagnosis": dict(diagnostico),
         "strata": bloques,
@@ -1103,6 +1106,10 @@ def run_final_evaluation(
     # El proveedor se construye **antes** de cargar la partición, porque su espacio
     # vectorial es una de las piezas congeladas y comprobarlo después significaría
     # haber abierto el conjunto de prueba para descubrir que no se podía medir.
+    # Las revisiones de los dos modelos de inferencia, antes de cargar ninguno: se
+    # cargan por nombre y sus pesos los administra una caché de terceros.
+    revisiones = exigir_revisiones_congeladas(manifiesto, estricto=particion == "test")
+
     provider = get_provider("multilingual")
     espacio = espacio_de(provider)
     exigir_espacio_congelado(manifiesto, espacio, estricto=particion == "test")
@@ -1326,6 +1333,7 @@ def run_final_evaluation(
             diagnostico=diagnostico,
             cotejo=cotejo,
             corpus=corpus,
+            revisiones=revisiones,
             por_estrato=por_estrato,
             confianzas=confianza_del_diagnostico,
             llm=llm,
