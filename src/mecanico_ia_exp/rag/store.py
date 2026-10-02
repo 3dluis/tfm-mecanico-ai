@@ -368,6 +368,37 @@ class PgVectorStore(VectorStore):
             filas = conexion.execute(sa.text("SELECT DISTINCT embedding_model FROM rag.embedding"))
             return frozenset(str(f[0]) for f in filas)
 
+    def corpus_counts(self, *, vehicle_id: str, embedding_model: str) -> dict[str, int]:
+        """Fragmentos, ficheros de origen y vectores indexados de un vehículo.
+
+        Existe para una comprobación que no puede hacerse de otra manera: un índice
+        **incompleto** no da error, da menos evidencia, y menos evidencia se cuenta
+        como una abstención legítima. La evaluación final compara estos recuentos
+        con los congelados antes de medir, porque la sección 11 del documento de
+        congelación trata un índice incompleto como motivo de invalidez.
+        """
+        with self._engine.connect() as cx:
+            fragmentos, ficheros = cx.execute(
+                sa.text(
+                    f"SELECT count(*), count(DISTINCT source_file) "
+                    f"FROM {ESQUEMA}.document_chunk WHERE vehicle_id = :v"
+                ),
+                {"v": vehicle_id},
+            ).one()
+            vectores = cx.execute(
+                sa.text(
+                    f"SELECT count(*) FROM {ESQUEMA}.embedding e "
+                    f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                    "WHERE c.vehicle_id = :v AND e.embedding_model = :m"
+                ),
+                {"v": vehicle_id, "m": embedding_model},
+            ).scalar_one()
+        return {
+            "n_chunks": int(fragmentos),
+            "n_source_files": int(ficheros),
+            "n_vectors_in_space": int(vectores),
+        }
+
     def search(
         self,
         query_vector: npt.NDArray[np.float32],
