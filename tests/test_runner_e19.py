@@ -1042,8 +1042,9 @@ def test_el_adaptador_que_falta_es_un_fallo_de_preparacion(
     from mecanico_ia_exp.experiments import congelacion
 
     assert exigir_redactor_disponible("echo") is None
-    assert exigir_redactor_disponible("transformers-lora@slm_lora_v2") is not None
 
+    # Los pesos no están en el repositorio, de modo que la prueba construye su
+    # propio adaptador: lo que se comprueba es la regla, no esta máquina.
     monkeypatch.setattr(congelacion.paths, "ROOT", tmp_path)
     with pytest.raises(CongelacionInvalidaError, match="fallo de preparación"):
         congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2")
@@ -1061,24 +1062,47 @@ def test_el_adaptador_que_falta_es_un_fallo_de_preparacion(
 
 
 def test_los_pesos_del_adaptador_tienen_que_ser_los_congelados(
-    manifiesto: dict[str, Any],
+    manifiesto: dict[str, Any], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Están fuera del control de versiones, de modo que la comprobación del árbol
     no los ve: sustituirlos por otros válidos habría publicado las métricas de
-    redacción de otro modelo bajo el nombre del congelado."""
-    declarados = manifiesto["controlled_state"]["writer"]["files"]
-    assert set(declarados) == {
+    redacción de otro modelo bajo el nombre del congelado.
+
+    Los pesos tampoco están en el repositorio, así que la prueba construye su propio
+    adaptador y su propio manifiesto: comprueba la regla, no esta máquina.
+    """
+    from mecanico_ia_exp.experiments import congelacion
+    from mecanico_ia_exp.experiments.congelacion import huella
+
+    assert set(manifiesto["controlled_state"]["writer"]["files"]) == {
         "models/slm_lora_v2/adapter_config.json",
         "models/slm_lora_v2/adapter_model.safetensors",
     }
-    assert exigir_redactor_disponible("transformers-lora@slm_lora_v2", manifiesto) is not None
 
-    falseado = json.loads(json.dumps(manifiesto))
+    directorio = tmp_path / "models" / "slm_lora_v2"
+    directorio.mkdir(parents=True)
+    (directorio / "adapter_config.json").write_text("{}", encoding="utf-8")
+    (directorio / "adapter_model.safetensors").write_bytes(b"pesos congelados")
+    monkeypatch.setattr(congelacion.paths, "ROOT", tmp_path)
+
+    propio = json.loads(json.dumps(manifiesto))
+    propio["controlled_state"]["writer"]["files"] = {
+        "models/slm_lora_v2/adapter_config.json": huella(directorio / "adapter_config.json"),
+        "models/slm_lora_v2/adapter_model.safetensors": huella(
+            directorio / "adapter_model.safetensors"
+        ),
+    }
+    assert (
+        congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2", propio)
+        == directorio
+    )
+
+    falseado = json.loads(json.dumps(propio))
     falseado["controlled_state"]["writer"]["files"][
         "models/slm_lora_v2/adapter_model.safetensors"
     ] = "0" * 16
     with pytest.raises(CongelacionInvalidaError, match="no son los congelados"):
-        exigir_redactor_disponible("transformers-lora@slm_lora_v2", falseado)
+        congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2", falseado)
 
 
 def test_la_huella_del_indice_cubre_el_texto_y_la_autoridad() -> None:
@@ -1178,8 +1202,31 @@ def test_el_nombre_del_modelo_tiene_que_identificar_un_solo_espacio() -> None:
         exigir_espacio_identificado_por_su_nombre((), modelo="m", estricto=True)
 
 
+def cache_temporal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, descargadas: dict[str, str]
+) -> Path:
+    """Una caché de modelos construida aquí, con las revisiones que se le pidan.
+
+    Los pesos de los dos modelos no están en el repositorio: sin esto, las pruebas
+    de la comprobación de revisiones dependerían de lo que esta máquina tenga
+    descargado y fallarían en otra con el código correcto.
+    """
+    from huggingface_hub import constants
+
+    cache = tmp_path / "hub"
+    for modelo, revision in descargadas.items():
+        instantanea = cache / f"models--{modelo.replace('/', '--')}" / "snapshots" / revision
+        instantanea.mkdir(parents=True)
+        (instantanea / "config.json").write_text("{}", encoding="utf-8")
+        referencias = cache / f"models--{modelo.replace('/', '--')}" / "refs"
+        referencias.mkdir(parents=True, exist_ok=True)
+        (referencias / "main").write_text(revision, encoding="utf-8")
+    monkeypatch.setattr(constants, "HF_HUB_CACHE", str(cache))
+    return cache
+
+
 def test_las_revisiones_de_los_modelos_de_inferencia_estan_congeladas(
-    manifiesto: dict[str, Any],
+    manifiesto: dict[str, Any], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Era la última dependencia sin fijar: los dos modelos se cargan por nombre y
     sus pesos los administra una caché de terceros. Si cambiaran manteniendo el
@@ -1196,6 +1243,14 @@ def test_las_revisiones_de_los_modelos_de_inferencia_estan_congeladas(
     assert len(redactor["base_model_revision"]) == 40
     assert redactor["base_model"] == "Qwen/Qwen2.5-3B-Instruct"
 
+    cache_temporal(
+        tmp_path,
+        monkeypatch,
+        {
+            embeddings["model"]: embeddings["revision"],
+            redactor["base_model"]: redactor["base_model_revision"],
+        },
+    )
     resultado = exigir_revisiones_congeladas(manifiesto, estricto=True)
     assert resultado["matches"]
     assert resultado["snapshot_available"][embeddings["model"]] is True
@@ -1210,7 +1265,7 @@ def test_las_revisiones_de_los_modelos_de_inferencia_estan_congeladas(
 
 
 def test_lo_que_decide_es_la_instantanea_fijada_y_no_la_rama_principal(
-    manifiesto: dict[str, Any],
+    manifiesto: dict[str, Any], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Los dos cargadores reciben la revisión congelada, de modo que una rama
     principal que haya avanzado es irrelevante mientras la instantánea siga ahí.
@@ -1222,12 +1277,26 @@ def test_lo_que_decide_es_la_instantanea_fijada_y_no_la_rama_principal(
     )
 
     embeddings = manifiesto["controlled_state"]["embedding"]
+    redactor = manifiesto["controlled_state"]["writer"]
+    cache = cache_temporal(
+        tmp_path,
+        monkeypatch,
+        {
+            embeddings["model"]: embeddings["revision"],
+            redactor["base_model"]: redactor["base_model_revision"],
+        },
+    )
     assert instantanea_disponible(embeddings["model"], embeddings["revision"])
     assert not instantanea_disponible(embeddings["model"], "f" * 40)
 
+    # La rama principal avanza y la instantánea congelada sigue descargada: la
+    # evaluación final no puede bloquearse por eso.
+    referencia = cache / f"models--{embeddings['model'].replace('/', '--')}" / "refs" / "main"
+    referencia.write_text("a" * 40, encoding="utf-8")
+
     resultado = exigir_revisiones_congeladas(manifiesto, estricto=True)
     assert resultado["matches"]
-    assert "main_ref_in_cache" in resultado, "la rama principal se registra, no decide"
+    assert resultado["main_ref_in_cache"][embeddings["model"]] == "a" * 40
 
 
 def test_el_redactor_se_carga_antes_de_sellar_no_solo_se_construye() -> None:
