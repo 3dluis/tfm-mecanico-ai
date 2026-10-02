@@ -647,6 +647,12 @@ def test_el_arbol_sucio_detiene_la_evaluacion_final_y_solo_avisa_en_un_ensayo(
     monkeypatch.setattr(congelacion, "ficheros_con_seguimiento_modificados", lambda: ())
     assert congelacion.exigir_arbol_limpio(estricto=True) == ()
 
+    # Y la distinción que importa: «no se ha podido averiguar» no es «está limpio».
+    monkeypatch.setattr(congelacion, "ficheros_con_seguimiento_modificados", lambda: None)
+    with pytest.raises(CongelacionInvalidaError, match="no se ha podido averiguar"):
+        congelacion.exigir_arbol_limpio(estricto=True)
+    assert congelacion.exigir_arbol_limpio(estricto=False) == ()
+
 
 # --- La redacción se guarda, no se pierde ------------------------------------
 
@@ -768,15 +774,20 @@ def test_el_sufijo_distingue_la_particion_y_el_intento() -> None:
     assert sufijo_de("validation", "v2") == "_validation_v2"
 
 
-def test_la_evaluacion_final_no_puede_prescindir_del_estrato_primario() -> None:
-    """Un artefacto marcado como evaluación final que solo contuviera los estratos
-    descriptivos sustituiría el resultado por un análisis de sensibilidad."""
-    with pytest.raises(ValueError, match="tiene que incluir el estrato"):
+@pytest.mark.parametrize("estratos", [("comparativo",), ("operativo",), ("operativo", "adverso")])
+def test_la_evaluacion_final_mide_los_tres_estratos_congelados(
+    estratos: tuple[str, ...],
+) -> None:
+    """Ninguno de los tres es opcional. Sin el comparativo, una diferencia con las
+    cifras de validación confundiría el efecto de la partición con el de haber
+    cambiado la regla de selección; sin el adverso no se mide el escenario del
+    diagnóstico incorrecto; y sin el operativo no se responde a la pregunta."""
+    with pytest.raises(ValueError, match="mide los tres estratos congelados"):
         run_final_evaluation(
             particion="test",
             open_test=True,
             reason="declaración de apertura de prueba",
-            estratos=("comparativo",),
+            estratos=estratos,
             llm="echo",
         )
 
