@@ -1096,7 +1096,7 @@ def test_el_redactor_se_valida_antes_de_sellar_la_anotacion() -> None:
     from mecanico_ia_exp.experiments import final_runner
 
     fuente = inspeccion.getsource(final_runner.run_final_evaluation)
-    assert fuente.index("_redactor(llm)") < fuente.index("sellar_anotacion(")
+    assert fuente.index("_redactor(llm,") < fuente.index("sellar_anotacion(")
     assert fuente.index("exigir_redactor_disponible(") < fuente.index("sellar_anotacion(")
 
 
@@ -1199,3 +1199,40 @@ def test_las_revisiones_de_los_modelos_de_inferencia_estan_congeladas(
     assert not exigir_revisiones_congeladas(falseado, estricto=False)["matches"]
 
     assert revision_en_cache("organizacion/modelo-que-no-existe") is None
+
+
+def test_los_dos_cargadores_reciben_la_revision_congelada() -> None:
+    """Comprobar la caché antes de cargar no basta: si la rama principal avanza y
+    la máquina tiene red, la misma orden resuelve otros pesos. La revisión se pasa
+    al cargador, que es lo único que ata lo comprobado a lo ejecutado."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.experiments import final_runner
+    from mecanico_ia_exp.llm.provider import TransformersProvider
+    from mecanico_ia_exp.rag.embeddings import SentenceTransformerProvider
+
+    assert "revision" in inspeccion.signature(SentenceTransformerProvider.__init__).parameters
+    assert "revision" in inspeccion.signature(TransformersProvider.__init__).parameters
+    assert "revision" in inspeccion.signature(final_runner._redactor).parameters
+
+    carga = inspeccion.getsource(SentenceTransformerProvider._cargar)
+    assert "revision=self._revision" in carga
+
+    fuente = inspeccion.getsource(final_runner.run_final_evaluation)
+    assert '"revision": manifiesto["controlled_state"]["embedding"]["revision"]' in fuente
+    assert "base_model_revision" in fuente
+
+
+def test_sin_revision_el_comportamiento_es_el_de_las_fases_anteriores() -> None:
+    """Las fases ya medidas cargaron por nombre, y eso no puede cambiar al preparar
+    una evaluación final: la revisión es opcional y por omisión no interviene."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.embeddings import SentenceTransformerProvider
+
+    assert (
+        inspeccion.signature(SentenceTransformerProvider.__init__).parameters["revision"].default
+        is None
+    )
+    carga = inspeccion.getsource(SentenceTransformerProvider._cargar)
+    assert "if self._revision" in carga, "sin revisión se llama como antes"

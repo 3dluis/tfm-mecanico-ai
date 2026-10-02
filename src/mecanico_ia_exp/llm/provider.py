@@ -320,11 +320,13 @@ class TransformersProvider(LLMProvider):
     def __init__(
         self,
         base_model: str = "Qwen/Qwen2.5-3B-Instruct",
+        revision: str | None = None,
         adapter_dir: str | None = None,
         max_tokens: int = 1024,
         device: str | None = None,
     ) -> None:
         self._base_model = base_model
+        self._revision = revision
         self._adapter_dir = adapter_dir
         self._max_tokens = max_tokens
         self._device = device
@@ -339,8 +341,11 @@ class TransformersProvider(LLMProvider):
 
         if self._device is None:
             self._device = "mps" if torch.backends.mps.is_available() else "cpu"
-        self._tok = AutoTokenizer.from_pretrained(self._base_model)
-        modelo: Any = AutoModelForCausalLM.from_pretrained(self._base_model, dtype=torch.bfloat16)
+        extra = {"revision": self._revision} if self._revision else {}
+        self._tok = AutoTokenizer.from_pretrained(self._base_model, **extra)
+        modelo: Any = AutoModelForCausalLM.from_pretrained(
+            self._base_model, dtype=torch.bfloat16, **extra
+        )
         if self._adapter_dir:
             from peft import PeftModel
 
