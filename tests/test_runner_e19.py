@@ -1142,3 +1142,28 @@ def test_la_huella_de_los_vectores_los_lee_del_espacio_declarado() -> None:
     for columna in ("embedding_provider", "embedding_dimension", "embedding_version"):
         assert columna in fuente, f"la huella debe acotarse al espacio por {columna}"
     assert "ORDER BY e.chunk_id" in fuente
+
+
+def test_el_nombre_del_modelo_tiene_que_identificar_un_solo_espacio() -> None:
+    """La búsqueda acota por nombre de modelo. Si dos espacios compartieran nombre,
+    acotar por nombre dejaría de identificar uno y la ordenación volvería a mezclar
+    vectores de espacios distintos: es `MIXED-EMBEDDING-SPACE`.
+
+    Se comprueba en lugar de cambiar el filtro de la búsqueda: mientras el nombre
+    identifique un único espacio, acotar por nombre y por identidad son la misma
+    cosa, y las fases ya medidas no cambian de comportamiento.
+    """
+    from mecanico_ia_exp.experiments.congelacion import (
+        exigir_espacio_identificado_por_su_nombre,
+    )
+
+    uno = (("sentence-transformers[mps]", 384, "1.0.0"),)
+    assert exigir_espacio_identificado_por_su_nombre(uno, modelo="m", estricto=True) == uno
+
+    dos = (*uno, ("sentence-transformers[cpu]", 384, "1.0.0"))
+    with pytest.raises(CongelacionInvalidaError, match="identifica 2 espacios"):
+        exigir_espacio_identificado_por_su_nombre(dos, modelo="m", estricto=True)
+    assert exigir_espacio_identificado_por_su_nombre(dos, modelo="m", estricto=False) == dos
+
+    with pytest.raises(CongelacionInvalidaError, match="identifica 0 espacios"):
+        exigir_espacio_identificado_por_su_nombre((), modelo="m", estricto=True)

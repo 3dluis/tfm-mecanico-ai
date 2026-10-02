@@ -493,6 +493,31 @@ class PgVectorStore(VectorStore):
             huella.update(f"{chunk_id}|{vector}\n".encode())
         return huella.hexdigest()[:16]
 
+    def spaces_for_model(self, *, embedding_model: str) -> tuple[tuple[str, int, str], ...]:
+        """Espacios indexados que comparten un nombre de modelo.
+
+        La búsqueda acota por `embedding_model`, que es lo que RERUN-A impuso para
+        no mezclar dos modelos en una misma ordenación. Pero la identidad de un
+        espacio es más que el nombre: incluye el proveedor con su dispositivo, la
+        dimensión y la versión. Si dos espacios compartieran nombre, acotar por
+        nombre dejaría de identificar uno solo y la ordenación volvería a mezclar.
+
+        Saberlo permite exigir, antes de medir, que el nombre identifique un único
+        espacio; mientras lo haga, acotar por nombre y acotar por identidad son la
+        misma cosa.
+        """
+        with self._engine.connect() as cx:
+            filas = cx.execute(
+                sa.text(
+                    "SELECT DISTINCT embedding_provider, embedding_dimension, "
+                    f"embedding_version FROM {ESQUEMA}.embedding "
+                    "WHERE embedding_model = :m "
+                    "ORDER BY embedding_provider, embedding_dimension, embedding_version"
+                ),
+                {"m": embedding_model},
+            ).all()
+        return tuple((str(p), int(d), str(v)) for p, d, v in filas)
+
     def search(
         self,
         query_vector: npt.NDArray[np.float32],

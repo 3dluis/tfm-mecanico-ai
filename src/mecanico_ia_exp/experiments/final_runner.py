@@ -60,6 +60,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     exigir_corpus_congelado,
     exigir_dataset_congelado,
     exigir_espacio_congelado,
+    exigir_espacio_identificado_por_su_nombre,
     exigir_politica_canonica,
     exigir_redactor_congelado,
     exigir_redactor_disponible,
@@ -1111,6 +1112,11 @@ def run_final_evaluation(
     # Descubrirlo después de abrir el conjunto sería descubrirlo tarde.
     sonda = PgVectorStore()
     try:
+        exigir_espacio_identificado_por_su_nombre(
+            sonda.spaces_for_model(embedding_model=provider.identity.model),
+            modelo=provider.identity.model,
+            estricto=particion == "test",
+        )
         corpus = exigir_corpus_congelado(
             manifiesto,
             sonda.corpus_counts(vehicle_id=VEHICULO, identidad=provider.identity),
