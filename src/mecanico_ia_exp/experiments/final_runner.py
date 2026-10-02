@@ -888,11 +888,18 @@ def resumen_de_redaccion(
         "identity": identidad,
         "summary": {
             "n_runs": len(ejecuciones),
-            "valid_outputs": sum(1 for a in ejecuciones if a.valid),
+            # Tres cosas distintas, y la sección 9 las publica por separado. La
+            # propiedad `valid` del agente une dos --esquema y citas-- y usarla
+            # contaba como inválida de esquema una salida bien formada con una cita
+            # indebida, que es el caso que hay que poder distinguir.
+            "schema_valid_outputs": sum(1 for a in ejecuciones if a.output is not None),
+            "schema_errors": sum(1 for a in ejecuciones if a.schema_error),
+            "runs_with_fake_citations": sum(1 for a in ejecuciones if a.fake_citations),
+            "fake_citations": sum(len(a.fake_citations) for a in ejecuciones),
             "respected_verdict": sum(1 for a in evaluables if a.respected_verdict),
             "n_evaluable_for_verdict": len(evaluables),
-            "fake_citations": sum(len(a.fake_citations) for a in ejecuciones),
-            "schema_errors": sum(1 for a in ejecuciones if a.schema_error),
+            # Se conserva la definición conjunta del agente, dicha como lo que es.
+            "schema_valid_and_without_fake_citations": sum(1 for a in ejecuciones if a.valid),
         },
         "runs": [a.to_dict() for a in ejecuciones],
     }
