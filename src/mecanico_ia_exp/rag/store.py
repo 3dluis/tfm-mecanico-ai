@@ -378,6 +378,12 @@ class PgVectorStore(VectorStore):
         con los congelados antes de medir, porque la sección 11 del documento de
         congelación trata un índice incompleto como motivo de invalidez.
 
+        Los vectores se acotan por el vehículo **en las dos tablas**, porque la
+        búsqueda filtra por el del vector y las comprobaciones filtraban por el del
+        fragmento: el esquema no obliga a que coincidan, y si no coincidieran la
+        búsqueda recuperaría menos evidencia de la que esta comprobación da por
+        completa. Menos evidencia se cuenta como una abstención legítima.
+
         Los vectores se cuentan por la identidad **completa** del espacio y no por
         el nombre del modelo: el proveedor incluye el dispositivo, y un índice con
         vectores producidos en CPU bajo el mismo nombre de modelo pasaría un filtro
@@ -396,7 +402,8 @@ class PgVectorStore(VectorStore):
                 sa.text(
                     f"SELECT count(*) FROM {ESQUEMA}.embedding e "
                     f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
-                    "WHERE c.vehicle_id = :v AND e.embedding_provider = :p "
+                    "WHERE e.vehicle_id = :v AND c.vehicle_id = :v "
+                    "AND e.embedding_provider = :p "
                     "AND e.embedding_model = :m AND e.embedding_dimension = :d "
                     "AND e.embedding_version = :r"
                 ),
@@ -469,7 +476,8 @@ class PgVectorStore(VectorStore):
                     "SELECT e.chunk_id, e.vector::text "
                     f"FROM {ESQUEMA}.embedding e "
                     f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
-                    "WHERE c.vehicle_id = :v AND e.embedding_provider = :p "
+                    "WHERE e.vehicle_id = :v AND c.vehicle_id = :v "
+                    "AND e.embedding_provider = :p "
                     "AND e.embedding_model = :m AND e.embedding_dimension = :d "
                     "AND e.embedding_version = :r ORDER BY e.chunk_id"
                 ),
@@ -511,7 +519,7 @@ class PgVectorStore(VectorStore):
                     "SELECT DISTINCT e.embedding_provider, e.embedding_dimension, "
                     f"e.embedding_version FROM {ESQUEMA}.embedding e "
                     f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
-                    "WHERE e.embedding_model = :m AND c.vehicle_id = :v "
+                    "WHERE e.embedding_model = :m AND e.vehicle_id = :v AND c.vehicle_id = :v "
                     "ORDER BY e.embedding_provider, e.embedding_dimension, e.embedding_version"
                 ),
                 {"m": embedding_model, "v": vehicle_id},
