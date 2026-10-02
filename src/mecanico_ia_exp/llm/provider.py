@@ -359,9 +359,19 @@ class TransformersProvider(LLMProvider):
             self._base_model, dtype=torch.bfloat16, **extra
         )
         if self._adapter_dir:
+            from pathlib import Path
+
             from peft import PeftModel
 
-            modelo = PeftModel.from_pretrained(modelo, self._adapter_dir)
+            from mecanico_ia_exp.config import paths
+
+            # Un adaptador relativo significa «relativo al repositorio», no al
+            # directorio desde el que se invoque: `models/slm_lora_v2` tiene que
+            # resolver al mismo sitio desde la raíz y desde un notebook.
+            ruta = Path(self._adapter_dir)
+            if not ruta.is_absolute():
+                ruta = paths.ROOT / ruta
+            modelo = PeftModel.from_pretrained(modelo, str(ruta))
             # Fusionar el adaptador en los pesos evita el sobrecoste de la doble
             # proyección en cada token durante la generación.
             modelo = modelo.merge_and_unload()

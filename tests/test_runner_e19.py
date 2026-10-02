@@ -1530,3 +1530,30 @@ def test_la_referencia_mayoritaria_sale_de_la_particion_evaluada_y_se_declara() 
     assert "np.unique(y, return_counts=True)" in fuente, "la mayoritaria sale de la partición"
     assert "majority_class_source" in fuente, "la referencia asistida se declara"
     assert "majority_baseline_from_train" in fuente
+
+
+def test_un_vector_que_apunta_a_otro_vehiculo_detiene_la_evaluacion_final() -> None:
+    """La búsqueda filtra por el vehículo del vector y las comprobaciones exigen que
+    el del vector y el del fragmento coincidan: con un desajuste, la búsqueda podría
+    recuperar evidencia que ninguna comprobación miró."""
+    from mecanico_ia_exp.experiments.congelacion import (
+        exigir_indice_sin_desajuste_de_vehiculo,
+    )
+
+    assert exigir_indice_sin_desajuste_de_vehiculo(0, estricto=True) == 0
+    with pytest.raises(CongelacionInvalidaError, match="otro vehículo"):
+        exigir_indice_sin_desajuste_de_vehiculo(3, estricto=True)
+    assert exigir_indice_sin_desajuste_de_vehiculo(3, estricto=False) == 3
+
+
+def test_el_adaptador_relativo_se_resuelve_contra_el_repositorio() -> None:
+    """`models/slm_lora_v2` tiene que resolver al mismo sitio desde la raíz y desde
+    cualquier otro directorio: si no, el redactor pasa el preflight y falla al
+    cargar."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.llm.provider import TransformersProvider
+
+    fuente = inspeccion.getsource(TransformersProvider._cargar)
+    assert "paths.ROOT / ruta" in fuente
+    assert "ruta.is_absolute()" in fuente

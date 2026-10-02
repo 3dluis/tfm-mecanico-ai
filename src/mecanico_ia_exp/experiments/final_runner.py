@@ -61,6 +61,7 @@ from mecanico_ia_exp.experiments.congelacion import (
     exigir_dataset_congelado,
     exigir_espacio_congelado,
     exigir_espacio_identificado_por_su_nombre,
+    exigir_indice_sin_desajuste_de_vehiculo,
     exigir_politica_canonica,
     exigir_prompt_congelado,
     exigir_redactor_congelado,
@@ -1201,6 +1202,10 @@ def run_final_evaluation(
         exigir_espacio_identificado_por_su_nombre(
             sonda.spaces_for_model(embedding_model=provider.identity.model, vehicle_id=VEHICULO),
             modelo=provider.identity.model,
+            estricto=particion == "test",
+        )
+        exigir_indice_sin_desajuste_de_vehiculo(
+            sonda.vehicle_id_mismatches(vehicle_id=VEHICULO),
             estricto=particion == "test",
         )
         corpus = exigir_corpus_congelado(
