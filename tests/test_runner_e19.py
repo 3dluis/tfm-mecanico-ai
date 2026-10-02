@@ -1461,3 +1461,22 @@ def test_un_manifiesto_que_falta_falla_de_forma_controlada(
     monkeypatch.setattr(congelacion.paths, "ROOT", tmp_path)
     with pytest.raises(CongelacionInvalidaError, match="falta el manifiesto"):
         congelacion.cargar_manifiesto(cargar_anclaje())
+
+
+def test_las_comprobaciones_del_indice_acotan_el_vehiculo_en_las_dos_tablas() -> None:
+    """La búsqueda filtra por el vehículo **del vector** y las comprobaciones
+    filtraban por el del fragmento. El esquema no obliga a que coincidan, y si no
+    coincidieran la búsqueda recuperaría menos evidencia de la que la comprobación
+    da por completa: menos evidencia se cuenta como una abstención legítima."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.store import PgVectorStore
+
+    for metodo in (
+        PgVectorStore.corpus_counts,
+        PgVectorStore.vectors_fingerprint,
+        PgVectorStore.spaces_for_model,
+    ):
+        fuente = inspeccion.getsource(metodo)
+        assert "e.vehicle_id = :v" in fuente, f"{metodo.__name__} debe acotar el del vector"
+        assert "c.vehicle_id = :v" in fuente, f"{metodo.__name__} debe acotar el del fragmento"
