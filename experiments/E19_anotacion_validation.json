@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_anotacion",
-  "commit": "0d110be00d904805700081f1132c3619f6cd1ca0",
-  "dirty": false,
-  "executed_at": "2026-10-02T01:18:38.089983+00:00",
+  "commit": "57509f736892f1813b5d862355de7790fae82dbc",
+  "dirty": true,
+  "executed_at": "2026-10-02T01:22:56.066348+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -14,10 +14,10 @@
   "frozen_rules": {
     "file": "docs/methodology/congelacion-anotacion-e19.md",
     "anchor_file": "configs/congelacion-e19.anchor.json",
-    "frozen_at_commit": "8d3bd5c",
+    "frozen_at_commit": "163df72",
     "files": {
-      "docs/methodology/congelacion-anotacion-e19.md": "d8c938d736033f84",
-      "configs/manifest_e19.json": "d04c43e459a382d0"
+      "docs/methodology/congelacion-anotacion-e19.md": "0f83ed8cba84782f",
+      "configs/manifest_e19.json": "1e3ff643a19a0d02"
     }
   },
   "freeze_verification": {
@@ -31,12 +31,12 @@
       {
         "check": "objeto_del_commit_de_congelacion",
         "status": "PASS",
-        "detail": "lo congelado coincide con el objeto del commit 8d3bd5c"
+        "detail": "lo congelado coincide con el objeto del commit 163df72"
       },
       {
         "check": "sin_commits_posteriores_a_la_congelacion",
         "status": "PASS",
-        "detail": "ningún commit posterior a 8d3bd5c toca lo congelado"
+        "detail": "ningún commit posterior a 163df72 toca lo congelado"
       },
       {
         "check": "politica_canonica_declarada",

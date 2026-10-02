@@ -427,20 +427,31 @@ class PgVectorStore(VectorStore):
         with self._engine.connect() as cx:
             filas = cx.execute(
                 sa.text(
-                    "SELECT chunk_id, content_hash, source_file, dtc_codes, engine_codes "
-                    f"FROM {ESQUEMA}.document_chunk WHERE vehicle_id = :v ORDER BY chunk_id"
+                    "SELECT c.chunk_id, c.text, c.source_file, c.dtc_codes, c.engine_codes, "
+                    "d.document_type, d.authority_level "
+                    f"FROM {ESQUEMA}.document_chunk c "
+                    f"JOIN {ESQUEMA}.document d ON d.document_id = c.document_id "
+                    "WHERE c.vehicle_id = :v ORDER BY c.chunk_id"
                 ),
                 {"v": vehicle_id},
             ).all()
-        for chunk_id, content_hash, source_file, dtc, motores in filas:
+        for chunk_id, texto, source_file, dtc, motores, tipo, autoridad in filas:
+            # El **texto**, no su `content_hash`: la columna podría quedarse igual
+            # mientras el texto cambia, y entonces la huella certificaría un corpus
+            # que ya no es el indexado. Y el tipo de documento y el nivel de
+            # autoridad, porque la reordenación por autoridad manda sobre la
+            # similitud: cambiarlos cambia qué evidencia llega al verificador sin
+            # tocar un solo fragmento.
             huella.update(
                 "|".join(
                     [
                         str(chunk_id),
-                        str(content_hash),
+                        hashlib.sha256(str(texto).encode("utf-8")).hexdigest(),
                         str(source_file),
                         ",".join(sorted(dtc or ())),
                         ",".join(sorted(motores or ())),
+                        str(tipo),
+                        str(autoridad),
                     ]
                 ).encode("utf-8")
             )

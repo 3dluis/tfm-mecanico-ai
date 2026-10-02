@@ -928,9 +928,9 @@ def test_la_huella_del_indice_cubre_lo_que_decide_una_recuperacion() -> None:
     from mecanico_ia_exp.rag.store import PgVectorStore
 
     fuente = inspeccion.getsource(PgVectorStore.corpus_fingerprint)
-    for columna in ("chunk_id", "content_hash", "source_file", "dtc_codes", "engine_codes"):
+    for columna in ("chunk_id", "text", "source_file", "dtc_codes", "engine_codes"):
         assert columna in fuente, f"la huella del índice debe cubrir {columna}"
-    assert "ORDER BY chunk_id" in fuente, "sin orden total la huella no es reproducible"
+    assert "ORDER BY c.chunk_id" in fuente, "sin orden total la huella no es reproducible"
 
 
 def test_el_identificador_de_ejecucion_distingue_los_estratos(
@@ -1048,6 +1048,42 @@ def test_el_adaptador_que_falta_es_un_fallo_de_preparacion(
 
     (directorio / "adapter_model.safetensors").write_bytes(b"pesos")
     assert congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2") == directorio
+
+
+def test_los_pesos_del_adaptador_tienen_que_ser_los_congelados(
+    manifiesto: dict[str, Any],
+) -> None:
+    """Están fuera del control de versiones, de modo que la comprobación del árbol
+    no los ve: sustituirlos por otros válidos habría publicado las métricas de
+    redacción de otro modelo bajo el nombre del congelado."""
+    declarados = manifiesto["controlled_state"]["writer"]["files"]
+    assert set(declarados) == {
+        "models/slm_lora_v2/adapter_config.json",
+        "models/slm_lora_v2/adapter_model.safetensors",
+    }
+    assert exigir_redactor_disponible("transformers-lora@slm_lora_v2", manifiesto) is not None
+
+    falseado = json.loads(json.dumps(manifiesto))
+    falseado["controlled_state"]["writer"]["files"][
+        "models/slm_lora_v2/adapter_model.safetensors"
+    ] = "0" * 16
+    with pytest.raises(CongelacionInvalidaError, match="no son los congelados"):
+        exigir_redactor_disponible("transformers-lora@slm_lora_v2", falseado)
+
+
+def test_la_huella_del_indice_cubre_el_texto_y_la_autoridad() -> None:
+    """La columna que resume el texto podría quedarse igual mientras el texto
+    cambia, y la reordenación por autoridad manda sobre la similitud: cambiar el
+    tipo de documento cambia qué evidencia llega al verificador."""
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.store import PgVectorStore
+
+    fuente = inspeccion.getsource(PgVectorStore.corpus_fingerprint)
+    assert "c.text" in fuente
+    assert "c.content_hash" not in fuente, "la huella no puede fiarse de la columna resumen"
+    for columna in ("d.document_type", "d.authority_level"):
+        assert columna in fuente, f"la huella del índice debe cubrir {columna}"
 
 
 def test_el_redactor_se_valida_antes_de_sellar_la_anotacion() -> None:
