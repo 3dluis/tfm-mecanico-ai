@@ -526,6 +526,28 @@ class PgVectorStore(VectorStore):
             ).all()
         return tuple((str(p), int(d), str(v)) for p, d, v in filas)
 
+    def vehicle_id_mismatches(self, *, vehicle_id: str) -> int:
+        """Vectores cuyo vehículo no es el del fragmento al que apuntan.
+
+        La búsqueda filtra por el vehículo **del vector** y las comprobaciones del
+        índice exigen que los dos coincidan. Mientras no haya desajustes, las dos
+        cosas son equivalentes; si los hubiera, la búsqueda podría recuperar un
+        vector que ninguna comprobación miró. El esquema no lo impide, así que se
+        cuenta.
+        """
+        with self._engine.connect() as cx:
+            return int(
+                cx.execute(
+                    sa.text(
+                        f"SELECT count(*) FROM {ESQUEMA}.embedding e "
+                        f"JOIN {ESQUEMA}.document_chunk c ON c.chunk_id = e.chunk_id "
+                        "WHERE (e.vehicle_id = :v OR c.vehicle_id = :v) "
+                        "AND e.vehicle_id <> c.vehicle_id"
+                    ),
+                    {"v": vehicle_id},
+                ).scalar_one()
+            )
+
     def search(
         self,
         query_vector: npt.NDArray[np.float32],

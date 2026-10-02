@@ -779,6 +779,28 @@ def exigir_espacio_identificado_por_su_nombre(
     return tuple(espacios)
 
 
+def exigir_indice_sin_desajuste_de_vehiculo(desajustes: int, *, estricto: bool) -> int:
+    """Ningún vector puede apuntar a un fragmento de otro vehículo.
+
+    La búsqueda filtra por el vehículo del vector y las comprobaciones del índice
+    exigen que el del vector y el del fragmento coincidan. Mientras no haya
+    desajustes las dos cosas son equivalentes; con un desajuste, la búsqueda podría
+    recuperar un vector que ninguna comprobación miró, y la evaluación final se
+    mediría sobre evidencia no verificada.
+    """
+    if desajustes == 0:
+        return 0
+    msg = (
+        f"{desajustes} vector(es) del índice apuntan a un fragmento de otro vehículo. "
+        "La búsqueda filtra por el vehículo del vector, de modo que podría recuperar "
+        "evidencia que las comprobaciones del índice no han mirado."
+    )
+    if estricto:
+        raise CongelacionInvalidaError(msg)
+    print(f"AVISO: {msg} En un ensayo se admite; en la evaluación final detendría.")
+    return desajustes
+
+
 def ficheros_con_seguimiento_modificados() -> tuple[str, ...] | None:
     """Ficheros **con seguimiento** modificados, o `None` si no se puede saber.
 
