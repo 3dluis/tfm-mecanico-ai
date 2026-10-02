@@ -34,7 +34,7 @@ from mecanico_ia_exp.abstention.sufficiency import (
     SufficiencyVerdict,
 )
 from mecanico_ia_exp.config import paths
-from mecanico_ia_exp.data.dataset import Dataset, load_partition
+from mecanico_ia_exp.data.dataset import Dataset, Particion, load_partition
 from mecanico_ia_exp.evaluation.metrics import expected_calibration_error
 from mecanico_ia_exp.evidence.assembly import assemble
 from mecanico_ia_exp.evidence.model import EvidenceBundle
@@ -105,7 +105,7 @@ def requisito_dtc(diagnostico: str, policy: str = VERIFIER_VERSION) -> DtcRequir
     return DtcRequirement.DTC_REQUIRED
 
 
-def calibrar(entrenamiento: Dataset, validacion: Dataset, configuracion: BaselineConfig) -> Any:
+def calibrar(entrenamiento: Dataset, configuracion: BaselineConfig) -> Any:
     """Calibra la confianza del modelo con validación cruzada sobre entrenamiento.
 
     E6 midió que el bosque está infraconfiado: confianza media 0,738 frente a
@@ -114,7 +114,10 @@ def calibrar(entrenamiento: Dataset, validacion: Dataset, configuracion: Baselin
 
     La calibración se ajusta **sobre entrenamiento**, con validación cruzada
     interna, para no gastar validación en dos cosas: aquí se calibra y después se
-    fijan los umbrales.
+    fijan los umbrales. La partición de evaluación **no entra aquí**, y el
+    parámetro que la recibía se retira al parametrizar la partición: dejar en la
+    firma algo que la función no usa sugeriría que la calibración depende de lo
+    que se mide, y en E19 eso habría que leerlo dos veces para descartarlo.
     """
     from sklearn.calibration import CalibratedClassifierCV
     from sklearn.ensemble import RandomForestClassifier
@@ -142,7 +145,14 @@ class Contexto:
 
     dataset_id: str
     entrenamiento: Dataset
-    validacion: Dataset
+    evaluacion: Dataset
+    """Partición sobre la que se evalúa: validación en E15 y E18, prueba en E19.
+
+    El campo se llamaba `validacion`, y el nombre dejó de ser cierto cuando la
+    evaluación final tuvo que recorrer el mismo camino sobre otra partición. Un
+    campo que dice `validacion` y lleva ventanas de prueba es la clase de detalle
+    que acaba produciendo una cifra mal etiquetada en una tabla.
+    """
     perfil: VehicleProfile
     casos_gold: list[dict[str, Any]]
     configuracion: BaselineConfig
@@ -154,37 +164,52 @@ class Contexto:
     aciertos: npt.NDArray[np.bool_]
 
 
-def preparar(dataset_id: str = DATASET) -> Contexto:
+def preparar(
+    dataset_id: str = DATASET,
+    *,
+    particion: Particion = "validation",
+    allow_test: bool = False,
+    reason: str = "",
+) -> Contexto:
     """Carga particiones y conjunto anotado, entrena el bosque y lo calibra.
 
     El efecto de la calibración se **registra**, no solo se imprime: la cifra
     sostiene la mitad del criterio de PI.1 y una transcripción de consola no es
     un artefacto verificable.
+
+    `particion` elige sobre qué se evalúa. El bosque y su calibración se ajustan
+    **siempre** sobre entrenamiento, también cuando se evalúa sobre prueba:
+    calibrar con la partición que se mide convertiría la cifra final en una
+    descripción de datos ya vistos. Pedir `particion="test"` exige `allow_test` y
+    una razón por escrito, que el cargador imprime; el cierre del conjunto de
+    prueba no se relaja aquí.
     """
     entrenamiento = load_partition("train", dataset_id=dataset_id)
-    validacion = load_partition("validation", dataset_id=dataset_id)
+    evaluacion = load_partition(
+        particion, dataset_id=dataset_id, allow_test=allow_test, reason=reason
+    )
     perfil = load_vehicle(VEHICULO)
     gold = yaml.safe_load(GOLDSET.read_text(encoding="utf-8"))
     casos_gold = list(gold["cases"])
 
     configuracion = BaselineConfig()
     modelo = train_baseline(entrenamiento.features, entrenamiento.y, configuracion)
-    calibrado = calibrar(entrenamiento, validacion, configuracion)
+    calibrado = calibrar(entrenamiento, configuracion)
 
     calibracion: dict[str, Any] = {
         "method": "isotonic, cv=5 sobre entrenamiento",
-        "partition": "validation",
-        "n_windows": len(validacion.y),
+        "partition": particion,
+        "n_windows": len(evaluacion.y),
         "n_bins": 10,
     }
     for clave, nombre, m in (
         ("uncalibrated", "sin calibrar", modelo),
         ("calibrated", "calibrado", calibrado),
     ):
-        prob = np.asarray(m.predict_proba(validacion.features), dtype=np.float64)
-        pred = np.asarray(m.predict(validacion.features), dtype=validacion.y.dtype)
+        prob = np.asarray(m.predict_proba(evaluacion.features), dtype=np.float64)
+        pred = np.asarray(m.predict(evaluacion.features), dtype=evaluacion.y.dtype)
         conf = prob.max(axis=1)
-        aciertos_m = (pred == validacion.y).astype(bool)
+        aciertos_m = (pred == evaluacion.y).astype(bool)
         ece = float(expected_calibration_error(conf, aciertos_m))
         calibracion[clave] = {
             "ece": round(ece, 6),
@@ -206,11 +231,11 @@ def preparar(dataset_id: str = DATASET) -> Contexto:
         seed=configuracion.seed,
     )
 
-    predicciones = np.asarray(modelo.predict(validacion.features), dtype=np.str_)
+    predicciones = np.asarray(modelo.predict(evaluacion.features), dtype=np.str_)
     return Contexto(
         dataset_id=dataset_id,
         entrenamiento=entrenamiento,
-        validacion=validacion,
+        evaluacion=evaluacion,
         perfil=perfil,
         casos_gold=casos_gold,
         configuracion=configuracion,
@@ -219,7 +244,7 @@ def preparar(dataset_id: str = DATASET) -> Contexto:
         fondo=fondo,
         fondo_hash=huella,
         calibracion=calibracion,
-        aciertos=np.asarray(predicciones == validacion.y, dtype=bool),
+        aciertos=np.asarray(predicciones == evaluacion.y, dtype=bool),
     )
 
 
@@ -235,7 +260,7 @@ def seleccionar_ventana(caso: Mapping[str, Any], ctx: Contexto, *, adverse: bool
     pedido, que es un hecho del conjunto y no un error.
     """
     fault_id = str(caso["fault_id"])
-    seleccion = (ctx.validacion.y == fault_id) & (~ctx.aciertos if adverse else ctx.aciertos)
+    seleccion = (ctx.evaluacion.y == fault_id) & (~ctx.aciertos if adverse else ctx.aciertos)
     indices = np.flatnonzero(seleccion)
     if indices.size == 0:
         cual = "mal clasificados" if adverse else "correctamente clasificados"
@@ -246,36 +271,36 @@ def seleccionar_ventana(caso: Mapping[str, Any], ctx: Contexto, *, adverse: bool
         # los errores del modelo se elige el **más confiado**, que es el único
         # que supera la puerta de confianza y llega al verificador. Elegir el
         # primero por índice escogía el caso menos adverso disponible.
-        confianzas = np.asarray(ctx.calibrado.predict_proba(ctx.validacion.features[indices])).max(
+        confianzas = np.asarray(ctx.calibrado.predict_proba(ctx.evaluacion.features[indices])).max(
             axis=1
         )
         return int(indices[int(np.argmax(confianzas))])
     return int(indices[0])
 
 
-def case_id_de(validacion: Dataset, i: int) -> str:
+def case_id_de(evaluacion: Dataset, i: int) -> str:
     """Identificador de la ventana: sesión y segundo de inicio."""
-    return f"{validacion.meta.iloc[i]['session_id']}@{validacion.meta.iloc[i]['t_start']:.0f}s"
+    return f"{evaluacion.meta.iloc[i]['session_id']}@{evaluacion.meta.iloc[i]['t_start']:.0f}s"
 
 
 def atribucion_de(ctx: Contexto, i: int, case_id: str) -> CaseAttribution:
     """Atribución SHAP de la ventana, con el fondo y la semilla del contexto."""
     return explain_cases(
         ctx.modelo,
-        ctx.validacion.features[i : i + 1],
+        ctx.evaluacion.features[i : i + 1],
         feature_names=ctx.entrenamiento.feature_names,
         background=ctx.fondo,
         background_hash=ctx.fondo_hash,
         case_ids=[case_id],
         model_id=f"rf_{ctx.dataset_id}",
-        meta=ctx.validacion.meta.iloc[[i]].reset_index(drop=True),
+        meta=ctx.evaluacion.meta.iloc[[i]].reset_index(drop=True),
         seed=ctx.configuracion.seed,
     )[0]
 
 
 def confianza_calibrada_de(ctx: Contexto, i: int, clase: str) -> float:
     """Confianza calibrada que el modelo asigna a la clase indicada."""
-    prob_cal = np.asarray(ctx.calibrado.predict_proba(ctx.validacion.features[i : i + 1]))[0]
+    prob_cal = np.asarray(ctx.calibrado.predict_proba(ctx.evaluacion.features[i : i + 1]))[0]
     clases_cal = list(ctx.calibrado.classes_)
     return float(prob_cal[clases_cal.index(clase)])
 
@@ -417,7 +442,7 @@ def run_sufficiency(
         i = seleccionar_ventana(caso, ctx, adverse=adverse)
         if i is None:
             continue
-        case_id = case_id_de(ctx.validacion, i)
+        case_id = case_id_de(ctx.evaluacion, i)
 
         atribucion = atribucion_de(ctx, i, case_id)
         confianza_calibrada = confianza_calibrada_de(ctx, i, str(atribucion.predicted_class))

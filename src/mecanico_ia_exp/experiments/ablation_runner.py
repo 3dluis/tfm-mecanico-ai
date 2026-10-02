@@ -514,16 +514,16 @@ def ejecutar_ablacion(
         i = seleccionar_ventana(caso, ctx, adverse=False)
         if i is None:
             continue
-        case_id = case_id_de(ctx.validacion, i)
+        case_id = case_id_de(ctx.evaluacion, i)
 
         if ablacion == "A1" and media is not None and desviacion is not None:
             prob = np.asarray(
-                ctx.modelo.predict_proba(ctx.validacion.features[i : i + 1]), dtype=np.float64
+                ctx.modelo.predict_proba(ctx.evaluacion.features[i : i + 1]), dtype=np.float64
             )[0]
             indice = int(prob.argmax())
-            fila_meta = ctx.validacion.meta.iloc[i]
+            fila_meta = ctx.evaluacion.meta.iloc[i]
             atribucion = atribucion_por_desviacion(
-                x_caso=np.asarray(ctx.validacion.features[i], dtype=np.float64),
+                x_caso=np.asarray(ctx.evaluacion.features[i], dtype=np.float64),
                 media=media,
                 desviacion=desviacion,
                 feature_names=ctx.entrenamiento.feature_names,
