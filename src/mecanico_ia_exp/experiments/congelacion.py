@@ -510,6 +510,40 @@ def exigir_arbol_limpio(*, estricto: bool) -> tuple[str, ...]:
     return modificados
 
 
+def _comprobar_ficheros_del_conjunto(manifiesto: Mapping[str, Any]) -> Comprobacion:
+    """Las huellas de los ficheros preprocesados que la ejecución va a leer.
+
+    Están fuera del control de versiones --son binarios de varios megabytes-- de
+    modo que la comprobación del árbol de trabajo no puede verlos. Sustituir uno
+    dejando el manifiesto de preprocesado con sus recuentos declarados pasaría
+    inadvertido, y la evaluación final mediría otros datos creyéndolos los
+    congelados.
+    """
+    declarados = manifiesto["controlled_state"]["dataset"].get("files")
+    if not declarados:
+        return Comprobacion(
+            "ficheros_del_conjunto",
+            FALLA,
+            "el manifiesto no declara las huellas de los ficheros del conjunto",
+        )
+    problemas = []
+    for ruta, declarada in declarados.items():
+        fichero = paths.ROOT / ruta
+        if not fichero.is_file():
+            problemas.append(f"{ruta} no existe")
+            continue
+        actual = huella(fichero)
+        if actual != declarada:
+            problemas.append(f"{ruta}: huella {actual}, declarada {declarada}")
+    if problemas:
+        return Comprobacion("ficheros_del_conjunto", FALLA, "; ".join(problemas))
+    return Comprobacion(
+        "ficheros_del_conjunto",
+        PASS,
+        f"{len(declarados)} fichero(s) preprocesados con la huella congelada",
+    )
+
+
 def verificar(ruta_anclaje: Path = RUTA_ANCLAJE) -> Verificacion:
     """Todas las comprobaciones, en un orden que no esconde ninguna.
 
@@ -531,5 +565,6 @@ def verificar(ruta_anclaje: Path = RUTA_ANCLAJE) -> Verificacion:
             _comprobar_conjunto_anotado(manifiesto),
             _comprobar_casos_elegibles(manifiesto),
             _comprobar_reparto(manifiesto),
+            _comprobar_ficheros_del_conjunto(manifiesto),
         )
     )

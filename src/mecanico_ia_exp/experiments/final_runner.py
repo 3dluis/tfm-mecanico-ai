@@ -681,6 +681,13 @@ def metricas_de_diagnostico(ctx: Contexto, particion: str) -> dict[str, Any]:
     }
 
 
+def _redactor(llm: str) -> Any:
+    """El proveedor de lenguaje, construido una sola vez por ejecución."""
+    from mecanico_ia_exp.llm.provider import get_llm
+
+    return get_llm(llm)
+
+
 def ejecutar_caso(
     caso: CasoFinal,
     *,
@@ -691,6 +698,7 @@ def ejecutar_caso(
     umbrales: SufficiencyThresholds,
     policy: str,
     llm: str | None,
+    redactor: Any = None,
 ) -> tuple[CasoVerificado, float]:
     """Un caso de punta a punta, por el mismo camino que E15.
 
@@ -731,9 +739,11 @@ def ejecutar_caso(
     ejecucion = None
     if llm:
         from mecanico_ia_exp.llm.agent import run_agent
-        from mecanico_ia_exp.llm.provider import get_llm
 
-        ejecucion = run_agent(get_llm(llm), bundle, veredicto)
+        # El redactor llega construido. Crearlo aquí volvía a cargar el modelo base
+        # y a fundir el adaptador en cada caso, y en la evaluación final son treinta
+        # y ocho ejecuciones.
+        ejecucion = run_agent(redactor or _redactor(llm), bundle, veredicto)
         ejecucion.gold_case_id = caso.case_id_gold
 
     return (
@@ -1116,6 +1126,7 @@ def run_final_evaluation(
     umbrales = SufficiencyThresholds()
     verificador = EvidenceVerifier(umbrales)
     store = PgVectorStore()
+    redactor = _redactor(llm) if llm else None
 
     por_estrato: dict[str, list[tuple[CasoFinal, CasoVerificado]]] = {e: [] for e in estratos}
     confianza_del_diagnostico: dict[str, float] = {}
@@ -1134,6 +1145,7 @@ def run_final_evaluation(
                     umbrales=umbrales,
                     policy=policy,
                     llm=llm,
+                    redactor=redactor,
                 )
             except Exception as error:
                 # La regla congelada manda registrar el caso como no completado,

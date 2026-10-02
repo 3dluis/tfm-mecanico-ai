@@ -570,7 +570,7 @@ def test_un_anclaje_incompleto_no_se_da_por_bueno(tmp_path: Path) -> None:
 def test_la_congelacion_vigente_se_verifica_entera() -> None:
     verificacion = verificar()
     assert verificacion.ok, str(verificacion)
-    assert len(verificacion.comprobaciones) == 9
+    assert len(verificacion.comprobaciones) == 10
 
 
 def test_los_recuentos_declarados_se_cotejan_y_una_discrepancia_no_se_absorbe(
@@ -823,3 +823,40 @@ def test_la_politica_de_referencia_usa_la_confianza_de_la_clase_predicha() -> No
 
     assert bajo["unnecessary_abstention"]["numerator"] == 1
     assert alto["unnecessary_abstention"]["numerator"] == 0
+
+
+def test_los_ficheros_del_conjunto_estan_anclados_por_huella(
+    manifiesto: dict[str, Any], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Están fuera del control de versiones, de modo que la comprobación del árbol
+    no puede verlos: sustituir uno dejando los recuentos declarados pasaba
+    inadvertido y la evaluación final habría medido otros datos."""
+    from mecanico_ia_exp.experiments import congelacion
+
+    declarados = manifiesto["controlled_state"]["dataset"]["files"]
+    assert set(declarados) == {
+        "data/processed/synthetic_v2_x.npy",
+        "data/processed/synthetic_v2_features.npy",
+        "data/processed/synthetic_v2_meta.parquet",
+        "data/processed/synthetic_v2_preprocess.json",
+    }
+    assert all(len(h) == 16 for h in declarados.values())
+
+    comprobacion = congelacion._comprobar_ficheros_del_conjunto(manifiesto)
+    assert comprobacion.ok
+
+    falseado = json.loads(json.dumps(manifiesto))
+    falseado["controlled_state"]["dataset"]["files"]["data/processed/synthetic_v2_meta.parquet"] = (
+        "0" * 16
+    )
+    assert not congelacion._comprobar_ficheros_del_conjunto(falseado).ok
+
+
+def test_el_redactor_se_construye_una_vez_por_ejecucion() -> None:
+    """Crearlo por caso volvía a cargar el modelo base y a fundir el adaptador en
+    cada uno, y en la evaluación final son treinta y ocho ejecuciones."""
+    from mecanico_ia_exp.experiments import final_runner
+
+    assert "redactor" in inspect.signature(final_runner.ejecutar_caso).parameters
+    fuente = inspect.getsource(final_runner.ejecutar_caso)
+    assert "get_llm" not in fuente, "el proveedor no puede construirse dentro del caso"
