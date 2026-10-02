@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_anotacion",
-  "commit": "daa48097c5c6f6a9c873d05eccaf90ddae175f1e",
-  "dirty": true,
-  "executed_at": "2026-10-02T00:35:30.618296+00:00",
+  "commit": "1bcc028b6e28f6d42c82f90102b4c9e5fdb8a977",
+  "dirty": false,
+  "executed_at": "2026-10-02T00:41:43.474679+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
