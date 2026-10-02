@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_final_evaluation",
-  "commit": "09d95fb887ab1eb5717a42e843ab30d57dabbaca",
+  "commit": "fec867fd38405b76da9c883f1492695a5bf52f7b",
   "dirty": true,
-  "executed_at": "2026-10-02T01:27:15.649151+00:00",
+  "executed_at": "2026-10-02T01:30:50.104850+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -35,7 +35,7 @@
   },
   "annotation": {
     "file": "E19_anotacion_validation.json",
-    "sha256_16": "c12d58a3fc333288",
+    "sha256_16": "c56a3db5f7ad022c",
     "written_before_any_measurement": true
   },
   "freeze_verification": {
