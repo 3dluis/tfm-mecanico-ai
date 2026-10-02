@@ -145,9 +145,14 @@ def cargar_manifiesto(anclaje: dict[str, Any] | None = None) -> dict[str, Any]:
     if len(candidatos) != 1:
         msg = f"el anclaje debe cubrir un único manifiesto; cubre {candidatos}"
         raise CongelacionInvalidaError(msg)
-    manifiesto: dict[str, Any] = json.loads(
-        (paths.ROOT / candidatos[0]).read_text(encoding="utf-8")
-    )
+    ruta = paths.ROOT / candidatos[0]
+    if not ruta.is_file():
+        # Falla de forma controlada, como la ausencia del anclaje: si el estado
+        # congelado no está, no hay nada que verificar, y una excepción del sistema
+        # de ficheros aquí dejaría al ejecutor sin mensaje que dar.
+        msg = f"falta el manifiesto del estado congelado: {candidatos[0]}"
+        raise CongelacionInvalidaError(msg)
+    manifiesto: dict[str, Any] = json.loads(ruta.read_text(encoding="utf-8"))
     return manifiesto
 
 
@@ -211,8 +216,15 @@ def _comprobar_commit(anclaje: dict[str, Any]) -> tuple[Comprobacion, Comprobaci
         if objeto is None or objeto.returncode != 0:
             problemas.append(f"{ruta} no está en el commit {commit}")
             continue
+        fichero = paths.ROOT / ruta
+        if not fichero.is_file():
+            # Sin esto, la ausencia del fichero lanzaba `FileNotFoundError` aquí y
+            # la verificación no llegaba a devolver su informe completo: el fallo
+            # cerrado perdía precisamente el detalle que lo justifica.
+            problemas.append(f"{ruta} no está en el árbol de trabajo")
+            continue
         congelado = hashlib.sha256(objeto.stdout).hexdigest()[:16]
-        actual = huella(paths.ROOT / ruta)
+        actual = huella(fichero)
         if congelado != actual:
             problemas.append(f"{ruta}: el árbol de trabajo no es el del commit {commit}")
         registro = _git("log", "--oneline", f"{commit}..HEAD", "--", ruta)
@@ -327,6 +339,11 @@ def casos_elegibles(manifiesto: dict[str, Any]) -> dict[str, str]:
 
 def _comprobar_casos_elegibles(manifiesto: dict[str, Any]) -> Comprobacion:
     anotado = paths.ROOT / manifiesto["controlled_state"]["annotated_set"]["file"]
+    if not anotado.is_file():
+        # Toda comprobación devuelve su estado en lugar de lanzar: si una lanzara,
+        # la verificación no llegaría a informar de las demás y el fallo cerrado
+        # perdería el detalle que lo justifica.
+        return Comprobacion("casos_elegibles", FALLA, f"falta el conjunto anotado: {anotado.name}")
     gold = yaml.safe_load(anotado.read_text(encoding="utf-8"))
     por_id = {str(c["case_id"]): c for c in gold["cases"]}
     elegibles = casos_elegibles(manifiesto)

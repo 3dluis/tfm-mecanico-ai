@@ -1346,3 +1346,49 @@ def test_el_redactor_se_carga_antes_de_abrir_la_particion() -> None:
 
     fuente = inspeccion.getsource(final_runner.run_final_evaluation)
     assert fuente.index("redactor.warmup()") < fuente.index("ctx = preparar(")
+
+
+def test_un_fichero_congelado_que_falta_se_informa_y_no_rompe_la_verificacion(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """El fallo cerrado tiene que devolver su informe completo. Sin esto, la
+    ausencia de un fichero lanzaba `FileNotFoundError` y la verificación no llegaba
+    a decir qué había pasado."""
+    from mecanico_ia_exp.experiments import congelacion
+
+    anclaje = cargar_anclaje()
+    ruta = tmp_path / "anclaje.json"
+    ruta.write_text(json.dumps(anclaje), encoding="utf-8")
+
+    # Un árbol con el manifiesto pero sin el documento de reglas: lo que se
+    # comprueba es que la verificación llega a informar, no que explote.
+    arbol = tmp_path / "arbol"
+    (arbol / "configs").mkdir(parents=True)
+    (arbol / "configs" / "manifest_e19.json").write_text(
+        (paths.CONFIGS / "manifest_e19.json").read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    monkeypatch.setattr(congelacion.paths, "ROOT", arbol)
+    monkeypatch.setattr(congelacion.paths, "DATA_PROCESSED", arbol / "data")
+
+    verificacion = congelacion.verificar(ruta)
+
+    # Lo que importa: la verificación **informa de las diez** en lugar de explotar
+    # en la primera que no puede leer un fichero.
+    assert len(verificacion.comprobaciones) == 10
+    assert not verificacion.ok
+    nombres = {c.nombre for c in verificacion.fallidas}
+    assert {"huellas_de_lo_congelado", "casos_elegibles", "reparto_declarado"} <= nombres
+    with pytest.raises(CongelacionInvalidaError):
+        verificacion.exigir()
+
+
+def test_un_manifiesto_que_falta_falla_de_forma_controlada(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Si el estado congelado no está, no hay nada que verificar, y una excepción
+    del sistema de ficheros dejaría al ejecutor sin mensaje que dar."""
+    from mecanico_ia_exp.experiments import congelacion
+
+    monkeypatch.setattr(congelacion.paths, "ROOT", tmp_path)
+    with pytest.raises(CongelacionInvalidaError, match="falta el manifiesto"):
+        congelacion.cargar_manifiesto(cargar_anclaje())
