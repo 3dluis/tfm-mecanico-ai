@@ -95,6 +95,18 @@ class LLMProvider(ABC):
     ) -> LLMResponse:
         """Genera una respuesta a partir de la conversación."""
 
+    def warmup(self) -> None:  # noqa: B027 - un proveedor sin estado no carga nada
+        """Carga lo que haga falta, para que un fallo de carga ocurra **aquí**.
+
+        Los proveedores cargan de forma diferida, y eso es lo correcto: importar un
+        módulo no debe disparar la descarga de un modelo de tres mil millones de
+        parámetros. Pero en la evaluación final la carga diferida convierte un
+        artefacto de entrada ausente en una ejecución a medias, con la anotación ya
+        sellada, cuando lo que había era un fallo de preparación.
+
+        Por omisión no hace nada: un proveedor sin estado no tiene qué cargar.
+        """
+
 
 class EchoProvider(LLMProvider):
     """Proveedor determinista, sin red.
@@ -320,11 +332,13 @@ class TransformersProvider(LLMProvider):
     def __init__(
         self,
         base_model: str = "Qwen/Qwen2.5-3B-Instruct",
+        revision: str | None = None,
         adapter_dir: str | None = None,
         max_tokens: int = 1024,
         device: str | None = None,
     ) -> None:
         self._base_model = base_model
+        self._revision = revision
         self._adapter_dir = adapter_dir
         self._max_tokens = max_tokens
         self._device = device
@@ -339,18 +353,35 @@ class TransformersProvider(LLMProvider):
 
         if self._device is None:
             self._device = "mps" if torch.backends.mps.is_available() else "cpu"
-        self._tok = AutoTokenizer.from_pretrained(self._base_model)
-        modelo: Any = AutoModelForCausalLM.from_pretrained(self._base_model, dtype=torch.bfloat16)
+        extra = {"revision": self._revision} if self._revision else {}
+        self._tok = AutoTokenizer.from_pretrained(self._base_model, **extra)
+        modelo: Any = AutoModelForCausalLM.from_pretrained(
+            self._base_model, dtype=torch.bfloat16, **extra
+        )
         if self._adapter_dir:
+            from pathlib import Path
+
             from peft import PeftModel
 
-            modelo = PeftModel.from_pretrained(modelo, self._adapter_dir)
+            from mecanico_ia_exp.config import paths
+
+            # Un adaptador relativo significa «relativo al repositorio», no al
+            # directorio desde el que se invoque: `models/slm_lora_v2` tiene que
+            # resolver al mismo sitio desde la raíz y desde un notebook.
+            ruta = Path(self._adapter_dir)
+            if not ruta.is_absolute():
+                ruta = paths.ROOT / ruta
+            modelo = PeftModel.from_pretrained(modelo, str(ruta))
             # Fusionar el adaptador en los pesos evita el sobrecoste de la doble
             # proyección en cada token durante la generación.
             modelo = modelo.merge_and_unload()
         modelo.to(self._device)
         modelo.eval()
         self._modelo = modelo
+
+    def warmup(self) -> None:
+        """Carga el modelo base, funde el adaptador y deja todo listo."""
+        self._cargar()
 
     @property
     def identity(self) -> LLMIdentity:

@@ -6,6 +6,16 @@ gate de `docs/methodology/plan-e19-evaluacion-final.md`, la única que faltaba. 
 hace:** no abre el conjunto de prueba ni autoriza abrirlo. La apertura es una declaración
 posterior del autor, y este documento es uno de sus requisitos, no su sustituto.
 
+**Una precisión posterior, del 1 de octubre de 2026 y anterior a cualquier medición.** La regla
+primaria decía «la primera ventana en orden canónico» de cada sesión, y al implementarla apareció
+una ambigüedad real: en una sesión con fallo, las primeras ventanas están etiquetadas como
+funcionamiento normal, porque la avería se inyecta después de un calentamiento. La regla pasa a
+decir **la primera ventana etiquetada con esa condición**, que es la única lectura con sentido:
+una ventana sin el fallo no puede explicarse con la documentación de ese fallo. El cambio se hace
+con el conjunto de prueba cerrado, el número de ejecuciones no varía, y se ve en el historial como
+dos commits —el que edita lo congelado y el que mueve el anclaje—, que es exactamente el
+procedimiento que la sección 12 describe.
+
 **Tres correcciones de la revisión previa a la congelación** quedan incorporadas en esta versión,
 que es la revisada y la que el anclaje fija: la fuente de la clase predicha, que debe ser la que
 usa el recorrido evaluado y no la del modelo calibrado (sección 5); el anclaje de las huellas, que
@@ -97,8 +107,11 @@ La selección es determinista y no consulta al modelo. **Orden canónico:** `ses
 ascendente y, dentro de cada sesión, `t_start` ascendente.
 
 **Regla primaria (estrato operativo).** De cada una de las dos sesiones de prueba de cada
-condición de fallo se toma **la primera ventana en orden canónico**. Son diez ventanas, de diez
-sesiones distintas, dos por condición. Cada una se ejecuta bajo todas las condiciones de
+condición de fallo se toma **la primera ventana, en orden canónico, que esté etiquetada con esa
+condición**. La precisión importa: en una sesión con avería las primeras ventanas llevan etiqueta
+de funcionamiento normal, porque el fallo se inyecta tras un calentamiento, y una ventana sin el
+fallo no puede explicarse con la documentación de ese fallo. Son diez ventanas, de diez sesiones
+distintas, dos por condición. Cada una se ejecuta bajo todas las condiciones de
 evidencia que su fallo tenga en la tabla anterior: las de `F01`, `F03` y `F04` dan tres
 ejecuciones cada una, y las de `F02` y `F05`, una. Total: **veintidós ejecuciones sobre diez
 ventanas de diez sesiones**.
@@ -285,12 +298,12 @@ intervalos que presupongan ejecuciones independientes.
 | Política del verificador | **v2.2**, que pasa a canónica **con esta evaluación** y solo con ella |
 | Umbrales | confianza 0,79; fragmentos de soporte 2; fuentes distintas 1; cobertura de afirmaciones 0,80; puntuación de recuperación desactivada en 0,0; aplicabilidad aceptada, solo coincidencia exacta |
 | Semilla | 20260901, única, en reparto, bosque, fondo de atribución y muestreos |
-| Conjunto de datos | `synthetic_v2`, 588 ventanas, 139 descriptores, `dataset_type: synthetic` |
+| Conjunto de datos | `synthetic_v2`, 588 ventanas, 139 descriptores, `dataset_type: synthetic`, con la **huella de los cuatro ficheros** que la ejecución lee |
 | Modelo de diagnóstico | bosque aleatorio, 400 árboles, hoja mínima 2, pesos equilibrados, calibración isotónica con validación cruzada de 5 pliegues ajustada **sobre entrenamiento** |
-| Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar |
-| Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados |
+| Corpus | `mazda-3-bk-2007`, versión 0.1.0, 6 158 fragmentos de 3 055 ficheros, sin reindexar, con **huella de contenido** del índice |
+| Embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, 384 dimensiones, identidad de espacio `sentence-transformers[mps]/.../d384/v1.0.0`, en el mismo dispositivo que produjo los vectores indexados, con la **huella de los vectores** |
 | Recuperación | guiada por el diagnóstico, profundidad 10, filtros de vehículo y motor, reordenación por autoridad |
-| Redactor | `transformers-lora@slm_lora_v2`, prompt `agent-2026-09-04`, sin reentrenar |
+| Redactor | `transformers-lora@slm_lora_v2` sobre `Qwen/Qwen2.5-3B-Instruct`, prompt `agent-2026-09-04`, sin reentrenar, con la **huella de sus pesos** y la **revisión de la base** |
 | Código | el commit que se registre en el artefacto, con el árbol limpio |
 
 **Canales de oráculo, cerrados.** E19 se ejecuta con el recorrido no oracular: los códigos que
@@ -304,6 +317,43 @@ definición, en el comparativo; en el adverso se invierte.
 
 El manifiesto `configs/manifest_e19.json` enumera estos valores con sus huellas, incluida la de
 este documento, y las pruebas comprueban que el documento no ha cambiado desde que se congeló.
+
+**Por qué el corpus lleva huella de contenido y no solo recuentos.** Un fragmento sustituido, o un
+código de avería cambiado, deja el número de filas igual y cambia lo que el sistema encuentra. Y un
+índice que devuelve menos evidencia no da error: produce abstenciones que parecen legítimas, de modo
+que confirmaría la hipótesis por la razón equivocada y las cifras parecerían buenas. Es el fallo más
+peligroso de esta evaluación, y por eso el índice se comprueba por recuentos **y** por una huella
+construida sobre **la fila completa** de cada fragmento y la de su documento, serializadas por la
+propia base de datos y en orden de identificador. No se eligen campos a propósito: elegirlos obliga
+a acertar la lista, y la lista crece --el texto, el fichero, los códigos de avería y de motor, el
+tipo de documento y el nivel de autoridad para la reordenación, la sección para la clasificación del
+fragmento, el identificador de documento para el recuento de fuentes distintas--. Incluirlo todo
+convierte un acierto en una propiedad. Una migración del esquema cambia la huella, y debe cambiarla:
+es un cambio visible del substrato sobre el que se mide.
+
+**Y por qué también los vectores.** La búsqueda ordena por distancia al vector, de modo que
+sustituir un vector --dejando intactos el fragmento, sus metadatos y la identidad del espacio--
+cambia qué evidencia se recupera y, con ella, las tasas, sin que ningún recuento ni la huella del
+contenido se muevan. Era la última pieza que decidía el resultado y no estaba cubierta.
+
+**Y por qué también la revisión de los dos modelos.** El que vectoriza la consulta y el que redacta
+se cargan **por nombre**, sin revisión fijada, y sus pesos los administra una biblioteca de terceros
+en una caché local. Si cambiaran manteniendo el nombre, la evaluación final ordenaría los vectores
+del índice con consultas de otro espacio, o atribuiría las métricas de redacción a otro adaptador
+fundido sobre otra base. Las dos revisiones quedan declaradas y se comprueban contra la caché, sin
+descargar nada.
+
+**Y por qué el adaptador también.** Los pesos están fuera del control de versiones, de modo que la
+comprobación del árbol no los ve: sustituirlos por otros válidos habría publicado las métricas de
+redacción de otro modelo bajo el nombre del congelado. Se comprueban por huella, igual que el
+conjunto y el índice.
+
+**Por qué el conjunto lleva huella propia.** Los ficheros preprocesados están fuera del control de
+versiones --son binarios de varios megabytes-- de modo que la comprobación del árbol de trabajo no
+puede verlos: sustituir uno dejando el manifiesto de preprocesado con sus recuentos declarados
+pasaría inadvertido y la evaluación final mediría otros datos creyéndolos los congelados. Sus cuatro
+huellas quedan en el manifiesto y se comprueban antes de abrir la partición. Lo añadió la revisión
+del diff, con el conjunto de prueba todavía cerrado.
 
 **Árbol limpio.** Los artefactos anteriores se produjeron con `dirty: true` y eso quedó
 registrado. Los de E19 se producirán con el árbol limpio; si no fuera posible, el motivo se
