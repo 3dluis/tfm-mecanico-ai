@@ -415,47 +415,39 @@ class PgVectorStore(VectorStore):
         }
 
     def corpus_fingerprint(self, *, vehicle_id: str) -> str:
-        """Huella del **contenido** indexado de un vehículo, no de su recuento.
+        """Huella del **contenido indexado** de un vehículo, fila a fila y entera.
 
         Los recuentos no detectan una sustitución: cambiar el texto de un fragmento,
-        o los códigos por los que la recuperación filtra, deja el número de filas
-        igual y cambia lo que el sistema encuentra. La huella se construye sobre lo
-        que decide una recuperación --identificador, huella del texto, fichero de
-        origen, códigos de avería y de motor-- en orden de `chunk_id`, que es total.
+        o un código por el que la recuperación filtra, o el encabezado de sección por
+        el que el verificador decide si un fragmento es un procedimiento, deja el
+        número de filas igual y cambia lo que el sistema encuentra y lo que acepta
+        como soporte. Y un índice que devuelve menos evidencia no da error: produce
+        abstenciones que parecen legítimas.
+
+        Por eso la huella no elige campos. Se construye sobre la **fila completa**
+        de cada fragmento y la de su documento, serializadas por la propia base de
+        datos, en orden de `chunk_id`. Elegir campos obliga a acertar la lista, y la
+        lista crece: el texto, el fichero, los códigos de avería y de motor, el tipo
+        de documento y el nivel de autoridad para la reordenación, la sección para la
+        clasificación del fragmento, el identificador de documento para el recuento
+        de fuentes distintas. Incluirlo todo convierte un acierto en una propiedad.
+
+        Una migración del esquema cambia la huella, y debe cambiarla: es un cambio
+        visible del substrato sobre el que se mide.
         """
         huella = hashlib.sha256()
         with self._engine.connect() as cx:
             filas = cx.execute(
                 sa.text(
-                    "SELECT c.chunk_id, c.text, c.source_file, c.dtc_codes, c.engine_codes, "
-                    "d.document_type, d.authority_level "
+                    "SELECT c.chunk_id, row_to_json(c)::text, row_to_json(d)::text "
                     f"FROM {ESQUEMA}.document_chunk c "
                     f"JOIN {ESQUEMA}.document d ON d.document_id = c.document_id "
                     "WHERE c.vehicle_id = :v ORDER BY c.chunk_id"
                 ),
                 {"v": vehicle_id},
             ).all()
-        for chunk_id, texto, source_file, dtc, motores, tipo, autoridad in filas:
-            # El **texto**, no su `content_hash`: la columna podría quedarse igual
-            # mientras el texto cambia, y entonces la huella certificaría un corpus
-            # que ya no es el indexado. Y el tipo de documento y el nivel de
-            # autoridad, porque la reordenación por autoridad manda sobre la
-            # similitud: cambiarlos cambia qué evidencia llega al verificador sin
-            # tocar un solo fragmento.
-            huella.update(
-                "|".join(
-                    [
-                        str(chunk_id),
-                        hashlib.sha256(str(texto).encode("utf-8")).hexdigest(),
-                        str(source_file),
-                        ",".join(sorted(dtc or ())),
-                        ",".join(sorted(motores or ())),
-                        str(tipo),
-                        str(autoridad),
-                    ]
-                ).encode("utf-8")
-            )
-            huella.update(b"\n")
+        for chunk_id, fragmento, documento in filas:
+            huella.update(f"{chunk_id}|{fragmento}|{documento}\n".encode())
         return huella.hexdigest()[:16]
 
     def vectors_fingerprint(self, *, vehicle_id: str, identidad: EmbeddingIdentity) -> str:
