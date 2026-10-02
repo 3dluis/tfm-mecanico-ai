@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_anotacion",
-  "commit": "c8ab4ecb5305a142648e03754d68c19b442076df",
+  "commit": "678980efa42c6491c65117047a6831001c90c48a",
   "dirty": false,
-  "executed_at": "2026-10-02T00:58:37.142039+00:00",
+  "executed_at": "2026-10-02T01:05:31.421053+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -128,7 +128,7 @@
       },
       "runs": [
         {
-          "run_id": "C01_maf_drift@F02_maf_drift__highway__01@120s",
+          "run_id": "operativo:C01_maf_drift@F02_maf_drift__highway__01@120s",
           "case_id_gold": "C01_maf_drift",
           "stratum": "operativo",
           "fault_id": "F02_maf_drift",
@@ -142,7 +142,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C01_maf_drift@F02_maf_drift__urban__04@120s",
+          "run_id": "operativo:C01_maf_drift@F02_maf_drift__urban__04@120s",
           "case_id_gold": "C01_maf_drift",
           "stratum": "operativo",
           "fault_id": "F02_maf_drift",
@@ -156,7 +156,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "operativo:C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
           "case_id_gold": "C02_thermostat_stuck",
           "stratum": "operativo",
           "fault_id": "F03_thermostat_stuck",
@@ -170,7 +170,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@120s",
+          "run_id": "operativo:C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@120s",
           "case_id_gold": "C02_thermostat_stuck",
           "stratum": "operativo",
           "fault_id": "F03_thermostat_stuck",
@@ -184,7 +184,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C03_o2_slow_response@F04_o2_lag__idle__02@120s",
+          "run_id": "operativo:C03_o2_slow_response@F04_o2_lag__idle__02@120s",
           "case_id_gold": "C03_o2_slow_response",
           "stratum": "operativo",
           "fault_id": "F04_o2_lag",
@@ -198,7 +198,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C03_o2_slow_response@F04_o2_lag__urban__00@120s",
+          "run_id": "operativo:C03_o2_slow_response@F04_o2_lag__urban__00@120s",
           "case_id_gold": "C03_o2_slow_response",
           "stratum": "operativo",
           "fault_id": "F04_o2_lag",
@@ -212,7 +212,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C04_misfire@F05_misfire__highway__09@120s",
+          "run_id": "operativo:C04_misfire@F05_misfire__highway__09@120s",
           "case_id_gold": "C04_misfire",
           "stratum": "operativo",
           "fault_id": "F05_misfire",
@@ -226,7 +226,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C04_misfire@F05_misfire__urban__00@120s",
+          "run_id": "operativo:C04_misfire@F05_misfire__urban__00@120s",
           "case_id_gold": "C04_misfire",
           "stratum": "operativo",
           "fault_id": "F05_misfire",
@@ -240,7 +240,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
+          "run_id": "operativo:C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
           "case_id_gold": "C05_vacuum_leak",
           "stratum": "operativo",
           "fault_id": "F01_vacuum_leak",
@@ -254,7 +254,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C05_vacuum_leak@F01_vacuum_leak__warmup__03@120s",
+          "run_id": "operativo:C05_vacuum_leak@F01_vacuum_leak__warmup__03@120s",
           "case_id_gold": "C05_vacuum_leak",
           "stratum": "operativo",
           "fault_id": "F01_vacuum_leak",
@@ -268,7 +268,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
+          "run_id": "operativo:C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
           "case_id_gold": "C06_vacuum_leak_evidencia_retirada",
           "stratum": "operativo",
           "fault_id": "F01_vacuum_leak",
@@ -282,7 +282,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__warmup__03@120s",
+          "run_id": "operativo:C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__warmup__03@120s",
           "case_id_gold": "C06_vacuum_leak_evidencia_retirada",
           "stratum": "operativo",
           "fault_id": "F01_vacuum_leak",
@@ -296,7 +296,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C07_partial@F01_vacuum_leak__idle__10@120s",
+          "run_id": "operativo:C07_partial@F01_vacuum_leak__idle__10@120s",
           "case_id_gold": "C07_partial",
           "stratum": "operativo",
           "fault_id": "F01_vacuum_leak",
@@ -310,7 +310,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C07_partial@F01_vacuum_leak__warmup__03@120s",
+          "run_id": "operativo:C07_partial@F01_vacuum_leak__warmup__03@120s",
           "case_id_gold": "C07_partial",
           "stratum": "operativo",
           "fault_id": "F01_vacuum_leak",
@@ -324,7 +324,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "operativo:C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
           "case_id_gold": "C10_thermostat_absent",
           "stratum": "operativo",
           "fault_id": "F03_thermostat_stuck",
@@ -338,7 +338,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__warmup__03@120s",
+          "run_id": "operativo:C10_thermostat_absent@F03_thermostat_stuck__warmup__03@120s",
           "case_id_gold": "C10_thermostat_absent",
           "stratum": "operativo",
           "fault_id": "F03_thermostat_stuck",
@@ -352,7 +352,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "operativo:C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
           "case_id_gold": "C11_thermostat_partial",
           "stratum": "operativo",
           "fault_id": "F03_thermostat_stuck",
@@ -366,7 +366,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__warmup__03@120s",
+          "run_id": "operativo:C11_thermostat_partial@F03_thermostat_stuck__warmup__03@120s",
           "case_id_gold": "C11_thermostat_partial",
           "stratum": "operativo",
           "fault_id": "F03_thermostat_stuck",
@@ -380,7 +380,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C14_o2_absent@F04_o2_lag__idle__02@120s",
+          "run_id": "operativo:C14_o2_absent@F04_o2_lag__idle__02@120s",
           "case_id_gold": "C14_o2_absent",
           "stratum": "operativo",
           "fault_id": "F04_o2_lag",
@@ -394,7 +394,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C14_o2_absent@F04_o2_lag__urban__00@120s",
+          "run_id": "operativo:C14_o2_absent@F04_o2_lag__urban__00@120s",
           "case_id_gold": "C14_o2_absent",
           "stratum": "operativo",
           "fault_id": "F04_o2_lag",
@@ -408,7 +408,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C15_o2_partial@F04_o2_lag__idle__02@120s",
+          "run_id": "operativo:C15_o2_partial@F04_o2_lag__idle__02@120s",
           "case_id_gold": "C15_o2_partial",
           "stratum": "operativo",
           "fault_id": "F04_o2_lag",
@@ -422,7 +422,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C15_o2_partial@F04_o2_lag__urban__00@120s",
+          "run_id": "operativo:C15_o2_partial@F04_o2_lag__urban__00@120s",
           "case_id_gold": "C15_o2_partial",
           "stratum": "operativo",
           "fault_id": "F04_o2_lag",
@@ -463,7 +463,7 @@
       },
       "runs": [
         {
-          "run_id": "C01_maf_drift@F02_maf_drift__highway__01@120s",
+          "run_id": "comparativo:C01_maf_drift@F02_maf_drift__highway__01@120s",
           "case_id_gold": "C01_maf_drift",
           "stratum": "comparativo",
           "fault_id": "F02_maf_drift",
@@ -477,7 +477,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "comparativo:C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
           "case_id_gold": "C02_thermostat_stuck",
           "stratum": "comparativo",
           "fault_id": "F03_thermostat_stuck",
@@ -491,7 +491,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C03_o2_slow_response@F04_o2_lag__idle__02@120s",
+          "run_id": "comparativo:C03_o2_slow_response@F04_o2_lag__idle__02@120s",
           "case_id_gold": "C03_o2_slow_response",
           "stratum": "comparativo",
           "fault_id": "F04_o2_lag",
@@ -505,7 +505,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C04_misfire@F05_misfire__highway__09@180s",
+          "run_id": "comparativo:C04_misfire@F05_misfire__highway__09@180s",
           "case_id_gold": "C04_misfire",
           "stratum": "comparativo",
           "fault_id": "F05_misfire",
@@ -519,7 +519,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
+          "run_id": "comparativo:C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
           "case_id_gold": "C05_vacuum_leak",
           "stratum": "comparativo",
           "fault_id": "F01_vacuum_leak",
@@ -533,7 +533,7 @@
           "expected_decision": "EXPLAIN"
         },
         {
-          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
+          "run_id": "comparativo:C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
           "case_id_gold": "C06_vacuum_leak_evidencia_retirada",
           "stratum": "comparativo",
           "fault_id": "F01_vacuum_leak",
@@ -547,7 +547,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C07_partial@F01_vacuum_leak__idle__10@120s",
+          "run_id": "comparativo:C07_partial@F01_vacuum_leak__idle__10@120s",
           "case_id_gold": "C07_partial",
           "stratum": "comparativo",
           "fault_id": "F01_vacuum_leak",
@@ -561,7 +561,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "comparativo:C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
           "case_id_gold": "C10_thermostat_absent",
           "stratum": "comparativo",
           "fault_id": "F03_thermostat_stuck",
@@ -575,7 +575,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "comparativo:C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
           "case_id_gold": "C11_thermostat_partial",
           "stratum": "comparativo",
           "fault_id": "F03_thermostat_stuck",
@@ -589,7 +589,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C14_o2_absent@F04_o2_lag__idle__02@120s",
+          "run_id": "comparativo:C14_o2_absent@F04_o2_lag__idle__02@120s",
           "case_id_gold": "C14_o2_absent",
           "stratum": "comparativo",
           "fault_id": "F04_o2_lag",
@@ -603,7 +603,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C15_o2_partial@F04_o2_lag__idle__02@120s",
+          "run_id": "comparativo:C15_o2_partial@F04_o2_lag__idle__02@120s",
           "case_id_gold": "C15_o2_partial",
           "stratum": "comparativo",
           "fault_id": "F04_o2_lag",
@@ -644,7 +644,7 @@
       },
       "runs": [
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@300s",
+          "run_id": "adverso:C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@300s",
           "case_id_gold": "C02_thermostat_stuck",
           "stratum": "adverso",
           "fault_id": "F03_thermostat_stuck",
@@ -658,7 +658,7 @@
           "expected_decision": "ABSTAIN"
         },
         {
-          "run_id": "C04_misfire@F05_misfire__highway__09@480s",
+          "run_id": "adverso:C04_misfire@F05_misfire__highway__09@480s",
           "case_id_gold": "C04_misfire",
           "stratum": "adverso",
           "fault_id": "F05_misfire",

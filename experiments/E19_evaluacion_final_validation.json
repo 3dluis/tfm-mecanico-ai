@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_final_evaluation",
-  "commit": "c8ab4ecb5305a142648e03754d68c19b442076df",
+  "commit": "678980efa42c6491c65117047a6831001c90c48a",
   "dirty": true,
-  "executed_at": "2026-10-02T00:58:51.164537+00:00",
+  "executed_at": "2026-10-02T01:05:45.110842+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -35,7 +35,7 @@
   },
   "annotation": {
     "file": "E19_anotacion_validation.json",
-    "sha256_16": "89805ebc013ff02d",
+    "sha256_16": "c079b142f638e32d",
     "written_before_any_measurement": true
   },
   "freeze_verification": {
@@ -92,6 +92,18 @@
         "detail": "4 fichero(s) preprocesados con la huella congelada"
       }
     ]
+  },
+  "corpus": {
+    "declared": {
+      "n_chunks": 6158,
+      "n_source_files": 3055
+    },
+    "indexed": {
+      "n_chunks": 6158,
+      "n_source_files": 3055,
+      "n_vectors_in_space": 6158
+    },
+    "matches": true
   },
   "declared_vs_observed": {
     "declared": {
@@ -345,9 +357,24 @@
           }
         }
       },
+      "traceability": {
+        "note": "el soporte es una propiedad del verificador; no hay anotación independiente de afirmaciones admisibles",
+        "denominator_claims": 66,
+        "n_runs": 22,
+        "n_windows": 10,
+        "n_sessions": 10,
+        "with_observation": 66,
+        "with_citation": 22,
+        "with_support": 22,
+        "rates": {
+          "with_observation": 1.0,
+          "with_citation": 0.3333,
+          "with_support": 0.3333
+        }
+      },
       "cases": [
         {
-          "run_id": "C01_maf_drift@F02_maf_drift__highway__01@120s",
+          "run_id": "operativo:C01_maf_drift@F02_maf_drift__highway__01@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F02_maf_drift",
           "dtc_requirement": "DTC_REQUIRED",
@@ -813,7 +840,7 @@
           ]
         },
         {
-          "run_id": "C01_maf_drift@F02_maf_drift__urban__04@120s",
+          "run_id": "operativo:C01_maf_drift@F02_maf_drift__urban__04@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F02_maf_drift",
           "dtc_requirement": "DTC_REQUIRED",
@@ -1275,7 +1302,7 @@
           ]
         },
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "operativo:C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F03_thermostat_stuck",
           "dtc_requirement": "DTC_REQUIRED",
@@ -1881,7 +1908,7 @@
           ]
         },
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@120s",
+          "run_id": "operativo:C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F00_normal",
           "dtc_requirement": "DTC_NOT_APPLICABLE",
@@ -2379,7 +2406,7 @@
           ]
         },
         {
-          "run_id": "C03_o2_slow_response@F04_o2_lag__idle__02@120s",
+          "run_id": "operativo:C03_o2_slow_response@F04_o2_lag__idle__02@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -2965,7 +2992,7 @@
           ]
         },
         {
-          "run_id": "C03_o2_slow_response@F04_o2_lag__urban__00@120s",
+          "run_id": "operativo:C03_o2_slow_response@F04_o2_lag__urban__00@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -3551,7 +3578,7 @@
           ]
         },
         {
-          "run_id": "C04_misfire@F05_misfire__highway__09@120s",
+          "run_id": "operativo:C04_misfire@F05_misfire__highway__09@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F00_normal",
           "dtc_requirement": "DTC_NOT_APPLICABLE",
@@ -4004,7 +4031,7 @@
           ]
         },
         {
-          "run_id": "C04_misfire@F05_misfire__urban__00@120s",
+          "run_id": "operativo:C04_misfire@F05_misfire__urban__00@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F05_misfire",
           "dtc_requirement": "DTC_REQUIRED",
@@ -4611,7 +4638,7 @@
           ]
         },
         {
-          "run_id": "C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
+          "run_id": "operativo:C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -5069,7 +5096,7 @@
           ]
         },
         {
-          "run_id": "C05_vacuum_leak@F01_vacuum_leak__warmup__03@120s",
+          "run_id": "operativo:C05_vacuum_leak@F01_vacuum_leak__warmup__03@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -5527,7 +5554,7 @@
           ]
         },
         {
-          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
+          "run_id": "operativo:C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -5662,7 +5689,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__warmup__03@120s",
+          "run_id": "operativo:C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__warmup__03@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -5797,7 +5824,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C07_partial@F01_vacuum_leak__idle__10@120s",
+          "run_id": "operativo:C07_partial@F01_vacuum_leak__idle__10@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -6422,7 +6449,7 @@
           ]
         },
         {
-          "run_id": "C07_partial@F01_vacuum_leak__warmup__03@120s",
+          "run_id": "operativo:C07_partial@F01_vacuum_leak__warmup__03@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -7047,7 +7074,7 @@
           ]
         },
         {
-          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "operativo:C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F03_thermostat_stuck",
           "dtc_requirement": "DTC_REQUIRED",
@@ -7182,7 +7209,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__warmup__03@120s",
+          "run_id": "operativo:C10_thermostat_absent@F03_thermostat_stuck__warmup__03@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F00_normal",
           "dtc_requirement": "DTC_NOT_APPLICABLE",
@@ -7646,7 +7673,7 @@
           ]
         },
         {
-          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "operativo:C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F03_thermostat_stuck",
           "dtc_requirement": "DTC_REQUIRED",
@@ -8459,7 +8486,7 @@
           ]
         },
         {
-          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__warmup__03@120s",
+          "run_id": "operativo:C11_thermostat_partial@F03_thermostat_stuck__warmup__03@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F00_normal",
           "dtc_requirement": "DTC_NOT_APPLICABLE",
@@ -8923,7 +8950,7 @@
           ]
         },
         {
-          "run_id": "C14_o2_absent@F04_o2_lag__idle__02@120s",
+          "run_id": "operativo:C14_o2_absent@F04_o2_lag__idle__02@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -9058,7 +9085,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C14_o2_absent@F04_o2_lag__urban__00@120s",
+          "run_id": "operativo:C14_o2_absent@F04_o2_lag__urban__00@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -9193,7 +9220,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C15_o2_partial@F04_o2_lag__idle__02@120s",
+          "run_id": "operativo:C15_o2_partial@F04_o2_lag__idle__02@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -10029,7 +10056,7 @@
           ]
         },
         {
-          "run_id": "C15_o2_partial@F04_o2_lag__urban__00@120s",
+          "run_id": "operativo:C15_o2_partial@F04_o2_lag__urban__00@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -10965,9 +10992,24 @@
           }
         }
       },
+      "traceability": {
+        "note": "el soporte es una propiedad del verificador; no hay anotación independiente de afirmaciones admisibles",
+        "denominator_claims": 33,
+        "n_runs": 11,
+        "n_windows": 5,
+        "n_sessions": 5,
+        "with_observation": 33,
+        "with_citation": 12,
+        "with_support": 12,
+        "rates": {
+          "with_observation": 1.0,
+          "with_citation": 0.3636,
+          "with_support": 0.3636
+        }
+      },
       "cases": [
         {
-          "run_id": "C01_maf_drift@F02_maf_drift__highway__01@120s",
+          "run_id": "comparativo:C01_maf_drift@F02_maf_drift__highway__01@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F02_maf_drift",
           "dtc_requirement": "DTC_REQUIRED",
@@ -11433,7 +11475,7 @@
           ]
         },
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "comparativo:C02_thermostat_stuck@F03_thermostat_stuck__urban__08@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F03_thermostat_stuck",
           "dtc_requirement": "DTC_REQUIRED",
@@ -12039,7 +12081,7 @@
           ]
         },
         {
-          "run_id": "C03_o2_slow_response@F04_o2_lag__idle__02@120s",
+          "run_id": "comparativo:C03_o2_slow_response@F04_o2_lag__idle__02@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -12625,7 +12667,7 @@
           ]
         },
         {
-          "run_id": "C04_misfire@F05_misfire__highway__09@180s",
+          "run_id": "comparativo:C04_misfire@F05_misfire__highway__09@180s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F05_misfire",
           "dtc_requirement": "DTC_REQUIRED",
@@ -13232,7 +13274,7 @@
           ]
         },
         {
-          "run_id": "C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
+          "run_id": "comparativo:C05_vacuum_leak@F01_vacuum_leak__idle__10@120s",
           "expected_decision": "EXPLAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -13690,7 +13732,7 @@
           ]
         },
         {
-          "run_id": "C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
+          "run_id": "comparativo:C06_vacuum_leak_evidencia_retirada@F01_vacuum_leak__idle__10@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -13825,7 +13867,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C07_partial@F01_vacuum_leak__idle__10@120s",
+          "run_id": "comparativo:C07_partial@F01_vacuum_leak__idle__10@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F01_vacuum_leak",
           "dtc_requirement": "DTC_REQUIRED",
@@ -14450,7 +14492,7 @@
           ]
         },
         {
-          "run_id": "C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "comparativo:C10_thermostat_absent@F03_thermostat_stuck__urban__08@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F03_thermostat_stuck",
           "dtc_requirement": "DTC_REQUIRED",
@@ -14585,7 +14627,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
+          "run_id": "comparativo:C11_thermostat_partial@F03_thermostat_stuck__urban__08@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F03_thermostat_stuck",
           "dtc_requirement": "DTC_REQUIRED",
@@ -15398,7 +15440,7 @@
           ]
         },
         {
-          "run_id": "C14_o2_absent@F04_o2_lag__idle__02@120s",
+          "run_id": "comparativo:C14_o2_absent@F04_o2_lag__idle__02@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -15533,7 +15575,7 @@
           "support_checks": []
         },
         {
-          "run_id": "C15_o2_partial@F04_o2_lag__idle__02@120s",
+          "run_id": "comparativo:C15_o2_partial@F04_o2_lag__idle__02@120s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F04_o2_lag",
           "dtc_requirement": "DTC_REQUIRED",
@@ -16469,9 +16511,24 @@
           }
         }
       },
+      "traceability": {
+        "note": "el soporte es una propiedad del verificador; no hay anotación independiente de afirmaciones admisibles",
+        "denominator_claims": 6,
+        "n_runs": 2,
+        "n_windows": 2,
+        "n_sessions": 2,
+        "with_observation": 6,
+        "with_citation": 0,
+        "with_support": 0,
+        "rates": {
+          "with_observation": 1.0,
+          "with_citation": 0.0,
+          "with_support": 0.0
+        }
+      },
       "cases": [
         {
-          "run_id": "C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@300s",
+          "run_id": "adverso:C02_thermostat_stuck@F03_thermostat_stuck__warmup__03@300s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F00_normal",
           "dtc_requirement": "DTC_NOT_APPLICABLE",
@@ -16967,7 +17024,7 @@
           ]
         },
         {
-          "run_id": "C04_misfire@F05_misfire__highway__09@480s",
+          "run_id": "adverso:C04_misfire@F05_misfire__highway__09@480s",
           "expected_decision": "ABSTAIN",
           "diagnosis_used": "F00_normal",
           "dtc_requirement": "DTC_NOT_APPLICABLE",
