@@ -24,6 +24,7 @@ import hashlib
 import json
 import subprocess
 from collections import Counter
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -383,6 +384,86 @@ def _comprobar_reparto(manifiesto: dict[str, Any]) -> Comprobacion:
         PASS,
         "el reparto de sesiones es el congelado, sin leer ninguna ventana",
     )
+
+
+def exigir_dataset_congelado(manifiesto: Mapping[str, Any], dataset_id: str) -> str:
+    """El conjunto de datos tiene que ser el congelado, y no otro con ese nombre.
+
+    Sin esta comprobación, pedir otro conjunto producía un artefacto que declaraba
+    una congelación verificada --porque la verificación mira el manifiesto, que
+    habla de `synthetic_v2`-- sobre datos que nunca se congelaron. El defecto lo
+    encontró la revisión del diff antes de abrir nada.
+    """
+    congelado = str(manifiesto["controlled_state"]["dataset"]["dataset_id"])
+    if dataset_id != congelado:
+        msg = (
+            f"el conjunto congelado para E19 es {congelado!r} y se ha pedido "
+            f"{dataset_id!r}. La verificación de la congelación habla del primero: "
+            "medir el segundo produciría un artefacto que declara una congelación "
+            "que no le corresponde."
+        )
+        raise CongelacionInvalidaError(msg)
+    return congelado
+
+
+def exigir_politica_canonica(manifiesto: Mapping[str, Any], policy: str) -> str:
+    """La política de E19 es la canónica del manifiesto, sin excepción.
+
+    Un parámetro que permitiera medir con otra versión dejaría pasar la
+    verificación --que solo comprueba que la del manifiesto existe-- y escribiría
+    un registro con la política equivocada bajo un anclaje correcto.
+    """
+    canonica = str(manifiesto["canonical_policy"]["verifier_version"])
+    if policy != canonica:
+        msg = (
+            f"E19 se mide con la política canónica congelada, {canonica!r}, y se ha "
+            f"pedido {policy!r}. Para medir con otra versión está el ejecutor de "
+            "suficiencia, cuyos artefactos llevan sufijo."
+        )
+        raise CongelacionInvalidaError(msg)
+    return canonica
+
+
+def ficheros_con_seguimiento_modificados() -> tuple[str, ...]:
+    """Ficheros **con seguimiento** que están modificados en el árbol de trabajo.
+
+    Deja fuera los que no tienen seguimiento a propósito: la anotación de E19 se
+    sella antes del registro y en ese momento es uno de ellos, de modo que exigir
+    un árbol sin nada pendiente sería imposible de cumplir.
+    """
+    resultado = _git("status", "--porcelain", "--untracked-files=no")
+    if resultado is None or resultado.returncode != 0:
+        return ()
+    lineas = resultado.stdout.decode("utf-8", errors="replace").splitlines()
+    return tuple(linea[3:].strip() for linea in lineas if linea.strip())
+
+
+def exigir_arbol_limpio(*, estricto: bool) -> tuple[str, ...]:
+    """Con `estricto`, un fichero con seguimiento modificado detiene la ejecución.
+
+    El manifiesto congela el código por su commit, y esa declaración no vale nada
+    si el árbol de trabajo tiene cambios: la ejecución usaría una recuperación o un
+    verificador que ese commit no contiene mientras el registro declara lo
+    contrario. En un ensayo sobre validación solo se avisa, porque ahí es normal
+    estar desarrollando.
+    """
+    modificados = ficheros_con_seguimiento_modificados()
+    if not modificados:
+        return ()
+    if estricto:
+        msg = (
+            "hay ficheros con seguimiento modificados y la evaluación final declara "
+            "el código por su commit:\n"
+            + "\n".join(f"  - {f}" for f in modificados)
+            + "\nO se comitean, o la medición declararía un código que no es el que "
+            "ejecutó."
+        )
+        raise CongelacionInvalidaError(msg)
+    print(
+        "AVISO: hay ficheros con seguimiento modificados. En un ensayo se admite; "
+        f"en la evaluación final detendría la ejecución: {', '.join(modificados)}"
+    )
+    return modificados
 
 
 def verificar(ruta_anclaje: Path = RUTA_ANCLAJE) -> Verificacion:
