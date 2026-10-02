@@ -1,8 +1,8 @@
 {
   "experiment_id": "E19_final_evaluation",
-  "commit": "e55fa7f80049193e650567772545903ba8a4c551",
+  "commit": "33dca8472d745d7dc7999837f846d29770490638",
   "dirty": true,
-  "executed_at": "2026-10-02T01:34:07.216869+00:00",
+  "executed_at": "2026-10-02T01:38:08.224195+00:00",
   "seed": 20260901,
   "dataset_id": "synthetic_v2",
   "dataset_type": "synthetic",
@@ -35,7 +35,7 @@
   },
   "annotation": {
     "file": "E19_anotacion_validation.json",
-    "sha256_16": "1bfdf8ee70d6e359",
+    "sha256_16": "944ddeaa7065f3b2",
     "written_before_any_measurement": true
   },
   "freeze_verification": {
@@ -49,12 +49,12 @@
       {
         "check": "objeto_del_commit_de_congelacion",
         "status": "PASS",
-        "detail": "lo congelado coincide con el objeto del commit 4705a3f"
+        "detail": "lo congelado coincide con el objeto del commit de6207f"
       },
       {
         "check": "sin_commits_posteriores_a_la_congelacion",
         "status": "PASS",
-        "detail": "ningún commit posterior a 4705a3f toca lo congelado"
+        "detail": "ningún commit posterior a de6207f toca lo congelado"
       },
       {
         "check": "politica_canonica_declarada",
@@ -106,6 +106,17 @@
       "n_vectors_in_space": 6158,
       "content_fingerprint_16": "7ac722bdda12595d",
       "vectors_fingerprint_16": "ad0b27a17798d042"
+    },
+    "matches": true
+  },
+  "model_revisions": {
+    "declared": {
+      "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+      "Qwen/Qwen2.5-3B-Instruct": "aa8e72537993ba99e69dfaafa59ed015b17504d1"
+    },
+    "in_cache": {
+      "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+      "Qwen/Qwen2.5-3B-Instruct": "aa8e72537993ba99e69dfaafa59ed015b17504d1"
     },
     "matches": true
   },
