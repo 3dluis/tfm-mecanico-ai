@@ -887,7 +887,10 @@ def test_el_indice_incompleto_detiene_la_evaluacion_final(manifiesto: dict[str, 
         "n_source_files": congelado["n_source_files"],
         "n_vectors_in_space": congelado["n_chunks"],
     }
-    assert exigir_corpus_congelado(manifiesto, completo, estricto=True)["matches"]
+    huella = congelado["content_fingerprint_16"]
+    assert exigir_corpus_congelado(manifiesto, completo, estricto=True, fingerprint=huella)[
+        "matches"
+    ]
 
     incompleto = {**completo, "n_chunks": congelado["n_chunks"] - 7}
     with pytest.raises(CongelacionInvalidaError, match="corpus congelado completo"):
@@ -897,6 +900,37 @@ def test_el_indice_incompleto_detiene_la_evaluacion_final(manifiesto: dict[str, 
     sin_vectores = {**completo, "n_vectors_in_space": 0}
     with pytest.raises(CongelacionInvalidaError, match="vectores en el espacio declarado"):
         exigir_corpus_congelado(manifiesto, sin_vectores, estricto=True)
+
+
+def test_un_corpus_sustituido_con_los_mismos_recuentos_tambien_detiene(
+    manifiesto: dict[str, Any],
+) -> None:
+    """Cambiar el texto de un fragmento, o un código por el que la recuperación
+    filtra, deja el número de filas igual y cambia lo que el sistema encuentra."""
+    from mecanico_ia_exp.experiments.congelacion import exigir_corpus_congelado
+
+    congelado = manifiesto["controlled_state"]["corpus"]
+    completo = {
+        "n_chunks": congelado["n_chunks"],
+        "n_source_files": congelado["n_source_files"],
+        "n_vectors_in_space": congelado["n_chunks"],
+    }
+    with pytest.raises(CongelacionInvalidaError, match="huella de contenido"):
+        exigir_corpus_congelado(manifiesto, completo, estricto=True, fingerprint="0" * 16)
+    assert not exigir_corpus_congelado(manifiesto, completo, estricto=False, fingerprint="0" * 16)[
+        "matches"
+    ]
+
+
+def test_la_huella_del_indice_cubre_lo_que_decide_una_recuperacion() -> None:
+    import inspect as inspeccion
+
+    from mecanico_ia_exp.rag.store import PgVectorStore
+
+    fuente = inspeccion.getsource(PgVectorStore.corpus_fingerprint)
+    for columna in ("chunk_id", "content_hash", "source_file", "dtc_codes", "engine_codes"):
+        assert columna in fuente, f"la huella del índice debe cubrir {columna}"
+    assert "ORDER BY chunk_id" in fuente, "sin orden total la huella no es reproducible"
 
 
 def test_el_identificador_de_ejecucion_distingue_los_estratos(
@@ -1003,6 +1037,17 @@ def test_el_adaptador_que_falta_es_un_fallo_de_preparacion(
     monkeypatch.setattr(congelacion.paths, "ROOT", tmp_path)
     with pytest.raises(CongelacionInvalidaError, match="fallo de preparación"):
         congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2")
+
+    # Y la configuración sola no basta: los pesos se cargan en la primera
+    # redacción, es decir después de sellar la anotación.
+    directorio = tmp_path / "models" / "slm_lora_v2"
+    directorio.mkdir(parents=True)
+    (directorio / "adapter_config.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(CongelacionInvalidaError, match=r"adapter_model\.safetensors"):
+        congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2")
+
+    (directorio / "adapter_model.safetensors").write_bytes(b"pesos")
+    assert congelacion.exigir_redactor_disponible("transformers-lora@slm_lora_v2") == directorio
 
 
 def test_el_redactor_se_valida_antes_de_sellar_la_anotacion() -> None:

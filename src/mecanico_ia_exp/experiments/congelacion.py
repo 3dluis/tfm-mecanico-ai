@@ -483,19 +483,41 @@ def exigir_redactor_disponible(llm: str) -> Path | None:
     if relativo is None:
         return None
     directorio = paths.ROOT / relativo
-    configuracion = directorio / "adapter_config.json"
-    if not directorio.is_dir() or not configuracion.is_file():
+    if not directorio.is_dir():
         msg = (
-            f"el redactor {llm!r} necesita el adaptador de {relativo}, y ahí no hay "
-            f"{'directorio' if not directorio.is_dir() else 'adapter_config.json'}. "
-            "Es un fallo de preparación: se resuelve antes de ejecutar."
+            f"el redactor {llm!r} necesita el adaptador de {relativo} y ahí no hay "
+            "directorio. Es un fallo de preparación: se resuelve antes de ejecutar."
+        )
+        raise CongelacionInvalidaError(msg)
+
+    faltan = []
+    for nombre in ("adapter_config.json", "adapter_model.safetensors"):
+        fichero = directorio / nombre
+        if not fichero.is_file() or fichero.stat().st_size == 0:
+            faltan.append(nombre)
+            continue
+        try:  # legible, no solo presente
+            with fichero.open("rb") as abierto:
+                abierto.read(1)
+        except OSError:  # pragma: no cover - permisos o fichero corrupto
+            faltan.append(f"{nombre} (ilegible)")
+    if faltan:
+        msg = (
+            f"el adaptador de {relativo} está incompleto: falta o no se puede leer "
+            f"{', '.join(faltan)}. La configuración sola no basta --los pesos se cargan "
+            "en la primera redacción, es decir después de sellar la anotación-- y la "
+            "sección 8 clasifica esto como fallo de preparación, no como resultado."
         )
         raise CongelacionInvalidaError(msg)
     return directorio
 
 
 def exigir_corpus_congelado(
-    manifiesto: Mapping[str, Any], recuentos: Mapping[str, int], *, estricto: bool
+    manifiesto: Mapping[str, Any],
+    recuentos: Mapping[str, int],
+    *,
+    estricto: bool,
+    fingerprint: str | None = None,
 ) -> dict[str, Any]:
     """El índice tiene que tener el corpus congelado completo.
 
@@ -519,9 +541,17 @@ def exigir_corpus_congelado(
         diferencias.append(
             f"vectores en el espacio declarado: {vectores}, fragmentos {esperado['n_chunks']}"
         )
+
+    # Los recuentos no detectan una sustitución: cambiar el texto de un fragmento o
+    # un código por el que la recuperación filtra deja el número de filas igual.
+    huella_congelada = congelado.get("content_fingerprint_16")
+    if huella_congelada and fingerprint is not None and fingerprint != huella_congelada:
+        diferencias.append(
+            f"huella de contenido: indexada {fingerprint}, congelada {huella_congelada}"
+        )
     resultado = {
-        "declared": esperado,
-        "indexed": dict(recuentos),
+        "declared": {**esperado, "content_fingerprint_16": huella_congelada},
+        "indexed": {**dict(recuentos), "content_fingerprint_16": fingerprint},
         "matches": not diferencias,
     }
     if not diferencias:
