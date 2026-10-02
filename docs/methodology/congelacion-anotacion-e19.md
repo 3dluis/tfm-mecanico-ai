@@ -323,11 +323,13 @@ código de avería cambiado, deja el número de filas igual y cambia lo que el s
 índice que devuelve menos evidencia no da error: produce abstenciones que parecen legítimas, de modo
 que confirmaría la hipótesis por la razón equivocada y las cifras parecerían buenas. Es el fallo más
 peligroso de esta evaluación, y por eso el índice se comprueba por recuentos **y** por una huella
-construida sobre lo que decide una recuperación: identificador, huella del **texto** --no la columna
-que lo resume, que podría quedarse igual mientras el texto cambia--, fichero de origen, códigos de
-avería, códigos de motor, y el tipo de documento y el nivel de autoridad, porque la reordenación por
-autoridad manda sobre la similitud y cambiarlos cambia qué evidencia llega al verificador sin tocar
-un solo fragmento.
+construida sobre **la fila completa** de cada fragmento y la de su documento, serializadas por la
+propia base de datos y en orden de identificador. No se eligen campos a propósito: elegirlos obliga
+a acertar la lista, y la lista crece --el texto, el fichero, los códigos de avería y de motor, el
+tipo de documento y el nivel de autoridad para la reordenación, la sección para la clasificación del
+fragmento, el identificador de documento para el recuento de fuentes distintas--. Incluirlo todo
+convierte un acierto en una propiedad. Una migración del esquema cambia la huella, y debe cambiarla:
+es un cambio visible del substrato sobre el que se mide.
 
 **Y por qué también los vectores.** La búsqueda ordena por distancia al vector, de modo que
 sustituir un vector --dejando intactos el fragmento, sus metadatos y la identidad del espacio--
