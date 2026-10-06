@@ -106,21 +106,32 @@ los dos conjuntos, y con más datos también el fallo de encendido y la clase si
 poco en los tres fallos donde el tabular ya está en 1,0000 y no hay nada que mejorar. En el termostato
 gana en los dos volúmenes, que es el dato más robusto de toda la comparación.
 
-### La estructura del error, que es el hallazgo transversal
+### La estructura del error, que distingue a los dos modelos
 
-Las matrices de confusión concentran **todo** el error en una sola dirección: ventanas con fallo
-clasificadas como sin fallo. No hay diagnósticos cruzados entre fallos.
+Conviene desglosarla por modelo, porque **no es la misma**, y la diferencia importa para un sistema que
+va a explicar.
 
-| | Termostato → sin fallo | Encendido → sin fallo |
-|---|---|---|
-| bosque, `v2` | 5 de 14 | 7 de 14 |
-| BiGRU, `v2` | 3 de 14 | 9 de 14 |
-| bosque, `v3` | 10 de 49 | 9 de 49 |
-| BiGRU, `v3` | 4 de 49 | 8 de 49 |
+| | Fallo → sin fallo | Sin fallo → fallo | Fallo → **otro** fallo |
+|---|---|---|---|
+| bosque, `v2` | 12: termostato 5, encendido 7 | **0** | **0** |
+| BiGRU, `v2` | 12: termostato 3, encendido 9 | 3: termostato 2, encendido 1 | **2**: caudalímetro → fuga, caudalímetro → sonda |
+| bosque, `v3` | 19: termostato 10, encendido 9 | 7: termostato 3, encendido 4 | **0** |
+| BiGRU, `v3` | 13: termostato 4, sonda 1, encendido 8 | 6: termostato 6 | **2**: caudalímetro → fuga, sonda → termostato |
 
-Para un sistema que va a explicar, es la dirección de error menos dañina, y el capítulo 5 ya lo dice.
-Para esta pregunta es además la pista: los dos únicos fallos con error son los dos cuya **señal no está
-presente en todas las ventanas que llevan su etiqueta**.
+**Solo el bosque sobre el conjunto oficial tiene la estructura benigna.** Ahí todos los errores van a la
+clase sin fallo: el modelo nunca inventa un fallo donde no hay ninguno ni confunde un fallo con otro, y
+eso es lo que el capítulo 5 afirma, correctamente acotado al bosque. El bosque sobre `v3` ya produce
+siete falsas alarmas, y el modelo secuencial produce además **diagnósticos cruzados** en los dos
+conjuntos: dos ventanas de deriva del caudalímetro clasificadas como otro fallo en `v2`, y una ventana
+de sonda clasificada como termostato en `v3`.
+
+La distinción no es cosmética. Un falso «sin fallo» produce una abstención o un silencio; un
+diagnóstico cruzado produce una explicación bien construida sobre la avería equivocada, que es
+exactamente el fallo que este trabajo estudia. En esa dimensión el modelo secuencial es **peor**, y hay
+que decirlo junto a su ventaja en el termostato.
+
+Lo que sí es transversal: los fallos que concentran el error son el termostato y el encendido, los dos
+cuya **señal no está presente en todas las ventanas que llevan su etiqueta**.
 
 ## 4. Evidencia específica del termostato bloqueado
 
@@ -170,17 +181,38 @@ que acierta, 70,7»—, pero **esas dos cifras no tienen registro**: son una de 
 `EVID-MAJ-019` del verificador de evidencia tiene abiertas por ese motivo. Para llevar esto al jurado
 hay que regenerarlo como artefacto, y eso es una reejecución sobre validación, no un experimento nuevo.
 
-**Qué puede explicar la ventaja de la secuencia, dicho como asociación y no como causa.** Los
-descriptores de ventana **no** son ciegos a la dinámica: el bosque usa sobre todo los diferenciales del
-refrigerante —`delta_max` es el tercer descriptor más importante de los 139, `autocorr1` el séptimo,
-`delta_min` el noveno, `crossings` el decimocuarto— y apenas usa la pendiente lineal, que queda en el
-puesto 47 con importancia 0,0041, ni el nivel medio, puesto 28. E9 confirma el mismo cuarteto en los
-tres casos de termostato. Lo que esos estadísticos resumen, la secuencia lo tiene entero: **la forma de
-la trayectoria dentro de la ventana**, es decir si la subida se aplana o continúa. En una ventana de
-calentamiento por debajo de 71 °C, un refrigerante que se aplana antes de lo que correspondería es la
-única diferencia posible frente a un calentamiento sano, y es una diferencia de forma, no de nivel ni
-de pendiente media. Es la hipótesis compatible con los datos; no está demostrada, y demostrarla exige
-localizar los aciertos y fallos de los dos modelos ventana a ventana.
+**Qué puede explicar la ventaja de la secuencia, y qué no puede explicarla.** Los descriptores de
+ventana **no** son ciegos a la dinámica: el bosque usa sobre todo los diferenciales del refrigerante
+—`delta_max` es el tercer descriptor más importante de los 139, `autocorr1` el séptimo, `delta_min` el
+noveno, `crossings` el decimocuarto— y apenas usa la pendiente lineal, que queda en el puesto 47 con
+importancia 0,0041, ni el nivel medio, puesto 28. E9 confirma el mismo cuarteto en los tres casos de
+termostato. Lo que esos cuatro estadísticos resumen, la secuencia lo tiene entero: la forma de la
+trayectoria dentro de la ventana. Esa es la explicación plausible **para las ventanas donde el techo
+actúa**, en las que el refrigerante llega a 71 °C y se queda recortado con ruido de ±0,5 °C: la meseta
+recortada tiene una forma que la media, el rango y la pendiente no representan.
+
+**Y hay una explicación que hay que descartar, aunque sea la primera que viene a la cabeza.** Podría
+pensarse que la secuencia detecta, en una ventana de calentamiento todavía fría, un refrigerante que se
+aplana antes de lo que correspondería. **Eso es imposible por construcción:** el fallo no modifica
+ninguna muestra por debajo de 71 °C, de modo que en una ventana enteramente fría no hay nada que
+detectar, ni forma, ni nivel, ni pendiente. Una ventana así es indistinguible de una ventana sana del
+mismo régimen.
+
+De ahí se sigue algo incómodo que conviene mirar de frente. El bosque acierta en `v2` nueve de las
+catorce ventanas de termostato, y nueve son exactamente las que tienen el techo actuando. El modelo
+secuencial acierta once. Si la identificación de la tabla anterior fuera correcta, **las dos ventanas
+de ventaja estarían entre las cinco que no contienen señal alguna del fallo**, y acertarlas no sería
+leer mejor la evolución temporal: sería azar, o sería aprovechar alguna idiosincrasia de las sesiones
+de calentamiento concretas —con siete ventanas de ese régimen en entrenamiento, el sobreajuste es
+verosímil—. En esa lectura, el +0,0322 del termostato en `v2` no es evidencia de valor del contexto
+temporal.
+
+No lo doy por cierto: es la consecuencia de una identificación que no está verificada. Pero es la razón
+por la que **el termostato no puede presentarse todavía al jurado como el ejemplo de que el contexto
+temporal aporta**, y por la que la verificación ventana a ventana de la sección 8 deja de ser un detalle
+de trazabilidad y pasa a ser la comprobación que decide la interpretación. En `synthetic_v3` la ventaja
+en termostato se obtiene recuperando seis de diez ventanas falladas sobre cuarenta y nueve, y el mismo
+reparo aplica hasta que se sepa cuántas de ellas tenían señal.
 
 Ninguno de los dos modelos ve el **tiempo desde el arranque**: no hay descriptor de tiempo entre los
 139 y la GRU recibe una ventana de 120 s sin su posición en la sesión. El instante de la ventana existe
@@ -235,15 +267,19 @@ Las tres representaciones que el tutor plantea están cubiertas así:
 **B y C no hay que repetirlos.** La comparación existe; lo que falta es presentarla desagregada y
 corregir su asimetría.
 
-**A no existe, y antes de construirlo conviene preguntarse qué respondería.** Un clasificador por
-muestra sobre doce señales instantáneas no podría detectar, por construcción, los dos fallos definidos
-por dispersión o por intermitencia —sonda lenta y fallo de encendido—, y para la fuga de vacío, la
-deriva y el termostato daría previsiblemente lo mismo que el nivel, que E4 ya midió señal a señal con
-delta de Cliff. Mi recomendación es **no construirlo** y usar en su lugar lo que ya está medido: E4
-**es** el análisis de la información puntual, por señal y por vía, y basta citarlo como tal. Si se
-quiere el escalón A como modelo, la versión honesta y barata es el mismo bosque sobre un subconjunto de
-descriptores de nivel —media, mínimo, máximo—, que aísla «nivel» frente a «dinámica dentro de la
-ventana» frente a «secuencia completa» con un solo entrenamiento más y sin arquitectura nueva.
+**A no existe y queda sin medir.** Conviene no confundirlo con E4: E4 mide delta de Cliff sobre el
+nivel y la dispersión de bloques de 60 s de `synthetic_v1`, no clasifica a partir de muestras
+individuales y no usa los conjuntos de E6 y E7. Es un buen argumento de por qué una representación
+puntual tendría poco que aportar —los fallos definidos por dispersión o por intermitencia no son
+visibles en una muestra suelta—, pero **no sustituye a la ablación**: citarlo como representación A
+sería atribuirle una comparación que no hizo.
+
+Si se quiere el escalón A, la versión honesta y barata es **el mismo bosque sobre un subconjunto de
+descriptores de nivel** —media, mínimo, máximo—, sobre el mismo conjunto y la misma partición. Eso
+aísla «nivel» frente a «dinámica dentro de la ventana» frente a «secuencia completa» con un solo
+entrenamiento más, sin arquitectura nueva y con las tres variantes comparables entre sí, que es lo que
+hoy no se cumpliría. Un clasificador por muestra, si se prefiere literal, es también posible, pero
+añade una arquitectura y un criterio de agregación nuevos para responder a lo mismo.
 
 Las ablaciones **A1-A4 de E18 son otro eje**: desmontan el criterio de suficiencia del agente, no la
 representación de la telemetría. No se solapan con esto. Y la tercera prioridad del tutor —ablaciones
@@ -267,15 +303,20 @@ afirmar que el volumen sea la limitación, solo que es la explicación más comp
 **No propongo ampliar el conjunto todavía**, y el motivo es que hay dos pasos más baratos y más
 informativos que se hacen sobre los datos que ya existen:
 
-1. **Quitar la asimetría.** Seleccionar la época sobre una partición interna de entrenamiento y evaluar
+1. **Guardar las predicciones por ventana y verificar el termostato.** Es lo más barato y lo que más
+   cambia la interpretación: reejecutar E6 y E7 sobre validación registrando qué ventana acierta y
+   falla cada modelo, y cruzarlo con el máximo de refrigerante y el régimen. Decide si la ventaja
+   secuencial en el termostato está en ventanas con señal —y entonces es un resultado— o en ventanas sin
+   ella —y entonces es azar—. Da además registro a las cifras 54,3 / 70,7 °C que hoy no lo tienen.
+2. **Quitar la asimetría.** Seleccionar la época sobre una partición interna de entrenamiento y evaluar
    después sobre validación. Sin esto, ningún número de la comparación es interpretable, con cuantos
    datos sea. Coste: reentrenar la GRU, menos de un minuto por ejecución en `v2`.
-2. **Réplicas con semillas distintas** sobre los dos conjuntos que ya existen, cinco por modelo y
+3. **Réplicas con semillas distintas** sobre los dos conjuntos que ya existen, cinco por modelo y
    conjunto. Con veinte ejecuciones se obtiene la dispersión de las diferencias por clase y se sabe si
    el +0,0322 del termostato sobrevive al ruido de la semilla. Coste: minutos en `v2`, unos veinte
    en `v3`.
 
-Esos dos pasos pueden convertir la comparación en una afirmación sostenible o en un resultado
+Esos tres pasos pueden convertir la comparación en una afirmación sostenible o en un resultado
 declaradamente inconcluso, y en los dos casos el TFM gana. Solo si tras ellos la diferencia sigue
 dependiendo del volumen tiene sentido generar más datos.
 
@@ -288,13 +329,17 @@ una variación dirigida**, no una ampliación masiva:
    de `v3`. Con tres volúmenes y réplicas se puede dibujar una curva de aprendizaje por clase y decir
    si la ventaja secuencial crece con los datos o es un artefacto. Es el mínimo que convierte dos
    puntos en una tendencia.
-2. **Variación dirigida del régimen de calentamiento, que es donde vive el problema.** La sección 4
-   muestra que todo el error del termostato está en las sesiones de calentamiento, y `v2` tiene **siete
-   ventanas** de ese régimen en entrenamiento y siete en validación. Generar más realizaciones del
-   **mismo escenario** variando solo `ambient_temp_c` y `duration_s` —los dos parámetros que el
-   generador expone y que gobiernan cuánto tarda el motor en alcanzar el techo— multiplicaría la
-   evidencia justo donde las dos representaciones se diferencian, sin tocar el fenómeno ni añadir
-   escenarios. Para el fallo de encendido, el parámetro análogo es `fault_onset_s` junto con `rate`.
+2. **Variación dirigida del régimen de calentamiento, condicionada a la verificación.** La sección 4
+   muestra que las ventanas de termostato sin señal están todas en el régimen de calentamiento, y que
+   `v2` tiene **siete ventanas** de ese régimen en entrenamiento y siete en validación. Lo que **no**
+   está verificado es que los errores de los modelos sean esas ventanas: eso exige las predicciones por
+   ventana. Si la verificación lo confirma, generar más realizaciones del **mismo escenario** variando
+   solo `ambient_temp_c` y `duration_s` —los dos parámetros que el generador expone y que gobiernan
+   cuánto tarda el motor en alcanzar el techo— multiplicaría la evidencia justo donde las dos
+   representaciones podrían diferenciarse, sin tocar el fenómeno ni añadir escenarios. Si la
+   verificación la desmiente, la prioridad cambia: lo que haría falta entonces no son más datos, sino
+   explicar de qué vive la ventaja del modelo secuencial. Para el fallo de encendido, el parámetro
+   análogo es `fault_onset_s` junto con `rate`.
 
 Lo que **no** propongo: nuevos escenarios, nuevas arquitecturas, ni adoptar `synthetic_v3` como
 conjunto oficial. Adoptarlo obligaría a regenerar E4, E5, E6, E9 y toda la cadena de suficiencia, que
@@ -330,4 +375,10 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
 4. **Mantener las tres prioridades del tutor por delante**: rediseño del distractor, reentrenamiento
    del adaptador y ablaciones sobre prueba. Y antes que todas ellas, cerrar E19, que está a medias.
 5. **Presentar el resultado negativo como resultado**, con su salvedad por fallo. La memoria ya lo
-   hace; lo que falta es la tabla desagregada que lo hace comprobable de un vistazo.
+   hace; lo que falta es la tabla desagregada que lo hace comprobable de un vistazo. Lo que **no** debe
+   presentarse todavía es el termostato como prueba de que el contexto temporal aporta: eso depende de
+   la verificación por ventana, y hasta tenerla la salvedad honesta es «la secuencia gana en el
+   termostato en los dos volúmenes, y no sabemos aún si lo gana donde el fallo es detectable».
+6. **Decir junto a esa ventaja que el modelo secuencial produce diagnósticos cruzados** y el bosque
+   sobre el conjunto oficial no. Para un sistema cuyo riesgo es explicar bien la avería equivocada, esa
+   es la comparación que más importa.
