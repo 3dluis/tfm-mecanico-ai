@@ -443,9 +443,20 @@ Lo que **no** propongo: nuevos escenarios, nuevas arquitecturas, ni adoptar `syn
 conjunto oficial. Adoptarlo obligaría a regenerar E4, E5, E6, E9 y toda la cadena de suficiencia, que
 está congelada para E19. `synthetic_v3` debe seguir siendo análisis de sensibilidad declarado.
 
-Cada realización nueva registraría su `SessionSpec` completa —identificador, régimen, duración,
-semilla, fallo, instante de aparición, temperatura ambiente y parámetros del fallo—, que es lo que el
-generador ya hace reproducible.
+**Y hay un requisito previo a esa variación dirigida, que hoy no se cumple.** La ficha que produce el
+generador guarda la semilla **global**, los identificadores de sesión, el número de sesiones y de
+muestras; y los datos crudos guardan por muestra el régimen, el fallo y si está activo. Lo que **no**
+queda registrado en ninguna parte es la especificación de cada sesión: su semilla individual, su
+temperatura ambiente, su duración, el instante de aparición del fallo ni los parámetros con que se
+aplicó. Con el plan equilibrado por omisión eso no estorba, porque el constructor del plan es
+determinista y la semilla global lo reproduce; pero en cuanto se **varíe** `ambient_temp_c`,
+`duration_s` o un parámetro del fallo por sesión, la reproducibilidad deja de estar garantizada: nada
+en los artefactos dice qué valor recibió cada sesión.
+
+De modo que el primer paso de esa variación no es generar: es **registrar la lista de `SessionSpec`**
+—identificador, régimen, duración, semilla, fallo, instante de aparición, temperatura ambiente y
+parámetros— junto al conjunto, como un artefacto propio. Es un cambio pequeño en el ejecutor del
+generador y sin él la variación dirigida produciría datos que no se podrían volver a construir.
 
 ## 10. Qué documentos deben actualizarse
 
