@@ -223,9 +223,12 @@ temporal.
 No lo doy por cierto: es la consecuencia de una identificación que no está verificada. Pero es la razón
 por la que **el termostato no puede presentarse todavía al jurado como el ejemplo de que el contexto
 temporal aporta**, y por la que la verificación ventana a ventana de la sección 8 deja de ser un detalle
-de trazabilidad y pasa a ser la comprobación que decide la interpretación. En `synthetic_v3` la ventaja
-en termostato se obtiene recuperando seis de diez ventanas falladas sobre cuarenta y nueve, y el mismo
-reparo aplica hasta que se sepa cuántas de ellas tenían señal.
+de trazabilidad y pasa a ser la comprobación que decide la interpretación. En `synthetic_v3` el modelo
+secuencial acierta cuarenta y cinco de las cuarenta y nueve ventanas de termostato y el bosque treinta y
+nueve: una mejora **neta de seis aciertos**, que es lo que las matrices agregadas permiten decir. No
+dicen qué ventanas son: el secuencial pudo acertar más de las que el bosque falla y fallar a su vez
+algunas que el bosque acierta. Hasta tener predicciones pareadas, ni el reparto ni cuántas de esas
+ventanas tenían señal del fallo son comprobables.
 
 Ninguno de los dos modelos ve el **tiempo desde el arranque**: no hay descriptor de tiempo entre los
 139 y la GRU recibe una ventana de 120 s sin su posición en la sesión. El instante de la ventana existe
