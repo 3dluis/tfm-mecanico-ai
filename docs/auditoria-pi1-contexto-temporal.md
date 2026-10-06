@@ -375,12 +375,15 @@ abierta cuya respuesta estaba dada por una comparación que no la sostiene.
 **No propongo ampliar el conjunto todavía**, y el motivo es que hay tres pasos más baratos y más
 informativos, y el primero no genera ni un escenario nuevo:
 
-0. **Regenerar `synthetic_v3` con el generador actual**, mismas 216 sesiones, misma semilla, misma
-   configuración, y reentrenar los dos modelos sobre él. Es una reejecución, no un experimento nuevo, y
-   es lo único que convierte la comparación de volumen en una comparación de volumen. Coste: el
-   generador, el preprocesado y dos entrenamientos; minutos, no días. Mientras no se haga, cualquier
-   conclusión sobre el volumen queda sin base, y la que hoy está publicada hay que retirarla o
-   condicionarla.
+0. **Generar el volumen grande con el generador actual, bajo un identificador nuevo** —`synthetic_v4`,
+   216 sesiones, misma semilla, misma configuración— y reentrenar los dos modelos sobre él. Es una
+   reejecución, no un experimento nuevo, y es lo único que convierte la comparación de volumen en una
+   comparación de volumen. **El identificador tiene que ser nuevo:** regenerar bajo `synthetic_v3`
+   sobrescribiría sus datos, su ficha, los registros de E6 y E7 y sus tablas, que son justamente la
+   evidencia con la que esta auditoría establece el resultado anterior a la calibración. Se conservan, y
+   `v3` queda etiquetado como **pre-calibración**. Coste: el generador, el preprocesado y dos
+   entrenamientos; minutos, no días. Mientras no se haga, cualquier conclusión sobre el volumen queda
+   sin base, y la que hoy está publicada hay que retirarla o condicionarla.
 
 1. **Guardar las predicciones por ventana y verificar el termostato.** Es lo más barato y lo que más
    cambia la interpretación: reejecutar E6 y E7 sobre validación registrando qué ventana acierta y
@@ -405,7 +408,7 @@ Si tras los pasos de la sección 8 —empezando por regenerar `v3`— sigue haci
 **una sola realización intermedia y una variación dirigida**, no una ampliación masiva:
 
 1. **Un punto intermedio de volumen: 144 sesiones, 24 por condición**, entre las 72 de `v2` y las 216
-   de un `v3` regenerado. Con tres volúmenes **del mismo generador** y réplicas se puede dibujar una
+   del `v4` calibrado. Con tres volúmenes **del mismo generador** y réplicas se puede dibujar una
    curva de aprendizaje por clase y decir si la ventaja secuencial crece con los datos o es un
    artefacto. Es el mínimo que convierte dos puntos en una tendencia, y solo tiene sentido después del
    paso 0.
@@ -436,7 +439,7 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
 | Documento | Cambio |
 |---|---|
 | `docs/experiments/E7_modelo_temporal.md` | **corregir las cifras obsoletas de `synthetic_v2`** por las de los registros, y **retirar o condicionar el hallazgo «el límite era el volumen de datos, no la arquitectura»**, que compara dos generadores distintos. Lo mismo con la corrección sobre el fallo de encendido. Es lo primero, porque hoy el informe contradice a su propio registro y sostiene una atribución confundida |
-| `docs/experiment-index.md` | la fila de E2 describe `synthetic_v3` bajo un «generador paramétrico calibrado contra el manual», y `v3` es anterior a esa calibración. Corregirlo y fechar los dos conjuntos |
+| `docs/experiment-index.md` | la fila de E2 describe `synthetic_v3` bajo un «generador paramétrico calibrado contra el manual», y `v3` es anterior a esa calibración. Corregirlo, fechar los dos conjuntos y etiquetar `v3` como **pre-calibración**, conservando sus registros como se conservaron los de las ejecuciones no canónicas de E12 y E13 |
 | `docs/memoria/cap5_resultados.md` (atribución) | la frase «la desventaja del modelo temporal se atribuye al volumen de datos» no se sostiene con los artefactos actuales. Condicionarla o retirarla hasta regenerar `v3` |
 | `research/traceability-matrix.md` | reconciliar el enunciado de PI.1 con el de la matriz de validación, y recoger el resultado negativo con su cadena E4 → E6 → E7 |
 | `docs/matriz_validacion_pi.md` | añadir la desagregación por fallo; dar registro a las cifras 54,3 / 70,7 °C o retirarlas hasta tenerlo (`EVID-MAJ-019`) |
@@ -449,11 +452,14 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
 
 ## Lo que esta auditoría recomienda decidir
 
-1. **Regenerar `synthetic_v3` con el generador calibrado antes de usar su comparación para nada.** Es el
-   hallazgo de fondo de esta auditoría: el conjunto que sostiene la atribución al volumen es anterior a
-   la calibración del generador, con un ralentí de 820 rpm que el manual no respalda. Hasta entonces, la
-   conclusión «el límite era el volumen» hay que retirarla del informe de E7 y condicionarla en el
-   capítulo 5. No es un experimento nuevo: es volver a ejecutar lo que ya está escrito.
+1. **Repetir el volumen grande con el generador calibrado y bajo un identificador nuevo, antes de usar
+   esa comparación para nada.** Es el hallazgo de fondo de esta auditoría: el conjunto que sostiene la
+   atribución al volumen es anterior a la calibración del generador, con un ralentí de 820 rpm que el
+   manual no respalda. `synthetic_v3` **se conserva** y queda etiquetado como pre-calibración, igual que
+   se conservaron las ejecuciones no canónicas de E12 y E13; el conjunto nuevo lleva otro identificador.
+   Hasta entonces, la conclusión «el límite era el volumen» hay que retirarla del informe de E7 y
+   condicionarla en el capítulo 5. No es un experimento nuevo: es volver a ejecutar lo que ya está
+   escrito.
 2. **Corregir el informe de E7** y dar registro a las cifras del termostato. Son dos defectos de
    trazabilidad, no de ciencia, y ensucian el resultado más interesante que hay.
 3. **Mantener la representación puntual como no medida.** E4 no la cubre: mide separabilidad por
