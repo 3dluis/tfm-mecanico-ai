@@ -82,7 +82,7 @@ la diferencia en una sola ejecución.
 | sin fallo | **0,8235** | 0,7692 | −0,0543 | tabular | — | la clase más abundante y la que recibe todos los errores de las demás |
 | F01 fuga de vacío | **1,0000** | 0,9655 | −0,0345 | tabular | no hay margen | el nivel de los ajustes de combustible la separa por completo (delta 1,00, E4) |
 | F02 deriva de caudalímetro | **1,0000** | 0,9231 | −0,0769 | tabular | no hay margen | separable por el nivel de los ajustes, no por el caudal (E4, hallazgo 1) |
-| **F03 termostato bloqueado** | 0,7826 | **0,8148** | **+0,0322** | **secuencial** | **sí** | único fallo donde la secuencia gana; ver sección 4 |
+| **F03 termostato bloqueado** | 0,7826 | **0,8148** | **+0,0322** | **secuencial** | **pendiente de verificar** | único fallo donde la secuencia gana en este conjunto. Si las dos ventanas de ventaja fueran de las que no contienen señal del fallo, la ventaja no demostraría aprovechamiento del contexto temporal: ver sección 4 |
 | F04 sonda lenta | **1,0000** | 0,9655 | −0,0345 | tabular | no hay margen | separable por la **dispersión** de la sonda (delta 1,00, E4) |
 | F05 fallo de encendido | **0,6667** | 0,5000 | −0,1667 | tabular | no, con este volumen | el peor de los dos modelos; episodios intermitentes de 1-3 s |
 
@@ -239,7 +239,10 @@ Sobre **validación** y sobre datos sintéticos:
 4. la estructura del error es benigna: todos los errores van a la clase sin fallo, sin diagnósticos
    cruzados;
 5. **el contraste con el modelo secuencial está hecho**, con su resultado negativo en agregado sobre
-   el conjunto oficial y su ventaja consistente en el termostato en los dos volúmenes.
+   el conjunto oficial. Su ventaja en el termostato se observa en los dos volúmenes, y **no está
+   demostrada como aprovechamiento del contexto temporal**: depende de la verificación ventana a
+   ventana de la sección 4. Lo demostrado es el resultado negativo; la ventaja por fallo es un patrón
+   observado.
 
 ## 6. Qué parte permanece sin demostrar
 
