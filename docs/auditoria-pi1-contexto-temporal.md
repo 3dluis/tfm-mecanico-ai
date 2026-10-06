@@ -31,7 +31,22 @@ volúmenes reducidos, de modo que la comparación entre ambas forma parte del di
 ## 2. Métricas exactas, bosque aleatorio frente a GRU bidireccional
 
 Sobre validación, de los registros. `synthetic_v2` es el conjunto oficial; `synthetic_v3` es análisis
-de sensibilidad **no adoptado**, idéntico salvo por tener el triple de sesiones.
+de sensibilidad **no adoptado**.
+
+**Antes de leer la tabla: los dos conjuntos no son el mismo generador.** El informe de E7 y el capítulo
+5 los describen como idénticos salvo por el número de sesiones, y no lo son. Las fichas de procedencia
+lo fechan: `synthetic_v3` se generó el **1 de septiembre a las 18:58** y `synthetic_v2` se **regeneró el
+14 de septiembre a las 00:37**, y entre esas dos fechas el generador se calibró contra el manual de
+taller. Se comprueba en los datos: el ralentí sin fallo tiene una mediana de **690 rpm en `v2`** —dentro
+del rango 640-740 que el manual documenta para el motor Z6— y de **820 rpm en `v3`**, que es
+precisamente el valor que la calibración retiró por no tener respaldo documental alguno, según la nota
+del propio fichero de calibración. El avance de encendido también cambia, 10,15 frente a 15,05 grados en
+la misma muestra. La etiqueta de versión del generador no distingue las dos, porque siguió siendo
+`v1.0.0`.
+
+De modo que **la comparación entre `v2` y `v3` cambia dos cosas a la vez: el volumen y la calibración
+del fenómeno**, y `v3` contiene el fenómeno *sin calibrar*. Nada de lo que sigue sobre `v3` puede
+atribuirse al volumen.
 
 | Conjunto | Modelo | Exactitud | F1 macro | F1 ponderado | Exactitud equilibrada | ECE | Exceso de confianza | n |
 |---|---|---|---|---|---|---|---|---|
@@ -90,7 +105,11 @@ Exhaustividad, que es donde se ve el mecanismo: en el termostato el bosque recup
 (0,6429, precisión 1,0000) y la GRU 11 de 14 (0,7857, precisión 0,8462). La secuencia **detecta dos
 ventanas más a cambio de dos falsos positivos** sobre la clase sin fallo.
 
-### `synthetic_v3`, sensibilidad no adoptada — 343 ventanas
+### `synthetic_v3`, sensibilidad no adoptada y **sin calibrar** — 343 ventanas
+
+Las cifras que siguen describen un fenómeno distinto del oficial, por lo dicho en la sección 2. Se
+incluyen porque el repositorio las publica y porque su patrón por clase es informativo, no como
+evidencia sobre el volumen.
 
 | Fallo | Tabular | Secuencial | Diferencia | Mejor |
 |---|---|---|---|---|
@@ -269,11 +288,17 @@ Sobre **validación** y sobre datos sintéticos:
 5. **La ventaja en el termostato no tiene mecanismo demostrado**, por lo dicho en la sección 4.
 6. **No existe la representación puntual.** Solo hay dos modelos en el código, el tabular sobre
    descriptores y el secuencial sobre series; no hay clasificador por muestra.
-7. **La comparación confunde representación y estimador.** B contra C cambia las dos cosas a la vez, de
+7. **La atribución del resultado al volumen de datos no está demostrada.** El informe de E7 concluye
+   que «el límite era el volumen de datos, no la arquitectura», y el capítulo 5 lo recoge. Esa conclusión
+   descansa en la comparación `v2` ↔ `v3`, que cambia el volumen **y** la calibración del generador. Con
+   los artefactos actuales no se puede separar un efecto del otro. La misma objeción alcanza a la
+   corrección que E7 hace de E5 y E6 sobre el fallo de encendido —«la condición sí es clasificable, lo
+   que faltaba eran datos»—, que también se apoya en el conjunto sin calibrar.
+8. **La comparación confunde representación y estimador.** B contra C cambia las dos cosas a la vez, de
    modo que ninguna diferencia por fallo puede atribuirse a la información secuencial sin una
    comparación controlada que hoy no existe. Lo que la comparación sostiene es una diferencia entre dos
    recorridos completos.
-8. **El fallo de encendido sigue abierto**: 0,6667 en `v2` y 0,8602 en `v3` para el tabular. E7 corrigió
+9. **El fallo de encendido sigue abierto**: 0,6667 en `v2` y 0,8602 en `v3` para el tabular. E7 corrigió
    la cautela de E5 y E6 —la condición sí es clasificable, faltaban datos— pero esa corrección descansa
    en el conjunto no adoptado.
 
@@ -330,21 +355,32 @@ sobre el conjunto de prueba— es la de E18 repetida sobre prueba, que sigue pen
 
 ## 8. ¿Hacen falta más datos sintéticos?
 
-La pregunta correcta no es si hacen falta más, sino **si el volumen es la limitación relevante**, y la
-evidencia disponible apunta a que sí, con dos puntos de volumen y una sola semilla cada uno:
+La pregunta correcta no es si hacen falta más, sino **si el volumen es la limitación relevante**. Y la
+respuesta honesta, con los artefactos de hoy, es que **no hay evidencia que lo establezca**, porque la
+única comparación que lo sugería cambia también el generador:
 
-| Conjunto | Sesiones | Ventanas de entrenamiento | F1 macro bosque | F1 macro BiGRU | Diferencia |
-|---|---|---|---|---|---|
-| `synthetic_v2` | 72 | 392 | 0,8788 | 0,8230 | −0,0558 |
-| `synthetic_v3` | 216 | 1 078 | 0,9321 | 0,9446 | +0,0125 |
+| Conjunto | Sesiones | Ventanas de entrenamiento | Calibración | F1 macro bosque | F1 macro BiGRU | Diferencia |
+|---|---|---|---|---|---|---|
+| `synthetic_v2` | 72 | 392 | **calibrado** | 0,8788 | 0,8230 | −0,0558 |
+| `synthetic_v3` | 216 | 1 078 | **sin calibrar** | 0,9321 | 0,9446 | +0,0125 |
 
-El orden se invierte al triplicar las sesiones, y el salto mayor es el del fallo de encendido en el
-modelo secuencial: 0,5000 → 0,9111. Pero dos puntos no son una curva de aprendizaje, la diferencia en
-`v3` es menor que el sesgo de la selección de época, y no hay réplicas. **Con lo que hay no se puede
-afirmar que el volumen sea la limitación, solo que es la explicación más compatible.**
+El orden se invierte y el salto mayor es el del fallo de encendido en el modelo secuencial, 0,5000 →
+0,9111. Pero entre las dos filas cambian **tres** cosas: el número de sesiones, la calibración del
+generador y la realización concreta. A eso se añade que dos puntos no son una curva, que la diferencia
+en `v3` es menor que el sesgo de la selección de época y que no hay réplicas.
 
-**No propongo ampliar el conjunto todavía**, y el motivo es que hay dos pasos más baratos y más
-informativos que se hacen sobre los datos que ya existen:
+**No se puede afirmar que el volumen sea la limitación, y tampoco que no lo sea.** Es una pregunta
+abierta cuya respuesta estaba dada por una comparación que no la sostiene.
+
+**No propongo ampliar el conjunto todavía**, y el motivo es que hay tres pasos más baratos y más
+informativos, y el primero no genera ni un escenario nuevo:
+
+0. **Regenerar `synthetic_v3` con el generador actual**, mismas 216 sesiones, misma semilla, misma
+   configuración, y reentrenar los dos modelos sobre él. Es una reejecución, no un experimento nuevo, y
+   es lo único que convierte la comparación de volumen en una comparación de volumen. Coste: el
+   generador, el preprocesado y dos entrenamientos; minutos, no días. Mientras no se haga, cualquier
+   conclusión sobre el volumen queda sin base, y la que hoy está publicada hay que retirarla o
+   condicionarla.
 
 1. **Guardar las predicciones por ventana y verificar el termostato.** Es lo más barato y lo que más
    cambia la interpretación: reejecutar E6 y E7 sobre validación registrando qué ventana acierta y
@@ -365,13 +401,14 @@ dependiendo del volumen tiene sentido generar más datos.
 
 ## 9. Qué cantidad adicional propongo, y por qué
 
-Si tras los dos pasos de la sección 8 hace falta volumen, propongo **una sola realización intermedia y
-una variación dirigida**, no una ampliación masiva:
+Si tras los pasos de la sección 8 —empezando por regenerar `v3`— sigue haciendo falta volumen, propongo
+**una sola realización intermedia y una variación dirigida**, no una ampliación masiva:
 
 1. **Un punto intermedio de volumen: 144 sesiones, 24 por condición**, entre las 72 de `v2` y las 216
-   de `v3`. Con tres volúmenes y réplicas se puede dibujar una curva de aprendizaje por clase y decir
-   si la ventaja secuencial crece con los datos o es un artefacto. Es el mínimo que convierte dos
-   puntos en una tendencia.
+   de un `v3` regenerado. Con tres volúmenes **del mismo generador** y réplicas se puede dibujar una
+   curva de aprendizaje por clase y decir si la ventaja secuencial crece con los datos o es un
+   artefacto. Es el mínimo que convierte dos puntos en una tendencia, y solo tiene sentido después del
+   paso 0.
 2. **Variación dirigida del régimen de calentamiento, condicionada a la verificación.** La sección 4
    muestra que las ventanas de termostato sin señal están todas en el régimen de calentamiento, y que
    `v2` tiene **siete ventanas** de ese régimen en entrenamiento y siete en validación. Lo que **no**
@@ -398,7 +435,9 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
 
 | Documento | Cambio |
 |---|---|
-| `docs/experiments/E7_modelo_temporal.md` | **corregir las cifras obsoletas de `synthetic_v2`** por las de los registros, y fechar la corrección. Es lo primero, porque hoy el informe contradice a su propio registro |
+| `docs/experiments/E7_modelo_temporal.md` | **corregir las cifras obsoletas de `synthetic_v2`** por las de los registros, y **retirar o condicionar el hallazgo «el límite era el volumen de datos, no la arquitectura»**, que compara dos generadores distintos. Lo mismo con la corrección sobre el fallo de encendido. Es lo primero, porque hoy el informe contradice a su propio registro y sostiene una atribución confundida |
+| `docs/experiment-index.md` | la fila de E2 describe `synthetic_v3` bajo un «generador paramétrico calibrado contra el manual», y `v3` es anterior a esa calibración. Corregirlo y fechar los dos conjuntos |
+| `docs/memoria/cap5_resultados.md` (atribución) | la frase «la desventaja del modelo temporal se atribuye al volumen de datos» no se sostiene con los artefactos actuales. Condicionarla o retirarla hasta regenerar `v3` |
 | `research/traceability-matrix.md` | reconciliar el enunciado de PI.1 con el de la matriz de validación, y recoger el resultado negativo con su cadena E4 → E6 → E7 |
 | `docs/matriz_validacion_pi.md` | añadir la desagregación por fallo; dar registro a las cifras 54,3 / 70,7 °C o retirarlas hasta tenerlo (`EVID-MAJ-019`) |
 | `docs/experiment-index.md` | E6 y E7 ya declaran el resultado correctamente; añadir la fila de la comparación desagregada cuando exista su artefacto |
@@ -410,23 +449,28 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
 
 ## Lo que esta auditoría recomienda decidir
 
-1. **Corregir el informe de E7** y dar registro a las cifras del termostato. Son dos defectos de
+1. **Regenerar `synthetic_v3` con el generador calibrado antes de usar su comparación para nada.** Es el
+   hallazgo de fondo de esta auditoría: el conjunto que sostiene la atribución al volumen es anterior a
+   la calibración del generador, con un ralentí de 820 rpm que el manual no respalda. Hasta entonces, la
+   conclusión «el límite era el volumen» hay que retirarla del informe de E7 y condicionarla en el
+   capítulo 5. No es un experimento nuevo: es volver a ejecutar lo que ya está escrito.
+2. **Corregir el informe de E7** y dar registro a las cifras del termostato. Son dos defectos de
    trazabilidad, no de ciencia, y ensucian el resultado más interesante que hay.
-2. **Mantener la representación puntual como no medida.** E4 no la cubre: mide separabilidad por
+3. **Mantener la representación puntual como no medida.** E4 no la cubre: mide separabilidad por
    bloques sobre otro conjunto y no clasifica muestras. Si se quiere el escalón, la vía recomendada es
    el mismo bosque sobre la media de cada señal, declarado como **ablación de estadísticos reducidos** y
    no como representación puntual.
-3. **Enunciar el resultado como diferencia entre dos recorridos**, no como efecto del contexto
+4. **Enunciar el resultado como diferencia entre dos recorridos**, no como efecto del contexto
    temporal: la comparación cambia representación y modelo a la vez, y atribuirla a la secuencia sería
    atribuir al dato lo que puede ser del estimador.
-4. **Quitar la asimetría y añadir réplicas antes de generar un solo dato nuevo.**
-5. **Mantener las tres prioridades del tutor por delante**: rediseño del distractor, reentrenamiento
+5. **Quitar la asimetría y añadir réplicas antes de generar un solo dato nuevo.**
+6. **Mantener las tres prioridades del tutor por delante**: rediseño del distractor, reentrenamiento
    del adaptador y ablaciones sobre prueba. Y antes que todas ellas, cerrar E19, que está a medias.
-6. **Presentar el resultado negativo como resultado**, con su salvedad por fallo. La memoria ya lo
+7. **Presentar el resultado negativo como resultado**, con su salvedad por fallo. La memoria ya lo
    hace; lo que falta es la tabla desagregada que lo hace comprobable de un vistazo. Lo que **no** debe
    presentarse todavía es el termostato como prueba de que el contexto temporal aporta: eso depende de
    la verificación por ventana, y hasta tenerla la salvedad honesta es «la secuencia gana en el
    termostato en los dos volúmenes, y no sabemos aún si lo gana donde el fallo es detectable».
-7. **Decir junto a esa ventaja que el modelo secuencial produce diagnósticos cruzados** y el bosque
+8. **Decir junto a esa ventaja que el modelo secuencial produce diagnósticos cruzados** y el bosque
    sobre el conjunto oficial no. Para un sistema cuyo riesgo es explicar bien la avería equivocada, esa
    es la comparación que más importa.
