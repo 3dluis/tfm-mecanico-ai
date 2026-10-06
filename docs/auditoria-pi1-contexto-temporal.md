@@ -261,7 +261,11 @@ Sobre **validación** y sobre datos sintéticos:
 5. **La ventaja en el termostato no tiene mecanismo demostrado**, por lo dicho en la sección 4.
 6. **No existe la representación puntual.** Solo hay dos modelos en el código, el tabular sobre
    descriptores y el secuencial sobre series; no hay clasificador por muestra.
-7. **El fallo de encendido sigue abierto**: 0,6667 en `v2` y 0,8602 en `v3` para el tabular. E7 corrigió
+7. **La comparación confunde representación y estimador.** B contra C cambia las dos cosas a la vez, de
+   modo que ninguna diferencia por fallo puede atribuirse a la información secuencial sin una
+   comparación controlada que hoy no existe. Lo que la comparación sostiene es una diferencia entre dos
+   recorridos completos.
+8. **El fallo de encendido sigue abierto**: 0,6667 en `v2` y 0,8602 en `v3` para el tabular. E7 corrigió
    la cautela de E5 y E6 —la condición sí es clasificable, faltaban datos— pero esa corrección descansa
    en el conjunto no adoptado.
 
@@ -278,6 +282,20 @@ Las tres representaciones que el tutor plantea están cubiertas así:
 **B y C no hay que repetirlos.** La comparación existe; lo que falta es presentarla desagregada y
 corregir su asimetría.
 
+**Y hay un confusor de fondo que conviene declarar antes de interpretar nada.** B contra C no cambia
+solo la representación: cambia **la representación y el estimador a la vez**. B es un bosque aleatorio
+sobre descriptores; C es una red recurrente bidireccional sobre series. Una diferencia por fallo entre
+los dos no puede atribuirse a la información secuencial, porque podría venir del sesgo inductivo de la
+red, de su regularización, de su calibración o de la selección de época. Aislar el efecto de la
+secuencia exigiría una comparación controlada —el mismo estimador sobre las dos representaciones, o los
+dos estimadores sobre las dos, cuatro celdas en lugar de dos—, y eso sí sería ampliar el diseño.
+
+Mi recomendación es **no ampliarlo** y, en su lugar, enunciar el resultado por lo que es: una diferencia
+entre **dos recorridos completos**, representación y modelo juntos, que es exactamente lo que el TFM
+compara y lo que un taller elegiría. La pregunta del tutor se responde entonces en esos términos: en qué
+fallos un recorrido secuencial aporta frente a un recorrido tabular. Afirmar «el contexto temporal
+aporta en el termostato» sin más sería atribuir a la representación lo que puede ser del modelo.
+
 **A no existe y queda sin medir.** Conviene no confundirlo con E4: E4 mide delta de Cliff sobre el
 nivel y la dispersión de bloques de 60 s de `synthetic_v1`, no clasifica a partir de muestras
 individuales y no usa los conjuntos de E6 y E7. Es un buen argumento de por qué una representación
@@ -285,12 +303,18 @@ puntual tendría poco que aportar —los fallos definidos por dispersión o por 
 visibles en una muestra suelta—, pero **no sustituye a la ablación**: citarlo como representación A
 sería atribuirle una comparación que no hizo.
 
-Si se quiere el escalón A, la versión honesta y barata es **el mismo bosque sobre un subconjunto de
-descriptores de nivel** —media, mínimo, máximo—, sobre el mismo conjunto y la misma partición. Eso
-aísla «nivel» frente a «dinámica dentro de la ventana» frente a «secuencia completa» con un solo
-entrenamiento más, sin arquitectura nueva y con las tres variantes comparables entre sí, que es lo que
-hoy no se cumpliría. Un clasificador por muestra, si se prefiere literal, es también posible, pero
-añade una arquitectura y un criterio de agregación nuevos para responder a lo mismo.
+Si se quiere el escalón A, la versión barata es **el mismo bosque sobre un subconjunto reducido de
+descriptores**, sobre el mismo conjunto y la misma partición. Conviene llamarlo por su nombre: es una
+**ablación de estadísticos reducidos**, no una representación puntual. Y el subconjunto hay que elegirlo
+con cuidado, porque el mínimo y el máximo de una ventana no son nivel: son extremos, y conservan
+información sobre cambios y sobre episodios breves —de hecho el máximo de la sonda y el mínimo del
+régimen están entre los descriptores más importantes del bosque—. El único subconjunto que se aproxima a
+«solo nivel» es la **media** de cada señal, doce descriptores de los 139.
+
+Con eso se obtiene un escalón interpretable —media sola, descriptores completos, secuencia— aunque
+seguiría sin ser la representación puntual literal, que exigiría clasificar muestra a muestra y decidir
+cómo agregar. Si el tutor quiere esa comparación en sentido estricto, hay que decir que no existe y que
+construirla es una ablación nueva.
 
 Las ablaciones **A1-A4 de E18 son otro eje**: desmontan el criterio de suficiencia del agente, no la
 representación de la telemetría. No se solapan con esto. Y la tercera prioridad del tutor —ablaciones
@@ -382,16 +406,19 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
    trazabilidad, no de ciencia, y ensucian el resultado más interesante que hay.
 2. **Mantener la representación puntual como no medida.** E4 no la cubre: mide separabilidad por
    bloques sobre otro conjunto y no clasifica muestras. Si se quiere el escalón, la vía recomendada es
-   el mismo bosque sobre descriptores de nivel, declarando que es un **sustituto** de la representación
-   puntual y no un clasificador por muestra.
-3. **Quitar la asimetría y añadir réplicas antes de generar un solo dato nuevo.**
-4. **Mantener las tres prioridades del tutor por delante**: rediseño del distractor, reentrenamiento
+   el mismo bosque sobre la media de cada señal, declarado como **ablación de estadísticos reducidos** y
+   no como representación puntual.
+3. **Enunciar el resultado como diferencia entre dos recorridos**, no como efecto del contexto
+   temporal: la comparación cambia representación y modelo a la vez, y atribuirla a la secuencia sería
+   atribuir al dato lo que puede ser del estimador.
+4. **Quitar la asimetría y añadir réplicas antes de generar un solo dato nuevo.**
+5. **Mantener las tres prioridades del tutor por delante**: rediseño del distractor, reentrenamiento
    del adaptador y ablaciones sobre prueba. Y antes que todas ellas, cerrar E19, que está a medias.
-5. **Presentar el resultado negativo como resultado**, con su salvedad por fallo. La memoria ya lo
+6. **Presentar el resultado negativo como resultado**, con su salvedad por fallo. La memoria ya lo
    hace; lo que falta es la tabla desagregada que lo hace comprobable de un vistazo. Lo que **no** debe
    presentarse todavía es el termostato como prueba de que el contexto temporal aporta: eso depende de
    la verificación por ventana, y hasta tenerla la salvedad honesta es «la secuencia gana en el
    termostato en los dos volúmenes, y no sabemos aún si lo gana donde el fallo es detectable».
-6. **Decir junto a esa ventaja que el modelo secuencial produce diagnósticos cruzados** y el bosque
+7. **Decir junto a esa ventaja que el modelo secuencial produce diagnósticos cruzados** y el bosque
    sobre el conjunto oficial no. Para un sistema cuyo riesgo es explicar bien la avería equivocada, esa
    es la comparación que más importa.
