@@ -101,10 +101,18 @@ ventanas más a cambio de dos falsos positivos** sobre la clase sin fallo.
 | F04 sonda lenta | **1,0000** | 0,9792 | −0,0208 | tabular |
 | **F05 fallo de encendido** | 0,8602 | **0,9111** | +0,0509 | secuencial |
 
-El patrón es **consistente, no aleatorio**: la secuencia gana donde hay margen que ganar —termostato en
-los dos conjuntos, y con más datos también el fallo de encendido y la clase sin fallo— y pierde por
-poco en los tres fallos donde el tabular ya está en 1,0000 y no hay nada que mejorar. En el termostato
-gana en los dos volúmenes, que es el dato más robusto de toda la comparación.
+El patrón **observado** es coherente en los dos conjuntos: la secuencia gana donde hay margen que
+ganar —termostato en los dos, y con más datos también el fallo de encendido y la clase sin fallo— y
+pierde por poco en los tres fallos donde el tabular ya está en 1,0000 y no hay nada que mejorar.
+
+**No puede llamarse consistente todavía, y la razón es la unidad de independencia**, que es la misma
+disciplina que este trabajo aplica a sus tasas de abstención. Las catorce ventanas de termostato de
+`v2` proceden de **dos sesiones**, y con ventanas de 120 s que avanzan 60 s cada una se solapan a
+mitad: no son catorce observaciones, son dos sesiones troceadas. A eso se añade una sola ejecución por
+modelo y conjunto. Que la dirección de la diferencia se repita en `v3` no descarta un efecto de sesión
+ni de semilla: en `v3` las cuarenta y nueve ventanas proceden de seis sesiones, mejor pero igual de
+expuesto. Es un patrón observado pendiente de análisis por sesión y de réplicas, y así hay que
+enunciarlo mientras no se tengan.
 
 ### La estructura del error, que distingue a los dos modelos
 
@@ -369,8 +377,10 @@ Cuando el autor apruebe el enfoque. Ninguno se ha tocado en esta auditoría.
 
 1. **Corregir el informe de E7** y dar registro a las cifras del termostato. Son dos defectos de
    trazabilidad, no de ciencia, y ensucian el resultado más interesante que hay.
-2. **No construir la representación puntual** como modelo nuevo: E4 ya la cubre, y si se quiere el
-   escalón, hacerlo con el mismo bosque sobre descriptores de nivel.
+2. **Mantener la representación puntual como no medida.** E4 no la cubre: mide separabilidad por
+   bloques sobre otro conjunto y no clasifica muestras. Si se quiere el escalón, la vía recomendada es
+   el mismo bosque sobre descriptores de nivel, declarando que es un **sustituto** de la representación
+   puntual y no un clasificador por muestra.
 3. **Quitar la asimetría y añadir réplicas antes de generar un solo dato nuevo.**
 4. **Mantener las tres prioridades del tutor por delante**: rediseño del distractor, reentrenamiento
    del adaptador y ablaciones sobre prueba. Y antes que todas ellas, cerrar E19, que está a medias.
