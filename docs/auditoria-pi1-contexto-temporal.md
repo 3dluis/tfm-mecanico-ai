@@ -110,8 +110,8 @@ disciplina que este trabajo aplica a sus tasas de abstención. Las catorce venta
 `v2` proceden de **dos sesiones**, y con ventanas de 120 s que avanzan 60 s cada una se solapan a
 mitad: no son catorce observaciones, son dos sesiones troceadas. A eso se añade una sola ejecución por
 modelo y conjunto. Que la dirección de la diferencia se repita en `v3` no descarta un efecto de sesión
-ni de semilla: en `v3` las cuarenta y nueve ventanas proceden de seis sesiones, mejor pero igual de
-expuesto. Es un patrón observado pendiente de análisis por sesión y de réplicas, y así hay que
+ni de semilla: en `v3` las cuarenta y nueve ventanas proceden de **siete** sesiones —dos de ralentí,
+tres urbanas y dos de calentamiento—, mejor pero igual de expuesto. Es un patrón observado pendiente de análisis por sesión y de réplicas, y así hay que
 enunciarlo mientras no se tengan.
 
 ### La estructura del error, que distingue a los dos modelos
@@ -176,10 +176,15 @@ ambiente», `obd/regimes.py`—.
 | validación | `warmup` | 7 | 65,32 °C | **5** |
 
 **Cinco ventanas sin señal y cinco ventanas falladas por el bosque.** Los dos recuentos coinciden, y la
-coincidencia es coherente con todo lo demás: los tres casos de termostato que E9 atribuye están
-acertados con confianza 0,948-0,951 y son los tres del régimen urbano, donde el techo actúa desde la
-primera muestra; y la ventana de termostato que el modelo falla en la anotación sellada de E19 es
-`F03_thermostat_stuck__warmup__11@120s`, de calentamiento.
+coincidencia es coherente con lo único que hay dentro de validación para contrastarla: los tres casos de
+termostato que E9 atribuye están acertados con confianza 0,948-0,951 y son los tres del régimen urbano,
+donde el techo actúa desde la primera muestra.
+
+Conviene decir qué **no** se usa aquí. La anotación sellada de E19 registra que el bosque clasifica como
+«sin fallo» una ventana de termostato del régimen de calentamiento, y esa observación apunta en la misma
+dirección, pero pertenece al **conjunto de prueba**: no entra en esta inferencia ni la sostiene. Queda
+mencionada porque el artefacto es público en el repositorio y ocultarlo sería peor, no porque añada
+evidencia a un análisis que se declara restringido a entrenamiento y validación.
 
 **Lo que no puedo afirmar, y hay que decirlo:** que sean *las mismas* cinco ventanas. Los registros de
 E6 y E7 guardan la matriz de confusión agregada, **no las predicciones por ventana**, de modo que la
