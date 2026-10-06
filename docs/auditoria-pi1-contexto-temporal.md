@@ -387,8 +387,10 @@ informativos, y el primero no genera ni un escenario nuevo:
    condición, `build_balanced_specs` consume números aleatorios distintos y `split_by_session` vuelve a
    barajar, de modo que cambian las realizaciones **y la partición de validación**. La diferencia de F1
    seguiría mezclando volumen y realización. Lo que sí aísla el volumen es construir **subconjuntos
-   anidados de entrenamiento** dentro de `synthetic_v4` —por ejemplo 8, 16, 24 y 36 sesiones por
-   condición— evaluando siempre sobre **la misma** validación. Eso es una curva de aprendizaje
+   anidados de entrenamiento** dentro de `synthetic_v4`, evaluando siempre sobre **la misma** validación.
+   Los tamaños hay que elegirlos dentro de lo que la partición deja: con 36 sesiones por condición, el
+   reparto por sesión destina 22 a entrenamiento y 7 a validación y a prueba —así es en `v3`—, de modo
+   que la curva puede tener puntos en **6, 12, 18 y 22 sesiones por condición** y no más. Eso es una curva de aprendizaje
    interpretable y no exige generar nada más. Coste: el generador, el preprocesado y cuatro
    entrenamientos por modelo; minutos, no días.
 
@@ -420,8 +422,8 @@ Si tras los pasos de la sección 8 —empezando por regenerar `v3`— sigue haci
 
 1. **Probablemente nada.** La curva de aprendizaje del paso 0 se construye con subconjuntos anidados de
    entrenamiento dentro de `synthetic_v4`, de modo que los cuatro puntos de volumen salen de un solo
-   conjunto generado una vez. Si la curva sigue subiendo en el punto más alto —36 sesiones por
-   condición—, entonces y solo entonces tiene sentido generar más: la cantidad la diría la pendiente de
+   conjunto generado una vez. Si la curva sigue subiendo en su punto más alto —22 sesiones por
+   condición en entrenamiento—, entonces y solo entonces tiene sentido generar más: la cantidad la diría la pendiente de
    esa curva, no una estimación previa. Pedir ahora una cifra sería inventarla.
 2. **Variación dirigida del régimen de calentamiento, condicionada a la verificación.** Es la única
    generación que propongo con un propósito distinto de la curva, y no busca volumen sino cubrir la
