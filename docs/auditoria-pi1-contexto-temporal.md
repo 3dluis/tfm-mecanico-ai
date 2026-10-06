@@ -376,14 +376,25 @@ abierta cuya respuesta estaba dada por una comparación que no la sostiene.
 informativos, y el primero no genera ni un escenario nuevo:
 
 0. **Generar el volumen grande con el generador actual, bajo un identificador nuevo** —`synthetic_v4`,
-   216 sesiones, misma semilla, misma configuración— y reentrenar los dos modelos sobre él. Es una
-   reejecución, no un experimento nuevo, y es lo único que convierte la comparación de volumen en una
-   comparación de volumen. **El identificador tiene que ser nuevo:** regenerar bajo `synthetic_v3`
-   sobrescribiría sus datos, su ficha, los registros de E6 y E7 y sus tablas, que son justamente la
-   evidencia con la que esta auditoría establece el resultado anterior a la calibración. Se conservan, y
-   `v3` queda etiquetado como **pre-calibración**. Coste: el generador, el preprocesado y dos
-   entrenamientos; minutos, no días. Mientras no se haga, cualquier conclusión sobre el volumen queda
-   sin base, y la que hoy está publicada hay que retirarla o condicionarla.
+   216 sesiones— y **medir el volumen dentro de ese único conjunto**, no comparándolo con `v2`. El
+   identificador tiene que ser nuevo: regenerar bajo `synthetic_v3` sobrescribiría sus datos, su ficha,
+   los registros de E6 y E7 y sus tablas, que son justamente la evidencia con la que esta auditoría
+   establece el resultado anterior a la calibración. Se conservan, y `v3` queda etiquetado como
+   **pre-calibración**.
+
+   **Y la comparación de volumen hay que hacerla con la validación fija.** Comparar `v2` con un conjunto
+   de más sesiones no aísla el volumen aunque se repita la semilla: con otro número de sesiones por
+   condición, `build_balanced_specs` consume números aleatorios distintos y `split_by_session` vuelve a
+   barajar, de modo que cambian las realizaciones **y la partición de validación**. La diferencia de F1
+   seguiría mezclando volumen y realización. Lo que sí aísla el volumen es construir **subconjuntos
+   anidados de entrenamiento** dentro de `synthetic_v4` —por ejemplo 8, 16, 24 y 36 sesiones por
+   condición— evaluando siempre sobre **la misma** validación. Eso es una curva de aprendizaje
+   interpretable y no exige generar nada más. Coste: el generador, el preprocesado y cuatro
+   entrenamientos por modelo; minutos, no días.
+
+   Mientras no se haga, cualquier conclusión sobre el volumen queda sin base, y la que hoy está
+   publicada hay que retirarla o condicionarla. La comparación `v2` ↔ `v3` que hoy la sostiene no es
+   controlada en ningún sentido: cambian el volumen, la calibración, las realizaciones y la validación.
 
 1. **Guardar las predicciones por ventana y verificar el termostato.** Es lo más barato y lo que más
    cambia la interpretación: reejecutar E6 y E7 sobre validación registrando qué ventana acierta y
@@ -407,12 +418,14 @@ dependiendo del volumen tiene sentido generar más datos.
 Si tras los pasos de la sección 8 —empezando por regenerar `v3`— sigue haciendo falta volumen, propongo
 **una sola realización intermedia y una variación dirigida**, no una ampliación masiva:
 
-1. **Un punto intermedio de volumen: 144 sesiones, 24 por condición**, entre las 72 de `v2` y las 216
-   del `v4` calibrado. Con tres volúmenes **del mismo generador** y réplicas se puede dibujar una
-   curva de aprendizaje por clase y decir si la ventaja secuencial crece con los datos o es un
-   artefacto. Es el mínimo que convierte dos puntos en una tendencia, y solo tiene sentido después del
-   paso 0.
-2. **Variación dirigida del régimen de calentamiento, condicionada a la verificación.** La sección 4
+1. **Probablemente nada.** La curva de aprendizaje del paso 0 se construye con subconjuntos anidados de
+   entrenamiento dentro de `synthetic_v4`, de modo que los cuatro puntos de volumen salen de un solo
+   conjunto generado una vez. Si la curva sigue subiendo en el punto más alto —36 sesiones por
+   condición—, entonces y solo entonces tiene sentido generar más: la cantidad la diría la pendiente de
+   esa curva, no una estimación previa. Pedir ahora una cifra sería inventarla.
+2. **Variación dirigida del régimen de calentamiento, condicionada a la verificación.** Es la única
+   generación que propongo con un propósito distinto de la curva, y no busca volumen sino cubrir la
+   región donde las dos representaciones podrían diferenciarse. La sección 4
    muestra que las ventanas de termostato sin señal están todas en el régimen de calentamiento, y que
    `v2` tiene **siete ventanas** de ese régimen en entrenamiento y siete en validación. Lo que **no**
    está verificado es que los errores de los modelos sean esas ventanas: eso exige las predicciones por
