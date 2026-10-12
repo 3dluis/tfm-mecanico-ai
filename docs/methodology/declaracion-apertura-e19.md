@@ -191,4 +191,18 @@ identificador.
 
 Lo que **no** cambia: ni los umbrales, ni los casos, ni las reglas, ni los modelos, ni las consultas,
 ni la política. La aprobación de esta declaración sigue siendo válida y el diseño sigue congelado.
-Lo único que falta para medir es que el autor autorice el intento siguiente.
+
+## 11. Desenlace: la evaluación está medida
+
+El autor autorizó terminar E19 el 5 de octubre de 2026. El intento `v2`, lanzado ese día, quedó
+también interrumpido poco después de sellar su anotación. El intento **`v3`**, del 12 de octubre,
+lanzado bajo `launchd` para que su proceso padre fuera el sistema y no la sesión de trabajo, **completó
+las 35 ejecuciones** y escribió su registro a las 21:50:19 UTC.
+
+El informe está en `docs/experiments/E19_evaluacion_final.md` y las aperturas, en
+`docs/methodology/registro-aperturas-test.md`. Los tres intentos y sus anotaciones selladas se
+conservan.
+
+El cambio a `launchd` afecta al **mecanismo de lanzamiento**, no al protocolo: entre la primera
+apertura y la medición no cambió ninguna línea de código ni de configuración, y las diez
+comprobaciones de la congelación se verificaron dentro de la ejecución que midió.
