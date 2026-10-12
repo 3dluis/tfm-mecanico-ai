@@ -15,7 +15,7 @@ análisis descriptivos, los errores se enumeran todos y las limitaciones van al 
 |---|---|---|---|
 | `v1` | 2 de octubre, 02:31:30 UTC | abrió la partición, predijo, **selló su anotación**; el proceso murió después, sin mediciones | `E19_anotacion.json`, huella `57d0e3c33e9ef82f` |
 | `v2` | 6 de octubre, 02:19:27 UTC | lo mismo; también interrumpido | `E19_anotacion_v2.json`, huella `70d5f6b7ca6de184` |
-| **`v3`** | **12 de octubre, 21:38:21 → 21:50:19 UTC** | **completó las 35 ejecuciones y escribió el registro** | `E19_anotacion_v3.json` (`7964f97fcdc21160`), `E19_evaluacion_final_v3.json`, `E19_evaluacion_final_v3.csv` |
+| **`v3`** | **12 de octubre, 21:38:21 → 21:50:19 UTC** | **completó las 35 ejecuciones y escribió el registro** | `E19_anotacion_v3.json` (`7964f97fcdc21160`), `E19_evaluacion_final_v3.json`, `artifacts/tables/E19_evaluacion_final_v3.csv` |
 
 Los tres se conservan. Las anotaciones de `v1` y `v2` son **idénticas byte a byte salvo la cabecera**,
 lo que acredita que el recorrido hasta el sellado es determinista. La incidencia de los dos primeros
@@ -255,7 +255,9 @@ E19  →  sesión (session_id de synthetic_v2, partición test)
                            política v2.2, umbral 0,79, cobertura 0,80, semilla 20260901,
                            corpus 0.1.0, embeddings y adaptador por huella)
      →  evidencia (bundle y support_checks de cada caso, con chunk_id)
-     →  resultado (E19_evaluacion_final_v3.json, tabla E19_evaluacion_final_v3.csv)
+     →  resultado (experiments/E19_evaluacion_final_v3.json y, fila a fila,
+                           artifacts/tables/E19_evaluacion_final_v3.csv, que se versiona
+                           porque `tables/` no lo esta y el jurado tiene que poder leerla)
      →  interpretación (este informe)
 ```
 
