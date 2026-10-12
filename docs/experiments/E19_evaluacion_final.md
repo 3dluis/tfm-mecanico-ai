@@ -32,7 +32,7 @@ Las diez comprobaciones que la sección 3 del encargo exige, verificadas **antes
 | 3 | Huellas de los conjuntos | las cuatro de `synthetic_v2` coinciden con las congeladas |
 | 4 | Integridad de la anotación sellada | huella en disco `7964f97fcdc21160`, idéntica a la que el registro cita |
 | 5 | Correspondencia anotación ↔ evaluación | los denominadores del registro son **idénticos** a los de la anotación en los tres estratos |
-| 6 | Denominadores preregistrados | 22 ejecuciones / 10 ventanas / 10 sesiones; 8 deben explicar, 14 abstenerse; comparativo 11; adverso 2. **Coinciden con lo declarado antes de abrir** |
+| 6 | Denominadores | **Declarados antes de abrir:** 22 ejecuciones, 10 ventanas y 10 sesiones en el estrato operativo, que es lo que la declaración fija; y como **cotas superiores** «hasta 11» en el comparativo y «hasta 5» en el adverso. Los tres se cumplen: 22/10/10, 11 y 2. **Fijados en la anotación sellada, después de abrir y antes de medir:** el reparto 8 deben explicar / 14 deben abstenerse, y los recuentos exactos de los dos estratos descriptivos. La declaración lo advertía: ese reparto depende de cuántas ventanas clasifique bien el modelo y no podía escribirse de antemano |
 | 7 | Ejecuciones completadas | 35 de 35: 22 + 11 + 2 |
 | 8 | Duplicados | ninguno; los 35 identificadores son únicos |
 | 9 | Resultados parciales tratados como completos | ninguno; no existe artefacto de ejecución no completada para `v3` |
@@ -113,7 +113,12 @@ circunstancia es parte del informe y debe estar ante el tribunal, no omitirse.
 evidencia sobre las dos sesiones de prueba de cada fallo, diez ventanas de diez sesiones distintas,
 sin solape.
 
-| Métrica preregistrada | Numerador | Denominador | Valor | Ventanas | Sesiones |
+Las dos métricas estaban preregistradas con su definición y su unidad de análisis. Sus
+**denominadores, no**: dependen de cuántas ventanas clasifique bien el modelo sobre prueba, y la
+declaración de apertura lo dejó escrito. Quedaron fijados en la anotación sellada, después de abrir y
+**antes** de calcular una sola métrica, y el registro lo acredita con su huella.
+
+| Métrica, preregistrada en su definición | Numerador | Denominador | Valor | Ventanas | Sesiones |
 |---|---|---|---|---|---|
 | **Falsa confianza** `T_FC` | 0 | 14 | **0,0000** | 7 | 7 |
 | **Abstención innecesaria** `T_AI` | 2 | 8 | **0,2500** | 8 | 8 |
