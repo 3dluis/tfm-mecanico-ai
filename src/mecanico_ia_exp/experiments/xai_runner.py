@@ -162,6 +162,7 @@ def run_xai(dataset_id: str = DATASET, *, etiqueta: str = "") -> int:
         + "\n",
         encoding="utf-8",
     )
-    print(f"\ntabla   E9_atribuciones_{dataset_id}.csv, E9_resumen_{dataset_id}.csv")
-    print(f"registro experiments/E9_xai_{dataset_id}.json")
+    print()
+    for clave, ruta in sorted(destinos.items()):
+        print(f"{clave:20s} {ruta.relative_to(paths.ROOT)}")
     return 0

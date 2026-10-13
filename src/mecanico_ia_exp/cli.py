@@ -207,6 +207,7 @@ def main(argv: list[str] | None = None) -> int:
     # esta opción, esos subcomandos no podrían reejecutarse desde la línea de
     # órdenes, que es peor que no protegerlos.
     for nombre in (
+        "preprocess",
         "train-baseline",
         "train-temporal",
         "xai",
@@ -306,7 +307,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "preprocess":
         from mecanico_ia_exp.experiments.preprocess_runner import run_preprocess
 
-        return run_preprocess(args.dataset_id)
+        return run_preprocess(args.dataset_id, etiqueta=args.etiqueta)
 
     if args.command == "train-baseline":
         from mecanico_ia_exp.experiments.baseline_runner import run_baseline
