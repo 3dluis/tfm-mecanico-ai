@@ -26,6 +26,21 @@ parámetros · métricas. En JSON y CSV, bajo `experiments/`.
 
 **Ningún número llega a la memoria sin proceder de uno de esos registros.**
 
+### Cinco registros anteriores a esta convención
+
+`experiments/E6_baseline_synthetic_v2.json`, `E6_baseline_synthetic_v3.json`,
+`E7_temporal_synthetic_v2.json`, `E7_temporal_synthetic_v3.json` y `E9_xai_synthetic_v2.json`
+**no llevan cabecera de identificación**: les faltan `commit`, `executed_at`, `dirty` y
+`dataset_type`. Son de antes de que la convención existiera.
+
+**No se regeneran para arreglarlo.** Regenerar cambiaría las cifras publicadas, que es un precio
+mucho más alto que el de declarar la carencia: lo que se pierde es poder anclar esas cinco
+ejecuciones a un commit exacto, y eso se dice en lugar de disimularlo. A cambio, **todo registro
+nuevo de PI.1 lleva la cabecera**, y además el **protocolo** del que sale, para que una cifra nueva
+no se confunda con una corrección silenciosa de la anterior.
+
+`CORRECTED 2026-10-12`.
+
 ## Estado por fase
 
 | Fase | Reproducible | Artefactos | Semilla |

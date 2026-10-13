@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import random
+from pathlib import Path
 
 import numpy as np
 import yaml
@@ -24,6 +25,7 @@ from mecanico_ia_exp.abstention.sufficiency import (
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
 from mecanico_ia_exp.evidence.assembly import assemble
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.llm.training_data import (
     TrainingExample,
@@ -49,7 +51,31 @@ VARIANTES: tuple[tuple[str, tuple[str, ...]], ...] = (
 )
 
 
-def run_training_data(dataset_id: str = DATASET, ventanas_por_condicion: int = 12) -> int:
+def destinos_de(etiqueta: str = "") -> dict[str, Path]:
+    """Los tres artefactos de E13b, antes de escribir el primero.
+
+    Los dos `.jsonl` van aquí y no solo el registro: son **los ejemplos con que
+    se ajustó el adaptador**. Proteger el registro y dejar los ejemplos en una
+    ruta fija los habría sobrescrito, y el registro anterior habría quedado
+    apuntando a unos ficheros cuyas huellas ya no coinciden con las que declara
+    --que es peor que perderlos, porque no se nota--.
+    """
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    ejemplos = paths.DATA_PROCESSED / f"slm_finetune{sufijo}"
+    return {
+        "registro": paths.EXPERIMENTS / f"E13b_training_data{sufijo}.json",
+        "ejemplos_train": ejemplos / "train.jsonl",
+        "ejemplos_valid": ejemplos / "valid.jsonl",
+    }
+
+
+def run_training_data(
+    dataset_id: str = DATASET,
+    ventanas_por_condicion: int = 12,
+    *,
+    etiqueta: str = "",
+) -> int:
+    destinos = exigir_libres(destinos_de(etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
     perfil = load_vehicle(VEHICULO)
@@ -203,22 +229,22 @@ def run_training_data(dataset_id: str = DATASET, ventanas_por_condicion: int = 1
     corte = int(len(casos) * 0.85)
     casos_train = set(casos[:corte])
 
-    destino = paths.ensure(paths.DATA_PROCESSED / "slm_finetune")
+    paths.ensure(destinos["ejemplos_train"].parent)
     for nombre, seleccion in (
         ("train", [e for e in ejemplos if e.case_id in casos_train]),
         ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
     ):
-        ruta = destino / f"{nombre}.jsonl"
+        ruta = destinos[f"ejemplos_{nombre}"]
         ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
-        print(f"  {ruta.name:<12} {len(seleccion)} ejemplos")
+        print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
 
     huellas = {
-        n: hashlib.sha256((destino / f"{n}.jsonl").read_bytes()).hexdigest()[:16]
+        n: hashlib.sha256(destinos[f"ejemplos_{n}"].read_bytes()).hexdigest()[:16]
         for n in ("train", "valid")
     }
     identidad = embeddings.identity
     escribir(
-        paths.ensure(paths.EXPERIMENTS) / "E13b_training_data.json",
+        destinos["registro"],
         {
             "experiment_id": "E13b_training_data",
             "n_examples": len(ejemplos),

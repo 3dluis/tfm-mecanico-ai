@@ -75,7 +75,10 @@ class WindowedData:
     y: np.ndarray
     """(n_ventanas,) — identificador de condición"""
     meta: pd.DataFrame
-    """(n_ventanas, ...) — session_id, regime, t_start, t_end, fault_active"""
+    """(n_ventanas, ...) — session_id, regime, t_start, t_end, fault_active y, si el
+    conjunto las trae, ``n_expressed``, ``fraction_expressed``, ``fault_expressed``
+    y ``deviation_max``: cuántas muestras de la ventana alteraron de verdad la
+    trayectoria. Ninguna ventana se descarta por no expresar el fallo."""
     signals: tuple[str, ...]
     config: WindowConfig
     n_discarded: int
@@ -101,6 +104,21 @@ def make_windows(datos: pd.DataFrame, config: WindowConfig | None = None) -> Win
         valores = grupo[columnas].to_numpy(dtype=np.float32)
         activo = grupo["fault_active"].to_numpy(dtype=bool)
         tiempos = grupo["timestamp"].to_numpy(dtype=float)
+        # La expresión efectiva solo existe desde `synthetic_v4`. Cuando está,
+        # cada ventana se queda con qué fracción de sus muestras alteró de
+        # verdad la trayectoria. **No se descarta ninguna por eso**: una ventana
+        # etiquetada con el fallo y sin señal observable es un caso del
+        # análisis, no un dato defectuoso, y eliminarla aquí la escondería.
+        expresado = (
+            grupo["fault_expressed"].to_numpy(dtype=bool)
+            if "fault_expressed" in grupo.columns
+            else None
+        )
+        desviacion = (
+            grupo["fault_deviation_max"].to_numpy(dtype=float)
+            if "fault_deviation_max" in grupo.columns
+            else None
+        )
         fault_id = str(grupo["fault_id"].iloc[0])
         regime = str(grupo["regime"].iloc[0])
 
@@ -116,16 +134,22 @@ def make_windows(datos: pd.DataFrame, config: WindowConfig | None = None) -> Win
 
             bloques.append(valores[inicio:fin])
             etiquetas.append(fault_id if tramo_activo.all() else NORMAL_ID)
-            filas_meta.append(
-                {
-                    "session_id": session_id,
-                    "regime": regime,
-                    "session_fault_id": fault_id,
-                    "t_start": float(tiempos[inicio]),
-                    "t_end": float(tiempos[fin - 1]),
-                    "fault_active": bool(tramo_activo.all()),
-                }
-            )
+            fila: dict[str, object] = {
+                "session_id": session_id,
+                "regime": regime,
+                "session_fault_id": fault_id,
+                "t_start": float(tiempos[inicio]),
+                "t_end": float(tiempos[fin - 1]),
+                "fault_active": bool(tramo_activo.all()),
+            }
+            if expresado is not None:
+                tramo = expresado[inicio:fin]
+                fila["n_expressed"] = int(tramo.sum())
+                fila["fraction_expressed"] = float(tramo.mean())
+                fila["fault_expressed"] = bool(tramo.any())
+            if desviacion is not None:
+                fila["deviation_max"] = float(desviacion[inicio:fin].max())
+            filas_meta.append(fila)
 
     if not bloques:
         msg = (

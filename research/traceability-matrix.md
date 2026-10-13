@@ -26,7 +26,7 @@ esta matriz sirve para hacer **ahora** es detectar huecos, no documentar hallazg
 
 | Sub-PI | Objetivo | Hipótesis | Experimento | Métricas | RES | DISC | CONC | Evidencia |
 |---|---|---|---|---|---|---|---|---|
-| **PI.1** — diagnóstico a partir de OBD-II | OE-M3 ⚠ | Un modelo temporal sobre ventanas OBD-II supera de forma clara al baseline y a la clase mayoritaria | **E8** (con E5 ✅, E6 ✅, E7) | M1: F1 macro, PR-AUC, calibración | **parcial, en validación**: baseline F1 macro 0,876 frente a 0,074 de la clase mayoritaria (E6). **Sin test** | PENDING | PENDING | `experiments/E6_baseline.json` |
+| **PI.1** — diagnóstico a partir de OBD-II | OE-M3 ⚠ | ~~Un modelo temporal sobre ventanas OBD-II supera de forma clara al baseline y a la clase mayoritaria~~ **`SUPERSEDED 2026-10-12`**. Criterio vigente, único: **el diagnóstico supera a la clase mayoritaria con margen amplio y su confianza se puede calibrar** (`docs/matriz_validacion_pi.md`, cap. 4). El enunciado anterior exigía que *el modelo temporal* superase al baseline, que es una pregunta sobre arquitecturas y no sobre la capacidad de diagnosticar | **E6** ✅, **E19** ✅ (con E5 ✅, E7) | M1: F1 macro, PR-AUC, calibración | F1 macro del bosque **0,8788** frente a 0,0741 de la clase mayoritaria (E6, validación) y **sobre prueba** en E19 | PENDING | PENDING | `experiments/E6_baseline_synthetic_v2.json`, `experiments/E19_evaluacion_final_v3.json` |
 | **PI.2** — explicación trazable | OE-M4 | Toda afirmación se ancla en una observación o en un fragmento identificable | **E14, E17** | M4: citation correctness, citation completeness, claim support rate, unsupported claim rate | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 | **PI.3** — reconocimiento de insuficiencia | OE-M4, OE-M5 ⚠ | Al retirar la evidencia relevante del corpus, el agente pasa de explicar a abstenerse sobre el mismo caso | **E16, E17** | M5: abstención correcta, abstención injustificada, cobertura | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
 | **PI.4** — rechazo de evidencia engañosa | OE-M5 ⚠ | Ante evidencia parecida pero incorrecta, el agente no la acepta como soporte | **E17** | M5 sobre DISTRACTOR; M2 por condición | PENDING | PENDING | PENDING | `[EXPERIMENT_REQUIRED]` |
@@ -186,8 +186,9 @@ umbral, sobre validación.
 
 E6 encontró que el termostato bloqueado tiene un **límite físico de detección**: mientras el
 motor no habría superado el techo de 71 °C por sí mismo, la señal de un motor averiado es
-idéntica a la de uno sano (detectadas 70,7 °C de media, no detectadas 54,3 °C; urbano 7/7,
-calentamiento 2/7).
+idéntica a la de uno sano (urbano **7/7**, calentamiento **2/7**; las dos medias que esta nota
+citaba —70,7 y 54,3 °C— quedan **sin registro y no utilizables** desde el 12 de octubre de 2026,
+ver `docs/experiments/E6_baseline.md`).
 
 Son ventanas donde la evidencia es **genuinamente insuficiente por física, no por
 construcción experimental**. El diseño de E17 preveía construir la insuficiencia retirando

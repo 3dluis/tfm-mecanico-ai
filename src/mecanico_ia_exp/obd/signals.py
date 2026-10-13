@@ -70,12 +70,33 @@ PID_EQUIVALENTE: dict[str, str] = {
 }
 
 #: Columnas no-señal que acompañan a toda serie generada.
+#:
+#: ``fault_active`` dice que la función de fallo se aplicó; ``fault_expressed``,
+#: que alteró la trayectoria. No son lo mismo y la diferencia importa: ver
+#: ``obd/expresion.py``. ``fault_deviation_max`` guarda la magnitud de la mayor
+#: alteración en umbrales de su propia señal, de modo que una lectura más
+#: estricta no exige regenerar nada, y ``fault_deviation_signal`` dice qué señal
+#: la lleva.
+#:
+#: Las tres últimas se incorporaron con `synthetic_v4`: **los conjuntos
+#: anteriores no las tienen**, y el código que las lea debe tolerar su ausencia
+#: en lugar de exigirlas.
 METADATA_COLUMNS: tuple[str, ...] = (
     "timestamp",
     "session_id",
     "regime",
     "fault_id",
     "fault_active",
+    "fault_expressed",
+    "fault_deviation_max",
+    "fault_deviation_signal",
+)
+
+#: Las que solo existen desde `synthetic_v4`.
+COLUMNAS_DE_EXPRESION: tuple[str, ...] = (
+    "fault_expressed",
+    "fault_deviation_max",
+    "fault_deviation_signal",
 )
 
 

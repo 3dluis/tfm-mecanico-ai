@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -39,6 +40,7 @@ from mecanico_ia_exp.evaluation.metrics import expected_calibration_error
 from mecanico_ia_exp.evidence.assembly import assemble
 from mecanico_ia_exp.evidence.model import EvidenceBundle
 from mecanico_ia_exp.evidence.support import DtcRequirement, SupportCheck, dtc_requirement
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.experiments.retrieval_runner import DIAGNOSTICO_A_DTC, recuperar
 from mecanico_ia_exp.llm.agent import PROMPT_VERSION, AgentRun
@@ -77,7 +79,43 @@ def modo_de(*, oracle: bool, adverse: bool) -> str:
     return "adverse" if adverse else ("oracle" if oracle else "non_oracle")
 
 
-def sufijo_artefacto(modo: str, policy: str = VERIFIER_VERSION) -> str:
+def sufijo_agente(modo: str, policy: str = VERIFIER_VERSION, etiqueta: str = "") -> str:
+    """Sufijo del registro del agente.
+
+    Lleva el **modo** además de la política: una redacción producida en modo no
+    oracular parte de evidencia distinta y puede decidir distinto, así que no es
+    la misma ejecución. Sin el modo, una ejecución no oracular sobrescribía el
+    registro de la oracular en silencio.
+
+    El caso publicado —modo oracular, política canónica y sin etiqueta— conserva
+    su nombre sin sufijo: `E13_agente_<llm>.json` es el registro que el capítulo
+    cita.
+    """
+    sufijo = "" if modo == "oracle" else f"_{modo}"
+    if policy != VERIFIER_VERSION:
+        sufijo += f"_{policy.replace('.', '_')}"
+    if etiqueta:
+        sufijo += f"_{etiqueta}"
+    return sufijo
+
+
+def destinos_de(
+    modo: str, policy: str = VERIFIER_VERSION, etiqueta: str = "", llm: str | None = None
+) -> dict[str, Path]:
+    """Los artefactos que una ejecución de suficiencia escribe, todos juntos."""
+    sufijo = sufijo_artefacto(modo, policy, etiqueta)
+    destinos = {
+        "registro": paths.EXPERIMENTS / f"E15_suficiencia{sufijo}.json",
+        "tabla": paths.TABLES / f"E15_suficiencia{sufijo}.csv",
+    }
+    if llm:
+        destinos["agente"] = (
+            paths.EXPERIMENTS / f"E13_agente_{llm}{sufijo_agente(modo, policy, etiqueta)}.json"
+        )
+    return destinos
+
+
+def sufijo_artefacto(modo: str, policy: str = VERIFIER_VERSION, etiqueta: str = "") -> str:
     """Sufijo del nombre de los artefactos de una ejecución.
 
     Una política no canónica **nunca** puede escribir sobre los registros
@@ -89,6 +127,11 @@ def sufijo_artefacto(modo: str, policy: str = VERIFIER_VERSION) -> str:
     sufijo = "" if modo == "oracle" else f"_{modo}"
     if validar_politica(policy) != VERIFIER_VERSION:
         sufijo += f"_{policy.replace('.', '_')}"
+    # Y la etiqueta de ejecución, que es lo que permite reproducir sin destruir:
+    # una reejecución de comprobación escribe al lado del registro publicado en
+    # lugar de encima.
+    if etiqueta:
+        sufijo += f"_{etiqueta}"
     return sufijo
 
 
@@ -403,6 +446,7 @@ def run_sufficiency(
     oracle: bool = True,
     adverse: bool = False,
     policy: str = VERIFIER_VERSION,
+    etiqueta: str = "",
 ) -> int:
     """Ejecuta el experimento de suficiencia sobre el conjunto anotado.
 
@@ -425,6 +469,11 @@ def run_sufficiency(
     sobrescribir los registros que el capítulo 5 cita.
     """
     validar_politica(policy)
+    # Los destinos se comprueban **antes** de preparar nada: una ejecución de
+    # comprobación con la etiqueta repetida pisaría el resultado anterior, y
+    # descubrirlo al escribir ya sería tarde.
+    exigir_libres(destinos_de(modo_de(oracle=oracle, adverse=adverse), policy, etiqueta, llm))
+
     ctx = preparar(dataset_id)
 
     umbrales = SufficiencyThresholds()
@@ -544,12 +593,12 @@ def run_sufficiency(
     print(f"\ndecisiones correctas: {aciertos_decision}/{len(verificados)}")
 
     modo = modo_de(oracle=oracle, adverse=adverse)
-    sufijo = sufijo_artefacto(modo, policy)
-    tablas = paths.ensure(paths.TABLES)
-    pd.DataFrame(filas).to_csv(tablas / f"E15_suficiencia{sufijo}.csv", index=False)
-    experimentos = paths.ensure(paths.EXPERIMENTS)
+    destinos = destinos_de(modo, policy, etiqueta, llm)
+    paths.ensure(paths.TABLES)
+    paths.ensure(paths.EXPERIMENTS)
+    pd.DataFrame(filas).to_csv(destinos["tabla"], index=False)
     escribir(
-        experimentos / f"E15_suficiencia{sufijo}.json",
+        destinos["registro"],
         documento_suficiencia(
             modo=modo,
             oracle=oracle,
@@ -600,11 +649,8 @@ def run_sufficiency(
                 f"\n  citas inventadas   {sum(len(a.fake_citations) for a in agentes)}"
                 f"\n  fallos de esquema  {sum(1 for a in agentes if a.schema_error)}"
             )
-            # El registro del agente lleva el mismo sufijo que el del verificador:
-            # una redacción producida bajo otra política no es la misma ejecución.
-            sufijo_agente = "" if policy == VERIFIER_VERSION else f"_{policy.replace('.', '_')}"
             escribir(
-                experimentos / f"E13_agente_{llm}{sufijo_agente}.json",
+                destinos["agente"],
                 {
                     "experiment_id": "E13_agent",
                     "llm": llm,
@@ -629,9 +675,9 @@ def run_sufficiency(
                 embedding_model=provider.identity.model,
                 goldset=GOLDSET.name,
             )
-            print(f"\nregistro experiments/E13_agente_{llm}{sufijo_agente}.json")
+            print(f"\nagente    {destinos['agente'].relative_to(paths.ROOT)}")
 
-    print(f"tabla   E15_suficiencia{sufijo}.csv")
-    print(f"registro experiments/E15_suficiencia{sufijo}.json")
+    for clave in ("tabla", "registro"):
+        print(f"{clave:9s} {destinos[clave].relative_to(paths.ROOT)}")
     store.dispose()
     return 0

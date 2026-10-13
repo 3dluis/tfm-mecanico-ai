@@ -41,6 +41,12 @@ def main(argv: list[str] | None = None) -> int:
     ):
         sub = subparsers.add_parser(nombre, help=ayuda)
         sub.add_argument("--dataset-id", default="synthetic_v2")
+    train_baseline = subparsers.choices["train-baseline"]
+    train_baseline.add_argument(
+        "--por-ventana",
+        action="store_true",
+        help="guardar también la predicción de cada ventana con su sesión y su temperatura media",
+    )
 
     subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
@@ -100,6 +106,33 @@ def main(argv: list[str] | None = None) -> int:
             "A1 sin atribución, A2 sin recuperación semántica, A3 sin criterio de "
             "suficiencia, A4 umbral único. Definidas en "
             "docs/methodology/preregistro-e18-ablaciones.md"
+        ),
+    )
+    abl.add_argument(
+        "--partition",
+        choices=("validation", "test"),
+        default="validation",
+        help=(
+            "sobre qué se miden las ablaciones. Repetirlas sobre el conjunto de prueba es "
+            "el tercero de los pendientes del tutor, exige --open-test con --reason y "
+            "constituye una apertura que hay que registrar en "
+            "docs/methodology/registro-aperturas-test.md ANTES de ejecutar"
+        ),
+    )
+    abl.add_argument(
+        "--open-test",
+        action="store_true",
+        help=(
+            "declara la apertura del conjunto de prueba. Sin esto y sin --reason, pedir "
+            "la partición de prueba es un error, no un resultado"
+        ),
+    )
+    abl.add_argument(
+        "--reason",
+        default="",
+        help=(
+            "razón por escrito de la apertura. Queda EN EL REGISTRO de cada ablación, no "
+            "solo en la salida de la ejecución"
         ),
     )
     abl.add_argument(
@@ -168,6 +201,32 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
 
+    # La etiqueta va a TODOS los ejecutores que escriben artefactos, y en un solo
+    # sitio para que añadir un subcomando sin ella se note. Sin etiqueta, el
+    # ejecutor conserva los nombres históricos y se niega a sobrescribirlos; sin
+    # esta opción, esos subcomandos no podrían reejecutarse desde la línea de
+    # órdenes, que es peor que no protegerlos.
+    for nombre in (
+        "preprocess",
+        "sufficiency",
+        "train-baseline",
+        "train-temporal",
+        "xai",
+        "eval-retrieval",
+        "threshold-sweep",
+        "training-data",
+        "ablations",
+    ):
+        subparsers.choices[nombre].add_argument(
+            "--etiqueta",
+            default="",
+            help=(
+                "identifica la ejecución y entra en el nombre de todos sus artefactos; "
+                "sin ella se usan los nombres históricos y la ejecución se niega a "
+                "sobrescribirlos"
+            ),
+        )
+
     args = parser.parse_args(argv)
 
     if args.command == "doctor":
@@ -189,10 +248,56 @@ def main(argv: list[str] | None = None) -> int:
         datos, metadata = generate_dataset(
             specs, dataset_id=args.dataset_id, seed=args.seed, notes="Plan equilibrado E2."
         )
+        from mecanico_ia_exp.experiments.destinos import ArtefactoOcupadoError, exigir_libres
+        from mecanico_ia_exp.obd.auditoria import (
+            AuditoriaDelGeneradorError,
+            exigir_auditoria_limpia,
+        )
+        from mecanico_ia_exp.obd.procedencia import construir, escribir, ruta_de
+
+        # Los TRES destinos se comprueban antes de escribir el primero. Si solo
+        # se comprobara el manifiesto, una regeneración habría reemplazado ya el
+        # parquet y la ficha antes de fallar, y el manifiesto antiguo habría
+        # quedado describiendo datos nuevos: una procedencia que miente es peor
+        # que no tenerla.
         destino = paths.ensure(paths.DATA_RAW_SYNTHETIC) / f"{args.dataset_id}.parquet"
+        try:
+            exigir_libres(
+                {
+                    "datos": destino,
+                    "ficha": destino.with_suffix(".meta.json"),
+                    "procedencia": ruta_de(args.dataset_id),
+                }
+            )
+        except ArtefactoOcupadoError as error:
+            print(
+                f"\n{error}\n"
+                "Para generar un conjunto nuevo, usa otro --dataset-id. "
+                "Los conjuntos existentes sostienen cifras publicadas y no se regeneran.\n"
+                "\nNo se escribe nada."
+            )
+            return 1
+
+        manifiesto = construir(specs, datos, dataset_id=args.dataset_id, seed=args.seed)
+
+        # La auditoría va ANTES de escribir, no después. Un conjunto que no la
+        # pasa no llega a existir en disco, y así no hay forma de entrenar sobre
+        # él por descuido. `synthetic_v3` se generó sin este paso, con el motor
+        # sin calibrar, y nadie lo notó hasta que una conclusión publicada hubo
+        # que retirarla.
+        print("\nAuditoría del generador:")
+        try:
+            for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
+                print(f"  {comprobacion}")
+        except AuditoriaDelGeneradorError as error:
+            print(f"\n{error}\n\nNo se escribe nada.")
+            return 1
+
         datos.to_parquet(destino, index=False)
         metadata.write(destino.with_suffix(".meta.json"))
-        print(f"{len(datos)} muestras en {metadata.n_sessions} sesiones -> {destino.name}")
+        escribir(ruta_de(args.dataset_id), manifiesto)
+        print(f"\n{len(datos)} muestras en {metadata.n_sessions} sesiones -> {destino.name}")
+        print(f"procedencia por sesión -> {ruta_de(args.dataset_id).name}")
         return 0
 
     if args.command == "eda":
@@ -203,39 +308,39 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "preprocess":
         from mecanico_ia_exp.experiments.preprocess_runner import run_preprocess
 
-        return run_preprocess(args.dataset_id)
+        return run_preprocess(args.dataset_id, etiqueta=args.etiqueta)
 
     if args.command == "train-baseline":
         from mecanico_ia_exp.experiments.baseline_runner import run_baseline
 
-        return run_baseline(args.dataset_id)
+        return run_baseline(args.dataset_id, etiqueta=args.etiqueta, por_ventana=args.por_ventana)
 
     if args.command == "train-temporal":
         from mecanico_ia_exp.experiments.temporal_runner import run_temporal
 
-        return run_temporal(args.dataset_id)
+        return run_temporal(args.dataset_id, etiqueta=args.etiqueta)
 
     if args.command == "xai":
         from mecanico_ia_exp.experiments.xai_runner import run_xai
 
-        return run_xai()
+        return run_xai(etiqueta=args.etiqueta)
 
     if args.command == "eval-retrieval":
         from mecanico_ia_exp.experiments.retrieval_runner import (
             run_retrieval_evaluation,
         )
 
-        return run_retrieval_evaluation()
+        return run_retrieval_evaluation(etiqueta=args.etiqueta)
 
     if args.command == "threshold-sweep":
         from mecanico_ia_exp.experiments.threshold_runner import run_threshold_sweep
 
-        return run_threshold_sweep(args.dataset_id)
+        return run_threshold_sweep(args.dataset_id, etiqueta=args.etiqueta)
 
     if args.command == "training-data":
         from mecanico_ia_exp.experiments.training_runner import run_training_data
 
-        return run_training_data()
+        return run_training_data(etiqueta=args.etiqueta)
 
     if args.command == "finetune-slm":
         from mecanico_ia_exp.llm.finetune import FinetuneConfig, finetune
@@ -258,6 +363,7 @@ def main(argv: list[str] | None = None) -> int:
             oracle=args.mode == "oracle",
             adverse=args.mode == "adverse",
             policy=args.policy,
+            etiqueta=args.etiqueta,
         )
 
     if args.command == "ablations":
@@ -267,6 +373,10 @@ def main(argv: list[str] | None = None) -> int:
             args.dataset_id,
             ablation=args.ablation,
             oracle=args.mode == "oracle",
+            etiqueta=args.etiqueta,
+            particion=args.partition,
+            allow_test=args.open_test,
+            reason=args.reason,
         )
 
     if args.command == "final-evaluation":
