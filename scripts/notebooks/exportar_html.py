@@ -31,6 +31,7 @@ ENTREGADOS = (
     "03_analisis_e19.ipynb",
     "04_explicabilidad.ipynb",
     "05_suficiencia_y_abstencion.ipynb",
+    "06_expresion_del_fallo.ipynb",
 )
 
 

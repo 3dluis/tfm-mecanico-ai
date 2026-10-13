@@ -451,6 +451,65 @@ recorrido: añadir una barrera ahora sería cambiar el sistema a la vista del re
 declarado como limitación `L-26`, con un guion —`scripts/auditar_cifras_redactadas.py`— para que
 cualquiera repita la auditoría."""),
     md("""\
+## 10 bis. La contaminación del adaptador, que afecta a estas mismas cifras
+
+Las cifras de redacción de este notebook —y las de E13 y E15 que el capítulo 5 publica— están
+**afectadas por contaminación**, y conviene saberlo antes de leerlas como evidencia de nada.
+
+Los ejemplos con que se ajustó el adaptador `slm_lora_v2` se generaron desde la **partición de
+validación**, que es exactamente donde se mide la calidad de redacción. No es un descuido de una
+línea: el reparto por sesión se diseñó para el modelo de diagnóstico —entrenamiento para ajustar,
+validación para medir— y cuando se añadió el redactor, sus ejemplos se tomaron de donde había
+predicciones correctas y evidencia ya montada, sin reparar en que esa partición era también donde se
+le iba a medir."""),
+    code("""\
+# Medido contra los ficheros de ajuste y el registro del agente. Los identificadores
+# de ventana están registrados en la congelación del conjunto independiente, de modo
+# que esto se puede comprobar en un clon sin los ficheros de ajuste.
+congelacion = json.loads(
+    (soporte.raiz() / "configs" / "evaluacion-independiente-redactor.json").read_text("utf-8")
+)
+entradas = congelacion["entradas_de_la_regla"]
+ajuste = set(entradas["ventanas_de_ajuste_de_slm_lora_v2"])
+evaluacion = set(entradas["ventanas_de_evaluacion_de_E15"])
+
+agente = soporte.registro("E13_agente_transformers-lora@slm_lora_v2")
+vistos = [r for r in agente["runs"] if r["case_id"] in ajuste]
+
+print(f"ventanas con que se ajustó el adaptador : {len(ajuste)}")
+print(f"ventanas de la evaluación de E15        : {len(evaluacion)}")
+print(f"solape de ventanas                      : {len(ajuste & evaluacion)} de {len(evaluacion)}")
+print()
+print(f"casos de E13 sobre ventanas vistas      : {len(vistos)} de {len(agente['runs'])}")
+print(f"casos sobre ventanas NO vistas          : {len(agente['runs']) - len(vistos)}")
+print(f"ventanas distintas en los no vistos     : "
+      f"{len({r['case_id'] for r in agente['runs'] if r['case_id'] not in ajuste})}")
+print()
+for subconjunto, nombre in ((vistos, "vistos"), (
+    [r for r in agente["runs"] if r["case_id"] not in ajuste], "no vistos")):
+    validas = sum(1 for r in subconjunto if r["valid"])
+    respetan = sum(1 for r in subconjunto if r["respected_verdict"])
+    inventadas = sum(len(r["fake_citations"]) for r in subconjunto)
+    print(f"  {nombre:10} n={len(subconjunto):2} · válidas {validas} · "
+          f"respetan {respetan} · citas inventadas {inventadas}")"""),
+    md("""\
+**Qué muestra.** Tres de las cinco ventanas de evaluación de E15 son **las mismas** con que el
+adaptador se ajustó, y al nivel del caso son **once de los diecisiete**. El resultado no cambia entre
+los dos subconjuntos: el adaptador redacta igual de bien sobre lo que vio y sobre lo que no.
+
+**Qué podemos interpretar.** Que no se observa degradación en el subconjunto no visto, y **nada más
+que eso**. Los seis casos limpios cubren **dos** ventanas distintas, y cinco de los seis son el mismo
+paquete de evidencia bajo cinco condiciones de corpus: las observaciones que el redactor recibe son
+casi las mismas. Lo que de verdad hay son **dos** situaciones no vistas, no seis.
+
+**Qué no podemos afirmar.** Que las cifras de redacción de E13 y E15 estimen cómo redacta el sistema
+ante evidencia nueva. **No lo estiman**, y por eso se conservan marcadas como históricas afectadas por
+contaminación y no como evidencia canónica de generalización. Corregirlo exige reentrenar el
+adaptador, y ese reentrenamiento está preparado, congelado y detenido por memoria insuficiente
+(`docs/experiments/incidencia-p2-02.md`). El conjunto sobre el que se medirá el adaptador nuevo
+—quince ventanas de validación de `synthetic_v3` que ninguno de los dos ha visto— está congelado desde
+el 13 de octubre de 2026 y **sin ejecutar**."""),
+    md("""\
 ## 11. Resultados negativos e inconclusos
 
 Un notebook que solo mostrara lo que salió bien sería una presentación, no un informe.
@@ -478,8 +537,12 @@ Un notebook que solo mostrara lo que salió bien sería una presentación, no un
    esa identidad era forzosa porque las ventanas están bien clasificadas: confirma que la
    implementación no introduce diferencias, no que el sistema resista un diagnóstico erróneo.
 5. **`n = 3` en P1.** Tres situaciones construidas.
-6. **La fidelidad numérica del texto redactado no está verificada** (`L-26`).
-7. **Un vehículo, un corpus, telemetría sintética.** Nada de esto dice qué pasaría con otro
+6. **La fidelidad numérica del texto redactado no está verificada** (`L-26`): cinco de las
+   veintitrés salidas del adaptador canónico contienen una cifra que no procede de los datos que
+   recibió, y las tres barreras no lo detectan.
+7. **El adaptador se ajustó sobre las ventanas en que se le midió** (`L-23`): once de los diecisiete
+   casos. Las cifras de redacción son históricas afectadas, no evidencia de generalización.
+8. **Un vehículo, un corpus, telemetría sintética.** Nada de esto dice qué pasaría con otro
    vehículo, otro fabricante o datos de operación real."""),
     md("""\
 ## 13. Trazabilidad
