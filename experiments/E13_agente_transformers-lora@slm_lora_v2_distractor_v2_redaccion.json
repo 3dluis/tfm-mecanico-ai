@@ -1,0 +1,196 @@
+{
+  "experiment_id": "E13_agent",
+  "commit": "3281758404b4c46bf2a1b64942e1649dd01361f7",
+  "dirty": true,
+  "executed_at": "2026-10-13T17:49:24.583085+00:00",
+  "seed": 20260901,
+  "dataset_id": "synthetic_v2",
+  "dataset_type": "synthetic",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "model": "transformers-lora@slm_lora_v2",
+  "prompt_version": "agent-2026-09-04",
+  "goldset": "goldset_mazda3_bk_distractor_v2.yaml",
+  "llm": "transformers-lora@slm_lora_v2",
+  "llm_provider": "transformers",
+  "identity": {
+    "llm_provider": "transformers",
+    "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "prompt_version": "p1",
+    "endpoint_type": "local"
+  },
+  "retrieval_run_id": "oracle@v2.1",
+  "verifier_version": "v2.1",
+  "embedding_space_id": "sentence-transformers[mps]/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/d384/v1.0.0",
+  "runs": [
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "P01_vacuum_leak_partial_v2",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.08,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F01_vacuum_leak__idle__10@120s",
+      "gold_case_id": "D01_vacuum_leak_distractor_v2",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.908 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.8,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.908 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "P02_thermostat_partial_v2",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 5.99,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F03_thermostat_stuck__urban__08@120s",
+      "gold_case_id": "D02_thermostat_distractor_v2",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 8.52,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "P03_o2_partial_v2",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 6.51,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    },
+    {
+      "case_id": "F04_o2_lag__idle__02@120s",
+      "gold_case_id": "D03_o2_distractor_v2",
+      "verdict": "ABSTAIN",
+      "output": {
+        "decision": "ABSTAIN",
+        "reason": "LOW_CLAIM_COVERAGE",
+        "missing_evidence": [
+          "cobertura 0.00 < 0.80"
+        ],
+        "notes": "No existe evidencia suficiente para sostener una explicación diagnóstica."
+      },
+      "fake_citations": [],
+      "schema_error": "",
+      "respected_verdict": true,
+      "verdict_evaluable": true,
+      "valid": true,
+      "llm": {
+        "llm_provider": "transformers",
+        "llm_model": "Qwen/Qwen2.5-3B-Instruct+lora:models/slm_lora_v2",
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "prompt_version": "p1",
+        "endpoint_type": "local"
+      },
+      "latency_s": 7.41,
+      "raw_text": "{\"decision\": \"ABSTAIN\", \"reason\": \"LOW_CLAIM_COVERAGE\", \"missing_evidence\": [\"cobertura 0.00 < 0.80\"], \"notes\": \"No existe evidencia suficiente para sostener una explicación diagnóstica.\"}"
+    }
+  ]
+}

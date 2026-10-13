@@ -1,6 +1,6 @@
 # P1 — Protocolo del rediseño de la condición con distractor
 
-**Fecha:** 13 de octubre de 2026 · **Estado:** **diseño, congelado antes de ejecutar** ·
+**Fecha:** 13 de octubre de 2026 · **Estado:** **EJECUTADO** el 13-10-2026; el diseño que sigue es el que se congeló antes de medir y no se ha modificado después. Resultado: [`P1_distractor_v2.md`](../experiments/P1_distractor_v2.md) ·
 **Criterio que lo gobierna:** los cuatro requisitos `D-1`…`D-4` de
 [`politica-condicion-distractor.md`](politica-condicion-distractor.md), pre-registrados el 4 de
 septiembre de 2026 · **Qué no hace:** no modifica el conjunto anotado congelado de E19
@@ -162,13 +162,20 @@ en este documento, antes de ejecutar, y si el resultado es desfavorable se publi
 4. **Tres casos nuevos no son una estimación de nada.** Con `n = 3`, lo que se obtenga describe tres
    situaciones construidas.
 
-## 7. Estado y qué hace falta para ejecutar
+## 7. Estado: ejecutado
 
-**Diseñado y congelado. No ejecutado.** Hace falta:
+**Ejecutado el 13 de octubre de 2026**, con los cuatro requisitos comprobados antes de ver ningún
+veredicto. Resultado: **6 de 6 abstenciones**, las seis por insuficiencia de la evidencia y
+**ninguna** por baja confianza del modelo; el distractor llega al verificador clasificado
+`EXACT_MATCH` y la línea que lo rechaza es la verificación de soporte. El informe, con las ocho
+comprobaciones previas y las huellas, está en
+[`docs/experiments/P1_distractor_v2.md`](../experiments/P1_distractor_v2.md).
+
+Lo que hizo falta, y se hizo en este orden:
 
 1. escribir `configs/goldset_mazda3_bk_distractor_v2.yaml` con los tres casos;
 2. ejecutar la comprobación de `D-1` y `D-2` **sin verificador**;
 3. si pasan, ejecutar el experimento y publicarlo con su informe;
 4. si no pasan, aplicar lo que la política pre-registrada ya decidió: **eliminar la condición del
    experimento principal** y pasarla a limitación y trabajo futuro. «Tres condiciones reales valen
-   más que cuatro con una falsa.»
+   más que cuatro con una falsa.» **No fue necesario: pasaron.**

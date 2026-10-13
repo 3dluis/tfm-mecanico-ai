@@ -1,0 +1,242 @@
+# Conjunto anotado del rediseño de la condición con distractor (P1).
+#
+# POR QUÉ ESTÁ EN UN FICHERO APARTE. El conjunto anotado canónico
+# --`goldset_mazda3_bk.yaml`, huella `7fadc49fc7daaad1`-- está fijado por huella
+# en el manifiesto de la evaluación final. Editarlo rompería su verificación, y
+# reproducir un estado congelado incluye no tocarlo. De modo que los casos nuevos
+# van aquí, con identificadores nuevos, y los seis casos con distractor del
+# conjunto canónico se quedan donde están, con su etiqueta de invalidez.
+#
+# QUÉ CORRIGE. La condición con distractor v1 no medía lo que decía medir, y la
+# causa no era la que el diagnóstico de septiembre atribuía. No era el filtro de
+# motor: era que `C12` y `C16` tenían EXACTAMENTE la misma configuración que
+# `C11` y `C15`. El único campo que difería --`distractor_files`-- no lo lee el
+# recorrido de suficiencia: solo lo usa E12, como etiqueta para puntuar la
+# recuperación. Dos condiciones con la misma exclusión recuperan lo mismo.
+# Protocolo: `docs/methodology/protocolo-distractor-v2.md`.
+#
+# EL MECANISMO, que es la lección de todo esto. La condición se construye por
+# EXCLUSIÓN DIFERENCIAL, que es como de verdad funciona el recorrido:
+#
+#   PARTIAL v2    excluye el procedimiento de diagnóstico Y los documentos de
+#                 alcance equivocado  -> queda solo material tangencial
+#   DISTRACTOR v2 excluye SOLO el procedimiento de diagnóstico
+#                 -> el esquema de cableado y el self-test quedan arriba
+#
+# Así el requisito `D-2` --que los conjuntos recuperados difieran-- se cumple por
+# construcción: las exclusiones son distintas, de modo que lo recuperado tiene
+# que serlo. La diferencia es exactamente el documento de alcance equivocado.
+#
+# POR QUÉ HAY SEIS CASOS Y NO TRES. El protocolo congelado enumera tres casos con
+# distractor y, en la misma sección, define una condición PARTIAL distinta de la
+# canónica: la del conjunto de E19 no excluye los documentos de alcance
+# equivocado. Sin su PARTIAL de referencia, el mecanismo del protocolo no se
+# puede ejecutar. Se añaden, por tanto, los tres casos PARTIAL que el mecanismo
+# exige, con identificadores propios. **Es una lectura del protocolo, no un
+# cambio**: los tres casos con distractor, sus distractores y su razón declarada
+# de insuficiencia son los que el protocolo fijó antes de medir, y la ambigüedad
+# queda declarada aquí en lugar de resolverse en silencio.
+#
+# LOS DISTRACTORES, y por qué estos y no otros. Tienen que llevar el DTC del
+# fallo --si no, la recuperación guiada por diagnóstico no los alcanza-- y ser
+# del motor ZJ/Z6 --si no, el filtro los bloquea antes de que nadie los juzgue--.
+# Eso descarta los candidatos obvios: el procedimiento de desmontaje del
+# termostato y el de inspección de la sonda son plausibles para un lector y no
+# llevan ningún código, así que nunca entran en el conjunto candidato.
+#
+#   srvc/node_S07_0000.pdf        CONTROL SYSTEM WIRING DIAGRAM [ZJ, Z6]
+#   srvc/B3E010200102T08.pdf      DIAGNOSTIC TEST MODE [ZJ, Z6]
+#   srvc/B3E010200102T10.pdf      KOEO/KOER SELF-TEST [ZJ, Z6]
+#
+# LA RAZÓN DE INSUFICIENCIA, declarada ANTES de ejecutar: **alcance equivocado**.
+# Un esquema de cableado es un plano, no un procedimiento de diagnóstico; un
+# self-test describe cómo entrar en modo de prueba, no cómo diagnosticar el
+# código. Cambia respecto de v1, donde la razón era *motor equivocado* --y por eso
+# el filtro lo bloqueaba, que es lo que invalidó la condición--. El alcance
+# equivocado el filtro no lo puede bloquear: no tiene nada que objetar.
+#
+# LO QUE ESTE CONJUNTO NO PERMITE AFIRMAR. Son tres situaciones construidas. Con
+# n = 3 no hay estimación de nada, y así se publicará el resultado, sea el que
+# sea. La elección de los distractores está en el protocolo, fechada antes de
+# medir, y no se cambiará después de ver un veredicto.
+
+vehicle_id: mazda-3-bk-2007
+engine_code: Z6
+corpus_version: "0.1.0"
+query_languages: [en, es]
+
+# Las consultas son LAS MISMAS, palabra por palabra, que las de los casos
+# canónicos del mismo fallo. Si cambiaran, la comparación mediría la consulta.
+cases:
+
+  # ---------------------------------------------------------------- fuga de vacío
+
+  - case_id: P01_vacuum_leak_partial_v2
+    fault_id: F01_vacuum_leak
+    dtc: P2187
+    corpus_variant: PARTIAL
+    # El procedimiento de diagnóstico y su familia, como en el caso canónico,
+    # MÁS los dos documentos de alcance equivocado. Queda material tangencial.
+    exclude_files:
+      - srvc/B3E010202100W09.pdf
+      - srvc/B3E010202100W07.pdf
+      - srvc/B3E010202100W08.pdf
+      - srvc/B3E010202100W10.pdf
+      - srvc/B3E010202000W10.pdf
+      - srvc/B3E010202100W11.pdf
+      - srvc/B3E010202100W12.pdf
+      - srvc/node_S07_0000.pdf
+      - srvc/B3E010200102T10.pdf
+    query: >-
+      Fuel trims persistently positive and markedly larger at idle than at road
+      speed, with elevated intake manifold pressure at idle and unstable idle
+      speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente mayores en
+      ralentí que a velocidad de carretera, con presión del colector de admisión
+      elevada en ralentí y régimen de ralentí inestable.
+    relevant_files: []
+    supporting_files: [srvc/B3E010200102W22.pdf, srvc/B3E010200102T09.pdf]
+    distractor_files: []
+    expected_action: ABSTAIN
+    justificacion: >-
+      Referencia del par. Sin el procedimiento de diagnóstico y sin los
+      documentos de alcance equivocado, no queda evidencia que sostenga nada.
+
+  - case_id: D01_vacuum_leak_distractor_v2
+    fault_id: F01_vacuum_leak
+    dtc: P2187
+    corpus_variant: DISTRACTOR
+    # Lo mismo, MENOS los dos de alcance equivocado: se dejan pasar a propósito.
+    exclude_files:
+      - srvc/B3E010202100W09.pdf
+      - srvc/B3E010202100W07.pdf
+      - srvc/B3E010202100W08.pdf
+      - srvc/B3E010202100W10.pdf
+      - srvc/B3E010202000W10.pdf
+      - srvc/B3E010202100W11.pdf
+      - srvc/B3E010202100W12.pdf
+    query: >-
+      Fuel trims persistently positive and markedly larger at idle than at road
+      speed, with elevated intake manifold pressure at idle and unstable idle
+      speed.
+    query_es: >-
+      Ajustes de combustible persistentemente positivos y marcadamente mayores en
+      ralentí que a velocidad de carretera, con presión del colector de admisión
+      elevada en ralentí y régimen de ralentí inestable.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/node_S07_0000.pdf, srvc/B3E010200102T10.pdf]
+    distractor_reason: >-
+      alcance equivocado: un esquema de cableado del sistema de control y un
+      procedimiento de autodiagnóstico KOEO/KOER. Llevan el código y son del
+      motor correcto, de modo que la recuperación los alcanza y el filtro no los
+      bloquea; no son el procedimiento de diagnóstico del código.
+    expected_action: ABSTAIN
+    justificacion: >-
+      Un esquema del sistema de control PARECE evidencia del diagnóstico de un
+      código de ese sistema. Si el agente lo acepta, la trazabilidad es
+      aparente: la cita existiría, resolvería, sería del vehículo correcto y no
+      diría nada sobre cómo diagnosticar el fallo.
+
+  # ------------------------------------------------------------------ termostato
+
+  - case_id: P02_thermostat_partial_v2
+    fault_id: F03_thermostat_stuck
+    dtc: P0125
+    corpus_variant: PARTIAL
+    exclude_files:
+      - srvc/B3E010200100W11.pdf
+      - srvc/node_S07_0000.pdf
+      - srvc/B3E010200102T08.pdf
+    query: >-
+      Engine coolant temperature stops rising and stabilises well below the
+      normal operating range after a cold start, despite sustained load and
+      sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío, pese a
+      carga sostenida y tiempo de marcha suficiente.
+    relevant_files: []
+    supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
+    distractor_files: []
+    expected_action: ABSTAIN
+    justificacion: >-
+      Referencia del par para el termostato.
+
+  - case_id: D02_thermostat_distractor_v2
+    fault_id: F03_thermostat_stuck
+    dtc: P0125
+    corpus_variant: DISTRACTOR
+    exclude_files:
+      - srvc/B3E010200100W11.pdf
+    query: >-
+      Engine coolant temperature stops rising and stabilises well below the
+      normal operating range after a cold start, despite sustained load and
+      sufficient running time.
+    query_es: >-
+      La temperatura del refrigerante deja de subir y se estabiliza muy por
+      debajo del rango normal de funcionamiento tras un arranque en frío, pese a
+      carga sostenida y tiempo de marcha suficiente.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/node_S07_0000.pdf, srvc/B3E010200102T08.pdf]
+    distractor_reason: >-
+      alcance equivocado: esquema de cableado del sistema de control y modo de
+      prueba de diagnóstico. Mismo código, motor correcto, no son el
+      procedimiento del código.
+    expected_action: ABSTAIN
+    justificacion: >-
+      Es el caso que la condición v1 nunca llegó a medir, porque su
+      configuración era idéntica a la parcial.
+
+  # ---------------------------------------------------------------- sonda lambda
+
+  - case_id: P03_o2_partial_v2
+    fault_id: F04_o2_lag
+    dtc: P0133
+    corpus_variant: PARTIAL
+    exclude_files:
+      - srvc/B3E010200100W13.pdf
+      - srvc/node_S07_0000.pdf
+    query: >-
+      Oxygen sensor voltage oscillation amplitude collapsed and switching
+      frequency across the stoichiometric point reduced. Short term fuel trim
+      noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada y
+      frecuencia de conmutación en torno al punto estequiométrico reducida.
+      Ajuste de combustible a corto plazo más ruidoso de lo habitual.
+    relevant_files: []
+    supporting_files: [srvc/B3E010200102T09.pdf, srvc/B3E010200102W22.pdf]
+    distractor_files: []
+    expected_action: ABSTAIN
+    justificacion: >-
+      Referencia del par para la sonda lambda.
+
+  - case_id: D03_o2_distractor_v2
+    fault_id: F04_o2_lag
+    dtc: P0133
+    corpus_variant: DISTRACTOR
+    exclude_files:
+      - srvc/B3E010200100W13.pdf
+    query: >-
+      Oxygen sensor voltage oscillation amplitude collapsed and switching
+      frequency across the stoichiometric point reduced. Short term fuel trim
+      noisier than usual.
+    query_es: >-
+      Amplitud de oscilación de la tensión de la sonda de oxígeno colapsada y
+      frecuencia de conmutación en torno al punto estequiométrico reducida.
+      Ajuste de combustible a corto plazo más ruidoso de lo habitual.
+    relevant_files: []
+    supporting_files: []
+    distractor_files: [srvc/node_S07_0000.pdf]
+    distractor_reason: >-
+      alcance equivocado: esquema de cableado del sistema de control. Es el
+      único documento que lleva P0133, es del motor correcto y no es el
+      procedimiento del código. Solo uno, y así se declara: para este fallo el
+      espacio de distractores alcanzables es más estrecho.
+    expected_action: ABSTAIN
+    justificacion: >-
+      Con un solo distractor, el caso es más débil que los otros dos y se
+      publicará como tal.

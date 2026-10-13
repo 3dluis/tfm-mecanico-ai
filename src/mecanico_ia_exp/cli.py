@@ -120,6 +120,16 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     suf.add_argument(
+        "--goldset",
+        default="",
+        help=(
+            "nombre de un conjunto anotado alternativo dentro de configs/. Sin él se usa el "
+            "canónico, goldset_mazda3_bk.yaml, que está fijado por huella en el manifiesto de "
+            "E19 y no se edita. Lo exige el rediseño de la condición con distractor (P1), que "
+            "mide sobre casos nuevos en un fichero nuevo"
+        ),
+    )
+    suf.add_argument(
         "--policy",
         choices=POLITICAS,
         default=VERIFIER_VERSION,
@@ -504,8 +514,20 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "sufficiency":
         from mecanico_ia_exp.experiments.sufficiency_runner import (
+            GOLDSET,
             run_sufficiency,
         )
+
+        conjunto_anotado = GOLDSET
+        if args.goldset:
+            conjunto_anotado = paths.CONFIGS / args.goldset
+            if not conjunto_anotado.is_file():
+                print(f"No existe el conjunto anotado: {conjunto_anotado}")
+                return 2
+            if conjunto_anotado == GOLDSET:
+                print("Para el canónico no hace falta --goldset.")
+            else:
+                print(f"conjunto anotado alternativo: {conjunto_anotado.name}")
 
         return run_sufficiency(
             llm=args.llm,
@@ -513,6 +535,7 @@ def main(argv: list[str] | None = None) -> int:
             adverse=args.mode == "adverse",
             policy=args.policy,
             etiqueta=args.etiqueta,
+            goldset=conjunto_anotado,
         )
 
     if args.command == "ablations":

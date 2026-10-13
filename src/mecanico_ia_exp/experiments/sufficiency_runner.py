@@ -213,6 +213,7 @@ def preparar(
     particion: Particion = "validation",
     allow_test: bool = False,
     reason: str = "",
+    goldset: Path = GOLDSET,
 ) -> Contexto:
     """Carga particiones y conjunto anotado, entrena el bosque y lo calibra.
 
@@ -232,7 +233,7 @@ def preparar(
         particion, dataset_id=dataset_id, allow_test=allow_test, reason=reason
     )
     perfil = load_vehicle(VEHICULO)
-    gold = yaml.safe_load(GOLDSET.read_text(encoding="utf-8"))
+    gold = yaml.safe_load(goldset.read_text(encoding="utf-8"))
     casos_gold = list(gold["cases"])
 
     configuracion = BaselineConfig()
@@ -447,8 +448,15 @@ def run_sufficiency(
     adverse: bool = False,
     policy: str = VERIFIER_VERSION,
     etiqueta: str = "",
+    goldset: Path = GOLDSET,
 ) -> int:
     """Ejecuta el experimento de suficiencia sobre el conjunto anotado.
+
+    `goldset` permite medir sobre un conjunto anotado distinto del canónico, que
+    es lo que exige el rediseño de la condición con distractor (P1): el conjunto
+    de E19 está fijado por huella en su manifiesto y editarlo rompería su
+    verificación. El valor por defecto es el canónico, de modo que ninguna
+    ejecución existente cambia, y el nombre del fichero entra en el registro.
 
     Los tres modos están definidos y congelados en
     `docs/methodology/politica-evaluacion-no-oracular.md`.
@@ -474,7 +482,7 @@ def run_sufficiency(
     # descubrirlo al escribir ya sería tarde.
     exigir_libres(destinos_de(modo_de(oracle=oracle, adverse=adverse), policy, etiqueta, llm))
 
-    ctx = preparar(dataset_id)
+    ctx = preparar(dataset_id, goldset=goldset)
 
     umbrales = SufficiencyThresholds()
     verificador = EvidenceVerifier(umbrales)
@@ -613,7 +621,7 @@ def run_sufficiency(
         dataset_id=dataset_id,
         dataset_type="synthetic",
         embedding_model=provider.identity.model,
-        goldset=GOLDSET.name,
+        goldset=goldset.name,
     )
     if llm:
         print("\n=== redacción con el modelo de lenguaje ===")
@@ -673,7 +681,7 @@ def run_sufficiency(
                 model=llm,
                 prompt_version=PROMPT_VERSION,
                 embedding_model=provider.identity.model,
-                goldset=GOLDSET.name,
+                goldset=goldset.name,
             )
             print(f"\nagente    {destinos['agente'].relative_to(paths.ROOT)}")
 
