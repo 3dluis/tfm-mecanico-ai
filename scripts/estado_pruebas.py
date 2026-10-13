@@ -12,7 +12,8 @@ Las tres categorías, por marcador:
   falla, el repositorio está roto.
 * **con preparación** — `conjunto`, `notebook`. Necesitan un paso previo que
   **está automatizado y es verificable**: `scripts/reconstruir_datos.sh`
-  reconstruye el conjunto y contrasta sus cuatro huellas contra las congeladas.
+  reconstruye cada conjunto y contrasta sus cuatro huellas contra las de
+  referencia; con `synthetic_v3` como argumento, el segundo.
 * **con recursos externos** — `db`, `llm`, `slow`. Dependen del corpus
   documental, de una base PostgreSQL o de los pesos del adaptador. No se
   distribuyen, y así está declarado.
@@ -67,11 +68,12 @@ CATEGORIAS: dict[str, tuple[str, str, str]] = {
 }
 
 #: Los ficheros cuya ausencia detiene las pruebas de la categoría `conjunto`.
-DEL_CONJUNTO = (
-    "data/processed/synthetic_v2_x.npy",
-    "data/processed/synthetic_v2_features.npy",
-    "data/processed/synthetic_v2_meta.parquet",
-    "data/processed/synthetic_v2_preprocess.json",
+#: Son dos conjuntos, no uno: `synthetic_v2` sostiene las pruebas del recorrido y
+#: `synthetic_v3` las del conjunto de evaluación independiente del redactor.
+DEL_CONJUNTO = tuple(
+    f"data/processed/{conjunto}_{pieza}"
+    for conjunto in ("synthetic_v2", "synthetic_v3")
+    for pieza in ("x.npy", "features.npy", "meta.parquet", "preprocess.json")
 )
 
 
@@ -119,6 +121,7 @@ def informar(ejecutar: bool) -> int:
         faltan = [r for r in DEL_CONJUNTO if not (RAIZ / r).is_file()]
         print(f"  faltan {len(faltan)} de {len(DEL_CONJUNTO)} ficheros")
         print("  bash scripts/reconstruir_datos.sh")
+        print("  bash scripts/reconstruir_datos.sh synthetic_v3")
         print("  genera, preprocesa y COMPRUEBA las cuatro huellas contra las congeladas")
 
     if not ejecutar:

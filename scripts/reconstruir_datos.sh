@@ -22,7 +22,15 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CONJUNTO="${1:-synthetic_v2}"
-SESIONES_POR_FALLO="${2:-12}"
+# Cada conjunto tiene su número de sesiones por condición, y equivocarlo produce
+# otro conjunto con el mismo nombre. Se deduce del nombre salvo que se indique.
+case "${CONJUNTO}" in
+  synthetic_v1) POR_DEFECTO=6 ;;
+  synthetic_v2) POR_DEFECTO=12 ;;
+  synthetic_v3) POR_DEFECTO=36 ;;
+  *)            POR_DEFECTO=12 ;;
+esac
+SESIONES_POR_FALLO="${2:-${POR_DEFECTO}}"
 
 echo "Reconstruyendo ${CONJUNTO} (${SESIONES_POR_FALLO} sesiones por condición)"
 echo
