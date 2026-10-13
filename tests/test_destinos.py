@@ -511,9 +511,7 @@ def test_generar_sobre_un_conjunto_existente_no_toca_nada(tmp_path, monkeypatch,
     antes = datos.read_bytes()
 
     monkeypatch.setattr(paths, "DATA_RAW_SYNTHETIC", crudo)
-    codigo = main(
-        ["generate-synthetic", "--dataset-id", "ya_existe", "--sessions-per-fault", "4"]
-    )
+    codigo = main(["generate-synthetic", "--dataset-id", "ya_existe", "--sessions-per-fault", "4"])
     assert codigo == 1
     assert datos.read_bytes() == antes, "el parquet existente se tocó"
     assert "No se escribe nada" in capsys.readouterr().out

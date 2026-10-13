@@ -76,6 +76,15 @@ def window_length_study(datos: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(filas)
 
 
+#: Los tres conjuntos anteriores al manifiesto de procedencia. Son los únicos
+#: exentos de la auditoría del generador, y la lista es cerrada a propósito: una
+#: exención por «no tiene manifiesto» dejaría pasar cualquier conjunto nuevo sin
+#: auditar, que es justo lo que la puerta existe para impedir.
+ANTERIORES_AL_MANIFIESTO: frozenset[str] = frozenset(
+    {"synthetic_v1", "synthetic_v2", "synthetic_v3"}
+)
+
+
 def destinos_de(dataset_id: str) -> dict[str, Path]:
     """Los artefactos de E5, con el conjunto en el nombre.
 
@@ -126,13 +135,24 @@ def run_preprocess(dataset_id: str = DATASET) -> int:
         print(f"\nAuditoría del generador ({manifiesto_de_procedencia.name}):")
         for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
             print(f"  {comprobacion}")
+    elif dataset_id in ANTERIORES_AL_MANIFIESTO:
+        print(
+            f"\nAVISO: {dataset_id} es anterior al manifiesto de procedencia, así que la "
+            "auditoría del generador no se le aplica. Está congelado, sostiene cifras "
+            "publicadas y su reproducción tiene que seguir funcionando."
+        )
     else:
         print(
-            f"\nAVISO: {dataset_id} no trae manifiesto de procedencia "
-            f"({manifiesto_de_procedencia.name}), así que la auditoría del generador no se "
-            "aplica. Es lo esperado en synthetic_v1, v2 y v3, anteriores al manifiesto; en un "
-            "conjunto nuevo significa que se generó sin registrar su procedencia."
+            f"\n{dataset_id} no trae manifiesto de procedencia "
+            f"({manifiesto_de_procedencia.name}) y no es uno de los tres anteriores al "
+            f"manifiesto ({', '.join(sorted(ANTERIORES_AL_MANIFIESTO))}).\n"
+            "Sin manifiesto no se puede auditar el generador, y un conjunto sin auditar no "
+            "llega al entrenamiento: fue así como se entrenó sobre synthetic_v3 durante "
+            "semanas sin saber que su motor estaba sin calibrar.\n"
+            "Regenéralo con «mecanico-exp generate-synthetic», que escribe el manifiesto.\n"
+            "\nNo se guarda nada."
         )
+        return 1
 
     paths.ensure(paths.TABLES)
     paths.ensure(paths.DATA_PROCESSED)
