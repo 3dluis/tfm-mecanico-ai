@@ -67,7 +67,7 @@ Tres defectos que esta máquina no mostraba, y por eso se valida en un clon y no
 
 | Qué | Por qué | Consecuencia |
 |---|---|---|
-| **`synthetic_v3`** | es **pre-calibración**: se generó antes del commit que calibró el generador contra el manual de taller. El generador publicado produce otras señales: cero de 216 sesiones idénticas | las cifras de E6, E7 y E19 sobre `synthetic_v3` no son reproducibles por un tercero. Se conserva sin regenerar, por decisión documentada |
+| **`synthetic_v3`** | es **pre-calibración**: se generó antes del commit que calibró el generador contra el manual de taller. El generador publicado produce otras señales: cero de 216 sesiones idénticas | la comparación de volumen de E6 y E7 **sobre `synthetic_v3`** no es reproducible por un tercero, ni lo son las quince ventanas del conjunto de evaluación independiente del redactor, que salen de su partición de validación. Las cifras publicadas de diagnóstico y la evaluación final **no** salen de este conjunto: salen de `synthetic_v2`, que sí se reconstruye. Se conserva sin regenerar, por decisión documentada |
 | **El corpus documental** | 3 055 PDF de un manual con licencia; no se redistribuye | E11–E15 no se pueden ejecutar sin conseguirlo |
 | **El índice documental** | se construye del corpus | las pruebas con marcador `db` no se ejecutan |
 | **Los pesos del adaptador** | no se distribuyen | las pruebas con marcador `llm` no se ejecutan |

@@ -695,10 +695,14 @@ tiene."""),
    cifras de redacción no están contaminadas por esa vía. Lo que sigue siendo cierto es que el
    adaptador no se ha reentrenado, y el reentrenamiento está **detenido por memoria insuficiente**:
    necesita más de 17 GB por paso (`docs/experiments/incidencia-p2-02.md`).
-9. **`synthetic_v3`, el conjunto de esta evaluación, no es reconstruible** con el generador publicado
-   (`L-25`): es pre-calibración y ninguna de sus 216 sesiones se reproduce. Las cifras de E19 son
-   correctas y **no son reproducibles por un tercero** sin los ficheros procesados, que no se
-   distribuyen por tamaño.
+9. **Reejecutar esta evaluación exige lo que no se distribuye**, y no es el conjunto. E19 mide sobre
+   `synthetic_v2`, partición de prueba, y ese conjunto **se reconstruye bit a bit**: las cuatro
+   huellas se comprobaron desde un clon limpio contra las que el manifiesto congeló antes de abrirlo.
+   Lo que no se distribuye son el corpus del manual, el índice documental y los pesos del adaptador,
+   y sin ellos un tercero no puede repetir la medición. Aparte queda `synthetic_v3`, que **no** es
+   reconstruible (`L-25`) y del que no sale ninguna cifra de esta evaluación: de él salen la
+   comparación de volumen de E7 y el conjunto de evaluación independiente del redactor, sin ejecutar.
+   Corregido el 13-10-2026: este punto decía que `synthetic_v3` era «el conjunto de esta evaluación».
 10. **Todo es sintético.** La validez externa no está establecida.
 11. **Una sola ejecución.** No hay repeticiones ni intervalos de confianza."""),
     md("""\
