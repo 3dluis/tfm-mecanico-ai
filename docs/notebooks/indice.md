@@ -40,6 +40,7 @@ caso, un acelerador. Cada notebook FULL documenta sus requisitos.
 | [`03_analisis_e19`](html/03_analisis_e19.html) | E19 | reanálisis sobre congelado | DEMO | si el criterio de suficiencia evita la falsa confianza sobre el conjunto de prueba |
 | [`04_explicabilidad`](html/04_explicabilidad.html) | E9, E18 (`A1`) | visualización histórica | DEMO | qué señal sostiene cada diagnóstico, y cuánto aporta la atribución |
 | [`05_suficiencia_y_abstencion`](html/05_suficiencia_y_abstencion.html) | E15, E18 (`A1`–`A4`), **P1** | visualización histórica | DEMO | cuándo el sistema se niega a explicar, qué componente lo decide y qué hace ante evidencia que parece pertinente |
+| [`06_expresion_del_fallo`](html/06_expresion_del_fallo.html) | E6, E7, fase G de PI.1 | **reanálisis** | FULL (necesita `synthetic_v2` reconstruido) | `fault_active` frente a `fault_expressed`: por qué el modelo acierta donde acierta, y por qué `synthetic_v2` y `synthetic_v3` no son el mismo instrumento |
 
 Los cinco se ejecutan desde un kernel limpio en menos de dos minutos cada uno y están verificados
 por `tests/test_notebooks.py`.
