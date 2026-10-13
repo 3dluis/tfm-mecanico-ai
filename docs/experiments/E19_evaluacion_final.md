@@ -323,9 +323,12 @@ no de la medición.
 9. **El consumo de memoria de `v3` no se muestreó**, y la causa de las dos interrupciones anteriores
    queda como hipótesis.
 10. **La coincidencia con validación está explicada y no implica generalización.** Ver la sección
-    siguiente. En resumen: cuatro de las seis cifras están forzadas por el diseño o son función
-    algebraica de las otras, y las dos restantes coinciden porque fallan los mismos dos casos
-    anotados. No debe presentarse como «el sistema se comporta igual en prueba que en validación».
+    siguiente. En resumen: de las seis cifras, tres están fijadas por el diseño o por la regla de
+    selección y una es función algebraica de otras dos; las dos restantes —los numeradores— y los
+    denominadores 8/14 son **observados, no forzados**, y coinciden porque el modelo falla en las
+    mismas dos condiciones y se abstiene de más en los mismos dos casos anotados, con `n = 2` en
+    ambos recuentos. No debe presentarse como «el sistema se comporta igual en prueba que en
+    validación».
 
 ## Auditoría de la coincidencia entre validación y prueba
 
@@ -339,16 +342,40 @@ marcas de tiempo separadas por diez días, y **cero solape de ventanas**: ningun
 del estrato operativo de prueba aparece en el de validación, ni ninguna de las cinco del comparativo.
 Las anotaciones selladas son distintas. No hay reutilización.
 
-**Cuatro de las seis cifras no podían ser otras.**
+**Lo que el diseño fija, y lo que no.** La distinción importa, porque de ella depende cuánta
+coincidencia queda por explicar. Hay que separar tres cosas: lo que la regla congelada obliga a que
+sea así en cualquier partición; lo que es función algebraica de otras cifras; y lo que resultó así
+porque el modelo se comportó de una determinada manera, que no estaba fijado y **es contingente**.
 
-| Cifra | Por qué coincide |
-|---|---|
-| Denominador de `T_FC`, 14 | Forzado por el diseño: 22 ejecuciones menos las 8 que deben explicar. Las 22 son once condiciones de evidencia por dos sesiones, que la regla congelada fija |
-| Denominador de `T_AI`, 8 | Diez ejecuciones con evidencia completa menos las que tienen diagnóstico incorrecto. En **las dos** particiones el modelo falla exactamente dos de las diez ventanas elegidas, y en las dos falla **en las mismas dos condiciones**: termostato en una sesión de calentamiento y encendido en una de autopista. Las sesiones son distintas —`warmup__03` frente a `warmup__11`, `highway__09` frente a `highway__01`— pero el patrón de error del modelo es el mismo |
-| Cobertura, 6/10 | **Función algebraica de las otras dos**: con ocho ejecuciones que deben explicar, diez con evidencia completa y dos abstenciones innecesarias, la cobertura es necesariamente (8 − 2)/10. No aporta información independiente |
-| Denominadores del comparativo, 5 y 6 | **Forzados por la propia regla de selección**, que elige ventanas que el modelo clasifica bien: las cinco ejecuciones con evidencia completa tienen siempre diagnóstico correcto, de modo que el reparto 5/6 es el único posible en cualquier partición |
+*Fijado por el diseño, en cualquier partición:* **22 ejecuciones** —once condiciones de evidencia
+elegibles (`FULL` 5, `PARTIAL` 3, `ABSENT` 3) por dos sesiones— y, dentro de ellas, **diez con
+evidencia completa**, las cinco condiciones `FULL` por dos sesiones. Estas dos cifras no podían ser
+otras y no aportan coincidencia alguna.
 
-**Las dos que sí coinciden de verdad, y por qué.** Los numeradores: cero falsa confianza y dos
+*Fijado por la regla de selección:* los **denominadores del comparativo, 5 y 6**. Esa regla elige
+ventanas que el modelo clasifica bien, de modo que las cinco ejecuciones con evidencia completa tienen
+siempre diagnóstico correcto y el reparto 5/6 es el único posible en cualquier partición.
+
+*Función algebraica:* la **cobertura, 6/10**. Con ocho ejecuciones que deben explicar, diez con
+evidencia completa y dos abstenciones innecesarias, la cobertura es necesariamente (8 − 2)/10. No
+aporta información independiente de las dos cifras de las que se deriva.
+
+*No fijado — observado:* **los denominadores 8 y 14**. Ninguno de los dos sale del diseño. Ambos se
+derivan de un mismo hecho medido: de las diez ejecuciones con evidencia completa, el modelo
+diagnostica mal exactamente dos. De ahí salen las ocho que deben explicar y, por resta sobre las 22,
+las catorce que deben abstenerse. El reparto 8/14 **no estaba pre-registrado** —así consta en las
+limitaciones— y habría sido 9/13 o 7/15 con un error menos o uno más. Que coincida en las dos
+particiones es parte de lo que hay que explicar, no parte de lo que el diseño garantizaba.
+
+Lo que se observa sobre ese punto: en **las dos** particiones el modelo falla exactamente dos de las
+diez ventanas con evidencia completa, y en las dos falla **en las mismas dos condiciones** —termostato
+en una sesión de calentamiento y encendido en una de autopista—. Las sesiones son distintas
+—`warmup__03` frente a `warmup__11`, `highway__09` frente a `highway__01`—, así que no hay reutilización:
+el patrón de error del modelo es el que se repite. Con `n = 2` errores sobre diez ventanas, esa
+repetición es compatible con que el modelo falle sistemáticamente en esas dos condiciones y también con
+el azar; los artefactos no permiten distinguirlo y no se afirma lo primero.
+
+**Los numeradores, que tampoco estaban fijados.**  cero falsa confianza y dos
 abstenciones innecesarias en las dos particiones. Y las dos abstenciones innecesarias son, en las dos,
 **los mismos dos casos anotados**: `C01_maf_drift` y `C04_misfire`. Pero no por la misma causa:
 
