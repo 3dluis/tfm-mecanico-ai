@@ -22,7 +22,7 @@ D. Reparto y subconjuntos anidados T6 ⊂ T12 ⊂ T18 ⊂ T22
 E. Protocolo simétrico implementado (partición interna, selección de época, calibración pareja)
       │  depende de D
       ▼
-F. Rejilla: 3 representaciones × 4 volúmenes × 5 réplicas = 60 celdas
+F. Rejilla: 6 representaciones (A1, A2, A3, A4, B, C) × 4 volúmenes × 5 réplicas = 120 celdas
       │  depende de E
       ▼
 G. Análisis por fallo con el indicador de expresión
@@ -45,7 +45,7 @@ Los pasos A y B no tocan ningún resultado y pueden hacerse mientras se revisa e
 | C | minutos | una hora | generación, preprocesado y los cinco criterios |
 | D | minutos | una hora | reparto, subconjuntos y las tres pruebas de fuga |
 | E | ninguno | un día | es el cambio con más riesgo de implementación |
-| F | ~30 min | medio día | bajo `launchd`, como la ejecución de E19 que funcionó |
+| F | ~35 min | medio día | cinco variantes del bosque, que cuestan segundos cada una, y la red recurrente, que es la única cara: veinte ejecuciones de hasta 135 s. Bajo `launchd`, como la ejecución de E19 que funcionó |
 | G | minutos | un día | el análisis, no el cómputo, es lo que lleva tiempo |
 | H | ninguno | medio día | |
 
@@ -61,7 +61,7 @@ es la restricción; lo es no confundir variables, y eso se paga en cuidado, no e
 | C | los cinco criterios de `02-protocolo-synthetic-v4.md`, incluido el ralentí dentro del rango del manual y el reparto 22/7/7 |
 | D | anidamiento estructural, auditoría de fuga en los cuatro puntos, estadísticos de normalización procedentes de cada subconjunto |
 | E | la selección de época no toca validación en ninguna ruta del código; los dos modelos reciben el mismo reparto interno; el conjunto de prueba no se lee |
-| F | las cinco semillas declaradas aparecen en los sesenta registros; ninguna celda con semilla distinta |
+| F | las cinco semillas declaradas aparecen en los **ciento veinte** registros; ninguna celda con semilla distinta; las seis representaciones presentes en los cuatro volúmenes |
 | G | el indicador de expresión se deriva del generador y no del modelo; las cifras del termostato quedan con registro |
 | H | ninguna conclusión nueva sin su artefacto |
 
@@ -92,7 +92,7 @@ resultados, y los tres son publicables.
 | C | el conjunto, su ficha, su manifiesto y el informe de los cinco criterios |
 | D | la definición de los cuatro subconjuntos, con su permutación declarada, y las pruebas de fuga |
 | E | el ejecutor con partición interna, y la prueba de que validación no interviene en la selección |
-| F | sesenta registros con cabecera completa y predicciones por ventana; tabla resumen con medianas, rangos y diferencias apareadas |
+| F | **ciento veinte** registros con cabecera completa y predicciones por ventana; tabla resumen con medianas, rangos y diferencias apareadas, incluida la de `A2` frente a `A3`, que es la única que aísla la dinámica intraventana |
 | G | el análisis por fallo separado por expresión; el artefacto que da registro a las cifras del termostato |
 | H | la matriz de conclusiones con la evidencia nueva |
 

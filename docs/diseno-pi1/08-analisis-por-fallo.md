@@ -65,27 +65,27 @@ sobre `synthetic_v4`**, porque `synthetic_v2` y `synthetic_v3` se generaron sin 
 regenerar. Sobre el conjunto oficial se puede hacer una versión **acotada y declaradamente aproximada**,
 y conviene saber hasta dónde llega:
 
-| Sobre `synthetic_v2` | Qué se puede decir |
-|---|---|
-| Termostato, ventanas con máximo < 70,0 °C | el techo **no** actuó: el refrigerante nunca llegó a 71. Clasificación segura |
-| Termostato, ventanas con máximo ≥ 71,5 °C | el techo actuó: en una sesión con fallo ningún valor supera 71 salvo por el ruido del propio recorte. Clasificación segura |
-| Termostato, ventanas entre 70,0 y 71,5 °C | **ambiguas.** Se excluyen del análisis y se cuenta cuántas son |
-| Fallo de encendido | **no se puede.** No hay observable que identifique los episodios sin heurística, y una heurística aquí contaminaría el resultado que se quiere medir |
+**Sobre `synthetic_v2` no hay indicador de expresión que se sostenga, y conviene decirlo sin rodeos.**
+Se intentó acotarlo con bandas del máximo de refrigerante y no funciona en ninguno de los dos extremos:
 
-**Y hay un supuesto detrás de esa tabla que no se da por bueno: se ha comprobado.** La clasificación
-segura de la segunda fila solo vale si una ventana etiquetada con el fallo no contiene muestras
-**anteriores** al instante de aparición, porque una sesión urbana arranca con el motor caliente y una
-muestra previa al fallo puede estar muy por encima de 71 °C sin que el techo haya actuado.
+- Un máximo **por encima** de 71,5 °C sí indica que el techo actuó, pero solo porque se ha comprobado que
+  ninguna ventana con etiqueta de fallo contiene muestras anteriores al instante de aparición: el plan
+  fija ese instante en **120 s**, el preprocesado etiqueta como sin fallo la ventana que termina ahí y
+  descarta la que lo cruza, y de las **350 ventanas etiquetadas con fallo** en entrenamiento y validación
+  **ninguna** empieza antes de 120 s. Sin esa comprobación, una sesión urbana arranca con el motor
+  caliente y una muestra previa al fallo superaría 71 °C sin que el techo hubiera actuado.
+- Un máximo **por debajo** de 70,0 °C **no** indica que el techo no actuara. La función del fallo no fija
+  el valor en 71: lo sustituye por `71 + gauss(0, 0.5)`, que puede caer por debajo de 70. Una ventana con
+  pocas muestras recortadas —las del propio tránsito— podría quedar entera por debajo del umbral y pasar
+  por no expresada siendo expresada. La probabilidad es baja y no es cero, y meter ventanas expresadas en
+  el grupo de las no expresadas invalidaría justo la comparación que el análisis busca.
+- Para el **fallo de encendido** no hay observable que identifique los episodios sin heurística, y una
+  heurística aquí contaminaría el resultado que se quiere medir.
 
-El plan equilibrado fija el instante de aparición en el 20 % de la duración, es decir **120 s**, y el
-preprocesado hace dos cosas: etiqueta como **sin fallo** la ventana que termina en ese instante y
-**descarta** la que lo cruza. Comprobado sobre el conjunto: de las **350 ventanas etiquetadas con fallo**
-en entrenamiento y validación, **ninguna** empieza antes de 120 s, y las 50 ventanas de sesiones con
-fallo etiquetadas como normal son todas la de `t_start = 0`. De modo que ninguna ventana con etiqueta de
-fallo contiene muestras previas al fallo, y la fila dos de la tabla es segura.
-
-Si `synthetic_v4` se genera con el mismo plan, la propiedad se mantiene; **hay que volver a comprobarla**
-sobre él en lugar de suponerla.
+**Conclusión operativa: el análisis por expresión se hace íntegramente sobre `synthetic_v4`**, con la
+columna que el generador escribe. Sobre el conjunto oficial solo es posible el estadístico descriptivo
+del paso 4, que no necesita indicador de expresión. Y la propiedad de que ninguna ventana con etiqueta de
+fallo contenga muestras previas **hay que volver a comprobarla** sobre `v4` en lugar de suponerla.
 
 **Paso 3. Separar las métricas por expresión.** Para cada fallo y cada representación: exhaustividad
 sobre las ventanas **con** el fallo expresado y sobre las ventanas **sin** expresar, por separado.

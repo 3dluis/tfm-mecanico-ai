@@ -41,5 +41,7 @@ para que el autor decida.
 2. Si el contexto temporal aporta en el termostato. **Vía:** análisis por expresión del fallo.
 3. Si la ventaja del modelo secuencial sobrevive a la simetría de protocolo y al cambio de semilla.
    **Vía:** protocolo simétrico y cinco réplicas apareadas.
-4. Cuánto aporta la dinámica dentro de la ventana frente al nivel. **Vía:** `A` frente a `B`, el único
-   eslabón que aísla la representación.
+4. Cuánto aporta la dinámica dentro de la ventana. **Vía:** `A2` frente a `A3` de la escalera de
+   ablaciones, con el estimador fijo, que es el **único** eslabón que la aísla. `A` frente a `B` sin
+   escalones añade 127 descriptores mezclados —dinámica, dispersión, extremos y relaciones entre
+   señales— y no permite atribuir la diferencia a la dinámica.
