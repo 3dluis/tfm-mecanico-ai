@@ -5,9 +5,18 @@ nada: las pruebas pasarían midiendo otros datos, y la evaluación final habría
 medido sobre unos ficheros creyéndolos otros. Eso es peor que no poder
 reconstruirlo, porque no se nota.
 
-Las huellas de referencia salen de `configs/manifest_e19.json`, que las fijó
-**antes** de abrir el conjunto de prueba. Este guion no las escribe ni las
-actualiza: solo compara.
+Hay **dos** fuentes de huellas y no valen lo mismo, de modo que el guion dice
+cuál usa:
+
+* `configs/manifest_e19.json` — las de `synthetic_v2`, fijadas **antes** de abrir
+  el conjunto de prueba. Garantía fuerte: coincidir significa que el conjunto es
+  el que sostiene las cifras publicadas.
+* `configs/huellas_datos_reconstruibles.json` — las de los demás conjuntos,
+  tomadas **después** de medir, de los ficheros de la máquina del autor. Garantía
+  débil: coincidir significa que la reconstrucción es igual a la del autor; no
+  demuestra cuál produjo las cifras. Difereir, en cambio, sí informa.
+
+Este guion no escribe ni actualiza ninguna de las dos: solo compara.
 """
 
 from __future__ import annotations
@@ -19,6 +28,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
 MANIFIESTO = RAIZ / "configs" / "manifest_e19.json"
+RECONSTRUIBLES = RAIZ / "configs" / "huellas_datos_reconstruibles.json"
 
 
 def huella_16(ruta: Path) -> str:
@@ -28,16 +38,29 @@ def huella_16(ruta: Path) -> str:
 def verificar(dataset_id: str) -> int:
     """Devuelve 0 si las cuatro huellas coinciden con las congeladas."""
     declarado = json.loads(MANIFIESTO.read_text("utf-8"))["controlled_state"]["dataset"]
-    if declarado["dataset_id"] != dataset_id:
-        print(
-            f"El manifiesto de E19 congela «{declarado['dataset_id']}», no «{dataset_id}».\n"
-            "Para los demás conjuntos no hay huellas de referencia y esta comprobación no "
-            "aplica: su reconstrucción se verifica con la auditoría del generador."
+    if declarado["dataset_id"] == dataset_id:
+        esperadas: dict[str, str] = declarado["files"]
+        fuente = "configs/manifest_e19.json, congeladas ANTES de abrir el conjunto de prueba"
+        garantia_fuerte = True
+    else:
+        if not RECONSTRUIBLES.is_file():
+            print(f"No hay huellas de referencia para «{dataset_id}»; nada que comparar.")
+            return 0
+        registro = json.loads(RECONSTRUIBLES.read_text("utf-8"))["conjuntos"]
+        if dataset_id not in registro:
+            print(
+                f"No hay huellas de referencia para «{dataset_id}».\n"
+                "Su reconstrucción se verifica con la auditoría del generador, no por huella."
+            )
+            return 0
+        esperadas = registro[dataset_id]["ficheros"]
+        fuente = (
+            "configs/huellas_datos_reconstruibles.json, tomadas DESPUÉS de medir: "
+            "comparan con la reconstrucción del autor, no demuestran cuál produjo las cifras"
         )
-        return 0
+        garantia_fuerte = False
 
-    esperadas: dict[str, str] = declarado["files"]
-    print(f"Huellas de {dataset_id}, contra las congeladas en configs/manifest_e19.json:\n")
+    print(f"Huellas de {dataset_id}, contra {fuente}:\n")
 
     problemas = 0
     for relativa, esperada in esperadas.items():
@@ -64,10 +87,17 @@ def verificar(dataset_id: str) -> int:
         )
         return 1
 
-    print(
-        f"Los {len(esperadas)} ficheros coinciden bit a bit con el estado congelado de E19. "
-        "El conjunto reconstruido es el mismo que sostiene las cifras publicadas."
-    )
+    if garantia_fuerte:
+        print(
+            f"Los {len(esperadas)} ficheros coinciden bit a bit con el estado congelado de E19. "
+            "El conjunto reconstruido es el mismo que sostiene las cifras publicadas."
+        )
+    else:
+        print(
+            f"Los {len(esperadas)} ficheros coinciden bit a bit con la reconstrucción del autor. "
+            "No es una congelación previa: lo que esto dice es que el generador es determinista "
+            "y que esta máquina produce lo mismo que aquella."
+        )
     return 0
 
 

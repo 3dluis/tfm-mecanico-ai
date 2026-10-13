@@ -1,0 +1,22 @@
+{
+  "tomado_el": "2026-10-13",
+  "commit": "492620bf",
+  "que_es": "huellas de los ficheros procesados de los conjuntos que el repositorio NO distribuye y que el manifiesto de E19 no congela",
+  "para_que": "que un clon pueda comprobar si su reconstruccion coincide con la del autor, en lugar de suponerlo",
+  "QUE_GARANTIA_TIENE_Y_CUAL_NO": {
+    "synthetic_v2": "sus huellas estan en configs/manifest_e19.json, CONGELADAS ANTES de abrir el conjunto de prueba. Esa es la garantia fuerte y no se duplica aqui",
+    "los_demas": "estas huellas se toman HOY, de los ficheros de la maquina del autor, DESPUES de que las cifras se midieran. NO son una congelacion previa: son un punto de comparacion. Si una reconstruccion difiere, se sabe que algo cambio; no se sabe cual de las dos es la que produjo las cifras publicadas"
+  },
+  "conjuntos": {
+    "synthetic_v3": {
+      "sesiones_por_condicion": 36,
+      "esquema": "historico",
+      "ficheros": {
+        "data/processed/synthetic_v3_x.npy": "1bba9b7527725537",
+        "data/processed/synthetic_v3_features.npy": "814b1cf7965d5a14",
+        "data/processed/synthetic_v3_meta.parquet": "f27cd17c23477e7e",
+        "data/processed/synthetic_v3_preprocess.json": "f991711f0fb8575a"
+      }
+    }
+  }
+}
