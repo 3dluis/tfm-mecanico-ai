@@ -511,7 +511,10 @@ def test_la_anotacion_no_filtra_ninguna_decision_del_sistema(
 # --- Fallo cerrado -----------------------------------------------------------
 
 
-def test_sin_declaracion_de_apertura_la_particion_de_prueba_no_se_toca() -> None:
+@pytest.mark.conjunto
+def test_sin_declaracion_de_apertura_la_particion_de_prueba_no_se_toca(
+    conjunto_preprocesado: None,
+) -> None:
     """La comprobación va **antes** de cargar nada: el error se produce sin haber
     leído una sola ventana."""
     with pytest.raises(AperturaNoDeclaradaError, match="declaración formal de apertura"):
@@ -576,7 +579,8 @@ def test_un_anclaje_incompleto_no_se_da_por_bueno(tmp_path: Path) -> None:
         cargar_anclaje(ruta)
 
 
-def test_la_congelacion_vigente_se_verifica_entera() -> None:
+@pytest.mark.conjunto
+def test_la_congelacion_vigente_se_verifica_entera(conjunto_preprocesado: None) -> None:
     verificacion = verificar()
     assert verificacion.ok, str(verificacion)
     assert len(verificacion.comprobaciones) == 10
@@ -712,7 +716,8 @@ def test_el_resumen_de_redaccion_conserva_las_salidas_y_sus_recuentos() -> None:
     assert resumen["prompt_version"]
 
 
-def test_la_evaluacion_final_no_se_mide_sin_redactor() -> None:
+@pytest.mark.conjunto
+def test_la_evaluacion_final_no_se_mide_sin_redactor(conjunto_preprocesado: None) -> None:
     """La sección 9 de las reglas congeladas no admite omitir ninguna de las
     métricas que enumera, y tres son de redacción. Sin redactor el artefacto
     quedaría incompleto declarándose completo."""
@@ -790,8 +795,10 @@ def test_el_sufijo_distingue_la_particion_y_el_intento() -> None:
     assert sufijo_de("validation", "v2") == "_validation_v2"
 
 
+@pytest.mark.conjunto
 @pytest.mark.parametrize("estratos", [("comparativo",), ("operativo",), ("operativo", "adverso")])
 def test_la_evaluacion_final_mide_los_tres_estratos_congelados(
+    conjunto_preprocesado: None,
     estratos: tuple[str, ...],
 ) -> None:
     """Ninguno de los tres es opcional. Sin el comparativo, una diferencia con las
@@ -853,8 +860,12 @@ def test_la_politica_de_referencia_usa_la_confianza_de_la_clase_predicha() -> No
     assert alto["unnecessary_abstention"]["numerator"] == 0
 
 
+@pytest.mark.conjunto
 def test_los_ficheros_del_conjunto_estan_anclados_por_huella(
-    manifiesto: dict[str, Any], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    conjunto_preprocesado: None,
+    manifiesto: dict[str, Any],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Están fuera del control de versiones, de modo que la comprobación del árbol
     no puede verlos: sustituir uno dejando los recuentos declarados pasaba
@@ -1396,7 +1407,8 @@ def test_la_comprobacion_del_espacio_se_acota_al_vehiculo_evaluado() -> None:
     assert "c.vehicle_id = :v" in fuente
 
 
-def test_un_estrato_repetido_no_se_mide_dos_veces() -> None:
+@pytest.mark.conjunto
+def test_un_estrato_repetido_no_se_mide_dos_veces(conjunto_preprocesado: None) -> None:
     """Ejecutaría sus casos dos veces con el mismo identificador, duplicando
     denominadores y tasas en un artefacto que se declara evaluación final."""
     with pytest.raises(ValueError, match="estratos repetidos"):
