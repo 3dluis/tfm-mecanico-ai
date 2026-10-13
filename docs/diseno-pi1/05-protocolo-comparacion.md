@@ -40,7 +40,7 @@ se queda cerrada.
 | Ajuste | sobre el interno de ajuste | sobre el interno de ajuste |
 | Selección de época | no aplica | **sobre el interno de desarrollo** |
 | Hiperparámetros | los congelados de `BaselineConfig`; si se tocaran, sobre el interno de desarrollo | los congelados de la configuración de E7; igual condición |
-| Calibración | isotónica, validación cruzada interna sobre el interno de ajuste, **con pliegues agrupados por sesión** | la misma técnica, los mismos datos y los mismos pliegues agrupados, para que la calibración no sea una ventaja de uno |
+| Calibración | isotónica **sobre las predicciones del interno de desarrollo** | la misma técnica y los mismos datos para los dos, sin validación cruzada: ver más abajo |
 | Métrica que se publica | sobre **validación** | sobre **validación** |
 | Semilla | la de la réplica | la misma de la réplica, apareada |
 
@@ -50,18 +50,31 @@ La primera, que hoy el bosque se calibra y la red no, y aun así la red sale mej
 conjuntos: ECE 0,1317 frente a 0,1439 en `v2`, y 0,0163 frente a 0,0801 en `v3`. Calibrar las dos con la
 misma técnica y sobre los mismos datos convierte esa observación en comparable; hoy no lo es.
 
-La segunda es un detalle de implementación que importa. `CalibratedClassifierCV(..., cv=5)` forma sus
-pliegues **por muestra**, es decir por ventana, de modo que ventanas solapadas de una misma sesión caen a
-la vez en el pliegue que ajusta el modelo y en el que ajusta el calibrador. Eso rompe el control por
-sesión que el resto del protocolo mantiene. **Los pliegues tienen que agruparse por sesión** —en la
-práctica, pasando a `cv` los índices de un `GroupKFold` agrupado por `session_id`— y la comprobación es
-que ninguna sesión aparezca en dos pliegues.
+La segunda es cómo se calibra, y la respuesta cambió al calcular su coste.
 
-**Y conviene decir que el código actual no lo hace**, de modo que la calibración de E6, E15 y E19 se
-ajustó con pliegues por ventana. Eso **no** invalida ninguna cifra publicada: el error de calibración se
-reporta sobre validación o sobre prueba, que son datos ajenos a esos pliegues, así que el número es
-honesto. Lo que queda es un calibrador peor ajustado de lo que podría estar. Va a limitaciones, no a
-correcciones: E19 está cerrada y su código no se toca.
+El código actual usa `CalibratedClassifierCV(..., cv=5)`, que forma sus pliegues **por muestra**, es decir
+por ventana: ventanas solapadas de una misma sesión caen a la vez en el pliegue que ajusta el modelo y en
+el que ajusta el calibrador, lo que rompe el control por sesión que el resto del protocolo mantiene. La
+corrección evidente sería agrupar los pliegues por sesión. Pero aplicarla a la red recurrente significa
+**cinco ajustes más por celda** para obtener predicciones fuera de pliegue, y con veinte celdas de red
+eso convierte media hora de cómputo en varias horas.
+
+**La solución que se adopta es más simple y además más simétrica: calibrar sobre la partición interna de
+desarrollo**, con un único reparto y sin validación cruzada. Esa partición ya existe —se crea para
+seleccionar la época—, está repartida **por sesión**, y es disjunta del interno de ajuste, de modo que no
+hay fuga. El calibrador se ajusta sobre las predicciones que el modelo ya produce en ella: **cero ajustes
+adicionales** para los dos modelos, y el mismo procedimiento con los mismos datos para ambos, que es lo
+que hoy no ocurre.
+
+**Su límite, declarado:** la isotónica sobre una partición pequeña es ruidosa. En el punto `T6` el interno
+de desarrollo tiene una sesión por condición, y la calibración de ese punto habrá que leerla con esa
+cautela. Es una propiedad del punto, no del procedimiento.
+
+**Y sobre lo ya publicado:** el código actual repartió por ventana, así que la calibración de E6, E15 y
+E19 se ajustó así. Eso **no** invalida ninguna cifra: el error de calibración se reporta sobre validación
+o sobre prueba, ajenas a esos pliegues, así que el número es honesto. Lo que queda es un calibrador peor
+ajustado de lo que podría estar. Va a limitaciones, no a correcciones: E19 está cerrada y su código no se
+toca.
 
 ## 5.3 Métricas que se publican
 
