@@ -246,11 +246,35 @@ def main(argv: list[str] | None = None) -> int:
         datos, metadata = generate_dataset(
             specs, dataset_id=args.dataset_id, seed=args.seed, notes="Plan equilibrado E2."
         )
+        from mecanico_ia_exp.experiments.destinos import ArtefactoOcupadoError, exigir_libres
         from mecanico_ia_exp.obd.auditoria import (
             AuditoriaDelGeneradorError,
             exigir_auditoria_limpia,
         )
         from mecanico_ia_exp.obd.procedencia import construir, escribir, ruta_de
+
+        # Los TRES destinos se comprueban antes de escribir el primero. Si solo
+        # se comprobara el manifiesto, una regeneración habría reemplazado ya el
+        # parquet y la ficha antes de fallar, y el manifiesto antiguo habría
+        # quedado describiendo datos nuevos: una procedencia que miente es peor
+        # que no tenerla.
+        destino = paths.ensure(paths.DATA_RAW_SYNTHETIC) / f"{args.dataset_id}.parquet"
+        try:
+            exigir_libres(
+                {
+                    "datos": destino,
+                    "ficha": destino.with_suffix(".meta.json"),
+                    "procedencia": ruta_de(args.dataset_id),
+                }
+            )
+        except ArtefactoOcupadoError as error:
+            print(
+                f"\n{error}\n"
+                "Para generar un conjunto nuevo, usa otro --dataset-id. "
+                "Los conjuntos existentes sostienen cifras publicadas y no se regeneran.\n"
+                "\nNo se escribe nada."
+            )
+            return 1
 
         manifiesto = construir(specs, datos, dataset_id=args.dataset_id, seed=args.seed)
 
@@ -267,7 +291,6 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\n{error}\n\nNo se escribe nada.")
             return 1
 
-        destino = paths.ensure(paths.DATA_RAW_SYNTHETIC) / f"{args.dataset_id}.parquet"
         datos.to_parquet(destino, index=False)
         metadata.write(destino.with_suffix(".meta.json"))
         escribir(ruta_de(args.dataset_id), manifiesto)
