@@ -672,12 +672,35 @@ tiene."""),
 3. **Los denominadores son pequeños**: 14, 8 y 10. Un solo caso mueve `T_AI` en 0,125.
 4. **El reparto 8/14 no estaba pre-registrado.** La regla sí; el reparto que produjo, no.
 5. **La condición con distractor quedó fuera** de los casos elegibles, porque no medía lo que decía
-   medir. PI.4 no puede interpretarse hasta su rediseño.
-6. **El conjunto de prueba se abrió tres veces**, contando los dos intentos interrumpidos. Las tres
-   están registradas en `docs/methodology/registro-aperturas-test.md`, distinguiendo apertura
-   técnica, exposición de etiquetas y uso efectivo de resultados. No se oculta.
-7. **Todo es sintético.** La validez externa no está establecida.
-8. **Una sola ejecución.** No hay repeticiones ni intervalos de confianza."""),
+   medir: dos de las tres tenían la misma configuración que la condición parcial. **Se rediseñó y se
+   ejecutó aparte el 13 de octubre de 2026** —seis abstenciones de seis, las seis por insuficiencia de
+   la evidencia y ninguna por confianza baja—, y esa medición **no forma parte de E19**:
+   `docs/experiments/P1_distractor_v2.md`.
+6. **El conjunto de prueba se abrió cinco veces**, no tres. Las tres de E19 —contando los dos intentos
+   interrumpidos—, una comprobación pre-registrada de las ablaciones el 13 de octubre y una **apertura
+   accidental** que solo leyó identificadores de sesión. Las cinco están registradas en
+   `docs/methodology/registro-aperturas-test.md`, clasificadas en **cinco niveles**: apertura técnica,
+   lectura de identificadores, exposición de etiquetas, exposición de predicciones y utilización de
+   resultados. En cuatro de las cinco hubo exposición de etiquetas y de predicciones. **No se afirma
+   que el conjunto permanezca intacto.**
+7. **Siete de las treinta y cinco salidas del redactor contienen una cifra que el verificador no
+   produjo** (`L-26`): 3 de 26 abstenciones y 8 de 27 afirmaciones. El peor caso está en
+   `operativo/C07_partial`, donde el redactor escribió «cobertura 0.852 < 0.90» y el verificador había
+   escrito «cobertura 0.00 < 0.80»: inventó el valor **y** el umbral, y la comparación resultante es
+   aritméticamente cierta, así que nada en la frase delata el error. **Ninguna de las dos tasas cambia
+   por ello**, porque las produce el verificador determinista; lo que cambia es que el texto de la
+   evaluación final no es numéricamente fiel. Las tres barreras lo dejan pasar.
+8. **El adaptador del redactor se ajustó sobre ventanas de validación** (`L-23`). E19 mide sobre
+   prueba y su solape con los ejemplos de ajuste es **cero ventanas y cero sesiones**, de modo que sus
+   cifras de redacción no están contaminadas por esa vía. Lo que sigue siendo cierto es que el
+   adaptador no se ha reentrenado, y el reentrenamiento está **detenido por memoria insuficiente**:
+   necesita más de 17 GB por paso (`docs/experiments/incidencia-p2-02.md`).
+9. **`synthetic_v3`, el conjunto de esta evaluación, no es reconstruible** con el generador publicado
+   (`L-25`): es pre-calibración y ninguna de sus 216 sesiones se reproduce. Las cifras de E19 son
+   correctas y **no son reproducibles por un tercero** sin los ficheros procesados, que no se
+   distribuyen por tamaño.
+10. **Todo es sintético.** La validez externa no está establecida.
+11. **Una sola ejecución.** No hay repeticiones ni intervalos de confianza."""),
     md("""\
 ## 14. Discusión
 

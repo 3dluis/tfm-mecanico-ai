@@ -16,8 +16,13 @@ antes de medir · **Modo:** oracular, política v2.1 · **Partición:** validaci
 | `P03_o2_partial_v2` | PARTIAL | ABSTAIN | **ABSTAIN** ✓ | 1,000 | 5 | 0,00 | cobertura baja |
 | `D03_o2_distractor_v2` | DISTRACTOR | ABSTAIN | **ABSTAIN** ✓ | 1,000 | 6 | 0,00 | cobertura baja |
 
-**6 de 6.** Y lo que importa más que el recuento: **el motivo registrado en los seis es
-`LOW_CLAIM_COVERAGE`** —la evidencia no sostiene ninguna afirmación— y **no** la baja confianza del
+**Seis ejecuciones, seis abstenciones. Y son seis ejecuciones de tres casos**, no seis
+observaciones: cada caso con distractor se compara con su condición parcial sobre **la misma ventana
+de telemetría**, de modo que las dos filas de cada par comparten datos, modelo, atribución y
+confianza. **Las unidades son tres**, y el recuento se publica así para que nadie lea 6/6 como una
+tasa sobre seis situaciones independientes.
+
+Y lo que importa más que el recuento: **el motivo registrado en los seis es `LOW_CLAIM_COVERAGE`** —la evidencia no sostiene ninguna afirmación— y **no** la baja confianza del
 modelo. Las confianzas son 0,908 y 1,000, todas **por encima** del umbral de 0,79.
 
 Eso es exactamente lo que el protocolo declaró de antemano que apoyaría `PI.4`:
@@ -200,7 +205,9 @@ requisito de alcanzabilidad comprobado antes de medir y su resultado publicado.
    el filtro de motor, era que dos condiciones tenían la misma configuración.
 2. **E19 no se reabre.** Su conjunto anotado excluye las seis condiciones con distractor, y esa
    exclusión sigue siendo correcta.
-3. **`n = 3` no es una estimación.** Tres situaciones construidas describen tres situaciones.
+3. **`n = 3` no es una estimación, y 6/6 tampoco.** Tres situaciones construidas, recorridas en seis
+   ejecuciones. No se publica ninguna tasa, ningún intervalo y ninguna comparación con las cifras de
+   E15 o de E19. El resultado **se limita a los casos evaluados**.
 4. **La condición sin filtro de motor sigue como estaba.** `C09`, `C13` y `C17` miden la última
    línea de defensa con el filtro desactivado y siguen siendo válidas.
 5. **El hueco de las cifras queda abierto.** Declarado, medido y sin corregir, por decisión: se

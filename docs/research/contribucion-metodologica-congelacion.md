@@ -384,6 +384,17 @@ insostenible.**
 
 Eso es todo lo que la evidencia aguanta. Es poco, y es verdad.
 
+### 10.2 bis Las tres condiciones que el autor puso al aceptarla
+
+| Condición | Dónde se cumple |
+|---|---|
+| **No presentarla como innovación científica completamente nueva** | §10.1 enumera las cinco piezas que son práctica conocida, y §3.4 declara que el *holdout* reutilizable y la escalera son **más fuertes** en lo que hacen |
+| **No afirmar que previene contaminación ni que garantiza independencia** | §6.2 publica los cinco fallos que el procedimiento **no** evitó, uno de ellos durante seis semanas y dos ya irreversibles al detectarse. El enunciado de §10.2 dice «detección y registro honesto, **no** prevención» |
+| **Conservar los casos en que no detectó el problema a tiempo** | §6.2 completa, junto a §6.1 y con el mismo peso |
+
+Y una cuarta que el propio documento se impone: **la pregunta principal del TFM no se modifica**, y
+no se añade objetivo ni se reformula hipótesis (§9 y §10.3).
+
 ### 10.3 Cómo incorporarlo
 
 | Dónde | Cómo |

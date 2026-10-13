@@ -134,8 +134,67 @@ def auditar(suficiencia: str, agente: str, etiqueta: str) -> Resultado | None:
     return res
 
 
+def auditar_e19(nombre: str = "E19_evaluacion_final_v3") -> Resultado | None:
+    """E19 guarda las salidas del redactor en otra forma, y hay que auditarla igual.
+
+    Sus registros no son un par (suficiencia, agente): los veredictos están en
+    ``strata[*].cases`` y las salidas del redactor en ``strata[*].writing.runs``.
+    Omitirla por eso sería dejar sin auditar **la evaluación final**, que es la
+    que sostiene el resultado principal del trabajo.
+    """
+    archivo = paths.EXPERIMENTS / f"{nombre}.json"
+    if not archivo.is_file():
+        return None
+    registro = json.loads(archivo.read_text("utf-8"))
+    res = Resultado("E19, la evaluación final")
+
+    for estrato, contenido in registro.get("strata", {}).items():
+        por_ventana = {c["bundle"]["case_id"]: c for c in contenido.get("cases", [])}
+        for run in contenido.get("writing", {}).get("runs", []):
+            caso = por_ventana.get(run.get("case_id"))
+            if caso is None:
+                continue
+            salida = run.get("output") or {}
+            identificador = f"{estrato}/{run.get('gold_case_id')}"
+
+            if salida.get("decision") == "ABSTAIN":
+                res.abstenciones += 1
+                ajenas = _cifras(salida.get("missing_evidence")) - _cifras(
+                    caso["verdict"].get("missing_evidence")
+                )
+                if ajenas:
+                    res.abstenciones_con_cifra_ajena += 1
+                    res.detalle.append((identificador, "abstención", sorted(ajenas)))
+                continue
+
+            if salida.get("decision") != "EXPLAIN":
+                continue
+            res.explicaciones += 1
+            observaciones = {o["observation_id"]: o for o in caso["bundle"]["observations"]}
+            for afirmacion in salida.get("claims", []):
+                res.afirmaciones += 1
+                permitidas: set[float] = set()
+                for oid in afirmacion.get("observational_evidence", []):
+                    observacion = observaciones.get(oid)
+                    if observacion is None:
+                        continue
+                    permitidas |= _redondeos(float(observacion["value"]))
+                    for extremo in ("window_start_s", "window_end_s"):
+                        if observacion.get(extremo) is not None:
+                            permitidas |= _redondeos(float(observacion[extremo]))
+                ajenas = _cifras(afirmacion.get("text")) - permitidas
+                if ajenas:
+                    res.afirmaciones_con_cifra_ajena += 1
+                    res.detalle.append(
+                        (identificador, f"afirmación {afirmacion.get('claim_id')}", sorted(ajenas))
+                    )
+    return res
+
+
 def main() -> int:
     resultados = [r for p in PARES if (r := auditar(*p)) is not None]
+    if (e19 := auditar_e19()) is not None:
+        resultados.append(e19)
 
     print("AUDITORÍA DE LAS CIFRAS QUE EL REDACTOR ESCRIBE\n")
     cabecera = f"{'configuración':34} {'abstenciones':>14} {'afirmaciones':>14}"
