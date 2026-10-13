@@ -786,6 +786,7 @@ def test_la_congelacion_declara_lo_que_el_codigo_comprueba() -> None:
 
 # ------------------------------- las tres categorias de prueba, comprobables
 
+
 def test_cada_prueba_cae_en_una_sola_categoria() -> None:
     """Una prueba sin categoría falla en silencio en un clon.
 

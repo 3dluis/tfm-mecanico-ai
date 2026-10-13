@@ -1,0 +1,190 @@
+{
+  "congelado_el": "2026-10-13",
+  "commit": "89950956",
+  "para_que": "evaluar al redactor sobre paquetes de evidencia que NINGUN adaptador ha visto, de modo que la comparacion entre slm_lora_v2 y un adaptador nuevo sea justa para los dos",
+  "por_que_se_congela_antes_de_que_exista_el_adaptador": "si el conjunto se eligiera despues de ver como redacta, mediria la busqueda y no al redactor. Se congela ahora, cuando models/slm_lora_v3 no existe",
+  "de_donde_sale": {
+    "dataset": "synthetic_v3",
+    "particion": "validation",
+    "por_que_no_la_prueba": "la particion de prueba de synthetic_v3 se abrio cinco veces (E19 y la revision de contaminacion). No es plenamente independiente y no se reutiliza como si lo fuera",
+    "por_que_no_validacion_de_synthetic_v2": "MEDIDO: validacion de synthetic_v2 tiene 12 sesiones; descontadas las 9 que vio slm_lora_v2 y las 5 de la evaluacion de E15, quedan 2 sesiones y las dos son de clase F00_normal. No queda ni una ventana de ninguna clase de fallo. Un conjunto independiente dentro de synthetic_v2 no existe",
+    "ventanas_disponibles_tras_excluir": {
+      "ventanas": 247,
+      "sesiones": 30,
+      "clases": 6
+    }
+  },
+  "exclusiones_aplicadas": {
+    "sesiones_que_vio_slm_lora_v2": 9,
+    "sesiones_de_la_evaluacion_de_E15": 5,
+    "sesiones_de_train_de_synthetic_v2": 48,
+    "por_que_por_sesion_y_no_por_ventana": "dos ventanas consecutivas de la misma sesion comparten la mitad de sus muestras; excluir solo la ventana vista deja entrar la de al lado"
+  },
+  "regla_de_seleccion": {
+    "enunciado": "para cada una de las cinco clases de fallo, las tres sesiones de menor identificador en orden lexicografico entre las libres; de cada sesion, la ventana de menor t_start con el fallo activo",
+    "por_que_una_ventana_por_sesion": "para que las 15 no solapen muestras entre si",
+    "no_interviene_ningun_resultado": "la regla es deterministica y se puede reejecutar; no mira ninguna prediccion, confianza ni veredicto"
+  },
+  "ventanas": [
+    {
+      "clase": "F01_vacuum_leak",
+      "sesion": "F01_vacuum_leak__highway__33",
+      "ventana": "F01_vacuum_leak__highway__33@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "highway"
+    },
+    {
+      "clase": "F01_vacuum_leak",
+      "sesion": "F01_vacuum_leak__idle__18",
+      "ventana": "F01_vacuum_leak__idle__18@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "idle"
+    },
+    {
+      "clase": "F01_vacuum_leak",
+      "sesion": "F01_vacuum_leak__urban__12",
+      "ventana": "F01_vacuum_leak__urban__12@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "urban"
+    },
+    {
+      "clase": "F02_maf_drift",
+      "sesion": "F02_maf_drift__highway__25",
+      "ventana": "F02_maf_drift__highway__25@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "highway"
+    },
+    {
+      "clase": "F02_maf_drift",
+      "sesion": "F02_maf_drift__highway__33",
+      "ventana": "F02_maf_drift__highway__33@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "highway"
+    },
+    {
+      "clase": "F02_maf_drift",
+      "sesion": "F02_maf_drift__idle__22",
+      "ventana": "F02_maf_drift__idle__22@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "idle"
+    },
+    {
+      "clase": "F03_thermostat_stuck",
+      "sesion": "F03_thermostat_stuck__urban__20",
+      "ventana": "F03_thermostat_stuck__urban__20@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "urban"
+    },
+    {
+      "clase": "F03_thermostat_stuck",
+      "sesion": "F03_thermostat_stuck__urban__28",
+      "ventana": "F03_thermostat_stuck__urban__28@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "urban"
+    },
+    {
+      "clase": "F03_thermostat_stuck",
+      "sesion": "F03_thermostat_stuck__urban__32",
+      "ventana": "F03_thermostat_stuck__urban__32@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "urban"
+    },
+    {
+      "clase": "F04_o2_lag",
+      "sesion": "F04_o2_lag__highway__25",
+      "ventana": "F04_o2_lag__highway__25@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "highway"
+    },
+    {
+      "clase": "F04_o2_lag",
+      "sesion": "F04_o2_lag__idle__14",
+      "ventana": "F04_o2_lag__idle__14@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "idle"
+    },
+    {
+      "clase": "F04_o2_lag",
+      "sesion": "F04_o2_lag__urban__32",
+      "ventana": "F04_o2_lag__urban__32@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "urban"
+    },
+    {
+      "clase": "F05_misfire",
+      "sesion": "F05_misfire__highway__21",
+      "ventana": "F05_misfire__highway__21@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "highway"
+    },
+    {
+      "clase": "F05_misfire",
+      "sesion": "F05_misfire__highway__33",
+      "ventana": "F05_misfire__highway__33@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "highway"
+    },
+    {
+      "clase": "F05_misfire",
+      "sesion": "F05_misfire__urban__16",
+      "ventana": "F05_misfire__urban__16@120s",
+      "t_start": 120.0,
+      "t_end": 239.0,
+      "fallo_activo": true,
+      "regimen": "urban"
+    }
+  ],
+  "huella_de_la_seleccion_sha256_16": "9c114d92ef7d3ff1",
+  "protocolo_de_medicion": {
+    "condiciones_de_corpus": [
+      "FULL",
+      "ABSENT"
+    ],
+    "casos": 30,
+    "que_se_mide": [
+      "salida valida contra el esquema",
+      "respeta el veredicto del verificador",
+      "citas inventadas"
+    ],
+    "comparacion": "emparejada por caso entre slm_lora_v2 y el adaptador nuevo; los dos ven estas 15 sesiones por primera vez",
+    "lo_que_no_se_mide": "la calidad del diagnostico. El modelo de diagnostico se ajusto sobre train de synthetic_v3 y su calibracion uso validacion, de modo que las confianzas de estos paquetes NO son fuera de muestra. Lo que se evalua es el texto del redactor, no el acierto del diagnostico"
+  },
+  "lo_que_este_conjunto_no_permite_afirmar": [
+    "nada sobre generalizacion a vehiculos, motores o corpus distintos: son 15 sesiones sinteticas del mismo generador",
+    "ninguna estimacion con intervalo util: n = 30 casos sobre 15 sesiones describe 30 situaciones",
+    "que las cifras de E13 y E15 queden corregidas: son otras medidas sobre otro conjunto, no un recalculo"
+  ],
+  "condiciones_de_invalidez": [
+    "si se cambia la regla de seleccion despues de ver un resultado, el conjunto deja de ser valido y hay que declararlo",
+    "si alguna de estas 15 sesiones se usa para ajustar cualquier adaptador, el conjunto queda contaminado y hay que rehacerlo",
+    "si la huella de la seleccion no coincide al reejecutar la regla, algo ha cambiado en el reparto y hay que pararse"
+  ]
+}

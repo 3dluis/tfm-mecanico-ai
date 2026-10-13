@@ -108,11 +108,8 @@ def informar(ejecutar: bool) -> int:
 
     print("CATEGORÍAS DE PRUEBA\n")
     print(f"  inmediatas             {inmediatas:>4}   un clon y `uv sync`")
-    print(
-        f"  con preparación        {con_preparacion:>4}   "
-        "reconstrucción automática y verificable"
-    )
-    print(f"  con recursos externos  {externas:>4}   corpus, base de datos o pesos no distribuidos")
+    print(f"  con preparación        {con_preparacion:>4}   reconstrucción comprobable")
+    print(f"  con recursos externos  {externas:>4}   corpus, base de datos o pesos")
     print(f"  {'─' * 44}")
     print(f"  total                  {inmediatas + con_preparacion + externas:>4}\n")
 

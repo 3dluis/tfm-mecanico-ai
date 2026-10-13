@@ -1,10 +1,27 @@
 # Registro de aperturas del conjunto de prueba
 
-**Por qué existe.** La sección 6 del encargo del autor lo pide como registro formal y separa tres
-cosas que no son la misma: la **apertura técnica** del conjunto, la **exposición** de etiquetas o
-predicciones, y la **utilización efectiva** de resultados para tomar decisiones. Una interrupción no
-equivale a una evaluación sin exposición, y conviene que eso esté escrito antes de que alguien lo
-pregunte.
+**Por qué existe.** El encargo del autor lo pide como registro formal, y pide además que no se
+confundan cosas que no son la misma. En la revisión del 13 de octubre de 2026 la distinción se
+afina de tres niveles a **cinco**, porque tres mezclaban casos que merecen nombres distintos.
+
+## Los cinco niveles, de menos a más
+
+| Nivel | Qué es | Qué consume |
+|---|---|---|
+| **1 · Apertura técnica** | la partición se cargó: `allow_test=True` con razón por escrito | el registro. Nada más, si no pasa de aquí |
+| **2 · Lectura de identificadores** | se leyeron `session_id`, recuentos o el reparto, sin ver ninguna señal ni etiqueta | casi nada en información, pero **sí** el argumento de que no se tocó |
+| **3 · Exposición de etiquetas** | se vio qué fallo tenía cada ventana | la posibilidad de construir una hipótesis sin saber la respuesta |
+| **4 · Exposición de predicciones** | se vio qué predijo el modelo, y por tanto en qué acierta y en qué falla | lo que hace de la prueba una prueba: ya no se puede diseñar a ciegas |
+| **5 · Utilización de resultados** | alguna decisión —un umbral, un diseño, una interpretación— se tomó a la vista de lo que la prueba dijo | la independencia, de verdad y sin remedio |
+
+**La diferencia entre el 4 y el 5 es la que sostiene este trabajo.** Hubo exposición de predicciones
+—niveles 3 y 4— en tres aperturas, y eso no se puede deshacer. Lo que se defiende es que no hubo
+utilización: que ninguna decisión se tomó mirando el resultado. Y eso es verificable, no una
+declaración de intenciones: el instrumento no cambió entre la primera apertura y la medición, y el
+comando que lo comprueba está más abajo.
+
+**Una interrupción no equivale a una evaluación sin exposición.** Las dos primeras aperturas
+murieron sin calcular ninguna métrica, y aun así llegaron al nivel 4.
 
 El cierre técnico está en `src/mecanico_ia_exp/data/dataset.py`: pedir la partición de prueba exige
 `allow_test=True` y una razón por escrito, que se imprime en la salida de la ejecución. Cada fila de
@@ -17,6 +34,48 @@ esta tabla corresponde a una de esas aperturas.
 | 3 | 2026-10-12, 21:38 → 21:50 | `v3` | intento tras la interrupción de `v2`, bajo `launchd` | commit `8ee2dd8` | evaluación completa, 35 ejecuciones | sí | **sí**, todas | es la medición |
 | 4 | 2026-10-13, 04:12 | `prueba` | **P3**, pendiente del tutor: repetir sobre prueba las cuatro ablaciones de E18, definidas y congeladas el 1-10, **antes** de la primera apertura | commit `bdf8640`, política v2.1, umbrales congelados sin cambios desde el 4-09 | las cuatro ablaciones sobre los 17 casos anotados, modo oracular, sin proveedor de lenguaje | sí: etiquetas y predicciones de las ventanas elegidas en prueba | **sí**, las del pre-registro de E18 | **no**, y es condición de la ejecución: sus resultados no se usan para rediseñar P1, ajustar P2, mover un umbral ni cambiar la política |
 | 5 | 2026-10-13, ~05:0x | — | **accidental**: la comprobación de contaminación de P2 llamaba a `load_partition("test")` para leer los identificadores de sesión | commit de la rama `fase3/p2-adaptador-v3` | solo `session_id` de las 12 sesiones de prueba | **no**: ninguna etiqueta, ninguna predicción, ninguna ventana | **no**: no se calculó ninguna | **no**. Corregido en el acto: la comprobación lee ahora el reparto de `synthetic_v2_preprocess.json`, que tiene la misma información sin abrir nada |
+
+## Las cinco aperturas clasificadas por nivel
+
+| # | 1 · Apertura | 2 · Identificadores | 3 · Etiquetas | 4 · Predicciones | 5 · Utilización | Nivel alcanzado |
+|---|---|---|---|---|---|---|
+| 1 · E19 `v1` | sí | sí | **sí** | **sí** | no (una vez citada y **retirada**) | **4** |
+| 2 · E19 `v2` | sí | sí | **sí** | **sí** | no | **4** |
+| 3 · E19 `v3` | sí | sí | **sí** | **sí** | es la medición declarada | **4**, y el 5 por diseño |
+| 4 · P3 | sí | sí | **sí** | **sí** | no, y es condición de la ejecución | **4** |
+| 5 · accidental | sí | **sí** | no | no | no | **2** |
+
+La tercera es el único caso donde el nivel 5 es legítimo, porque esa apertura **era** la medición
+autorizada: utilizar su resultado es a lo que se abrió.
+
+## Qué limitan las aperturas acumuladas, y qué no
+
+La pregunta es si cinco aperturas dejan algo que pueda llamarse evaluación independiente. Revisada
+una a una, la respuesta tiene dos partes y ninguna es «sí, intacto».
+
+**Lo que sigue en pie.** La medición de E19 conserva su carácter de independiente en el sentido que
+importa: **el instrumento no se modificó entre la primera apertura y la medición**. Umbrales, casos
+elegibles, reglas de selección, política, métricas publicables y código: ni una línea. Eso es
+comprobable con un comando y no depende de la palabra de nadie. Las tres primeras aperturas son el
+mismo intento repetido, no tres miradas distintas.
+
+**Lo que ya no puede decirse.**
+
+1. **Que el conjunto esté intacto.** No lo está. Se abrió cinco veces, y en cuatro hubo exposición
+   de etiquetas y predicciones.
+2. **Que una evaluación futura sobre esta partición sea plenamente independiente.** No lo sería. El
+   analista ha visto qué ventanas de prueba el modelo diagnostica mal. Cualquier medición nueva
+   sobre `synthetic_v3`/prueba arrastra ese conocimiento, y declararla independiente sería falso.
+   Por eso el conjunto de evaluación del redactor **no sale de la partición de prueba**:
+   [`evaluacion-independiente-redactor.md`](evaluacion-independiente-redactor.md).
+3. **Que la cuarta apertura sea una estimación operativa.** Lo dice su propia revisión de
+   independencia: describe un estrato favorable, no una tasa poblacional.
+
+**Lo que esto significa para el tribunal.** La partición de prueba de este trabajo es un recurso
+**gastado**, no un recurso intacto. Rindió una medición —E19— y una comprobación pre-registrada
+—P3—, las dos con su exposición declarada, y no queda margen para una tercera pregunta que
+necesite independencia. Quien lea los resultados tiene derecho a saberlo, y por eso está escrito
+aquí y en las limitaciones, no solo en el informe de E19.
 
 ## Sobre la quinta, que no debió ocurrir
 
