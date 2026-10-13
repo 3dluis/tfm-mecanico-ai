@@ -109,6 +109,33 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     abl.add_argument(
+        "--partition",
+        choices=("validation", "test"),
+        default="validation",
+        help=(
+            "sobre qué se miden las ablaciones. Repetirlas sobre el conjunto de prueba es "
+            "el tercero de los pendientes del tutor, exige --open-test con --reason y "
+            "constituye una apertura que hay que registrar en "
+            "docs/methodology/registro-aperturas-test.md ANTES de ejecutar"
+        ),
+    )
+    abl.add_argument(
+        "--open-test",
+        action="store_true",
+        help=(
+            "declara la apertura del conjunto de prueba. Sin esto y sin --reason, pedir "
+            "la partición de prueba es un error, no un resultado"
+        ),
+    )
+    abl.add_argument(
+        "--reason",
+        default="",
+        help=(
+            "razón por escrito de la apertura. Queda EN EL REGISTRO de cada ablación, no "
+            "solo en la salida de la ejecución"
+        ),
+    )
+    abl.add_argument(
         "--mode",
         choices=("oracle", "non-oracle"),
         default="oracle",
@@ -298,6 +325,9 @@ def main(argv: list[str] | None = None) -> int:
             ablation=args.ablation,
             oracle=args.mode == "oracle",
             etiqueta=args.etiqueta,
+            particion=args.partition,
+            allow_test=args.open_test,
+            reason=args.reason,
         )
 
     if args.command == "final-evaluation":
