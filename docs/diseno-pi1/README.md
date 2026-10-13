@@ -1,8 +1,12 @@
-# Paquete de diseño de PI.1 — solo protocolos, nada ejecutado
+# Paquete de diseño de PI.1 — cerrado con alcance reducido el 13-10-2026
 
-**Fecha:** 12 de octubre de 2026 · **Estado: diseño, pendiente de aprobación.** No se ha ejecutado
-ningún experimento, no se ha generado ningún conjunto de datos, no se ha reentrenado ningún modelo, no
-se ha tocado ningún conjunto histórico y no se ha abierto ninguna partición de prueba.
+**Fecha:** 12 de octubre de 2026 · **Actualizado:** 13 de octubre de 2026 ·
+**Estado: cerrado con alcance reducido.** El autor aprobó mantener la fase A, plegar G dentro de ella y
+fundir H con la matriz de impacto de los capítulos 5 y 6; y aplazar `synthetic_v4`, la curva de volumen
+y las comparaciones extensivas. **La fase F no se ha ejecutado**, y su valor científico se evaluó antes
+de aplazarla. Sigue siendo cierto que no se ha generado ningún conjunto nuevo, no se ha reentrenado
+ningún modelo, no se ha tocado ningún conjunto histórico y no se ha abierto ninguna partición de
+prueba. El cierre está en [`14-cierre-alcance-reducido.md`](14-cierre-alcance-reducido.md).
 
 ## Para qué es esto, y para qué no
 
@@ -15,14 +19,21 @@ generador contra el manual.
 
 Este paquete diseña cómo arreglarlo. No es una línea de investigación nueva.
 
-**Y conviene decir qué no es.** La pregunta de investigación del TFM es si un sistema híbrido puede
-identificar patrones no representados en su conocimiento disponible, generar hipótesis diagnósticas
-desde el análisis contextual y longitudinal de datos OBD-II, y validarlas con evidencia antes de
-incorporarlas como conocimiento reutilizable. PI.1 es **una pieza** de eso: qué información diagnóstica
-aporta cada representación de la telemetría y cuáles son sus límites. **No es una investigación
-independiente sobre qué arquitectura de aprendizaje automático es superior**, y si en algún momento
-estos protocolos empiezan a parecerlo, hay que recortarlos. El objeto de evaluación sigue siendo el
-sistema completo.
+**Y conviene decir qué no es.** La pregunta de investigación del TFM, en la formulación canónica que
+fijó `ADR-004`, es si un agente con RAG puede explicar el diagnóstico de un vehículo a partir de datos
+OBD-II, rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin
+fundamento. PI.1 es **una pieza** de eso: qué información diagnóstica aporta cada representación de la
+telemetría y cuáles son sus límites. **No es una investigación independiente sobre qué arquitectura de
+aprendizaje automático es superior**, y si en algún momento estos protocolos empiezan a parecerlo, hay
+que recortarlos. El objeto de evaluación sigue siendo el sistema completo.
+
+> **Corrección del 13 de octubre de 2026.** Este párrafo enunciaba la pregunta **amplia** —patrones no
+> representados, generación de hipótesis, conocimiento reutilizable— como si fuera la vigente.
+> `ADR-004`, de 12 de septiembre de 2026, la declaró superada tras auditar sus cinco términos: dos no
+> tenían implementación ni fase en el plan. Es el cuarto documento con esa contradicción, además de los
+> tres que inventarió `docs/audits/matriz-impacto-adr004-notebooks.md`. La formulación amplia se
+> conserva como línea futura, no como objetivo.
 
 ## Los doce documentos
 
@@ -40,6 +51,9 @@ sistema completo.
 | 10 | `10-plan-reejecucion.md` | I | El orden, las dependencias, el coste, los criterios de integridad y de parada |
 | 11 | `11-riesgos-metodologicos.md` | — | Lo que puede salir mal y qué lo detectaría |
 | 12 | `12-trazabilidad-pi1.md` | — | La cadena de PI.1 de la pregunta al artefacto |
+| 13 | `13-recomendacion-alcance.md` | — | Si las nueve fases son necesarias, y qué recomendar |
+| 14 | `14-cierre-alcance-reducido.md` | — | **El cierre con el alcance aprobado**, y la fase G medida: el rendimiento por clase se ordena igual que la expresión del fallo |
+| 15 | `15-valor-cientifico-de-f.md` | — | El valor científico de F antes de descartarla, y el conjunto mínimo de réplicas que sí cabe |
 
 ## Las cinco decisiones que piden aprobación
 
