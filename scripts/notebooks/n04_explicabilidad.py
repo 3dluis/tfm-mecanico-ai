@@ -179,13 +179,23 @@ atribuciones = atribuciones.assign(peso=atribuciones["importance"].abs())
 matriz = (
     atribuciones.groupby(["predicted_class", "signal"])["peso"].sum().unstack(fill_value=0.0)
 )
-matriz = matriz.reindex(columns=[s for s in SIGNAL_NAMES if s in matriz.columns])
+# Las señales COMPUESTAS --descriptores de correlación cruzada como
+# `stft_bank1+ltft_bank1`-- se conservan. Reindexar solo por SIGNAL_NAMES las
+# descartaba en silencio antes de calcular el total de cada condición, de modo
+# que inflaba la fracción de las demás con el peso que acababa de tirar.
+simples = [s for s in SIGNAL_NAMES if s in matriz.columns]
+compuestas = sorted(c for c in matriz.columns if c not in simples)
+matriz = matriz.reindex(columns=simples + compuestas)
 normalizada = matriz.div(matriz.sum(axis=1), axis=0)
 
 fig, eje = plt.subplots(figsize=(9.4, 4.2))
 imagen = eje.imshow(normalizada.to_numpy(), cmap=SEQUENTIAL, aspect="auto")
 eje.set_xticks(range(len(normalizada.columns)), normalizada.columns, rotation=55,
                ha="right", fontsize=7)
+if compuestas:
+    # Una línea separa las doce señales de los descriptores compuestos.
+    eje.axvline(len(simples) - 0.5, color="#52514e", linewidth=1.0)
+    eje.text(len(simples) - 0.35, -0.75, "compuestas", fontsize=6.5, color="#52514e")
 eje.set_yticks(range(len(normalizada.index)), normalizada.index, fontsize=7.5)
 eje.grid(False)
 
@@ -213,7 +223,8 @@ fig.tight_layout()
 soporte.exportar(fig, "FIG-NB04-01_mapa_atribucion", subdirectorio="04_explicabilidad")
 plt.show()
 
-print("Deriva del caudalímetro · peso de cada señal:")
+print(f"señales simples: {len(simples)} · compuestas conservadas: {compuestas}")
+print("\\nDeriva del caudalímetro · peso de cada señal:")
 fila = normalizada.loc["F02_maf_drift"].sort_values(ascending=False)
 print(fila[fila > 0.01].round(3).to_string())"""),
     md("""\
