@@ -28,9 +28,9 @@ Redactado: 1 de septiembre de 2026, al cerrar E1
 | E3 datos reales | 🟡 pendiente | Sin fuente decidida. Desde ADR-003 es validación externa, no precondición de la PI |
 | E4 análisis exploratorio | ✅ | La deriva del caudalímetro no se ve en el caudalímetro |
 | E5 preprocesamiento | ✅ | Ventana 120 s, reparto sin fuga, suelo de ruido medido |
-| E6 baseline | ✅ | F1 macro 0,879 |
-| E7 modelo temporal | ✅ | GRU 0,823: no supera al baseline con estos datos |
-| E8 evaluación del modelo | ⬜ | Requiere abrir el test (E19) |
+| E6 baseline | ✅ | F1 macro 0,8788 sobre validación |
+| E7 modelo temporal | ✅ | GRU 0,8230: no supera al baseline **en las condiciones evaluadas**. Las dos conclusiones sobre el volumen quedaron `SUPERSEDED` el 12-10-2026 |
+| E8 evaluación del modelo | ⬜ `SUPERSEDED` | Absorbida por E19 |
 | E9 atribución | ✅ | `maf` no contribuye a detectar su propio fallo |
 | E10 corpus por vehículo | ✅ | Mazda 3 BK, manual verificado en contenido |
 | E11 pgvector | ✅ | 6 158 fragmentos, 320 DTC distintos |
@@ -40,12 +40,53 @@ Redactado: 1 de septiembre de 2026, al cerrar E1
 | E15 suficiencia | ✅ | EXPLAIN → ABSTAIN al retirar la evidencia |
 | E16 abstención | ✅ | Integrada en E15 |
 | E17 condiciones de corpus | 🟡 parcial | FULL, ABSENT y PARTIAL puntuadas en E15; DISTRACTOR diagnosticada en RERUN-A: redundante con PARTIAL en dos de tres fallos (13-09-2026) |
-| E18 ablaciones | ⬜ | |
-| E19 evaluación final | 🔴 **bloqueada** | Depende de E3 y E13 |
-| E20 demostración | 🔴 **bloqueada** | Depende de E19 |
+| E18 ablaciones | ✅ sobre validación | Cuatro ablaciones, 1-10-2026. Sobre **prueba**: pendiente (`P3`) |
+| E19 evaluación final | ✅ **COMPLETED — WITH DOCUMENTED LIMITATIONS** | Medida el 12-10-2026 en el tercer intento: falsa confianza 0/14, abstención innecesaria 2/8, cobertura 6/10 |
+| E20 demostración | 🟡 | Depende de cerrar los pendientes del tutor |
 
 **Guía de reproducción:** [`EXPERIMENTO_PASO_A_PASO.md`](EXPERIMENTO_PASO_A_PASO.md)
 **Respuesta a la PI:** [`matriz_validacion_pi.md`](matriz_validacion_pi.md)
+
+## El trabajo que queda, en dos bloques
+
+Actualizado el 12 de octubre de 2026, con E19 cerrada.
+
+**BLOQUE A — los tres pendientes del tutor**, que son prioritarios para la entrega final:
+
+| # | Pendiente | Estado |
+|---|---|---|
+| `P1` | Rediseño de la condición con distractor | criterio pre-registrado el 4-09 (`politica-condicion-distractor.md`), **nada construido** |
+| `P2` | Adaptador LoRA reentrenado sin contaminación | diagnosticado y declarado como limitación abierta, **no ejecutado** |
+| `P3` | Ablaciones de E18 sobre el conjunto de prueba | posibles desde que E19 abrió el test, **no hechas** |
+
+**BLOQUE B — reejecución controlada de PI.1**, nueve fases diseñadas y **ninguna ejecutada**:
+`docs/diseno-pi1/`. Responde a la pregunta que el tutor formuló —en qué tipos de fallo el contexto
+temporal aporta señal diagnóstica adicional y en cuáles no— sin abrir una línea nueva.
+
+Las dependencias entre los dos bloques están comprobadas en el código y en los manifiestos, no
+supuestas, en **[`methodology/bloques-pendientes-y-pi1.md`](methodology/bloques-pendientes-y-pi1.md)**.
+Lo esencial: **A y B pueden ir en paralelo** porque no comparten dato, corpus ni modelo; lo único que
+comparten es el espacio de nombres de los artefactos, y eso se resuelve con la etiqueta de ejecución.
+La única dependencia de orden estricta es **`P3` antes de `P1`**, porque el rediseño del distractor
+cambiaría la recuperación y dejaría las ablaciones sobre prueba sin referencia con la que compararse.
+
+### Lo que la preparación del bloque B ya dejó hecho
+
+Etapa 1, ejecutada el 12 de octubre de 2026 sin generar datos ni entrenar nada:
+
+- **`fault_expressed`** con definición operacional por contrafactual
+  (`methodology/expresion-efectiva-del-fallo.md`). Lo que mide: en calentamiento, **32 de 45**
+  ventanas etiquetadas con el termostato no contienen ninguna señal observable del fallo, y el fallo
+  de encendido **no expresa por completo ninguna** de sus 45.
+- **Manifiesto de procedencia por sesión**, con la prueba de que la sesión se regenera desde su ficha.
+- **Tres particiones internas** de entrenamiento —ajuste, desarrollo y calibración—, viables en los
+  cuatro puntos de volumen y con las cinco semillas.
+- **Cinco semillas pre-registradas** (`configs/semillas_pi1.json`), con la dependencia entre
+  réplicas declarada: comparten las mismas sesiones de evaluación.
+- **Doce comprobaciones del generador**, con fallo cerrado.
+- **Los siete ejecutores escriben con etiqueta** y se niegan a sobrescribir; **144 artefactos
+  históricos** censados por huella, porque `tables/`, `figures/`, `data/` y `models/` están fuera del
+  control de versiones.
 
 ---
 
@@ -393,3 +434,6 @@ informe en `docs/experiments/`. No se avanza de fase sin aprobación explícita.
 ## 8. Estado
 
 E1 cerrada el 1 de septiembre de 2026. E2 pendiente de aprobación.
+
+> Esto es el estado **del plan original**, de septiembre. El estado vigente está arriba, en «Estado
+> a día de hoy» y en «El trabajo que queda, en dos bloques».
