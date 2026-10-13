@@ -731,3 +731,54 @@ def test_los_ejemplos_de_ajuste_declaran_su_particion() -> None:
     d = _json.loads(registro.read_text("utf-8"))
     assert d["examples_partition"] == "train"
     assert "ninguna sesión" in d["contamination_check"]
+
+
+# ------------------------------------- la congelacion del adaptador ata los datos
+
+
+def _finetune(*args: str, capsys) -> tuple[int, str]:
+    from mecanico_ia_exp.cli import main
+
+    codigo = main(["finetune-slm", *args])
+    return codigo, capsys.readouterr().out
+
+
+def test_ajustar_con_otros_datos_se_niega(capsys) -> None:
+    """Comprobar las huellas y después ajustar con otro directorio produciría un
+    adaptador que no es el congelado con apariencia de serlo."""
+    codigo, salida = _finetune("--adapter-dir", "slm_lora_v3", "--epochs", "4", capsys=capsys)
+    assert codigo == 1
+    assert "No se ajusta nada" in salida
+    assert "otros datos" in salida
+
+
+def test_ajustar_con_otro_numero_de_epocas_se_niega(capsys) -> None:
+    """El criterio de parada es parte del experimento congelado."""
+    codigo, salida = _finetune(
+        "--datos",
+        "sin_contaminacion",
+        "--adapter-dir",
+        "slm_lora_v3",
+        "--epochs",
+        "1",
+        capsys=capsys,
+    )
+    assert codigo == 1
+    assert "congela 4 épocas" in salida
+
+
+def test_no_se_sobrescribe_un_adaptador_existente(capsys) -> None:
+    codigo, salida = _finetune("--adapter-dir", "slm_lora_v2", capsys=capsys)
+    assert codigo == 1
+    assert "no se sobrescribe" in salida
+
+
+def test_la_congelacion_declara_lo_que_el_codigo_comprueba() -> None:
+    """Una promesa escrita y no implementada es peor que no escribirla."""
+    congelacion = json.loads((paths.CONFIGS / "congelacion-adaptador-v3.json").read_text("utf-8"))
+    assert congelacion["datos_de_ajuste"]["huellas_sha256_16"]
+    assert congelacion["hiperparametros"]["epochs"]
+    assert "preparados" in congelacion["datos_de_ajuste"]["ficheros"]
+    fuente = (paths.ROOT / "src" / "mecanico_ia_exp" / "cli.py").read_text("utf-8")
+    for pieza in ("huellas_sha256_16", "hiperparametros", "directorio_congelado"):
+        assert pieza in fuente, f"la congelación declara «{pieza}» y el código no lo comprueba"

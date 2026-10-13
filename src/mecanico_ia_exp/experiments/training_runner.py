@@ -177,21 +177,27 @@ def run_training_data(
     semilla = 0
 
     for fault_id, caso in sorted(por_fallo.items()):
-        # Las ventanas se reparten **entre sesiones**, no se toman las primeras.
-        # Tomar las primeras concentraba los doce ejemplos de cada condición en
-        # una o dos sesiones, lo que produce ejemplos casi duplicados --ventanas
-        # consecutivas comparten la mitad de sus muestras-- y deja el reparto
-        # interno del ajuste sin sesiones que separar.
         candidatas = np.flatnonzero((validacion.y == fault_id) & aciertos)
-        por_sesion: dict[str, list[int]] = {}
-        for i in candidatas:
-            por_sesion.setdefault(str(validacion.meta.iloc[i]["session_id"]), []).append(int(i))
-        indices_ordenados: list[int] = []
-        for k in range(max((len(v) for v in por_sesion.values()), default=0)):
-            for sesion in sorted(por_sesion):
-                if k < len(por_sesion[sesion]):
-                    indices_ordenados.append(por_sesion[sesion][k])
-        indices = np.array(indices_ordenados[:ventanas_por_condicion], dtype=int)
+        if particion_de_ejemplos == "validation":
+            # Selección HISTÓRICA, intacta: las primeras ventanas. Este modo
+            # existe para reproducir el conjunto de `slm_lora_v2`, de modo que
+            # mejorarlo lo rompería.
+            indices = candidatas[:ventanas_por_condicion]
+        else:
+            # Las ventanas se reparten **entre sesiones**, no se toman las
+            # primeras: tomar las primeras concentraba los ejemplos de cada
+            # condición en una o dos sesiones, lo que produce ejemplos casi
+            # duplicados --ventanas consecutivas comparten la mitad de sus
+            # muestras-- y deja el reparto interno sin sesiones que separar.
+            por_sesion: dict[str, list[int]] = {}
+            for i in candidatas:
+                por_sesion.setdefault(str(validacion.meta.iloc[i]["session_id"]), []).append(int(i))
+            ordenados: list[int] = []
+            for k in range(max((len(v) for v in por_sesion.values()), default=0)):
+                for sesion in sorted(por_sesion):
+                    if k < len(por_sesion[sesion]):
+                        ordenados.append(por_sesion[sesion][k])
+            indices = np.array(ordenados[:ventanas_por_condicion], dtype=int)
         if indices.size == 0:
             continue
         codigos = DIAGNOSTICO_A_DTC.get(fault_id, ())
@@ -318,8 +324,9 @@ def run_training_data(
     # Las variantes de corpus de una misma ventana comparten `case_id` y la
     # ventana comparte sesión, así que agrupar por sesión las mantiene juntas.
     casos = sorted({e.case_id for e in ejemplos})
+    limpio = particion_de_ejemplos == "train"
 
-    if particion_de_ejemplos == "validation":
+    if not limpio:
         # Reparto HISTÓRICO, por ventana. Se conserva por el mismo motivo que la
         # selección: este modo existe para reproducir el conjunto de
         # `slm_lora_v2`, y mejorarlo lo rompería.
@@ -387,12 +394,16 @@ def run_training_data(
             "experiment_id": "E13b_training_data",
             "n_examples": len(ejemplos),
             "n_cases": len(casos),
-            "split_by": "source_session",
+            "split_by": "source_session" if limpio else "source_window",
+            "window_selection": "across_sessions" if limpio else "first_n",
             "split_unit_note": (
                 "por SESIÓN y estratificado por condición: dos ventanas consecutivas "
                 "comparten la mitad de sus muestras, de modo que repartir por ventana dejaba "
                 "que la pérdida de validación del ajuste midiera sobre datos vistos; y cortar "
                 "por orden dejaba la validación interna con una sola condición"
+                if limpio
+                else "por VENTANA, el reparto histórico: se conserva para poder reproducir el "
+                "conjunto de slm_lora_v2, y deja ventanas de la misma sesión a los dos lados"
             ),
             "split_seed": 20260901,
             "distribution": reparto,
