@@ -215,3 +215,27 @@ def test_la_sonda_de_equivalencia_esta_congelada_y_tiene_las_seis_medidas() -> N
     assert len(topan) == 3, "la sonda tiene que incluir el caso peor de memoria"
     assert all("perdida" in m for m in datos["medidas"])
     assert datos["hardware"]["acelerador"] in {"mps", "cuda", "cpu"}
+
+
+def test_la_congelacion_prohibe_compararlo_con_la_evaluacion_original() -> None:
+    """El encargo lo exige, y es la salvedad que más acota lo que se podrá decir.
+
+    Cinco variables cambian a la vez respecto de E13 y E15: las ventanas, las
+    condiciones de corpus, el conjunto de datos, el generador y el modelo de
+    diagnóstico. Una cifra de este conjunto puesta al lado del «17/17» publicado
+    compararía cosas distintas, y la congelación lo declara prohibido **antes**
+    de que exista la cifra.
+    """
+    cfg = _congelacion()
+    prohibicion = cfg["NO_ES_EQUIVALENTE_A_LA_EVALUACION_ORIGINAL"]
+    assert "PARTIAL" in prohibicion["condiciones_que_faltan"]
+    assert "DISTRACTOR" in prohibicion["condiciones_que_faltan"]
+    assert "PI.3" in prohibicion["consecuencia"]
+    assert "PI.4" in prohibicion["consecuencia"]
+    # Y la distribución, para que nadie la suponga equilibrada en todo.
+    distribucion = cfg["distribucion_de_condiciones"]
+    assert distribucion["condiciones_de_corpus"] == 2
+    assert distribucion["regimenes"]["warmup"] == 0, (
+        "no hay ventanas de calentamiento, y es donde el termostato no se expresa"
+    )
+    assert sum(distribucion["regimenes"].values()) == len(cfg["ventanas"])

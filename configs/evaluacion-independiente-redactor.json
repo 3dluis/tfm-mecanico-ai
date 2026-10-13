@@ -352,5 +352,28 @@
       "F05_misfire__warmup__11"
     ]
   },
-  "limite_de_la_verificacion_en_un_clon": "la regla se puede comprobar contra las entradas registradas aqui, en cualquier clon. Lo que NO se puede comprobar en un clon es que esas entradas correspondan a synthetic_v3, porque ese conjunto no es reconstruible: es pre-calibracion (configs/datos_no_reconstruibles.json). Esa comprobacion lleva el marcador «artefactos» y solo se ejecuta donde estan los ficheros procesados"
+  "limite_de_la_verificacion_en_un_clon": "la regla se puede comprobar contra las entradas registradas aqui, en cualquier clon. Lo que NO se puede comprobar en un clon es que esas entradas correspondan a synthetic_v3, porque ese conjunto no es reconstruible: es pre-calibracion (configs/datos_no_reconstruibles.json). Esa comprobacion lleva el marcador «artefactos» y solo se ejecuta donde estan los ficheros procesados",
+  "NO_ES_EQUIVALENTE_A_LA_EVALUACION_ORIGINAL": {
+    "por_que": "cinco variables cambian a la vez respecto de E15/E13: otras ventanas, otras condiciones de corpus (2 frente a 5), otro conjunto de datos, otro generador (v3 es pre-calibracion) y otro modelo de diagnostico (ajustado sobre train de v3)",
+    "que_PROHIBE_afirmar": "cualquier comparacion de sus cifras con el 17/17 de E13 o el 15/17 de E15",
+    "que_SI_permite": "la comparacion emparejada entre slm_lora_v2 y el adaptador nuevo sobre estas mismas 15 ventanas, que los dos ven por primera vez",
+    "condiciones_que_faltan": [
+      "PARTIAL",
+      "DISTRACTOR",
+      "DISTRACTOR_NO_FILTER"
+    ],
+    "consecuencia": "no sostiene nada sobre PI.3 ni PI.4",
+    "regimen_ausente": "calentamiento: no hay ninguna ventana, y es donde el termostato no se expresa"
+  },
+  "distribucion_de_condiciones": {
+    "clases": "las cinco, tres ventanas cada una",
+    "regimenes": {
+      "highway": 6,
+      "urban": 6,
+      "idle": 3,
+      "warmup": 0
+    },
+    "condiciones_de_corpus": 2,
+    "casos": 30
+  }
 }
