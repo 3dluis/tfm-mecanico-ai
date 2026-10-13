@@ -51,6 +51,7 @@ ENTREGADOS: tuple[str, ...] = (
     "02_comparacion_modelos.ipynb",
     "03_analisis_e19.ipynb",
     "04_explicabilidad.ipynb",
+    "05_suficiencia_y_abstencion.ipynb",
 )
 
 #: Secciones que todo notebook entregado tiene que llevar. No se exige la

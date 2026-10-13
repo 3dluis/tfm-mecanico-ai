@@ -165,20 +165,16 @@ columnas = [
 nucleo = e15[e15.case_id_gold.isin(["C05_vacuum_leak", "C06_vacuum_leak_evidencia_retirada"])]
 print(nucleo[columnas].to_string(index=False))"""),
     md("""\
-### Qué muestra
-
-Dos ejecuciones sobre **la misma ventana de telemetría**, con la misma confianza calibrada —0,908— y
+**Qué muestra.** Dos ejecuciones sobre **la misma ventana de telemetría**, con la misma confianza calibrada —0,908— y
 decisiones opuestas. En la primera hay documentos aplicables y la cobertura es 1,00; en la segunda,
 con la evidencia retirada del índice, no queda ninguno y la cobertura es 0,00.
 
-### Qué podemos interpretar
 
-Que la decisión **cambió porque cambió la evidencia**, no porque cambiara el vehículo ni la certeza
+**Qué podemos interpretar.** Que la decisión **cambió porque cambió la evidencia**, no porque cambiara el vehículo ni la certeza
 del modelo. Es la hipótesis de PI.3 reducida a su mínima expresión, y se cumple.
 
-### Qué no podemos afirmar
 
-Que esto demuestre un comportamiento general. Son dos ejecuciones sobre una ventana. Y hay algo más
+**Qué no podemos afirmar.** Que esto demuestre un comportamiento general. Son dos ejecuciones sobre una ventana. Y hay algo más
 débil de lo que parece: la abstención de la segunda fila está **determinada por la construcción de
 la condición** —se retiraron del índice todos los fragmentos con los códigos del fallo, así que no
 quedaba nada que juzgar—. No pone a prueba el criterio de soporte; solo comprueba que el sistema no
@@ -258,24 +254,20 @@ ejes[1].legend(
 )
 soporte.exportar(fig, "FIG-N05-01_aplicables_vs_cobertura", subdirectorio="05_suficiencia")"""),
     md("""\
-### Qué muestra la figura
-
-A la izquierda, cuántos fragmentos **aplicables** —vehículo correcto, código correcto— llegan al
+**Qué muestra.** A la izquierda, cuántos fragmentos **aplicables** —vehículo correcto, código correcto— llegan al
 verificador en cada condición. A la derecha, qué fracción de las afirmaciones construidas queda
 **sostenida** por ellos. El color es la decisión.
 
 Lo que salta a la vista es que las dos columnas no se parecen. En la condición parcial hay
 fragmentos aplicables —entre cuatro y siete— y la cobertura es **cero** en todos los casos.
 
-### Qué podemos interpretar
 
-Que **tener documentación aplicable delante no equivale a tener soporte**. Las dos magnitudes se
+**Qué podemos interpretar.** Que **tener documentación aplicable delante no equivale a tener soporte**. Las dos magnitudes se
 separan exactamente en la condición que el diseño construyó para separarlas, y la decisión sigue a
 la cobertura y no al recuento de documentos.
 
-### Qué no podemos afirmar
 
-Que la cobertura sea un buen estimador de nada fuera de estos casos. Y hay un límite más serio: que
+**Qué no podemos afirmar.** Que la cobertura sea un buen estimador de nada fuera de estos casos. Y hay un límite más serio: que
 las comprobaciones deterministas de soporte coincidan con lo que un fragmento sostiene **de verdad**
 no se ha medido. Haría falta anotar, caso a caso, qué afirmaciones son admisibles y qué evidencia es
 mínima exigible, y el conjunto anotado no tiene esa anotación. Lo que está comprobado es que ninguna
@@ -316,16 +308,13 @@ for clave, tabla in ablaciones.items():
     filas.append({"ablación": clave, "qué cambia": nombres[clave], **tasas(tabla)})
 print(pd.DataFrame(filas).to_string(index=False))"""),
     md("""\
-### Qué muestra
-
-`A4`, que deja solo la puerta de confianza, explica **las nueve ejecuciones que debían terminar en
+**Qué muestra.** `A4`, que deja solo la puerta de confianza, explica **las nueve ejecuciones que debían terminar en
 abstención**, incluidas las tres en que la recuperación no devuelve ningún fragmento. `A3`, que
 exige que exista algún fragmento aplicable pero no que lo sostenga, baja a seis de nueve. `A1`, que
 sustituye la atribución por un criterio estadístico simple, no cambia ninguna decisión.
 
-### Qué podemos interpretar
 
-Lo que estas dos ablaciones muestran se enuncia mejor al revés de como suele pensarse un sistema de
+**Qué podemos interpretar.** Lo que estas dos ablaciones muestran se enuncia mejor al revés de como suele pensarse un sistema de
 diagnóstico: **una confianza diagnóstica alta no basta para sostener una explicación si la evidencia
 documental no la sostiene**. La confianza del modelo mide cuán seguro está de su diagnóstico y no
 sabe nada de si el manual lo documenta.
@@ -335,9 +324,8 @@ sea prescindible: significa que **no interviene en la política de abstención**
 en otro plano —la trazabilidad, nombrar qué señal y en qué ventana sostiene cada afirmación—, y esa
 dimensión no se ha evaluado aquí.
 
-### Qué no podemos afirmar
 
-Nada sobre la separación entre decidir y redactar, que no se ablaciona. Y nada que no esté
+**Qué no podemos afirmar.** Nada sobre la separación entre decidir y redactar, que no se ablaciona. Y nada que no esté
 condicionado por que **las cuatro se miden sobre el conjunto con el que el criterio se ajustó**.
 `A2` quedó además **inconclusa**: la ruta léxica no recuperó nada en ningún caso, pero la causa no
 es la ablación sino la consulta —una búsqueda de texto completo con treinta palabras unidas por
@@ -376,15 +364,12 @@ print(f"decisiones correctas: {int(p1.correct.sum())} de {len(p1)}")
 print(f"motivos registrados:  {sorted(set(p1.reasons.dropna()))}")
 print(f"confianzas:           {sorted(set(p1.confidence.round(3)))}  (umbral 0,79)")"""),
     md("""\
-### Qué muestra
-
-Seis abstenciones de seis. Y el dato que decide la lectura: el motivo registrado en las seis es
+**Qué muestra.** Seis abstenciones de seis. Y el dato que decide la lectura: el motivo registrado en las seis es
 `LOW_CLAIM_COVERAGE` —la evidencia no sostiene ninguna afirmación— y **ninguna** es
 `LOW_MODEL_CONFIDENCE`. Las confianzas son 0,908 y 1,000, **por encima** del umbral de 0,79.
 
-### Qué podemos interpretar
 
-Que la puerta de confianza **no intervino**: el rechazo lo hizo la verificación de soporte. Era la
+**Qué podemos interpretar.** Que la puerta de confianza **no intervino**: el rechazo lo hizo la verificación de soporte. Era la
 condición que el protocolo fijó de antemano para que el resultado apoyara PI.4, y se cumple en su
 forma fuerte.
 
@@ -394,9 +379,8 @@ el código del fallo—. De los documentos aplicables, uno de cinco, tres de sie
 distractores. **Las dos primeras líneas de defensa no actúan**, y lo que rechaza es que el fragmento
 no habla de la señal observada con el vocabulario del manual.
 
-### Qué no podemos afirmar
 
-Que exista una tasa de rechazo. Son **tres** situaciones construidas por el autor, con `n = 3`, en
+**Qué no podemos afirmar.** Que exista una tasa de rechazo. Son **tres** situaciones construidas por el autor, con `n = 3`, en
 un vehículo, sobre un corpus. Describen tres situaciones y no estiman ninguna probabilidad. Tampoco
 que el espacio de distractores alcanzables esté cubierto: para la sonda lambda solo se encontró
 **uno**, y así se declaró."""),
@@ -450,22 +434,18 @@ for suf_nombre, ag_nombre, etiqueta in pares:
     for caso in alteradas:
         print(f"    {caso}")"""),
     md("""\
-### Qué muestra
-
-Tres de las diecisiete salidas de la configuración canónica —la que sostiene el «17/17 válidas ·
+**Qué muestra.** Tres de las diecisiete salidas de la configuración canónica —la que sostiene el «17/17 válidas ·
 17/17 respeta el veredicto · 0 citas inventadas» publicado— contienen un número que el verificador
 no produjo. El modelo base, sin adaptador, no presenta ninguna.
 
-### Qué podemos interpretar
 
-Que una salida puede ser **trazable en sus citas y falsa en sus cifras**. Las barreras comprueban
+**Qué podemos interpretar.** Que una salida puede ser **trazable en sus citas y falsa en sus cifras**. Las barreras comprueban
 que el identificador citado se entregara; **ninguna comprueba que el número dicho sea cierto**. Es
 un hueco en la trazabilidad —PI.2— que no estaba declarado, y afecta justamente a la parte del texto
 que un lector usaría para juzgar la decisión.
 
-### Qué no podemos afirmar
 
-Que el ajuste empeore la fidelidad numérica. Cero de diecisiete frente a tres de diecisiete es
+**Qué no podemos afirmar.** Que el ajuste empeore la fidelidad numérica. Cero de diecisiete frente a tres de diecisiete es
 sugerente y con diecisiete casos es compatible con el azar del muestreo. Tampoco se corrige el
 recorrido: añadir una barrera ahora sería cambiar el sistema a la vista del resultado. Queda
 declarado como limitación `L-26`, con un guion —`scripts/auditar_cifras_redactadas.py`— para que
@@ -536,7 +516,7 @@ print()
 for clave, valor in soporte.entorno().items():
     print(f"  {clave}: {valor}")"""),
     md("""\
-## 15. Conclusión de este notebook
+## 15. Conclusiones
 
 La decisión de explicar o abstenerse **depende de la evidencia** y es auditable sin que intervenga un
 generador de texto. Retirar o degradar la evidencia cambia la decisión; tener documentación
