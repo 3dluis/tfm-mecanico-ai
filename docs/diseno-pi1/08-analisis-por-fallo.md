@@ -111,11 +111,17 @@ sentido de inventadas. Proceden de un análisis que el informe de E6 documenta, 
 | Detectadas | 9 | 70,7 °C | 68,6 – 71,1 |
 | No detectadas | 5 | 54,3 °C | 42,8 – 64,9 |
 
-y con un desglose que no había tenido en cuenta y que importa mucho: **por régimen, urbano 7 de 7 y
+y con un desglose que no había tenido en cuenta y que importa: **por régimen, urbano 7 de 7 y
 calentamiento 2 de 7**. Es decir que el análisis por ventana **se hizo** en su momento y localizó los
-cinco errores en el calentamiento; lo que no se persistió fue el artefacto intermedio. Las cinco
-ventanas no detectadas son las cinco de calentamiento que el conjunto tiene por debajo del techo, y eso
-corrobora la hipótesis desde un análisis anterior e independiente.
+cinco errores en el régimen de calentamiento; lo que no se persistió fue el artefacto intermedio.
+
+**Hasta dónde llega eso, y hasta dónde no.** Lo que establece es que los cinco errores están en
+calentamiento, y por separado se ha medido que cinco de las siete ventanas de termostato de calentamiento
+tienen el máximo por debajo de 70 °C. Los dos conjuntos tienen el mismo tamaño dentro de las mismas siete
+ventanas, y los rangos publicados son disjuntos —68,6 a 71,1 °C las detectadas, 42,8 a 64,9 las no
+detectadas—, lo que es **muy compatible** con que sean las mismas cinco. Pero no lo demuestra: podrían
+solaparse en cuatro y diferir en una. La identificación una a una **sigue pendiente** del cruce por
+ventana que el paso 1 registra, y hasta entonces se describe como compatible, no como corroborada.
 
 Lo que hay que hacer, por tanto, es una **reejecución de E6 sobre `synthetic_v2`** —su semilla, su
 configuración— registrando esta vez las predicciones por ventana, y recalcular **el mismo estadístico**:
