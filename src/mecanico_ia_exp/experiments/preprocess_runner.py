@@ -156,8 +156,10 @@ def run_preprocess(dataset_id: str = DATASET, *, etiqueta: str = "") -> int:
             # informa la auditoría entera sin bloquear, igual que con los tres
             # conjuntos congelados, porque es exactamente lo que es: uno de
             # ellos, reconstruido.
-            print(f"\nAuditoría del generador ({manifiesto_de_procedencia.name}, "
-                  "esquema histórico, informativa):")
+            print(
+                f"\nAuditoría del generador ({manifiesto_de_procedencia.name}, "
+                "esquema histórico, informativa):"
+            )
             for comprobacion in auditar(datos, manifiesto):
                 print(f"  {comprobacion}")
         else:

@@ -367,3 +367,49 @@ def test_un_conjunto_nuevo_sin_manifiesto_no_se_preprocesa(tmp_path, monkeypatch
     salida = capsys.readouterr().out
     assert "no trae manifiesto de procedencia" in salida
     assert "No se guarda nada" in salida
+
+
+def test_el_manifiesto_declara_con_que_esquema_se_genero() -> None:
+    """Sin esto, el preprocesado no puede distinguir «no trae expresión porque es
+    un conjunto congelado reconstruido» de «no la trae porque se generó mal»."""
+    specs = [
+        SessionSpec(
+            session_id=f"F00_normal__urban__{k:02d}",
+            regime="urban",
+            duration_s=120.0,
+            seed=11 + k,
+            fault_id="F00_normal",
+        )
+        for k in range(2)
+    ]
+    for con_expresion, esperado in ((True, "vigente"), (False, "historico")):
+        datos, _ = generate_dataset(
+            specs, dataset_id="esquema", seed=1, con_expresion=con_expresion
+        )
+        manifiesto = construir(
+            specs, datos, dataset_id="esquema", seed=1, con_expresion=con_expresion
+        )
+        assert manifiesto["expression"]["esquema"] == esperado
+
+
+def test_el_esquema_historico_no_altera_las_senales() -> None:
+    """Omitir las columnas no puede cambiar ni un valor: si lo hiciera, el
+    conjunto reconstruido no sería el congelado."""
+    import numpy as np
+
+    from mecanico_ia_exp.obd.signals import SIGNAL_NAMES
+
+    spec = SessionSpec(
+        session_id="s",
+        regime="warmup",
+        duration_s=180.0,
+        seed=77,
+        fault_id="F03_thermostat_stuck",
+        fault_onset_s=36.0,
+    )
+    from mecanico_ia_exp.obd.synthetic import generate_session
+
+    con = generate_session(spec)
+    sin = generate_session(spec, con_expresion=False)
+    assert np.array_equal(con[list(SIGNAL_NAMES)].to_numpy(), sin[list(SIGNAL_NAMES)].to_numpy())
+    assert not any(c in sin.columns for c in COLUMNAS_DE_EXPRESION)
