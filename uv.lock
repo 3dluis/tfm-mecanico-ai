@@ -1336,7 +1336,9 @@ embeddings = [
 finetune = [
     { name = "accelerate" },
     { name = "datasets" },
+    { name = "huggingface-hub" },
     { name = "peft" },
+    { name = "transformers" },
 ]
 llm = [
     { name = "tenacity" },
@@ -1369,6 +1371,7 @@ requires-dist = [
     { name = "alembic", specifier = ">=1.13" },
     { name = "datasets", marker = "extra == 'finetune'", specifier = ">=3.0" },
     { name = "httpx", specifier = ">=0.27" },
+    { name = "huggingface-hub", marker = "extra == 'finetune'", specifier = ">=0.25" },
     { name = "ipykernel", marker = "extra == 'nb'", specifier = ">=6.29" },
     { name = "jupyterlab", marker = "extra == 'nb'", specifier = ">=4.2" },
     { name = "matplotlib", marker = "extra == 'nb'", specifier = ">=3.9" },
@@ -1390,6 +1393,7 @@ requires-dist = [
     { name = "sqlalchemy", specifier = ">=2.0" },
     { name = "tenacity", marker = "extra == 'llm'", specifier = ">=8.3" },
     { name = "torch", marker = "extra == 'ml'", specifier = ">=2.3" },
+    { name = "transformers", marker = "extra == 'finetune'", specifier = ">=4.44" },
 ]
 provides-extras = ["ml", "nb", "llm", "embeddings", "finetune"]
 

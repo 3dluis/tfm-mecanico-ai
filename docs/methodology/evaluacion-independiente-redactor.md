@@ -3,7 +3,7 @@
 **Fecha:** 13 de octubre de 2026 · **Qué fija:** las quince ventanas sobre las que se medirá al
 redactor, congeladas **antes de que exista el adaptador que se va a medir** ·
 **Congelación:** `configs/evaluacion-independiente-redactor.json`, huella de la selección
-`9c114d92ef7d3ff1` · **Comprobable:** `tests/test_evaluacion_independiente.py`, cinco pruebas
+`9c114d92ef7d3ff1` · **Comprobable:** `tests/test_evaluacion_independiente.py`, nueve pruebas, seis de ellas en cualquier clon
 
 ## 1. Por qué hace falta, y por qué no basta con «otras ventanas»
 
@@ -72,10 +72,21 @@ primera vez. Eso es lo que hace la comparación emparejada justa.
 > activo**.
 
 Quince ventanas, quince sesiones distintas, una por sesión para que no solapen muestras entre sí.
-La regla es determinista, no mira ninguna predicción, confianza ni veredicto, y
-`tests/test_evaluacion_independiente.py` la vuelve a aplicar y comprueba que reproduce la huella
-congelada. Si el reparto cambiara, la prueba falla y avisa en lugar de dejar pasar un conjunto
-distinto con el mismo nombre.
+La regla es determinista y no mira ninguna predicción, confianza ni veredicto.
+
+**Dónde se puede comprobar qué, que es una distinción que la validación en un clon limpio obligó a
+hacer.** Las entradas de la regla —las 43 ventanas que vio el adaptador, las 5 de la evaluación de
+E15, las 48 sesiones de ajuste de `synthetic_v2`— están **registradas en la congelación**, porque
+salen de `data/processed`, que no se versiona. Con ellas, seis de las nueve pruebas verifican la
+selección y su exclusión en cualquier clon, sin un solo fichero no distribuido. Las otras tres
+llevan el marcador `artefactos` y solo corren donde están los ficheros procesados: comprueban que
+las entradas registradas siguen coincidiendo con ellos y que la regla, aplicada sobre
+`synthetic_v3`, reproduce la huella.
+
+**Y esa última comprobación tiene un límite que hay que declarar:** `synthetic_v3` **no es
+reconstruible** —es pre-calibración (L-25)—, de modo que un tercero no puede rehacer la selección
+desde el conjunto. Puede verificar la regla contra las entradas registradas, que es menos, y es lo
+que hay.
 
 | Clase | Ventanas |
 |---|---|

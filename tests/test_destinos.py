@@ -796,7 +796,7 @@ def test_cada_prueba_cae_en_una_sola_categoria() -> None:
     """
     import subprocess
 
-    marcadores = ("conjunto", "notebook", "db", "llm", "slow")
+    marcadores = ("conjunto", "notebook", "db", "llm", "slow", "artefactos")
     sin = " and ".join(f"not {m}" for m in marcadores)
 
     def cuenta(expresion: str) -> int:
@@ -815,7 +815,7 @@ def test_cada_prueba_cae_en_una_sola_categoria() -> None:
 
     inmediatas = cuenta(sin)
     preparacion = cuenta("conjunto or notebook")
-    externas = cuenta("db or llm or slow")
+    externas = cuenta("db or llm or slow or artefactos")
     todas = cuenta("")
     assert inmediatas + preparacion + externas == todas, (
         f"{todas - inmediatas - preparacion - externas} prueba(s) en más de una categoría o "

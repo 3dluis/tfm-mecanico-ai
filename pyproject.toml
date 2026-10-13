@@ -64,6 +64,13 @@ finetune = [
     "peft>=0.13",
     "accelerate>=1.0",
     "datasets>=3.0",
+    # Se importan directamente en `llm/provider.py`, `llm/finetune.py` y
+    # `experiments/congelacion.py`. Hasta el 13-10-2026 llegaban solo como
+    # dependencia transitiva de `sentence-transformers`: instalar este extra sin
+    # aquel dejaba el ajuste sin transformers, y el gate de calidad fallaba en un
+    # clon limpio con seis errores de importación. Se declaran donde se usan.
+    "transformers>=4.44",
+    "huggingface-hub>=0.25",
 ]
 
 [dependency-groups]
@@ -120,4 +127,5 @@ markers = [
     "slow: ejecución larga (entrenamiento, corpus completo)",
     "notebook: ejecuta un notebook entero desde un kernel limpio (minutos)",
     "conjunto: necesita synthetic_v2 preprocesado; se reconstruye con scripts/reconstruir_datos.sh",
+    "artefactos: necesita artefactos intermedios que NO se distribuyen y NO son reconstruibles (synthetic_v3, que es pre-calibracion, o los ejemplos de ajuste del redactor, que exigen el indice documental)",
 ]

@@ -22,12 +22,29 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CONJUNTO="${1:-synthetic_v2}"
+
+# `synthetic_v3` NO se reconstruye, y el guion se niega en lugar de producir un
+# conjunto distinto con el mismo nombre. Es PRE-CALIBRACIÓN: se generó el 1 de
+# septiembre a las 14:58 locales y la calibración del generador contra el manual
+# es de las 15:46 del mismo día. Medido el 13-10-2026 al validar un clon limpio:
+# cero de 216 sesiones idénticas, diferencia máxima en rpm de 1 983. El ventanado
+# y el reparto sí reproducen —dependen de identificadores e instantes, no de
+# valores—, lo que hace el fallo peor: `meta.parquet` coincide y las pruebas
+# parecerían pasar midiendo otras señales.
+# Está en `configs/datos_no_reconstruibles.json`, y el riesgo 16 de
+# `docs/diseno-pi1/11-riesgos-metodologicos.md` ya decía que v3 no se regenera.
+if [ "${CONJUNTO}" = "synthetic_v3" ]; then
+  echo "synthetic_v3 NO se reconstruye: es pre-calibración." >&2
+  echo "El generador publicado produce otras señales; ver configs/datos_no_reconstruibles.json" >&2
+  echo "Las pruebas que lo necesitan están declaradas como de recursos no distribuidos." >&2
+  exit 2
+fi
+
 # Cada conjunto tiene su número de sesiones por condición, y equivocarlo produce
 # otro conjunto con el mismo nombre. Se deduce del nombre salvo que se indique.
 case "${CONJUNTO}" in
   synthetic_v1) POR_DEFECTO=6 ;;
   synthetic_v2) POR_DEFECTO=12 ;;
-  synthetic_v3) POR_DEFECTO=36 ;;
   *)            POR_DEFECTO=12 ;;
 esac
 SESIONES_POR_FALLO="${2:-${POR_DEFECTO}}"
