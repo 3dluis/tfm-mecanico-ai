@@ -6,8 +6,14 @@ ventanas sueltas de una misma sesión entre entrenamiento y test filtraría
 información de un lado a otro, y la evaluación mediría memoria en lugar de
 capacidad de generalizar.
 
-Cada muestra lleva anotado si el fallo estaba activo en ese instante. Esa es la
-verdad de referencia contra la que se contrasta después todo lo demás.
+Cada muestra lleva anotado si el fallo estaba activo en ese instante y, por
+separado, si **alteró la trayectoria**. Las dos cosas no coinciden: hay
+condiciones que se aplican sin cambiar nada --el termostato por debajo de su tope,
+el encendido fuera de un episodio-- y confundirlas haría pasar por manifestación
+del fallo una muestra idéntica a la de un motor sano. El criterio está en
+``obd/expresion.py``.
+
+Esa es la verdad de referencia contra la que se contrasta después todo lo demás.
 """
 
 from __future__ import annotations
@@ -19,11 +25,20 @@ import pandas as pd
 
 from mecanico_ia_exp.data.metadata import DatasetMetadata
 from mecanico_ia_exp.obd.engine import SignalEngine
+from mecanico_ia_exp.obd.expresion import (
+    RATIO_DECLARADO,
+    SIN_ALTERACION,
+    desviacion,
+    tolerancias,
+)
 from mecanico_ia_exp.obd.faults import FAULTS, NORMAL_ID, FaultRuntime
 from mecanico_ia_exp.obd.regimes import REGIMES
 from mecanico_ia_exp.obd.signals import METADATA_COLUMNS, SIGNAL_NAMES, SIGNALS_BY_NAME
 
 GENERATOR_VERSION = "1.0.0"
+"""Constante escrita a mano. **No identifica el fenómeno generado:** fue la misma
+para ``synthetic_v2`` y ``synthetic_v3``, que salen de generadores distintos. La
+identidad real son las huellas de los módulos, que escribe ``obd/procedencia.py``."""
 
 
 @dataclass(frozen=True)
@@ -71,8 +86,21 @@ def _clip_to_physical_range(values: dict[str, float]) -> dict[str, float]:
     return recortado
 
 
-def generate_session(spec: SessionSpec) -> pd.DataFrame:
-    """Genera una sesión completa como serie temporal."""
+def generate_session(
+    spec: SessionSpec, *, ratio_expresion: float = RATIO_DECLARADO
+) -> pd.DataFrame:
+    """Genera una sesión completa como serie temporal.
+
+    Cada muestra se compara con **su propio contrafactual**: el valor que el
+    motor habría dado en ese mismo instante, con el mismo estado y la misma
+    semilla, si la función de fallo no se hubiera aplicado. Eso es posible
+    porque ``tick`` devuelve una copia y el estado del motor avanza al margen
+    del fallo, así que la trayectoria sana no hay que simularla aparte: es el
+    valor que la función recibe.
+
+    La comparación se hace **tras el recorte a rango físico**, porque es el
+    valor que llega al modelo.
+    """
     motor = SignalEngine(
         regime=spec.regime,
         seed=spec.seed,
@@ -84,6 +112,7 @@ def generate_session(spec: SessionSpec) -> pd.DataFrame:
     params: dict[str, float] = {}
     if fallo is not None:
         params = {**fallo.default_params, **dict(spec.fault_params)}
+    umbrales = tolerancias(ratio_expresion)
 
     dt = 1.0 / spec.sample_rate_hz
     n = int(spec.duration_s * spec.sample_rate_hz)
@@ -91,12 +120,19 @@ def generate_session(spec: SessionSpec) -> pd.DataFrame:
 
     for i in range(n):
         t = i * dt
-        valores = motor.tick()
+        contrafactual = motor.tick()
         activo = fallo is not None and t >= spec.fault_onset_s
         if activo and fallo is not None:
             runtime.elapsed_s = t - spec.fault_onset_s
-            valores = fallo.apply(valores, params, runtime)
+            valores = fallo.apply(dict(contrafactual), params, runtime)
+        else:
+            valores = contrafactual
         valores = _clip_to_physical_range(valores)
+
+        if activo:
+            magnitud, señal = desviacion(valores, _clip_to_physical_range(contrafactual), umbrales)
+        else:
+            magnitud, señal = 0.0, SIN_ALTERACION
 
         fila: dict[str, float | str | bool] = {
             "timestamp": t,
@@ -104,6 +140,9 @@ def generate_session(spec: SessionSpec) -> pd.DataFrame:
             "regime": spec.regime,
             "fault_id": spec.fault_id,
             "fault_active": activo,
+            "fault_expressed": magnitud >= 1.0,
+            "fault_deviation_max": magnitud,
+            "fault_deviation_signal": señal,
         }
         fila.update(valores)
         filas.append(fila)

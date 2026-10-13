@@ -56,6 +56,17 @@ De las 14 ventanas de F03, acierta 9. Los cinco errores no están repartidos:
 
 Por régimen: urbano **7/7**, calentamiento **2/7**.
 
+> **`SIN REGISTRO 2026-10-12`.** Estas cuatro cifras y los dos rangos **no están en ningún
+> artefacto**: ni en `experiments/E6_baseline_synthetic_v2.json`, que no guarda predicciones por
+> ventana, ni en las tablas de la fase. Se calcularon durante el análisis y no se persistieron, de
+> modo que hoy no se pueden verificar; es uno de los cinco casos de `EVID-MAJ-019`. **No se citan
+> como utilizables** hasta regenerarlas. El protocolo está en
+> `docs/diseno-pi1/08-analisis-por-fallo.md` y pasa por una reejecución de E6 **con destino propio**,
+> que guarde la predicción de cada ventana. El reparto por régimen —urbano 7/7, calentamiento
+> 2/7— sí figura en este informe desde su redacción, y la explicación física **no depende** de las
+> cifras: depende del techo de 71 °C, que está en el catálogo de fallos.
+
+
 La explicación es física. El fallo consiste en imponer un techo de 71 °C a la
 temperatura del refrigerante. Mientras el motor no habría superado ese techo por
 sí mismo --durante el calentamiento-- el fallo **no impone nada**, y la señal de

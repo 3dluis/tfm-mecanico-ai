@@ -77,7 +77,7 @@ CONTENIDO: dict[str, list[tuple[str, str]]] = {
         ),
         (
             "code",
-            "sep = pd.read_csv(paths.TABLES / 'E4_separabilidad.csv')\n"
+            "sep = pd.read_csv(ARTEFACTOS_TABLAS / 'E4_separabilidad.csv')\n"
             "mejor = (sep.groupby('signal')['delta_max_abs'].max()\n"
             "            .sort_values(ascending=False).round(3))\n"
             "mejor.to_frame('delta máximo')",
@@ -105,7 +105,7 @@ CONTENIDO: dict[str, list[tuple[str, str]]] = {
         ),
         (
             "code",
-            "est = pd.read_csv(paths.TABLES / 'E5_estudio_ventana.csv')\n"
+            "est = pd.read_csv(ARTEFACTOS_TABLAS / 'E5_estudio_ventana.csv')\n"
             "est[['length_s', 'fault_id', 'noise_floor_p90', 'best_delta',\n"
             "     'best_feature', 'feature_declared_by_fault', 'above_noise_floor']]",
         ),
@@ -188,7 +188,7 @@ CONTENIDO: dict[str, list[tuple[str, str]]] = {
         (
             "code",
             "from IPython.display import Image\n"
-            "Image(str(paths.FIGURES / 'FIG-E6-02_limite_evidencia_f03.png'))",
+            "Image(str(ARTEFACTOS_FIGURAS / 'FIG-E6-02_limite_evidencia_f03.png'))",
         ),
     ],
     "07_xai": [
@@ -208,7 +208,7 @@ CONTENIDO: dict[str, list[tuple[str, str]]] = {
         ("md", "### El hallazgo: `maf` no contribuye a detectar su propio fallo"),
         (
             "code",
-            "atr = pd.read_csv(paths.TABLES / 'E9_atribuciones_synthetic_v2.csv')\n"
+            "atr = pd.read_csv(ARTEFACTOS_TABLAS / 'E9_atribuciones_synthetic_v2.csv')\n"
             "f02 = atr[atr.predicted_class == 'F02_maf_drift']\n"
             "(f02.groupby('signal')['importance']\n"
             "    .apply(lambda s: s.abs().sum()).sort_values(ascending=False)\n"
@@ -291,7 +291,7 @@ CONTENIDO: dict[str, list[tuple[str, str]]] = {
         ("md", "### El distractor: mismo código, otro motor"),
         (
             "code",
-            "detalle = pd.read_csv(paths.TABLES / 'E12_retrieval_por_caso.csv')\n"
+            "detalle = pd.read_csv(ARTEFACTOS_TABLAS / 'E12_retrieval_por_caso.csv')\n"
             "detalle[detalle.distractors_retrieved > 0][\n"
             "    ['strategy', 'case_id', 'distractors_retrieved',\n"
             "     'distractor_above_relevant']]",

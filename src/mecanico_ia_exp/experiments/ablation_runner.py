@@ -21,7 +21,8 @@ from __future__ import annotations
 import hashlib
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Protocol
+from pathlib import Path
+from typing import Any, Literal, Protocol
 
 import numpy as np
 import numpy.typing as npt
@@ -39,6 +40,7 @@ from mecanico_ia_exp.abstention.sufficiency import (
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.evidence.assembly import assemble
 from mecanico_ia_exp.evidence.model import EvidenceBundle
+from mecanico_ia_exp.experiments.destinos import ArtefactoOcupadoError, exigir_libres
 from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.experiments.retrieval_runner import (
     DIAGNOSTICO_A_DTC,
@@ -615,6 +617,8 @@ def documento_ablacion(
     calibracion: dict[str, Any],
     casos: list[CasoVerificado],
     embedding_space_id: str | None,
+    particion: str = "validation",
+    motivo_de_apertura: str = "",
 ) -> dict[str, Any]:
     """Contenido del registro de una ablación, sin la cabecera de identificación.
 
@@ -625,6 +629,12 @@ def documento_ablacion(
     return {
         "experiment_id": f"E18_ablation_{ablacion}",
         "ablation_id": ablacion,
+        "partition": particion,
+        # El motivo de abrir el conjunto de prueba va EN EL ARTEFACTO y no solo
+        # en la salida del ejecutor. Un registro que no dice por qué se abrió la
+        # partición de prueba no documenta la apertura, por mucho que el
+        # ejecutor haya exigido la razón para arrancar.
+        "test_opening_reason": motivo_de_apertura or None,
         "ablation": ABLACIONES[ablacion],
         "operational_change": CAMBIO_OPERATIVO[ablacion],
         "preregistration": PREREGISTRO,
@@ -663,23 +673,57 @@ def documento_ablacion(
     }
 
 
+def destinos_de(ablacion: str, etiqueta: str = "") -> dict[str, Path]:
+    """Los dos artefactos de una ablación, antes de escribir el primero."""
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    return {
+        "registro": paths.EXPERIMENTS / f"E18_ablacion_{ablacion}{sufijo}.json",
+        "tabla": paths.TABLES / f"E18_ablacion_{ablacion}{sufijo}.csv",
+    }
+
+
 def run_ablations(
     dataset_id: str = DATASET,
     *,
     ablation: str = "all",
     oracle: bool = True,
+    etiqueta: str = "",
+    particion: Literal["train", "validation", "test"] = "validation",
+    allow_test: bool = False,
+    reason: str = "",
 ) -> int:
     """Ejecuta una ablación o las cuatro, cada una con su registro y su tabla.
 
     No se pasa proveedor de lenguaje: el pre-registro declara que las ablaciones
     no redactan.
+
+    ``etiqueta`` entra en el nombre de los dos artefactos de cada ablación. Sin
+    ella se conservan los nombres de la ejecución publicada del 1 de octubre y
+    la ejecución **se niega a escribir** si ya existen.
+
+    ``particion`` permite repetir las ablaciones sobre el conjunto de **prueba**,
+    que es el tercero de los pendientes del tutor. Hacerlo exige ``allow_test``
+    y una ``reason`` escrita, y constituye una **apertura del conjunto de
+    prueba** que hay que registrar en
+    ``docs/methodology/registro-aperturas-test.md``: el ejecutor no puede
+    obligar a escribir ese registro, pero sí exige la razón y la deja en el
+    artefacto.
     """
     if ablation != "all" and ablation not in ABLACIONES:
         msg = f"ablación desconocida: {ablation!r}; declaradas {(*ABLACIONES, 'all')}"
         raise ValueError(msg)
     seleccionadas = tuple(ABLACIONES) if ablation == "all" else (ablation,)
 
-    ctx = preparar(dataset_id)
+    if particion != "validation" and not etiqueta:
+        msg = (
+            f"una ejecución sobre {particion!r} necesita su propia etiqueta: sin ella "
+            "sobrescribiría los artefactos de la ejecución publicada sobre validación"
+        )
+        raise ArtefactoOcupadoError(msg)
+    for ablacion in seleccionadas:
+        exigir_libres(destinos_de(ablacion, etiqueta))
+
+    ctx = preparar(dataset_id, particion=particion, allow_test=allow_test, reason=reason)
     umbrales = SufficiencyThresholds()
     store = PgVectorStore()
     # El proveedor se construye solo si alguna ablación recorre la ruta semántica:
@@ -695,8 +739,8 @@ def run_ablations(
         )
     )
     modo = "oracle" if oracle else "non_oracle"
-    tablas = paths.ensure(paths.TABLES)
-    experimentos = paths.ensure(paths.EXPERIMENTS)
+    paths.ensure(paths.TABLES)
+    paths.ensure(paths.EXPERIMENTS)
 
     for ablacion in seleccionadas:
         print(f"\n=== E18 {ablacion}: {ABLACIONES[ablacion]} · modo {modo} ===")
@@ -739,9 +783,10 @@ def run_ablations(
             f"\n  cobertura (evidencia completa) {cob['numerator']}/{cob['denominator']}"
         )
 
-        pd.DataFrame(filas).to_csv(tablas / f"E18_ablacion_{ablacion}.csv", index=False)
+        destinos = destinos_de(ablacion, etiqueta)
+        pd.DataFrame(filas).to_csv(destinos["tabla"], index=False)
         escribir(
-            experimentos / f"E18_ablacion_{ablacion}.json",
+            destinos["registro"],
             documento_ablacion(
                 ablacion,
                 modo=modo,
@@ -751,6 +796,8 @@ def run_ablations(
                 calibracion=ctx.calibracion,
                 casos=casos,
                 embedding_space_id=espacio,
+                particion=particion,
+                motivo_de_apertura=reason if particion == "test" else "",
             ),
             seed=ctx.configuracion.seed,
             dataset_id=dataset_id,

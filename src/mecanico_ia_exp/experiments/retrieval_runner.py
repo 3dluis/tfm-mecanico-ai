@@ -20,6 +20,7 @@ from mecanico_ia_exp.evaluation.retrieval import (
     StrategyReport,
     evaluate_case,
 )
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.rag.embeddings import EmbeddingProvider, get_provider
 from mecanico_ia_exp.rag.manifest import JERARQUIA_EVIDENCIA, DocumentType
@@ -277,11 +278,22 @@ def _huella(texto: str) -> str:
     return hashlib.sha256(texto.encode("utf-8")).hexdigest()[:16]
 
 
+def destinos_de(etiqueta: str = "") -> dict[str, Path]:
+    """Los tres artefactos de E12, antes de escribir el primero."""
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    return {
+        "registro": paths.EXPERIMENTS / f"E12_retrieval{sufijo}.json",
+        "tabla_por_caso": paths.TABLES / f"E12_retrieval_por_caso{sufijo}.csv",
+        "tabla_por_estrategia": paths.TABLES / f"E12_retrieval_por_estrategia{sufijo}.csv",
+    }
+
+
 def run_retrieval_evaluation(
     goldset_path: Path = GOLDSET,
     *,
     case_set: tuple[str, ...] = CONJUNTO_E12_ORIGINAL,
     dtc_map: dict[str, tuple[str, ...]] | None = None,
+    etiqueta: str = "",
 ) -> int:
     """Evalúa todas las estrategias y guarda los resultados.
 
@@ -401,17 +413,18 @@ def run_retrieval_evaluation(
             fila += f"{(str(rango) if rango else '—'):>20}"
         print(fila)
 
-    tablas = paths.ensure(paths.TABLES)
+    paths.ensure(paths.TABLES)
     import pandas as pd
 
-    pd.DataFrame(detalle).to_csv(tablas / "E12_retrieval_por_caso.csv", index=False)
+    destinos = exigir_libres(destinos_de(etiqueta))
+    pd.DataFrame(detalle).to_csv(destinos["tabla_por_caso"], index=False)
     pd.DataFrame([i.to_dict() for i in informes]).drop(columns=["cases"]).to_csv(
-        tablas / "E12_retrieval_por_estrategia.csv", index=False
+        destinos["tabla_por_estrategia"], index=False
     )
 
-    experimentos = paths.ensure(paths.EXPERIMENTS)
+    paths.ensure(paths.EXPERIMENTS)
     escribir(
-        experimentos / "E12_retrieval.json",
+        destinos["registro"],
         {
             "experiment_id": "E12_retrieval",
             "vehicle_id": vehicle_id,
@@ -432,7 +445,8 @@ def run_retrieval_evaluation(
         goldset=str(goldset_path.name),
         embedding_model=identidad.model,
     )
-    print("\ntabla   E12_retrieval_por_caso.csv, E12_retrieval_por_estrategia.csv")
-    print("registro experiments/E12_retrieval.json")
+    print()
+    for clave, ruta in sorted(destinos.items()):
+        print(f"{clave:22s} {ruta.relative_to(paths.ROOT)}")
     store.dispose()
     return 0
