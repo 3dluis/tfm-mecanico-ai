@@ -331,3 +331,30 @@ def test_se_ejecuta_entero_desde_un_kernel_limpio(nombre: str, tmp_path: Path) -
         if s.get("output_type") == "error"
     ]
     assert not errores, f"{nombre} falló: {errores[:2]}"
+
+
+@pytest.mark.parametrize("nombre", ENTREGADOS)
+def test_la_raiz_se_encuentra_desde_cualquier_directorio(nombre: str, tmp_path: Path) -> None:
+    """El tribunal abrirá Jupyter donde quiera, no necesariamente en la raíz.
+
+    El preámbulo anterior suponía dos únicos casos --la raíz o `notebooks/`-- y
+    en cualquier otro directorio el import fallaba.
+    """
+    import subprocess
+    import sys
+
+    preambulo = next(
+        "".join(c["source"])
+        for c in _cargar(nombre).cells
+        if c["cell_type"] == "code" and "_raiz_del_repositorio" in "".join(c["source"])
+    )
+    for desde in (paths.ROOT, NOTEBOOKS, paths.ROOT / "docs" / "diseno-pi1", paths.ROOT / "src"):
+        resultado = subprocess.run(
+            [sys.executable, "-c", preambulo],
+            cwd=desde,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert resultado.returncode == 0, f"{nombre} desde {desde}: {resultado.stderr[-300:]}"
+        assert "python" in resultado.stdout
