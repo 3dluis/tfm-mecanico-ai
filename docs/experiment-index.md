@@ -103,6 +103,23 @@ evidencia y el cambio queda visible en el propio documento, con fecha.
 | D-6 | Siete registros JSON anteriores al 4-09 sin `commit` ni `executed_at` | El defecto es real y no es corregible retroactivamente sin reejecutar; `registro.py` lo obliga desde el 4-09 | Se documenta como `NOT RECORDED` aquí y en `docs/reproducibility.md`; la fecha se reconstruye por el commit que añadió cada registro (tabla en `artifacts/README.md`) |
 | D-7 | `vehicle.yaml` fija `engine_code: Z6` y sus notas decían que quedaba en `null` hasta comprobarlo sobre el vehículo real | El Z6 se fijó por decisión del autor al formalizar el vehículo de referencia (Tabla 4.1), no por un vehículo real | Nota del fichero corregida, indicando qué decía antes y por qué |
 
+## Hallazgos y pendientes del 13 de octubre de 2026
+
+Lo que se midió ese día y dónde está cada cosa, para no tener que buscarla.
+
+| Qué | Dónde | Estado |
+|---|---|---|
+| **P1**, rediseño de la condición con distractor: 6/6 abstenciones por insuficiencia | `docs/experiments/P1_distractor_v2.md` | **ejecutado** |
+| **L-26**, el redactor altera cifras: 5 de 23 salidas del adaptador canónico | `docs/audits/impacto-l26-e13.md` | **medido**; corrección propuesta y no implementada en `docs/methodology/propuesta-validador-numerico.md` |
+| **L-23**, contaminación del adaptador: 11 de 17 casos sobre ventanas del ajuste | `docs/methodology/auditoria-contaminacion-adaptador.md` | **medido**; cifras marcadas como históricas afectadas |
+| **L-25**, `synthetic_v3` no reconstruible: 0 de 216 sesiones | `configs/datos_no_reconstruibles.json` | **medido**; el guion de reconstrucción se niega |
+| **P2**, reentrenamiento del adaptador | `docs/experiments/incidencia-p2-02.md`, `traslado-p2-maquina.md` | **pendiente por dependencia de infraestructura**: necesita >17 GB por paso y la máquina tiene 24 GB totales. Preparado para otra máquina, con sonda de equivalencia |
+| **Fase G de PI.1**: el rendimiento por clase se ordena igual que la expresión del fallo | `docs/diseno-pi1/14-cierre-alcance-reducido.md` §2 | **medido** sin ejecutar nada nuevo |
+| **PI.1**, alcance reducido | `docs/diseno-pi1/14-cierre-alcance-reducido.md`, `15-valor-cientifico-de-f.md` | **cerrada**; `synthetic_v4` y la fase F aplazadas |
+| **Cinco aperturas** del conjunto de prueba, en cinco niveles | `docs/methodology/registro-aperturas-test.md` | registradas |
+| **Correcciones de los capítulos 5 y 6**: seis afirmaciones falsas | `docs/audits/correccion-cap5-cap6-paso-a.md` | **aplicadas**, conservando el texto anterior |
+| **Conjunto de evaluación independiente del redactor** | `docs/methodology/evaluacion-independiente-redactor.md` | **congelado y sin ejecutar**; no equivalente al original |
+
 ## Ficha por experimento (plantilla)
 
 Para cada experimento con registro se propone una ficha `docs/experiments/fichas/E<n>.md` con
