@@ -76,8 +76,10 @@ def main(etiqueta: str = "") -> int:
                 )
 
             destino = destino_dir / f"{nombre}.jsonl"
-            destino.write_text("\n".join(salidas) + "\n", encoding="utf-8")
+            # Anotado ANTES de escribir, por lo mismo: un fichero a medias
+            # también bloquea el reintento.
             escritos.append(destino)
+            destino.write_text("\n".join(salidas) + "\n", encoding="utf-8")
             largos = [len(tok(json.loads(s)["prompt"])["input_ids"]) for s in salidas]
             print(
                 f"{nombre:<6} {len(salidas):>4} ejemplos · "

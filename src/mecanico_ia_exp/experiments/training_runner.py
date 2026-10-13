@@ -375,8 +375,11 @@ def run_training_data(
             ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
         ):
             ruta = destinos[f"ejemplos_{nombre}"]
-            ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
+            # Se anota ANTES de escribir: si `write_text` falla a mitad, el
+            # fichero existe a medias y hay que borrarlo igual. Anotarlo después
+            # dejaba fuera justo el que había quedado corrupto.
             escritos.append(ruta)
+            ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
             print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
     except Exception:
         for ruta in escritos:
