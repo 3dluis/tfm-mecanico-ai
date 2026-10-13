@@ -44,7 +44,7 @@ sustituye.
   "sessions": [
     {
       "session_id": "F03_thermostat_stuck__warmup__07",
-      "seed": 20260901073,
+      "seed": 1486233057,
       "regime": "warmup",
       "duration_s": 600.0,
       "fault_id": "F03_thermostat_stuck",
@@ -57,7 +57,7 @@ sustituye.
     }
   ],
   "temporal_distribution": {
-    "by_regime": {"idle": 36, "urban": 72, "highway": 54, "warmup": 54},
+    "by_regime": {"urban": 54, "highway": 54, "idle": 54, "warmup": 54},
     "by_condition": {"F00_normal": 36, "F01_vacuum_leak": 36, "F02_maf_drift": 36,
                      "F03_thermostat_stuck": 36, "F04_o2_lag": 36, "F05_misfire": 36},
     "note": "los recuentos reales los escribe el generador; aqui figuran como ejemplo del esquema"
@@ -80,10 +80,15 @@ de forma distinta según la condición: `severity` en la fuga de vacío, `temp_c
 `severity` queda para cuando el parámetro se llame así. **No se inventa un valor** cuando la condición
 no lo tiene: se escribe nulo.
 
-Los valores del ejemplo son los que el protocolo de `v4` fija: sesión de **600 s**, instante de
-aparición del fallo en **120 s** —el 20 % de la duración, como hace el plan equilibrado— y temperatura
-ambiente sorteada en el rango que el generador usa. Un ejemplo con otros valores describiría otro
-experimento y no serviría como comprobación de reconstrucción.
+Los valores del ejemplo son los que el protocolo de `v4` fija, y cada uno tiene que caer donde el plan
+declarado lo pone, porque si no el ejemplo no sirve como comprobación de reconstrucción: sesión de
+**600 s**; instante de aparición del fallo en **120 s** —el 20 % de la duración, como hace el plan
+equilibrado—; temperatura ambiente sorteada en `uniform(15.0, 28.0)`; régimen `warmup`, que es el que
+`build_balanced_specs` asigna al índice 07 al recorrer los cuatro en ciclo; y **semilla dentro de
+`randrange(1, 2**31)`**, el rango del que el constructor sortea la de cada sesión —la del ejemplo es
+una realización posible de ese sorteo, no una semilla elegida—. El reparto por régimen del ejemplo son
+54 sesiones en cada uno de los cuatro: 36 sesiones por condición repartidas en ciclo dan nueve por
+régimen y condición, y seis condiciones las llevan a 54. Los recuentos reales los escribe el generador.
 
 **`initial_coolant_c` se registra incluso cuando es nulo**, porque nulo significa algo —«el motor
 arranca a la temperatura ambiente»— y es exactamente la propiedad que hace indetectable el termostato
