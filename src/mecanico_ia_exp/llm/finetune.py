@@ -63,16 +63,29 @@ class FinetuneConfig:
     # --- gestión de memoria. NO son hiperparámetros: no cambian ni los pesos, ni
     # el orden de los ejemplos, ni la semilla, ni una sola operación en coma
     # flotante. Cambian cuándo el asignador devuelve los búferes que ya no usa.
-    fraccion_de_memoria: float = 0.7
+    fraccion_de_memoria: float = 0.85
     """Techo del asignador de MPS, como fracción de lo que recomienda el
     dispositivo. Medido el 13-10-2026 en esta máquina: el recomendado es 17,8 GB
-    y el asignador, sin techo, llegó a **22,8 GB en 1364 regiones** con 13,9 GB
+    y el asignador, **sin** techo, llegó a 22,8 GB en 1364 regiones con 13,9 GB
     en intercambio; el proceso pedía 25,4 GB de huella física en una máquina de
-    24, y cada paso esperaba a disco (12,6 % de uso de CPU). Con 0,7 el techo
-    queda en unos 12,5 GB: cabe el modelo --5,8 GB-- y sus activaciones con
-    recomputación, y la máquina conserva holgura real.
-    Si el ajuste no cabe, ahora **falla rápido y visiblemente** en lugar de
-    paginar durante horas, que es mejor. Ver `docs/experiments/incidencia-p2-02.md`."""
+    24, y cada paso esperaba a disco (12,6 % de uso de CPU).
+
+    **El valor sale de una medición, no de una estimación.** Con 0,7 —12,43 GB—
+    el ajuste falló en el primer paso, y el mensaje dijo exactamente dónde:
+
+        MPS allocated: 11.36 GiB · max allowed: 12.43 GiB
+        Tried to allocate 1.63 GiB  (cross_entropy sobre el vocabulario)
+
+    La reserva grande es la pérdida sobre las 151 936 entradas del vocabulario de
+    Qwen2.5 para una secuencia de hasta 3 072 posiciones: los logits y su
+    gradiente. El paso necesita unos 13 GB, de modo que 0,85 —15,1 GB— lo cubre
+    con holgura y deja unos 9 GB a la máquina. Sigue estando **muy por debajo** de
+    los 22,8 GB que la paralizaron.
+
+    Que el primer valor fuera corto es justamente lo que se buscaba: con techo, el
+    ajuste **falla rápido y dice el número que le falta**, en lugar de paginar
+    durante horas sin producir una época. Ver
+    `docs/experiments/incidencia-p2-02.md`."""
 
     vaciar_cache_por_paso: bool = True
     """Devolver al sistema los búferes que el asignador cachea, en cada paso.
