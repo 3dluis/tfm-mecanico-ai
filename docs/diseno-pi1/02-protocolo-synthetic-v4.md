@@ -65,8 +65,12 @@ esa comprobación en verde, `synthetic_v2` y `synthetic_v3` siguen siendo reprod
 
 ## 2.5 Criterios de integridad de la generación
 
-1. **Determinismo comprobado:** dos ejecuciones con la misma semilla producen ficheros con la misma
-   huella. Es el criterio que E2 ya declara y hay que volver a comprobarlo aquí.
+1. **Determinismo comprobado:** dos ejecuciones con la misma semilla producen **los mismos datos**. La
+   huella se toma sobre los artefactos deterministas —el parquet de sesiones y los `.npy` del
+   preprocesado— y, para la ficha y el manifiesto, sobre su contenido **excluyendo los campos de
+   marca de tiempo**: `DatasetMetadata.created_at` lleva `datetime.now(UTC)` por omisión, de modo que
+   exigir huella idéntica del fichero completo haría fallar el criterio a una generación correcta. Es
+   el criterio que E2 ya declara, aquí con el alcance escrito.
 2. **El ralentí sin fallo cae dentro del rango del manual**, 640-740 rpm para el Z6. Se comprueba sobre
    el conjunto generado y se registra la mediana y los percentiles 5 y 95. Es la comprobación que
    habría detectado el problema de `v3` el día que se generó.
