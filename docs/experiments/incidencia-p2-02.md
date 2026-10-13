@@ -131,6 +131,29 @@ De 3 072 a, por ejemplo, 2 048.
 | **Qué se pierde** | no se sabrá cuánta de la calidad atribuida al redactor venía de haber visto los casos |
 | **Qué se gana** | es honesto y está medido. Un trabajo que declara con números por qué no pudo hacer algo es más defendible que uno que lo hace mal para poder decir que lo hizo |
 
+## 4 bis. Lo que el autor autorizó, y qué se hizo
+
+**Alternativa A**, el 13 de octubre de 2026. Implementada en `src/mecanico_ia_exp/llm/finetune.py`:
+
+| Qué | Valor | Efecto |
+|---|---|---|
+| `fraccion_de_memoria` | 0,7 | techo del asignador en 0,7 de los 17,8 GB recomendados, unos 12,5 GB |
+| `vaciar_cache_por_paso` | sí | el asignador devuelve en cada paso lo que ya no usa |
+
+Las dos quedan **en el registro del adaptador**, porque van en la configuración y se escriben con
+él. Ninguna es un hiperparámetro: rango, alpha, dropout, épocas, tasa de aprendizaje, tope de
+longitud, semilla y dispositivo **siguen exactamente como se congelaron el 13 de octubre**, y no se
+han tocado en ninguno de los cuatro intentos.
+
+Y hay una ganancia secundaria que importa tanto como la memoria: **con techo, el ajuste falla rápido
+y visiblemente** si no cabe, en lugar de paginar durante horas. Un error de memoria de MPS en el
+primer minuto es mejor resultado que tres horas sin una época, porque dice algo.
+
+Se añade además el vaciado de los búferes de salida en los avisos de progreso. Los tres intentos
+anteriores no imprimieron una sola línea de progreso, y eso llevó a una conclusión equivocada
+—«está parado antes de contar parámetros»— cuando la salida estaba en el búfer del proceso. Un
+proceso que escribe en un fichero y no vacía el búfer parece muerto sin estarlo.
+
 ## 5. Lo que queda hecho y no hay que rehacer
 
 | Pieza | Estado |
