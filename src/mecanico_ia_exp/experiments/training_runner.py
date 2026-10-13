@@ -383,53 +383,69 @@ def run_training_data(
             ruta.unlink(missing_ok=True)
         raise
 
+    def _limpiar_todo() -> None:
+        """Borra lo que esta ejecución escribió, para que el reintento sea posible.
+
+        Incluye el registro: si falla al escribirlo, los dos `.jsonl` quedarían
+        en disco sin él y la negativa a sobrescribir impediría reintentar con la
+        misma etiqueta. No es hipotético, pasó al introducir el reparto por
+        sesión.
+        """
+        for ruta in escritos:
+            ruta.unlink(missing_ok=True)
+        destinos["registro"].unlink(missing_ok=True)
+
     huellas = {
         n: hashlib.sha256(destinos[f"ejemplos_{n}"].read_bytes()).hexdigest()[:16]
         for n in ("train", "valid")
     }
-    identidad = embeddings.identity
-    escribir(
-        destinos["registro"],
-        {
-            "experiment_id": "E13b_training_data",
-            "n_examples": len(ejemplos),
-            "n_cases": len(casos),
-            "split_by": "source_session" if limpio else "source_window",
-            "window_selection": "across_sessions" if limpio else "first_n",
-            "split_unit_note": (
-                "por SESIÓN y estratificado por condición: dos ventanas consecutivas "
-                "comparten la mitad de sus muestras, de modo que repartir por ventana dejaba "
-                "que la pérdida de validación del ajuste midiera sobre datos vistos; y cortar "
-                "por orden dejaba la validación interna con una sola condición"
-                if limpio
-                else "por VENTANA, el reparto histórico: se conserva para poder reproducir el "
-                "conjunto de slm_lora_v2, y deja ventanas de la misma sesión a los dos lados"
-            ),
-            "split_seed": 20260901,
-            "distribution": reparto,
-            "leakage_check": "sin texto del manual en las salidas esperadas",
-            "examples_partition": particion_de_ejemplos,
-            "contamination_check": (
-                "ninguna sesión de los ejemplos aparece en validación ni en prueba; "
-                "comprobado antes de escribir"
-                if particion_de_ejemplos == "train"
-                else "NO SE COMPRUEBA: los ejemplos salen de validación, que es donde E13 y "
-                "E15 miden al redactor. Es la contaminación que P2 corrige "
-                "(docs/methodology/auditoria-contaminacion-adaptador.md)"
-            ),
-            # Linaje: sin esto no se puede decidir sobre el adaptador.
-            "source_verifier_version": VERIFIER_VERSION,
-            "source_case_set": sorted({e.case_id for e in ejemplos}),
-            "source_embedding_space_id": (
-                f"{identidad.provider}/{identidad.model}/"
-                f"d{identidad.dimension}/v{identidad.version}"
-            ),
-            "dataset_hash": huellas,
-        },
-        dataset_id=dataset_id,
-        dataset_type="synthetic",
-        embedding_model=identidad.model,
-        seed=20260901,
-    )
+    try:
+        identidad = embeddings.identity
+        escribir(
+            destinos["registro"],
+            {
+                "experiment_id": "E13b_training_data",
+                "n_examples": len(ejemplos),
+                "n_cases": len(casos),
+                "split_by": "source_session" if limpio else "source_window",
+                "window_selection": "across_sessions" if limpio else "first_n",
+                "split_unit_note": (
+                    "por SESIÓN y estratificado por condición: dos ventanas consecutivas "
+                    "comparten la mitad de sus muestras, de modo que repartir por ventana dejaba "
+                    "que la pérdida de validación del ajuste midiera sobre datos vistos; y cortar "
+                    "por orden dejaba la validación interna con una sola condición"
+                    if limpio
+                    else "por VENTANA, el reparto histórico: se conserva para poder reproducir el "
+                    "conjunto de slm_lora_v2, y deja ventanas de la misma sesión a los dos lados"
+                ),
+                "split_seed": 20260901,
+                "distribution": reparto,
+                "leakage_check": "sin texto del manual en las salidas esperadas",
+                "examples_partition": particion_de_ejemplos,
+                "contamination_check": (
+                    "ninguna sesión de los ejemplos aparece en validación ni en prueba; "
+                    "comprobado antes de escribir"
+                    if particion_de_ejemplos == "train"
+                    else "NO SE COMPRUEBA: los ejemplos salen de validación, que es donde E13 y "
+                    "E15 miden al redactor. Es la contaminación que P2 corrige "
+                    "(docs/methodology/auditoria-contaminacion-adaptador.md)"
+                ),
+                # Linaje: sin esto no se puede decidir sobre el adaptador.
+                "source_verifier_version": VERIFIER_VERSION,
+                "source_case_set": sorted({e.case_id for e in ejemplos}),
+                "source_embedding_space_id": (
+                    f"{identidad.provider}/{identidad.model}/"
+                    f"d{identidad.dimension}/v{identidad.version}"
+                ),
+                "dataset_hash": huellas,
+            },
+            dataset_id=dataset_id,
+            dataset_type="synthetic",
+            embedding_model=identidad.model,
+            seed=20260901,
+        )
+    except Exception:
+        _limpiar_todo()
+        raise
     print("\nregistro experiments/E13b_training_data.json")
     return 0
