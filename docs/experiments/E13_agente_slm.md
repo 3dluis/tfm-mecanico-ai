@@ -17,6 +17,19 @@ Modelo: Qwen2.5-3B-Instruct, local, sin clave de API
 > determinista sin modelo de lenguaje, y la evaluación final de E19, cuyo solape con los ejemplos
 > de ajuste es cero ventanas y cero sesiones.
 
+> **Nota del 13-10-2026 — tres de las diecisiete salidas contienen una cifra falsa.**
+> Auditado con `scripts/auditar_cifras_redactadas.py` sobre el registro canónico: en
+> `C01_maf_drift` el redactor escribe el umbral 0,80 donde el verificador escribió 0,79, y en
+> `C07_partial` y `C08_distractor` escribe «cobertura 0.908 < 0.80» donde el verificador escribió
+> «cobertura 0.00 < 0.80» —0,908 es la confianza calibrada, y la frase es internamente falsa—.
+> **Las tres pasan las tres barreras:** esquema válido, veredicto respetado, cero citas inventadas.
+> Las cifras publicadas de validez de salida **no cambian**, porque miden lo que miden; lo que
+> cambia es lo que se puede afirmar con ellas: una salida válida y trazable en sus citas puede ser
+> falsa en sus números. Ver `L-26` y
+> [`P1_distractor_v2.md`](P1_distractor_v2.md) §5. El modelo base, sin adaptador, no presenta
+> ninguna alteración en los mismos 17 casos; con 17 casos esa diferencia no se puede atribuir al
+> adaptador.
+
 ## Reparto de responsabilidades
 
 | Quién | Qué hace |
