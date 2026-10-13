@@ -445,7 +445,8 @@ def run_retrieval_evaluation(
         goldset=str(goldset_path.name),
         embedding_model=identidad.model,
     )
-    print("\ntabla   E12_retrieval_por_caso.csv, E12_retrieval_por_estrategia.csv")
-    print("registro experiments/E12_retrieval.json")
+    print()
+    for clave, ruta in sorted(destinos.items()):
+        print(f"{clave:22s} {ruta.relative_to(paths.ROOT)}")
     store.dispose()
     return 0

@@ -232,8 +232,8 @@ def run_threshold_sweep(dataset_id: str = "synthetic_v2", *, etiqueta: str = "")
         dataset_id=dataset_id,
         dataset_type="synthetic",
     )
-    print("\ntabla    E15b_barrido_umbral.csv")
-    print("registro experiments/E15b_barrido_umbral.json")
+    for clave, ruta in sorted(destinos.items()):
+        print(f"{clave:10s} {ruta.relative_to(paths.ROOT)}")
     return 0
 
 

@@ -16,6 +16,7 @@ import pandas as pd
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.exploration import cliffs_delta, noise_floor_max_delta
 from mecanico_ia_exp.data.splits import PARTICIONES, audit_masks, split_by_session
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.features.temporal import FEATURE_NAMES, extract_features
 from mecanico_ia_exp.obd.auditoria import exigir_auditoria_limpia
 from mecanico_ia_exp.obd.faults import FAULTS, NORMAL_ID
@@ -85,7 +86,7 @@ ANTERIORES_AL_MANIFIESTO: frozenset[str] = frozenset(
 )
 
 
-def destinos_de(dataset_id: str) -> dict[str, Path]:
+def destinos_de(dataset_id: str, etiqueta: str = "") -> dict[str, Path]:
     """Los artefactos de E5, con el conjunto en el nombre.
 
     **Esto no lo tenían.** `run_preprocess` escribía `E5_estudio_ventana.csv`,
@@ -99,11 +100,17 @@ def destinos_de(dataset_id: str) -> dict[str, Path]:
     desde ahora lleva el identificador del conjunto, como ya lo llevaban los de
     E6, E7 y E9.
     """
+    sufijo = f"_{etiqueta}" if etiqueta else ""
     return {
-        "tabla_estudio": paths.TABLES / f"E5_estudio_ventana_{dataset_id}.csv",
-        "tabla_reparto": paths.TABLES / f"E5_reparto_{dataset_id}.csv",
-        "figura_estudio": paths.FIGURES / f"FIG-E5-01_estudio_ventana_{dataset_id}.png",
-        "figura_particiones": paths.FIGURES / f"FIG-E5-02_particiones_{dataset_id}.png",
+        "tabla_estudio": paths.TABLES / f"E5_estudio_ventana_{dataset_id}{sufijo}.csv",
+        "tabla_reparto": paths.TABLES / f"E5_reparto_{dataset_id}{sufijo}.csv",
+        "figura_estudio": paths.FIGURES / f"FIG-E5-01_estudio_ventana_{dataset_id}{sufijo}.png",
+        "figura_particiones": paths.FIGURES / f"FIG-E5-02_particiones_{dataset_id}{sufijo}.png",
+        # Los procesados NO llevan etiqueta, y es deliberado: `load_partition`
+        # los busca por identificador de conjunto, y ponerles sufijo rompería el
+        # contrato con todo lo que viene después. Son **caché derivada**, no
+        # artefacto de registro: se regeneran del parquet cuando haga falta y su
+        # procedencia está en el manifiesto que los acompaña.
         "x": paths.DATA_PROCESSED / f"{dataset_id}_x.npy",
         "features": paths.DATA_PROCESSED / f"{dataset_id}_features.npy",
         "meta": paths.DATA_PROCESSED / f"{dataset_id}_meta.parquet",
@@ -111,9 +118,19 @@ def destinos_de(dataset_id: str) -> dict[str, Path]:
     }
 
 
-def run_preprocess(dataset_id: str = DATASET) -> int:
+#: Los que sí son artefactos de registro y no se sobrescriben.
+ARTEFACTOS_DE_REGISTRO: tuple[str, ...] = (
+    "tabla_estudio",
+    "tabla_reparto",
+    "figura_estudio",
+    "figura_particiones",
+)
+
+
+def run_preprocess(dataset_id: str = DATASET, *, etiqueta: str = "") -> int:
     """Produce el estudio, el conjunto ventaneado y el reparto auditado."""
-    destinos = destinos_de(dataset_id)
+    destinos = destinos_de(dataset_id, etiqueta)
+    exigir_libres({c: destinos[c] for c in ARTEFACTOS_DE_REGISTRO})
     origen = paths.DATA_RAW_SYNTHETIC / f"{dataset_id}.parquet"
     if not origen.is_file():
         print(f"No existe {origen}. Ejecuta antes: mecanico-exp generate-synthetic")

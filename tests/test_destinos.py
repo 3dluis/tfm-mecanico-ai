@@ -524,3 +524,45 @@ def test_el_conjunto_oficial_no_se_puede_regenerar_por_descuido() -> None:
     if not (paths.DATA_RAW_SYNTHETIC / "synthetic_v2.parquet").is_file():
         pytest.skip("este clon no trae synthetic_v2")
     assert main(["generate-synthetic", "--dataset-id", "synthetic_v2"]) == 1
+
+
+def test_los_guiones_de_reproduccion_usan_etiqueta() -> None:
+    """Comparar con `git diff` exigía sobrescribir el registro publicado.
+
+    Es decir, destruir el resultado para comprobar que se reproduce. Los guiones
+    escriben ahora con etiqueta y comparan los dos ficheros.
+    """
+    for nombre in ("reproduce_baseline.sh", "reproduce_main_results.sh"):
+        guion = (paths.ROOT / "scripts" / nombre).read_text("utf-8")
+        assert "--etiqueta" in guion, f"{nombre} no etiqueta sus ejecuciones"
+        assert "comparar_registro.py" in guion, f"{nombre} no compara con el publicado"
+
+
+def test_el_comparador_ignora_lo_que_cambia_en_toda_reejecucion(tmp_path) -> None:
+    import subprocess
+    import sys
+
+    base = {"commit": "aaa", "executed_at": "2026-01-01", "metrics": {"macro_f1": 0.8788}}
+    otro = {"commit": "bbb", "executed_at": "2026-02-02", "metrics": {"macro_f1": 0.8788}}
+    uno, dos = tmp_path / "a.json", tmp_path / "b.json"
+    uno.write_text(json.dumps(base), encoding="utf-8")
+    dos.write_text(json.dumps(otro), encoding="utf-8")
+
+    resultado = subprocess.run(
+        [sys.executable, str(paths.ROOT / "scripts" / "comparar_registro.py"), str(uno), str(dos)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert resultado.returncode == 0, resultado.stdout
+    assert "IDÉNTICOS" in resultado.stdout
+
+    dos.write_text(json.dumps({**otro, "metrics": {"macro_f1": 0.5}}), encoding="utf-8")
+    resultado = subprocess.run(
+        [sys.executable, str(paths.ROOT / "scripts" / "comparar_registro.py"), str(uno), str(dos)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert resultado.returncode == 1
+    assert "DIFIERE metrics.macro_f1" in resultado.stdout
