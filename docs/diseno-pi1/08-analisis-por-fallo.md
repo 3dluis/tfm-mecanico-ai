@@ -92,11 +92,15 @@ sobre las ventanas **con** el fallo expresado y sobre las ventanas **sin** expre
 
 Esto es lo que decide la pregunta:
 
-| Resultado posible | Lectura |
+| Resultado posible | Lectura, acotada a lo que el diseño permite |
 |---|---|
-| La ventaja de la secuencia está en ventanas **con** el fallo expresado | hay información en la forma de la trayectoria que los descriptores resumen y pierden. Es un resultado a favor del contexto temporal, acotado a ese fallo |
-| La ventaja está en ventanas **sin** expresar | no es información temporal: es azar o ajuste a idiosincrasias de las sesiones. **La hipótesis del termostato cae** |
+| La ventaja de la secuencia está en ventanas **con** el fallo expresado | el **recorrido secuencial completo** detecta mejor ese fallo donde el fallo existe. **No** se puede atribuir al contexto temporal como tal: la comparación cambia también el estimador, de modo que la ventaja podría venir del sesgo inductivo de la red y no de información adicional en la trayectoria. Lo que sí se habrá descartado es la explicación alternativa más probable, que es que acertara ventanas indetectables |
+| La ventaja está en ventanas **sin** expresar | no hay información que aprovechar: es azar o ajuste a idiosincrasias de las sesiones. **La hipótesis del termostato cae** |
 | No hay ventaja al separar | la ventaja agregada venía del reparto entre los dos grupos y no de detectar mejor |
+
+Y si lo que se quiere es atribuir algo a la **dinámica intraventana**, la vía no es esta comparación
+sino el escalón `A2` frente a `A3` de la escalera de ablaciones, que mantiene el estimador fijo. Las dos
+cosas son compatibles y responden a preguntas distintas.
 
 **Paso 4. Dar registro a las cifras del termostato, sobre el conjunto que describen y con el
 estadístico que usaron.** Y aquí hay que empezar por una corrección: esas cifras no son huérfanas en el

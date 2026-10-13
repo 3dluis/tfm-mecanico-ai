@@ -43,7 +43,7 @@ PI.1  ¿en qué tipos de fallo el contexto temporal aporta señal diagnóstica a
 | La representación secuencial supera a la tabular | E7 | F1 macro | `E7_temporal_synthetic_v2.json` | **NEGATIVO** en el conjunto oficial |
 | …y lo hace con más volumen | E7 sobre `v3` | F1 macro | `E7_temporal_synthetic_v3.json` | **INCONCLUSO y confundido**: el conjunto es pre-calibración |
 | El contexto temporal aporta en el termostato | E7 por clase | F1 y exhaustividad del termostato | matrices de confusión de E6 y E7 | **patrón observado, no demostrado**: falta saber si la ventaja está en ventanas con el fallo expresado |
-| Cuánto aporta la dinámica dentro de la ventana frente al nivel | ablación A frente a B | F1 por clase | por diseñar, Fase F | **por medir**; es el único eslabón que aísla la representación |
+| Cuánto aporta la **dinámica intraventana** | escalón **`A2` frente a `A3`** de la escalera de ablaciones, con el estimador fijo | F1 por clase | por diseñar, Fase F | **por medir**; es el **único** eslabón que la aísla. `A` frente a `B` sin escalones añade 127 descriptores mezclados y no sirve para esta atribución |
 | El volumen limitaba la comparación | curva T6-T22 | F1 macro y por clase frente a sesiones de entrenamiento | por diseñar, Fase C | **por medir** |
 | La ventaja sobrevive a la simetría y a la semilla | protocolo simétrico, cinco réplicas | diferencias apareadas | por diseñar, Fases D y E | **por medir** |
 | Dónde ocurre la diferencia en el termostato y en el encendido | análisis por expresión | exhaustividad con el fallo expresado y sin expresar | por diseñar, Fase G | **por medir** |
@@ -66,7 +66,8 @@ PI.1  ¿en qué tipos de fallo el contexto temporal aporta señal diagnóstica a
 
 ## 12.5 Lo que PI.1 podrá afirmar cuando esto se ejecute, y lo que no
 
-**Podrá afirmar:** si la dinámica dentro de la ventana aporta sobre el nivel, con el estimador fijo; cómo
+**Podrá afirmar:** si la dinámica intraventana aporta sobre el nivel y la dispersión, con el estimador
+fijo, que es el escalón `A2` frente a `A3`; cómo
 cambian los dos recorridos al aumentar las sesiones de entrenamiento, con todo lo demás fijo; si las
 diferencias por fallo sobreviven al cambio de semilla; y si la ventaja del recorrido secuencial en el
 termostato ocurre en ventanas donde el fallo está expresado.
