@@ -98,6 +98,98 @@ que hay.
 
 En las quince el fallo está activo, y los tres regímenes aparecen.
 
+## 4 bis. Lo que hay que documentar antes de usarlo
+
+El encargo pide seis cosas documentadas **antes** de utilizar este conjunto. Aquí están, y la última
+es la que más acota lo que se podrá decir.
+
+### 4 bis.1 Procedencia
+
+Partición de **validación** de `synthetic_v3`, generado el 1 de septiembre de 2026 a las 14:58
+locales con semilla 20260901 y 36 sesiones por condición. Las quince ventanas se eligen con la regla
+de §4, determinista y comprobable. No se ha generado ningún dato para este conjunto.
+
+### 4 bis.2 Distribución de condiciones
+
+| | Este conjunto | La evaluación original de E15 |
+|---|---|---|
+| **Conjunto de datos** | `synthetic_v3` | `synthetic_v2` |
+| **Ventanas distintas** | **15** | **5** |
+| **Clases de fallo** | las cinco, **tres ventanas cada una** | las cinco, pero **desiguales**: termostato 5, sonda 5, fuga 5, caudalímetro 1, encendido 1 |
+| **Regímenes** | autopista 6, urbano 6, ralentí 3 · **ninguno de calentamiento** | no equilibrados por diseño |
+| **Condiciones de corpus** | **2**: `FULL` y `ABSENT` | **5**: `FULL`, `ABSENT`, `PARTIAL`, `DISTRACTOR`, `DISTRACTOR_NO_FILTER` |
+| **Casos** | 30 | 17 |
+
+**Qué gana y qué pierde respecto del original.** Gana en ventanas —quince frente a cinco— y en
+equilibrio entre clases. **Pierde las tres condiciones de corpus que son el núcleo de PI.3 y PI.4**:
+la parcial, que es la informativa, y las dos de distractor. Las quince ventanas no llevan conjunto
+anotado con ficheros relevantes, de soporte y distractores declarados caso a caso, que es lo que
+permite construir esas condiciones; construirlo exigiría anotar quince casos a mano contra el manual.
+
+### 4 bis.3 Independencia respecto del entrenamiento
+
+Verificado por construcción y comprobado con pruebas:
+
+| Respecto de | Solape | Cómo se garantiza |
+|---|---|---|
+| Ejemplos de ajuste de `slm_lora_v2` | **cero sesiones** | sus 43 ventanas salen de validación de `synthetic_v2`; sus 9 sesiones están excluidas |
+| Ejemplos de ajuste de `slm_lora_v3` | **cero sesiones** | salen de `train` de `synthetic_v2`; sus 48 sesiones están excluidas |
+| Evaluación de E15 | **cero sesiones** | sus 5 sesiones están excluidas |
+| Ajuste del **modelo de diagnóstico** | **las quince son de validación**, no de entrenamiento | el reparto es por sesión |
+
+**Y una dependencia que no es cero y hay que declarar:** la **calibración** del modelo de diagnóstico
+se ajusta con validación cruzada sobre entrenamiento, pero el **umbral** de confianza —0,79— se eligió
+con un barrido sobre validación de `synthetic_v2`. Las confianzas de estos paquetes no son fuera de
+muestra respecto de ese umbral.
+
+### 4 bis.4 Las diferencias entre generadores, y por qué importan aquí
+
+**Este conjunto sale de un generador distinto del de la evaluación original.** `synthetic_v3` es
+**pre-calibración**: se generó antes del commit que calibró el generador contra el manual de taller.
+Diferencias medidas entre los dos:
+
+| | `synthetic_v2` | `synthetic_v3` |
+|---|---|---|
+| Generado | 14 de septiembre | **1 de septiembre, antes de la calibración** |
+| Ralentí sin fallo, mediana | 690 rpm, dentro del rango 640–740 del manual | **820 rpm**, sin respaldo documental |
+| Avance de encendido, primera muestra | 10,15° | 15,05° |
+| `GENERATOR_VERSION` | `1.0.0` | `1.0.0` — **no los distingue** |
+| Reproducible con el código publicado | **sí**, bit a bit | **no**: 0 de 216 sesiones idénticas |
+
+**Consecuencia para el modelo de diagnóstico.** Medir sobre `synthetic_v3` exige un bosque ajustado
+sobre el `train` de `synthetic_v3`, que **no es el modelo de E6 ni el de E19**. Los paquetes de
+evidencia que el redactor recibirá vendrán de otro modelo, con otras confianzas y otras atribuciones.
+
+### 4 bis.5 Alcance de las conclusiones posibles
+
+Lo que una medición sobre este conjunto **podrá** sostener:
+
+1. Una **comparación emparejada entre adaptadores** —`slm_lora_v2` frente al nuevo— sobre las mismas
+   quince ventanas y los mismos paquetes de evidencia. Los dos las ven por primera vez, y esa es la
+   pregunta que P2 hace.
+2. Una descripción de **cuántas de las treinta salidas** son válidas, respetan el veredicto, no
+   inventan citas y, si el validador numérico existe, no alteran cifras.
+
+Lo que **no** podrá sostener, y conviene fijarlo antes de medir:
+
+1. **Ninguna comparación con las cifras publicadas de E13 y E15.** Son otras ventanas, otras
+   condiciones de corpus, otro conjunto de datos, otro generador y otro modelo de diagnóstico.
+   **Cinco variables cambian a la vez.** Decir «el adaptador nuevo da 28 de 30 frente a 17 de 17 del
+   viejo» sería comparar cosas distintas, y este documento lo prohíbe de antemano.
+2. **Nada sobre PI.3 ni PI.4.** Faltan las condiciones parcial y de distractor.
+3. **Ninguna estimación con intervalo útil.** Treinta casos sobre quince sesiones.
+4. **Nada sobre el régimen de calentamiento**, que no está representado, y es justamente donde el
+   termostato no se expresa.
+
+### 4 bis.6 Por qué, aun así, vale
+
+Porque la pregunta que P2 hace no es «¿cuánto vale el redactor?» sino **«¿cuánta de la calidad
+atribuida al redactor venía de haber visto los casos?»**, y eso solo se responde con un conjunto que
+ninguno de los dos adaptadores haya visto. Este lo es, y dentro de `synthetic_v2` no existe.
+
+**No es una evaluación equivalente a la original y no se presentará como tal.** Es una medición nueva,
+con su propio alcance, que responde a una pregunta que la original no podía responder.
+
 ## 5. Qué se mide y qué no
 
 **Qué se mide:** en dos condiciones de corpus —`FULL` y `ABSENT`, treinta casos— tres cosas del
