@@ -44,8 +44,8 @@ Los pasos A y B no tocan ningún resultado y pueden hacerse mientras se revisa e
 | B | ninguno | medio día | tres cambios de procedencia y sus pruebas |
 | C | minutos | una hora | generación, preprocesado y los cinco criterios |
 | D | minutos | una hora | reparto, subconjuntos y las tres pruebas de fuga |
-| E | ninguno | un día | es el cambio con más riesgo de implementación: partición interna por sesión, selección de época ahí, y calibración de los dos modelos sobre ella |
-| F | ~35 min | medio día | cien celdas del bosque, segundos cada una, y veinte de la red, hasta 135 s cada una. **La calibración no añade ajustes**: se hace sobre la partición interna de desarrollo, que ya existe, y no por validación cruzada; con pliegues agrupados habrían sido cinco ajustes más por celda de red y varias horas en lugar de media. Bajo `launchd`, como la ejecución de E19 que funcionó |
+| E | ninguno | un día | es el cambio con más riesgo de implementación: **tres** particiones internas por sesión —ajuste, desarrollo y calibración—, selección de época en la segunda y calibración de los dos modelos en la tercera |
+| F | ~35 min | medio día | cien celdas del bosque, segundos cada una, y veinte de la red, hasta 135 s cada una. **La calibración no añade ajustes**: se hace sobre la **partición interna de calibración**, disjunta del ajuste y del desarrollo, y no por validación cruzada; con pliegues agrupados habrían sido cinco ajustes más por celda de red y varias horas en lugar de media. Bajo `launchd`, como la ejecución de E19 que funcionó |
 | G | minutos | un día | el análisis, no el cómputo, es lo que lleva tiempo |
 | H | ninguno | medio día | |
 
@@ -60,7 +60,7 @@ es la restricción; lo es no confundir variables, y eso se paga en cuidado, no e
 | B | la prueba de reconstrucción del manifiesto pasa: una sesión se regenera desde su `SessionSpec` y sale idéntica |
 | C | los cinco criterios de `02-protocolo-synthetic-v4.md`, incluido el ralentí dentro del rango del manual y el reparto 22/7/7 |
 | D | anidamiento estructural, auditoría de fuga en los cuatro puntos, estadísticos de normalización procedentes de cada subconjunto |
-| E | la selección de época no toca validación en ninguna ruta del código; los dos modelos reciben el mismo reparto interno; el conjunto de prueba no se lee |
+| E | la selección de época no toca validación ni la partición de calibración en ninguna ruta del código; las tres particiones internas no comparten ninguna sesión; los dos modelos reciben el mismo reparto interno; el conjunto de prueba no se lee |
 | F | las cinco semillas declaradas aparecen en los **ciento veinte** registros; ninguna celda con semilla distinta; las seis representaciones presentes en los cuatro volúmenes |
 | G | el indicador de expresión se deriva del generador y no del modelo; las cifras del termostato quedan con registro |
 | H | ninguna conclusión nueva sin su artefacto |
