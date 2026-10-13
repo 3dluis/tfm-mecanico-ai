@@ -1,6 +1,6 @@
 # Índice de notebooks
 
-**Actualizado:** 12 de octubre de 2026
+**Actualizado:** 13 de octubre de 2026
 
 Los notebooks son documentos científicos ejecutables. Cada uno se entiende por sí solo, se puede
 **leer sin ejecutar nada** —hay una copia en HTML— y declara qué modalidad tiene, porque no todos
@@ -39,6 +39,7 @@ caso, un acelerador. Cada notebook FULL documenta sus requisitos.
 | [`02_comparacion_modelos`](html/02_comparacion_modelos.html) | E6, E7 | visualización histórica | DEMO | si el modelo temporal supera a la línea base, y por qué la pregunta sigue abierta |
 | [`03_analisis_e19`](html/03_analisis_e19.html) | E19 | reanálisis sobre congelado | DEMO | si el criterio de suficiencia evita la falsa confianza sobre el conjunto de prueba |
 | [`04_explicabilidad`](html/04_explicabilidad.html) | E9, E18 (`A1`) | visualización histórica | DEMO | qué señal sostiene cada diagnóstico, y cuánto aporta la atribución |
+| [`05_suficiencia_y_abstencion`](html/05_suficiencia_y_abstencion.html) | E15, E18 (`A1`–`A4`), **P1** | visualización histórica | DEMO | cuándo el sistema se niega a explicar, qué componente lo decide y qué hace ante evidencia que parece pertinente |
 
 Los cinco se ejecutan desde un kernel limpio en menos de dos minutos cada uno y están verificados
 por `tests/test_notebooks.py`.
