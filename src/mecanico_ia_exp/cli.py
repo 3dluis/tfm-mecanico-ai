@@ -32,6 +32,17 @@ def main(argv: list[str] | None = None) -> int:
     generar.add_argument("--seed", type=int, default=20260901)
     generar.add_argument("--sessions-per-fault", type=int, default=6)
     generar.add_argument("--duration-s", type=float, default=600.0)
+    generar.add_argument(
+        "--esquema",
+        choices=("vigente", "historico"),
+        default="vigente",
+        help=(
+            "vigente incluye las columnas de expresión efectiva del fallo. historico las "
+            "omite y es el esquema de synthetic_v1, v2 y v3: reconstruir uno de ellos con "
+            "el esquema vigente produce un meta.parquet distinto y rompe la verificación de "
+            "la congelación de E19, que lo fija por huella. Solo se admite para esos tres"
+        ),
+    )
 
     subparsers.add_parser("eda", help="análisis exploratorio: figuras y tablas")
     for nombre, ayuda in (
@@ -245,8 +256,24 @@ def main(argv: list[str] | None = None) -> int:
             sessions_per_fault=args.sessions_per_fault,
             duration_s=args.duration_s,
         )
+        from mecanico_ia_exp.experiments.preprocess_runner import ANTERIORES_AL_MANIFIESTO
+
+        historico = args.esquema == "historico"
+        if historico and args.dataset_id not in ANTERIORES_AL_MANIFIESTO:
+            print(
+                f"El esquema histórico solo se admite para "
+                f"{', '.join(sorted(ANTERIORES_AL_MANIFIESTO))}, que están congelados. "
+                f"«{args.dataset_id}» es un conjunto nuevo y tiene que llevar las columnas "
+                "de expresión efectiva del fallo.\n\nNo se escribe nada."
+            )
+            return 1
+
         datos, metadata = generate_dataset(
-            specs, dataset_id=args.dataset_id, seed=args.seed, notes="Plan equilibrado E2."
+            specs,
+            dataset_id=args.dataset_id,
+            seed=args.seed,
+            notes="Plan equilibrado E2.",
+            con_expresion=not historico,
         )
         from mecanico_ia_exp.experiments.destinos import ArtefactoOcupadoError, exigir_libres
         from mecanico_ia_exp.obd.auditoria import (
@@ -285,13 +312,28 @@ def main(argv: list[str] | None = None) -> int:
         # él por descuido. `synthetic_v3` se generó sin este paso, con el motor
         # sin calibrar, y nadie lo notó hasta que una conclusión publicada hubo
         # que retirarla.
-        print("\nAuditoría del generador:")
-        try:
-            for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
+        if historico:
+            # Un conjunto en esquema histórico no puede pasar la comprobación de
+            # expresión, porque no trae las columnas. Se informa la auditoría sin
+            # bloquear, como ya hace el preprocesado con esos mismos tres
+            # conjuntos, y se dice por qué en lugar de saltarla en silencio.
+            from mecanico_ia_exp.obd.auditoria import auditar
+
+            print("\nAuditoría del generador (esquema histórico, informativa):")
+            for comprobacion in auditar(datos, manifiesto):
                 print(f"  {comprobacion}")
-        except AuditoriaDelGeneradorError as error:
-            print(f"\n{error}\n\nNo se escribe nada.")
-            return 1
+            print(
+                "  La comprobación 8 no se puede verificar sin las columnas de expresión: "
+                "es el esquema de un conjunto congelado y se reproduce tal como era."
+            )
+        else:
+            print("\nAuditoría del generador:")
+            try:
+                for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
+                    print(f"  {comprobacion}")
+            except AuditoriaDelGeneradorError as error:
+                print(f"\n{error}\n\nNo se escribe nada.")
+                return 1
 
         datos.to_parquet(destino, index=False)
         metadata.write(destino.with_suffix(".meta.json"))

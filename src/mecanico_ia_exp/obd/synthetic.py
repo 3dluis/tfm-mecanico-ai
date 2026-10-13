@@ -33,7 +33,12 @@ from mecanico_ia_exp.obd.expresion import (
 )
 from mecanico_ia_exp.obd.faults import FAULTS, NORMAL_ID, FaultRuntime
 from mecanico_ia_exp.obd.regimes import REGIMES
-from mecanico_ia_exp.obd.signals import METADATA_COLUMNS, SIGNAL_NAMES, SIGNALS_BY_NAME
+from mecanico_ia_exp.obd.signals import (
+    COLUMNAS_DE_EXPRESION,
+    METADATA_COLUMNS,
+    SIGNAL_NAMES,
+    SIGNALS_BY_NAME,
+)
 
 GENERATOR_VERSION = "1.0.0"
 """Constante escrita a mano. **No identifica el fenómeno generado:** fue la misma
@@ -87,7 +92,10 @@ def _clip_to_physical_range(values: dict[str, float]) -> dict[str, float]:
 
 
 def generate_session(
-    spec: SessionSpec, *, ratio_expresion: float = RATIO_DECLARADO
+    spec: SessionSpec,
+    *,
+    ratio_expresion: float = RATIO_DECLARADO,
+    con_expresion: bool = True,
 ) -> pd.DataFrame:
     """Genera una sesión completa como serie temporal.
 
@@ -100,6 +108,14 @@ def generate_session(
 
     La comparación se hace **tras el recorte a rango físico**, porque es el
     valor que llega al modelo.
+
+    ``con_expresion=False`` reproduce el **esquema histórico**, sin las tres
+    columnas. No es una opción de comodidad: `synthetic_v1`, `v2` y `v3` se
+    generaron antes de que existieran, están congelados y el manifiesto de E19
+    fija por huella los ficheros procesados que salen de ellos. Reconstruirlos
+    con las columnas nuevas produce un `meta.parquet` distinto y rompe la
+    verificación de la congelación. Reproducir un conjunto congelado incluye
+    reproducir su esquema.
     """
     motor = SignalEngine(
         regime=spec.regime,
@@ -140,15 +156,18 @@ def generate_session(
             "regime": spec.regime,
             "fault_id": spec.fault_id,
             "fault_active": activo,
-            "fault_expressed": magnitud >= 1.0,
-            "fault_deviation_max": magnitud,
-            "fault_deviation_signal": señal,
         }
+        if con_expresion:
+            fila["fault_expressed"] = magnitud >= 1.0
+            fila["fault_deviation_max"] = magnitud
+            fila["fault_deviation_signal"] = señal
         fila.update(valores)
         filas.append(fila)
 
-    marco = pd.DataFrame(filas, columns=[*METADATA_COLUMNS, *SIGNAL_NAMES])
-    return marco
+    columnas = list(METADATA_COLUMNS)
+    if not con_expresion:
+        columnas = [c for c in columnas if c not in COLUMNAS_DE_EXPRESION]
+    return pd.DataFrame(filas, columns=[*columnas, *SIGNAL_NAMES])
 
 
 def generate_dataset(
@@ -157,6 +176,7 @@ def generate_dataset(
     dataset_id: str,
     seed: int,
     notes: str = "",
+    con_expresion: bool = True,
 ) -> tuple[pd.DataFrame, DatasetMetadata]:
     """Genera varias sesiones y su ficha de procedencia."""
     if not specs:
@@ -168,7 +188,7 @@ def generate_dataset(
         msg = "Los identificadores de sesión deben ser únicos dentro de un dataset"
         raise ValueError(msg)
 
-    marcos = [generate_session(spec) for spec in specs]
+    marcos = [generate_session(spec, con_expresion=con_expresion) for spec in specs]
     datos = pd.concat(marcos, ignore_index=True)
 
     tasas = {s.sample_rate_hz for s in specs}
