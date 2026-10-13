@@ -1,0 +1,35 @@
+{
+  "medido_el": "2026-10-13",
+  "commit": "c0bd675a",
+  "que_es": "registro de que synthetic_v3 NO se puede reconstruir con el generador publicado, con la medicion que lo demuestra",
+  "por_que_existe": "al validar el procedimiento de reproduccion desde un clon limpio se intento reconstruir synthetic_v3 y salio un conjunto distinto con el mismo nombre. Es peor que no poder reconstruirlo, porque no se nota: las pruebas pasarian midiendo otros datos",
+  "synthetic_v3": {
+    "estado": "NO_RECONSTRUIBLE",
+    "causa": "es PRE-CALIBRACION. Se genero el 1-09-2026 a las 14:58 locales; la calibracion del generador contra el manual de taller es el commit 770ce70, de las 15:46 del mismo dia. El generador publicado ya esta calibrado y produce otras senales",
+    "ya_estaba_documentado": [
+      "docs/auditoria-pi1-contexto-temporal.md",
+      "docs/diseno-pi1/01-correcciones-e7-e2.md",
+      "docs/diseno-pi1/11-riesgos-metodologicos.md (riesgo 16: «v2 y v3 no se regeneran»)"
+    ],
+    "medicion_del_13_10_2026": {
+      "sesiones_identicas": "0 de 216",
+      "ventanas_identicas": "0 de 1764",
+      "elementos_identicos_en_x_npy": "25,34 % (coincidencias por recorte a rango fisico, no por reproduccion)",
+      "diferencia_maxima_en_rpm": 1983.48,
+      "lo_que_SI_reproduce": "meta.parquet y preprocess.json, bit a bit: el ventanado y el reparto dependen de los identificadores y los instantes, no de los valores",
+      "lo_que_NO_reproduce": "el parquet crudo, x.npy y features.npy"
+    },
+    "huellas_de_los_ficheros_del_autor": {
+      "data/processed/synthetic_v3_x.npy": "1bba9b7527725537",
+      "data/processed/synthetic_v3_features.npy": "814b1cf7965d5a14",
+      "data/processed/synthetic_v3_meta.parquet": "f27cd17c23477e7e",
+      "data/processed/synthetic_v3_preprocess.json": "f991711f0fb8575a"
+    },
+    "que_hacer_en_un_clon": "NO regenerarlo. El guion de reconstruccion se niega. Las cifras de E6, E7 y E19 sobre synthetic_v3 no son reproducibles por un tercero sin los ficheros procesados, que no se distribuyen por tamano"
+  },
+  "synthetic_v2": {
+    "estado": "RECONSTRUIBLE Y VERIFICADO",
+    "donde": "configs/manifest_e19.json, congelado antes de abrir el conjunto de prueba",
+    "comprobado_el": "2026-10-13, en un clon limpio: las cuatro huellas coinciden bit a bit"
+  }
+}

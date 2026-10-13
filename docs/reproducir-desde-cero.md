@@ -1,43 +1,75 @@
 # Reproducir desde un clon limpio
 
-**Actualizado:** 12 de octubre de 2026 · **Comprobado:** clonando el repositorio en un directorio
-temporal y ejecutando los seis pasos, no suponiéndolos.
+**Actualizado:** 13 de octubre de 2026 · **Comprobado:** clonando el repositorio en un directorio
+temporal y ejecutando los pasos, no suponiéndolos. La validación del 13 de octubre **encontró tres
+defectos** y están corregidos; lo que sigue es el estado tras corregirlos.
 
 Quien reciba este repositorio no tiene la máquina del autor. Este documento dice exactamente qué
 funciona sin ella, qué hay que reconstruir y qué no se puede reproducir en absoluto, con el motivo.
 
-## Los seis pasos
+## Los pasos
 
 ```bash
 git clone <repositorio> mecanico-ia-exp
 cd mecanico-ia-exp
 
-# 1. Dependencias
-uv sync --extra nb --extra ml
+# 1. Dependencias. Los cinco extras, no dos: `transformers`, `peft`,
+#    `sentence-transformers` y `huggingface-hub` se importan en src, y sin ellos
+#    fallan cuatro pruebas y seis comprobaciones de tipado.
+uv sync --extra nb --extra ml --extra embeddings --extra finetune --extra llm
 
-# 2. Reconstruir los datos que no se distribuyen
+# 2. Reconstruir el conjunto que no se distribuye y COMPROBAR sus huellas
 bash scripts/reconstruir_datos.sh
 
-# 3-5. Gate de calidad
-uv run pytest
+# 3. Qué se puede ejecutar, y ejecutarlo
+uv run python scripts/estado_pruebas.py --ejecutar
+
+# 4. Resto del gate
 uv run ruff check .
+uv run ruff format --check src tests scripts
 uv run mypy src
 
-# 6. Notebooks de demostración
+# 5. Notebooks de demostración
 uv run jupyter lab notebooks/
 ```
 
-**Resultado esperado**, medido en un clon real:
+**Resultado esperado**, medido en un clon real el 13 de octubre de 2026:
 
 | Paso | Sin reconstruir | Tras reconstruir |
 |---|---|---|
-| `pytest` | **815 pasan, 12 se detienen** con instrucciones | **829 pasan** |
-| `ruff check` | pasa | pasa |
+| pruebas **inmediatas** | **833 pasan** | 833 pasan |
+| pruebas **con preparación** | **15 se detienen** con la orden exacta | **15 pasan** |
+| pruebas **con recursos externos** | 15, declaradas y no ejecutables | ídem |
+| `ruff check` · `ruff format` | pasan | pasan |
 | `mypy src` | pasa | pasa |
 | notebooks DEMO | los cuatro se ejecutan | ídem |
 
-Los doce que se detienen sin reconstruir dicen qué falta y la orden exacta. No es un `skip` de
-conveniencia: miden algo real y lo que falta es un dato **reconstruible**.
+`scripts/estado_pruebas.py --ejecutar` devuelve **2** si la segunda categoría no se ha podido
+ejecutar, y **1** si falla la primera. No declara satisfactoria una categoría que no ha corrido:
+una prueba detenida no es una prueba que pase.
+
+## Lo que la validación del 13 de octubre encontró
+
+Tres defectos que esta máquina no mostraba, y por eso se valida en un clon y no aquí:
+
+| Defecto | Síntoma en el clon | Corregido |
+|---|---|---|
+| **`transformers` y `huggingface-hub` se importaban sin estar declarados** | 4 pruebas fallaban y `mypy` daba 6 errores de importación; llegaban como dependencia transitiva de `sentence-transformers` | declarados en el extra `finetune`, donde se usan. La versión resuelta no cambia —`transformers` 5.16.1, `huggingface-hub` 1.29.0—, de modo que el entorno que produjo los resultados es el mismo |
+| **La orden de instalación documentada era incompleta** | dos extras de cinco | corregida arriba |
+| **`synthetic_v3` no es reconstruible y el guion lo intentaba** | producía un conjunto distinto con el mismo nombre, y el censo de artefactos lo detectaba después | el guion se niega; la medición y la causa quedan en `configs/datos_no_reconstruibles.json` y en L-25 |
+
+## Lo que no se puede reproducir, y por qué
+
+| Qué | Por qué | Consecuencia |
+|---|---|---|
+| **`synthetic_v3`** | es **pre-calibración**: se generó antes del commit que calibró el generador contra el manual de taller. El generador publicado produce otras señales: cero de 216 sesiones idénticas | las cifras de E6, E7 y E19 sobre `synthetic_v3` no son reproducibles por un tercero. Se conserva sin regenerar, por decisión documentada |
+| **El corpus documental** | 3 055 PDF de un manual con licencia; no se redistribuye | E11–E15 no se pueden ejecutar sin conseguirlo |
+| **El índice documental** | se construye del corpus | las pruebas con marcador `db` no se ejecutan |
+| **Los pesos del adaptador** | no se distribuyen | las pruebas con marcador `llm` no se ejecutan |
+| **Los ejemplos de ajuste del redactor** | se generan con el índice documental | las pruebas con marcador `artefactos` no se ejecutan |
+
+Los quince que se detienen sin reconstruir dicen qué falta y la orden exacta. No es un `skip` de
+conveniencia: miden algo real y lo que falta es un dato **reconstruible y verificable por huella**.
 
 ## Por qué hay que reconstruir, y por qué eso no es una concesión
 

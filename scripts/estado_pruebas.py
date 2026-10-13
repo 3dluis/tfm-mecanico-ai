@@ -12,11 +12,12 @@ Las tres categorías, por marcador:
   falla, el repositorio está roto.
 * **con preparación** — `conjunto`, `notebook`. Necesitan un paso previo que
   **está automatizado y es verificable**: `scripts/reconstruir_datos.sh`
-  reconstruye cada conjunto y contrasta sus cuatro huellas contra las de
-  referencia; con `synthetic_v3` como argumento, el segundo.
-* **con recursos externos** — `db`, `llm`, `slow`. Dependen del corpus
-  documental, de una base PostgreSQL o de los pesos del adaptador. No se
-  distribuyen, y así está declarado.
+  reconstruye el conjunto y contrasta sus cuatro huellas contra las congeladas.
+* **con recursos externos** — `db`, `llm`, `slow`, `artefactos`. Dependen del
+  corpus documental, de una base PostgreSQL, de los pesos del adaptador o de
+  artefactos intermedios que **no son reconstruibles**: `synthetic_v3`, que es
+  pre-calibración, y los ejemplos de ajuste del redactor, que exigen el índice
+  documental. No se distribuyen, y así está declarado.
 
 El guion **comprueba**, no describe: mira si la preparación está hecha, ejecuta
 lo que corresponde y devuelve un código distinto de cero si algo de la primera
@@ -65,14 +66,19 @@ CATEGORIAS: dict[str, tuple[str, str, str]] = {
         "tiempo: entrenamientos y corpus completo",
         "—",
     ),
+    "artefactos": (
+        "con recursos externos",
+        "artefactos intermedios no reconstruibles: synthetic_v3 (pre-calibración) "
+        "y los ejemplos de ajuste del redactor",
+        "no se distribuyen: ver configs/datos_no_reconstruibles.json",
+    ),
 }
 
 #: Los ficheros cuya ausencia detiene las pruebas de la categoría `conjunto`.
-#: Son dos conjuntos, no uno: `synthetic_v2` sostiene las pruebas del recorrido y
-#: `synthetic_v3` las del conjunto de evaluación independiente del redactor.
+#: Solo `synthetic_v2`: es el único con huellas congeladas y el único
+#: reconstruible. `synthetic_v3` no lo es, y el guion de reconstrucción se niega.
 DEL_CONJUNTO = tuple(
-    f"data/processed/{conjunto}_{pieza}"
-    for conjunto in ("synthetic_v2", "synthetic_v3")
+    f"data/processed/synthetic_v2_{pieza}"
     for pieza in ("x.npy", "features.npy", "meta.parquet", "preprocess.json")
 )
 
@@ -106,7 +112,7 @@ def informar(ejecutar: bool) -> int:
 
     inmediatas = _contar(sin_marcador)
     con_preparacion = _contar("conjunto or notebook")
-    externas = _contar("db or llm or slow")
+    externas = _contar("db or llm or slow or artefactos")
 
     print("CATEGORÍAS DE PRUEBA\n")
     print(f"  inmediatas             {inmediatas:>4}   un clon y `uv sync`")
@@ -121,7 +127,6 @@ def informar(ejecutar: bool) -> int:
         faltan = [r for r in DEL_CONJUNTO if not (RAIZ / r).is_file()]
         print(f"  faltan {len(faltan)} de {len(DEL_CONJUNTO)} ficheros")
         print("  bash scripts/reconstruir_datos.sh")
-        print("  bash scripts/reconstruir_datos.sh synthetic_v3")
         print("  genera, preprocesa y COMPRUEBA las cuatro huellas contra las congeladas")
 
     if not ejecutar:
@@ -171,7 +176,7 @@ def main(argv: list[str]) -> int:
                 {
                     "inmediatas": _contar(" and ".join(f"not {m}" for m in marcadores)),
                     "con_preparacion": _contar("conjunto or notebook"),
-                    "con_recursos_externos": _contar("db or llm or slow"),
+                    "con_recursos_externos": _contar("db or llm or slow or artefactos"),
                     "preparacion_hecha": _preparacion_hecha(),
                 },
                 indent=2,
