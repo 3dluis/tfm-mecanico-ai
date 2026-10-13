@@ -7946,16 +7946,36 @@ distintos no son comparables, y la única forma de saberlo es que el commit qued
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:</span>
-<span class="c1"># la raíz se deduce de dónde está este fichero, de modo que da igual desde qué</span>
-<span class="c1"># directorio se haya abierto Jupyter.</span>
+<span class="c1"># se busca hacia arriba el directorio que contiene `pyproject.toml` y</span>
+<span class="c1"># `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya</span>
+<span class="c1"># abierto Jupyter y a qué profundidad esté el notebook.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"notebooks"</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
-<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_raiz_del_repositorio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">candidato</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">candidato</span> <span class="o">/</span> <span class="s2">"pyproject.toml"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">candidato</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidato</span>
+    <span class="c1"># Si no se encuentra, el paquete puede estar instalado en el entorno; se</span>
+    <span class="c1"># devuelve el directorio actual y el import de abajo dirá si funciona o no.</span>
+    <span class="c1"># Fallar aquí con un mensaje claro es mejor que fallar después sin él.</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+
+
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">_raiz_del_repositorio</span><span class="p">()</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">))</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.notebooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">soporte</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.notebooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">soporte</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># pragma: no cover - solo fuera del repositorio</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"No se encuentra el paquete del laboratorio desde </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con «uv sync --extra nb»."</span>
+    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
 <span class="n">soporte</span><span class="o">.</span><span class="n">imprimir_entorno</span><span class="p">()</span>
 </pre></div>
@@ -7972,7 +7992,7 @@ distintos no son comparables, y la única forma de saberlo es que el commit qued
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       f8ac6dd
+commit       f468729
 arbol        sucio
 </pre>
 </div>

@@ -31,16 +31,36 @@ DESTINO = RAIZ / "notebooks"
 #: la máquina del tribunal igual que en la del autor.
 PREAMBULO = """\
 # Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:
-# la raíz se deduce de dónde está este fichero, de modo que da igual desde qué
-# directorio se haya abierto Jupyter.
+# se busca hacia arriba el directorio que contiene `pyproject.toml` y
+# `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya
+# abierto Jupyter y a qué profundidad esté el notebook.
 import sys
 from pathlib import Path
 
-RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
-if str(RAIZ / "src") not in sys.path:
+
+def _raiz_del_repositorio() -> Path:
+    for candidato in (Path.cwd(), *Path.cwd().parents):
+        if (candidato / "pyproject.toml").is_file() and (
+            candidato / "src" / "mecanico_ia_exp"
+        ).is_dir():
+            return candidato
+    # Si no se encuentra, el paquete puede estar instalado en el entorno; se
+    # devuelve el directorio actual y el import de abajo dirá si funciona o no.
+    # Fallar aquí con un mensaje claro es mejor que fallar después sin él.
+    return Path.cwd()
+
+
+RAIZ = _raiz_del_repositorio()
+if (RAIZ / "src").is_dir() and str(RAIZ / "src") not in sys.path:
     sys.path.insert(0, str(RAIZ / "src"))
 
-from mecanico_ia_exp.notebooks import soporte
+try:
+    from mecanico_ia_exp.notebooks import soporte
+except ModuleNotFoundError as error:  # pragma: no cover - solo fuera del repositorio
+    raise SystemExit(
+        f"No se encuentra el paquete del laboratorio desde {Path.cwd()}.\\n"
+        "Abra Jupyter dentro del repositorio clonado, o instálelo con «uv sync --extra nb»."
+    ) from error
 
 soporte.imprimir_entorno()"""
 
