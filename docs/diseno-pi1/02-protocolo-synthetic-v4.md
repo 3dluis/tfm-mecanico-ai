@@ -55,11 +55,13 @@ generador produce.
 | 1 | La ficha del conjunto debe registrar la **lista completa de `SessionSpec`** | Hoy guarda la semilla global y los identificadores, y nada más. Sin esto no se puede responder «¿con qué configuración se generó esta sesión?», que es lo que el autor pide |
 | 2 | La ficha debe registrar la **versión efectiva del generador**: su commit, la huella del fichero de calibración y la huella de `obd/faults.py`, `obd/regimes.py` y `obd/synthetic.py` | `GENERATOR_VERSION = "1.0.0"` no distinguió `v2` de `v3`, que son fenómenos distintos. Una constante escrita a mano no sirve como identidad |
 | 3 | La ficha debe registrar las **huellas de integridad** de los ficheros producidos | Es lo que permite comprobar después que nadie los sustituyó, como ya se hace con `v2` en el manifiesto de E19 |
+| 4 | Los datos crudos deben llevar una columna **`fault_expressed`** que diga, por muestra, si el fallo **modificó** esa muestra | La columna existente, `fault_active`, dice solo que la función del fallo se aplicó: para el encendido vale cierto en ventanas sin ningún episodio. Sin esta columna el análisis por fallo de la Fase G no se puede hacer sobre bases firmes. Es un booleano que la función del fallo ya calcula; no consume números aleatorios y no cambia ningún valor de señal |
 
-El esquema exacto está en `03-manifiesto-procedencia.md`. Los tres cambios afectan a
-`experiments/preprocess_runner.py` y al ejecutor del generador, **no** a `obd/faults.py`, `obd/regimes.py`
-ni al modelo de señales, de modo que `synthetic_v2` y `synthetic_v3` siguen siendo reproducibles tal como
-están.
+El esquema exacto está en `03-manifiesto-procedencia.md`. Los tres primeros cambios afectan al
+ejecutor del generador y al del preprocesado. El cuarto sí toca `obd/faults.py`, porque es ahí donde cada
+función sabe si modificó la muestra, y por eso lleva su propia comprobación: regenerar una sesión con la
+columna y verificar que **los valores de señal son idénticos** a los de la misma semilla sin ella. Con
+esa comprobación en verde, `synthetic_v2` y `synthetic_v3` siguen siendo reproducibles tal como están.
 
 ## 2.5 Criterios de integridad de la generación
 

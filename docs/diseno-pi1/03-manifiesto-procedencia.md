@@ -91,6 +91,11 @@ falta.
 **Las huellas del código fuente del generador, y no solo su versión declarada.** Es la lección de
 `v2` frente a `v3`: dos conjuntos con la misma versión declarada y distinta física.
 
+**Y una columna nueva en los datos crudos, no en el manifiesto:** `fault_expressed`, que dice por muestra
+si el fallo modificó esa muestra. La que ya existe, `fault_active`, dice solo que la función se aplicó, y
+para el fallo de encendido vale cierto en ventanas sin ningún episodio. El manifiesto declara que la
+columna está y con qué criterio la escribe cada fallo; el dato va con las muestras, que es donde se usa.
+
 ## 3.3 Cómo se comprueba que el manifiesto sirve
 
 Una prueba automatizada que, para una sesión elegida del conjunto, reconstruya su `SessionSpec` desde
