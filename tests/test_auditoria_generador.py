@@ -284,3 +284,45 @@ def test_detecta_que_la_serie_no_se_regenera(conjunto) -> None:
     reproducibilidad = next(c for c in auditar(datos, mentiroso) if c.numero == 12)
     assert reproducibilidad.estado == FALLA
     assert "difiere" in reproducibilidad.detalle
+
+
+def test_una_frecuencia_no_entera_no_se_rechaza() -> None:
+    """A 10 Hz el paso no produce un único valor en coma flotante.
+
+    Exigir igualdad exacta marcaría como defectuoso un conjunto perfectamente
+    regular, y la auditoría es de fallo cerrado: bloquearía el entrenamiento.
+    """
+    specs = [
+        SessionSpec(
+            session_id=f"F00_normal__urban__{k:02d}",
+            regime="urban",
+            duration_s=40.0,
+            seed=5 + k,
+            fault_id="F00_normal",
+            sample_rate_hz=10.0,
+        )
+        for k in range(2)
+    ]
+    datos, _ = generate_dataset(specs, dataset_id="diez_hz", seed=1)
+    manifiesto = construir(specs, datos, dataset_id="diez_hz", seed=1)
+    frecuencia = next(c for c in auditar(datos, manifiesto) if c.numero == 5)
+    assert frecuencia.estado == PASS, frecuencia.detalle
+    assert "10" in frecuencia.detalle
+
+
+def test_se_detecta_que_las_sesiones_no_comparten_paso() -> None:
+    """Lo que la comprobación sí tiene que ver."""
+    a = generate_dataset(
+        [SessionSpec(session_id="a", regime="urban", duration_s=40.0, seed=1)],
+        dataset_id="x",
+        seed=1,
+    )[0]
+    b = generate_dataset(
+        [SessionSpec(session_id="b", regime="urban", duration_s=40.0, seed=2, sample_rate_hz=10.0)],
+        dataset_id="x",
+        seed=1,
+    )[0]
+    mezclado = pd.concat([a, b], ignore_index=True)
+    frecuencia = next(c for c in auditar(mezclado, None) if c.numero == 5)
+    assert frecuencia.estado == FALLA
+    assert "no comparten paso" in frecuencia.detalle

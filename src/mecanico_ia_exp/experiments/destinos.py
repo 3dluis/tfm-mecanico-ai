@@ -28,10 +28,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 from mecanico_ia_exp.config import paths
 
@@ -101,16 +103,49 @@ def exigir_libres(destinos: dict[str, Path]) -> dict[str, Path]:
     return destinos
 
 
+def _versionados(raiz: Path) -> frozenset[str]:
+    """Qué rutas lleva Git. Fuera de un repositorio, el conjunto vacío.
+
+    Importa para no confundir dos cosas muy distintas: un artefacto **que falta
+    porque no se versiona** —`tables/`, `figures/` y `data/` están en
+    `.gitignore`, de modo que un clon recién hecho no los tiene— y un artefacto
+    **que falta porque algo lo borró**. Lo primero es el estado normal de una
+    copia limpia; lo segundo es la alarma que este censo existe para dar.
+    """
+    try:
+        salida = subprocess.run(
+            ["git", "-C", str(raiz), "ls-files"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return frozenset()
+    if salida.returncode != 0:
+        return frozenset()
+    return frozenset(linea for linea in salida.stdout.splitlines() if linea)
+
+
 def censar(
     patrones: Iterable[str] = PATRONES_HISTORICOS, *, raiz: Path | None = None
-) -> dict[str, str]:
-    """Huella de cada artefacto que encaja en los patrones, por ruta relativa."""
+) -> dict[str, dict[str, object]]:
+    """Huella de cada artefacto que encaja en los patrones, por ruta relativa.
+
+    Cada entrada dice además si **Git lleva ese fichero**, que es lo que
+    permite después distinguir una ausencia esperada de una alarma.
+    """
     base = raiz or paths.ROOT
-    censo: dict[str, str] = {}
+    seguidos = _versionados(base)
+    censo: dict[str, dict[str, object]] = {}
     for patron in patrones:
         for ruta in sorted(base.glob(patron)):
             if ruta.is_file():
-                censo[str(ruta.relative_to(base))] = huella(ruta)
+                relativa = str(ruta.relative_to(base))
+                censo[relativa] = {
+                    "sha256": huella(ruta),
+                    "versionado": relativa in seguidos,
+                }
     return censo
 
 
@@ -152,6 +187,11 @@ def escribir_censo(
             "detectar que una ejecución nueva modificó un artefacto histórico; "
             "tables/, figures/ y data/ están fuera de Git y no tienen otra protección"
         ),
+        "sobre_las_ausencias": (
+            "un artefacto con versionado=false que falta NO es una desviación: es el "
+            "estado normal de un clon recién hecho, porque Git no lo lleva. Uno con "
+            "versionado=true que falta sí lo es, y cualquiera que haya cambiado también"
+        ),
         "patrones": list(PATRONES_HISTORICOS),
         "n_artefactos": len(censo),
         "huellas_sha256": censo,
@@ -177,9 +217,18 @@ def verificar_historicos(
 ) -> list[Desviacion]:
     """Compara el estado actual contra el censo.
 
-    Un artefacto **nuevo** que encaje en los patrones no es una desviación: el
-    censo vigila lo que ya existía, y producir artefactos nuevos es lo que una
-    ejecución nueva hace.
+    Qué cuenta como desviación, y qué no:
+
+    * un artefacto **que cambió** siempre lo es, esté versionado o no;
+    * un artefacto **versionado que falta** lo es: Git lo lleva, así que su
+      ausencia significa que algo lo borró;
+    * un artefacto **no versionado que falta no lo es**. `tables/`, `figures/`
+      y `data/` están en `.gitignore`, de modo que un clon recién hecho no los
+      tiene. Tratar esa ausencia como alarma haría que la verificación fallara
+      en la máquina del tribunal sin que nada estuviera mal, que es la forma más
+      segura de que nadie la mire;
+    * un artefacto **nuevo** tampoco lo es: el censo vigila lo que ya existía, y
+      producir artefactos nuevos es lo que una ejecución nueva hace.
     """
     ruta = censo or REGISTRO_HISTORICO
     base = raiz or paths.ROOT
@@ -187,15 +236,23 @@ def verificar_historicos(
         return [Desviacion(str(ruta), "no existe el censo de artefactos históricos")]
     try:
         contenido = json.loads(ruta.read_text("utf-8"))
-        declaradas: dict[str, str] = contenido["huellas_sha256"]
+        declaradas: dict[str, Any] = contenido["huellas_sha256"]
     except (json.JSONDecodeError, KeyError, OSError) as error:
         return [Desviacion(str(ruta), f"el censo no se puede leer: {error}")]
 
     desviaciones: list[Desviacion] = []
-    for relativa, esperada in sorted(declaradas.items()):
+    for relativa, entrada in sorted(declaradas.items()):
+        # Censos anteriores guardaban la huella suelta; se siguen leyendo.
+        if isinstance(entrada, str):
+            esperada, versionado = entrada, True
+        else:
+            esperada = str(entrada["sha256"])
+            versionado = bool(entrada.get("versionado", True))
+
         fichero = base / relativa
         if not fichero.is_file():
-            desviaciones.append(Desviacion(relativa, "falta"))
+            if versionado:
+                desviaciones.append(Desviacion(relativa, "falta, y Git lo lleva"))
             continue
         try:
             actual = huella(fichero)
@@ -205,6 +262,29 @@ def verificar_historicos(
         if actual != esperada:
             desviaciones.append(Desviacion(relativa, f"cambió: {esperada[:16]} → {actual[:16]}"))
     return desviaciones
+
+
+def ausentes_por_no_versionarse(
+    censo: Path | None = None, *, raiz: Path | None = None
+) -> list[str]:
+    """Los artefactos censados que este clon no tiene porque Git no los lleva.
+
+    No son un problema: son la lista de lo que haría falta regenerar para poder
+    verificarlos. Se devuelve aparte para poder informarla sin confundirla con
+    una alarma.
+    """
+    ruta = censo or REGISTRO_HISTORICO
+    base = raiz or paths.ROOT
+    if not ruta.is_file():
+        return []
+    declaradas: dict[str, Any] = json.loads(ruta.read_text("utf-8"))["huellas_sha256"]
+    return sorted(
+        relativa
+        for relativa, entrada in declaradas.items()
+        if isinstance(entrada, dict)
+        and not entrada.get("versionado", True)
+        and not (base / relativa).is_file()
+    )
 
 
 def exigir_historicos_intactos(censo: Path | None = None, *, raiz: Path | None = None) -> int:

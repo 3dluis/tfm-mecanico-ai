@@ -28,6 +28,7 @@ from mecanico_ia_exp.experiments.destinos import (
     REGISTRO_HISTORICO,
     ArtefactoOcupadoError,
     HistoricoAlteradoError,
+    ausentes_por_no_versionarse,
     censar,
     escribir_censo,
     exigir_historicos_intactos,
@@ -140,16 +141,22 @@ def test_el_censo_detecta_un_artefacto_alterado(tmp_path) -> None:
         exigir_historicos_intactos(censo, raiz=tmp_path)
 
 
-def test_el_censo_detecta_un_artefacto_borrado(tmp_path) -> None:
-    (tmp_path / "tables").mkdir()
-    fichero = tmp_path / "tables" / "historico.csv"
-    fichero.write_text("x\n", encoding="utf-8")
+def test_el_censo_detecta_un_artefacto_versionado_borrado(tmp_path) -> None:
+    """Que falte uno que Git lleva es otra cosa: significa que algo lo borró."""
+    (tmp_path / "experiments").mkdir()
+    fichero = tmp_path / "experiments" / "E0_registro.json"
+    fichero.write_text("{}", encoding="utf-8")
     censo = tmp_path / "censo.json"
     escribir_censo(censo, raiz=tmp_path)
 
+    contenido = json.loads(censo.read_text("utf-8"))
+    contenido["huellas_sha256"]["experiments/E0_registro.json"]["versionado"] = True
+    censo.write_text(json.dumps(contenido), encoding="utf-8")
+
     fichero.unlink()
     desviaciones = verificar_historicos(censo, raiz=tmp_path)
-    assert [d.motivo for d in desviaciones] == ["falta"]
+    assert len(desviaciones) == 1
+    assert "Git lo lleva" in desviaciones[0].motivo
 
 
 def test_un_artefacto_nuevo_no_es_una_desviacion(tmp_path) -> None:
@@ -369,3 +376,53 @@ def test_sobre_validacion_no_se_inventa_un_motivo_de_apertura() -> None:
     )
     assert documento["partition"] == "validation"
     assert documento["test_opening_reason"] is None
+
+
+def test_un_clon_sin_los_ficheros_ignorados_no_da_falsas_alarmas(tmp_path) -> None:
+    """Es la comprobación que importa para el tribunal.
+
+    `tables/`, `figures/` y `data/` están en `.gitignore`: un clon recién hecho
+    no los tiene. Si su ausencia contara como desviación, la verificación
+    fallaría en la máquina de quien evalúa sin que nada estuviera mal, y una
+    alarma que salta siempre deja de mirarse.
+    """
+    (tmp_path / "tables").mkdir()
+    (tmp_path / "experiments").mkdir()
+    no_versionado = tmp_path / "tables" / "E0_salida.csv"
+    no_versionado.write_text("a\n", encoding="utf-8")
+    versionado = tmp_path / "experiments" / "E0_registro.json"
+    versionado.write_text("{}", encoding="utf-8")
+
+    censo = tmp_path / "censo.json"
+    escribir_censo(censo, raiz=tmp_path)
+    declaradas = json.loads(censo.read_text("utf-8"))["huellas_sha256"]
+    # Fuera de un repositorio Git nada consta como versionado; se marca a mano
+    # el que sí lo estaría para poder distinguir los dos casos.
+    declaradas["experiments/E0_registro.json"]["versionado"] = True
+    contenido = json.loads(censo.read_text("utf-8"))
+    contenido["huellas_sha256"] = declaradas
+    censo.write_text(json.dumps(contenido), encoding="utf-8")
+
+    no_versionado.unlink()
+    assert verificar_historicos(censo, raiz=tmp_path) == []
+    assert ausentes_por_no_versionarse(censo, raiz=tmp_path) == ["tables/E0_salida.csv"]
+
+    versionado.unlink()
+    desviaciones = verificar_historicos(censo, raiz=tmp_path)
+    assert len(desviaciones) == 1
+    assert "Git lo lleva" in desviaciones[0].motivo
+
+
+def test_el_censo_distingue_lo_que_git_lleva_de_lo_que_no() -> None:
+    declaradas = json.loads(REGISTRO_HISTORICO.read_text("utf-8"))["huellas_sha256"]
+    versionados = {r for r, e in declaradas.items() if e["versionado"]}
+    sin_versionar = set(declaradas) - versionados
+    assert versionados, "ningún artefacto censado consta como versionado"
+    assert sin_versionar, "ninguno sin versionar: el censo perdería su motivo de existir"
+    # Los versionados son exactamente los que un clon trae: los registros, las
+    # copias de artifacts/, los manifiestos y los dos ficheros de configuración
+    # del adaptador. Lo demás --tables/, figures/, data/-- vive fuera de Git y
+    # es la razón por la que este censo existe.
+    prefijos = {r.split("/")[0] for r in versionados}
+    assert prefijos <= {"experiments", "artifacts", "configs", "models"}, prefijos
+    assert {r.split("/")[0] for r in sin_versionar} >= {"tables", "figures"}
