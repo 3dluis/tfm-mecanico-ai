@@ -15,6 +15,7 @@ sesiones de validación, dos por condición: presentar 98 ventanas como si fuera
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -23,6 +24,7 @@ import pandas as pd
 
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.models.baseline import BaselineConfig
 
@@ -63,8 +65,18 @@ def _calibrar(entrenamiento: Any, configuracion: BaselineConfig) -> Any:
     return calibrado
 
 
-def run_threshold_sweep(dataset_id: str = "synthetic_v2") -> int:
+def destinos_de(etiqueta: str = "") -> dict[str, Path]:
+    """Los dos artefactos de E15b, antes de escribir el primero."""
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    return {
+        "registro": paths.EXPERIMENTS / f"E15b_barrido_umbral{sufijo}.json",
+        "tabla": paths.TABLES / f"E15b_barrido_umbral{sufijo}.csv",
+    }
+
+
+def run_threshold_sweep(dataset_id: str = "synthetic_v2", *, etiqueta: str = "") -> int:
     """Recorre el rango de umbrales y aplica el criterio declarado."""
+    destinos = exigir_libres(destinos_de(etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
     configuracion = BaselineConfig()
@@ -113,8 +125,8 @@ def run_threshold_sweep(dataset_id: str = "synthetic_v2") -> int:
         )
 
     curva = pd.DataFrame(filas)
-    tablas = paths.ensure(paths.TABLES)
-    curva.to_csv(tablas / "E15b_barrido_umbral.csv", index=False)
+    paths.ensure(paths.TABLES)
+    curva.to_csv(destinos["tabla"], index=False)
 
     # --- Criterio original, conservado tal cual. Su resultado se publica aunque
     # la enmienda seleccione otro punto: ocultarlo sería reescribir el pasado.
@@ -183,7 +195,7 @@ def run_threshold_sweep(dataset_id: str = "synthetic_v2") -> int:
         )
 
     escribir(
-        paths.ensure(paths.EXPERIMENTS) / "E15b_barrido_umbral.json",
+        destinos["registro"],
         {
             "experiment_id": "E15b_threshold_sweep",
             "criterion": {

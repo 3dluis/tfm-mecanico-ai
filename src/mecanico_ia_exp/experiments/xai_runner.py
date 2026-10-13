@@ -6,12 +6,14 @@ Solo entrenamiento y validación. El fondo sale exclusivamente de entrenamiento.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.models.baseline import BaselineConfig, train_baseline
 from mecanico_ia_exp.obd.faults import FAULTS, NORMAL_ID
 from mecanico_ia_exp.xai.attribution import (
@@ -26,7 +28,18 @@ DATASET = "synthetic_v2"
 POR_CONDICION = 3
 
 
-def run_xai(dataset_id: str = DATASET) -> int:
+def destinos_de(dataset_id: str, etiqueta: str = "") -> dict[str, Path]:
+    """Los tres artefactos de E9, antes de escribir el primero."""
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    return {
+        "registro": paths.EXPERIMENTS / f"E9_xai_{dataset_id}{sufijo}.json",
+        "tabla_atribuciones": paths.TABLES / f"E9_atribuciones_{dataset_id}{sufijo}.csv",
+        "tabla_resumen": paths.TABLES / f"E9_resumen_{dataset_id}{sufijo}.csv",
+    }
+
+
+def run_xai(dataset_id: str = DATASET, *, etiqueta: str = "") -> int:
+    destinos = exigir_libres(destinos_de(dataset_id, etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
 
@@ -95,8 +108,8 @@ def run_xai(dataset_id: str = DATASET) -> int:
                 }
             )
     tabla = pd.DataFrame(filas)
-    tablas = paths.ensure(paths.TABLES)
-    tabla.to_csv(tablas / f"E9_atribuciones_{dataset_id}.csv", index=False)
+    paths.ensure(paths.TABLES)
+    tabla.to_csv(destinos["tabla_atribuciones"], index=False)
 
     print("Señales más atribuidas por condición (agregando los casos explicados):")
     print(f"  {'condición':<24}{'señales principales':<58}{'confianza'}")
@@ -123,10 +136,10 @@ def run_xai(dataset_id: str = DATASET) -> int:
                 "top_signal_declared": principales[0] in declaradas if ficha else None,
             }
         )
-    pd.DataFrame(resumen).to_csv(tablas / f"E9_resumen_{dataset_id}.csv", index=False)
+    pd.DataFrame(resumen).to_csv(destinos["tabla_resumen"], index=False)
 
-    experimentos = paths.ensure(paths.EXPERIMENTS)
-    (experimentos / f"E9_xai_{dataset_id}.json").write_text(
+    paths.ensure(paths.EXPERIMENTS)
+    destinos["registro"].write_text(
         json.dumps(
             {
                 "experiment_id": "E9_xai",

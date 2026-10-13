@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import random
+from pathlib import Path
 
 import numpy as np
 import yaml
@@ -24,6 +25,7 @@ from mecanico_ia_exp.abstention.sufficiency import (
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
 from mecanico_ia_exp.evidence.assembly import assemble
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.experiments.registro import escribir
 from mecanico_ia_exp.llm.training_data import (
     TrainingExample,
@@ -49,7 +51,19 @@ VARIANTES: tuple[tuple[str, tuple[str, ...]], ...] = (
 )
 
 
-def run_training_data(dataset_id: str = DATASET, ventanas_por_condicion: int = 12) -> int:
+def destinos_de(etiqueta: str = "") -> dict[str, Path]:
+    """El registro de E13b, antes de escribirlo."""
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    return {"registro": paths.EXPERIMENTS / f"E13b_training_data{sufijo}.json"}
+
+
+def run_training_data(
+    dataset_id: str = DATASET,
+    ventanas_por_condicion: int = 12,
+    *,
+    etiqueta: str = "",
+) -> int:
+    destinos = exigir_libres(destinos_de(etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
     perfil = load_vehicle(VEHICULO)
@@ -218,7 +232,7 @@ def run_training_data(dataset_id: str = DATASET, ventanas_por_condicion: int = 1
     }
     identidad = embeddings.identity
     escribir(
-        paths.ensure(paths.EXPERIMENTS) / "E13b_training_data.json",
+        destinos["registro"],
         {
             "experiment_id": "E13b_training_data",
             "n_examples": len(ejemplos),
