@@ -182,29 +182,44 @@ def _c4_continuidad(datos: pd.DataFrame, _manifiesto: dict[str, Any] | None) -> 
 
 
 def _c5_frecuencia(datos: pd.DataFrame, manifiesto: dict[str, Any] | None) -> Comprobacion:
-    pasos = {
-        float(np.diff(g["timestamp"].to_numpy(dtype=float))[0])
+    # El paso se compara **con tolerancia**, no por igualdad exacta: un intervalo
+    # perfectamente regular de 0,1 s no produce un único valor en coma flotante,
+    # y exigir igualdad exacta marcaría como defectuoso un conjunto correcto.
+    pasos = [
+        float(np.median(np.diff(g["timestamp"].to_numpy(dtype=float))))
         for _, g in datos.groupby("session_id", sort=True)
         if len(g) > 1
-    }
-    if len(pasos) != 1:
+    ]
+    if not pasos:
         return Comprobacion(
-            5, "frecuencia de muestreo", FALLA, f"{len(pasos)} pasos distintos: {sorted(pasos)[:4]}"
+            5, "frecuencia de muestreo", NO_VERIFICABLE, "ninguna sesión con dos muestras"
         )
-    observada = 1.0 / pasos.pop()
+    if not np.allclose(pasos, pasos[0], rtol=1e-6, atol=1e-9):
+        return Comprobacion(
+            5,
+            "frecuencia de muestreo",
+            FALLA,
+            f"las sesiones no comparten paso: de {min(pasos):g} a {max(pasos):g} s",
+        )
+    observada = 1.0 / pasos[0]
     if manifiesto is None:
         return Comprobacion(
-            5, "frecuencia de muestreo", NO_VERIFICABLE, f"observada {observada} Hz, sin manifiesto"
+            5,
+            "frecuencia de muestreo",
+            NO_VERIFICABLE,
+            f"observada {observada:g} Hz, sin manifiesto",
         )
     declarada = float(manifiesto["sampling_rate_hz"])
-    if abs(observada - declarada) > 1e-9:
+    if not np.isclose(observada, declarada, rtol=1e-6, atol=1e-9):
         return Comprobacion(
             5,
             "frecuencia de muestreo",
             FALLA,
             f"declarada {declarada} Hz, observada {observada} Hz",
         )
-    return Comprobacion(5, "frecuencia de muestreo", PASS, f"{observada} Hz, igual a la declarada")
+    return Comprobacion(
+        5, "frecuencia de muestreo", PASS, f"{observada:g} Hz, igual a la declarada"
+    )
 
 
 def _c6_calentamiento(datos: pd.DataFrame, _manifiesto: dict[str, Any] | None) -> Comprobacion:
