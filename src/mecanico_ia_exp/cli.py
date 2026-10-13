@@ -41,6 +41,22 @@ def main(argv: list[str] | None = None) -> int:
     ):
         sub = subparsers.add_parser(nombre, help=ayuda)
         sub.add_argument("--dataset-id", default="synthetic_v2")
+        if nombre != "preprocess":
+            sub.add_argument(
+                "--etiqueta",
+                default="",
+                help=(
+                    "identifica la ejecución y entra en el nombre de todos sus artefactos; "
+                    "sin ella se usan los nombres históricos y la ejecución se niega a "
+                    "sobrescribirlos"
+                ),
+            )
+    train_baseline = subparsers.choices["train-baseline"]
+    train_baseline.add_argument(
+        "--por-ventana",
+        action="store_true",
+        help="guardar también la predicción de cada ventana con su sesión y su temperatura media",
+    )
 
     subparsers.add_parser("xai", help="atribución sobre el modelo especializado")
     subparsers.add_parser("eval-retrieval", help="evaluar la recuperación")
@@ -208,12 +224,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "train-baseline":
         from mecanico_ia_exp.experiments.baseline_runner import run_baseline
 
-        return run_baseline(args.dataset_id)
+        return run_baseline(args.dataset_id, etiqueta=args.etiqueta, por_ventana=args.por_ventana)
 
     if args.command == "train-temporal":
         from mecanico_ia_exp.experiments.temporal_runner import run_temporal
 
-        return run_temporal(args.dataset_id)
+        return run_temporal(args.dataset_id, etiqueta=args.etiqueta)
 
     if args.command == "xai":
         from mecanico_ia_exp.experiments.xai_runner import run_xai
