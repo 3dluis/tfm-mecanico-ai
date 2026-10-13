@@ -40,14 +40,28 @@ se queda cerrada.
 | Ajuste | sobre el interno de ajuste | sobre el interno de ajuste |
 | Selección de época | no aplica | **sobre el interno de desarrollo** |
 | Hiperparámetros | los congelados de `BaselineConfig`; si se tocaran, sobre el interno de desarrollo | los congelados de la configuración de E7; igual condición |
-| Calibración | isotónica, validación cruzada interna **sobre el interno de ajuste** | la misma técnica, sobre el mismo interno de ajuste, para que la calibración no sea una ventaja de uno |
+| Calibración | isotónica, validación cruzada interna sobre el interno de ajuste, **con pliegues agrupados por sesión** | la misma técnica, los mismos datos y los mismos pliegues agrupados, para que la calibración no sea una ventaja de uno |
 | Métrica que se publica | sobre **validación** | sobre **validación** |
 | Semilla | la de la réplica | la misma de la réplica, apareada |
 
-La calibración merece una nota. Hoy el bosque se calibra y la red no, y aun así la red sale mejor
-calibrada en los dos conjuntos: ECE 0,1317 frente a 0,1439 en `v2`, y 0,0163 frente a 0,0801 en `v3`.
-Calibrar las dos con la misma técnica y sobre los mismos datos convierte esa observación en comparable;
-hoy no lo es.
+La calibración merece dos notas.
+
+La primera, que hoy el bosque se calibra y la red no, y aun así la red sale mejor calibrada en los dos
+conjuntos: ECE 0,1317 frente a 0,1439 en `v2`, y 0,0163 frente a 0,0801 en `v3`. Calibrar las dos con la
+misma técnica y sobre los mismos datos convierte esa observación en comparable; hoy no lo es.
+
+La segunda es un detalle de implementación que importa. `CalibratedClassifierCV(..., cv=5)` forma sus
+pliegues **por muestra**, es decir por ventana, de modo que ventanas solapadas de una misma sesión caen a
+la vez en el pliegue que ajusta el modelo y en el que ajusta el calibrador. Eso rompe el control por
+sesión que el resto del protocolo mantiene. **Los pliegues tienen que agruparse por sesión** —en la
+práctica, pasando a `cv` los índices de un `GroupKFold` agrupado por `session_id`— y la comprobación es
+que ninguna sesión aparezca en dos pliegues.
+
+**Y conviene decir que el código actual no lo hace**, de modo que la calibración de E6, E15 y E19 se
+ajustó con pliegues por ventana. Eso **no** invalida ninguna cifra publicada: el error de calibración se
+reporta sobre validación o sobre prueba, que son datos ajenos a esos pliegues, así que el número es
+honesto. Lo que queda es un calibrador peor ajustado de lo que podría estar. Va a limitaciones, no a
+correcciones: E19 está cerrada y su código no se toca.
 
 ## 5.3 Métricas que se publican
 
