@@ -52,33 +52,45 @@ def main(etiqueta: str = "") -> int:
 
     tok = AutoTokenizer.from_pretrained(MODELO)
     destino_dir.mkdir(parents=True, exist_ok=True)
+    escritos: list[Path] = []
 
-    for nombre in ("train", "valid"):
-        origen = origen_dir / f"{nombre}.jsonl"
-        salidas: list[str] = []
-        for linea in origen.read_text(encoding="utf-8").splitlines():
-            if not linea.strip():
-                continue
-            mensajes = json.loads(linea)["messages"]
-            # Todo menos el último turno es el prompt; el último es lo que se
-            # aprende a producir.
-            contexto, objetivo = mensajes[:-1], mensajes[-1]
-            prompt = tok.apply_chat_template(contexto, tokenize=False, add_generation_prompt=True)
-            salidas.append(
-                json.dumps(
-                    {"prompt": prompt, "completion": objetivo["content"]},
-                    ensure_ascii=False,
+    try:
+        for nombre in ("train", "valid"):
+            origen = origen_dir / f"{nombre}.jsonl"
+            salidas: list[str] = []
+            for linea in origen.read_text(encoding="utf-8").splitlines():
+                if not linea.strip():
+                    continue
+                mensajes = json.loads(linea)["messages"]
+                # Todo menos el último turno es el prompt; el último es lo que se
+                # aprende a producir.
+                contexto, objetivo = mensajes[:-1], mensajes[-1]
+                prompt = tok.apply_chat_template(
+                    contexto, tokenize=False, add_generation_prompt=True
                 )
-            )
+                salidas.append(
+                    json.dumps(
+                        {"prompt": prompt, "completion": objetivo["content"]},
+                        ensure_ascii=False,
+                    )
+                )
 
-        destino = destino_dir / f"{nombre}.jsonl"
-        destino.write_text("\n".join(salidas) + "\n", encoding="utf-8")
-        largos = [len(tok(json.loads(s)["prompt"])["input_ids"]) for s in salidas]
-        print(
-            f"{nombre:<6} {len(salidas):>4} ejemplos · "
-            f"prompt {min(largos)}-{max(largos)} tokens "
-            f"(mediana {sorted(largos)[len(largos) // 2]})"
-        )
+            destino = destino_dir / f"{nombre}.jsonl"
+            destino.write_text("\n".join(salidas) + "\n", encoding="utf-8")
+            escritos.append(destino)
+            largos = [len(tok(json.loads(s)["prompt"])["input_ids"]) for s in salidas]
+            print(
+                f"{nombre:<6} {len(salidas):>4} ejemplos · "
+                f"prompt {min(largos)}-{max(largos)} tokens "
+                f"(mediana {sorted(largos)[len(largos) // 2]})"
+            )
+    except Exception:
+        # Un destino a medias bloquea el reintento, porque la negativa a
+        # sobrescribir no distingue «ya está hecho» de «quedó a medias».
+        for ruta in escritos:
+            ruta.unlink(missing_ok=True)
+        raise
+
     return 0
 
 
