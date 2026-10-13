@@ -643,3 +643,14 @@ def test_los_dos_incidentes_de_artefactos_siguen_documentados() -> None:
         texto = documento.read_text("utf-8")
         assert marca in texto
         assert "no se declara" in texto.lower() or "no restaurada" in texto.lower()
+
+
+def test_el_procedimiento_de_reconstruccion_esta_documentado() -> None:
+    """Una prueba que necesita recursos externos tiene que decir cómo obtenerlos."""
+    documento = paths.DOCS / "reproducir-desde-cero.md"
+    assert documento.is_file()
+    texto = documento.read_text("utf-8")
+    for pieza in ("reconstruir_datos.sh", "esquema historico", "no se puede reproducir"):
+        assert pieza in texto, f"el procedimiento no explica «{pieza}»"
+    for guion in ("scripts/reconstruir_datos.sh", "scripts/verificar_reconstruccion.py"):
+        assert (paths.ROOT / guion).is_file(), f"falta {guion}"
