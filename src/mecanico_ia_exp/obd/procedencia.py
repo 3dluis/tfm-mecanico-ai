@@ -134,6 +134,7 @@ def construir(
     dataset_id: str,
     seed: int,
     ratio_expresion: float = RATIO_DECLARADO,
+    con_expresion: bool = True,
     artefactos: dict[str, Path] | None = None,
     raiz: Path | None = None,
 ) -> dict[str, Any]:
@@ -162,6 +163,11 @@ def construir(
             "calibracion_no_leida_por_ningun_modulo": CALIBRACION_NO_LEIDA,
         },
         "expression": {
+            # El esquema con que se generó. `historico` reproduce los tres
+            # conjuntos anteriores a estas columnas: no las lleva, y por tanto su
+            # expresión efectiva no se puede auditar. Se declara aquí para que
+            # quien lea el manifiesto no tenga que deducirlo de una ausencia.
+            "esquema": "vigente" if con_expresion else "historico",
             "ratio_declarado": ratio_expresion,
             "sigma_generador": dict(SIGMA_GENERADOR),
             "umbral_por_senal": tolerancias(ratio_expresion),

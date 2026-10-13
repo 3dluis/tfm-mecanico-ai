@@ -49,7 +49,12 @@ PATRONES_HISTORICOS: tuple[str, ...] = (
     "tables/*.csv",
     "figures/*.png",
     "data/raw/synthetic/*.parquet",
-    "data/raw/synthetic/*.meta.json",
+    # La ficha `*.meta.json` **no** se censa: lleva `created_at`, de modo que una
+    # reconstrucción legítima la cambia siempre y la vigilancia daría una alarma
+    # en cada reconstrucción. Una alarma que salta siempre deja de mirarse. Lo
+    # que sí se vigila es el parquet, que **sí** es reproducible bit a bit: ahí
+    # están los datos, y una sustitución silenciosa de la ficha sin tocar el
+    # parquet no cambiaría ninguna cifra medida.
     "models/*.npy",
     "models/*/finetune_config.json",
     # Los ejemplos con que se ajustó el adaptador. Están fuera del control de

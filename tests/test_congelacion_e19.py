@@ -404,7 +404,9 @@ def test_las_agregaciones_prohibidas_cubren_las_medidas_repetidas(
 # --- El reparto declarado ----------------------------------------------------
 
 
+@pytest.mark.conjunto
 def test_los_recuentos_de_sesiones_son_los_del_reparto_real(
+    conjunto_preprocesado: None,
     manifiesto: dict[str, Any],
 ) -> None:
     """Lo único que se leyó de la partición de prueba para congelar las reglas.
@@ -435,7 +437,9 @@ def test_los_recuentos_de_sesiones_son_los_del_reparto_real(
         assert por_condicion[("test", condicion)] == 2
 
 
+@pytest.mark.conjunto
 def test_el_total_de_ventanas_cuadra_con_el_manifiesto_de_preprocesado(
+    conjunto_preprocesado: None,
     manifiesto: dict[str, Any],
 ) -> None:
     """Las 98 ventanas de prueba se obtienen por resta, sin leer la partición."""
