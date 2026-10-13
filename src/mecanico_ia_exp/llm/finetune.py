@@ -63,29 +63,34 @@ class FinetuneConfig:
     # --- gestión de memoria. NO son hiperparámetros: no cambian ni los pesos, ni
     # el orden de los ejemplos, ni la semilla, ni una sola operación en coma
     # flotante. Cambian cuándo el asignador devuelve los búferes que ya no usa.
-    fraccion_de_memoria: float = 0.85
+    fraccion_de_memoria: float = 0.95
     """Techo del asignador de MPS, como fracción de lo que recomienda el
     dispositivo. Medido el 13-10-2026 en esta máquina: el recomendado es 17,8 GB
     y el asignador, **sin** techo, llegó a 22,8 GB en 1364 regiones con 13,9 GB
     en intercambio; el proceso pedía 25,4 GB de huella física en una máquina de
     24, y cada paso esperaba a disco (12,6 % de uso de CPU).
 
-    **El valor sale de una medición, no de una estimación.** Con 0,7 —12,43 GB—
-    el ajuste falló en el primer paso, y el mensaje dijo exactamente dónde:
+    **El valor sale de dos mediciones, no de una estimación.** Cada techo corto
+    produjo un fallo inmediato que dijo exactamente cuánto faltaba:
 
-        MPS allocated: 11.36 GiB · max allowed: 12.43 GiB
-        Tried to allocate 1.63 GiB  (cross_entropy sobre el vocabulario)
+        techo 0,70 (12,43 GB) · pasada hacia ADELANTE
+          MPS allocated 11.36 GiB · tried to allocate 1.63 GiB  ->  ~13,0 GB
+        techo 0,85 (15,10 GB) · pasada hacia ATRÁS
+          MPS allocated 12.17 GiB + other 1.75 GiB · tried 1.63 GiB  ->  ~15,6 GB
 
-    La reserva grande es la pérdida sobre las 151 936 entradas del vocabulario de
-    Qwen2.5 para una secuencia de hasta 3 072 posiciones: los logits y su
-    gradiente. El paso necesita unos 13 GB, de modo que 0,85 —15,1 GB— lo cubre
-    con holgura y deja unos 9 GB a la máquina. Sigue estando **muy por debajo** de
-    los 22,8 GB que la paralizaron.
+    La reserva grande, en las dos, es la pérdida sobre las 151 936 entradas del
+    vocabulario de Qwen2.5 para una secuencia de hasta 3 072 posiciones: los
+    logits y su gradiente. El pico real de un paso es el de la pasada hacia atrás,
+    **unos 15,6 GB**, y 0,95 —16,9 GB— lo cubre con poco más de un gigabyte de
+    margen. En una máquina de 24 GB deja unos 7 GB al sistema, y sigue muy por
+    debajo de los 22,8 GB de caché acumulado que la paralizaron: lo que esos 16,9
+    acotan es el **pico de un paso**, no el crecimiento del asignador, que el
+    vaciado por paso ya controla.
 
-    Que el primer valor fuera corto es justamente lo que se buscaba: con techo, el
-    ajuste **falla rápido y dice el número que le falta**, en lugar de paginar
-    durante horas sin producir una época. Ver
-    `docs/experiments/incidencia-p2-02.md`."""
+    **Esto es lo último que se intenta por esta vía.** Si 0,95 no basta, la
+    conclusión no es subir otra vez: es que el modelo con sus hiperparámetros
+    congelados —3 072 tokens, 36 capas, este vocabulario— no cabe en esta máquina,
+    y eso es un resultado. Ver `docs/experiments/incidencia-p2-02.md`."""
 
     vaciar_cache_por_paso: bool = True
     """Devolver al sistema los búferes que el asignador cachea, en cada paso.
