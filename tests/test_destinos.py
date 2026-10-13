@@ -782,3 +782,51 @@ def test_la_congelacion_declara_lo_que_el_codigo_comprueba() -> None:
     fuente = (paths.ROOT / "src" / "mecanico_ia_exp" / "cli.py").read_text("utf-8")
     for pieza in ("huellas_sha256_16", "hiperparametros", "directorio_congelado"):
         assert pieza in fuente, f"la congelación declara «{pieza}» y el código no lo comprueba"
+
+
+# ------------------------------- las tres categorias de prueba, comprobables
+
+def test_cada_prueba_cae_en_una_sola_categoria() -> None:
+    """Una prueba sin categoría falla en silencio en un clon.
+
+    El riesgo concreto: añadir una prueba que necesite el conjunto y olvidar el
+    marcador. En esta máquina pasaría; en la del tribunal, no, y parecería que el
+    repositorio está roto.
+    """
+    import subprocess
+
+    marcadores = ("conjunto", "notebook", "db", "llm", "slow")
+    sin = " and ".join(f"not {m}" for m in marcadores)
+
+    def cuenta(expresion: str) -> int:
+        salida = subprocess.run(
+            ["uv", "run", "pytest", "--collect-only", "-q", "-m", expresion],
+            capture_output=True,
+            text=True,
+            cwd=paths.ROOT,
+            check=False,
+        ).stdout
+        return sum(
+            int(linea.rsplit(":", 1)[-1].strip())
+            for linea in salida.splitlines()
+            if ".py:" in linea and linea.rsplit(":", 1)[-1].strip().isdigit()
+        )
+
+    inmediatas = cuenta(sin)
+    preparacion = cuenta("conjunto or notebook")
+    externas = cuenta("db or llm or slow")
+    todas = cuenta("")
+    assert inmediatas + preparacion + externas == todas, (
+        f"{todas - inmediatas - preparacion - externas} prueba(s) en más de una categoría o "
+        "en ninguna"
+    )
+
+
+def test_el_guion_de_estado_de_pruebas_existe_y_declara_las_tres() -> None:
+    guion = paths.ROOT / "scripts" / "estado_pruebas.py"
+    assert guion.is_file()
+    texto = guion.read_text("utf-8")
+    for categoria in ("inmediatas", "con preparación", "con recursos externos"):
+        assert categoria in texto
+    # Y no declara satisfactoria una categoría que no ha ejecutado.
+    assert "no se han ejecutado" in texto
