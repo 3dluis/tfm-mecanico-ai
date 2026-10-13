@@ -33,15 +33,18 @@ reproducir en una máquina cualquiera y qué no."""),
     md("""\
 ## 1. La pregunta de investigación
 
-> ¿Puede un sistema inteligente híbrido identificar patrones de fallo no representados en su
-> conocimiento disponible, generar hipótesis diagnósticas a partir del análisis contextual y
-> longitudinal de datos OBD-II y validarlas mediante evidencia antes de incorporarlas como
-> conocimiento reutilizable?
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
+> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+> disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin
+> fundamento?
 
-La pregunta tiene cuatro verbos y ninguno es decorativo: **identificar**, **generar**, **validar** e
-**incorporar**. Cada uno se evalúa por separado, porque un sistema puede acertar el diagnóstico y
-sostenerlo con evidencia que no viene al caso, o anclarlo impecablemente en un documento que no
-aplica a ese motor.
+Es la formulación **acotada**, fijada por `ADR-004` el 12 de septiembre de 2026. La elección importa
+y se explica en el apartado 9: el trabajo circuló un tiempo con una formulación más amplia, y una
+auditoría encontró que dos de sus términos no tenían experimento que los sostuviera.
+
+La pregunta tiene tres verbos y ninguno es decorativo: **explicar**, **rastrear** y **reconocer**.
+Cada uno se evalúa por separado, porque un sistema puede acertar el diagnóstico y sostenerlo con
+evidencia que no viene al caso, o anclarlo impecablemente en un documento que no aplica a ese motor.
 
 | Subpregunta | Qué evalúa | Experimentos |
 |---|---|---|
@@ -355,9 +358,16 @@ funcionó, y en varios casos es más informativo que lo que sí.
 | **Un espacio de embeddings mezclado** | las búsquedas no declaraban qué modelo las había producido; se corrigió y se reejecutó con pre-registro | `resultado-rerun-a.md` |
 | **El verificador regresionó al corregirlo** | la política v2 arregló cinco casos y rompió uno que antes acertaba | `E15_suficiencia_verifier_v2.json` |
 | **Dos cifras publicadas sin registro** | las medias de temperatura del termostato se calcularon en el análisis y no se guardaron: hoy no se pueden verificar | marcadas **no utilizables** el 12-10-2026 |
+| **El conjunto de prueba se abrió cinco veces** | tres intentos de E19 —dos interrumpidos—, una para repetir las ablaciones y **una accidental**, al leer identificadores de sesión que ya estaban en otro sitio | `docs/methodology/registro-aperturas-test.md`, con qué se expuso en cada una |
+| **Dos artefactos dañados por el propio trabajo** | una tabla de E5 sobrescrita y otra de E15 borrada por un patrón demasiado amplio; las detectó el censo | `incidencia-artefactos-e5.md` e `incidencia-artefactos-e15.md`; la segunda **no se declara restaurada** |
 
 Sobre el cuarto punto conviene ser explícito, porque afecta a lo que PI.4 puede afirmar: mientras el
-rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**."""),
+rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**.
+
+Y sobre el conjunto de prueba, con la misma franqueza: **cinco aperturas no son tres**. Las tres
+primeras son la misma medición intentada tres veces; la cuarta repite unas ablaciones definidas antes
+de la primera; la quinta **no debió ocurrir** y está registrada como lo que fue, un descuido corregido
+en el acto. Lo que se expuso en cada una está en la tabla, y ninguna cambió una decisión de diseño."""),
     md("""\
 ## 9. La pregunta que sigue abierta, y por qué
 
@@ -386,7 +396,37 @@ mientras el refrigerante no supera su tope, de modo que en una sesión de calent
 ventanas etiquetadas con el fallo no contienen ninguna señal observable de él.
 
 El diseño para responder la pregunta —sin abrir una línea nueva— está en `docs/diseno-pi1/` y
-**no se ha ejecutado**."""),
+**no se ha ejecutado**.
+
+## 9.1 La formulación amplia, y por qué no es la pregunta de este trabajo
+
+Conviene decirlo aquí porque el lector puede encontrarla en material anterior. El trabajo circuló
+hasta septiembre de 2026 con una formulación más ambiciosa:
+
+> ¿Puede un sistema inteligente híbrido **identificar patrones de fallo no representados en su
+> conocimiento disponible**, generar hipótesis diagnósticas a partir del análisis contextual y
+> longitudinal de datos OBD-II y validarlas mediante evidencia antes de **incorporarlas como
+> conocimiento reutilizable**?
+
+Una auditoría la examinó término a término y encontró que **de sus cinco componentes, uno tenía
+evidencia**. Los dos marcados en negrita —identificar patrones no representados e incorporar
+conocimiento reutilizable— **no tenían implementación ni fase** en el plan de veinte experimentos.
+`ADR-004` fijó en consecuencia la formulación acotada como canónica.
+
+Lo que sí está construido de esa formulación amplia no se retira ni se esconde, y sirve a la pregunta
+acotada:
+
+| Componente | Qué hay | Estado |
+|---|---|---|
+| Detección de anomalías | E6, E7 | **necesario** para el diagnóstico |
+| Análisis longitudinal | E4, E5, E7 y el diseño de PI.1 | **necesario** en lo medido; **exploratorio** en lo diseñado y no ejecutado |
+| Generación de hipótesis | E9: la atribución produce las observaciones | **necesario** para la trazabilidad |
+| Identificar patrones no representados | nada | **línea futura**, sin evidencia |
+| Memoria evolutiva de conocimiento | nada | **línea futura**, sin evidencia |
+
+Los dos últimos son trabajo posterior, y proponerlos formalmente exigiría resultados verificables que
+hoy no existen. Presentarlos como logrados sería exactamente el tipo de afirmación sin evidencia que
+este trabajo se propone detectar."""),
     md("""\
 ## 10. Reproducibilidad
 

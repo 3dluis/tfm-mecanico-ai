@@ -33,7 +33,7 @@ es una **ausencia** —algo que debería ocurrir y no ocurre—, y esas son las 
     md("""\
 ## 1. Introducción: por qué hace falta mirar antes de modelar
 
-Un modelo entrenado sobre datos que nadie ha mirado puede obtener métricas excelentes por motivos
+Un modelo entrenado sobre datos que nadie ha mirado puede obtener métricas altas por motivos
 que no tienen nada que ver con el problema. Si el generador dejara, por ejemplo, una señal que tomara
 un valor imposible solo durante un fallo, cualquier clasificador la encontraría y el resultado
 mediría la calidad del generador, no la del diagnóstico.

@@ -19,6 +19,25 @@ fragmentos** que la condición de evidencia parcial, en los tres fallos:
 manipular.** Tres de los diecisiete casos no miden nada distinto de otros tres, y «distractor
 3/3» no es una quinta condición: es la condición parcial contada dos veces.
 
+> **`CORREGIDO 2026-10-13`.** La tabla de arriba y su explicación —que la causa es el filtro de
+> motor— **no son exactas**. Al medirlo de nuevo antes de rediseñar, con la recuperación ya
+> corregida, sale esto:
+>
+> | Pareja | ¿Llega el distractor? | Diferencia con la parcial |
+> |---|---|---|
+> | fuga de vacío | **sí**, los dos ficheros declarados | **2 fragmentos** |
+> | termostato | no | 0 |
+> | sonda | no | 0 |
+>
+> Y la causa de los dos que fallan no es el filtro: **`C12` y `C16` tienen exactamente la misma
+> configuración que `C11` y `C15`**. El único campo que difiere es `distractor_files`, que el
+> recorrido de suficiencia **no lee** —solo lo usa E12, como etiqueta para puntuar la recuperación—.
+> Nunca fueron una condición distinta, y no porque algo las bloqueara, sino porque no había nada que
+> bloquear.
+>
+> La invalidación sigue en pie: la condición no medía lo que decía medir. Lo que cambia es el motivo,
+> y con él el rediseño. Ver [`protocolo-distractor-v2.md`](protocolo-distractor-v2.md).
+
 ## 2. Esto ya estaba documentado, para un solo fallo
 
 El propio conjunto anotado lo dice, en el comentario del caso sin filtro:

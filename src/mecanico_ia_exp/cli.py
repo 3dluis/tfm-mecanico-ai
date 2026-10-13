@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from mecanico_ia_exp.abstention.sufficiency import POLITICAS, VERIFIER_VERSION
 from mecanico_ia_exp.config import paths
@@ -65,9 +66,31 @@ def main(argv: list[str] | None = None) -> int:
         "threshold-sweep", help="barrido del umbral de confianza sobre validación"
     )
     umbral.add_argument("--dataset-id", default="synthetic_v2")
-    subparsers.add_parser("training-data", help="generar el conjunto de ajuste del SLM")
+    datos_ajuste = subparsers.add_parser(
+        "training-data", help="generar el conjunto de ajuste del SLM"
+    )
+    datos_ajuste.add_argument(
+        "--particion-ejemplos",
+        choices=("train", "validation"),
+        default="validation",
+        help=(
+            "de dónde salen los ejemplos. validation es lo que produjo slm_lora_v2 y "
+            "CONTAMINA, porque E13 y E15 miden al redactor sobre validación: tres de sus "
+            "cinco ventanas de evaluación eran las mismas del ajuste "
+            "(docs/methodology/auditoria-contaminacion-adaptador.md). Se conserva para poder "
+            "reproducir aquel conjunto. Para un adaptador nuevo, train"
+        ),
+    )
     ft = subparsers.add_parser("finetune-slm", help="ajustar el SLM con LoRA")
     ft.add_argument("--epochs", type=int, default=4)
+    ft.add_argument(
+        "--datos",
+        default="",
+        help=(
+            "etiqueta del conjunto de ejemplos: usa "
+            "data/processed/slm_finetune_prepared_<etiqueta>. Sin ella, el histórico"
+        ),
+    )
     ft.add_argument(
         "--adapter-dir",
         default="slm_lora",
@@ -388,14 +411,92 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "training-data":
         from mecanico_ia_exp.experiments.training_runner import run_training_data
 
-        return run_training_data(etiqueta=args.etiqueta)
+        return run_training_data(
+            etiqueta=args.etiqueta,
+            particion_de_ejemplos=args.particion_ejemplos,
+        )
 
     if args.command == "finetune-slm":
         from mecanico_ia_exp.llm.finetune import FinetuneConfig, finetune
 
+        sufijo_datos = f"_{args.datos}" if args.datos else ""
+        destino_adaptador = paths.MODELS / args.adapter_dir
+        if destino_adaptador.exists() and any(destino_adaptador.iterdir()):
+            print(
+                f"Ya existe models/{args.adapter_dir} y no se sobrescribe: un adaptador "
+                "congelado sostiene cifras publicadas.\n\nNo se escribe nada."
+            )
+            return 1
+        # Las huellas de la congelación se comprueban ANTES de cargar el modelo.
+        # El fichero de congelación promete que «si los ficheros de ejemplos no
+        # coinciden con las huellas que declara, no se ajusta»; sin esto, la
+        # promesa estaba escrita y no se cumplía, y un `.jsonl` cambiado después
+        # de congelar habría producido un adaptador de otros datos con apariencia
+        # de seguir la configuración declarada.
+        version = args.adapter_dir.split("_")[-1]
+        congelacion = paths.CONFIGS / f"congelacion-adaptador-{version}.json"
+        if congelacion.is_file():
+            import hashlib
+
+            congelado = json.loads(congelacion.read_text("utf-8"))
+
+            # Las huellas no bastan: comprobarlas y después ajustar con OTRO
+            # directorio de datos, o con otro número de épocas, produciría un
+            # adaptador que no es el congelado con apariencia de serlo. Se ata
+            # también el origen de los datos y los hiperparámetros que el fichero
+            # declara.
+            # Se compara el directorio que de verdad se va a usar, no la etiqueta:
+            # omitir `--datos` resolvía al conjunto histórico y la comprobación
+            # anterior lo dejaba pasar por estar vacía la etiqueta.
+            # Comparación EXACTA del nombre de directorio. Buscarlo como
+            # subcadena dejaba pasar el histórico, porque `slm_finetune_prepared`
+            # está contenido en `slm_finetune_prepared_sin_contaminacion`.
+            esperado = congelado["datos_de_ajuste"]["ficheros"]["preparados"]
+            directorio_congelado = Path(esperado).parent.name
+            directorio = f"slm_finetune_prepared{sufijo_datos}"
+            if directorio != directorio_congelado:
+                print(
+                    f"{congelacion.name} congela los ejemplos de «{esperado}» y se ha pedido "
+                    f"ajustar con «{directorio}».\n"
+                    "Un adaptador entrenado con otros datos no es el experimento congelado.\n"
+                    "\nNo se ajusta nada."
+                )
+                return 1
+            epocas = int(congelado["hiperparametros"]["epochs"])
+            if args.epochs != epocas:
+                print(
+                    f"{congelacion.name} congela {epocas} épocas y se han pedido "
+                    f"{args.epochs}. El criterio de parada es parte del experimento "
+                    "congelado.\n\nNo se ajusta nada."
+                )
+                return 1
+
+            declaradas = congelado["datos_de_ajuste"]["huellas_sha256_16"]
+            discrepantes = []
+            for relativa, esperada in sorted(declaradas.items()):
+                fichero = paths.DATA_PROCESSED / relativa
+                if not fichero.is_file():
+                    discrepantes.append(f"{relativa}: falta")
+                    continue
+                actual = hashlib.sha256(fichero.read_bytes()).hexdigest()[:16]
+                if actual != esperada:
+                    discrepantes.append(f"{relativa}: {esperada} → {actual}")
+            if discrepantes:
+                detalle = "\n".join(f"  - {d}" for d in discrepantes)
+                print(
+                    f"Los ejemplos no son los que {congelacion.name} congeló:\n{detalle}\n"
+                    "Un ajuste sobre otros datos con la configuración declarada no es el "
+                    "experimento congelado.\n\nNo se ajusta nada."
+                )
+                return 1
+            print(
+                f"congelación verificada: {len(declaradas)} ficheros, origen de los datos y "
+                f"{epocas} épocas coinciden con {congelacion.name}"
+            )
+
         h = finetune(
-            paths.DATA_PROCESSED / "slm_finetune_prepared",
-            paths.MODELS / args.adapter_dir,
+            paths.DATA_PROCESSED / f"slm_finetune_prepared{sufijo_datos}",
+            destino_adaptador,
             FinetuneConfig(epochs=args.epochs),
         )
         print(f"\nadaptador guardado en models/{args.adapter_dir} · {h.seconds:.0f} s")

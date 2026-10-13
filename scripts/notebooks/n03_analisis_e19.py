@@ -258,16 +258,56 @@ el diagnóstico era incorrecto, porque la evidencia estaba retirada o porque era
 en todas. Es lo que PI.3 pedía, sobre datos que el diseño no vio.
 
 **Qué no podemos afirmar, y es lo más importante de este notebook.** Que el riesgo de falsa
-confianza sea cero. Con un denominador de **14** y siete sesiones independientes, un numerador de
-cero es perfectamente compatible con una tasa real de varios puntos porcentuales: el intervalo de
-confianza de una proporción de 0/14 llega holgadamente por encima del 20 % en su extremo superior.
-Lo medido es que **en esta muestra no ocurrió**, no que no pueda ocurrir. El experimento está
+confianza sea cero. La celda siguiente calcula el intervalo en lugar de describirlo: con 0 de 14, la
+evidencia disponible es compatible con una tasa real de **hasta el 21,5 %**. Lo medido es que **en
+esta muestra no ocurrió**, no que no pueda ocurrir. El experimento está
 marcado `COMPLETED — WITH DOCUMENTED LIMITATIONS` por esto, y `VALIDATED` no se usa como sinónimo
 de hipótesis demostrada.
 
 Tampoco se puede leer la cobertura 6/10 como «cuatro oportunidades perdidas». De esas diez
 ejecuciones con evidencia completa, **dos llevaban diagnóstico incorrecto**, y en ellas abstenerse
 era lo que debía hacer. La parte evitable del coste es la otra cifra: **2 de 8**."""),
+    code('''\
+# El intervalo se calcula, no se describe. Con numeradores de 0 y denominadores
+# de 14, el intervalo de Wald da [0, 0] --un artefacto conocido-- de modo que se
+# usa el de **Wilson**, que no colapsa en los extremos.
+from math import sqrt
+
+
+def wilson(exitos: int, total: int, z: float = 1.959963985) -> tuple[float, float]:
+    """Intervalo de Wilson al 95 % para una proporción."""
+    p = exitos / total
+    centro = (p + z * z / (2 * total)) / (1 + z * z / total)
+    radio = z * sqrt(p * (1 - p) / total + z * z / (4 * total * total)) / (1 + z * z / total)
+    return max(0.0, centro - radio), min(1.0, centro + radio)
+
+
+intervalos = []
+for nombre, fila in primario.iterrows():
+    bajo, alto = wilson(int(fila.numerador), int(fila.denominador))
+    intervalos.append({
+        "tasa": nombre,
+        "medido": f"{int(fila.numerador)}/{int(fila.denominador)}",
+        "valor": round(float(fila.valor), 4),
+        "IC 95 % (Wilson)": f"[{bajo:.3f}, {alto:.3f}]",
+        "amplitud": round(alto - bajo, 3),
+    })
+pd.DataFrame(intervalos).set_index("tasa")'''),
+    md("""\
+**Qué muestra.** Los tres intervalos, y son anchos. La falsa confianza de 0/14 es compatible con
+cualquier tasa real entre **0 y 0,215**; la abstención innecesaria de 2/8, con cualquiera entre
+**0,071 y 0,591**; la cobertura de 6/10, entre **0,313 y 0,832**.
+
+**Qué podemos interpretar.** Que el experimento acota poco. Decir «hasta un 21,5 % de falsa
+confianza es compatible con lo medido» es una afirmación más fuerte que no decir nada, porque
+delimita exactamente lo que no se ha demostrado. Y la amplitud del intervalo de la abstención
+innecesaria —más de medio punto— explica por qué el informe de la fase se niega a llamarla
+«estimación».
+
+**Qué no podemos afirmar.** Que el intervalo sea exacto. Supone observaciones independientes, y las
+catorce proceden de siete sesiones del mismo generador: dos ejecuciones de la misma sesión no son
+independientes, de modo que el intervalo real es **más ancho** que el que sale aquí. Tampoco cubre
+la incertidumbre de que el conjunto sea sintético, que no es estadística."""),
     md("""\
 ## 7. Qué decidió el sistema, caso a caso
 
