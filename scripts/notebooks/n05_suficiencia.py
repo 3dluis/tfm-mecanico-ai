@@ -252,7 +252,12 @@ ejes[1].legend(
     title_fontsize=7,
     loc="center right",
 )
-soporte.exportar(fig, "FIG-N05-01_aplicables_vs_cobertura", subdirectorio="05_suficiencia")"""),
+destino = soporte.exportar(
+    fig, "FIG-N05-01_aplicables_vs_cobertura", subdirectorio="05_suficiencia"
+)
+# Se imprime la ruta RELATIVA a la raíz: la absoluta sería la de esta máquina,
+# y el HTML que se entrega la llevaría dentro.
+print(f"figura exportada en PNG y SVG: {destino.relative_to(soporte.raiz())}")"""),
     md("""\
 **Qué muestra.** A la izquierda, cuántos fragmentos **aplicables** —vehículo correcto, código correcto— llegan al
 verificador en cada condición. A la derecha, qué fracción de las afirmaciones construidas queda

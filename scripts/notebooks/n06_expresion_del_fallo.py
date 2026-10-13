@@ -284,7 +284,11 @@ ejes[1].set_xlabel("Condición de fallo")
 ejes[1].set_title("Sin señal frente a falladas", fontsize=9)
 ejes[1].legend(fontsize=7)
 
-soporte.exportar(fig, "FIG-N06-01_expresion_y_aciertos", subdirectorio="06_expresion")"""),
+destino = soporte.exportar(
+    fig, "FIG-N06-01_expresion_y_aciertos", subdirectorio="06_expresion"
+)
+# Ruta RELATIVA: la absoluta es la de esta máquina y acabaría en el HTML entregado.
+print(f"figura exportada en PNG y SVG: {destino.relative_to(soporte.raiz())}")"""),
     md("""\
 **Qué muestra la figura.** A la izquierda, cada punto es una de las 70 ventanas etiquetadas, situada
 en la fracción de sus 120 muestras que altera la trayectoria. Tres condiciones tienen todos sus puntos

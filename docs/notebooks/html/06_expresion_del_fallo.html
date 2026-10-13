@@ -8025,7 +8025,7 @@ lo dicen y fallan con un mensaje claro si falta.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       de9e66d
+commit       6efaa79
 arbol        sucio
 </pre>
 </div>
@@ -8328,7 +8328,11 @@ F05_misfire                 14          0         14       0          0.054167  
 <span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Sin señal frente a falladas"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
 <span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-N06-01_expresion_y_aciertos"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"06_expresion"</span><span class="p">)</span>
+<span class="n">destino</span> <span class="o">=</span> <span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-N06-01_expresion_y_aciertos"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"06_expresion"</span>
+<span class="p">)</span>
+<span class="c1"># Ruta RELATIVA: la absoluta es la de esta máquina y acabaría en el HTML entregado.</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"figura exportada en PNG y SVG: </span><span class="si">{</span><span class="n">destino</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">soporte</span><span class="o">.</span><span class="n">raiz</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8342,13 +8346,8 @@ F05_misfire                 14          0         14       0          0.054167  
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>exportada: notebooks/salida/06_expresion/FIG-N06-01_expresion_y_aciertos.png y FIG-N06-01_expresion_y_aciertos.svg
+figura exportada en PNG y SVG: notebooks/salida/06_expresion/FIG-N06-01_expresion_y_aciertos.png
 </pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>PosixPath('/Users/ldiaz/workspace/MasterAI/TFM/mecanico-ia-exp/notebooks/salida/06_expresion/FIG-N06-01_expresion_y_aciertos.png')</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
@@ -8757,7 +8756,7 @@ reconstructibilidad, no el conjunto.</p>
 
   python: 3.11.14
   plataforma: Darwin arm64
-  commit: de9e66d
+  commit: 6efaa79
   arbol: sucio
 </pre>
 </div>
