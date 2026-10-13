@@ -183,7 +183,7 @@ siguiente."""),
     md("""\
 ## 7. La condición informativa: hay documentos y aun así se abstiene
 
-Con evidencia parcial el sistema tiene delante cuatro, siete o seis fragmentos aplicables —del
+Con evidencia parcial el sistema tiene delante cinco, siete o seis fragmentos aplicables —del
 vehículo correcto, con el código correcto— y se abstiene igual. Esa es la medición que distingue
 «no hay nada» de «hay algo que no sirve»."""),
     code("""\
@@ -203,7 +203,7 @@ print(resumen.round(2).to_string())"""),
     code("""\
 fig, ejes = soporte.lienzo(
     experimento="E15 · verificador v2.1",
-    dataset="synthetic_v2, validación · 17 casos anotados",
+    dataset="synthetic_v2, validación · los 17 casos anotados, en sus 5 condiciones",
     procedencia="artifacts/tables/E15_suficiencia.csv",
     titulo="Documentos aplicables frente a cobertura de afirmaciones, por condición de evidencia",
     columnas=2,
@@ -211,7 +211,11 @@ fig, ejes = soporte.lienzo(
     alto=3.4,
 )
 
-orden = ["FULL", "PARTIAL", "ABSENT", "DISTRACTOR"]
+# Las CINCO condiciones del conjunto. Hasta el 13-10-2026 esta lista tenía
+# cuatro y dejaba fuera DISTRACTOR_NO_FILTER, de modo que la figura dibujaba 14
+# de los 17 casos mientras su pie declaraba los diecisiete.
+orden = ["FULL", "PARTIAL", "ABSENT", "DISTRACTOR", "DISTRACTOR_NO_FILTER"]
+etiquetas_x = ["FULL", "PARTIAL", "ABSENT", "DISTRACTOR", "DISTRACTOR\\nSIN FILTRO"]
 colores = {"EXPLAIN": "#1b6b4a", "ABSTAIN": "#9c4221"}
 
 for eje, (columna, etiqueta, unidad) in zip(
@@ -235,10 +239,14 @@ for eje, (columna, etiqueta, unidad) in zip(
                 linewidth=0.6,
             )
     eje.set_xticks(range(len(orden)))
-    eje.set_xticklabels(orden, fontsize=8)
+    eje.set_xticklabels(etiquetas_x, fontsize=7.5)
     eje.set_xlabel("Condición de evidencia")
     eje.set_ylabel(f"{etiqueta} ({unidad})")
     eje.set_title(etiqueta, fontsize=9)
+
+dibujados = int(e15.corpus_variant.isin(orden).sum())
+assert dibujados == len(e15), f"la figura dibuja {dibujados} de {len(e15)} casos"
+print(f"condiciones dibujadas: {len(orden)} · casos dibujados: {dibujados} de {len(e15)}")
 
 from matplotlib.lines import Line2D
 
@@ -264,13 +272,24 @@ verificador en cada condición. A la derecha, qué fracción de las afirmaciones
 **sostenida** por ellos. El color es la decisión.
 
 Lo que salta a la vista es que las dos columnas no se parecen. En la condición parcial hay
-fragmentos aplicables —entre cuatro y siete— y la cobertura es **cero** en todos los casos.
+fragmentos aplicables —cinco, seis y siete— y la cobertura es **cero** en los tres casos. Con el
+distractor y el filtro de motor activo, los mismos tres recuentos y la misma cobertura cero; sin el
+filtro, entran fragmentos de otro motor y el recuento **baja** a tres, cuatro y tres, porque el
+validador de aplicabilidad los degrada a coincidencia parcial y dejan de contar como aplicables. La
+cobertura sigue siendo cero. Solo la condición completa alcanza cobertura 1,00, y en tres de sus
+cinco casos.
 
 
 **Qué podemos interpretar.** Que **tener documentación aplicable delante no equivale a tener soporte**. Las dos magnitudes se
 separan exactamente en la condición que el diseño construyó para separarlas, y la decisión sigue a
 la cobertura y no al recuento de documentos.
 
+
+> **Corrección del 13 de octubre de 2026.** Esta figura dibujaba cuatro de las cinco condiciones
+> —dejaba fuera `DISTRACTOR_NO_FILTER`— y su pie declaraba los diecisiete casos: mostraba catorce.
+> Ninguna conclusión cambiaba, porque los tres omitidos se abstienen con cobertura cero, pero la
+> condición que faltaba es justamente la única en la que entran fragmentos de otro motor. La celda
+> comprueba ahora, antes de exportar, que no falte ningún caso.
 
 **Qué no podemos afirmar.** Que la cobertura sea un buen estimador de nada fuera de estos casos. Y hay un límite más serio: que
 las comprobaciones deterministas de soporte coincidan con lo que un fragmento sostiene **de verdad**
