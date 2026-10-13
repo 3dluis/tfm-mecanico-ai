@@ -81,11 +81,15 @@ elegir época ni hiperparámetros.
 de calibración tiene una sesión por condición. Es una propiedad del punto, no del procedimiento, y se
 lee en la tendencia de los cuatro puntos.
 
-**Y sobre lo ya publicado:** el código actual repartió por ventana, así que la calibración de E6, E15 y
-E19 se ajustó así. Eso **no** invalida ninguna cifra: el error de calibración se reporta sobre validación
-o sobre prueba, ajenas a esos pliegues, así que el número es honesto. Lo que queda es un calibrador peor
-ajustado de lo que podría estar. Va a limitaciones, no a correcciones: E19 está cerrada y su código no se
-toca.
+**Y sobre lo ya publicado:** el reparto por ventana afecta a los experimentos que ajustan el calibrador,
+que son E15 y E19 (`threshold_runner.py` y `sufficiency_runner.py`, ambos
+`CalibratedClassifierCV(method="isotonic", cv=5)`). **E6 no está entre ellos**: `baseline_runner.py`
+ajusta un bosque sin calibrar y calcula su error de calibración sobre `predict_proba` en crudo, de modo
+que su ECE de 0,1439 es el del modelo sin calibrar y no arrastra esta limitación —lo que también quiere
+decir que la comparación de ECE entre E6 y E7 no es una comparación entre dos calibradores. Sobre E15 y
+E19 el reparto **no** invalida ninguna cifra: el error de calibración se reporta sobre validación o sobre
+prueba, ajenas a esos pliegues, así que el número es honesto. Lo que queda es un calibrador peor ajustado
+de lo que podría estar. Va a limitaciones, no a correcciones: E19 está cerrada y su código no se toca.
 
 ## 5.3 Métricas que se publican
 
