@@ -1,5 +1,5 @@
 {
-  "tomado_el": "2026-10-13T15:16:19.127391+00:00",
+  "tomado_el": "2026-10-13T15:31:14.326048+00:00",
   "cambios_aceptados_a_proposito": true,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
@@ -58,7 +58,7 @@
       "versionado": true
     },
     "experiments/E13b_training_data_sin_contaminacion.json": {
-      "sha256": "ee29737d2bcbd90a8e536f30abfe03b496d3c223b2117c9fd4881931de641275",
+      "sha256": "a8fc6d19ac889e474cc0e21b8374898765c1645e9f4db0586c8c3c34a81c8818",
       "versionado": true
     },
     "experiments/E15_suficiencia.json": {

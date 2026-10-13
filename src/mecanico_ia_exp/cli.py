@@ -426,6 +426,42 @@ def main(argv: list[str] | None = None) -> int:
                 "congelado sostiene cifras publicadas.\n\nNo se escribe nada."
             )
             return 1
+        # Las huellas de la congelación se comprueban ANTES de cargar el modelo.
+        # El fichero de congelación promete que «si los ficheros de ejemplos no
+        # coinciden con las huellas que declara, no se ajusta»; sin esto, la
+        # promesa estaba escrita y no se cumplía, y un `.jsonl` cambiado después
+        # de congelar habría producido un adaptador de otros datos con apariencia
+        # de seguir la configuración declarada.
+        version = args.adapter_dir.split("_")[-1]
+        congelacion = paths.CONFIGS / f"congelacion-adaptador-{version}.json"
+        if congelacion.is_file():
+            import hashlib
+
+            declaradas = json.loads(congelacion.read_text("utf-8"))["datos_de_ajuste"][
+                "huellas_sha256_16"
+            ]
+            discrepantes = []
+            for relativa, esperada in sorted(declaradas.items()):
+                fichero = paths.DATA_PROCESSED / relativa
+                if not fichero.is_file():
+                    discrepantes.append(f"{relativa}: falta")
+                    continue
+                actual = hashlib.sha256(fichero.read_bytes()).hexdigest()[:16]
+                if actual != esperada:
+                    discrepantes.append(f"{relativa}: {esperada} → {actual}")
+            if discrepantes:
+                detalle = "\n".join(f"  - {d}" for d in discrepantes)
+                print(
+                    f"Los ejemplos no son los que {congelacion.name} congeló:\n{detalle}\n"
+                    "Un ajuste sobre otros datos con la configuración declarada no es el "
+                    "experimento congelado.\n\nNo se ajusta nada."
+                )
+                return 1
+            print(
+                f"congelación verificada: los {len(declaradas)} ficheros de ajuste coinciden "
+                f"con {congelacion.name}"
+            )
+
         h = finetune(
             paths.DATA_PROCESSED / f"slm_finetune_prepared{sufijo_datos}",
             destino_adaptador,

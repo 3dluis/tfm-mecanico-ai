@@ -319,16 +319,22 @@ def run_training_data(
     # ventana comparte sesión, así que agrupar por sesión las mantiene juntas.
     casos = sorted({e.case_id for e in ejemplos})
 
-    # Y **estratificado por condición**. Ordenar las sesiones y cortar por el 85 %
-    # dejaba una validación interna con una sola condición --las dos últimas por
-    # orden alfabético eran las dos de encendido--, de modo que la pérdida de
-    # validación del ajuste habría medido el comportamiento ante un solo tipo de
-    # caso. Tomando la última sesión de cada condición, cubre las cinco.
-    por_condicion: dict[str, list[str]] = {}
-    for sesion in sorted({e.case_id.split("@")[0] for e in ejemplos}):
-        por_condicion.setdefault(sesion.split("__")[0], []).append(sesion)
-    sesiones_valid = {lista[-1] for lista in por_condicion.values() if len(lista) > 1}
-    casos_train = {e.case_id for e in ejemplos if e.case_id.split("@")[0] not in sesiones_valid}
+    if particion_de_ejemplos == "validation":
+        # Reparto HISTÓRICO, por ventana. Se conserva por el mismo motivo que la
+        # selección: este modo existe para reproducir el conjunto de
+        # `slm_lora_v2`, y mejorarlo lo rompería.
+        casos_train = set(casos[: int(len(casos) * 0.85)])
+    else:
+        # Por SESIÓN y **estratificado por condición**. Por ventana no basta: dos
+        # ventanas consecutivas comparten la mitad de sus muestras, de modo que
+        # la pérdida de validación del ajuste mediría sobre datos vistos. Y
+        # cortar por orden dejaba la validación interna con una sola condición,
+        # porque las últimas por orden alfabético eran las de encendido.
+        por_condicion: dict[str, list[str]] = {}
+        for sesion in sorted({e.case_id.split("@")[0] for e in ejemplos}):
+            por_condicion.setdefault(sesion.split("__")[0], []).append(sesion)
+        sesiones_valid = {lista[-1] for lista in por_condicion.values() if len(lista) > 1}
+        casos_train = {e.case_id for e in ejemplos if e.case_id.split("@")[0] not in sesiones_valid}
 
     paths.ensure(destinos["ejemplos_train"].parent)
     # La comprobación de contaminación va **antes** de escribir un solo ejemplo.
