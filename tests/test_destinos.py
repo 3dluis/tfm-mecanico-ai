@@ -235,3 +235,85 @@ def test_las_ablaciones_sobre_prueba_exigen_etiqueta() -> None:
     """Repetir E18 sobre prueba sin etiqueta borraría la ejecución publicada."""
     with pytest.raises(ArtefactoOcupadoError, match="su propia etiqueta"):
         ablation_runner.run_ablations("synthetic_v2", particion="test", allow_test=True, reason="x")
+
+
+# --------------------------------------- la etiqueta llega desde la línea de órdenes
+
+#: Todo subcomando que escriba artefactos tiene que aceptar `--etiqueta`. Sin
+#: ella el ejecutor se niega a sobrescribir, de modo que un subcomando sin la
+#: opción sería un subcomando imposible de reejecutar.
+SUBCOMANDOS_QUE_ESCRIBEN = (
+    "train-baseline",
+    "train-temporal",
+    "xai",
+    "eval-retrieval",
+    "threshold-sweep",
+    "training-data",
+    "ablations",
+)
+
+
+@pytest.mark.parametrize("subcomando", SUBCOMANDOS_QUE_ESCRIBEN)
+def test_el_subcomando_acepta_etiqueta(subcomando: str, capsys) -> None:
+    from mecanico_ia_exp.cli import main
+
+    with pytest.raises(SystemExit):
+        main([subcomando, "--help"])
+    assert "--etiqueta" in capsys.readouterr().out, (
+        f"«{subcomando}» escribe artefactos y no se puede etiquetar desde la línea de órdenes: "
+        "con los artefactos publicados en su sitio, no habría forma de reejecutarlo"
+    )
+
+
+def test_los_ejemplos_de_ajuste_tambien_llevan_etiqueta() -> None:
+    """Proteger el registro de E13b y dejar los .jsonl en ruta fija sería peor que
+    no protegerlo: el registro anterior quedaría apuntando a unos ejemplos cuyas
+    huellas ya no son las que declara, y eso no se nota."""
+    historicos = training_runner.destinos_de()
+    etiquetados = training_runner.destinos_de("sin_contaminacion")
+    assert set(historicos) == {"registro", "ejemplos_train", "ejemplos_valid"}
+    for clave in historicos:
+        assert historicos[clave] != etiquetados[clave], f"{clave} no cambió de ruta"
+
+
+# ------------------------------------------- el censo no absorbe un cambio en silencio
+
+
+def test_el_censo_se_niega_a_absorber_un_cambio(tmp_path) -> None:
+    """Es el modo en que una vigilancia deja de vigilar sin que nadie lo note.
+
+    Si un artefacto censado cambia y después se reescribe el censo para añadir
+    otro, la huella alterada pasa a ser la esperada y la verificación posterior
+    lo da por intacto.
+    """
+    (tmp_path / "tables").mkdir()
+    vigilado = tmp_path / "tables" / "historico.csv"
+    vigilado.write_text("a\n", encoding="utf-8")
+    censo = tmp_path / "censo.json"
+    escribir_censo(censo, raiz=tmp_path)
+
+    vigilado.write_text("ALTERADO\n", encoding="utf-8")
+    (tmp_path / "tables" / "nuevo.csv").write_text("b\n", encoding="utf-8")
+
+    with pytest.raises(HistoricoAlteradoError, match="No se reescribe el censo"):
+        escribir_censo(censo, raiz=tmp_path)
+
+    # Y la verificación sigue delatándolo: el censo no se tocó.
+    desviaciones = verificar_historicos(censo, raiz=tmp_path)
+    assert len(desviaciones) == 1
+    assert desviaciones[0].motivo.startswith("cambió")
+
+
+def test_un_cambio_deliberado_se_acepta_pidiendolo(tmp_path) -> None:
+    """El caso legítimo existe y tiene que ser explícito, no el camino por omisión."""
+    (tmp_path / "tables").mkdir()
+    vigilado = tmp_path / "tables" / "historico.csv"
+    vigilado.write_text("a\n", encoding="utf-8")
+    censo = tmp_path / "censo.json"
+    escribir_censo(censo, raiz=tmp_path)
+
+    vigilado.write_text("cambiado a propósito\n", encoding="utf-8")
+    escribir_censo(censo, raiz=tmp_path, aceptar_cambios=True)
+
+    assert verificar_historicos(censo, raiz=tmp_path) == []
+    assert json.loads(censo.read_text("utf-8"))["cambios_aceptados_a_proposito"] is True

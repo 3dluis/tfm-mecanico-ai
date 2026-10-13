@@ -52,9 +52,21 @@ VARIANTES: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 def destinos_de(etiqueta: str = "") -> dict[str, Path]:
-    """El registro de E13b, antes de escribirlo."""
+    """Los tres artefactos de E13b, antes de escribir el primero.
+
+    Los dos `.jsonl` van aquí y no solo el registro: son **los ejemplos con que
+    se ajustó el adaptador**. Proteger el registro y dejar los ejemplos en una
+    ruta fija los habría sobrescrito, y el registro anterior habría quedado
+    apuntando a unos ficheros cuyas huellas ya no coinciden con las que declara
+    --que es peor que perderlos, porque no se nota--.
+    """
     sufijo = f"_{etiqueta}" if etiqueta else ""
-    return {"registro": paths.EXPERIMENTS / f"E13b_training_data{sufijo}.json"}
+    ejemplos = paths.DATA_PROCESSED / f"slm_finetune{sufijo}"
+    return {
+        "registro": paths.EXPERIMENTS / f"E13b_training_data{sufijo}.json",
+        "ejemplos_train": ejemplos / "train.jsonl",
+        "ejemplos_valid": ejemplos / "valid.jsonl",
+    }
 
 
 def run_training_data(
@@ -217,17 +229,17 @@ def run_training_data(
     corte = int(len(casos) * 0.85)
     casos_train = set(casos[:corte])
 
-    destino = paths.ensure(paths.DATA_PROCESSED / "slm_finetune")
+    paths.ensure(destinos["ejemplos_train"].parent)
     for nombre, seleccion in (
         ("train", [e for e in ejemplos if e.case_id in casos_train]),
         ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
     ):
-        ruta = destino / f"{nombre}.jsonl"
+        ruta = destinos[f"ejemplos_{nombre}"]
         ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
-        print(f"  {ruta.name:<12} {len(seleccion)} ejemplos")
+        print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
 
     huellas = {
-        n: hashlib.sha256((destino / f"{n}.jsonl").read_bytes()).hexdigest()[:16]
+        n: hashlib.sha256(destinos[f"ejemplos_{n}"].read_bytes()).hexdigest()[:16]
         for n in ("train", "valid")
     }
     identidad = embeddings.identity

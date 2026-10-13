@@ -1,5 +1,6 @@
 {
-  "tomado_el": "2026-10-13T02:23:19.619496+00:00",
+  "tomado_el": "2026-10-13T02:56:07.439213+00:00",
+  "cambios_aceptados_a_proposito": false,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "patrones": [
     "experiments/*.json",
@@ -10,6 +11,7 @@
     "data/raw/synthetic/*.meta.json",
     "models/*.npy",
     "models/*/finetune_config.json",
+    "data/processed/slm_finetune/*.jsonl",
     "artifacts/metrics/*.json",
     "artifacts/tables/*.csv",
     "configs/manifest_e19.json",
@@ -17,7 +19,7 @@
     "configs/goldset_mazda3_bk.yaml",
     "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 144,
+  "n_artefactos": 146,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
     "experiments/E13_agente_echo.json": "59e159eb84db5c1ba28b303214279fc237af389e2cece4617be631997faf1a11",
@@ -133,6 +135,8 @@
     "models/E7_standardizer_scale.npy": "1b5ddb56e9ed94fa8f8acbb9b77815abbeebb1e28a34bd3023657419806bc6fe",
     "models/slm_lora/finetune_config.json": "8141e630c5b557976fd20a203b133da6d3f69f1653a4eaa32805cd7beff0bd2a",
     "models/slm_lora_v2/finetune_config.json": "8dbf625afe7a441c4a9e715c26944e7c5f11fc010e120aac60a79ddec4409b41",
+    "data/processed/slm_finetune/train.jsonl": "70bd0d7e6c406319b3e606496d837fbb673a6e6193d31278d937bdc86ccb1505",
+    "data/processed/slm_finetune/valid.jsonl": "ac81346e6d48548a6e79ef37736b740d97f916df2c218311a38036adbc23a3c9",
     "artifacts/metrics/e18_ablaciones_resumen.json": "ed272508f5452af93a0da998fc14e41baec44d5ab478fed19b1a1bd144752028",
     "artifacts/metrics/rerun_a_comparison.json": "f06e3135f737bb35462d73004e5b26235ceaec5037d01a845d48d98de902cc21",
     "artifacts/tables/E12_retrieval_por_caso.csv": "bdabb344639339b27fdaf78d8ce8fd2b8078a802e344c6f031dc18bab4fdb1c7",

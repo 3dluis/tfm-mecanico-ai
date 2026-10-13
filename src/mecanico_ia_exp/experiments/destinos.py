@@ -50,6 +50,10 @@ PATRONES_HISTORICOS: tuple[str, ...] = (
     "data/raw/synthetic/*.meta.json",
     "models/*.npy",
     "models/*/finetune_config.json",
+    # Los ejemplos con que se ajustó el adaptador. Están fuera del control de
+    # versiones y son lo que haría irreproducible el ajuste si cambiaran sin
+    # que nadie lo notara.
+    "data/processed/slm_finetune/*.jsonl",
     "artifacts/metrics/*.json",
     "artifacts/tables/*.csv",
     "configs/manifest_e19.json",
@@ -110,19 +114,40 @@ def censar(
     return censo
 
 
-def escribir_censo(destino: Path | None = None, *, raiz: Path | None = None) -> Path:
-    """Escribe el censo con la fecha en que se tomó.
+def escribir_censo(
+    destino: Path | None = None, *, raiz: Path | None = None, aceptar_cambios: bool = False
+) -> Path:
+    """Amplía el censo, **comprobando antes que lo ya censado no ha cambiado**.
 
-    **Sobrescribe a propósito**, al contrario que todo lo demás en este módulo:
-    el censo no es evidencia experimental, es el instrumento que la vigila, y
-    tiene que poder ampliarse cuando se declara histórico un artefacto nuevo.
-    Lo que no puede cambiar es la huella de lo ya censado, y de eso se encarga
-    ``verificar_historicos``.
+    El censo tiene que poder crecer cuando se declara histórico un artefacto
+    nuevo. Lo que no puede hacer es **absorber un cambio**: si un artefacto
+    censado se alteró y se reescribe el censo sin mirar, la huella nueva pasa a
+    ser la esperada y la verificación posterior lo da por intacto. El censo
+    habría dejado de vigilar justo lo que existe para vigilar, y en silencio.
+
+    Por eso esta función verifica primero y se niega si encuentra una
+    desviación. ``aceptar_cambios`` existe para el único caso legítimo —el autor
+    decide que un artefacto cambió a propósito— y obliga a pedirlo
+    explícitamente.
     """
     ruta = destino or REGISTRO_HISTORICO
+    if ruta.is_file() and not aceptar_cambios:
+        desviaciones = verificar_historicos(ruta, raiz=raiz)
+        if desviaciones:
+            listado = "\n".join(f"  - {d}" for d in desviaciones)
+            msg = (
+                f"No se reescribe el censo: {len(desviaciones)} artefacto(s) censado(s) han "
+                f"cambiado o faltan.\n{listado}\n"
+                "Reescribirlo ahora convertiría la huella alterada en la esperada y la "
+                "verificación posterior daría el artefacto por intacto. Si el cambio es "
+                "deliberado, pásalo con aceptar_cambios=True y déjalo escrito en el informe "
+                "de la fase."
+            )
+            raise HistoricoAlteradoError(msg)
     censo = censar(raiz=raiz)
     contenido = {
         "tomado_el": datetime.now(UTC).isoformat(),
+        "cambios_aceptados_a_proposito": aceptar_cambios,
         "para_que": (
             "detectar que una ejecución nueva modificó un artefacto histórico; "
             "tables/, figures/ y data/ están fuera de Git y no tienen otra protección"
