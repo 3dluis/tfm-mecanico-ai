@@ -49,6 +49,15 @@ RETIRADAS: tuple[tuple[str, str], ...] = (
         "necesita un rediseño antes de sostener",
         "el rediseño se hizo y se ejecutó",
     ),
+    (
+        "del que salen E6, E7 y la evaluación final",
+        "las tres ejecuciones declaran dataset_id synthetic_v2, que sí se reconstruye",
+    ),
+    (
+        "el fallo de encendido y el termostato bloqueado abierto",
+        "el termostato es el fallo con la firma MÁS clara en medias (69,2 frente a 81,4 °C);"
+        " el segundo invisible es la sonda lambda de respuesta lenta",
+    ),
 )
 
 CAPITULOS = ("cap5_resultados.md", "cap6_conclusiones.md")
@@ -81,6 +90,10 @@ def test_las_correcciones_conservan_lo_que_el_texto_decia(nombre: str) -> None:
     assert "correccion-cap5-cap6-paso-a.md" in texto, (
         "la nota tiene que remitir a la propuesta que la motivó"
     )
+    assert "propuesta-figuras-cap5-cap6.md" in texto, (
+        "F-7 y F-8 salieron de la verificación de procedencia de las figuras:"
+        " la nota tiene que remitir a esa propuesta"
+    )
 
 
 def test_la_propuesta_del_paso_a_tiene_las_cinco_columnas_exigidas() -> None:
@@ -98,6 +111,30 @@ def test_la_propuesta_del_paso_a_tiene_las_cinco_columnas_exigidas() -> None:
     # Las seis, cada una con su identificador.
     for identificador in ("F-1", "F-2", "F-3", "F-4", "F-5", "F-6"):
         assert f"## {identificador} " in texto, f"falta el apartado de {identificador}"
+
+
+def test_la_propuesta_de_figuras_declara_f7_y_f8_con_las_mismas_columnas() -> None:
+    """Las dos añadidas el 13-10-2026 siguen el mismo procedimiento que las seis."""
+    propuesta = paths.ROOT / "docs" / "audits" / "propuesta-figuras-cap5-cap6.md"
+    assert propuesta.is_file()
+    texto = propuesta.read_text("utf-8")
+    for columna in (
+        "Afirmación actual",
+        "Evidencia disponible",
+        "Motivo de invalidez",
+        "Redacción corregida propuesta",
+        "Impacto sobre las conclusiones",
+    ):
+        assert columna in texto, f"la propuesta no declara «{columna}»"
+    for identificador in ("F-7", "F-8"):
+        assert f"`{identificador}`" in texto, f"falta el apartado de {identificador}"
+
+
+def test_los_tres_conjuntos_quedan_atribuidos_a_su_ejecucion() -> None:
+    """F-7: quien lea el capítulo 6 tiene que poder saber qué conjunto sostiene qué."""
+    texto = (paths.ROOT / "docs" / "memoria" / "cap6_conclusiones.md").read_text("utf-8")
+    assert "se midieron sobre `synthetic_v2`" in texto
+    assert "`synthetic_v3` no es reconstruible" in texto
 
 
 def test_ninguna_cifra_de_las_tablas_cambia_con_la_correccion() -> None:

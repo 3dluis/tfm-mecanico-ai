@@ -95,8 +95,9 @@ uv run mecanico-exp eda
 
 - **La deriva del caudalímetro no se ve en el caudalímetro**: delta de Cliff 0,13
   en `maf` frente a 1,00 en el ajuste de combustible.
-- Dos de las cinco condiciones son **invisibles en las medias** y solo aparecen
-  en la dispersión.
+- Dos de las cinco condiciones son **invisibles en las medias**: la sonda lenta,
+  que aparece en la dispersión (−1,00 frente a +0,29 en nivel), y el fallo de
+  encendido, que queda diluido porque sus episodios son el 5,7 % de la sesión.
 - Siete de las doce señales no separan nada por sí solas, **y ninguna se
   descarta**: una señal puede ser determinante en combinación y nula en solitario.
 

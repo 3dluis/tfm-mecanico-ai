@@ -15,7 +15,7 @@ no se da ninguna proporción.
 
 | Clase | Cuántas | Qué son |
 |---|---|---|
-| **Falsas hoy** | **6** + 2 | dicen algo que ya no es cierto. Dos están en el primer párrafo de su capítulo. Las seis se corrigieron el 13-10; las dos añadidas ese mismo día al verificar las figuras (`F-7`, `F-8`) **siguen sin corregir** |
+| **Falsas hoy** | **6** + 2 | dicen algo que ya no es cierto. Dos están en el primer párrafo de su capítulo. Las ocho se corrigieron el 13-10-2026: las seis primeras por la mañana, y `F-7` y `F-8` al verificar la procedencia de las figuras |
 | **Incompletas o excesivas** | **10** | la cifra es correcta y lo que se afirma con ella va más allá, o le falta una salvedad |
 | **Ausentes** | **6** | contenido que los capítulos no contemplan y que hace falta |
 
@@ -50,7 +50,11 @@ Estas no admiten matiz: dicen algo que ya no es cierto.
 
 Aparecieron el mismo 13 de octubre, al comprobar de dónde sale cada figura candidata a entrar en los
 capítulos. Las dos están propuestas, con sus cinco columnas, en
-[`propuesta-figuras-cap5-cap6.md`](propuesta-figuras-cap5-cap6.md) §0, y **ninguna se ha aplicado**.
+[`propuesta-figuras-cap5-cap6.md`](propuesta-figuras-cap5-cap6.md) §0.
+
+> **Estado: las dos se aplicaron el 13 de octubre de 2026**, con autorización del autor y por el
+> mismo procedimiento que las seis anteriores: el texto que decían los capítulos se conserva dentro
+> de una nota fechada y ninguna cifra se modificó.
 
 | # | Dónde | Qué dice | Por qué es falso | Evidencia |
 |---|---|---|---|---|
@@ -68,7 +72,7 @@ siguiente, que son por donde la frase llegó al capítulo. `F-8` alcanza a
 | **A-1** | cap. 5, Tabla 5.7 y su discusión | «el conjunto con que se ajustaron los adaptadores no registró las ventanas de origen, pero los valores permiten identificarlas: **las dos primeras sirven a diez de las diecisiete ejecuciones**» | la cifra medida es **11 de 17**, no 10, y el mecanismo es más simple y peor de lo que el párrafo sugiere: los ejemplos se generaban **desde la partición de validación**, que es donde se mide al redactor. No hace falta identificar ventanas por sus valores: están en el fichero de ejemplos | `docs/methodology/auditoria-contaminacion-adaptador.md` §2 |
 | **A-2** | cap. 5, Tabla 5.7, fila del adaptador v2 | «17/17 válidas · 17/17 respeta el veredicto · 0 citas inexistentes» | las cifras **no cambian**, y hay que añadir que **3 de esas 17 salidas contienen una cifra que el verificador no produjo**, dos de ellas en una frase internamente falsa. Las tres barreras las dejan pasar | `L-26`, `scripts/auditar_cifras_redactadas.py` |
 | **A-3** | cap. 5, §PI.1, y cap. 6, OE3 | «Con un conjunto tres veces mayor… el orden se invierte por un margen de 0,012… **la desventaja del modelo temporal se atribuye al volumen de datos**» | el conjunto tres veces mayor es `synthetic_v3`, que es **pre-calibración**: la comparación cruza dos generadores distintos y la atribución al volumen está **confundida**. Ya estaba detectado; sigue en el texto | `docs/auditoria-pi1-contexto-temporal.md`, `L-25` |
-| **A-4** | cap. 6, OE2 | «el entorno experimental reproducible **se cumplió parcialmente**… el generador es determinista» | cierto, y con un límite que falta: **`synthetic_v3` no es reconstruible** con el generador publicado, y de él salen E6, E7 y la evaluación final. Medido: 0 de 216 sesiones idénticas. Lo que agrava el caso es que el ventanado y el reparto **sí** reproducen, de modo que una reconstrucción ingenua pasa las pruebas midiendo otras señales | `L-25`, `configs/datos_no_reconstruibles.json` |
+| **A-4** | cap. 6, OE2 | «el entorno experimental reproducible **se cumplió parcialmente**… el generador es determinista» | cierto, y con un límite que falta: **`synthetic_v3` no es reconstruible** con el generador publicado. Medido: 0 de 216 sesiones idénticas. **Corregido el 13-10-2026:** esta celda decía «y de él salen E6, E7 y la evaluación final», y es falso; ver `F-7`. Lo que agrava el caso es que el ventanado y el reparto **sí** reproducen, de modo que una reconstrucción ingenua pasa las pruebas midiendo otras señales | `L-25`, `configs/datos_no_reconstruibles.json` |
 | **A-5** | cap. 6, OE4 | «El modelo de lenguaje **no cita nada que no se le haya entregado**» | cierto y **incompleto**: no cita identificadores que no recibió, **y puede escribir un número que nadie le dio**. La trazabilidad verificada cubre las citas, no las cifras | `L-26` |
 | **A-6** | cap. 6, limitaciones, párrafo del índice documental | «el adaptador sigue entrenado sobre ejemplos generados antes de la corrección… **y no se ha reentrenado**» | hay que añadir **por qué** sigue sin reentrenarse: el reentrenamiento se diseñó, se preparó, se congeló y **se detuvo cuatro veces por memoria insuficiente**, con la causa medida —25,4 GB de huella física en una máquina de 24, el 97 % en el asignador de Metal— | `docs/experiments/incidencia-p2-02.md` |
 | **A-7** | cap. 5, Tabla 5.5, filas `C12`, `C13`, `C16`, `C17` | las filas se publican con sus decisiones | las de `C12` y `C16` **no son condiciones independientes**: su configuración era idéntica a la parcial. La nota al pie ya las separa del recuento; lo que hay que corregir es **la razón** que da, que culpa al filtro de motor | `protocolo-distractor-v2.md` §1 |

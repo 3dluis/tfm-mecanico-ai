@@ -160,15 +160,17 @@ Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
 ```
 uv sync --extra nb --extra ml
 bash scripts/reconstruir_datos.sh    # reconstruye lo que no se distribuye, y COMPRUEBA sus huellas
-uv run pytest                        # 829 pasan
+uv run pytest                        # 882 pasan sin reconstruir; 899 tras reconstruir
 uv run ruff check . && uv run mypy src
 uv run jupyter lab notebooks/
 ```
 
 `data/raw/**` y `data/processed/**` están fuera del control de versiones: `synthetic_v2` son 43 200
-muestras. No hace falta distribuirlos porque el generador los reconstruye **bit a bit**, y el guion
+muestras. No hace falta distribuirlo porque el generador lo reconstruye **bit a bit**, y el guion
 contrasta las cuatro huellas contra las que el manifiesto de E19 congeló antes de abrir el conjunto
-de prueba. Sin reconstruir, doce pruebas se detienen diciendo la orden exacta en lugar de fallar.
+de prueba. De `synthetic_v2` salen la línea base de diagnóstico, el modelo temporal y la evaluación
+final. `synthetic_v3`, del que sale solo la comparación de volumen de E7, **no** se reconstruye y el
+guion se niega: es anterior a la calibración del generador. Sin reconstruir, doce pruebas se detienen diciendo la orden exacta en lugar de fallar.
 
 Detalle completo, con lo que **no** se puede reproducir y por qué:
 [`docs/reproducir-desde-cero.md`](docs/reproducir-desde-cero.md).

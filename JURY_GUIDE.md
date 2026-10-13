@@ -133,10 +133,12 @@ bash scripts/reproduce_main_results.sh
 ## 7. Si quiere ejecutarlo
 
 Seis pasos desde un clon, comprobados clonando el repositorio:
-[`docs/reproducir-desde-cero.md`](docs/reproducir-desde-cero.md). Lo esencial: los conjuntos no se
-distribuyen porque el generador los reconstruye **bit a bit**, y el guion de reconstrucción
-contrasta sus huellas contra las que se congelaron antes de abrir el conjunto de prueba. Si alguna
-difiere, falla.
+[`docs/reproducir-desde-cero.md`](docs/reproducir-desde-cero.md). Lo esencial: `synthetic_v2` —el
+conjunto del que salen la línea base de diagnóstico, el modelo temporal y la evaluación final— no se
+distribuye porque el generador lo reconstruye **bit a bit**, y el guion de reconstrucción contrasta
+sus cuatro huellas contra las que se congelaron antes de abrir el conjunto de prueba. Si alguna
+difiere, falla. `synthetic_v3`, del que sale únicamente la comparación de volumen de E7, **no** es
+reconstruible: es anterior a la calibración del generador, y el guion se niega a regenerarlo.
 
 Lo que **no** se puede reproducir —el corpus del manual, los pesos del adaptador, una reejecución de
 E19— está declarado ahí con su motivo, y lo que se entrega en su lugar.
