@@ -588,3 +588,27 @@ def test_las_reejecuciones_de_suficiencia_tambien_se_etiquetan() -> None:
         con = sufijo_artefacto(modo, etiqueta="reproduccion")
         assert con != sin, f"el modo {modo} no distingue la ejecución"
         assert con.endswith("_reproduccion")
+
+
+def test_el_registro_publicado_del_agente_conserva_su_nombre() -> None:
+    """`E13_agente_<llm>.json` es el que cita el capítulo: no puede cambiar."""
+    from mecanico_ia_exp.experiments.sufficiency_runner import destinos_de
+
+    publicado = destinos_de("oracle", llm="transformers-lora@slm_lora_v2")
+    assert publicado["registro"].name == "E15_suficiencia.json"
+    assert publicado["agente"].name == "E13_agente_transformers-lora@slm_lora_v2.json"
+
+
+def test_el_modo_distingue_el_registro_del_agente() -> None:
+    """Una redacción no oracular parte de otra evidencia y puede decidir distinto.
+
+    Sin el modo en el nombre, la segunda ejecución sobrescribía a la primera en
+    silencio aunque sus decisiones difirieran.
+    """
+    from mecanico_ia_exp.experiments.sufficiency_runner import destinos_de
+
+    llm = "transformers-lora@slm_lora_v2"
+    oracular = destinos_de("oracle", llm=llm)["agente"]
+    no_oracular = destinos_de("non_oracle", llm=llm)["agente"]
+    assert oracular != no_oracular
+    assert "non_oracle" in no_oracular.name
