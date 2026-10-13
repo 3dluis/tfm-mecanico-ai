@@ -60,6 +60,28 @@ class FinetuneConfig:
     seed: int = 20260901
     device: str = "mps"
 
+    # --- gestión de memoria. NO son hiperparámetros: no cambian ni los pesos, ni
+    # el orden de los ejemplos, ni la semilla, ni una sola operación en coma
+    # flotante. Cambian cuándo el asignador devuelve los búferes que ya no usa.
+    fraccion_de_memoria: float = 0.7
+    """Techo del asignador de MPS, como fracción de lo que recomienda el
+    dispositivo. Medido el 13-10-2026 en esta máquina: el recomendado es 17,8 GB
+    y el asignador, sin techo, llegó a **22,8 GB en 1364 regiones** con 13,9 GB
+    en intercambio; el proceso pedía 25,4 GB de huella física en una máquina de
+    24, y cada paso esperaba a disco (12,6 % de uso de CPU). Con 0,7 el techo
+    queda en unos 12,5 GB: cabe el modelo --5,8 GB-- y sus activaciones con
+    recomputación, y la máquina conserva holgura real.
+    Si el ajuste no cabe, ahora **falla rápido y visiblemente** en lugar de
+    paginar durante horas, que es mejor. Ver `docs/experiments/incidencia-p2-02.md`."""
+
+    vaciar_cache_por_paso: bool = True
+    """Devolver al sistema los búferes que el asignador cachea, en cada paso.
+    El asignador de MPS no los devuelve por su cuenta, y cada secuencia de
+    longitud distinta estrena formas: los ejemplos van de unos 900 a unos 3 000
+    tokens, de modo que casi cada uno deja su rastro en el caché. Cuesta tiempo
+    --hay que volver a reservar-- y evita que el caché crezca por encima de la
+    memoria física, que es lo que paralizó los tres primeros intentos."""
+
 
 @dataclass
 class FinetuneHistory:
@@ -127,6 +149,15 @@ def finetune(
     torch.manual_seed(cfg.seed)
     if cfg.device == "mps":
         torch.mps.manual_seed(cfg.seed)
+        # El techo se pone ANTES de cargar nada: después, el asignador ya habría
+        # crecido. No altera el cálculo; altera cuándo devuelve la memoria.
+        torch.mps.set_per_process_memory_fraction(cfg.fraccion_de_memoria)
+        if verbose:
+            print(
+                f"techo del asignador de MPS: {cfg.fraccion_de_memoria:.2f} de "
+                f"{torch.mps.recommended_max_memory() / 2**30:.1f} GB recomendados, es decir "
+                f"{cfg.fraccion_de_memoria * torch.mps.recommended_max_memory() / 2**30:.1f} GB"
+            )
 
     # Los tipos de transformers y peft son abiertos; se fijan a Any en la
     # frontera en lugar de silenciar cada llamada.
@@ -172,7 +203,8 @@ def finetune(
             f"({100 * historia.n_trainable_params / historia.n_total_params:.2f} %)"
         )
         print(
-            f"ejemplos: {len(train)} train · {len(valid)} valid · {historia.n_truncated} truncados"
+            f"ejemplos: {len(train)} train · {len(valid)} valid · {historia.n_truncated} truncados",
+            flush=True,
         )
 
     optimizador = torch.optim.AdamW(
@@ -208,14 +240,24 @@ def finetune(
             torch.nn.utils.clip_grad_norm_(modelo.parameters(), 1.0)
             optimizador.step()
             acumulada += float(perdida.item())
+            if cfg.vaciar_cache_por_paso and cfg.device == "mps":
+                torch.mps.empty_cache()
             if verbose and k % 10 == 0:
-                print(f"  época {epoca + 1} · paso {k}/{len(orden)} · pérdida {acumulada / k:.4f}")
+                reservada = (
+                    torch.mps.driver_allocated_memory() / 2**30 if cfg.device == "mps" else 0.0
+                )
+                print(
+                    f"  época {epoca + 1} · paso {k}/{len(orden)} · "
+                    f"pérdida {acumulada / k:.4f} · memoria del asignador {reservada:.1f} GB",
+                    flush=True,
+                )
         historia.train_loss.append(acumulada / len(orden))
         historia.val_loss.append(evaluar())
         if verbose:
             print(
                 f"época {epoca + 1}/{cfg.epochs} · pérdida train {historia.train_loss[-1]:.4f} · "
-                f"valid {historia.val_loss[-1]:.4f}"
+                f"valid {historia.val_loss[-1]:.4f}",
+                flush=True,
             )
 
     historia.seconds = time.perf_counter() - inicio

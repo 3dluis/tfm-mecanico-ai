@@ -86,6 +86,19 @@
     "si los ficheros de ejemplos no coinciden con las huellas que este fichero declara, no se ajusta",
     "si models/slm_lora_v3 ya existe, el ejecutor se niega"
   ],
-  "recongelado_el": "2026-10-13",
-  "motivo_del_recongelado": "la revision independiente encontro que el reparto interno era por ventana y dejaba sesiones a los dos lados; corregirlo cambia los ficheros, de modo que la congelacion se rehace ANTES de ajustar. El ajuste no habia llegado a ejecutarse (INC-P2-01)"
+  "recongelado_el": "2026-10-13 (tercera vez)",
+  "motivo_del_recongelado": "cuarto intento. Los tres anteriores no produjeron ninguna epoca: el asignador de Metal crecio hasta 22,8 GB en 1364 regiones y el proceso pedia 25,4 GB de huella fisica en una maquina de 24, con 13,9 GB en intercambio y 12,6 % de uso de CPU. Medido con vmmap sobre el proceso vivo: docs/experiments/incidencia-p2-02.md",
+  "gestion_de_memoria_anadida": {
+    "autorizado_por_el_autor": "2026-10-13, alternativa A de las cinco presentadas en INC-P2-02",
+    "que_se_anade": {
+      "fraccion_de_memoria": 0.7,
+      "efecto": "techo del asignador de MPS en 0,7 de los 17,8 GB que el dispositivo recomienda, unos 12,5 GB",
+      "vaciar_cache_por_paso": true
+    },
+    "POR_QUE_NO_ES_UN_HIPERPARAMETRO": "no cambia los pesos, ni el orden de los ejemplos, ni la semilla, ni el tope de longitud, ni una sola operacion en coma flotante. Cambia CUANDO el asignador devuelve los buferes que ya no usa. Las perdidas esperadas son las mismas",
+    "que_codigo_toca": "src/mecanico_ia_exp/llm/finetune.py, el unico fichero del camino de ajuste",
+    "alcance_del_cambio": "NO afecta a E19 ni a ninguna medicion publicada. El redactor de E19 carga el modelo por llm/provider.py, no por llm/finetune.py; comprobado: el unico modulo que importa llm.finetune es cli.py, para el subcomando finetune-slm. Lo que el cambio afecta es la re-derivacion futura de slm_lora_v2, cuyos pesos estan en disco y cuyo finetune_config.json registra lo que se ejecuto",
+    "si_no_basta": "con techo, el ajuste FALLA RAPIDO con un error de memoria de MPS en lugar de paginar durante horas. Eso es informacion: significaria que el problema no era el cache"
+  },
+  "hiperparametros_sin_cambios": "rango 16, alpha 32, dropout 0,05, 4 epocas, lr 2e-4, max_seq_length 3072, semilla 20260901, dispositivo mps. NINGUNO se ha tocado en ninguno de los cuatro intentos"
 }
