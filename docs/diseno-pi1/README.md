@@ -54,7 +54,8 @@ sistema completo.
    **apareadas** por semilla.
 5. **La comparación entre bosque y red recurrente se enuncia como diferencia entre dos recorridos
    completos**, no como efecto del contexto temporal, mientras no exista un diseño 2×2 que lo aísle.
-   Ese diseño 2×2 **no** se propone: ampliaría el alcance del TFM.
+   Ese diseño 2×2 **no** se propone: ampliaría el alcance del TFM. Lo que sí se aísla, con el estimador
+   fijo, es la **dinámica intraventana**, y para eso la ablación tiene cinco escalones y no dos.
 
 ## Lo que este paquete deja fuera a propósito
 
