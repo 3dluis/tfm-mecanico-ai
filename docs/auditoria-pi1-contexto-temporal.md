@@ -210,9 +210,10 @@ matriz de confusión agregada, **no las predicciones por ventana**, de modo que 
 una no es comprobable con los artefactos. Pero el **informe** de E6 sí trae el análisis: da la
 temperatura media de las detectadas y de las no detectadas con sus rangos, y añade el desglose por
 régimen, **urbano 7 de 7 y calentamiento 2 de 7**. Es decir que el análisis por ventana se hizo en su
-momento y localizó los cinco errores en el calentamiento, que es exactamente donde están las cinco
-ventanas por debajo del techo. La identificación está corroborada por un análisis anterior; lo que falta
-es su artefacto. `docs/matriz_validacion_pi.md`
+momento y localizó los cinco errores en el régimen de calentamiento, que es donde están las cinco
+ventanas por debajo del techo. Es **muy compatible** con que sean las mismas cinco —mismo tamaño dentro
+de las mismas siete ventanas, y rangos de temperatura disjuntos— pero no lo demuestra: podrían solaparse
+en cuatro y diferir en una. Falta el cruce por ventana, y falta el artefacto. `docs/matriz_validacion_pi.md`
 afirma el reparto por temperatura —«las ventanas que el modelo falla tienen 54,3 °C de media; las que
 acierta, 70,7»—, y **esas cifras no tienen artefacto**, que es el motivo por el que figuran entre las
 cinco de `EVID-MAJ-019`. No son inventadas: están en la tabla del informe de E6 con sus rangos. Les

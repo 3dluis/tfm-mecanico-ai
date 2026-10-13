@@ -46,8 +46,9 @@ Estimado a partir de lo medido en E7 y E6:
 
 Cinco réplicas: **alrededor de media hora de cómputo** para las ciento veinte celdas, más el
 preprocesado del conjunto, que se hace una vez. La calibración no añade ajustes nuevos, por lo que se
-explica en `05-protocolo-comparacion.md`: se ajusta sobre la partición interna de desarrollo, que ya
-existe para seleccionar la época, y no por validación cruzada. Entra holgadamente en una sesión de trabajo, lo que importa porque los
+explica en `05-protocolo-comparacion.md`: se ajusta sobre la **partición interna de calibración**
+—disjunta del ajuste y del desarrollo— y no por validación cruzada. No sobre la de desarrollo, que es
+donde la red elige su época y donde sus predicciones están sesgadas a su favor. Entra holgadamente en una sesión de trabajo, lo que importa porque los
 dos intentos fallidos de E19 murieron al cerrarse la sesión; las ejecuciones largas irán bajo `launchd`,
 como la que funcionó.
 

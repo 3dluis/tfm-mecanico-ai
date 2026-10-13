@@ -46,14 +46,14 @@ sustituye.
       "session_id": "F03_thermostat_stuck__warmup__07",
       "seed": 20260901073,
       "regime": "warmup",
-      "duration_s": 152.0,
+      "duration_s": 600.0,
       "fault_id": "F03_thermostat_stuck",
-      "fault_onset_s": 0.0,
-      "ambient_temp_c": 22.0,
+      "fault_onset_s": 120.0,
+      "ambient_temp_c": 21.4,
       "initial_coolant_c": null,
       "fault_params": {"temp_cap_c": 71.0},
       "severity": null,
-      "n_samples": 152
+      "n_samples": 600
     }
   ],
   "temporal_distribution": {
@@ -79,6 +79,11 @@ de forma distinta según la condición: `severity` en la fuga de vacío, `temp_c
 `rate` y `rpm_drop` en el encendido. El campo `fault_params` recoge lo que de verdad se aplicó, y
 `severity` queda para cuando el parámetro se llame así. **No se inventa un valor** cuando la condición
 no lo tiene: se escribe nulo.
+
+Los valores del ejemplo son los que el protocolo de `v4` fija: sesión de **600 s**, instante de
+aparición del fallo en **120 s** —el 20 % de la duración, como hace el plan equilibrado— y temperatura
+ambiente sorteada en el rango que el generador usa. Un ejemplo con otros valores describiría otro
+experimento y no serviría como comprobación de reconstrucción.
 
 **`initial_coolant_c` se registra incluso cuando es nulo**, porque nulo significa algo —«el motor
 arranca a la temperatura ambiente»— y es exactamente la propiedad que hace indetectable el termostato
