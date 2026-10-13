@@ -493,3 +493,36 @@ def test_el_preprocesado_tambien_lleva_el_conjunto_en_el_nombre() -> None:
     assert "E5_estudio_ventana.csv" not in nombres
     assert "E5_reparto.csv" not in nombres
     assert "FIG-E5-01_estudio_ventana.png" not in nombres
+
+
+def test_generar_sobre_un_conjunto_existente_no_toca_nada(tmp_path, monkeypatch, capsys) -> None:
+    """Y falla ANTES de escribir el parquet, no después.
+
+    Si solo se comprobara el manifiesto, una regeneración habría reemplazado ya
+    los datos antes de fallar y el manifiesto antiguo habría quedado describiendo
+    datos nuevos. Una procedencia que miente es peor que no tenerla.
+    """
+    from mecanico_ia_exp.cli import main
+
+    crudo = tmp_path / "raw"
+    crudo.mkdir()
+    datos = crudo / "ya_existe.parquet"
+    datos.write_bytes(b"contenido original")
+    antes = datos.read_bytes()
+
+    monkeypatch.setattr(paths, "DATA_RAW_SYNTHETIC", crudo)
+    codigo = main(
+        ["generate-synthetic", "--dataset-id", "ya_existe", "--sessions-per-fault", "4"]
+    )
+    assert codigo == 1
+    assert datos.read_bytes() == antes, "el parquet existente se tocó"
+    assert "No se escribe nada" in capsys.readouterr().out
+
+
+def test_el_conjunto_oficial_no_se_puede_regenerar_por_descuido() -> None:
+    """`synthetic_v2` sostiene las cifras de E6, E7, E9, E15 y E19."""
+    from mecanico_ia_exp.cli import main
+
+    if not (paths.DATA_RAW_SYNTHETIC / "synthetic_v2.parquet").is_file():
+        pytest.skip("este clon no trae synthetic_v2")
+    assert main(["generate-synthetic", "--dataset-id", "synthetic_v2"]) == 1
