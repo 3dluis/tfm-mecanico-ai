@@ -56,3 +56,7 @@ experiments/runs/**
 !corpus/manifests/**
 !data/**/*.md
 !results/RESULTADOS_TFM.md
+
+# Los notebooks escriben aquí. Sus figuras se regeneran al ejecutarlos; lo que
+# se versiona es la copia en HTML, que es lo que el tribunal lee sin ejecutar.
+notebooks/salida/

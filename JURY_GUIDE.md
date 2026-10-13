@@ -130,7 +130,23 @@ uv run python scripts/ingest_mazda.py multilingual
 bash scripts/reproduce_main_results.sh
 ```
 
-## 7. Si solo dispone de cinco minutos
+## 7. Si prefiere leerlo en vez de ejecutarlo
+
+Cuatro notebooks explican los experimentos cerrados con sus gráficos, su interpretación y sus
+limitaciones. Hay copia en HTML: se abren en cualquier navegador, sin instalar nada.
+
+| Documento | Qué responde |
+|---|---|
+| [`00_introduccion`](docs/notebooks/html/00_introduccion.html) | el recorrido entero, de la señal OBD-II a la decisión de explicar o callar, y qué quedó demostrado |
+| [`01_exploracion_obd`](docs/notebooks/html/01_exploracion_obd.html) | qué hay en los datos, incluido el caso en que la etiqueta dice «fallo» y la señal no lo contiene |
+| [`02_comparacion_modelos`](docs/notebooks/html/02_comparacion_modelos.html) | por qué el modelo temporal no superó a la línea base, y por qué la explicación que se dio quedó retirada |
+| [`03_analisis_e19`](docs/notebooks/html/03_analisis_e19.html) | la única medición sobre el conjunto de prueba, con sus numeradores y denominadores |
+
+Cada uno dice al principio qué hace con la evidencia: si la reproduce, la reanaliza, la muestra tal
+como quedó congelada o solo ilustra un concepto. Y cada gráfico lleva tres lecturas: qué muestra,
+qué permite interpretar y **qué no permite afirmar**.
+
+## 8. Si solo dispone de cinco minutos
 
 1. Pregunta de investigación: `docs/memoria/cap1_introduccion.md` (líneas 25–28) y `README.md` §2.
 2. Arquitectura: `README.md` §4 y `docs/methodology/experimental-design.md`.
@@ -140,3 +156,4 @@ bash scripts/reproduce_main_results.sh
 6. Figuras principales: `artifacts/figures/` (`FIG-E6-01`, `FIG-E7-01`, `FIG-E5-01`) con `artifacts/README.md`.
 7. Matriz de trazabilidad: `docs/tfm-traceability.md`.
 8. Reproducción: `docs/reproducibility.md` y `scripts/reproduce_baseline.sh`.
+9. Si prefiere no ejecutar nada: `docs/notebooks/html/00_introduccion.html`, que recorre todo con sus figuras y sus limitaciones.
