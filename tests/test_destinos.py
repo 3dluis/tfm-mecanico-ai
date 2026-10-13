@@ -317,3 +317,55 @@ def test_un_cambio_deliberado_se_acepta_pidiendolo(tmp_path) -> None:
 
     assert verificar_historicos(censo, raiz=tmp_path) == []
     assert json.loads(censo.read_text("utf-8"))["cambios_aceptados_a_proposito"] is True
+
+
+def test_las_ablaciones_sobre_prueba_son_alcanzables_desde_la_linea_de_ordenes(capsys) -> None:
+    """P3 --repetir E18 sobre prueba-- es un pendiente del tutor.
+
+    Si solo se pudiera hacer llamando a Python, el ejecutor estaría protegido y
+    el pendiente, inalcanzable por la vía documentada.
+    """
+    from mecanico_ia_exp.cli import main
+
+    with pytest.raises(SystemExit):
+        main(["ablations", "--help"])
+    ayuda = capsys.readouterr().out
+    for opcion in ("--partition", "--open-test", "--reason", "--etiqueta"):
+        assert opcion in ayuda, f"«ablations» no expone {opcion}"
+
+
+def test_el_registro_de_una_ablacion_guarda_la_particion_y_el_motivo() -> None:
+    """Un registro que no dice por qué se abrió prueba no documenta la apertura."""
+    from mecanico_ia_exp.abstention.sufficiency import SufficiencyThresholds
+
+    documento = ablation_runner.documento_ablacion(
+        "A1",
+        modo="oracle",
+        oracle=True,
+        dataset_id="synthetic_v2",
+        umbrales=SufficiencyThresholds(),
+        calibracion={},
+        casos=[],
+        embedding_space_id=None,
+        particion="test",
+        motivo_de_apertura="P3: ablaciones sobre prueba, pendiente del tutor",
+    )
+    assert documento["partition"] == "test"
+    assert "P3" in documento["test_opening_reason"]
+
+
+def test_sobre_validacion_no_se_inventa_un_motivo_de_apertura() -> None:
+    from mecanico_ia_exp.abstention.sufficiency import SufficiencyThresholds
+
+    documento = ablation_runner.documento_ablacion(
+        "A1",
+        modo="oracle",
+        oracle=True,
+        dataset_id="synthetic_v2",
+        umbrales=SufficiencyThresholds(),
+        calibracion={},
+        casos=[],
+        embedding_space_id=None,
+    )
+    assert documento["partition"] == "validation"
+    assert documento["test_opening_reason"] is None
