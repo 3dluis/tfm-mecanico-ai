@@ -61,25 +61,33 @@ def comparar(publicado: Path, reproducido: Path) -> int:
     b = _aplanar(json.loads(reproducido.read_text("utf-8")))
 
     solo_publicado = sorted(set(a) - set(b))
-    solo_reproducido = sorted(set(b) - set(a))
+    # Un campo que solo está en el reproducido **no es una diferencia**: el
+    # esquema de los registros crece --se añadió `protocolo`, por ejemplo-- y un
+    # registro antiguo no lo tiene. Lo que sí es una diferencia es que al
+    # reproducido le **falte** algo que el publicado traía: ahí se ha perdido
+    # información.
+    campos_nuevos = sorted(set(b) - set(a))
     distintos = sorted(c for c in set(a) & set(b) if a[c] != b[c])
 
     print(f"\n{publicado.name}  frente a  {reproducido.name}")
-    if not (solo_publicado or solo_reproducido or distintos):
+    if campos_nuevos:
         print(
-            f"  IDÉNTICOS en los {len(a)} campos comparados "
+            f"  {len(campos_nuevos)} campo(s) que el registro publicado no traía, por haber "
+            f"crecido el esquema: {', '.join(campos_nuevos[:6])}"
+        )
+    if not (solo_publicado or distintos):
+        print(
+            f"  REPRODUCIDO: coinciden los {len(a)} campos del registro publicado "
             f"(se ignoran {', '.join(sorted(VOLATILES))})"
         )
         return 0
 
     for campo in solo_publicado[:10]:
-        print(f"  solo en el publicado:   {campo} = {a[campo]!r}")
-    for campo in solo_reproducido[:10]:
-        print(f"  solo en el reproducido: {campo} = {b[campo]!r}")
+        print(f"  FALTA en el reproducido: {campo} = {a[campo]!r}")
     for campo in distintos[:20]:
         print(f"  DIFIERE {campo}: publicado {a[campo]!r} · reproducido {b[campo]!r}")
-    total = len(solo_publicado) + len(solo_reproducido) + len(distintos)
-    print(f"  {total} diferencia(s) sobre {len(set(a) | set(b))} campos")
+    total = len(solo_publicado) + len(distintos)
+    print(f"  {total} diferencia(s) sobre {len(a)} campos del registro publicado")
     return 1
 
 

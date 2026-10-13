@@ -208,6 +208,7 @@ def main(argv: list[str] | None = None) -> int:
     # órdenes, que es peor que no protegerlos.
     for nombre in (
         "preprocess",
+        "sufficiency",
         "train-baseline",
         "train-temporal",
         "xai",
@@ -362,6 +363,7 @@ def main(argv: list[str] | None = None) -> int:
             oracle=args.mode == "oracle",
             adverse=args.mode == "adverse",
             policy=args.policy,
+            etiqueta=args.etiqueta,
         )
 
     if args.command == "ablations":
