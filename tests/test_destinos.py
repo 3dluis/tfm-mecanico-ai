@@ -472,3 +472,24 @@ def test_ampliar_el_censo_desde_un_clon_no_borra_las_huellas_que_faltan(tmp_path
     desviaciones = verificar_historicos(censo, raiz=tmp_path)
     assert len(desviaciones) == 1
     assert desviaciones[0].motivo.startswith("cambió")
+
+
+def test_el_preprocesado_tambien_lleva_el_conjunto_en_el_nombre() -> None:
+    """INC-E5-01: era el único ejecutor que quedaba con rutas fijas.
+
+    Se le pasó por alto porque E5 no produce registro JSON y no aparecía en la
+    búsqueda de lo que escribe en `experiments/`. La búsqueda correcta no era
+    «qué escribe un registro» sino «qué escribe en una ruta fija».
+    """
+    from mecanico_ia_exp.experiments import preprocess_runner
+
+    uno = preprocess_runner.destinos_de("synthetic_v2")
+    otro = preprocess_runner.destinos_de("synthetic_v4")
+    assert set(uno) == set(otro)
+    for clave in uno:
+        assert uno[clave] != otro[clave], f"{clave} no distingue el conjunto"
+    # Y ninguno pisa los artefactos publicados de E5, que van sin sufijo.
+    nombres = {ruta.name for ruta in uno.values()}
+    assert "E5_estudio_ventana.csv" not in nombres
+    assert "E5_reparto.csv" not in nombres
+    assert "FIG-E5-01_estudio_ventana.png" not in nombres
