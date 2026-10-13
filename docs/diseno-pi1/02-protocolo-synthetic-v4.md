@@ -29,7 +29,7 @@ conjunto oficial del TFM sigue siendo `synthetic_v2`.
 | Frecuencia de muestreo | 1 Hz | La del conjunto oficial |
 | Duración de sesión | **600 s**, la que `build_balanced_specs` usa hoy para todos los regímenes | Es la de `v2` y `v3`. El tipo `Regime` define fases, no duración, de modo que «la que define el régimen» no existe; y elegir una distinta cambiaría el número de ventanas por sesión y con él la comparación de volumen |
 | Semilla global | **20260901**, la del proyecto | Para que el conjunto sea reproducible desde un único número |
-| Generador | el **calibrado**, con la configuración vigente de `configs/calibracion_mazda3_bk.yaml` | Es la única diferencia que se busca frente a `v3` |
+| Generador | el **calibrado**, es decir el `obd/engine.py` vigente, cuyas constantes llevan los valores del manual —`_IDLE_RPM = 690.0` y las demás—. El YAML de calibración documenta su procedencia pero **ningún módulo lo lee** | Es la única diferencia que se busca frente a `v3` |
 | Ventanado y reparto | 120 s con paso de 60 s, reparto **por sesión** estratificado, test cerrado | Idénticos a `v2`, para que la geometría no sea una variable más |
 
 Con 36 sesiones por condición el reparto por sesión da, por condición, **22 de entrenamiento, 7 de
