@@ -155,3 +155,63 @@ def test_validacion_de_synthetic_v2_no_ofrece_ninguna_ventana_de_fallo_libre() -
     assert not clases_de_fallo, (
         f"ahora sí hay ventanas de fallo libres en validación de synthetic_v2: {clases_de_fallo}"
     )
+
+
+# ------------------------------- el traslado de P2: que la puerta sea una puerta
+
+
+def test_el_guion_de_traslado_se_niega_si_la_memoria_no_alcanza() -> None:
+    """Una comprobación que no puede fallar no comprueba nada.
+
+    El guion se ejecuta en la máquina de destino. En la del autor, con 24 GB,
+    tiene que negarse en el paso 2: si pasara, el experimento se intentaría otra
+    vez donde ya se sabe que no cabe.
+    """
+    import subprocess
+
+    guion = paths.ROOT / "scripts" / "preparar_traslado_p2.py"
+    assert guion.is_file()
+    texto = guion.read_text("utf-8")
+    # Las diez comprobaciones están nombradas, no solo prometidas.
+    for titulo in (
+        "Compatibilidad del entorno",
+        "Memoria realmente disponible",
+        "Huellas de los datos",
+        "Integridad de la congelación",
+        "Hardware y versiones",
+        "Ausencia de diferencias metodológicas",
+        "Estimación del consumo",
+        "Prueba técnica breve",
+        "Diferencias numéricas",
+        "Veredicto",
+    ):
+        assert titulo in texto, f"el guion no nombra «{titulo}»"
+    # Y la necesidad medida no se baja a conveniencia.
+    assert "PICO_MEDIDO_GB = 17.0" in texto
+    assert "MARGEN = 1.4" in texto
+
+    salida = subprocess.run(
+        ["uv", "run", "python", str(guion), "--sin-prueba-tecnica"],
+        capture_output=True,
+        text=True,
+        cwd=paths.ROOT,
+        check=False,
+    )
+    # En una máquina de 24 GB el paso 2 falla; en una de 48 pasaría y el
+    # veredicto quedaría «incompleto» por omitir los pasos 8 y 9. Las dos son
+    # distintas de cero: lo que no puede ocurrir es que autorice el ajuste.
+    assert salida.returncode != 0, "el guion autorizó el ajuste sin la prueba técnica"
+
+
+def test_la_sonda_de_equivalencia_esta_congelada_y_tiene_las_seis_medidas() -> None:
+    sonda = paths.ROOT / "configs" / "sonda-equivalencia-p2.json"
+    assert sonda.is_file(), "sin sonda de referencia no hay evaluación de equivalencia posible"
+    datos = json.loads(sonda.read_text("utf-8"))
+    assert len(datos["medidas"]) == 6
+    assert datos["precision"] == "bfloat16"
+    assert datos["max_seq_length"] == 3072
+    # Tres cortos y tres que topan: es lo que hace útil la sonda.
+    topan = [m for m in datos["medidas"] if m["tokens"] == 3072]
+    assert len(topan) == 3, "la sonda tiene que incluir el caso peor de memoria"
+    assert all("perdida" in m for m in datos["medidas"])
+    assert datos["hardware"]["acelerador"] in {"mps", "cuda", "cpu"}
