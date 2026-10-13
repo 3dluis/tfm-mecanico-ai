@@ -31,7 +31,6 @@ escribir una explicación sobre algo que el manual no documenta.
 
 Hay además un hallazgo que conviene anticipar porque es contraintuitivo: **la deriva del
 caudalímetro no se detecta mirando el caudalímetro.**"""),
-
     md("""\
 ## 1. Introducción: por qué una predicción no basta
 
@@ -46,7 +45,6 @@ Lo que no sabemos antes de empezar:
 2. **Si la atribución es estable** entre casos de la misma condición.
 3. **Si las señales que elige tienen respaldo documental.** Una observación sobre una señal que el
    manual no menciona no puede anclarse, y el sistema tendría que abstenerse."""),
-
     md("""\
 ## 2. Objetivo e hipótesis
 
@@ -65,7 +63,6 @@ se decide después.
 
 **Qué la cuestionaría.** Que la señal principal no esté entre las declaradas. Ocurre en una de las
 seis, y es el resultado más interesante del experimento."""),
-
     md("""\
 ## 3. Fundamento: valores de Shapley, y qué no son
 
@@ -88,20 +85,16 @@ comparación entre recorridos es lo que el trabajo necesita.
 modelo** al cambiar un descriptor, no cuánto cambia la **avería** al cambiar la señal. Si dos señales
 están correlacionadas —y aquí varias lo están mucho— la atribución se reparte entre ellas de forma
 inestable, y eso es una propiedad del método, no del fallo."""),
-
     md("""\
 ## 4. Preparación del entorno"""),
-
     code(PREAMBULO),
-
-    code('''\
+    code("""\
 soporte.declarar_modalidad(
     "VISUALIZACIÓN DE EVIDENCIA HISTÓRICA",
     "las atribuciones se leen de artifacts/tables/E9_*.csv y del registro; no se recalcula "
     "ninguna. Recalcularlas exigiría reentrenar el bosque y volver a ejecutar el explicador, "
     "y lo que este notebook enseña es lo que E9 midió",
-)'''),
-
+)"""),
     md("""\
 ## 5. El conjunto y el procedimiento
 
@@ -112,8 +105,7 @@ primeros** son los que después viajan al informe como observaciones.
 Conviene saber qué se explica exactamente: la función `predict_proba` **de la clase predicha**. No la
 probabilidad de la clase verdadera. Es deliberado: lo que hay que justificar es la hipótesis que el
 sistema va a sostener, también cuando se equivoca."""),
-
-    code('''\
+    code("""\
 import pandas as pd
 
 registro = soporte.registro("E9_xai_synthetic_v2")
@@ -129,8 +121,7 @@ print(f"fondo             {registro['background']['n']} ventanas de "
 print()
 print(f"{len(atribuciones)} atribuciones = {registro['n_cases']} casos × "
       f"{len(atribuciones) // registro['n_cases']} descriptores explicados cada uno")
-print("de los que los tres primeros viajan al informe como observaciones")'''),
-
+print("de los que los tres primeros viajan al informe como observaciones")"""),
     md("""\
 ## 6. ¿Mira el modelo donde la ficha del fallo dice?
 
@@ -141,11 +132,9 @@ ficha declara afectadas.
 
 **Por qué esta tabla y no un gráfico.** Es una comparación de conjuntos de nombres: una tabla se lee
 mejor que cualquier figura."""),
-
-    code('''\
+    code("""\
 resumen[["predicted_class", "n_cases", "mean_confidence", "top_signals",
-         "declared_by_fault", "top_signal_declared"]]'''),
-
+         "declared_by_fault", "top_signal_declared"]]"""),
     md("""\
 **Lo observado.** En **cinco de las seis** condiciones la señal principal está entre las declaradas.
 La excepción es `F00_normal`, que no tiene ficha: no es un fallo, de modo que la columna de señales
@@ -159,7 +148,6 @@ ancle después en un fragmento del manual que hable de esa misma señal.
 generador produjo los datos con esas mismas reglas, así que la coincidencia es, en parte, una
 comprobación de que el modelo aprendió lo que se le puso delante. En datos reales la firma podría
 estar en otro sitio."""),
-
     md("""\
 ## 7. El hallazgo: la deriva del caudalímetro no se ve en el caudalímetro
 
@@ -172,8 +160,7 @@ atribución se aparta de lo esperable.
 un vistazo dónde se concentra el peso y dónde hay huecos.
 
 **Qué debemos observar.** La fila del caudalímetro."""),
-
-    code('''\
+    code("""\
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -228,8 +215,7 @@ plt.show()
 
 print("Deriva del caudalímetro · peso de cada señal:")
 fila = normalizada.loc["F02_maf_drift"].sort_values(ascending=False)
-print(fila[fila > 0.01].round(3).to_string())'''),
-
+print(fila[fila > 0.01].round(3).to_string())"""),
     md("""\
 **Qué muestra.** El peso se concentra, en cada condición, en pocas señales, y casi siempre sobre las
 que la ficha declara —los puntos—. La fila de la **deriva del caudalímetro** es la excepción
@@ -249,7 +235,6 @@ necesariamente en la señal del componente que falla.
 **Qué no podemos afirmar.** Que la atribución sea causal: dice dónde mira el modelo, no qué causa
 qué. Y con `ltft_bank1` y `stft_bank1` fuertemente correlacionados, el reparto entre esos dos es
 inestable: otra semilla podría asignar más peso a uno u otro sin que cambie nada del fenómeno."""),
-
     md("""\
 ## 8. La atribución caso a caso, y su dispersión
 
@@ -261,8 +246,7 @@ el mismo fallo, y un mecánico no podría fiarse de ella.
 
 **Por qué un gráfico de puntos y no barras.** Son tres observaciones por condición: dibujarlas una a
 una muestra la dispersión, que es justo lo que se quiere ver. Una barra de media la escondería."""),
-
-    code('''\
+    code("""\
 from mecanico_ia_exp.visualization.style import CATEGORICAL
 
 principales = (
@@ -288,11 +272,13 @@ confianzas = atribuciones.groupby("predicted_class")["confidence"].agg(["min", "
 posiciones = np.arange(len(confianzas))
 der.hlines(posiciones, confianzas["min"], confianzas["max"], color="#c3c2b7", linewidth=2.5)
 der.scatter(confianzas["mean"], posiciones, s=55, color=CATEGORICAL[0], zorder=3)
-der.axvline(0.79, color="#d94f2b", linestyle="--", linewidth=1.0)
-der.text(0.795, -0.4, "umbral de\\nconfianza 0,79", fontsize=6.8, color="#d94f2b")
+# NO se dibuja el umbral de 0,79 de E19: esta confianza es la de
+# `predict_proba` en CRUDO --xai_runner entrena un bosque sin calibrar-- y aquel
+# umbral se aplica a la probabilidad calibrada. Son magnitudes distintas y
+# superponerlas invitaría a una comparación que no se sostiene.
 der.set_yticks(posiciones, [""] * len(posiciones))
-der.set_xlabel("confianza calibrada (probabilidad, 0–1)")
-der.set_title("Confianza: mínimo, media y máximo", fontsize=9)
+der.set_xlabel("confianza SIN calibrar (predict_proba, 0–1)")
+der.set_title("Confianza sin calibrar: mínimo, media y máximo", fontsize=9)
 der.set_xlim(0.3, 1.05)
 
 fig.suptitle(
@@ -301,33 +287,39 @@ fig.suptitle(
 )
 fig.supxlabel(
     "E9 atribución · synthetic_v2, validación · tres casos por condición · "
-    "fuente: artifacts/tables/E9_atribuciones_synthetic_v2.csv",
+    "fuente: artifacts/tables/E9_atribuciones_synthetic_v2.csv · "
+    "la confianza es de predict_proba SIN calibrar: E9 no calibra",
     fontsize=6.5, x=0.0, ha="left",
 )
 fig.tight_layout()
 soporte.exportar(fig, "FIG-NB04-02_dispersion", subdirectorio="04_explicabilidad")
 plt.show()
 
-print(confianzas.round(4).to_string())'''),
-
+print(confianzas.round(4).to_string())"""),
     md("""\
 **Qué muestra.** A la izquierda, la importancia del descriptor principal de cada caso: dentro de una
 condición los tres puntos caen cerca, salvo en el fallo de encendido y en la clase sin fallo. A la
-derecha, la confianza: el termostato y la sonda deciden por encima del umbral de 0,79; la fuga, la
-deriva y el encendido quedan por debajo o alrededor.
+derecha, la confianza sin calibrar: el termostato y la sonda por encima de 0,91 de media; la fuga, la
+deriva y el encendido entre 0,64 y 0,72.
 
 **Qué podemos interpretar.** La atribución es razonablemente estable en las condiciones que el modelo
 diagnostica con confianza alta, y dispersa en las que no. Es consistente: cuando el modelo no está
 seguro, tampoco está seguro de qué lo llevó ahí.
 
-Y conecta directamente con el criterio de abstención: las dos condiciones cuya confianza media queda
-por debajo de 0,79 son exactamente las que, en E19, produjeron las dos abstenciones innecesarias.
-**No es casualidad: es el mismo umbral actuando sobre la misma debilidad del modelo.**
+**Qué no podemos afirmar, y conviene ser estricto porque la tentación es evidente.** Que estas
+cifras expliquen las abstenciones de E19. **Son otra magnitud**: `xai_runner` entrena un bosque
+**sin calibrar** y lo que aquí se dibuja es `predict_proba` en crudo, mientras el umbral de 0,79 de
+E19 se aplica a la probabilidad **calibrada**, que puede reordenar. Comparar las dos sería el mismo
+error que este trabajo señala en otros sitios: poner juntas dos cifras que miden cosas distintas
+porque están en la misma escala.
 
-**Qué no podemos afirmar.** Nada sobre la estabilidad frente a otra semilla o a otro reparto: son
-tres casos por condición y una sola ejecución. Tampoco que una atribución estable sea una atribución
-correcta."""),
+Lo que sí puede decirse, y es más débil de lo que parecía: las condiciones con menos confianza aquí
+son cuatro —sin fallo, fuga, caudalímetro y encendido—, no dos. Cualquier conexión con las
+abstenciones de E19 exigiría comparar las confianzas **calibradas** de las mismas ventanas, y esos
+valores están en el registro de E19, no en el de E9.
 
+Tampoco se puede afirmar nada sobre la estabilidad frente a otra semilla o a otro reparto: son tres
+casos por condición y una sola ejecución. Ni que una atribución estable sea una atribución correcta."""),
     md("""\
 ## 9. De la atribución a la observación del informe
 
@@ -335,8 +327,7 @@ Lo que hace que este experimento no sea un ejercicio decorativo: las tres atribu
 cada caso se convierten en las **observaciones** del paquete de evidencia, con su señal, su
 estadístico, su valor y su dirección. Y cada observación tiene que anclarse después en un fragmento
 del manual que hable de esa señal."""),
-
-    code('''\
+    code("""\
 # Las tres primeras: son las que el paquete de evidencia lleva como observaciones.
 ejemplo = atribuciones[
     (atribuciones["case_id"] == atribuciones["case_id"].iloc[0]) & (atribuciones["rank"] <= 3)
@@ -346,8 +337,7 @@ print(f"Diagnóstico: {ejemplo['predicted_class'].iloc[0]} "
       f"(confianza {ejemplo['confidence'].iloc[0]:.4f})\\n")
 for _, fila in ejemplo.sort_values("rank").iterrows():
     print(f"  OBS00{int(fila['rank'])}  {fila['signal']}.{fila['statistic']} = {fila['value']:.4f}"
-          f"  ({fila['direction']}, importancia {fila['importance']:.4f})")'''),
-
+          f"  ({fila['direction']}, importancia {fila['importance']:.4f})")"""),
     md("""\
 **Lo observado.** Tres observaciones, cada una con señal, estadístico, valor, dirección e
 importancia. Es exactamente lo que llega al verificador y lo que el redactor tiene que anclar.
@@ -356,14 +346,12 @@ importancia. Es exactamente lo que llega al verificador y lo que el redactor tie
 documental que mencione **esa** señal. La atribución decide, por tanto, qué tiene que buscarse en el
 manual; si señalara una señal que el manual no documenta, el sistema se quedaría sin respaldo y
 tendría que abstenerse. En la práctica no ocurrió, y la ablación `A1` de E18 midió lo que eso vale."""),
-
     md("""\
 ## 10. Lo que la ablación `A1` dice de todo esto
 
 E18 retiró la atribución de Shapley y la sustituyó por un criterio estadístico simple —la desviación
 tipificada del descriptor frente a la clase sin fallo— manteniendo todo lo demás."""),
-
-    code('''\
+    code("""\
 import json
 
 filas = []
@@ -382,8 +370,7 @@ for suf, particion in (("", "validación"), ("_prueba", "prueba")):
         "cobertura": f"{r['coverage_full_evidence']['numerator']}/"
                      f"{r['coverage_full_evidence']['denominator']}",
     })
-pd.DataFrame(filas).set_index("partición")'''),
-
+pd.DataFrame(filas).set_index("partición")"""),
     md("""\
 **Qué muestra.** `A1` produce **las mismas decisiones que la configuración canónica**, en validación
 y en prueba. Diecisiete de diecisiete, las dos veces.
@@ -401,7 +388,6 @@ PI.3.
 **Qué no podemos afirmar.** Que un criterio estadístico simple sea equivalente en general. Con
 diecisiete casos, cinco de ellos con evidencia completa, lo que se ha medido es que en esta muestra
 ninguna decisión cambió."""),
-
     md("""\
 ## 11. Resultados negativos y limitaciones
 
@@ -417,7 +403,6 @@ ninguna decisión cambió."""),
 6. **El registro de E9 no lleva cabecera de identificación**: le faltan `commit` y `executed_at`,
    como a los de E6 y E7. Es anterior a la convención y no se regenera, porque regenerar cambiaría
    las cifras publicadas."""),
-
     md("""\
 ## 12. Discusión
 
@@ -436,7 +421,6 @@ Y deja un hallazgo que sobrevive a todo lo anterior: **la firma de un fallo no e
 la señal del componente que falla.** El caudalímetro contaminado se detecta en los ajustes de
 combustible. Un sistema diseñado con la intuición contraria —vigilar cada sensor para detectar su
 propio fallo— no habría encontrado esta avería."""),
-
     md("""\
 ## 13. Conclusiones
 

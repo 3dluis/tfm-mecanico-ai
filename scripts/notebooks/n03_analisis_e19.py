@@ -267,7 +267,6 @@ de hipótesis demostrada.
 Tampoco se puede leer la cobertura 6/10 como «cuatro oportunidades perdidas». De esas diez
 ejecuciones con evidencia completa, **dos llevaban diagnóstico incorrecto**, y en ellas abstenerse
 era lo que debía hacer. La parte evitable del coste es la otra cifra: **2 de 8**."""),
-
     code('''\
 # El intervalo se calcula, no se describe. Con numeradores de 0 y denominadores
 # de 14, el intervalo de Wald da [0, 0] --un artefacto conocido-- de modo que se
@@ -294,7 +293,6 @@ for nombre, fila in primario.iterrows():
         "amplitud": round(alto - bajo, 3),
     })
 pd.DataFrame(intervalos).set_index("tasa")'''),
-
     md("""\
 **Qué muestra.** Los tres intervalos, y son anchos. La falsa confianza de 0/14 es compatible con
 cualquier tasa real entre **0 y 0,215**; la abstención innecesaria de 2/8, con cualquiera entre
@@ -310,7 +308,6 @@ innecesaria —más de medio punto— explica por qué el informe de la fase se 
 catorce proceden de siete sesiones del mismo generador: dos ejecuciones de la misma sesión no son
 independientes, de modo que el intervalo real es **más ancho** que el que sale aquí. Tampoco cubre
 la incertidumbre de que el conjunto sea sintético, que no es estadística."""),
-
     md("""\
 ## 7. Qué decidió el sistema, caso a caso
 
