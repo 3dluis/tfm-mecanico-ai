@@ -65,7 +65,21 @@ def main(argv: list[str] | None = None) -> int:
         "threshold-sweep", help="barrido del umbral de confianza sobre validación"
     )
     umbral.add_argument("--dataset-id", default="synthetic_v2")
-    subparsers.add_parser("training-data", help="generar el conjunto de ajuste del SLM")
+    datos_ajuste = subparsers.add_parser(
+        "training-data", help="generar el conjunto de ajuste del SLM"
+    )
+    datos_ajuste.add_argument(
+        "--particion-ejemplos",
+        choices=("train", "validation"),
+        default="validation",
+        help=(
+            "de dónde salen los ejemplos. validation es lo que produjo slm_lora_v2 y "
+            "CONTAMINA, porque E13 y E15 miden al redactor sobre validación: tres de sus "
+            "cinco ventanas de evaluación eran las mismas del ajuste "
+            "(docs/methodology/auditoria-contaminacion-adaptador.md). Se conserva para poder "
+            "reproducir aquel conjunto. Para un adaptador nuevo, train"
+        ),
+    )
     ft = subparsers.add_parser("finetune-slm", help="ajustar el SLM con LoRA")
     ft.add_argument("--epochs", type=int, default=4)
     ft.add_argument(
@@ -388,7 +402,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "training-data":
         from mecanico_ia_exp.experiments.training_runner import run_training_data
 
-        return run_training_data(etiqueta=args.etiqueta)
+        return run_training_data(
+            etiqueta=args.etiqueta,
+            particion_de_ejemplos=args.particion_ejemplos,
+        )
 
     if args.command == "finetune-slm":
         from mecanico_ia_exp.llm.finetune import FinetuneConfig, finetune

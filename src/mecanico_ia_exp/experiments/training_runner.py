@@ -11,8 +11,10 @@ ha escrito a mano ni generado con otro modelo.
 from __future__ import annotations
 
 import hashlib
+import json
 import random
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 import yaml
@@ -69,15 +71,85 @@ def destinos_de(etiqueta: str = "") -> dict[str, Path]:
     }
 
 
+class ContaminacionError(RuntimeError):
+    """Los ejemplos de ajuste tocan una partición sobre la que se va a medir."""
+
+
+def exigir_particion_de_ajuste_limpia(ventanas: list[str], dataset_id: str) -> dict[str, int]:
+    """Falla si alguna ventana de los ejemplos cae en validación o en prueba.
+
+    **Esta comprobación nació de un defecto real.** Los ejemplos de
+    `models/slm_lora_v2` se generaron desde validación, y E13 y E15 midieron la
+    calidad del redactor sobre validación: tres de las cinco ventanas de
+    evaluación eran **exactamente las mismas** con que se había ajustado.
+    Documentado en `docs/methodology/auditoria-contaminacion-adaptador.md`.
+
+    Se comprueba por **sesión** además de por ventana: dos ventanas de la misma
+    sesión comparten la mitad de sus muestras, de modo que la disyunción por
+    ventana no bastaría.
+
+    **Y se comprueba leyendo el reparto, no las particiones.**
+    `synthetic_v2_preprocess.json` registra a qué partición va cada sesión, que
+    es toda la información que hace falta. Cargar la partición de prueba para
+    esto habría sido una apertura del conjunto de prueba —y una apertura
+    innecesaria es peor que inútil: gasta la única cosa que no se repone—.
+    """
+    manifiesto = paths.DATA_PROCESSED / f"{dataset_id}_preprocess.json"
+    if not manifiesto.is_file():
+        msg = (
+            f"No está {manifiesto.name} y sin él no se puede comprobar que los ejemplos no "
+            "tocan validación ni prueba. Reconstrúyalo con scripts/reconstruir_datos.sh."
+        )
+        raise ContaminacionError(msg)
+    reparto: dict[str, str] = json.loads(manifiesto.read_text("utf-8"))["split_assignment"]
+
+    sesiones = {v.split("@")[0] for v in ventanas}
+    reservadas = {
+        particion: {s for s, p in reparto.items() if p == particion}
+        for particion in ("validation", "test")
+    }
+    problemas = {
+        particion: sorted(sesiones & reservado) for particion, reservado in reservadas.items()
+    }
+    if any(problemas.values()):
+        detalle = "\n".join(
+            f"  {particion}: {len(s)} sesión(es) {s[:4]}" for particion, s in problemas.items() if s
+        )
+        msg = (
+            "Los ejemplos de ajuste tocan particiones sobre las que se mide:\n"
+            f"{detalle}\n"
+            "Es la contaminación que P2 corrige. Genere los ejemplos desde la partición de "
+            "entrenamiento."
+        )
+        raise ContaminacionError(msg)
+    return {p: len(s) for p, s in reservadas.items()}
+
+
 def run_training_data(
     dataset_id: str = DATASET,
     ventanas_por_condicion: int = 12,
     *,
     etiqueta: str = "",
+    particion_de_ejemplos: Literal["train", "validation"] = "validation",
 ) -> int:
+    """Construye los ejemplos con que se ajusta el redactor.
+
+    ``particion_de_ejemplos`` decide de dónde salen. El valor por omisión,
+    ``"validation"``, es el que produjo `models/slm_lora_v2` y **se conserva solo
+    para poder reproducir aquel conjunto**: contamina, porque E13 y E15 miden
+    sobre validación. Para un adaptador nuevo hay que pasar ``"train"``.
+    """
     destinos = exigir_libres(destinos_de(etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
-    validacion = load_partition("validation", dataset_id=dataset_id)
+    if particion_de_ejemplos == "train":
+        # Los ejemplos salen de la misma partición con que se ajustó el bosque.
+        # No es un problema para el redactor: su trabajo es escribir lo que se le
+        # entrega, no diagnosticar. Y es la única partición disjunta por
+        # construcción de las dos sobre las que se le mide.
+        origen = entrenamiento
+    else:
+        origen = load_partition("validation", dataset_id=dataset_id)
+    validacion = origen
     perfil = load_vehicle(VEHICULO)
     gold = yaml.safe_load((paths.CONFIGS / "goldset_mazda3_bk.yaml").read_text())
     por_fallo = {c["fault_id"]: c for c in gold["cases"] if c.get("corpus_variant") is None}
@@ -230,6 +302,27 @@ def run_training_data(
     casos_train = set(casos[:corte])
 
     paths.ensure(destinos["ejemplos_train"].parent)
+    # La comprobación de contaminación va **antes** de escribir un solo ejemplo.
+    # Descubrir después que los ejemplos tocan la partición sobre la que se mide
+    # ya sería tarde: el fichero existiría y alguien podría ajustar con él.
+    if particion_de_ejemplos == "train":
+        reservadas = exigir_particion_de_ajuste_limpia(
+            sorted({e.case_id for e in ejemplos}), dataset_id
+        )
+        print(
+            f"\nSin contaminación: ninguna de las {len(ejemplos)} muestras de ajuste toca "
+            f"validación ({reservadas['validation']} sesiones) ni prueba "
+            f"({reservadas['test']})."
+        )
+    else:
+        print(
+            "\nAVISO: los ejemplos salen de VALIDACIÓN, que es donde E13 y E15 miden al "
+            "redactor. Es la contaminación documentada en "
+            "docs/methodology/auditoria-contaminacion-adaptador.md. Se conserva para poder "
+            "reproducir el conjunto de slm_lora_v2; para un adaptador nuevo, use "
+            "--particion-ejemplos train."
+        )
+
     for nombre, seleccion in (
         ("train", [e for e in ejemplos if e.case_id in casos_train]),
         ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
@@ -257,6 +350,15 @@ def run_training_data(
             "split_seed": 20260901,
             "distribution": reparto,
             "leakage_check": "sin texto del manual en las salidas esperadas",
+            "examples_partition": particion_de_ejemplos,
+            "contamination_check": (
+                "ninguna sesión de los ejemplos aparece en validación ni en prueba; "
+                "comprobado antes de escribir"
+                if particion_de_ejemplos == "train"
+                else "NO SE COMPRUEBA: los ejemplos salen de validación, que es donde E13 y "
+                "E15 miden al redactor. Es la contaminación que P2 corrige "
+                "(docs/methodology/auditoria-contaminacion-adaptador.md)"
+            ),
             # Linaje: sin esto no se puede decidir sobre el adaptador.
             "source_verifier_version": VERIFIER_VERSION,
             "source_case_set": sorted({e.case_id for e in ejemplos}),
