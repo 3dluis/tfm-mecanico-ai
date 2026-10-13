@@ -305,7 +305,13 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 1
 
-        manifiesto = construir(specs, datos, dataset_id=args.dataset_id, seed=args.seed)
+        manifiesto = construir(
+            specs,
+            datos,
+            dataset_id=args.dataset_id,
+            seed=args.seed,
+            con_expresion=not historico,
+        )
 
         # La auditoría va ANTES de escribir, no después. Un conjunto que no la
         # pasa no llega a existir en disco, y así no hay forma de entrenar sobre
