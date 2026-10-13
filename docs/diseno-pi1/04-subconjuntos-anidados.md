@@ -50,10 +50,13 @@ es. **Lo cierra:** los estadísticos se recalculan **desde cada subconjunto**, c
 las suyas. Hay que comprobarlo con una prueba, como ya se hizo en E7 para la fuga entrenamiento →
 validación.
 
-**Fuga por calibración.** La calibración isotónica del bosque se ajusta con validación cruzada interna
-sobre entrenamiento. Debe ajustarse sobre **el subconjunto**, no sobre el entrenamiento completo, por el
-mismo motivo. **Lo cierra:** una comprobación de que el objeto calibrado se ajustó con el número de
-ventanas del punto.
+**Fuga por calibración.** Hoy el calibrador isotónico se ajusta con validación cruzada interna sobre
+entrenamiento, lo que reparte sus pliegues por ventana. En esta fase **no se hace así**: cada punto
+calibra sobre su propia **partición interna de calibración**, repartida por sesión y disjunta del ajuste
+y del desarrollo, tal como fija `05-protocolo-comparacion.md` §5.2. Lo que esta fase añade es que esa
+partición sea **la del punto** y no la del entrenamiento completo, por el mismo motivo que la
+normalización. **Lo cierra:** una comprobación de que el objeto calibrado se ajustó con el número de
+ventanas del interno de calibración de ese punto, y de que ninguna sesión suya aparece en el ajuste.
 
 ## 4.4 Qué mide esta curva, y qué no
 
@@ -61,11 +64,20 @@ Mide cómo cambia el rendimiento de cada recorrido —y la diferencia entre los 
 sesiones de entrenamiento, con todo lo demás fijo. **No mide** si el contexto temporal aporta: eso sigue
 confundido por el estimador, como explica `05-protocolo-comparacion.md`.
 
-Y hay un límite que conviene escribir antes de ver la curva: **con 22 sesiones por condición el punto
-más alto está en 132 sesiones de entrenamiento**, menos que las 216 de `synthetic_v3` pero más del
-doble de las 48 de `synthetic_v2`. Si la curva sigue subiendo en `T22`, la conclusión honesta es «el
-volumen seguía limitando en el rango explorado», no «hace falta más volumen»: lo segundo exige
-extrapolar, y la pendiente de cuatro puntos con cinco semillas dirá si eso es defendible.
+Y hay un límite que conviene escribir antes de ver la curva, sobre el rango que de verdad explora. Con
+22 sesiones por condición el punto más alto está en **132 sesiones de entrenamiento**, que son
+**exactamente las que tiene `synthetic_v3`**: su reparto por sesión da 22 de entrenamiento por
+condición, 132 en total —`v3` tiene 216 sesiones, pero 42 son de validación y 42 de prueba—. Comparado
+sobre la misma base, `T22` **no amplía** el volumen ya explorado: lo reproduce con el generador
+calibrado, que es lo que lo hace comparable con la cifra publicada. El que sí amplía es el rango por
+abajo: `T6` son 36 sesiones de entrenamiento, por debajo de las **48** de `synthetic_v2`, y los cuatro
+puntos cubren de 36 a 132.
+
+De ahí se sigue lo que la curva puede concluir. Si sigue subiendo en `T22`, la conclusión honesta es
+«el volumen seguía limitando **en el rango explorado**, que termina donde termina `v3`», no «hace falta
+más volumen»: lo segundo exige extrapolar más allá del punto más alto medido, y la pendiente de cuatro
+puntos con cinco semillas dirá si eso es defendible. Medir por encima de 132 exigiría generar más
+sesiones por condición, y eso no está en esta fase.
 
 ## 4.5 Criterio de parada de esta fase
 
