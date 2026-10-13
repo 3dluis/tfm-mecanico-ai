@@ -77,7 +77,7 @@ def modo_de(*, oracle: bool, adverse: bool) -> str:
     return "adverse" if adverse else ("oracle" if oracle else "non_oracle")
 
 
-def sufijo_artefacto(modo: str, policy: str = VERIFIER_VERSION) -> str:
+def sufijo_artefacto(modo: str, policy: str = VERIFIER_VERSION, etiqueta: str = "") -> str:
     """Sufijo del nombre de los artefactos de una ejecución.
 
     Una política no canónica **nunca** puede escribir sobre los registros
@@ -89,6 +89,11 @@ def sufijo_artefacto(modo: str, policy: str = VERIFIER_VERSION) -> str:
     sufijo = "" if modo == "oracle" else f"_{modo}"
     if validar_politica(policy) != VERIFIER_VERSION:
         sufijo += f"_{policy.replace('.', '_')}"
+    # Y la etiqueta de ejecución, que es lo que permite reproducir sin destruir:
+    # una reejecución de comprobación escribe al lado del registro publicado en
+    # lugar de encima.
+    if etiqueta:
+        sufijo += f"_{etiqueta}"
     return sufijo
 
 
@@ -403,6 +408,7 @@ def run_sufficiency(
     oracle: bool = True,
     adverse: bool = False,
     policy: str = VERIFIER_VERSION,
+    etiqueta: str = "",
 ) -> int:
     """Ejecuta el experimento de suficiencia sobre el conjunto anotado.
 
@@ -544,7 +550,7 @@ def run_sufficiency(
     print(f"\ndecisiones correctas: {aciertos_decision}/{len(verificados)}")
 
     modo = modo_de(oracle=oracle, adverse=adverse)
-    sufijo = sufijo_artefacto(modo, policy)
+    sufijo = sufijo_artefacto(modo, policy, etiqueta)
     tablas = paths.ensure(paths.TABLES)
     pd.DataFrame(filas).to_csv(tablas / f"E15_suficiencia{sufijo}.csv", index=False)
     experimentos = paths.ensure(paths.EXPERIMENTS)
@@ -603,6 +609,8 @@ def run_sufficiency(
             # El registro del agente lleva el mismo sufijo que el del verificador:
             # una redacción producida bajo otra política no es la misma ejecución.
             sufijo_agente = "" if policy == VERIFIER_VERSION else f"_{policy.replace('.', '_')}"
+            if etiqueta:
+                sufijo_agente += f"_{etiqueta}"
             escribir(
                 experimentos / f"E13_agente_{llm}{sufijo_agente}.json",
                 {

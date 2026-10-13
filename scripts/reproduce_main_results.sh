@@ -13,17 +13,21 @@ echo "Etiqueta de esta reproducción: ${ETIQUETA}"
 
 uv run mecanico-exp doctor
 uv run mecanico-exp eval-retrieval --etiqueta "${ETIQUETA}"
-uv run mecanico-exp sufficiency --mode oracle
-uv run mecanico-exp sufficiency --mode non-oracle
-uv run mecanico-exp sufficiency --mode oracle --llm transformers-lora@slm_lora_v2
+uv run mecanico-exp sufficiency --mode oracle --etiqueta "${ETIQUETA}"
+uv run mecanico-exp sufficiency --mode non-oracle --etiqueta "${ETIQUETA}"
+uv run mecanico-exp sufficiency --mode oracle --llm transformers-lora@slm_lora_v2 \
+  --etiqueta "${ETIQUETA}"
 
 echo
 echo "¿Coinciden las cifras reproducidas con las publicadas?"
 uv run python scripts/comparar_registro.py \
   experiments/E12_retrieval.json "experiments/E12_retrieval_${ETIQUETA}.json"
 
-echo
-echo "Los registros de E15 y E13 llevan su propio sufijo de modo; compárelos con:"
-echo "  git --no-pager diff --stat -- experiments/E15_suficiencia.json \\"
-echo "    experiments/E15_suficiencia_non_oracle.json \\"
-echo "    'experiments/E13_agente_transformers-lora@slm_lora_v2.json'"
+uv run python scripts/comparar_registro.py \
+  experiments/E15_suficiencia.json "experiments/E15_suficiencia_${ETIQUETA}.json"
+uv run python scripts/comparar_registro.py \
+  experiments/E15_suficiencia_non_oracle.json \
+  "experiments/E15_suficiencia_non_oracle_${ETIQUETA}.json"
+uv run python scripts/comparar_registro.py \
+  "experiments/E13_agente_transformers-lora@slm_lora_v2.json" \
+  "experiments/E13_agente_transformers-lora@slm_lora_v2_${ETIQUETA}.json"

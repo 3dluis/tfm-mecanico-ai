@@ -555,7 +555,18 @@ def test_el_comparador_ignora_lo_que_cambia_en_toda_reejecucion(tmp_path) -> Non
         check=False,
     )
     assert resultado.returncode == 0, resultado.stdout
-    assert "IDÉNTICOS" in resultado.stdout
+    assert "REPRODUCIDO" in resultado.stdout
+
+    # Un campo nuevo en el reproducido no es una diferencia: el esquema crece.
+    dos.write_text(json.dumps({**otro, "protocolo": "E6_v1"}), encoding="utf-8")
+    resultado = subprocess.run(
+        [sys.executable, str(paths.ROOT / "scripts" / "comparar_registro.py"), str(uno), str(dos)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert resultado.returncode == 0, resultado.stdout
+    assert "crecido el esquema" in resultado.stdout
 
     dos.write_text(json.dumps({**otro, "metrics": {"macro_f1": 0.5}}), encoding="utf-8")
     resultado = subprocess.run(
@@ -566,3 +577,14 @@ def test_el_comparador_ignora_lo_que_cambia_en_toda_reejecucion(tmp_path) -> Non
     )
     assert resultado.returncode == 1
     assert "DIFIERE metrics.macro_f1" in resultado.stdout
+
+
+def test_las_reejecuciones_de_suficiencia_tambien_se_etiquetan() -> None:
+    """E15 y E13 escribían en rutas fijas por modo: una reproducción las pisaba."""
+    from mecanico_ia_exp.experiments.sufficiency_runner import sufijo_artefacto
+
+    for modo in ("oracle", "non_oracle", "adverse"):
+        sin = sufijo_artefacto(modo)
+        con = sufijo_artefacto(modo, etiqueta="reproduccion")
+        assert con != sin, f"el modo {modo} no distingue la ejecución"
+        assert con.endswith("_reproduccion")
