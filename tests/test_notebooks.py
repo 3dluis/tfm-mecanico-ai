@@ -377,3 +377,49 @@ def test_ningun_notebook_lee_de_un_directorio_que_un_clon_no_trae(nombre: str) -
             f"{nombre} lee de {prohibido}, que un clon recién hecho no trae; "
             "usa artifacts/ o soporte.tabla()/soporte.figura()"
         )
+
+
+# ------------------- el HTML entregado: lo que el tribunal lee sin ejecutar nada
+
+HTML = paths.ROOT / "docs" / "notebooks" / "html"
+
+
+@pytest.mark.parametrize("nombre", ENTREGADOS)
+def test_el_html_entregado_existe_y_no_lleva_rutas_de_esta_maquina(nombre: str) -> None:
+    """Un `Path` absoluto impreso en una salida acaba dentro del HTML.
+
+    Pasó: las dos primeras versiones de los notebooks 05 y 06 terminaban su celda
+    de figura con `soporte.exportar(...)`, cuyo valor devuelto Jupyter imprime
+    como resultado de la celda. El HTML entregado llevaba dentro la ruta del
+    directorio personal del autor. Los notebooks pasaban su propia comprobación
+    de portabilidad porque la ruta no está en el código: aparece al ejecutarlo.
+    """
+    import re
+
+    archivo = HTML / nombre.replace(".ipynb", ".html")
+    assert archivo.is_file(), (
+        f"falta el HTML de {nombre}; se genera con scripts/notebooks/exportar_html.py"
+    )
+    texto = archivo.read_text("utf-8", errors="replace")
+    for patron, descripcion in PATRONES_LOCALES:
+        encontrados = re.findall(patron, texto)
+        assert not encontrados, (
+            f"{archivo.name} contiene {descripcion}: {sorted(set(encontrados))[:3]}. "
+            "Probablemente una celda termina devolviendo un Path absoluto en lugar de imprimirlo "
+            "relativo a la raíz."
+        )
+
+
+@pytest.mark.parametrize("nombre", ENTREGADOS)
+def test_el_html_se_puede_leer_sin_ejecutar_nada(nombre: str) -> None:
+    """El HTML es el entregable para quien no ejecuta: tiene que estar completo."""
+    archivo = HTML / nombre.replace(".ipynb", ".html")
+    texto = archivo.read_text("utf-8", errors="replace")
+    assert texto.lstrip().lower().startswith("<!doctype html"), "el HTML no está completo"
+    # Las figuras van embebidas en base64, no enlazadas a ficheros locales.
+    assert 'src="data:image' in texto or "soporte.exportar" not in texto, (
+        "hay figuras y no están embebidas: el HTML no sería autosuficiente"
+    )
+    # Y la modalidad declarada tiene que verse, porque es lo que acota lo que el
+    # notebook autoriza a afirmar.
+    assert "MODALIDAD" in texto, "el HTML no muestra la modalidad declarada"
