@@ -1,0 +1,56 @@
+{
+  "que_es": "perdida del modelo BASE, sin adaptador y sin entrenar, sobre los 3 ejemplos mas largos y los 3 mas cortos del conjunto de ajuste congelado. Deterministica",
+  "modelo_base": "Qwen/Qwen2.5-3B-Instruct",
+  "precision": "bfloat16",
+  "max_seq_length": 3072,
+  "dispositivo": "mps",
+  "datos": "data/processed/slm_finetune_prepared_sin_contaminacion/train.jsonl",
+  "hardware": {
+    "plataforma": "macOS-26.6.2-arm64-arm-64bit",
+    "procesador": "arm",
+    "python": "3.11.14",
+    "torch": "2.13.0",
+    "transformers": "5.16.1",
+    "acelerador": "mps",
+    "memoria_recomendada_gb": 17.76
+  },
+  "medidas": [
+    {
+      "indice": 77,
+      "tokens_sin_recortar": 984,
+      "tokens": 985,
+      "perdida": 1.820834
+    },
+    {
+      "indice": 20,
+      "tokens_sin_recortar": 986,
+      "tokens": 987,
+      "perdida": 1.817806
+    },
+    {
+      "indice": 28,
+      "tokens_sin_recortar": 986,
+      "tokens": 987,
+      "perdida": 1.814785
+    },
+    {
+      "indice": 61,
+      "tokens_sin_recortar": 4356,
+      "tokens": 3072,
+      "perdida": 1.324841
+    },
+    {
+      "indice": 100,
+      "tokens_sin_recortar": 4358,
+      "tokens": 3072,
+      "perdida": 1.337618
+    },
+    {
+      "indice": 62,
+      "tokens_sin_recortar": 4361,
+      "tokens": 3072,
+      "perdida": 1.33412
+    }
+  ],
+  "medida_el": "referencia tomada en la máquina del autor"
+}
