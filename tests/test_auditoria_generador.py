@@ -233,14 +233,51 @@ def test_sin_manifiesto_tres_comprobaciones_no_se_verifican(conjunto) -> None:
         exigir_auditoria_limpia(datos, None)
 
 
+def test_la_reproducibilidad_se_comprueba_sobre_una_sesion_con_fallo(conjunto) -> None:
+    """Una sesión sana no ejercita nada: su expresión es cero por construcción.
+
+    En un plan equilibrado la primera sesión por orden es sana, de modo que
+    comprobar «la primera» dejaba fuera todo lo que puede estar mal.
+    """
+    datos, manifiesto = conjunto
+    comprobacion = next(c for c in auditar(datos, manifiesto) if c.numero == 12)
+    assert comprobacion.estado == PASS
+    assert "F00_normal" not in comprobacion.detalle, comprobacion.detalle
+    assert "expresión" in comprobacion.detalle
+
+
+def test_detecta_una_anotacion_de_expresion_incorrecta(conjunto) -> None:
+    """Las señales intactas y la expresión mal: la comprobación 8 no lo vería.
+
+    Es informativa y no aprobatoria, así que si la reproducibilidad comparase
+    solo las doce señales, una anotación de expresión equivocada pasaría el
+    filtro entero.
+    """
+    datos, manifiesto = conjunto
+    comprobada = next(c for c in auditar(datos, manifiesto) if c.numero == 12)
+    session_id = comprobada.detalle.split()[0]
+
+    for columna, valor in (("fault_expressed", True), ("fault_deviation_max", 999.0)):
+        roto = datos.copy()
+        indice = roto.index[(roto.session_id == session_id) & roto.fault_active][0]
+        roto.loc[indice, columna] = (
+            not roto.loc[indice, columna] if columna == "fault_expressed" else valor
+        )
+        resultado = next(c for c in auditar(roto, manifiesto) if c.numero == 12)
+        assert resultado.estado == FALLA, columna
+        assert columna in resultado.detalle
+
+
 def test_detecta_que_la_serie_no_se_regenera(conjunto) -> None:
     """La comprobación que da sentido al manifiesto."""
     datos, manifiesto = conjunto
-    primera = sorted(str(f["session_id"]) for f in manifiesto["sessions"])[0]
+    con_fallo = sorted(
+        str(f["session_id"]) for f in manifiesto["sessions"] if f["fault_id"] != "F00_normal"
+    )[0]
     mentiroso = {
         **manifiesto,
         "sessions": [
-            {**f, "seed": f["seed"] + 1} if f["session_id"] == primera else f
+            {**f, "seed": f["seed"] + 1} if f["session_id"] == con_fallo else f
             for f in manifiesto["sessions"]
         ],
     }

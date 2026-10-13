@@ -34,6 +34,7 @@ import numpy as np
 import pandas as pd
 
 from mecanico_ia_exp.obd.engine import _IDLE_RPM, _THERMOSTAT_C
+from mecanico_ia_exp.obd.expresion import RATIO_DECLARADO
 from mecanico_ia_exp.obd.faults import NORMAL_ID
 from mecanico_ia_exp.obd.signals import COLUMNAS_DE_EXPRESION, SIGNAL_NAMES, SIGNALS_BY_NAME
 
@@ -414,21 +415,45 @@ def _c11_procedencia(datos: pd.DataFrame, manifiesto: dict[str, Any] | None) -> 
 
 
 def _c12_reproducibilidad(datos: pd.DataFrame, manifiesto: dict[str, Any] | None) -> Comprobacion:
-    """Regenera una sesión desde su ficha y la compara muestra a muestra.
+    """Regenera una sesión **con fallo** desde su ficha y la compara entera.
 
     Es la comprobación que da sentido al manifiesto: si de la ficha no sale la
     misma serie, el fichero no documenta la procedencia aunque lo diga su
-    nombre. Se regenera **la primera sesión por orden**, no una al azar, para
-    que el resultado de la auditoría sea él mismo reproducible.
+    nombre.
+
+    Dos decisiones que no son obvias:
+
+    * Se regenera **una sesión con fallo**, no la primera por orden. En un plan
+      equilibrado la primera por orden es una sesión sana, y una sesión sana no
+      ejercita nada de lo que puede estar mal: su expresión es cero por
+      construcción y sus parámetros de fallo están vacíos.
+    * Se comparan también las **columnas de expresión**. Comparar solo las doce
+      señales dejaría pasar una anotación de expresión incorrecta con los
+      valores intactos, y la comprobación 8 no la detectaría porque es
+      informativa y no aprobatoria.
+
+    Dentro de las sesiones con fallo se toma la **primera por orden**, para que
+    el resultado de la auditoría sea él mismo reproducible.
     """
     if manifiesto is None:
         return Comprobacion(12, "reproducibilidad exacta", NO_VERIFICABLE, "sin manifiesto")
     from mecanico_ia_exp.obd.procedencia import reconstruir
     from mecanico_ia_exp.obd.synthetic import generate_session
 
-    session_id = sorted(str(f["session_id"]) for f in manifiesto["sessions"])[0]
+    con_fallo = sorted(
+        str(f["session_id"]) for f in manifiesto["sessions"] if f["fault_id"] != NORMAL_ID
+    )
+    if not con_fallo:
+        return Comprobacion(
+            12,
+            "reproducibilidad exacta",
+            NO_VERIFICABLE,
+            "el manifiesto no tiene sesiones con fallo",
+        )
+    session_id = con_fallo[0]
     spec = reconstruir(manifiesto, session_id)
-    regenerada = generate_session(spec)
+    ratio = float(manifiesto.get("expression", {}).get("ratio_declarado", RATIO_DECLARADO))
+    regenerada = generate_session(spec, ratio_expresion=ratio)
     original = datos[datos["session_id"] == session_id].sort_values("timestamp")
     if len(original) != len(regenerada):
         return Comprobacion(
@@ -446,11 +471,35 @@ def _c12_reproducibilidad(datos: pd.DataFrame, manifiesto: dict[str, Any] | None
             FALLA,
             f"{session_id}: la serie regenerada difiere, máximo {np.abs(a - b).max():.3g}",
         )
+
+    columnas_expresion = [c for c in COLUMNAS_DE_EXPRESION if c in original.columns]
+    if not columnas_expresion:
+        return Comprobacion(
+            12,
+            "reproducibilidad exacta",
+            NO_VERIFICABLE,
+            f"{session_id}: las doce señales coinciden, pero el conjunto no trae las "
+            "columnas de expresión y no se pueden comparar",
+        )
+    discrepantes = [
+        columna
+        for columna in columnas_expresion
+        if not np.array_equal(original[columna].to_numpy(), regenerada[columna].to_numpy())
+    ]
+    if discrepantes:
+        return Comprobacion(
+            12,
+            "reproducibilidad exacta",
+            FALLA,
+            f"{session_id}: las señales coinciden pero la anotación de expresión no: "
+            f"{discrepantes}",
+        )
     return Comprobacion(
         12,
         "reproducibilidad exacta",
         PASS,
-        f"{session_id} regenerada desde su ficha, idéntica bit a bit en {len(original)} muestras",
+        f"{session_id} ({spec.fault_id}) regenerada desde su ficha: idéntica bit a bit en "
+        f"{len(original)} muestras, señales y expresión",
     )
 
 

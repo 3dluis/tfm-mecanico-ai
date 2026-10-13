@@ -617,6 +617,8 @@ def documento_ablacion(
     calibracion: dict[str, Any],
     casos: list[CasoVerificado],
     embedding_space_id: str | None,
+    particion: str = "validation",
+    motivo_de_apertura: str = "",
 ) -> dict[str, Any]:
     """Contenido del registro de una ablación, sin la cabecera de identificación.
 
@@ -627,6 +629,12 @@ def documento_ablacion(
     return {
         "experiment_id": f"E18_ablation_{ablacion}",
         "ablation_id": ablacion,
+        "partition": particion,
+        # El motivo de abrir el conjunto de prueba va EN EL ARTEFACTO y no solo
+        # en la salida del ejecutor. Un registro que no dice por qué se abrió la
+        # partición de prueba no documenta la apertura, por mucho que el
+        # ejecutor haya exigido la razón para arrancar.
+        "test_opening_reason": motivo_de_apertura or None,
         "ablation": ABLACIONES[ablacion],
         "operational_change": CAMBIO_OPERATIVO[ablacion],
         "preregistration": PREREGISTRO,
@@ -788,6 +796,8 @@ def run_ablations(
                 calibracion=ctx.calibracion,
                 casos=casos,
                 embedding_space_id=espacio,
+                particion=particion,
+                motivo_de_apertura=reason if particion == "test" else "",
             ),
             seed=ctx.configuracion.seed,
             dataset_id=dataset_id,
