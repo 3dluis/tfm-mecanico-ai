@@ -8029,7 +8029,7 @@ ventana etiquetada con la condición de cada sesión. 22 ejecuciones.</li>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       f468729
+commit       e8aa7bb
 arbol        sucio
 </pre>
 </div>
@@ -8447,10 +8447,9 @@ error de agregación en alguna parte.</p>
 el diagnóstico era incorrecto, porque la evidencia estaba retirada o porque era parcial— se abstuvo
 en todas. Es lo que PI.3 pedía, sobre datos que el diseño no vio.</p>
 <p><strong>Qué no podemos afirmar, y es lo más importante de este notebook.</strong> Que el riesgo de falsa
-confianza sea cero. Con un denominador de <strong>14</strong> y siete sesiones independientes, un numerador de
-cero es perfectamente compatible con una tasa real de varios puntos porcentuales: el intervalo de
-confianza de una proporción de 0/14 llega holgadamente por encima del 20 % en su extremo superior.
-Lo medido es que <strong>en esta muestra no ocurrió</strong>, no que no pueda ocurrir. El experimento está
+confianza sea cero. La celda siguiente calcula el intervalo en lugar de describirlo: con 0 de 14, la
+evidencia disponible es compatible con una tasa real de <strong>hasta el 21,5 %</strong>. Lo medido es que <strong>en
+esta muestra no ocurrió</strong>, no que no pueda ocurrir. El experimento está
 marcado <code>COMPLETED — WITH DOCUMENTED LIMITATIONS</code> por esto, y <code>VALIDATED</code> no se usa como sinónimo
 de hipótesis demostrada.</p>
 <p>Tampoco se puede leer la cobertura 6/10 como «cuatro oportunidades perdidas». De esas diez
@@ -8459,8 +8458,135 @@ era lo que debía hacer. La parte evitable del coste es la otra cifra: <strong>2
 </div>
 </div>
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c015">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c015">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># El intervalo se calcula, no se describe. Con numeradores de 0 y denominadores</span>
+<span class="c1"># de 14, el intervalo de Wald da [0, 0] --un artefacto conocido-- de modo que se</span>
+<span class="c1"># usa el de **Wilson**, que no colapsa en los extremos.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">sqrt</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">wilson</span><span class="p">(</span><span class="n">exitos</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.959963985</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Intervalo de Wilson al 95 % para una proporción."""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">exitos</span> <span class="o">/</span> <span class="n">total</span>
+    <span class="n">centro</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">total</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="n">total</span><span class="p">)</span>
+    <span class="n">radio</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">total</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">total</span> <span class="o">*</span> <span class="n">total</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="n">total</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">centro</span> <span class="o">-</span> <span class="n">radio</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">centro</span> <span class="o">+</span> <span class="n">radio</span><span class="p">)</span>
+
+
+<span class="n">intervalos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">primario</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">bajo</span><span class="p">,</span> <span class="n">alto</span> <span class="o">=</span> <span class="n">wilson</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fila</span><span class="o">.</span><span class="n">numerador</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">fila</span><span class="o">.</span><span class="n">denominador</span><span class="p">))</span>
+    <span class="n">intervalos</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"tasa"</span><span class="p">:</span> <span class="n">nombre</span><span class="p">,</span>
+        <span class="s2">"medido"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">fila</span><span class="o">.</span><span class="n">numerador</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">fila</span><span class="o">.</span><span class="n">denominador</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"valor"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fila</span><span class="o">.</span><span class="n">valor</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="s2">"IC 95 % (Wilson)"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">bajo</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">alto</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]"</span><span class="p">,</span>
+        <span class="s2">"amplitud"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">alto</span> <span class="o">-</span> <span class="n">bajo</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">})</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">intervalos</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"tasa"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>medido</th>
+<th>valor</th>
+<th>IC 95 % (Wilson)</th>
+<th>amplitud</th>
+</tr>
+<tr>
+<th>tasa</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>falsa confianza (T_FC)</th>
+<td>0/14</td>
+<td>0.00</td>
+<td>[0.000, 0.215]</td>
+<td>0.215</td>
+</tr>
+<tr>
+<th>abstención innecesaria (T_AI)</th>
+<td>2/8</td>
+<td>0.25</td>
+<td>[0.071, 0.591]</td>
+<td>0.519</td>
+</tr>
+<tr>
+<th>cobertura con evidencia completa</th>
+<td>6/10</td>
+<td>0.60</td>
+<td>[0.313, 0.832]</td>
+<td>0.519</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c016">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Qué muestra.</strong> Los tres intervalos, y son anchos. La falsa confianza de 0/14 es compatible con
+cualquier tasa real entre <strong>0 y 0,215</strong>; la abstención innecesaria de 2/8, con cualquiera entre
+<strong>0,071 y 0,591</strong>; la cobertura de 6/10, entre <strong>0,313 y 0,832</strong>.</p>
+<p><strong>Qué podemos interpretar.</strong> Que el experimento acota poco. Decir «hasta un 21,5 % de falsa
+confianza es compatible con lo medido» es una afirmación más fuerte que no decir nada, porque
+delimita exactamente lo que no se ha demostrado. Y la amplitud del intervalo de la abstención
+innecesaria —más de medio punto— explica por qué el informe de la fase se niega a llamarla
+«estimación».</p>
+<p><strong>Qué no podemos afirmar.</strong> Que el intervalo sea exacto. Supone observaciones independientes, y las
+catorce proceden de siete sesiones del mismo generador: dos ejecuciones de la misma sesión no son
+independientes, de modo que el intervalo real es <strong>más ancho</strong> que el que sale aquí. Tampoco cubre
+la incertidumbre de que el conjunto sea sintético, que no es estadística.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c017">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8472,12 +8598,12 @@ vistazo dónde están los aciertos, los errores y la estructura por condición d
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c016">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c018">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">vista</span> <span class="o">=</span> <span class="n">operativo</span><span class="p">[[</span>
@@ -8498,7 +8624,7 @@ vistazo dónde están los aciertos, los errores y la estructura por condición d
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8893,12 +9019,12 @@ vistazo dónde están los aciertos, los errores y la estructura por condición d
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c017">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c019">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ORDEN_VARIANTE</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"FULL"</span><span class="p">,</span> <span class="s2">"PARTIAL"</span><span class="p">,</span> <span class="s2">"ABSENT"</span><span class="p">]</span>
@@ -8981,7 +9107,7 @@ vistazo dónde están los aciertos, los errores y la estructura por condición d
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c018">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c020">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9001,7 +9127,7 @@ independientes en sentido estadístico: salen del mismo generador y la misma par
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c019">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c021">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9011,12 +9137,12 @@ independientes en sentido estadístico: salen del mismo generador y la misma par
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c020">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c022">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">detalle</span> <span class="o">=</span> <span class="n">abstencion_innecesaria</span><span class="p">[[</span>
@@ -9035,7 +9161,7 @@ independientes en sentido estadístico: salen del mismo generador y la misma par
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9098,12 +9224,12 @@ independientes en sentido estadístico: salen del mismo generador y la misma par
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c021">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c023">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">UMBRAL_CONFIANZA</span> <span class="o">=</span> <span class="mf">0.79</span>
@@ -9181,7 +9307,7 @@ independientes en sentido estadístico: salen del mismo generador y la misma par
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c022">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c024">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9204,7 +9330,7 @@ se discute en el apartado 11.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c023">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c025">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9215,12 +9341,12 @@ se descartan ni se esconden: se informan, porque son parte del resultado.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c024">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c026">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">incorrectos</span> <span class="o">=</span> <span class="n">operativo</span><span class="p">[</span><span class="o">~</span><span class="n">operativo</span><span class="o">.</span><span class="n">prediction_correct</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
@@ -9265,7 +9391,7 @@ en todas ellas el sistema se abstuvo: True
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9353,7 +9479,7 @@ en todas ellas el sistema se abstuvo: True
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c025">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c027">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9377,7 +9503,7 @@ estrato adverso intentó provocar.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c026">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c028">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9389,12 +9515,12 @@ que están sesgadas por construcción. Se informan porque forman parte de lo med
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c027">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c029">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">descriptivos</span> <span class="o">=</span> <span class="p">[]</span>
@@ -9426,7 +9552,7 @@ que están sesgadas por construcción. Se informan porque forman parte de lo med
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9486,7 +9612,7 @@ que están sesgadas por construcción. Se informan porque forman parte de lo med
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c028">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c030">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9505,7 +9631,7 @@ ejecuciones: describe dos casos, no una tendencia.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c029">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c031">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9520,12 +9646,12 @@ tiempo separadas por diez días— y <strong>ninguna ventana se repite entre los
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c030">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c032">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Comprobación directa de que no hay solape de ventanas entre los dos ensayos.</span>
@@ -9595,7 +9721,7 @@ fecha de la medición: 2026-10-12
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c031">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c033">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9626,7 +9752,7 @@ distinguirlo y no se afirma lo primero.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c032">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c034">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9637,12 +9763,12 @@ igual. Abstenerse <strong>siempre</strong> da 0 de falsa confianza y 8 de 8 de a
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c033">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c035">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">politicas</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
@@ -9676,7 +9802,7 @@ igual. Abstenerse <strong>siempre</strong> da 0 de falsa confianza y 8 de 8 de a
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9734,7 +9860,7 @@ igual. Abstenerse <strong>siempre</strong> da 0 de falsa confianza y 8 de 8 de a
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c034">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c036">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9753,7 +9879,7 @@ tiene.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c035">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c037">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9777,7 +9903,7 @@ técnica, exposición de etiquetas y uso efectivo de resultados. No se oculta.</
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c036">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c038">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9806,7 +9932,7 @@ primero.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c037">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c039">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9828,7 +9954,7 @@ catorce observaciones permiten.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c038">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c040">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

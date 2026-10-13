@@ -29,6 +29,7 @@ ENTREGADOS = (
     "01_exploracion_obd.ipynb",
     "02_comparacion_modelos.ipynb",
     "03_analisis_e19.ipynb",
+    "04_explicabilidad.ipynb",
 )
 
 

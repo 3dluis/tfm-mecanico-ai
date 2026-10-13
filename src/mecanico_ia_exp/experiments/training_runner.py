@@ -11,8 +11,10 @@ ha escrito a mano ni generado con otro modelo.
 from __future__ import annotations
 
 import hashlib
+import json
 import random
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 import yaml
@@ -69,15 +71,85 @@ def destinos_de(etiqueta: str = "") -> dict[str, Path]:
     }
 
 
+class ContaminacionError(RuntimeError):
+    """Los ejemplos de ajuste tocan una partición sobre la que se va a medir."""
+
+
+def exigir_particion_de_ajuste_limpia(ventanas: list[str], dataset_id: str) -> dict[str, int]:
+    """Falla si alguna ventana de los ejemplos cae en validación o en prueba.
+
+    **Esta comprobación nació de un defecto real.** Los ejemplos de
+    `models/slm_lora_v2` se generaron desde validación, y E13 y E15 midieron la
+    calidad del redactor sobre validación: tres de las cinco ventanas de
+    evaluación eran **exactamente las mismas** con que se había ajustado.
+    Documentado en `docs/methodology/auditoria-contaminacion-adaptador.md`.
+
+    Se comprueba por **sesión** además de por ventana: dos ventanas de la misma
+    sesión comparten la mitad de sus muestras, de modo que la disyunción por
+    ventana no bastaría.
+
+    **Y se comprueba leyendo el reparto, no las particiones.**
+    `synthetic_v2_preprocess.json` registra a qué partición va cada sesión, que
+    es toda la información que hace falta. Cargar la partición de prueba para
+    esto habría sido una apertura del conjunto de prueba —y una apertura
+    innecesaria es peor que inútil: gasta la única cosa que no se repone—.
+    """
+    manifiesto = paths.DATA_PROCESSED / f"{dataset_id}_preprocess.json"
+    if not manifiesto.is_file():
+        msg = (
+            f"No está {manifiesto.name} y sin él no se puede comprobar que los ejemplos no "
+            "tocan validación ni prueba. Reconstrúyalo con scripts/reconstruir_datos.sh."
+        )
+        raise ContaminacionError(msg)
+    reparto: dict[str, str] = json.loads(manifiesto.read_text("utf-8"))["split_assignment"]
+
+    sesiones = {v.split("@")[0] for v in ventanas}
+    reservadas = {
+        particion: {s for s, p in reparto.items() if p == particion}
+        for particion in ("validation", "test")
+    }
+    problemas = {
+        particion: sorted(sesiones & reservado) for particion, reservado in reservadas.items()
+    }
+    if any(problemas.values()):
+        detalle = "\n".join(
+            f"  {particion}: {len(s)} sesión(es) {s[:4]}" for particion, s in problemas.items() if s
+        )
+        msg = (
+            "Los ejemplos de ajuste tocan particiones sobre las que se mide:\n"
+            f"{detalle}\n"
+            "Es la contaminación que P2 corrige. Genere los ejemplos desde la partición de "
+            "entrenamiento."
+        )
+        raise ContaminacionError(msg)
+    return {p: len(s) for p, s in reservadas.items()}
+
+
 def run_training_data(
     dataset_id: str = DATASET,
     ventanas_por_condicion: int = 12,
     *,
     etiqueta: str = "",
+    particion_de_ejemplos: Literal["train", "validation"] = "validation",
 ) -> int:
+    """Construye los ejemplos con que se ajusta el redactor.
+
+    ``particion_de_ejemplos`` decide de dónde salen. El valor por omisión,
+    ``"validation"``, es el que produjo `models/slm_lora_v2` y **se conserva solo
+    para poder reproducir aquel conjunto**: contamina, porque E13 y E15 miden
+    sobre validación. Para un adaptador nuevo hay que pasar ``"train"``.
+    """
     destinos = exigir_libres(destinos_de(etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
-    validacion = load_partition("validation", dataset_id=dataset_id)
+    if particion_de_ejemplos == "train":
+        # Los ejemplos salen de la misma partición con que se ajustó el bosque.
+        # No es un problema para el redactor: su trabajo es escribir lo que se le
+        # entrega, no diagnosticar. Y es la única partición disjunta por
+        # construcción de las dos sobre las que se le mide.
+        origen = entrenamiento
+    else:
+        origen = load_partition("validation", dataset_id=dataset_id)
+    validacion = origen
     perfil = load_vehicle(VEHICULO)
     gold = yaml.safe_load((paths.CONFIGS / "goldset_mazda3_bk.yaml").read_text())
     por_fallo = {c["fault_id"]: c for c in gold["cases"] if c.get("corpus_variant") is None}
@@ -105,7 +177,27 @@ def run_training_data(
     semilla = 0
 
     for fault_id, caso in sorted(por_fallo.items()):
-        indices = np.flatnonzero((validacion.y == fault_id) & aciertos)[:ventanas_por_condicion]
+        candidatas = np.flatnonzero((validacion.y == fault_id) & aciertos)
+        if particion_de_ejemplos == "validation":
+            # Selección HISTÓRICA, intacta: las primeras ventanas. Este modo
+            # existe para reproducir el conjunto de `slm_lora_v2`, de modo que
+            # mejorarlo lo rompería.
+            indices = candidatas[:ventanas_por_condicion]
+        else:
+            # Las ventanas se reparten **entre sesiones**, no se toman las
+            # primeras: tomar las primeras concentraba los ejemplos de cada
+            # condición en una o dos sesiones, lo que produce ejemplos casi
+            # duplicados --ventanas consecutivas comparten la mitad de sus
+            # muestras-- y deja el reparto interno sin sesiones que separar.
+            por_sesion: dict[str, list[int]] = {}
+            for i in candidatas:
+                por_sesion.setdefault(str(validacion.meta.iloc[i]["session_id"]), []).append(int(i))
+            ordenados: list[int] = []
+            for k in range(max((len(v) for v in por_sesion.values()), default=0)):
+                for sesion in sorted(por_sesion):
+                    if k < len(por_sesion[sesion]):
+                        ordenados.append(por_sesion[sesion][k])
+            indices = np.array(ordenados[:ventanas_por_condicion], dtype=int)
         if indices.size == 0:
             continue
         codigos = DIAGNOSTICO_A_DTC.get(fault_id, ())
@@ -219,57 +311,144 @@ def run_training_data(
     for clave, n in sorted(reparto.items()):
         print(f"  {clave:<20} {n}")
 
-    # Reparto en entrenamiento y validación del ajuste, POR CASO: dos variantes
-    # del mismo caso comparten observaciones, y separarlas al azar filtraría
-    # información entre particiones igual que ocurriría con las ventanas.
-    # Partición por **ventana de origen**, que es la unidad independiente. Las
-    # variantes de corpus de una misma ventana comparten `case_id` y caen juntas:
-    # repartirlas entre particiones sería fuga, aunque los prompts difieran.
+    # Reparto en entrenamiento y validación del ajuste, **POR SESIÓN**.
+    #
+    # Repartir por ventana no basta, y es un defecto que estuvo aquí: dos
+    # ventanas consecutivas de la misma sesión comparten la mitad de sus
+    # muestras, de modo que `F05_misfire__idle__02@240s` en entrenamiento y
+    # `@300s` en validación dejaban que la pérdida de validación del ajuste
+    # midiera sobre datos que el adaptador acababa de ver. Es la misma fuga que
+    # el reparto del conjunto principal evita desde E5, y que aquí no se había
+    # propagado.
+    #
+    # Las variantes de corpus de una misma ventana comparten `case_id` y la
+    # ventana comparte sesión, así que agrupar por sesión las mantiene juntas.
     casos = sorted({e.case_id for e in ejemplos})
-    corte = int(len(casos) * 0.85)
-    casos_train = set(casos[:corte])
+    limpio = particion_de_ejemplos == "train"
+
+    if not limpio:
+        # Reparto HISTÓRICO, por ventana. Se conserva por el mismo motivo que la
+        # selección: este modo existe para reproducir el conjunto de
+        # `slm_lora_v2`, y mejorarlo lo rompería.
+        casos_train = set(casos[: int(len(casos) * 0.85)])
+    else:
+        # Por SESIÓN y **estratificado por condición**. Por ventana no basta: dos
+        # ventanas consecutivas comparten la mitad de sus muestras, de modo que
+        # la pérdida de validación del ajuste mediría sobre datos vistos. Y
+        # cortar por orden dejaba la validación interna con una sola condición,
+        # porque las últimas por orden alfabético eran las de encendido.
+        por_condicion: dict[str, list[str]] = {}
+        for sesion in sorted({e.case_id.split("@")[0] for e in ejemplos}):
+            por_condicion.setdefault(sesion.split("__")[0], []).append(sesion)
+        sesiones_valid = {lista[-1] for lista in por_condicion.values() if len(lista) > 1}
+        casos_train = {e.case_id for e in ejemplos if e.case_id.split("@")[0] not in sesiones_valid}
 
     paths.ensure(destinos["ejemplos_train"].parent)
-    for nombre, seleccion in (
-        ("train", [e for e in ejemplos if e.case_id in casos_train]),
-        ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
-    ):
-        ruta = destinos[f"ejemplos_{nombre}"]
-        ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
-        print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
+    # La comprobación de contaminación va **antes** de escribir un solo ejemplo.
+    # Descubrir después que los ejemplos tocan la partición sobre la que se mide
+    # ya sería tarde: el fichero existiría y alguien podría ajustar con él.
+    if particion_de_ejemplos == "train":
+        reservadas = exigir_particion_de_ajuste_limpia(
+            sorted({e.case_id for e in ejemplos}), dataset_id
+        )
+        print(
+            f"\nSin contaminación: ninguna de las {len(ejemplos)} muestras de ajuste toca "
+            f"validación ({reservadas['validation']} sesiones) ni prueba "
+            f"({reservadas['test']})."
+        )
+    else:
+        print(
+            "\nAVISO: los ejemplos salen de VALIDACIÓN, que es donde E13 y E15 miden al "
+            "redactor. Es la contaminación documentada en "
+            "docs/methodology/auditoria-contaminacion-adaptador.md. Se conserva para poder "
+            "reproducir el conjunto de slm_lora_v2; para un adaptador nuevo, use "
+            "--particion-ejemplos train."
+        )
+
+    # Si algo falla después de escribir los `.jsonl`, se borran. Un destino a
+    # medias bloquea el reintento, porque la negativa a sobrescribir no distingue
+    # «ya está hecho» de «quedó a medias», y eso ya pasó una vez.
+    escritos: list[Path] = []
+    try:
+        for nombre, seleccion in (
+            ("train", [e for e in ejemplos if e.case_id in casos_train]),
+            ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
+        ):
+            ruta = destinos[f"ejemplos_{nombre}"]
+            # Se anota ANTES de escribir: si `write_text` falla a mitad, el
+            # fichero existe a medias y hay que borrarlo igual. Anotarlo después
+            # dejaba fuera justo el que había quedado corrupto.
+            escritos.append(ruta)
+            ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
+            print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
+    except Exception:
+        for ruta in escritos:
+            ruta.unlink(missing_ok=True)
+        raise
+
+    def _limpiar_todo() -> None:
+        """Borra lo que esta ejecución escribió, para que el reintento sea posible.
+
+        Incluye el registro: si falla al escribirlo, los dos `.jsonl` quedarían
+        en disco sin él y la negativa a sobrescribir impediría reintentar con la
+        misma etiqueta. No es hipotético, pasó al introducir el reparto por
+        sesión.
+        """
+        for ruta in escritos:
+            ruta.unlink(missing_ok=True)
+        destinos["registro"].unlink(missing_ok=True)
 
     huellas = {
         n: hashlib.sha256(destinos[f"ejemplos_{n}"].read_bytes()).hexdigest()[:16]
         for n in ("train", "valid")
     }
-    identidad = embeddings.identity
-    escribir(
-        destinos["registro"],
-        {
-            "experiment_id": "E13b_training_data",
-            "n_examples": len(ejemplos),
-            "n_cases": len(casos),
-            "split_by": "source_window",
-            "split_unit_note": (
-                "las variantes de corpus de una misma ventana comparten case_id y "
-                "caen en la misma partición"
-            ),
-            "split_seed": 20260901,
-            "distribution": reparto,
-            "leakage_check": "sin texto del manual en las salidas esperadas",
-            # Linaje: sin esto no se puede decidir sobre el adaptador.
-            "source_verifier_version": VERIFIER_VERSION,
-            "source_case_set": sorted({e.case_id for e in ejemplos}),
-            "source_embedding_space_id": (
-                f"{identidad.provider}/{identidad.model}/"
-                f"d{identidad.dimension}/v{identidad.version}"
-            ),
-            "dataset_hash": huellas,
-        },
-        dataset_id=dataset_id,
-        dataset_type="synthetic",
-        embedding_model=identidad.model,
-        seed=20260901,
-    )
+    try:
+        identidad = embeddings.identity
+        escribir(
+            destinos["registro"],
+            {
+                "experiment_id": "E13b_training_data",
+                "n_examples": len(ejemplos),
+                "n_cases": len(casos),
+                "split_by": "source_session" if limpio else "source_window",
+                "window_selection": "across_sessions" if limpio else "first_n",
+                "split_unit_note": (
+                    "por SESIÓN y estratificado por condición: dos ventanas consecutivas "
+                    "comparten la mitad de sus muestras, de modo que repartir por ventana dejaba "
+                    "que la pérdida de validación del ajuste midiera sobre datos vistos; y cortar "
+                    "por orden dejaba la validación interna con una sola condición"
+                    if limpio
+                    else "por VENTANA, el reparto histórico: se conserva para poder reproducir el "
+                    "conjunto de slm_lora_v2, y deja ventanas de la misma sesión a los dos lados"
+                ),
+                "split_seed": 20260901,
+                "distribution": reparto,
+                "leakage_check": "sin texto del manual en las salidas esperadas",
+                "examples_partition": particion_de_ejemplos,
+                "contamination_check": (
+                    "ninguna sesión de los ejemplos aparece en validación ni en prueba; "
+                    "comprobado antes de escribir"
+                    if particion_de_ejemplos == "train"
+                    else "NO SE COMPRUEBA: los ejemplos salen de validación, que es donde E13 y "
+                    "E15 miden al redactor. Es la contaminación que P2 corrige "
+                    "(docs/methodology/auditoria-contaminacion-adaptador.md)"
+                ),
+                # Linaje: sin esto no se puede decidir sobre el adaptador.
+                "source_verifier_version": VERIFIER_VERSION,
+                "source_case_set": sorted({e.case_id for e in ejemplos}),
+                "source_embedding_space_id": (
+                    f"{identidad.provider}/{identidad.model}/"
+                    f"d{identidad.dimension}/v{identidad.version}"
+                ),
+                "dataset_hash": huellas,
+            },
+            dataset_id=dataset_id,
+            dataset_type="synthetic",
+            embedding_model=identidad.model,
+            seed=20260901,
+        )
+    except Exception:
+        _limpiar_todo()
+        raise
     print("\nregistro experiments/E13b_training_data.json")
     return 0

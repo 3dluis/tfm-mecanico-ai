@@ -1,6 +1,6 @@
 {
-  "tomado_el": "2026-10-13T11:36:45.781440+00:00",
-  "cambios_aceptados_a_proposito": false,
+  "tomado_el": "2026-10-13T15:31:14.326048+00:00",
+  "cambios_aceptados_a_proposito": true,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
   "patrones": [
@@ -19,7 +19,7 @@
     "configs/goldset_mazda3_bk.yaml",
     "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 150,
+  "n_artefactos": 151,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": {
       "sha256": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
@@ -55,6 +55,10 @@
     },
     "experiments/E13b_training_data.json": {
       "sha256": "efeacbe7bba4b45dbb042b49376c205757ab3e9576a85511311a82eee7572d77",
+      "versionado": true
+    },
+    "experiments/E13b_training_data_sin_contaminacion.json": {
+      "sha256": "a8fc6d19ac889e474cc0e21b8374898765c1645e9f4db0586c8c3c34a81c8818",
       "versionado": true
     },
     "experiments/E15_suficiencia.json": {

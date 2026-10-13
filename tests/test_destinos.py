@@ -699,3 +699,86 @@ def test_los_registros_de_p3_estan_censados_como_versionados() -> None:
         clave = f"experiments/E18_ablacion_{ablacion}_prueba.json"
         assert clave in declaradas, f"{clave} sin censar"
         assert declaradas[clave]["versionado"] is True, f"{clave} marcado como no versionado"
+
+
+def test_la_comprobacion_de_contaminacion_no_abre_el_conjunto_de_prueba() -> None:
+    """Una apertura innecesaria gasta lo único que no se repone.
+
+    La primera versión cargaba la partición de prueba para leer identificadores
+    de sesión que ya estaban en el manifiesto del preprocesado. Quedó registrada
+    como la quinta apertura y se corrigió en el acto.
+    """
+    fuente = (
+        paths.ROOT / "src" / "mecanico_ia_exp" / "experiments" / "training_runner.py"
+    ).read_text("utf-8")
+    inicio = fuente.index("def exigir_particion_de_ajuste_limpia(")
+    cuerpo = fuente[inicio : fuente.index("def run_training_data(")]
+    assert "load_partition" not in cuerpo, (
+        "la comprobación de contaminación carga una partición; el reparto está en "
+        "<dataset>_preprocess.json y no hace falta abrir nada"
+    )
+    assert "split_assignment" in cuerpo
+
+
+def test_los_ejemplos_de_ajuste_declaran_su_particion() -> None:
+    """Un conjunto de ajuste que no dice de dónde salen sus ejemplos no permite
+    saber si contamina."""
+    import json as _json
+
+    registro = paths.EXPERIMENTS / "E13b_training_data_sin_contaminacion.json"
+    if not registro.is_file():
+        pytest.skip("P2 todavía no ha generado el conjunto sin contaminación")
+    d = _json.loads(registro.read_text("utf-8"))
+    assert d["examples_partition"] == "train"
+    assert "ninguna sesión" in d["contamination_check"]
+
+
+# ------------------------------------- la congelacion del adaptador ata los datos
+
+
+def _finetune(*args: str, capsys) -> tuple[int, str]:
+    from mecanico_ia_exp.cli import main
+
+    codigo = main(["finetune-slm", *args])
+    return codigo, capsys.readouterr().out
+
+
+def test_ajustar_con_otros_datos_se_niega(capsys) -> None:
+    """Comprobar las huellas y después ajustar con otro directorio produciría un
+    adaptador que no es el congelado con apariencia de serlo."""
+    codigo, salida = _finetune("--adapter-dir", "slm_lora_v3", "--epochs", "4", capsys=capsys)
+    assert codigo == 1
+    assert "No se ajusta nada" in salida
+    assert "otros datos" in salida
+
+
+def test_ajustar_con_otro_numero_de_epocas_se_niega(capsys) -> None:
+    """El criterio de parada es parte del experimento congelado."""
+    codigo, salida = _finetune(
+        "--datos",
+        "sin_contaminacion",
+        "--adapter-dir",
+        "slm_lora_v3",
+        "--epochs",
+        "1",
+        capsys=capsys,
+    )
+    assert codigo == 1
+    assert "congela 4 épocas" in salida
+
+
+def test_no_se_sobrescribe_un_adaptador_existente(capsys) -> None:
+    codigo, salida = _finetune("--adapter-dir", "slm_lora_v2", capsys=capsys)
+    assert codigo == 1
+    assert "no se sobrescribe" in salida
+
+
+def test_la_congelacion_declara_lo_que_el_codigo_comprueba() -> None:
+    """Una promesa escrita y no implementada es peor que no escribirla."""
+    congelacion = json.loads((paths.CONFIGS / "congelacion-adaptador-v3.json").read_text("utf-8"))
+    assert congelacion["datos_de_ajuste"]["huellas_sha256_16"]
+    assert congelacion["hiperparametros"]["epochs"]
+    assert "preparados" in congelacion["datos_de_ajuste"]["ficheros"]
+    fuente = (paths.ROOT / "src" / "mecanico_ia_exp" / "cli.py").read_text("utf-8")
+    for pieza in ("huellas_sha256_16", "hiperparametros", "directorio_congelado"):
+        assert pieza in fuente, f"la congelación declara «{pieza}» y el código no lo comprueba"

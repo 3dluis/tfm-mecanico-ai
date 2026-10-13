@@ -103,3 +103,13 @@ excusa para cambiar nada: ni umbrales, ni casos, ni reglas, ni modelos, ni consu
    para añadirla:** el diseño está congelado y la declaración fija el commit con el que se mide.
 
 `[AUTHOR_DECISION_REQUIRED]` — autorizar o no el intento `v2`. Sin esa autorización no se ejecuta nada.
+
+---
+
+> **Añadido el 13 de octubre de 2026.** La causa quedó aquí como una hipótesis ambiental no
+> demostrada. `docs/experiments/incidencia-p2-01.md` aporta una medición en el mismo equipo y con el
+> mismo modelo: un proceso que carga Qwen2.5-3B con el 88 % de la memoria ocupada y 12,8 GB de
+> intercambio en uso consumió 15 minutos de CPU en 187 de reloj, es decir pasó el 92 % del tiempo
+> paginando. **No demuestra** lo que les ocurrió a los dos intentos de E19 —aquellos procesos no se
+> midieron y no se puede volver atrás— pero hace la hipótesis más plausible de lo que era. Este
+> informe no se modifica.
