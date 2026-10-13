@@ -29,6 +29,17 @@ Modelo: Qwen2.5-3B-Instruct, local, sin clave de API
 > [`P1_distractor_v2.md`](P1_distractor_v2.md) §5. El modelo base, sin adaptador, no presenta
 > ninguna alteración en los mismos 17 casos; con 17 casos esa diferencia no se puede atribuir al
 > adaptador.
+>
+> **Ampliación del 13-10-2026, y es peor de lo que la nota decía.** Al auditar también las
+> **explicaciones** —no solo los motivos de abstención— aparecen **dos de las nueve afirmaciones**
+> del adaptador canónico que **citan la observación correcta y corrompen el valor que citan**: la
+> observación `OBS001` de `C03_o2_slow_response` vale 0,083801 y la afirmación escribe «delta_max de
+> 0.08381», que no es ningún redondeo; la `OBS002` vale 0,028741 y la afirmación escribe 0,02871.
+> En total, **5 de las 23 salidas** de esta configuración tienen al menos una cifra que no procede de
+> los datos recibidos. **Con un validador numérico, el «17/17 válidas» habría sido 13/17.**
+> El daño principal es a PI.2: la cadena «afirmación → observación → fragmento» está verificada en
+> sus **enlaces** y no en sus **valores**. Análisis completo en
+> [`../audits/impacto-l26-e13.md`](../audits/impacto-l26-e13.md).
 
 ## Reparto de responsabilidades
 
