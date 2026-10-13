@@ -14,19 +14,31 @@ grande es menor que el sesgo plausible, y por eso es inconclusa.
 
 | Partición | Para qué | Quién la ve |
 |---|---|---|
-| **Entrenamiento**, dividido en interno de ajuste e interno de desarrollo | ajustar parámetros, **seleccionar la época**, elegir hiperparámetros, ajustar la calibración | los dos modelos |
+| **Interno de ajuste** | ajustar los parámetros del modelo | los dos modelos |
+| **Interno de desarrollo** | **seleccionar la época** y, si se tocaran, los hiperparámetros | los dos modelos |
+| **Interno de calibración** | ajustar el calibrador isotónico | los dos modelos |
 | **Validación** | medir y comparar | solo para medir, **nunca para seleccionar** |
 | **Prueba** | no se usa en PI.1 | nadie |
 
-**El cambio central:** la época del modelo temporal se selecciona sobre una **partición interna de
-desarrollo**, obtenida del propio subconjunto de entrenamiento y repartida **por sesión**, y la cifra se
-reporta después sobre validación, que ya no interviene en ninguna decisión.
+Las tres internas salen de las sesiones de entrenamiento de cada punto de la curva, repartidas **por
+sesión** y estratificadas por condición, en proporciones **4/6, 1/6 y 1/6**: por condición, el resto va a
+ajuste y desarrollo y calibración reciben al menos una sesión cada una. En los cuatro puntos sale 4/1/1,
+8/2/2, 12/3/3 y 14/4/4 sesiones por condición.
 
-El reparto interno propuesto: de las sesiones de entrenamiento de cada punto de la curva, **cinco
-sextos a ajuste y un sexto a desarrollo**, estratificado por condición y por sesión. Con `T6` eso deja
-cinco sesiones de ajuste y una de desarrollo por condición, que es poco y hay que decirlo: en el punto
-más pequeño la selección de época será ruidosa, y esa es una propiedad del punto, no un defecto del
-protocolo.
+**El cambio central:** la época del modelo temporal se selecciona sobre el **interno de desarrollo** y
+la cifra se reporta sobre validación, que ya no interviene en ninguna decisión.
+
+**Y la calibración tiene su propia partición, que es lo que hace el protocolo de verdad simétrico.** La
+tentación es calibrar sobre el interno de desarrollo, que ya existe y no cuesta nada; pero ahí la época
+de la red **se eligió** mirando esa partición, de modo que sus predicciones están sesgadas a favor en
+ella. El bosque no tiene paso de selección equivalente, así que calibrar los dos sobre desarrollo
+volvería a dar ventaja a uno. Con una tercera partición disjunta, ninguno de los dos ha visto esos datos
+para decidir nada.
+
+Con `T6` eso deja cuatro sesiones de ajuste, una de desarrollo y una de calibración por condición, que es
+poco y hay que decirlo: en el punto más pequeño tanto la selección de época como la calibración serán
+ruidosas. Es una propiedad del punto, no un defecto del protocolo, y se lee mirando la tendencia a lo
+largo de los cuatro puntos y no el valor de uno.
 
 **Y el conjunto de prueba no se usa para seleccionar nada, en ningún punto de este protocolo.** PI.1 se
 responde sobre validación. La partición de prueba de `synthetic_v4` existe porque el reparto la crea, y
@@ -40,7 +52,7 @@ se queda cerrada.
 | Ajuste | sobre el interno de ajuste | sobre el interno de ajuste |
 | Selección de época | no aplica | **sobre el interno de desarrollo** |
 | Hiperparámetros | los congelados de `BaselineConfig`; si se tocaran, sobre el interno de desarrollo | los congelados de la configuración de E7; igual condición |
-| Calibración | isotónica **sobre las predicciones del interno de desarrollo** | la misma técnica y los mismos datos para los dos, sin validación cruzada: ver más abajo |
+| Calibración | isotónica **sobre las predicciones del interno de calibración** | la misma técnica y los mismos datos para los dos, sin validación cruzada, y sobre una partición que ninguno usó para seleccionar nada |
 | Métrica que se publica | sobre **validación** | sobre **validación** |
 | Semilla | la de la réplica | la misma de la réplica, apareada |
 
@@ -59,16 +71,15 @@ corrección evidente sería agrupar los pliegues por sesión. Pero aplicarla a l
 **cinco ajustes más por celda** para obtener predicciones fuera de pliegue, y con veinte celdas de red
 eso convierte media hora de cómputo en varias horas.
 
-**La solución que se adopta es más simple y además más simétrica: calibrar sobre la partición interna de
-desarrollo**, con un único reparto y sin validación cruzada. Esa partición ya existe —se crea para
-seleccionar la época—, está repartida **por sesión**, y es disjunta del interno de ajuste, de modo que no
-hay fuga. El calibrador se ajusta sobre las predicciones que el modelo ya produce en ella: **cero ajustes
-adicionales** para los dos modelos, y el mismo procedimiento con los mismos datos para ambos, que es lo
-que hoy no ocurre.
+**La solución que se adopta: una partición interna de calibración propia**, disjunta del ajuste y del
+desarrollo, repartida por sesión. El calibrador se ajusta sobre las predicciones que el modelo ya produce
+en ella: **cero ajustes adicionales** para los dos modelos, el mismo procedimiento con los mismos datos
+para ambos, y —a diferencia de calibrar sobre desarrollo— sobre datos que ninguno de los dos usó para
+elegir época ni hiperparámetros.
 
 **Su límite, declarado:** la isotónica sobre una partición pequeña es ruidosa. En el punto `T6` el interno
-de desarrollo tiene una sesión por condición, y la calibración de ese punto habrá que leerla con esa
-cautela. Es una propiedad del punto, no del procedimiento.
+de calibración tiene una sesión por condición. Es una propiedad del punto, no del procedimiento, y se
+lee en la tendencia de los cuatro puntos.
 
 **Y sobre lo ya publicado:** el código actual repartió por ventana, así que la calibración de E6, E15 y
 E19 se ajustó así. Eso **no** invalida ninguna cifra: el error de calibración se reporta sobre validación
@@ -101,8 +112,9 @@ mantiene el estimador. Es el único eslabón limpio de la cadena, y por eso impo
 
 ## 5.5 Criterio de parada
 
-Se para si la prueba de fuga de la normalización falla, si la selección de época toca validación en
-algún punto del código, o si los dos modelos no reciben el mismo reparto interno. Se para también si
+Se para si la prueba de fuga de la normalización falla, si la selección de época toca validación o el
+interno de calibración en algún punto del código, si las tres particiones internas comparten alguna
+sesión, o si los dos modelos no reciben el mismo reparto interno. Se para también si
 cualquier orden de este protocolo lee la partición de prueba.
 
 No se para por el signo de la diferencia.
