@@ -355,9 +355,16 @@ funcionó, y en varios casos es más informativo que lo que sí.
 | **Un espacio de embeddings mezclado** | las búsquedas no declaraban qué modelo las había producido; se corrigió y se reejecutó con pre-registro | `resultado-rerun-a.md` |
 | **El verificador regresionó al corregirlo** | la política v2 arregló cinco casos y rompió uno que antes acertaba | `E15_suficiencia_verifier_v2.json` |
 | **Dos cifras publicadas sin registro** | las medias de temperatura del termostato se calcularon en el análisis y no se guardaron: hoy no se pueden verificar | marcadas **no utilizables** el 12-10-2026 |
+| **El conjunto de prueba se abrió cinco veces** | tres intentos de E19 —dos interrumpidos—, una para repetir las ablaciones y **una accidental**, al leer identificadores de sesión que ya estaban en otro sitio | `docs/methodology/registro-aperturas-test.md`, con qué se expuso en cada una |
+| **Dos artefactos dañados por el propio trabajo** | una tabla de E5 sobrescrita y otra de E15 borrada por un patrón demasiado amplio; las detectó el censo | `incidencia-artefactos-e5.md` e `incidencia-artefactos-e15.md`; la segunda **no se declara restaurada** |
 
 Sobre el cuarto punto conviene ser explícito, porque afecta a lo que PI.4 puede afirmar: mientras el
-rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**."""),
+rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**.
+
+Y sobre el conjunto de prueba, con la misma franqueza: **cinco aperturas no son tres**. Las tres
+primeras son la misma medición intentada tres veces; la cuarta repite unas ablaciones definidas antes
+de la primera; la quinta **no debió ocurrir** y está registrada como lo que fue, un descuido corregido
+en el acto. Lo que se expuso en cada una está en la tabla, y ninguna cambió una decisión de diseño."""),
     md("""\
 ## 9. La pregunta que sigue abierta, y por qué
 
