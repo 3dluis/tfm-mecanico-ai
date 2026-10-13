@@ -58,11 +58,16 @@ se queda cerrada.
 
 La calibración merece dos notas.
 
-La primera, que hoy el bosque se calibra y la red no, y aun así la red sale mejor calibrada en los dos
-conjuntos: ECE 0,1317 frente a 0,1439 en `v2`, y 0,0163 frente a 0,0801 en `v3`. Calibrar las dos con la
-misma técnica y sobre los mismos datos convierte esa observación en comparable; hoy no lo es.
+La primera, que **hoy no se calibra ninguno de los dos**: `baseline_runner.py` y `temporal_runner.py`
+calculan su error de calibración sobre `predict_proba` en crudo, sin calibrador. Las cifras publicadas
+—ECE 0,1317 de la red frente a 0,1439 del bosque en `v2`, y 0,0163 frente a 0,0801 en `v3`— son por tanto
+de dos modelos sin calibrar, y lo que separa a uno de otro no es el tratamiento de la probabilidad sino el
+par representación + estimador completo, que cambia a la vez. La ventaja aparente de la red en ECE no se
+puede atribuir a su arquitectura mientras ese par no se separe, que es lo que hace la escalera de
+ablación. Calibrar a los dos con la misma técnica y sobre los mismos datos añade la pieza que falta:
+permite leer, además, cuánto de esa diferencia sobrevive a la calibración.
 
-La segunda es cómo se calibra, y la respuesta cambió al calcular su coste.
+La segunda es cómo se calibra en el protocolo propuesto, y la respuesta cambió al calcular su coste.
 
 El código actual usa `CalibratedClassifierCV(..., cv=5)`, que forma sus pliegues **por muestra**, es decir
 por ventana: ventanas solapadas de una misma sesión caen a la vez en el pliegue que ajusta el modelo y en
