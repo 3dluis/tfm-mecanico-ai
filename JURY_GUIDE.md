@@ -130,7 +130,18 @@ uv run python scripts/ingest_mazda.py multilingual
 bash scripts/reproduce_main_results.sh
 ```
 
-## 7. Si prefiere leerlo en vez de ejecutarlo
+## 7. Si quiere ejecutarlo
+
+Seis pasos desde un clon, comprobados clonando el repositorio:
+[`docs/reproducir-desde-cero.md`](docs/reproducir-desde-cero.md). Lo esencial: los conjuntos no se
+distribuyen porque el generador los reconstruye **bit a bit**, y el guion de reconstrucción
+contrasta sus huellas contra las que se congelaron antes de abrir el conjunto de prueba. Si alguna
+difiere, falla.
+
+Lo que **no** se puede reproducir —el corpus del manual, los pesos del adaptador, una reejecución de
+E19— está declarado ahí con su motivo, y lo que se entrega en su lugar.
+
+## 8. Si prefiere leerlo en vez de ejecutarlo
 
 Cuatro notebooks explican los experimentos cerrados con sus gráficos, su interpretación y sus
 limitaciones. Hay copia en HTML: se abren en cualquier navegador, sin instalar nada.
@@ -146,7 +157,7 @@ Cada uno dice al principio qué hace con la evidencia: si la reproduce, la reana
 como quedó congelada o solo ilustra un concepto. Y cada gráfico lleva tres lecturas: qué muestra,
 qué permite interpretar y **qué no permite afirmar**.
 
-## 8. Si solo dispone de cinco minutos
+## 9. Si solo dispone de cinco minutos
 
 1. Pregunta de investigación: `docs/memoria/cap1_introduccion.md` (líneas 25–28) y `README.md` §2.
 2. Arquitectura: `README.md` §4 y `docs/methodology/experimental-design.md`.

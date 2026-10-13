@@ -155,6 +155,24 @@ Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
 
 ## 9. Cómo reproducir
 
+**Desde un clon limpio, en seis pasos**, comprobados clonando el repositorio y ejecutándolos:
+
+```
+uv sync --extra nb --extra ml
+bash scripts/reconstruir_datos.sh    # reconstruye lo que no se distribuye, y COMPRUEBA sus huellas
+uv run pytest                        # 829 pasan
+uv run ruff check . && uv run mypy src
+uv run jupyter lab notebooks/
+```
+
+`data/raw/**` y `data/processed/**` están fuera del control de versiones: `synthetic_v2` son 43 200
+muestras. No hace falta distribuirlos porque el generador los reconstruye **bit a bit**, y el guion
+contrasta las cuatro huellas contra las que el manifiesto de E19 congeló antes de abrir el conjunto
+de prueba. Sin reconstruir, doce pruebas se detienen diciendo la orden exacta en lugar de fallar.
+
+Detalle completo, con lo que **no** se puede reproducir y por qué:
+[`docs/reproducir-desde-cero.md`](docs/reproducir-desde-cero.md).
+
 Entorno verificado: macOS sobre Apple Silicon, `uv`, PostgreSQL 14+ con `pgvector`. El bloque
 de telemetría (E2 → E9, E15b) se reproduce sin base de datos ni manual:
 
