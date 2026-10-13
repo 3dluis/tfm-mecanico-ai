@@ -437,3 +437,38 @@ def test_el_censo_distingue_lo_que_git_lleva_de_lo_que_no() -> None:
     prefijos = {r.split("/")[0] for r in versionados}
     assert prefijos <= {"experiments", "artifacts", "configs", "models"}, prefijos
     assert {r.split("/")[0] for r in sin_versionar} >= {"tables", "figures"}
+
+
+def test_ampliar_el_censo_desde_un_clon_no_borra_las_huellas_que_faltan(tmp_path) -> None:
+    """Es el modo más silencioso de perder la protección.
+
+    En un clon no están los artefactos no versionados. Si al ampliar el censo se
+    reescribiera con solo lo presente, sus huellas desaparecerían y el censo
+    saldría más corto sin que nada fallara.
+    """
+    (tmp_path / "tables").mkdir()
+    (tmp_path / "experiments").mkdir()
+    fuera_de_git = tmp_path / "tables" / "historico.csv"
+    fuera_de_git.write_text("a\n", encoding="utf-8")
+    (tmp_path / "experiments" / "E0_registro.json").write_text("{}", encoding="utf-8")
+
+    censo = tmp_path / "censo.json"
+    escribir_censo(censo, raiz=tmp_path)
+    antes = json.loads(censo.read_text("utf-8"))["huellas_sha256"]
+    huella_original = antes["tables/historico.csv"]["sha256"]
+
+    # El clon: el fichero ignorado no está, y se añade uno nuevo.
+    fuera_de_git.unlink()
+    (tmp_path / "experiments" / "E1_registro.json").write_text("{}", encoding="utf-8")
+    escribir_censo(censo, raiz=tmp_path)
+
+    despues = json.loads(censo.read_text("utf-8"))["huellas_sha256"]
+    assert "experiments/E1_registro.json" in despues, "no se añadió el artefacto nuevo"
+    assert "tables/historico.csv" in despues, "se perdió la huella del que no está"
+    assert despues["tables/historico.csv"]["sha256"] == huella_original
+
+    # Y si vuelve alterado, se detecta igual que antes.
+    fuera_de_git.write_text("ALTERADO\n", encoding="utf-8")
+    desviaciones = verificar_historicos(censo, raiz=tmp_path)
+    assert len(desviaciones) == 1
+    assert desviaciones[0].motivo.startswith("cambió")

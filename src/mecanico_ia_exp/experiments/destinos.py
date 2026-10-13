@@ -179,7 +179,31 @@ def escribir_censo(
                 "de la fase."
             )
             raise HistoricoAlteradoError(msg)
+
     censo = censar(raiz=raiz)
+    # Y se **conservan** las entradas de lo que esta copia no tiene porque no se
+    # versiona. Sin esto, ampliar el censo desde un clon recién hecho borraría
+    # las huellas de los 67 artefactos que viven fuera de Git --que son
+    # precisamente los que nada más protege-- y el censo saldría más corto sin
+    # que nadie lo notara.
+    if ruta.is_file():
+        try:
+            previas: dict[str, Any] = json.loads(ruta.read_text("utf-8"))["huellas_sha256"]
+        except (json.JSONDecodeError, KeyError, OSError):
+            previas = {}
+        base = raiz or paths.ROOT
+        conservadas = 0
+        for relativa, entrada in previas.items():
+            if relativa in censo or (base / relativa).is_file():
+                continue
+            if isinstance(entrada, dict) and not entrada.get("versionado", True):
+                censo[relativa] = entrada
+                conservadas += 1
+        if conservadas:
+            print(
+                f"censo: conservadas {conservadas} huella(s) de artefactos que esta copia "
+                "no tiene porque no se versionan"
+            )
     contenido = {
         "tomado_el": datetime.now(UTC).isoformat(),
         "cambios_aceptados_a_proposito": aceptar_cambios,
