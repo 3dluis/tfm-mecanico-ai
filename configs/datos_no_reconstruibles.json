@@ -30,6 +30,21 @@
   "synthetic_v2": {
     "estado": "RECONSTRUIBLE Y VERIFICADO",
     "donde": "configs/manifest_e19.json, congelado antes de abrir el conjunto de prueba",
-    "comprobado_el": "2026-10-13, en un clon limpio: las cuatro huellas coinciden bit a bit"
+    "comprobado_el": "2026-10-13, en un clon limpio: las cuatro huellas coinciden bit a bit",
+    "comprobado_tambien_muestra_a_muestra": "72 de 72 sesiones identicas, 13-10-2026"
+  },
+  "ampliado_el": "2026-10-13, al verificar la procedencia de las figuras del capitulo 5",
+  "como_se_mide": "uv run python scripts/medir_reconstruccion_cruda.py. Regenera cada sesion con el plan y la semilla declarados y la compara muestra a muestra con la que hay en disco. Es una comprobacion distinta de la del guion de reconstruccion, que contrasta las huellas de los ficheros PROCESADOS: esas pueden coincidir aunque las senales sean otras",
+  "synthetic_v1": {
+    "estado": "NO_RECONSTRUIBLE",
+    "causa": "es PRE-CALIBRACION, igual que synthetic_v3. Se genero el 1-09-2026, antes del commit 770ce70 que calibro el generador contra el manual de taller",
+    "medicion_del_13_10_2026": {
+      "sesiones_identicas": "0 de 36",
+      "diferencia_maxima": 1973.1,
+      "senal_de_la_diferencia_maxima": "F02_maf_drift__urban__00",
+      "control": "la misma medicion sobre synthetic_v2 da 72 de 72 identicas"
+    },
+    "de_donde_sale": "E4, el analisis exploratorio: las seis figuras FIG-E4-* y las cinco tablas E4_*.csv que el capitulo 5 cita en su analisis descriptivo",
+    "que_hacer_en_un_clon": "NO regenerarlo. El guion de reconstruccion se niega desde el 13-10-2026"
   }
 }

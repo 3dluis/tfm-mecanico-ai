@@ -33,17 +33,25 @@ CONJUNTO="${1:-synthetic_v2}"
 # parecerían pasar midiendo otras señales.
 # Está en `configs/datos_no_reconstruibles.json`, y el riesgo 16 de
 # `docs/diseno-pi1/11-riesgos-metodologicos.md` ya decía que v3 no se regenera.
-if [ "${CONJUNTO}" = "synthetic_v3" ]; then
-  echo "synthetic_v3 NO se reconstruye: es pre-calibración." >&2
-  echo "El generador publicado produce otras señales; ver configs/datos_no_reconstruibles.json" >&2
-  echo "Las pruebas que lo necesitan están declaradas como de recursos no distribuidos." >&2
-  exit 2
-fi
+# Ampliado el 13-10-2026: `synthetic_v1` está en el mismo caso y no se había
+# comprobado. Medido muestra a muestra con
+# `scripts/medir_reconstruccion_cruda.py`: cero de 36 sesiones idénticas,
+# diferencia máxima de 1 973 rpm. De él salen las figuras y las tablas de E4,
+# el análisis exploratorio que el capítulo 5 cita. El control de esa misma
+# medición sobre `synthetic_v2` da 72 de 72 idénticas.
+case "${CONJUNTO}" in
+  synthetic_v1|synthetic_v3)
+    echo "${CONJUNTO} NO se reconstruye: es pre-calibración." >&2
+    echo "El generador publicado produce otras señales; ver configs/datos_no_reconstruibles.json" >&2
+    echo "Compruébelo con: uv run python scripts/medir_reconstruccion_cruda.py ${CONJUNTO}" >&2
+    echo "Las pruebas que lo necesitan están declaradas como de recursos no distribuidos." >&2
+    exit 2
+    ;;
+esac
 
 # Cada conjunto tiene su número de sesiones por condición, y equivocarlo produce
 # otro conjunto con el mismo nombre. Se deduce del nombre salvo que se indique.
 case "${CONJUNTO}" in
-  synthetic_v1) POR_DEFECTO=6 ;;
   synthetic_v2) POR_DEFECTO=12 ;;
   *)            POR_DEFECTO=12 ;;
 esac
