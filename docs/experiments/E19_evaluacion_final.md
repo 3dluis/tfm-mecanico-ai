@@ -375,8 +375,8 @@ el patrón de error del modelo es el que se repite. Con `n = 2` errores sobre di
 repetición es compatible con que el modelo falle sistemáticamente en esas dos condiciones y también con
 el azar; los artefactos no permiten distinguirlo y no se afirma lo primero.
 
-**Los numeradores, que tampoco estaban fijados.**  cero falsa confianza y dos
-abstenciones innecesarias en las dos particiones. Y las dos abstenciones innecesarias son, en las dos,
+**Los numeradores, que tampoco estaban fijados.** Cero falsa confianza y dos abstenciones
+innecesarias, en las dos particiones. Y las dos abstenciones innecesarias son, en las dos,
 **los mismos dos casos anotados**: `C01_maf_drift` y `C04_misfire`. Pero no por la misma causa:
 
 | Caso | Validación | Prueba |
@@ -391,8 +391,9 @@ prueba abstuvo por las dos cosas a la vez. El mismo caso anotado falla en las do
 motivo registrado no es idéntico.
 
 **Qué concluye esta auditoría.** La coincidencia no es un error ni una reutilización, y **tampoco es
-evidencia de estabilidad ni de generalización**. Es el resultado de un diseño con denominadores
-pequeños y en buena parte forzados, sobre un conjunto de datos cuyas dos condiciones difíciles —el
+evidencia de estabilidad ni de generalización**. Es el resultado de un diseño con denominadores muy
+pequeños —parte fijados por la regla, parte determinados por dos errores del modelo— sobre un conjunto
+de datos cuyas dos condiciones difíciles —el
 termostato en calentamiento y el fallo de encendido— se comportan igual en las dos particiones porque
 las genera el mismo generador con la misma parametrización. Lo que la coincidencia sí sugiere, sin
 demostrarlo, es que los dos fallos difíciles lo son por una propiedad del fenómeno simulado y no por
