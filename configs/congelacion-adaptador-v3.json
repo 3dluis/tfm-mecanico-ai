@@ -91,15 +91,16 @@
   "gestion_de_memoria_anadida": {
     "autorizado_por_el_autor": "2026-10-13, alternativa A de las cinco presentadas en INC-P2-02",
     "que_se_anade": {
-      "fraccion_de_memoria": 0.85,
-      "efecto": "techo del asignador de MPS en 0,85 de los 17,8 GB que el dispositivo recomienda, unos 15,1 GB",
+      "fraccion_de_memoria": 0.95,
+      "efecto": "techo del asignador de MPS en 0,95 de los 17,8 GB recomendados, unos 16,9 GB",
       "vaciar_cache_por_paso": true
     },
     "POR_QUE_NO_ES_UN_HIPERPARAMETRO": "no cambia los pesos, ni el orden de los ejemplos, ni la semilla, ni el tope de longitud, ni una sola operacion en coma flotante. Cambia CUANDO el asignador devuelve los buferes que ya no usa. Las perdidas esperadas son las mismas",
     "que_codigo_toca": "src/mecanico_ia_exp/llm/finetune.py, el unico fichero del camino de ajuste",
     "alcance_del_cambio": "NO afecta a E19 ni a ninguna medicion publicada. El redactor de E19 carga el modelo por llm/provider.py, no por llm/finetune.py; comprobado: el unico modulo que importa llm.finetune es cli.py, para el subcomando finetune-slm. Lo que el cambio afecta es la re-derivacion futura de slm_lora_v2, cuyos pesos estan en disco y cuyo finetune_config.json registra lo que se ejecuto",
     "si_no_basta": "con techo, el ajuste FALLA RAPIDO con un error de memoria de MPS en lugar de paginar durante horas. Eso es informacion: significaria que el problema no era el cache",
-    "como_se_fijo_el_valor": "MEDIDO, no estimado. Con 0,70 (12,43 GB) el cuarto intento fallo en el primer paso: «MPS allocated 11.36 GiB, max allowed 12.43 GiB, tried to allocate 1.63 GiB», en el cross_entropy sobre el vocabulario de 151936 entradas. El paso necesita unos 13 GB; 0,85 lo cubre y sigue muy por debajo de los 22,8 GB que paralizaron los tres primeros intentos"
+    "como_se_fijo_el_valor": "MEDIDO dos veces. Con 0,70 (12,43 GB) fallo en la pasada hacia ADELANTE pidiendo 1,63 GB sobre 11,36 ya reservados: el paso necesita ~13,0 GB. Con 0,85 (15,10 GB) fallo en la pasada hacia ATRAS con 12,17 + 1,75 reservados y 1,63 pedidos: el pico real es ~15,6 GB. 0,95 lo cubre con poco mas de 1 GB de margen y deja ~7 GB al sistema. La reserva grande es la perdida sobre las 151936 entradas del vocabulario para 3072 posiciones",
+    "ultimo_intento_por_esta_via": "si 0,95 no basta, la conclusion NO es subir otra vez: es que el modelo con sus hiperparametros congelados no cabe en esta maquina, y eso es un resultado que decide el autor entre las alternativas B, D y E de INC-P2-02"
   },
   "hiperparametros_sin_cambios": "rango 16, alpha 32, dropout 0,05, 4 epocas, lr 2e-4, max_seq_length 3072, semilla 20260901, dispositivo mps. NINGUNO se ha tocado en ninguno de los cuatro intentos",
   "intentos": {
@@ -107,7 +108,8 @@
     "2": "1 h 33 de reloj, 8 min de CPU, ninguna epoca. Idem",
     "3": "11 min 30, detenido por decision con la causa MEDIDA: 25,4 GB de huella fisica en 24 GB, 22,8 GB en el asignador de Metal",
     "4": "fallo en el primer paso con techo 0,70: informacion util, el numero que falta",
-    "5": "techo 0,85, vaciado por paso"
+    "5": "techo 0,85: fallo en la pasada hacia atras. Informacion: el pico real es ~15,6 GB",
+    "6": "techo 0,95 (16,9 GB), vaciado por paso"
   },
   "dato_del_ajuste_que_conviene_registrar": "47 de los 101 ejemplos de entrenamiento se recortan al tope de 3072 tokens. Es casi la mitad, y no se cambia el tope: cambiarlo seria modificar un hiperparametro congelado. Queda declarado"
 }
