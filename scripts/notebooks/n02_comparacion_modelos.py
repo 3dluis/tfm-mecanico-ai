@@ -273,8 +273,9 @@ el diagnóstico a partir de ventanas de OBD-II es posible con margen amplio.
 
 1. **Que la red sea peor arquitectura.** Lo medido es un recorrido completo contra otro.
 2. **Que la diferencia de ECE favorezca a la red por calibrar mejor.** Ninguno de los dos calibra:
-   las dos cifras son de `predict_proba` en crudo. Lo que muestran es que la red está menos
-   sobreconfiada, no que su probabilidad esté mejor ajustada tras calibrar.
+   las dos cifras son de `predict_proba` en crudo. Lo que muestran es que el error por tramos de la
+   red es algo menor, no que su probabilidad esté mejor ajustada tras calibrar. Y el ECE no lleva
+   signo: los dos modelos fallan hacia lados distintos, como se ve en el apartado 10.
 3. **Que la diferencia sea significativa.** Es **una sola ejecución** sobre 98 ventanas de
    validación. No hay repeticiones con semillas distintas ni intervalo de confianza, y por tanto no
    se afirma significación. El diseño con cinco semillas está en `docs/diseno-pi1/06-plan-replicas.md`
@@ -479,8 +480,10 @@ confianza. En cada tramo se compara la confianza media con el acierto real. El E
 esas diferencias, ponderada por cuántas predicciones hay en cada tramo. Un ECE de 0,14 quiere decir
 que, de media, el modelo se desvía catorce puntos de lo que su confianza prometía.
 
-**Exceso de confianza.** La diferencia entre confianza media y acierto. Positivo quiere decir que el
-modelo promete más de lo que cumple."""),
+**Sesgo de confianza.** La diferencia entre confianza media y acierto, con signo. Positivo quiere
+decir que el modelo promete más de lo que cumple; negativo, que promete menos. A diferencia del ECE,
+que es un promedio de valores absolutos por tramo, el sesgo puede ser casi nulo aunque los tramos
+fallen mucho, si fallan en direcciones opuestas."""),
     code("""\
 calibracion = pd.DataFrame(
     {
@@ -500,7 +503,7 @@ for (nombre, fila), color, marca in zip(
     eje.scatter(fila["mean_confidence"], fila["accuracy"], s=95, color=color,
                 marker=marca, label=nombre, zorder=3)
     eje.annotate(
-        f"{nombre}\\nECE {fila['ece']:.4f}\\nexceso {fila['overconfidence']:+.4f}",
+        f"{nombre}\\nECE {fila['ece']:.4f}\\nsesgo {fila['overconfidence']:+.4f}",
         (fila["mean_confidence"], fila["accuracy"]),
         textcoords="offset points", xytext=(10, -22), fontsize=7, color=color,
     )
@@ -511,33 +514,49 @@ eje.set_xlim(0.6, 1.0)
 eje.set_ylim(0.6, 1.0)
 eje.legend(fontsize=7, loc="upper left")
 fig.suptitle(
-    "Los dos prometen más de lo que cumplen",
+    "Ninguno de los dos calibra, y no fallan hacia el mismo lado",
     fontsize=10.5, fontweight="bold", x=0.0, ha="left",
 )
 fig.supxlabel(
     "E6 y E7 · synthetic_v2, validación · por encima de la diagonal: infraconfianza; "
-    "por debajo: exceso de confianza · ninguno de los dos modelos calibra: "
-    "las cifras son de predict_proba en crudo",
+    "por debajo: exceso de confianza · el sesgo es confianza media menos acierto; "
+    "el ECE no lleva signo: es el error por tramos · cifras de predict_proba en crudo",
     fontsize=6.5, x=0.0, ha="left",
 )
 fig.tight_layout()
 soporte.exportar(fig, "FIG-NB02-04_calibracion", subdirectorio="02_comparacion_modelos")
 plt.show()"""),
     md("""\
-**Qué muestra.** Los dos modelos caen por debajo de la diagonal: declaran una confianza media
-superior a su acierto. El bosque se desvía 0,1439 y la red 0,1317.
+> **Corrección del 13 de octubre de 2026.** Esta figura se titulaba «Los dos prometen más de lo que
+> cumplen» y el párrafo siguiente decía que los dos modelos caen por debajo de la diagonal. Es falso
+> para el bosque, y lo contrario de lo que el registro guarda. El error se detectó al verificar la
+> procedencia de las figuras candidatas a entrar en la memoria, y el capítulo 5 no lo heredó: su
+> redacción siempre dijo que el modelo estaba infraconfiado.
 
-**Qué podemos interpretar.** El exceso de confianza es real y del mismo orden en los dos, y es la
-razón por la que el recorrido de diagnóstico **no usa la probabilidad cruda** como criterio de
-abstención: la calibra antes. Esa decisión, que podría parecer un tecnicismo, está justificada por
-estas dos cifras.
+**Qué muestra.** El bosque queda **por encima** de la diagonal: acierta el 87,8 % de las ventanas
+declarando una confianza media de 0,738, de modo que **promete menos de lo que cumple**. Su sesgo,
+que es la confianza media menos el acierto, vale −0,1395. La red queda justo por debajo, con un
+sesgo de +0,0070: en agregado está prácticamente centrada. El error de calibración esperado, en
+cambio, es alto y parecido en los dos, 0,1439 y 0,1317.
+
+**Qué podemos interpretar.** Que las dos cifras miden cosas distintas y conviene no confundirlas. El
+ECE **no lleva signo**: promedia, tramo a tramo y ponderando por su tamaño, cuánto se aparta la
+confianza del acierto. El sesgo sí lo lleva, y es global. Que la red tenga un sesgo casi nulo y a la
+vez un ECE de 0,1317 significa que sus tramos fallan en direcciones opuestas y se cancelan al
+promediar. Ninguno de los dos, por tanto, puede usarse en crudo como criterio de abstención, que es
+la razón por la que el recorrido de diagnóstico **calibra antes de decidir**. Y en el caso del
+bosque la dirección importa además por sí misma: un umbral sobre la confianza cruda habría hecho que
+el sistema se abstuviera de más de la cuenta, y eso habría parecido prudencia cuando era mala
+medición.
 
 **Qué no podemos afirmar.** Que la red esté mejor calibrada **que el bosque calibrado**. Lo
-comparado son dos modelos sin calibrar. Tampoco que el ECE sea estable: con diez tramos y 98
-ventanas, cada tramo contiene muy pocas predicciones y la cifra es frágil. Y un solo punto por
-modelo —confianza media contra acierto— es un resumen: no muestra si el exceso se concentra en los
-tramos de alta confianza, que es donde más daño haría. La curva de fiabilidad completa exigiría las
-predicciones por ventana, que los registros de E6 y E7 **no guardan**."""),
+comparado son dos modelos sin calibrar. Tampoco que el bosque esté bien calibrado porque su sesgo
+sea negativo: un ECE de 0,1439 dice que los tramos fallan, y el signo solo dice hacia dónde fallan
+en promedio. Tampoco que el ECE sea estable: con diez tramos y 98 ventanas, cada tramo contiene muy
+pocas predicciones y la cifra es frágil. Y un solo punto por modelo —confianza media contra
+acierto— es un resumen: no muestra en qué tramos se concentra el error, que es lo que más
+importaría. La curva de fiabilidad completa exigiría las predicciones por ventana, que los registros
+de E6 y E7 **no guardan**."""),
     md("""\
 ## 11. Las cifras de `synthetic_v3`, y por qué no cierran la cuestión
 
@@ -649,8 +668,10 @@ explorado; lo reproduce con el generador calibrado."""),
 4. **Las dos cifras de temperatura del termostato que circulaban —70,7 y 54,3 °C— no tienen
    registro.** Se calcularon durante el análisis y no se persistieron; están marcadas como no
    utilizables desde el 12 de octubre de 2026.
-5. **Ninguno de los dos modelos está bien calibrado** sin calibrar: los dos prometen más de lo que
-   cumplen, en torno a 0,13–0,14 de ECE.
+5. **Ninguno de los dos modelos está bien calibrado** sin calibrar: el error por tramos ronda
+   0,13–0,14 en los dos. El sentido del fallo no es el mismo: el bosque **promete menos de lo que
+   cumple** —sesgo −0,1395— y la red está casi centrada en agregado, con +0,0070 y tramos que se
+   cancelan.
 6. **La red genera diagnósticos cruzados que el bosque no genera**, lo que para este trabajo es el
    modo de fallo más costoso.
 7. **Todo lo anterior es una sola ejecución por celda.** No hay repeticiones, ni intervalos, ni

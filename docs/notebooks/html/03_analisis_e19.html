@@ -8029,7 +8029,7 @@ ventana etiquetada con la condición de cada sesión. 22 ejecuciones.</li>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       2fd5648
+commit       136daf6
 arbol        sucio
 </pre>
 </div>
@@ -9915,10 +9915,14 @@ prueba y su solape con los ejemplos de ajuste es <strong>cero ventanas y cero se
 cifras de redacción no están contaminadas por esa vía. Lo que sigue siendo cierto es que el
 adaptador no se ha reentrenado, y el reentrenamiento está <strong>detenido por memoria insuficiente</strong>:
 necesita más de 17 GB por paso (<code>docs/experiments/incidencia-p2-02.md</code>).</li>
-<li><strong><code>synthetic_v3</code>, el conjunto de esta evaluación, no es reconstruible</strong> con el generador publicado
-(<code>L-25</code>): es pre-calibración y ninguna de sus 216 sesiones se reproduce. Las cifras de E19 son
-correctas y <strong>no son reproducibles por un tercero</strong> sin los ficheros procesados, que no se
-distribuyen por tamaño.</li>
+<li><strong>Reejecutar esta evaluación exige lo que no se distribuye</strong>, y no es el conjunto. E19 mide sobre
+<code>synthetic_v2</code>, partición de prueba, y ese conjunto <strong>se reconstruye bit a bit</strong>: las cuatro
+huellas se comprobaron desde un clon limpio contra las que el manifiesto congeló antes de abrirlo.
+Lo que no se distribuye son el corpus del manual, el índice documental y los pesos del adaptador,
+y sin ellos un tercero no puede repetir la medición. Aparte queda <code>synthetic_v3</code>, que <strong>no</strong> es
+reconstruible (<code>L-25</code>) y del que no sale ninguna cifra de esta evaluación: de él salen la
+comparación de volumen de E7 y el conjunto de evaluación independiente del redactor, sin ejecutar.
+Corregido el 13-10-2026: este punto decía que <code>synthetic_v3</code> era «el conjunto de esta evaluación».</li>
 <li><strong>Todo es sintético.</strong> La validez externa no está establecida.</li>
 <li><strong>Una sola ejecución.</strong> No hay repeticiones ni intervalos de confianza.</li>
 </ol>
