@@ -326,3 +326,44 @@ def test_se_detecta_que_las_sesiones_no_comparten_paso() -> None:
     frecuencia = next(c for c in auditar(mezclado, None) if c.numero == 5)
     assert frecuencia.estado == FALLA
     assert "no comparten paso" in frecuencia.detalle
+
+
+# ------------------------------------------- la puerta en la cadena de ejecución
+
+
+def test_la_exencion_es_una_lista_cerrada_de_tres() -> None:
+    """«No tiene manifiesto» no puede ser motivo de exención.
+
+    Si lo fuera, bastaría no generar el manifiesto para que cualquier conjunto
+    nuevo llegara al entrenamiento sin auditar, que es exactamente lo que la
+    puerta existe para impedir.
+    """
+    from mecanico_ia_exp.experiments.preprocess_runner import ANTERIORES_AL_MANIFIESTO
+
+    assert {"synthetic_v1", "synthetic_v2", "synthetic_v3"} == ANTERIORES_AL_MANIFIESTO
+
+
+def test_un_conjunto_nuevo_sin_manifiesto_no_se_preprocesa(tmp_path, monkeypatch, capsys) -> None:
+    from mecanico_ia_exp.config import paths
+    from mecanico_ia_exp.experiments import preprocess_runner
+
+    crudo = tmp_path / "raw"
+    crudo.mkdir()
+    specs = [
+        SessionSpec(
+            session_id=f"F00_normal__urban__{k:02d}",
+            regime="urban",
+            duration_s=180.0,
+            seed=3 + k,
+            fault_id="F00_normal",
+        )
+        for k in range(2)
+    ]
+    datos, _ = generate_dataset(specs, dataset_id="synthetic_v9", seed=1)
+    datos.to_parquet(crudo / "synthetic_v9.parquet", index=False)
+
+    monkeypatch.setattr(paths, "DATA_RAW_SYNTHETIC", crudo)
+    assert preprocess_runner.run_preprocess("synthetic_v9") == 1
+    salida = capsys.readouterr().out
+    assert "no trae manifiesto de procedencia" in salida
+    assert "No se guarda nada" in salida
