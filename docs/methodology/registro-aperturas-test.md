@@ -16,6 +16,26 @@ esta tabla corresponde a una de esas aperturas.
 | 2 | 2026-10-06, ~02:19 | `v2` | intento tras la interrupción de `v1` | commit `8ee2dd8`, sin cambios en el diseño congelado | idéntico a `v1`; también interrumpido | **sí**, la misma información; la anotación resultó idéntica a la de `v1` salvo la cabecera | **no** | no |
 | 3 | 2026-10-12, 21:38 → 21:50 | `v3` | intento tras la interrupción de `v2`, bajo `launchd` | commit `8ee2dd8` | evaluación completa, 35 ejecuciones | sí | **sí**, todas | es la medición |
 | 4 | 2026-10-13, 04:12 | `prueba` | **P3**, pendiente del tutor: repetir sobre prueba las cuatro ablaciones de E18, definidas y congeladas el 1-10, **antes** de la primera apertura | commit `bdf8640`, política v2.1, umbrales congelados sin cambios desde el 4-09 | las cuatro ablaciones sobre los 17 casos anotados, modo oracular, sin proveedor de lenguaje | sí: etiquetas y predicciones de las ventanas elegidas en prueba | **sí**, las del pre-registro de E18 | **no**, y es condición de la ejecución: sus resultados no se usan para rediseñar P1, ajustar P2, mover un umbral ni cambiar la política |
+| 5 | 2026-10-13, ~05:0x | — | **accidental**: la comprobación de contaminación de P2 llamaba a `load_partition("test")` para leer los identificadores de sesión | commit de la rama `fase3/p2-adaptador-v3` | solo `session_id` de las 12 sesiones de prueba | **no**: ninguna etiqueta, ninguna predicción, ninguna ventana | **no**: no se calculó ninguna | **no**. Corregido en el acto: la comprobación lee ahora el reparto de `synthetic_v2_preprocess.json`, que tiene la misma información sin abrir nada |
+
+## Sobre la quinta, que no debió ocurrir
+
+Se registra aunque su exposición fuera mínima, porque el criterio de este trabajo es registrar **la
+apertura**, no el daño.
+
+Al implementar la comprobación de contaminación de P2 —que los ejemplos de ajuste del redactor no
+toquen validación ni prueba— la primera versión cargaba las dos particiones con
+`load_partition(..., allow_test=True)` para leer sus identificadores de sesión. Funcionaba, y abría
+el conjunto de prueba para obtener una información que **ya estaba en otro sitio**: el reparto por
+sesión está en `data/processed/synthetic_v2_preprocess.json`, que no es una partición sino un mapa.
+
+Lo que se expuso: los `session_id` de las doce sesiones de prueba. Ninguna etiqueta, ninguna
+predicción, ninguna ventana, ninguna métrica. No influyó en ninguna decisión: el resultado de la
+comprobación fue el mismo antes y después de corregirla —cero solape—.
+
+**Corregido en el acto**, y la lección es la que vale: una apertura innecesaria es peor que inútil,
+porque gasta lo único que no se repone. Antes de leer una partición reservada hay que preguntarse si
+la información que se busca está en un artefacto derivado, y aquí lo estaba.
 
 ## Sobre la cuarta apertura
 

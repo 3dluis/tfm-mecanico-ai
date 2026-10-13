@@ -699,3 +699,35 @@ def test_los_registros_de_p3_estan_censados_como_versionados() -> None:
         clave = f"experiments/E18_ablacion_{ablacion}_prueba.json"
         assert clave in declaradas, f"{clave} sin censar"
         assert declaradas[clave]["versionado"] is True, f"{clave} marcado como no versionado"
+
+
+def test_la_comprobacion_de_contaminacion_no_abre_el_conjunto_de_prueba() -> None:
+    """Una apertura innecesaria gasta lo único que no se repone.
+
+    La primera versión cargaba la partición de prueba para leer identificadores
+    de sesión que ya estaban en el manifiesto del preprocesado. Quedó registrada
+    como la quinta apertura y se corrigió en el acto.
+    """
+    fuente = (
+        paths.ROOT / "src" / "mecanico_ia_exp" / "experiments" / "training_runner.py"
+    ).read_text("utf-8")
+    inicio = fuente.index("def exigir_particion_de_ajuste_limpia(")
+    cuerpo = fuente[inicio : fuente.index("def run_training_data(")]
+    assert "load_partition" not in cuerpo, (
+        "la comprobación de contaminación carga una partición; el reparto está en "
+        "<dataset>_preprocess.json y no hace falta abrir nada"
+    )
+    assert "split_assignment" in cuerpo
+
+
+def test_los_ejemplos_de_ajuste_declaran_su_particion() -> None:
+    """Un conjunto de ajuste que no dice de dónde salen sus ejemplos no permite
+    saber si contamina."""
+    import json as _json
+
+    registro = paths.EXPERIMENTS / "E13b_training_data_sin_contaminacion.json"
+    if not registro.is_file():
+        pytest.skip("P2 todavía no ha generado el conjunto sin contaminación")
+    d = _json.loads(registro.read_text("utf-8"))
+    assert d["examples_partition"] == "train"
+    assert "ninguna sesión" in d["contamination_check"]
