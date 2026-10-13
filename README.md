@@ -125,7 +125,35 @@ Registro completo: [`docs/limitations.md`](docs/limitations.md) y
 `research/limitations-register.md`. Hallazgos y correcciones documentadas:
 `docs/experiments/hallazgo-*.md`.
 
-## 8. Cómo reproducir
+## 8. Notebooks: leer la evidencia sin ejecutar nada
+
+Cuatro notebooks documentan los experimentos cerrados como documentos científicos ejecutables.
+Se pueden **leer sin instalar nada** —hay copia en HTML con sus figuras dentro— y ejecutar con un
+clon del repositorio, sin GPU, sin base de datos y sin descargas.
+
+| Notebook | Qué responde | Leer | Experimentos |
+|---|---|---|---|
+| `00_introduccion` | el recorrido completo y el estado de la evidencia | [HTML](docs/notebooks/html/00_introduccion.html) | E1–E19 |
+| `01_exploracion_obd` | si las señales OBD-II contienen estructura diagnóstica | [HTML](docs/notebooks/html/01_exploracion_obd.html) | E2, E4, E5 |
+| `02_comparacion_modelos` | si el modelo temporal supera a la línea base | [HTML](docs/notebooks/html/02_comparacion_modelos.html) | E6, E7 |
+| `03_analisis_e19` | si el criterio de suficiencia evita la falsa confianza | [HTML](docs/notebooks/html/03_analisis_e19.html) | E19 |
+
+```
+uv sync --extra nb
+uv run jupyter lab notebooks/
+```
+
+Cada notebook declara su **modalidad** —reproducción, reanálisis, visualización de evidencia
+histórica o demostración ilustrativa—, porque no todos hacen lo mismo con la evidencia y
+confundirlas sería grave. Índice y criterios: [`docs/notebooks/indice.md`](docs/notebooks/indice.md).
+Qué notebook corresponde a cada resultado:
+[`docs/notebook-traceability.md`](docs/notebook-traceability.md). Qué puede ejecutar de verdad quien
+no tenga el equipo del autor: [`docs/notebooks/auditoria-portabilidad.md`](docs/notebooks/auditoria-portabilidad.md).
+
+Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
+`tests/test_notebooks.py` lo verifican, incluida la ejecución de los cuatro desde un kernel limpio.
+
+## 9. Cómo reproducir
 
 Entorno verificado: macOS sobre Apple Silicon, `uv`, PostgreSQL 14+ con `pgvector`. El bloque
 de telemetría (E2 → E9, E15b) se reproduce sin base de datos ni manual:
@@ -164,7 +192,9 @@ Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de ca
 | `research/` | Decisiones (ADR-001…004), matriz de trazabilidad, registro de limitaciones, referencias |
 | `configs/` | Calibración del generador, conjunto anotado, estado congelado de RERUN-A |
 | `data/` | Muestra redistribuible en `data/samples/`; el resto se regenera (`data/README.md`) |
-| `notebooks/` | Cuadernos generados por script que leen los artefactos; sin lógica propia |
+| `notebooks/` | Documentos científicos ejecutables; importan del paquete y no duplican lógica. Escritos desde `scripts/notebooks/` |
+| `notebooks/salida/` | Donde escriben los notebooks. **Nunca** en `experiments/`, `tables/`, `figures/` ni `data/` |
+| `docs/notebooks/html/` | Copia en HTML de cada notebook, legible sin ejecutar nada |
 | `tests/` | 400 pruebas: políticas de suficiencia, aislamiento de embeddings, contrato de RERUN-A, cierre del test |
 
 ## Trazabilidad

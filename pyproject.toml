@@ -94,7 +94,12 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
 # En un notebook, importar junto al uso ayuda a leer la celda de forma aislada, y
 # el preámbulo carga cosas que no toda celda usa. Ninguna de las dos cosas es un
 # defecto aquí: los notebooks son capa de presentación, no código de librería.
-"notebooks/*" = ["E402", "I001", "F401"]
+"notebooks/*" = ["E402", "I001", "F401", "E501", "RUF001", "RUF002", "RUF003"]
+# Los constructores de notebooks son prosa académica en español dentro de
+# cadenas: el guion largo, el signo menos y el de multiplicación son la
+# tipografía correcta, no caracteres confundibles colados por descuido, y las
+# líneas largas son párrafos. Lo que sí se exige aquí es todo lo demás.
+"scripts/notebooks/n*.py" = ["E501", "RUF001", "RUF002", "RUF003"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -113,4 +118,5 @@ markers = [
     "db: requiere PostgreSQL local con pgvector",
     "llm: requiere un proveedor LLM configurado",
     "slow: ejecución larga (entrenamiento, corpus completo)",
+    "notebook: ejecuta un notebook entero desde un kernel limpio (minutos)",
 ]
