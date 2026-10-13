@@ -154,6 +154,52 @@ anteriores no imprimieron una sola línea de progreso, y eso llevó a una conclu
 —«está parado antes de contar parámetros»— cuando la salida estaba en el búfer del proceso. Un
 proceso que escribe en un fichero y no vacía el búfer parece muerto sin estarlo.
 
+## 4 ter. La alternativa A se agotó, con la causa medida
+
+Tres intentos con techo, y los tres dieron el número que faltaba en lugar de colgarse. Eso era el
+objetivo del techo, y funcionó.
+
+| Intento | Techo | Dónde falló | Reservado + pedido | Necesidad medida |
+|---|---|---|---|---|
+| 4 | 0,70 · 12,43 GB | pasada hacia **adelante** | 11,36 + 0,12 + 1,63 | ~13,0 GB |
+| 5 | 0,85 · 15,10 GB | pasada hacia **atrás** | 12,17 + 1,75 + 1,63 | ~15,6 GB |
+| 6 | 0,95 · 16,87 GB | pasada hacia atrás, **tras entrenar al menos 10 ejemplos** | 13,39 + 1,87 + 1,74 | **~17,0 GB** |
+
+**El sexto intento entrenó.** Su registro deja «época 1 · paso 10/101 · pérdida 1,0785 · memoria del
+asignador 9,6 GB»: diez ejemplos ajustados, con la pérdida bajando. Es la primera vez en seis
+intentos que el ajuste produce una cifra.
+
+**Y por eso la conclusión es clara.** La necesidad **no es un pico fijo: crece**. En el paso 10 el
+asignador tenía 9,6 GB; cuando falló, 13,39 más 1,87 de otras reservas. Con el vaciado del caché
+activo en cada paso, ese crecimiento no es caché que no se devuelve: es que **los ejemplos no miden
+lo mismo**. Medido con el tokenizador del modelo sobre los 101 ejemplos de ajuste:
+
+```
+mínimo 984 · mediana 2 874 · máximo 4 361 tokens
+47 de 101 llegan al tope de 3 072 y se recortan
+percentil 75: 3 586 · percentil 90: 4 348
+```
+
+La mitad de los ejemplos son cortos y la otra mitad topa. Los que topan son los que piden 17 GB, y
+cada uno llega en un punto distinto del orden aleatorio que fija la semilla. Subir el techo a 1,0
+—17,8 GB, el máximo que el dispositivo recomienda— dejaría 0,8 GB de margen sobre una necesidad
+medida de 17,0, y la máquina tiene 24 GB en total.
+
+**No se sube más.** Está declarado en la congelación: *«si 0,95 no basta, la conclusión no es subir
+otra vez: es que el modelo con sus hiperparámetros congelados —3 072 tokens, 36 capas, este
+vocabulario— no cabe en esta máquina, y eso es un resultado.»*
+
+**Lo que este resultado dice, con precisión:** un ajuste LoRA de Qwen2.5-3B con secuencias de hasta
+3 072 tokens, *gradient checkpointing* y la pérdida calculada sobre las 151 936 entradas del
+vocabulario **necesita más de 17 GB de memoria unificada por paso**, y en una máquina de 24 GB eso
+no deja margen de operación. No es una limitación de la implementación: es la aritmética del modelo
+y de la longitud de contexto que el experimento declaró.
+
+**La decisión vuelve al autor**, entre las alternativas que quedan: **B** (CPU, con pérdidas que no
+serán idénticas), **D** (otra máquina con 32 GB o más) o **E** (cerrar P2 como limitación
+declarada). La **C** —bajar el tope de longitud— sigue descartada: sería modificar un hiperparámetro
+congelado para que quepa, y eso cambia qué se ajusta.
+
 ## 5. Lo que queda hecho y no hay que rehacer
 
 | Pieza | Estado |
