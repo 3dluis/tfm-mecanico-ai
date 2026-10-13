@@ -29,6 +29,7 @@ sustituye.
     "commit": "<sha completo del repositorio al generar>",
     "dirty": false,
     "source_fingerprints_16": {
+      "src/mecanico_ia_exp/obd/engine.py": "<sha256:16>",
       "src/mecanico_ia_exp/obd/synthetic.py": "<sha256:16>",
       "src/mecanico_ia_exp/obd/faults.py": "<sha256:16>",
       "src/mecanico_ia_exp/obd/regimes.py": "<sha256:16>",
@@ -90,6 +91,16 @@ falta.
 
 **Las huellas del código fuente del generador, y no solo su versión declarada.** Es la lección de
 `v2` frente a `v3`: dos conjuntos con la misma versión declarada y distinta física.
+
+**Y `engine.py` encabeza la lista, que es donde está la física.** Conviene no equivocarse aquí: el
+fichero `configs/calibracion_mazda3_bk.yaml` **no lo lee ningún módulo**. Documenta de dónde sale cada
+valor y con qué cita del manual, y eso tiene su propio valor para el jurado, pero los números que el
+generador usa están **codificados como constantes** en `src/mecanico_ia_exp/obd/engine.py`:
+`_IDLE_RPM = 690.0`, `_THERMOSTAT_C = 82.0`, los coeficientes del caudal, el avance base. La diferencia
+entre `v2` y `v3` —690 frente a 820 rpm de ralentí— es un cambio en **ese** fichero.
+
+De modo que la huella del YAML sirve para rastrear la **justificación** y la de `engine.py` para
+identificar la **señal**. Las dos van, y si solo pudiera ir una, iría la del código.
 
 **Y una columna nueva en los datos crudos, no en el manifiesto:** `fault_expressed`, que dice por muestra
 si el fallo modificó esa muestra. La que ya existe, `fault_active`, dice solo que la función se aplicó, y
