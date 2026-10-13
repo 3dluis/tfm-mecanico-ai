@@ -10,10 +10,16 @@ sostiene sin buscar. Se lee de izquierda a derecha:
 
 ## La pregunta principal
 
-> ¿Puede un sistema inteligente híbrido identificar patrones de fallo no representados en su
-> conocimiento disponible, generar hipótesis diagnósticas a partir del análisis contextual y
-> longitudinal de datos OBD-II y validarlas mediante evidencia antes de incorporarlas como
-> conocimiento reutilizable?
+Canónica desde `ADR-004`, de 12 de septiembre de 2026:
+
+> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
+> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+> disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin
+> fundamento?
+
+Una formulación más amplia circuló hasta septiembre y quedó superada: dos de sus términos no tenían
+experimento. Lo construido de ella sirve a esta pregunta y así está clasificado en
+`docs/audits/matriz-impacto-adr004-notebooks.md`; lo no construido es trabajo futuro.
 
 ## PI.1 — Diagnóstico a partir de OBD-II
 
