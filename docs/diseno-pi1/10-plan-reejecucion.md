@@ -40,7 +40,7 @@ Los pasos A y B no tocan ningún resultado y pueden hacerse mientras se revisa e
 
 | Paso | Cómputo | Trabajo | Nota |
 |---|---|---|---|
-| A | ninguno | medio día | solo lectura y escritura |
+| A | minutos | un día | lectura y escritura, más la reejecución de E6 sobre `synthetic_v2` con predicciones por ventana, que es lo que da registro a las dos cifras del termostato |
 | B | ninguno | medio día | tres cambios de procedencia y sus pruebas |
 | C | minutos | una hora | generación, preprocesado y los cinco criterios |
 | D | minutos | una hora | reparto, subconjuntos y las tres pruebas de fuga |
@@ -56,7 +56,7 @@ es la restricción; lo es no confundir variables, y eso se paga en cuidado, no e
 
 | Paso | Qué tiene que cumplirse para seguir |
 |---|---|
-| A | ninguna cifra del informe de E7 difiere de su registro; ninguna afirmación sobre el volumen sin su marca; `v3` no descrito como calibrado en ningún documento |
+| A | ninguna cifra del informe de E7 difiere de su registro; ninguna afirmación sobre el volumen sin su marca; `v3` no descrito como calibrado en ningún documento; y la reejecución de E6 **reproduce** las métricas agregadas de su registro, sin lo cual las dos cifras del termostato se retiran |
 | B | la prueba de reconstrucción del manifiesto pasa: una sesión se regenera desde su `SessionSpec` y sale idéntica |
 | C | los cinco criterios de `02-protocolo-synthetic-v4.md`, incluido el ralentí dentro del rango del manual y el reparto 22/7/7 |
 | D | anidamiento estructural, auditoría de fuga en los cuatro puntos, estadísticos de normalización procedentes de cada subconjunto |
