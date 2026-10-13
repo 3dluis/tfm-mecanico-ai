@@ -37,18 +37,40 @@ el conjunto oficial tiene en entrenamiento.
 de validación: identificador de ventana, sesión, régimen, etiqueta, clase predicha, acierto y confianza.
 Es un campo nuevo en el registro, no un experimento nuevo.
 
-**Paso 2. Marcar, por ventana, si el fallo está expresado.** Un indicador derivado del generador, no del
-modelo:
+**Paso 2. Marcar, por ventana, si el fallo está expresado.** Y aquí hay que corregir un error de la
+primera versión de este protocolo, porque proponía dos indicadores que **no identifican lo que dicen
+identificar**.
 
-| Fallo | Indicador de expresión | Umbral |
-|---|---|---|
-| F03 termostato | el techo actuó en la ventana | máximo de refrigerante ≥ 70,5 °C, es decir el techo menos el ruido declarado |
-| F05 encendido | hubo al menos un episodio en la ventana | la columna `fault_active` de los datos crudos, agregada a la ventana |
-| F01, F02, F04 | persistentes por definición del catálogo | expresado en toda ventana posterior al instante de aparición |
+**La columna `fault_active` no sirve.** El generador la calcula como `t >= fault_onset_s`: significa que
+la función del fallo **se aplicó**, no que el fallo **modificara** la muestra. Para el fallo de
+encendido, cuyos episodios se deciden al azar dentro de la propia función, una ventana entera sin ningún
+episodio lleva `fault_active` en cierto en todas sus muestras. Agregar esa columna etiquetaría como
+expresadas precisamente las ventanas sin señal, que son las que el análisis quiere separar.
 
-El indicador del encendido es mejor que el del termostato porque el generador ya marca `fault_active`
-por muestra. Para el termostato hay que derivarlo del umbral, y la elección de 70,5 °C se declara aquí,
-antes de usarla.
+**Y el máximo de refrigerante tampoco sirve como umbral simple.** Que una ventana de termostato alcance
+70,5 °C no establece que el techo actuara: el techo solo modifica muestras **por encima de 71 °C**, de
+modo que una ventana cuyo refrigerante sube de 69 a 70,8 no sufre ninguna alteración y pasaría por
+expresada. En el otro sentido, el ruido del techo —±0,5 °C— puede dejar alguna muestra recortada por
+debajo del umbral.
+
+**Lo que sí sirve: que el generador lo registre.** Se añade una columna de metadatos, `fault_expressed`,
+que cada función de fallo escribe diciendo si **modificó** la muestra: el techo, si recortó; el
+encendido, si había episodio activo; los tres persistentes, siempre que se apliquen. Es un booleano que
+la función ya calcula internamente, no consume números aleatorios y no cambia ningún valor de señal, de
+modo que no altera el fenómeno. Entra en el protocolo de `synthetic_v4` como el cuarto cambio de
+procedencia.
+
+**Consecuencia sobre el orden del trabajo, y es importante.** El análisis decisivo **solo puede hacerse
+sobre `synthetic_v4`**, porque `synthetic_v2` y `synthetic_v3` se generaron sin esa columna y no se van a
+regenerar. Sobre el conjunto oficial se puede hacer una versión **acotada y declaradamente aproximada**,
+y conviene saber hasta dónde llega:
+
+| Sobre `synthetic_v2` | Qué se puede decir |
+|---|---|
+| Termostato, ventanas con máximo < 70,0 °C | el techo **no** actuó: el refrigerante nunca llegó a 71. Clasificación segura |
+| Termostato, ventanas con máximo ≥ 71,5 °C | el techo actuó: en una sesión con fallo ningún valor supera 71 salvo por el ruido del propio recorte. Clasificación segura |
+| Termostato, ventanas entre 70,0 y 71,5 °C | **ambiguas.** Se excluyen del análisis y se cuenta cuántas son |
+| Fallo de encendido | **no se puede.** No hay observable que identifique los episodios sin heurística, y una heurística aquí contaminaría el resultado que se quiere medir |
 
 **Paso 3. Separar las métricas por expresión.** Para cada fallo y cada representación: exhaustividad
 sobre las ventanas **con** el fallo expresado y sobre las ventanas **sin** expresar, por separado.
@@ -68,7 +90,7 @@ refrigerante, las cifras «las ventanas que el modelo falla tienen 54,3 °C de m
 
 **Paso 5. Repetir lo mismo con el fallo de encendido**, que es la condición más débil en los dos
 modelos y sobre prueba —F1 0,4444 en E19— y cuya intermitencia produce el mismo tipo de ventanas sin
-señal.
+señal. Este paso **solo existe sobre `synthetic_v4`**, por lo dicho en el paso 2.
 
 ## 8.4 Qué no hace este protocolo
 
@@ -83,6 +105,10 @@ Descartar eso ya es bastante.
 
 ## 8.5 Criterio de parada
 
-Se para si el indicador de expresión no se puede derivar para algún fallo, o si las predicciones por
-ventana no se pueden registrar sin tocar código congelado. Nada de esto afecta a E19, que está cerrada
-sobre `synthetic_v2` y cuyo código no se toca.
+Se para si la columna `fault_expressed` no reproduce el fenómeno —se comprueba regenerando una sesión y
+verificando que los valores de señal son idénticos a los de la misma semilla sin la columna—, si las
+predicciones por ventana no se pueden registrar sin tocar código congelado, o si la banda ambigua del
+análisis acotado sobre `synthetic_v2` se come tantas ventanas que no queda nada que comparar, cosa que
+hay que contar **antes** de interpretar.
+
+Nada de esto afecta a E19, que está cerrada sobre `synthetic_v2` y cuyo código no se toca.
