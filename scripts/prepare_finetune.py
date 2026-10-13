@@ -40,15 +40,21 @@ def main(etiqueta: str = "") -> int:
         print(f"Ya existe {destino_dir.relative_to(ROOT)} y no se sobrescribe.")
         return 1
 
+    # Los DOS ficheros de entrada se comprueban antes de crear nada. Si faltara
+    # uno a mitad, el directorio de destino quedaría creado con un solo fichero
+    # dentro, y la negativa a sobrescribir --que existe para proteger un conjunto
+    # preparado-- impediría reintentarlo una vez corregida la entrada.
+    faltan = [n for n in ("train", "valid") if not (origen_dir / f"{n}.jsonl").is_file()]
+    if faltan:
+        nombres = ", ".join(f"{n}.jsonl" for n in faltan)
+        print(f"faltan en {origen_dir.relative_to(ROOT)}: {nombres}")
+        return 1
+
     tok = AutoTokenizer.from_pretrained(MODELO)
     destino_dir.mkdir(parents=True, exist_ok=True)
 
     for nombre in ("train", "valid"):
         origen = origen_dir / f"{nombre}.jsonl"
-        if not origen.is_file():
-            print(f"falta {origen}")
-            return 1
-
         salidas: list[str] = []
         for linea in origen.read_text(encoding="utf-8").splitlines():
             if not linea.strip():
