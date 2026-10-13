@@ -15,6 +15,33 @@ esta tabla corresponde a una de esas aperturas.
 | 1 | 2026-10-02, ~02:31 | `v1` | evaluación final autorizada el 1-10 con `OPEN_TEST_AND_RUN_E19` | commit `5b64504`, política v2.2, reglas ancladas en `de6207f` | apertura, predicciones del bosque, anotación sellada; el proceso murió después | **sí**: etiquetas y clase predicha de las 10 ventanas elegidas, incluidas las 2 mal diagnosticadas | **no**: ninguna métrica llegó a calcularse | una sola vez, y se retiró: ver abajo |
 | 2 | 2026-10-06, ~02:19 | `v2` | intento tras la interrupción de `v1` | commit `8ee2dd8`, sin cambios en el diseño congelado | idéntico a `v1`; también interrumpido | **sí**, la misma información; la anotación resultó idéntica a la de `v1` salvo la cabecera | **no** | no |
 | 3 | 2026-10-12, 21:38 → 21:50 | `v3` | intento tras la interrupción de `v2`, bajo `launchd` | commit `8ee2dd8` | evaluación completa, 35 ejecuciones | sí | **sí**, todas | es la medición |
+| 4 | 2026-10-13, 04:12 | `prueba` | **P3**, pendiente del tutor: repetir sobre prueba las cuatro ablaciones de E18, definidas y congeladas el 1-10, **antes** de la primera apertura | commit `bdf8640`, política v2.1, umbrales congelados sin cambios desde el 4-09 | las cuatro ablaciones sobre los 17 casos anotados, modo oracular, sin proveedor de lenguaje | sí: etiquetas y predicciones de las ventanas elegidas en prueba | **sí**, las del pre-registro de E18 | **no**, y es condición de la ejecución: sus resultados no se usan para rediseñar P1, ajustar P2, mover un umbral ni cambiar la política |
+
+## Sobre la cuarta apertura
+
+Las tres primeras son la misma medición, E19, intentada tres veces. La cuarta es **otra cosa** y
+conviene no confundirlas.
+
+**Qué la justifica.** Las cuatro ablaciones de E18 se congelaron el 1 de octubre, **antes** de que el
+conjunto de prueba se abriera por primera vez, y midieron sobre validación qué aporta cada componente
+del criterio. La pregunta que quedaba —si eso se sostiene fuera de la partición con la que el
+criterio se ajustó— solo se responde sobre prueba.
+
+**Qué la acota.** La revisión de independencia está en
+[`revision-independencia-p3.md`](revision-independencia-p3.md), con las siete condiciones verificadas
+una a una **antes** de ejecutar. Dos salvedades se declaran allí y se repiten aquí porque importan:
+
+1. **El analista ya ha visto los resultados de E19.** No se puede deshacer. Las ablaciones están
+   pre-registradas y el código congelado, de modo que no hay ninguna decisión que contaminar en
+   tiempo de ejecución; lo que ocurre con conocimiento previo es la interpretación, y por eso la
+   lectura de cada desenlace posible quedó escrita antes de medir.
+2. **No es una estimación operativa.** La regla de selección elige ventanas que el modelo clasifica
+   bien, consultando sus predicciones. Describe el comportamiento en condiciones favorables, como el
+   estrato comparativo de E19, y no estima ninguna tasa poblacional.
+
+**Lo que esta apertura no autoriza:** usar sus resultados para rediseñar la condición con distractor,
+ajustar el reentrenamiento del adaptador, mover un umbral o cambiar la política. Es condición de la
+ejecución, no una recomendación.
 
 ## La única influencia detectada, y qué se hizo con ella
 

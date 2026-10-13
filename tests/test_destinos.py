@@ -10,6 +10,7 @@ nuevo.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -142,16 +143,19 @@ def test_el_censo_detecta_un_artefacto_alterado(tmp_path) -> None:
 
 
 def test_el_censo_detecta_un_artefacto_versionado_borrado(tmp_path) -> None:
-    """Que falte uno que Git lleva es otra cosa: significa que algo lo borró."""
+    """Que falte uno que viaja con el repositorio es otra cosa: algo lo borró."""
+    _repositorio_de_prueba(tmp_path)
     (tmp_path / "experiments").mkdir()
     fichero = tmp_path / "experiments" / "E0_registro.json"
     fichero.write_text("{}", encoding="utf-8")
     censo = tmp_path / "censo.json"
     escribir_censo(censo, raiz=tmp_path)
-
-    contenido = json.loads(censo.read_text("utf-8"))
-    contenido["huellas_sha256"]["experiments/E0_registro.json"]["versionado"] = True
-    censo.write_text(json.dumps(contenido), encoding="utf-8")
+    assert (
+        json.loads(censo.read_text("utf-8"))["huellas_sha256"]["experiments/E0_registro.json"][
+            "versionado"
+        ]
+        is True
+    )
 
     fichero.unlink()
     desviaciones = verificar_historicos(censo, raiz=tmp_path)
@@ -389,6 +393,18 @@ def test_sobre_validacion_no_se_inventa_un_motivo_de_apertura() -> None:
     assert documento["test_opening_reason"] is None
 
 
+def _repositorio_de_prueba(raiz: Path) -> None:
+    """Un repositorio mínimo con `tables/` ignorado, como el de verdad.
+
+    Hace falta porque la clasificación la decide `.gitignore`: sin repositorio
+    no hay nada que preguntar, y el escenario dejaría de parecerse al real.
+    """
+    import subprocess
+
+    subprocess.run(["git", "init", "-q"], cwd=raiz, check=True)
+    (raiz / ".gitignore").write_text("tables/\nfigures/\n", encoding="utf-8")
+
+
 def test_un_clon_sin_los_ficheros_ignorados_no_da_falsas_alarmas(tmp_path) -> None:
     """Es la comprobación que importa para el tribunal.
 
@@ -397,6 +413,7 @@ def test_un_clon_sin_los_ficheros_ignorados_no_da_falsas_alarmas(tmp_path) -> No
     fallaría en la máquina de quien evalúa sin que nada estuviera mal, y una
     alarma que salta siempre deja de mirarse.
     """
+    _repositorio_de_prueba(tmp_path)
     (tmp_path / "tables").mkdir()
     (tmp_path / "experiments").mkdir()
     no_versionado = tmp_path / "tables" / "E0_salida.csv"
@@ -407,12 +424,8 @@ def test_un_clon_sin_los_ficheros_ignorados_no_da_falsas_alarmas(tmp_path) -> No
     censo = tmp_path / "censo.json"
     escribir_censo(censo, raiz=tmp_path)
     declaradas = json.loads(censo.read_text("utf-8"))["huellas_sha256"]
-    # Fuera de un repositorio Git nada consta como versionado; se marca a mano
-    # el que sí lo estaría para poder distinguir los dos casos.
-    declaradas["experiments/E0_registro.json"]["versionado"] = True
-    contenido = json.loads(censo.read_text("utf-8"))
-    contenido["huellas_sha256"] = declaradas
-    censo.write_text(json.dumps(contenido), encoding="utf-8")
+    assert declaradas["experiments/E0_registro.json"]["versionado"] is True
+    assert declaradas["tables/E0_salida.csv"]["versionado"] is False
 
     no_versionado.unlink()
     assert verificar_historicos(censo, raiz=tmp_path) == []
@@ -446,6 +459,7 @@ def test_ampliar_el_censo_desde_un_clon_no_borra_las_huellas_que_faltan(tmp_path
     reescribiera con solo lo presente, sus huellas desaparecerían y el censo
     saldría más corto sin que nada fallara.
     """
+    _repositorio_de_prueba(tmp_path)
     (tmp_path / "tables").mkdir()
     (tmp_path / "experiments").mkdir()
     fuera_de_git = tmp_path / "tables" / "historico.csv"
@@ -654,3 +668,34 @@ def test_el_procedimiento_de_reconstruccion_esta_documentado() -> None:
         assert pieza in texto, f"el procedimiento no explica «{pieza}»"
     for guion in ("scripts/reconstruir_datos.sh", "scripts/verificar_reconstruccion.py"):
         assert (paths.ROOT / guion).is_file(), f"falta {guion}"
+
+
+def test_un_artefacto_recien_creado_cuenta_como_versionado(tmp_path) -> None:
+    """Antes de confirmarse, Git todavía no lo sigue; pero `.gitignore` no lo
+    excluye, de modo que viajará con el repositorio.
+
+    Preguntar por el índice lo habría marcado como no versionado y el censo
+    habría aceptado su desaparición en silencio. Es lo que pasó con los cuatro
+    registros de P3: el censo se construyó antes del commit.
+    """
+    import subprocess
+
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    (tmp_path / ".gitignore").write_text("tables/\n", encoding="utf-8")
+    (tmp_path / "experiments").mkdir()
+    (tmp_path / "tables").mkdir()
+    # Ninguno de los dos está confirmado todavía.
+    (tmp_path / "experiments" / "E0_nuevo.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "tables" / "E0_nueva.csv").write_text("x\n", encoding="utf-8")
+
+    censo = censar(("experiments/*.json", "tables/*.csv"), raiz=tmp_path)
+    assert censo["experiments/E0_nuevo.json"]["versionado"] is True
+    assert censo["tables/E0_nueva.csv"]["versionado"] is False
+
+
+def test_los_registros_de_p3_estan_censados_como_versionados() -> None:
+    declaradas = json.loads(REGISTRO_HISTORICO.read_text("utf-8"))["huellas_sha256"]
+    for ablacion in ("A1", "A2", "A3", "A4"):
+        clave = f"experiments/E18_ablacion_{ablacion}_prueba.json"
+        assert clave in declaradas, f"{clave} sin censar"
+        assert declaradas[clave]["versionado"] is True, f"{clave} marcado como no versionado"
