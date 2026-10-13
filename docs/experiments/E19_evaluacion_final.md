@@ -130,7 +130,14 @@ lo declara. El criterio vigente es por tanto **cualitativo** —la decisión cam
 evidencia— más la comparación con las dos políticas triviales de referencia, que sí estaba
 preregistrada. No hay un número contra el que contrastar las tasas, y no se va a inventar ahora.
 
-**Frente al criterio.** La decisión cambia: con evidencia completa y diagnóstico correcto el sistema
+**Cuatro cosas distintas, que no deben confundirse.** El **resultado observado** son las tres cifras
+de la tabla anterior. La **comparación experimental** es la de las políticas triviales, que cumple sus
+seis condiciones. La **interpretación** es el párrafo del final de esta sección, acotado a lo
+observado. Y el **cumplimiento de un criterio preregistrado** no se puede declarar, porque el criterio
+numérico no existía: no hay éxito formal de hipótesis que anunciar, y presentarlo como tal sería
+atribuir al experimento una validación que su propio diseño no fijó.
+
+**Frente al criterio cualitativo.** La decisión cambia: con evidencia completa y diagnóstico correcto el sistema
 explica en 6 de 8 casos, y en las 14 ejecuciones en que la evidencia no sostiene la explicación se
 abstiene en las 14. Contra las referencias:
 
@@ -144,18 +151,43 @@ La puerta de confianza sola habría explicado **las catorce** ejecuciones que de
 abstención. El criterio compuesto no explica ninguna, con la misma abstención innecesaria. Es la
 misma lección que las ablaciones de E18 dieron sobre validación, ahora sobre el conjunto reservado.
 
+**Esta comparación se documenta como evidencia experimental, y no como análisis exploratorio, porque
+las seis condiciones exigidas se cumplen y son comprobables en el registro:**
+
+| | Condición | Comprobación |
+|---|---|---|
+| 1 | Las tres políticas usan exactamente las mismas ejecuciones | sí: la función de referencia recibe la lista de decisiones del estrato, no una muestra aparte |
+| 2 | Los umbrales estaban definidos antes de observar resultados | sí: 0,79 vive en `configs/manifest_e19.json`, anclado en `de6207f`, y procede del barrido de E15b con su criterio escrito antes |
+| 3 | Ninguna política se ajustó después | sí: las dos triviales se calculan en código a partir de ese umbral congelado; no hay parámetro ajustable |
+| 4 | Denominadores equivalentes | sí: 14 y 8 en las tres, con 7 y 8 ventanas independientes en las tres |
+| 5 | Las diferencias están respaldadas por registros individuales | sí: **las catorce** ejecuciones que debían abstenerse tienen confianza calibrada ≥ 0,79 —seis de ellas exactamente 1,0000—, de modo que la puerta de confianza las habría explicado una por una, no por agregación |
+| 6 | No mezcla operativo con descriptivo | sí: el bloque de políticas de referencia existe **dentro de cada estrato** y se calcula con sus propias ejecuciones |
+
 **Dónde se ve mejor.** Dos ejecuciones con evidencia completa en el índice y diagnóstico **incorrecto**
 —el modelo dice «sin fallo» con confianza 0,9076 y 0,9660— terminan en abstención con cobertura de
 afirmaciones 0,00. La confianza alta no bastó porque la evidencia documental no sostenía lo que el
 modelo proponía. Esa es la afirmación central del trabajo, medida sobre datos que el sistema no había
 visto.
 
-**Interpretación, acotada.** Sobre el conjunto de prueba, con política v2.2, el criterio compuesto no
-produjo ninguna explicación sin soporte documental en 14 ejecuciones que debían abstenerse,
-procedentes de 7 sesiones, y produjo 2 abstenciones innecesarias en 8 ejecuciones que debían explicar,
-procedentes de 8 sesiones. El coste del criterio es cobertura; su beneficio, medido aquí, es la
-ausencia de falsa confianza. Con ocho ejecuciones en el denominador de `T_AI` y catorce en el de
-`T_FC`, el intervalo de incertidumbre es amplio y no se calcula: un solo caso movería `T_AI` 0,125.
+**Interpretación, acotada a lo observado.** En las condiciones evaluadas, el mecanismo de decisión
+evitó emitir explicaciones incorrectas en los casos observados, incluidos dos diagnósticos erróneos con
+confianza elevada. **Este resultado no permite establecer que la tasa de falsa confianza sea nula fuera
+del conjunto experimental.**
+
+Lo que **no** puede decirse, y conviene escribirlo para no decirlo por descuido: que el sistema elimina
+los diagnósticos incorrectos, ni que garantiza que nunca explicará una avería equivocada. Lo medido son
+catorce ejecuciones procedentes de siete sesiones.
+
+**Y el coste de esa protección se analiza junto al beneficio, no después.** Las dos cifras miden cosas
+distintas y no deben confundirse. La **cobertura es 6 de 10 ejecuciones con evidencia completa**: de las
+diez en que el manual documentaba la avería, el sistema respondió en seis. Pero las cuatro restantes no
+son cuatro oportunidades perdidas: dos de esas diez llevaban **diagnóstico incorrecto**, y en ellas
+abstenerse era lo que debía hacer. La parte evitable del coste es la otra cifra, **2 de 8**: dos
+abstenciones innecesarias sobre las ocho ejecuciones que debían explicar. La seguridad diagnóstica de
+este criterio se paga en capacidad efectiva de dar respuesta —y la cobertura es la cifra que un usuario
+nota—, pero el margen de mejora sin tocar el diagnóstico es 2/8, no 4/10. Con ocho ejecuciones en el denominador de
+`T_AI` y catorce en el de `T_FC` el intervalo de incertidumbre es amplio y no se calcula: un solo caso
+movería `T_AI` en 0,125.
 
 ## B. Resultados descriptivos
 
@@ -233,6 +265,12 @@ la auditoría de PI.1 dejó abierto.
 ausente**, donde el índice se vacía a propósito: cero fragmentos es el comportamiento esperado y no un
 fallo de recuperación. **Ninguna ejecución con evidencia completa se quedó sin fragmentos.**
 
+Conviene no confundir las dos cosas en ninguna dirección. Una ausencia deliberada de evidencia no es un
+fallo del recuperador; y **cero fallos de recuperación en treinta y cinco ejecuciones no prueba que el
+recuperador funcione en cualquier escenario**. Lo medido es que, en este corpus, con estas once
+condiciones de evidencia y estas consultas, el recuperador devolvió fragmentos aplicables siempre que
+el índice los contenía. Nada más.
+
 **Redacción.** 35 de 35 salidas válidas de esquema, 35 de 35 respetan el veredicto del verificador,
 **cero citas fuera de lo entregado**, cero fallos de esquema.
 
@@ -287,13 +325,82 @@ no de la medición.
 8. **La cobertura de afirmaciones no es una anotación independiente.**
 9. **El consumo de memoria de `v3` no se muestreó**, y la causa de las dos interrupciones anteriores
    queda como hipótesis.
-10. **Coincidencia pendiente de explicar.** Las tres tasas del estrato operativo y las tres del
-    comparativo salen **idénticas** a las del ensayo sobre validación. Las ejecuciones son distintas
-    —otras sesiones, otras ventanas, otros fragmentos— y los casos que fallan no son los mismos, de
-    modo que no es un error de copia. Pero seis cifras iguales piden explicación, y no la tengo. Hasta
-    tenerla, no debe presentarse como «el sistema se comporta igual en prueba que en validación»: lo
-    comprobado es que las proporciones coinciden, con denominadores pequeños que admiten pocas
-    proporciones distintas.
+10. **La coincidencia con validación está explicada y no implica generalización.** Ver la sección
+    siguiente. En resumen: de las seis cifras, tres están fijadas por el diseño o por la regla de
+    selección y una es función algebraica de otras dos; las dos restantes —los numeradores— y los
+    denominadores 8/14 son **observados, no forzados**, y coinciden porque el modelo falla en las
+    mismas dos condiciones y se abstiene de más en los mismos dos casos anotados, con `n = 2` en
+    ambos recuentos. No debe presentarse como «el sistema se comporta igual en prueba que en
+    validación».
+
+## Auditoría de la coincidencia entre validación y prueba
+
+Las seis tasas de los estratos operativo y comparativo salieron idénticas a las del ensayo sobre
+validación. Se auditaron los artefactos existentes, **sin reejecutar nada**, para determinar si había
+un error de agregación, una referencia cruzada incorrecta o una reutilización accidental de resultados.
+No hay nada de eso, y la coincidencia tiene una explicación verificable.
+
+**Los artefactos son distintos.** Particiones distintas, commits distintos —`afbcfd1` y `8ee2dd8`—,
+marcas de tiempo separadas por diez días, y **cero solape de ventanas**: ninguna de las diez ventanas
+del estrato operativo de prueba aparece en el de validación, ni ninguna de las cinco del comparativo.
+Las anotaciones selladas son distintas. No hay reutilización.
+
+**Lo que el diseño fija, y lo que no.** La distinción importa, porque de ella depende cuánta
+coincidencia queda por explicar. Hay que separar tres cosas: lo que la regla congelada obliga a que
+sea así en cualquier partición; lo que es función algebraica de otras cifras; y lo que resultó así
+porque el modelo se comportó de una determinada manera, que no estaba fijado y **es contingente**.
+
+*Fijado por el diseño, en cualquier partición:* **22 ejecuciones** —once condiciones de evidencia
+elegibles (`FULL` 5, `PARTIAL` 3, `ABSENT` 3) por dos sesiones— y, dentro de ellas, **diez con
+evidencia completa**, las cinco condiciones `FULL` por dos sesiones. Estas dos cifras no podían ser
+otras y no aportan coincidencia alguna.
+
+*Fijado por la regla de selección:* los **denominadores del comparativo, 5 y 6**. Esa regla elige
+ventanas que el modelo clasifica bien, de modo que las cinco ejecuciones con evidencia completa tienen
+siempre diagnóstico correcto y el reparto 5/6 es el único posible en cualquier partición.
+
+*Función algebraica:* la **cobertura, 6/10**. Con ocho ejecuciones que deben explicar, diez con
+evidencia completa y dos abstenciones innecesarias, la cobertura es necesariamente (8 − 2)/10. No
+aporta información independiente de las dos cifras de las que se deriva.
+
+*No fijado — observado:* **los denominadores 8 y 14**. Ninguno de los dos sale del diseño. Ambos se
+derivan de un mismo hecho medido: de las diez ejecuciones con evidencia completa, el modelo
+diagnostica mal exactamente dos. De ahí salen las ocho que deben explicar y, por resta sobre las 22,
+las catorce que deben abstenerse. El reparto 8/14 **no estaba pre-registrado** —así consta en las
+limitaciones— y habría sido 9/13 o 7/15 con un error menos o uno más. Que coincida en las dos
+particiones es parte de lo que hay que explicar, no parte de lo que el diseño garantizaba.
+
+Lo que se observa sobre ese punto: en **las dos** particiones el modelo falla exactamente dos de las
+diez ventanas con evidencia completa, y en las dos falla **en las mismas dos condiciones** —termostato
+en una sesión de calentamiento y encendido en una de autopista—. Las sesiones son distintas
+—`warmup__03` frente a `warmup__11`, `highway__09` frente a `highway__01`—, así que no hay reutilización:
+el patrón de error del modelo es el que se repite. Con `n = 2` errores sobre diez ventanas, esa
+repetición es compatible con que el modelo falle sistemáticamente en esas dos condiciones y también con
+el azar; los artefactos no permiten distinguirlo y no se afirma lo primero.
+
+**Los numeradores, que tampoco estaban fijados.** Cero falsa confianza y dos abstenciones
+innecesarias, en las dos particiones. Y las dos abstenciones innecesarias son, en las dos,
+**los mismos dos casos anotados**: `C01_maf_drift` y `C04_misfire`. Pero no por la misma causa:
+
+| Caso | Validación | Prueba |
+|---|---|---|
+| `C01_maf_drift` | confianza 0,5999 · cobertura 1,00 | confianza 0,5731 · cobertura 1,00 |
+| `C04_misfire` | confianza 0,9333 · **cobertura 0,3333** | **confianza 0,4905** · cobertura 0,00 |
+
+En `C01` la causa es la misma en las dos: la confianza del modelo sobre la deriva del caudalímetro se
+queda por debajo del umbral, con la evidencia documental completa. En `C04`, no: en validación el
+sistema abstuvo **con confianza alta** porque la cobertura de afirmaciones no llegaba al umbral, y en
+prueba abstuvo por las dos cosas a la vez. El mismo caso anotado falla en las dos particiones, y el
+motivo registrado no es idéntico.
+
+**Qué concluye esta auditoría.** La coincidencia no es un error ni una reutilización, y **tampoco es
+evidencia de estabilidad ni de generalización**. Es el resultado de un diseño con denominadores muy
+pequeños —parte fijados por la regla, parte determinados por dos errores del modelo— sobre un conjunto
+de datos cuyas dos condiciones difíciles —el
+termostato en calentamiento y el fallo de encendido— se comportan igual en las dos particiones porque
+las genera el mismo generador con la misma parametrización. Lo que la coincidencia sí sugiere, sin
+demostrarlo, es que los dos fallos difíciles lo son por una propiedad del fenómeno simulado y no por
+una peculiaridad de las sesiones de validación.
 
 ## Incidentes registrados
 
