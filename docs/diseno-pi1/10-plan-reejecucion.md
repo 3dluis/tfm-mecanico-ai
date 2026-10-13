@@ -40,7 +40,7 @@ Los pasos A y B no tocan ningún resultado y pueden hacerse mientras se revisa e
 
 | Paso | Cómputo | Trabajo | Nota |
 |---|---|---|---|
-| A | minutos | un día | lectura y escritura, más la reejecución de E6 sobre `synthetic_v2` con predicciones por ventana, que es lo que da registro a las dos cifras del termostato |
+| A | minutos | un día | lectura y escritura, más la reejecución de E6 sobre `synthetic_v2` con predicciones por ventana, que es lo que da registro a las dos cifras del termostato. **Con destino propio y sin sobrescribir** el registro histórico (`08-analisis-por-fallo.md` §8.3) |
 | B | ninguno | medio día | tres cambios de procedencia y sus pruebas |
 | C | minutos | una hora | generación, preprocesado y los cinco criterios |
 | D | minutos | una hora | reparto, subconjuntos y las tres pruebas de fuga |
