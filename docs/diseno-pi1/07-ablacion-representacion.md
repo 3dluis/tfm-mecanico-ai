@@ -8,6 +8,27 @@
 | **B** | descriptores completos de ventana | los **139** descriptores | bosque aleatorio |
 | **C** | secuencia temporal completa | 120 × 12 muestras crudas | red recurrente bidireccional |
 
+**Y una escalera intermedia, porque sin ella `A` frente a `B` no dice lo que parece.** Entre los doce
+descriptores de `A` y los 139 de `B` hay 127 más, y **no todos son dinámica**: hay extremos, dispersión,
+una razón entre señales y seis correlaciones cruzadas. Atribuir a la dinámica intraventana la diferencia
+entre `A` y `B` sería atribuirle también lo que aportan los otros. La escalera, con los recuentos
+verificados sobre el conjunto:
+
+| Escalón | Qué añade respecto del anterior | Descriptores | Acumulado |
+|---|---|---|---|
+| `A1` | la **media** de cada señal | 12 | **12** |
+| `A2` | dispersión y extremos: `std`, `min`, `max`, `range` | 48 | **60** |
+| `A3` | **dinámica intraventana**: `slope`, `autocorr1`, `delta_min`, `delta_max`, `crossings`, `n_events` | 72 | **132** |
+| `A4` | la razón entre señales `maf_over_rpm_load` | 1 | **133** |
+| `B` | las seis correlaciones entre señales | 6 | **139** |
+
+El escalón que responde a la pregunta es **`A2` → `A3`**, con el estimador fijo: ahí y solo ahí se añade
+dinámica intraventana y nada más. `A1` → `A2` mide qué aporta mirar la dispersión y los extremos, que es
+otra pregunta y también interesante, porque E4 midió que dos de los cinco fallos se separan por
+dispersión y no por nivel.
+
+Cinco escalones del bosque cuestan segundos cada uno. No es coste; es precisión.
+
 **A no es una observación puntual, y no se llamará así.** Es un resumen de ventana, solo que de un
 único estadístico. Un clasificador por muestra sería otra cosa: exigiría decidir cómo agregar las
 ciento veinte decisiones de una ventana en una, lo que añade un mecanismo nuevo para responder a la
@@ -28,20 +49,23 @@ La media de cada señal es el único subconjunto que se aproxima a nivel puro. D
 
 | Comparación | Qué cambia | ¿Aísla la representación? |
 |---|---|---|
-| **A frente a B** | solo la representación; el estimador, el conjunto, la partición y el protocolo son los mismos | **Sí.** Es el único eslabón limpio de toda la cadena |
+| **`A2` frente a `A3`** | solo los 72 descriptores de dinámica intraventana; mismo estimador | **Sí, y es la única que aísla la dinámica.** El eslabón limpio de toda la cadena |
+| `A1` frente a `A2` | solo dispersión y extremos | sí, aísla **eso**, que no es dinámica |
+| `A3` frente a `B` | la razón y las correlaciones cruzadas | sí, aísla **eso** |
+| `A` frente a `B` sin escalones | los 127 descriptores a la vez: dinámica, dispersión, extremos y relaciones | **No para la dinámica.** Aísla el conjunto añadido completo, que es otra afirmación |
 | **B frente a C** | la representación **y** el estimador | **No.** Una diferencia puede venir del sesgo inductivo de la red, de su capacidad o de su regularización |
 | **A frente a C** | la representación y el estimador, con más distancia aún | **No**, y por el mismo motivo |
 
 De aquí sale una consecuencia que conviene aceptar antes de medir: **lo que el diseño puede sostener es
-cuánto aporta la dinámica dentro de la ventana frente al nivel**, porque eso es `A` frente a `B` con el
-mismo estimador. Lo que la secuencia completa añade sobre los descriptores **no** queda aislado, y se
-enunciará como diferencia entre dos recorridos.
+cuánto aporta la dinámica dentro de la ventana frente al nivel y la dispersión**, porque eso es `A2`
+frente a `A3` con el mismo estimador. Lo que la secuencia completa añade sobre los descriptores **no**
+queda aislado, y se enunciará como diferencia entre dos recorridos.
 
-Esto tiene una lectura positiva que vale la pena decir: `A` frente a `B` ya responde una parte real de
-la pregunta del tutor. Si en el termostato el salto grande está entre el nivel y los descriptores, la
-información diagnóstica temporal relevante está **dentro de la ventana** y los descriptores la capturan;
-si el salto está entre los descriptores y la secuencia, está en la forma de la trayectoria, que los
-descriptores resumen. La primera mitad es demostrable con este diseño.
+Esto tiene una lectura positiva que vale la pena decir: la escalera ya responde una parte real de la
+pregunta del tutor. Si en el termostato el salto grande está en `A2` → `A3`, la información diagnóstica
+temporal relevante está **dentro de la ventana** y los descriptores la capturan; si está entre los
+descriptores y la secuencia, está en la forma de la trayectoria, que los descriptores resumen. La
+primera mitad es demostrable con este diseño; la segunda, no.
 
 ## 7.4 Qué se registra
 

@@ -72,6 +72,21 @@ y conviene saber hasta dónde llega:
 | Termostato, ventanas entre 70,0 y 71,5 °C | **ambiguas.** Se excluyen del análisis y se cuenta cuántas son |
 | Fallo de encendido | **no se puede.** No hay observable que identifique los episodios sin heurística, y una heurística aquí contaminaría el resultado que se quiere medir |
 
+**Y hay un supuesto detrás de esa tabla que no se da por bueno: se ha comprobado.** La clasificación
+segura de la segunda fila solo vale si una ventana etiquetada con el fallo no contiene muestras
+**anteriores** al instante de aparición, porque una sesión urbana arranca con el motor caliente y una
+muestra previa al fallo puede estar muy por encima de 71 °C sin que el techo haya actuado.
+
+El plan equilibrado fija el instante de aparición en el 20 % de la duración, es decir **120 s**, y el
+preprocesado hace dos cosas: etiqueta como **sin fallo** la ventana que termina en ese instante y
+**descarta** la que lo cruza. Comprobado sobre el conjunto: de las **350 ventanas etiquetadas con fallo**
+en entrenamiento y validación, **ninguna** empieza antes de 120 s, y las 50 ventanas de sesiones con
+fallo etiquetadas como normal son todas la de `t_start = 0`. De modo que ninguna ventana con etiqueta de
+fallo contiene muestras previas al fallo, y la fila dos de la tabla es segura.
+
+Si `synthetic_v4` se genera con el mismo plan, la propiedad se mantiene; **hay que volver a comprobarla**
+sobre él en lugar de suponerla.
+
 **Paso 3. Separar las métricas por expresión.** Para cada fallo y cada representación: exhaustividad
 sobre las ventanas **con** el fallo expresado y sobre las ventanas **sin** expresar, por separado.
 
@@ -83,10 +98,20 @@ Esto es lo que decide la pregunta:
 | La ventaja está en ventanas **sin** expresar | no es información temporal: es azar o ajuste a idiosincrasias de las sesiones. **La hipótesis del termostato cae** |
 | No hay ventaja al separar | la ventaja agregada venía del reparto entre los dos grupos y no de detectar mejor |
 
-**Paso 4. Dar registro a las dos cifras huérfanas.** Con las predicciones por ventana y el máximo de
-refrigerante, las cifras «las ventanas que el modelo falla tienen 54,3 °C de media; las que acierta,
-70,7» se regeneran como artefacto o se corrigen. Cierra una de las cinco cifras sin registro de
-`EVID-MAJ-019`.
+**Paso 4. Dar registro a las dos cifras huérfanas, sobre el conjunto que describen.** Las cifras «las
+ventanas que el modelo falla tienen 54,3 °C de media; las que acierta, 70,7» describen la validación de
+**`synthetic_v2`**, no de `synthetic_v4`. Calcularlas con las predicciones del conjunto nuevo no las
+sostendría ni las corregiría: sería otra medida de otra cosa.
+
+Lo que hay que hacer es una **reejecución de E6 sobre `synthetic_v2`**, con su semilla y su
+configuración, registrando esta vez las predicciones por ventana, y calcular el estadístico sobre esas
+predicciones y el máximo de refrigerante de esas mismas ventanas. No es un experimento nuevo: es volver
+a ejecutar lo que ya está publicado, y tiene una ventaja añadida —si las métricas agregadas no
+reproducen las del registro de E6, eso es un hallazgo de reproducibilidad y hay que pararse ahí—.
+
+Este paso no necesita `synthetic_v4` y puede hacerse en la Fase A. Si la reejecución no reproduce E6, o
+si el estadístico sale distinto de 54,3 y 70,7, las dos cifras **se retiran** de la matriz de validación
+en lugar de corregirse en silencio, y se dice por qué.
 
 **Paso 5. Repetir lo mismo con el fallo de encendido**, que es la condición más débil en los dos
 modelos y sobre prueba —F1 0,4444 en E19— y cuya intermitencia produce el mismo tipo de ventanas sin
