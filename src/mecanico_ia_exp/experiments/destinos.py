@@ -54,6 +54,11 @@ PATRONES_HISTORICOS: tuple[str, ...] = (
     "artifacts/tables/*.csv",
     "configs/manifest_e19.json",
     "configs/congelacion-e19.anchor.json",
+    # El conjunto anotado va censado porque el manifiesto de E19 lo fija **por
+    # huella**: editarlo rompería la verificación de la congelación. El rediseño
+    # de la condición con distractor tiene que escribir un fichero nuevo.
+    "configs/goldset_mazda3_bk.yaml",
+    "configs/politica_suficiencia*.json",
 )
 
 

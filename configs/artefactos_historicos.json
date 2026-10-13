@@ -1,5 +1,5 @@
 {
-  "tomado_el": "2026-10-13T01:50:23.609583+00:00",
+  "tomado_el": "2026-10-13T02:23:19.619496+00:00",
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "patrones": [
     "experiments/*.json",
@@ -13,9 +13,11 @@
     "artifacts/metrics/*.json",
     "artifacts/tables/*.csv",
     "configs/manifest_e19.json",
-    "configs/congelacion-e19.anchor.json"
+    "configs/congelacion-e19.anchor.json",
+    "configs/goldset_mazda3_bk.yaml",
+    "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 143,
+  "n_artefactos": 144,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
     "experiments/E13_agente_echo.json": "59e159eb84db5c1ba28b303214279fc237af389e2cece4617be631997faf1a11",
@@ -159,6 +161,7 @@
     "artifacts/tables/E9_atribuciones_synthetic_v2.csv": "5efc1fd3d01e1b7be05203038fb3f34515322443199dd92aceecdd49b5a63206",
     "artifacts/tables/E9_resumen_synthetic_v2.csv": "ee7f92bf171e969f26ee7b55d63bb3607faa8cb547baf15b6cab02d4d8c15fd7",
     "configs/manifest_e19.json": "6ddaf83854e23a541eadda719bcb075129fb9c5f9306cb0bd13903c830af8323",
-    "configs/congelacion-e19.anchor.json": "c5cb928f10dc63ff790042618f989a450d4bfd79d2e2b719105acaa7909b6b08"
+    "configs/congelacion-e19.anchor.json": "c5cb928f10dc63ff790042618f989a450d4bfd79d2e2b719105acaa7909b6b08",
+    "configs/goldset_mazda3_bk.yaml": "7fadc49fc7daaad1d84fb0ebe625b061ed4664a99adea7b548c105533644a25a"
   }
 }
