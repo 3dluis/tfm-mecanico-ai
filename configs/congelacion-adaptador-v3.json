@@ -1,0 +1,86 @@
+{
+  "congelado_el": "2026-10-13",
+  "para_que": "P2: reentrenar el adaptador del redactor sin contaminacion, en models/slm_lora_v3",
+  "por_que_se_congela_antes": "si la configuracion se eligiera despues de ver como redacta, el resultado mediria la busqueda y no el adaptador",
+  "objetivo": "eliminar la contaminacion y medir el comportamiento en condiciones controladas; NO conseguir mejores cifras. Si el adaptador limpio redacta peor, ese es el resultado y se publica: significaria que parte de la calidad atribuida al redactor venia de haber visto los casos",
+  "contaminacion_que_corrige": {
+    "la_declarada": "los ejemplos de slm_lora_v2 llevan paquetes de evidencia de una recuperacion anterior a la correccion del espacio de embeddings mezclado",
+    "la_encontrada_al_auditar": "run_training_data construia los ejemplos desde VALIDACION, y E13 y E15 miden al redactor sobre validacion: 3 de las 5 ventanas de evaluacion eran las mismas del ajuste, y 4 de las 5 sesiones",
+    "documento": "docs/methodology/auditoria-contaminacion-adaptador.md"
+  },
+  "datos_de_ajuste": {
+    "particion_de_origen": "train",
+    "por_que": "es la unica disjunta por construccion de validacion y de prueba, porque el reparto es por sesion",
+    "comprobacion": "ninguna sesion de los ejemplos aparece en validacion ni en prueba; se comprueba ANTES de escribir ningun ejemplo, leyendo el reparto de synthetic_v2_preprocess.json y sin abrir ninguna particion",
+    "registro": "experiments/E13b_training_data_sin_contaminacion.json",
+    "n_ejemplos": 112,
+    "n_casos": 60,
+    "reparto": {
+      "FULL/EXPLAIN": 48,
+      "FULL/ABSTAIN": 12,
+      "PARTIAL/EXPLAIN": 12,
+      "PARTIAL/ABSTAIN": 20,
+      "ABSENT/ABSTAIN": 20
+    },
+    "ficheros": {
+      "crudos": "data/processed/slm_finetune_sin_contaminacion/{train,valid}.jsonl",
+      "preparados": "data/processed/slm_finetune_prepared_sin_contaminacion/{train,valid}.jsonl",
+      "n_train": 94,
+      "n_valid": 18
+    },
+    "duplicados": "los ejemplos se reparten por VENTANA DE ORIGEN, no por ejemplo: las tres variantes de corpus de una misma ventana comparten case_id y caen en la misma particion interna, de modo que no hay solape entre el train y el valid del ajuste",
+    "huellas_sha256_16": {
+      "slm_finetune_sin_contaminacion/train.jsonl": "fc2b601e74455c4f",
+      "slm_finetune_sin_contaminacion/valid.jsonl": "9ffd930b567780f8",
+      "slm_finetune_prepared_sin_contaminacion/train.jsonl": "06f9119c31739bf6",
+      "slm_finetune_prepared_sin_contaminacion/valid.jsonl": "4bda51e0b823e20a"
+    }
+  },
+  "hiperparametros": {
+    "heredados_de": "models/slm_lora_v2/finetune_config.json, sin cambiar ninguno",
+    "por_que_no_se_tocan": "cambiar a la vez los datos y los hiperparametros haria que la diferencia entre v2 y v3 no fuera atribuible a la limpieza de los datos, que es lo unico que este reentrenamiento quiere cambiar",
+    "base_model": "Qwen/Qwen2.5-3B-Instruct",
+    "lora_rank": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "epochs": 4,
+    "learning_rate": 0.0002,
+    "max_seq_length": 3072,
+    "device": "mps"
+  },
+  "semilla": 20260901,
+  "criterios_de_parada": {
+    "regla": "cuatro epocas completas, sin parada temprana y sin seleccion de epoca",
+    "por_que": "no hay particion sobre la que elegir una epoca sin contaminar: el valid del ajuste sale de las mismas sesiones de entrenamiento. Elegir la mejor epoca mirandolo seria seleccionar sobre datos vistos, y mirando validacion seria reintroducir exactamente la contaminacion que este reentrenamiento corrige",
+    "se_publica": "la perdida de entrenamiento y la de validacion interna de las cuatro epocas, para poder ver si sobreajusta, pero NO se usan para elegir nada"
+  },
+  "metricas_de_evaluacion": {
+    "sobre_que": "los 17 casos anotados, modo oracular, particion de VALIDACION",
+    "por_que_validacion": "es donde estan las cifras publicadas de E13 y E15 con que hay que comparar, y donde el adaptador v3 NO ha visto nada: sus ejemplos salen de entrenamiento",
+    "cuales": [
+      "salidas con esquema valido sobre el total",
+      "citas inventadas",
+      "fallos de esquema",
+      "cobertura de afirmaciones",
+      "decisiones EXPLAIN/ABSTAIN del verificador, que NO dependen del redactor y sirven de control"
+    ],
+    "comparacion": "contra experiments/E13_agente_transformers-lora@slm_lora_v2.json, declarando que aquella medicion esta contaminada y esta no"
+  },
+  "lo_que_no_se_hace": [
+    "no se toca models/slm_lora_v2 ni ninguno de sus registros",
+    "no se elige configuracion mirando resultados del conjunto de prueba",
+    "no se repite el ajuste con otros hiperparametros si el resultado no gusta: una segunda configuracion seria una busqueda, y habria que declararla como tal",
+    "no se usan los resultados de P3 para decidir nada de esto"
+  ],
+  "condiciones_de_invalidez": [
+    "si el ajuste se interrumpe, el adaptador parcial no se usa: se borra y se repite con identificador propio",
+    "si los ficheros de ejemplos no coinciden con las huellas que este fichero declara, no se ajusta",
+    "si models/slm_lora_v3 ya existe, el ejecutor se niega"
+  ]
+}

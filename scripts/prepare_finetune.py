@@ -18,21 +18,33 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ORIGEN = ROOT / "data" / "processed" / "slm_finetune"
-DESTINO = ROOT / "data" / "processed" / "slm_finetune_prepared"
+PROCESADOS = ROOT / "data" / "processed"
 # Se renderiza con el tokenizador del MISMO modelo que se ajusta, para que lo que
 # ve en el ajuste sea exactamente lo que verá al inferir.
 MODELO = "Qwen/Qwen2.5-3B-Instruct"
 
 
-def main() -> int:
+def main(etiqueta: str = "") -> int:
+    """Prepara un conjunto de ejemplos. Con etiqueta, el suyo y no el histórico.
+
+    Los nombres llevan la etiqueta por el mismo motivo que todo lo demás: el
+    conjunto preparado de `slm_lora_v2` sostiene un adaptador congelado y no se
+    sobrescribe.
+    """
     from transformers import AutoTokenizer
 
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    origen_dir = PROCESADOS / f"slm_finetune{sufijo}"
+    destino_dir = PROCESADOS / f"slm_finetune_prepared{sufijo}"
+    if destino_dir.exists() and any(destino_dir.iterdir()):
+        print(f"Ya existe {destino_dir.relative_to(ROOT)} y no se sobrescribe.")
+        return 1
+
     tok = AutoTokenizer.from_pretrained(MODELO)
-    DESTINO.mkdir(parents=True, exist_ok=True)
+    destino_dir.mkdir(parents=True, exist_ok=True)
 
     for nombre in ("train", "valid"):
-        origen = ORIGEN / f"{nombre}.jsonl"
+        origen = origen_dir / f"{nombre}.jsonl"
         if not origen.is_file():
             print(f"falta {origen}")
             return 1
@@ -53,7 +65,7 @@ def main() -> int:
                 )
             )
 
-        destino = DESTINO / f"{nombre}.jsonl"
+        destino = destino_dir / f"{nombre}.jsonl"
         destino.write_text("\n".join(salidas) + "\n", encoding="utf-8")
         largos = [len(tok(json.loads(s)["prompt"])["input_ids"]) for s in salidas]
         print(
@@ -65,4 +77,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else ""))
