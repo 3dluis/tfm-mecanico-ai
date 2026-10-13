@@ -14,7 +14,10 @@ que **no se renombran**. La columna «Familia» agrupa por bloque técnico y sir
 lectura para un revisor externo; no sustituye al `E<n>`.
 
 Estados (vocabulario cerrado): `PLANNED` (definido, sin ejecutar) · `RUN` (ejecutado, con
-registro) · `VALIDATED` (ejecutado y su criterio declarado se cumplió) · `NEGATIVE` (ejecutado
+registro) · `VALIDATED` (ejecutado y su criterio declarado se cumplió) · `COMPLETED — WITH
+DOCUMENTED LIMITATIONS` (ejecutado y medido, con sus limitaciones escritas, **sin que ello signifique
+hipótesis demostrada**; se usa cuando no había criterio numérico preregistrado contra el que
+contrastar) · `NEGATIVE` (ejecutado
 y la hipótesis o el criterio no se sostuvo) · `INCONCLUSIVE` (ejecutado, sin resolución
 declarada) · `SUPERSEDED` (sustituido por una versión posterior o invalidado por un hallazgo).
 
@@ -39,7 +42,8 @@ oracular), E13b y E13 son ahora los de esa fecha en `experiments/`; las decision
 | E5 | FEAT | ¿Qué ventana y reparto evitan la fuga entre sesiones? | Geometría elegida por medición, no por costumbre (`preprocess_runner.py:3-6`) | Ventanado 120 s, 139 descriptores, reparto por sesión, test cerrado por excepción | `synthetic_v2` | RUN | 392 ventanas de entrenamiento, 98 de validación (`docs/memoria/cap5_resultados.md:17`); `tables/E5_*.csv` |
 | E6 | ANOM | Línea base tabular frente a la clase mayoritaria | Referencia contra la que medir E7 | RandomForest 400 árboles, `class_weight=balanced`, semilla 20260901 | `synthetic_v2`; también `synthetic_v3` | VALIDATED | v2: accuracy 0,8776, macro-F1 0,8788, ECE 0,1439; mayoritaria macro-F1 0,0741 (`experiments/E6_baseline_synthetic_v2.json`). v3: macro-F1 0,9321, ECE 0,0801 |
 | E7 | ANOM | ¿Supera el modelo temporal a la línea base? | «Si no la supera, su complejidad no está justificada» (`docs/experiments/E6_baseline.md:8`) | GRU bidireccional, 19 014 parámetros, MPS, semilla 20260901 | `synthetic_v2`; `synthetic_v3` | **NEGATIVE** (v2) / **INCONCLUSIVE** (v3) | v2: macro-F1 0,823 < 0,8788 del bosque (`experiments/E7_temporal_synthetic_v2.json`). v3: 0,9446 frente a 0,9321, margen «inferior al sesgo plausible: inconcluso» (`docs/experiments/E7_modelo_temporal.md:12-14`) |
-| E8 | ANOM | Evaluación del modelo sobre test | — | — | — | PLANNED | Test cerrado; sin registro (`docs/experiments/README.md`) |
+| E8 | ANOM | Evaluación del modelo sobre test | — | — | — | SUPERSEDED por E19 | La evaluación sobre prueba se ejecutó como E19 bajo reglas congeladas; E8 no llegó a tener protocolo propio |
+| **E19** | VALID | ¿Qué hace el sistema sobre el conjunto de prueba, con la política de suficiencia corregida? | Criterio **cualitativo**: la decisión cambia al retirar la evidencia, y comparación con las dos políticas triviales. **Sin umbral numérico preregistrado** para las dos tasas | Reglas congeladas y ancladas (`de6207f`), política v2.2, tres estratos, anotación sellada antes de medir | `synthetic_v2`, partición de prueba | **COMPLETED — WITH DOCUMENTED LIMITATIONS** | Estrato operativo: falsa confianza **0/14**, abstención innecesaria **2/8**, cobertura 6/10, sobre 10 sesiones. Diagnóstico F1 macro 0,8360 frente a 0,0741. Redactor 35/35 válidas y 35/35 respetan el veredicto. Tres intentos, dos interrumpidos; conjunto de prueba abierto tres veces (`docs/experiments/E19_evaluacion_final.md`, `docs/methodology/registro-aperturas-test.md`) |
 | E9 | XAI | ¿Qué señales sostienen cada diagnóstico? | — | SHAP `Permutation` sobre `predict_proba[clase]`, fondo con semilla 20260901 | `synthetic_v2`, 18 casos de validación | RUN | 18 casos atribuidos (`experiments/E9_xai_synthetic_v2.json`); `tables/E9_*.csv` |
 | E10 | RAG | Corpus documental condicionado por vehículo | — | `rag/vehicle.py`, `rag/manifest.py`; vehículo Mazda 3 BK 2007, motor Z6 | Manual de taller (no redistribuible) | RUN (infraestructura) | «infraestructura cerrada, corpus vacío» en el índice (`docs/experiments/README.md:19`); el corpus se cargó en E11 |
 | E11 | RAG | Carga del corpus en pgvector | — | Ingesta + embeddings multilingües 384-d | 3 055 ficheros / 243 MB | RUN | 6 158 fragmentos, 981 con DTC (`docs/experiments/E11_carga_rag.md:9-14`). Registro en `results/rag_ingestion/` (no versionado) |
