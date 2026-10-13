@@ -1,7 +1,8 @@
 # Reproducir desde un clon limpio
 
 **Actualizado:** 13 de octubre de 2026 · **Comprobado:** clonando el repositorio en un directorio
-temporal y ejecutando los pasos, no suponiéndolos. La validación del 13 de octubre **encontró tres
+temporal y ejecutando los pasos, no suponiéndolos. Última pasada completa: commit `3ab02d2`,
+**todos los pasos en verde**, incluidos los siete notebooks y sus versiones HTML. La validación del 13 de octubre **encontró tres
 defectos** y están corregidos; lo que sigue es el estado tras corregirlos.
 
 Quien reciba este repositorio no tiene la máquina del autor. Este documento dice exactamente qué
@@ -37,12 +38,16 @@ uv run jupyter lab notebooks/
 
 | Paso | Sin reconstruir | Tras reconstruir |
 |---|---|---|
-| pruebas **inmediatas** | **833 pasan** | 833 pasan |
-| pruebas **con preparación** | **15 se detienen** con la orden exacta | **15 pasan** |
+| pruebas **inmediatas** | **882 pasan** | 882 pasan |
+| pruebas **con preparación** | **17 se detienen** con la orden exacta | **17 pasan** |
 | pruebas **con recursos externos** | 15, declaradas y no ejecutables | ídem |
 | `ruff check` · `ruff format` | pasan | pasan |
 | `mypy src` | pasa | pasa |
-| notebooks DEMO | los cuatro se ejecutan | ídem |
+| **notebooks DEMO** | los **seis** se ejecutan desde un kernel limpio | ídem |
+| **notebook 06 (FULL)** | se detiene: necesita `synthetic_v2` | **se ejecuta** |
+| **las siete versiones HTML** | completas, sin rutas locales, con la modalidad visible | ídem |
+| comprobaciones del traslado de P2 | **se niegan**, con el motivo medido | ídem |
+| censo de artefactos | 0 desviaciones | 0 desviaciones |
 
 `scripts/estado_pruebas.py --ejecutar` devuelve **2** si la segunda categoría no se ha podido
 ejecutar, y **1** si falla la primera. No declara satisfactoria una categoría que no ha corrido:
@@ -68,7 +73,7 @@ Tres defectos que esta máquina no mostraba, y por eso se valida en un clon y no
 | **Los pesos del adaptador** | no se distribuyen | las pruebas con marcador `llm` no se ejecutan |
 | **Los ejemplos de ajuste del redactor** | se generan con el índice documental | las pruebas con marcador `artefactos` no se ejecutan |
 
-Los quince que se detienen sin reconstruir dicen qué falta y la orden exacta. No es un `skip` de
+Los diecisiete que se detienen sin reconstruir dicen qué falta y la orden exacta. No es un `skip` de
 conveniencia: miden algo real y lo que falta es un dato **reconstruible y verificable por huella**.
 
 ## Por qué hay que reconstruir, y por qué eso no es una concesión
