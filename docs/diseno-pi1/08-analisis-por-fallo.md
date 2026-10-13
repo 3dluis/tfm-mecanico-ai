@@ -133,13 +133,21 @@ Se compara contra las cuatro cifras publicadas y los dos rangos. No es un experi
 ejecutar lo ya publicado, y trae una comprobación de regalo —si las métricas agregadas no reproducen el
 registro de E6, hay que pararse ahí—.
 
-**Dónde escribe esa reejecución, que no es donde escribió E6.** `run_baseline` escribe hoy en una ruta
-fija, `experiments/E6_baseline_synthetic_v2.json`, que es precisamente el registro histórico que este
-plan declara intocable: ejecutarlo tal cual lo sobrescribiría. La reejecución necesita por tanto, antes
-de lanzarse, **destino propio** —`experiments/E6_reejecucion_por_ventana.json` y las predicciones por
-ventana junto a él— y una **negativa a escribir si el destino ya existe**, igual que la que el runner de
-E19 aplica a sus destinos. El registro original no se toca ni se regenera: la comparación es entre dos
-ficheros, y para eso los dos tienen que existir.
+**Dónde escribe esa reejecución, que no es donde escribió E6.** `run_baseline` escribe hoy en rutas
+fijas, y **todas** son artefactos históricos de E6 que este plan declara intocables: el registro
+`experiments/E6_baseline_synthetic_v2.json`, las tres tablas
+`tables/E6_baseline_{por_clase,confusion,importancias}_synthetic_v2.csv` y las dos figuras
+`FIG-E6-01_confusion_baseline.png` y `FIG-E6-02_limite_evidencia_f03.png`. Ejecutarlo tal cual
+sobrescribiría los seis, no solo el JSON. La reejecución necesita por tanto, antes de lanzarse:
+
+- **destino propio para cada artefacto**, con un prefijo que lo identifique como verificación y no como
+  E6 —`experiments/E6_reejecucion_por_ventana.json`, las predicciones por ventana junto a él, y tablas
+  y figuras bajo el mismo prefijo—;
+- y una **negativa a escribir si cualquiera de esos destinos ya existe**, igual que la que el runner de
+  E19 aplica a los suyos, que es lo que convierte la promesa en comprobación.
+
+El registro original no se toca ni se regenera: la comparación es entre dos juegos de ficheros, y para
+eso los dos tienen que existir.
 
 Este paso no necesita `synthetic_v4` y puede hacerse en la Fase A. Si la reejecución no reproduce E6, o
 si el estadístico sale distinto, las cifras **se retiran** de la matriz de validación en lugar de
