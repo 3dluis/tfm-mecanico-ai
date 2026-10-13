@@ -205,12 +205,19 @@ dirección, pero pertenece al **conjunto de prueba**: no entra en esta inferenci
 mencionada porque el artefacto es público en el repositorio y ocultarlo sería peor, no porque añada
 evidencia a un análisis que se declara restringido a entrenamiento y validación.
 
-**Lo que no puedo afirmar, y hay que decirlo:** que sean *las mismas* cinco ventanas. Los registros de
-E6 y E7 guardan la matriz de confusión agregada, **no las predicciones por ventana**, de modo que la
-identificación una a una no es comprobable con los artefactos existentes. `docs/matriz_validacion_pi.md`
-sí afirma el reparto por temperatura —«las ventanas que el modelo falla tienen 54,3 °C de media; las
-que acierta, 70,7»—, pero **esas dos cifras no tienen registro**: son una de las cinco que el hallazgo
-`EVID-MAJ-019` del verificador de evidencia tiene abiertas por ese motivo. Para llevar esto al jurado
+**Lo que no puedo afirmar desde los registros, y de dónde sí sale:** los registros de E6 y E7 guardan la
+matriz de confusión agregada, **no las predicciones por ventana**, de modo que la identificación una a
+una no es comprobable con los artefactos. Pero el **informe** de E6 sí trae el análisis: da la
+temperatura media de las detectadas y de las no detectadas con sus rangos, y añade el desglose por
+régimen, **urbano 7 de 7 y calentamiento 2 de 7**. Es decir que el análisis por ventana se hizo en su
+momento y localizó los cinco errores en el régimen de calentamiento, que es donde están las cinco
+ventanas por debajo del techo. Es **muy compatible** con que sean las mismas cinco —mismo tamaño dentro
+de las mismas siete ventanas, y rangos de temperatura disjuntos— pero no lo demuestra: podrían solaparse
+en cuatro y diferir en una. Falta el cruce por ventana, y falta el artefacto. `docs/matriz_validacion_pi.md`
+afirma el reparto por temperatura —«las ventanas que el modelo falla tienen 54,3 °C de media; las que
+acierta, 70,7»—, y **esas cifras no tienen artefacto**, que es el motivo por el que figuran entre las
+cinco de `EVID-MAJ-019`. No son inventadas: están en la tabla del informe de E6 con sus rangos. Les
+falta el registro, no el análisis. Para llevar esto al jurado
 hay que regenerarlo como artefacto, y eso es una reejecución sobre validación, no un experimento nuevo.
 
 **Qué puede explicar la ventaja de la secuencia, y qué no puede explicarla.** Los descriptores de
