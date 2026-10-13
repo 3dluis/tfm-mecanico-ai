@@ -108,18 +108,26 @@ def exigir_libres(destinos: dict[str, Path]) -> dict[str, Path]:
     return destinos
 
 
-def _versionados(raiz: Path) -> frozenset[str]:
-    """Qué rutas lleva Git. Fuera de un repositorio, el conjunto vacío.
+def _ignorados_por_git(raiz: Path, rutas: list[str]) -> frozenset[str]:
+    """Cuáles de esas rutas excluye `.gitignore`. Fuera de un repositorio, ninguna.
 
-    Importa para no confundir dos cosas muy distintas: un artefacto **que falta
-    porque no se versiona** —`tables/`, `figures/` y `data/` están en
-    `.gitignore`, de modo que un clon recién hecho no los tiene— y un artefacto
-    **que falta porque algo lo borró**. Lo primero es el estado normal de una
-    copia limpia; lo segundo es la alarma que este censo existe para dar.
+    Se pregunta por **lo ignorado**, no por lo que Git ya sigue, y la diferencia
+    importa: un artefacto recién creado bajo `experiments/` todavía no está en el
+    índice pero **lo estará** en cuanto se confirme el commit. Preguntar por
+    `ls-files` lo marcaría como no versionado, y entonces el censo aceptaría su
+    desaparición en silencio --que es justo la alarma que tiene que dar--.
+
+    Lo que de verdad separa los dos casos es si `.gitignore` lo excluye:
+    `tables/`, `figures/`, `data/` y parte de `models/` están fuera del control
+    de versiones y un clon recién hecho no los tiene; `experiments/`, `configs/`
+    y `artifacts/` sí viajan con el repositorio.
     """
+    if not rutas:
+        return frozenset()
     try:
         salida = subprocess.run(
-            ["git", "-C", str(raiz), "ls-files"],
+            ["git", "-C", str(raiz), "check-ignore", "--stdin"],
+            input="\n".join(rutas),
             capture_output=True,
             text=True,
             timeout=30,
@@ -127,7 +135,10 @@ def _versionados(raiz: Path) -> frozenset[str]:
         )
     except (OSError, subprocess.SubprocessError):
         return frozenset()
-    if salida.returncode != 0:
+    # Devuelve 0 si ignora alguna, 1 si ninguna y más de 1 si hubo error. Fuera
+    # de un repositorio no se puede saber, y entonces no se marca ninguna como
+    # ignorada: es la opción conservadora, porque una ausencia se denuncia.
+    if salida.returncode > 1:
         return frozenset()
     return frozenset(linea for linea in salida.stdout.splitlines() if linea)
 
@@ -137,21 +148,24 @@ def censar(
 ) -> dict[str, dict[str, object]]:
     """Huella de cada artefacto que encaja en los patrones, por ruta relativa.
 
-    Cada entrada dice además si **Git lleva ese fichero**, que es lo que
-    permite después distinguir una ausencia esperada de una alarma.
+    Cada entrada dice además si el fichero **viaja con el repositorio**, que es
+    lo que permite después distinguir una ausencia esperada de una alarma.
     """
     base = raiz or paths.ROOT
-    seguidos = _versionados(base)
-    censo: dict[str, dict[str, object]] = {}
-    for patron in patrones:
-        for ruta in sorted(base.glob(patron)):
-            if ruta.is_file():
-                relativa = str(ruta.relative_to(base))
-                censo[relativa] = {
-                    "sha256": huella(ruta),
-                    "versionado": relativa in seguidos,
-                }
-    return censo
+    encontrados = [
+        str(ruta.relative_to(base))
+        for patron in patrones
+        for ruta in sorted(base.glob(patron))
+        if ruta.is_file()
+    ]
+    ignorados = _ignorados_por_git(base, encontrados)
+    return {
+        relativa: {
+            "sha256": huella(base / relativa),
+            "versionado": relativa not in ignorados,
+        }
+        for relativa in encontrados
+    }
 
 
 def escribir_censo(
