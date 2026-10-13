@@ -133,6 +133,14 @@ Se compara contra las cuatro cifras publicadas y los dos rangos. No es un experi
 ejecutar lo ya publicado, y trae una comprobación de regalo —si las métricas agregadas no reproducen el
 registro de E6, hay que pararse ahí—.
 
+**Dónde escribe esa reejecución, que no es donde escribió E6.** `run_baseline` escribe hoy en una ruta
+fija, `experiments/E6_baseline_synthetic_v2.json`, que es precisamente el registro histórico que este
+plan declara intocable: ejecutarlo tal cual lo sobrescribiría. La reejecución necesita por tanto, antes
+de lanzarse, **destino propio** —`experiments/E6_reejecucion_por_ventana.json` y las predicciones por
+ventana junto a él— y una **negativa a escribir si el destino ya existe**, igual que la que el runner de
+E19 aplica a sus destinos. El registro original no se toca ni se regenera: la comparación es entre dos
+ficheros, y para eso los dos tienen que existir.
+
 Este paso no necesita `synthetic_v4` y puede hacerse en la Fase A. Si la reejecución no reproduce E6, o
 si el estadístico sale distinto, las cifras **se retiran** de la matriz de validación en lugar de
 corregirse en silencio, y se dice por qué.

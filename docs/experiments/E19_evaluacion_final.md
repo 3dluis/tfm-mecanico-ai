@@ -178,11 +178,14 @@ Lo que **no** puede decirse, y conviene escribirlo para no decirlo por descuido:
 los diagnósticos incorrectos, ni que garantiza que nunca explicará una avería equivocada. Lo medido son
 catorce ejecuciones procedentes de siete sesiones.
 
-**Y el coste de esa protección se analiza junto al beneficio, no después.** Dos abstenciones
-innecesarias de ocho ejecuciones que debían explicar, y cobertura de 6 de 10 ejecuciones con evidencia
-completa: de cada diez situaciones en que el manual documentaba la avería y el sistema podía haber
-respondido, respondió en seis. La seguridad diagnóstica de este criterio se paga en capacidad efectiva
-de dar respuesta, y las dos cifras tienen que leerse juntas. Con ocho ejecuciones en el denominador de
+**Y el coste de esa protección se analiza junto al beneficio, no después.** Las dos cifras miden cosas
+distintas y no deben confundirse. La **cobertura es 6 de 10 ejecuciones con evidencia completa**: de las
+diez en que el manual documentaba la avería, el sistema respondió en seis. Pero las cuatro restantes no
+son cuatro oportunidades perdidas: dos de esas diez llevaban **diagnóstico incorrecto**, y en ellas
+abstenerse era lo que debía hacer. La parte evitable del coste es la otra cifra, **2 de 8**: dos
+abstenciones innecesarias sobre las ocho ejecuciones que debían explicar. La seguridad diagnóstica de
+este criterio se paga en capacidad efectiva de dar respuesta —y la cobertura es la cifra que un usuario
+nota—, pero el margen de mejora sin tocar el diagnóstico es 2/8, no 4/10. Con ocho ejecuciones en el denominador de
 `T_AI` y catorce en el de `T_FC` el intervalo de incertidumbre es amplio y no se calcula: un solo caso
 movería `T_AI` en 0,125.
 
