@@ -3,6 +3,20 @@
 Fecha: 1–2 de septiembre de 2026 · Estado: **cerrada** — dos iteraciones del ajuste, la segunda 9/9 sobre el conjunto anotado
 Modelo: Qwen2.5-3B-Instruct, local, sin clave de API
 
+> **Nota del 13-10-2026 — estas cifras de redacción están afectadas por contaminación.**
+> Los ejemplos con que se ajustó `models/slm_lora_v2` se generaron desde la **partición de
+> validación**, que es también donde se midió al redactor. Medido: **once de los diecisiete casos**
+> están sobre ventanas con las que el adaptador se ajustó; los seis restantes cubren **dos**
+> ventanas distintas. En los dos subconjuntos el resultado es el mismo —sin salidas inválidas ni
+> citas inventadas—, pero el subconjunto no visto es demasiado pequeño para estimar nada.
+> **Las cifras no se retiran ni se recalculan:** recalcularlas exige otro adaptador, y entonces
+> serían otras cifras. Lo que cambia es lo que se puede afirmar con ellas, que no es cómo redacta
+> ante evidencia nueva. Detalle y recuento:
+> [`auditoria-contaminacion-adaptador.md`](../methodology/auditoria-contaminacion-adaptador.md).
+> Lo que **no** queda afectado: las decisiones EXPLAIN/ABSTAIN, que las toma un criterio
+> determinista sin modelo de lenguaje, y la evaluación final de E19, cuyo solape con los ejemplos
+> de ajuste es cero ventanas y cero sesiones.
+
 ## Reparto de responsabilidades
 
 | Quién | Qué hace |

@@ -40,6 +40,41 @@ F03_thermostat_stuck__urban__08@120s
 F04_o2_lag__idle__02@120s
 ```
 
+### Al nivel del caso, que es el que importa para las cifras publicadas
+
+Las cinco ventanas de evaluación no pesan lo mismo: los diecisiete casos del conjunto anotado se
+reparten de forma desigual entre ellas, porque varias condiciones de corpus comparten ventana. El
+recuento por caso, medido contra el registro del adaptador vigente
+(`experiments/E13_agente_transformers-lora@slm_lora_v2.json`):
+
+| | Casos | Ventanas distintas |
+|---|---|---|
+| **Sobre ventanas que el adaptador vio** | **11 de 17** | 3 |
+| Sobre ventanas que no vio | **6 de 17** | **2** |
+
+Los once afectados: `C01`, `C02`, `C03`, `C10`…`C17`. Los seis limpios son `C04` —el fallo de
+encendido— y los cinco del caso de la fuga de vacío con sus condiciones, `C05`…`C09`.
+
+**Qué le hace esto al «17/17».** La cifra publicada —17 de 17 salidas válidas, 17 de 17 respetando
+el veredicto, cero citas inventadas— se descompone así:
+
+| Subconjunto | n | Válidas | Respetan el veredicto | Citas inventadas |
+|---|---|---|---|---|
+| Todos | 17 | 17 | 17 | 0 |
+| Vistos en el ajuste | 11 | 11 | 11 | 0 |
+| **No vistos** | **6** | **6** | **6** | **0** |
+
+El resultado **no cambia** en ninguno de los dos subconjuntos: el adaptador redacta igual de bien
+sobre lo que vio y sobre lo que no. Eso es tranquilizador y **no es una demostración**. Seis casos
+sobre **dos** ventanas distintas no sostienen una afirmación sobre cómo redacta ante evidencia
+nueva: cinco de los seis son el mismo paquete de evidencia bajo cinco condiciones de corpus
+distintas, de modo que las observaciones que el redactor recibe son casi las mismas en cinco de los
+seis casos. Lo que de verdad hay son **dos** situaciones no vistas, no seis.
+
+**Lo que se puede decir, y es todo lo que se puede decir:** la cifra de 17/17 se midió en su mayor
+parte sobre ventanas vistas en el ajuste; en el subconjunto no visto, que es demasiado pequeño para
+estimar nada, no se observa degradación.
+
 ### Qué significa y qué no
 
 **Lo que queda comprometido:** las cifras de calidad de redacción de E13 y E15 sobre validación
@@ -81,6 +116,12 @@ El reentrenamiento en `models/slm_lora_v3` corrige **las dos** contaminaciones:
    es por sesión, de modo que la disyunción con validación y prueba es estructural y no depende de
    que nadie se acuerde.
 2. **Con la recuperación corregida**, posterior al espacio de embeddings mezclado.
+
+Y **el conjunto sobre el que se medirá** se congela también antes, en
+[`evaluacion-independiente-redactor.md`](evaluacion-independiente-redactor.md): quince ventanas de
+validación de `synthetic_v3` que ninguno de los dos adaptadores ha visto. Buscarlo dejó un hallazgo
+propio: **dentro de `synthetic_v2` ese conjunto no existe**, porque descontadas las sesiones vistas
+no queda ni una ventana de ninguna clase de fallo.
 
 Y se comprueba **antes de entrenar**, no después: el generador de ejemplos verifica que ninguna
 ventana ni ninguna sesión de los ejemplos aparece en validación ni en prueba, y se detiene si

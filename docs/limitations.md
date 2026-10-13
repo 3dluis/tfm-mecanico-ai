@@ -23,11 +23,19 @@ el criterio fijado de antemano, «sin efecto detectable con este instrumento». 
 adaptador LoRA, entrenado sobre el conjunto anterior y no reentrenado
 (`docs/experiments/resultado-rerun-a.md`).
 
+**Ampliación del 13-10-2026.** La auditoría previa al reentrenamiento encontró que la limitación del
+adaptador era **más amplia** de lo que esta sección declaraba. No es solo que sus ejemplos vengan de
+una recuperación anterior: es que se generaron desde la **partición de validación**, que es donde se
+mide la calidad de redacción. Ver L-23 y
+`docs/methodology/auditoria-contaminacion-adaptador.md`.
+
 ## Alcance de lo que se puede afirmar
 
 | Id | Limitación | Severidad |
 |---|---|---|
-| L-17 | Todas las cifras disponibles son de validación; el conjunto de test está cerrado por excepción y nunca se abrió | baja (por diseño), pero condiciona toda lectura |
+| L-17 | **Corregida el 13-10-2026.** Decía: «el conjunto de test está cerrado por excepción y nunca se abrió». **Ya no es cierto.** Se abrió **cinco** veces, y en cuatro hubo exposición de etiquetas y de predicciones; una fue accidental. La partición de prueba es un recurso **gastado**: rindió E19 y la comprobación P3, las dos con su exposición declarada, y **no queda margen para una pregunta nueva que necesite independencia**. Lo que sí se sostiene, y es comprobable con un comando, es que el instrumento no cambió entre la primera apertura y la medición (`docs/methodology/registro-aperturas-test.md`, cinco niveles de apertura) | alta |
+| L-23 | **El adaptador del redactor se ajustó sobre las ventanas en que se le midió.** Los ejemplos de `models/slm_lora_v2` se generaron desde la partición de validación, donde E13 y E15 miden la calidad de redacción: **11 de los 17 casos** están sobre ventanas vistas en el ajuste. El resultado no se degrada en los 6 no vistos, pero esos 6 cubren **dos** ventanas distintas y no estiman nada. El reentrenamiento sin contaminación se diseñó, se preparó y **se detuvo por memoria insuficiente**, con la causa medida: 25,4 GB de huella física en una máquina de 24 GB (`docs/experiments/incidencia-p2-02.md`). No afecta a las decisiones EXPLAIN/ABSTAIN, que no usan modelo de lenguaje, ni a E19, cuyo solape con los ejemplos de ajuste es cero | alta |
+| L-24 | **No existe, dentro de `synthetic_v2`, un conjunto con el que evaluar al redactor sin contaminación.** Medido: descontadas las sesiones que el adaptador vio y las de la evaluación de E15, la partición de validación deja 2 sesiones y ninguna de clase de fallo. La partición quedó consumida por el ajuste. El conjunto independiente se construye desde validación de `synthetic_v3` y está congelado sin ejecutar (`docs/methodology/evaluacion-independiente-redactor.md`) | media |
 | L-19 | Los resultados describen un solo vehículo (Mazda 3 BK 2007, motor Z6) | alta |
 | L-13 | El alcance ejecutado es más estrecho que el alcance aprobado por la dirección (pregunta abierta P-03) | alta |
 | L-21 | El catálogo de fallos del modelo de diagnóstico es cerrado: cinco condiciones más normal | media |
