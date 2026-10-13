@@ -1,6 +1,6 @@
 {
-  "tomado_el": "2026-10-13T15:31:14.326048+00:00",
-  "cambios_aceptados_a_proposito": true,
+  "tomado_el": "2026-10-13T17:54:49.136197+00:00",
+  "cambios_aceptados_a_proposito": false,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
   "patrones": [
@@ -19,7 +19,7 @@
     "configs/goldset_mazda3_bk.yaml",
     "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 151,
+  "n_artefactos": 156,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": {
       "sha256": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
@@ -39,6 +39,10 @@
     },
     "experiments/E13_agente_transformers-lora@slm_lora_v2.json": {
       "sha256": "ea620239a3d7fb00f05f212dd267e750869894b0c06de1b3ed85f65d89a4d085",
+      "versionado": true
+    },
+    "experiments/E13_agente_transformers-lora@slm_lora_v2_distractor_v2_redaccion.json": {
+      "sha256": "e8561000390e5b494f9237a8adf7faf0afa7c8309c73423569c4f5d15e99b316",
       "versionado": true
     },
     "experiments/E13_agente_transformers-lora_esquema_v1.json": {
@@ -75,6 +79,14 @@
     },
     "experiments/E15_suficiencia_adverse_v2_2.json": {
       "sha256": "ac7f0c2a311439acaf393cba7e21c3451b315df2adda5f711ee62a9c3668eae7",
+      "versionado": true
+    },
+    "experiments/E15_suficiencia_distractor_v2.json": {
+      "sha256": "ae25da2a69356e43928a3419d1df4b1746fd80f817bc3c1944b136b42dedb1a1",
+      "versionado": true
+    },
+    "experiments/E15_suficiencia_distractor_v2_redaccion.json": {
+      "sha256": "f524d276043e72b559c430ff1460e96029cdd8cb5e79dd00e324ccf95c53e151",
       "versionado": true
     },
     "experiments/E15_suficiencia_non_oracle.json": {
@@ -247,6 +259,14 @@
     },
     "tables/E15_suficiencia_adverse_v2_2.csv": {
       "sha256": "153938201bda9198d8d543ac21b2c7df8c3fa15e934e40b250088833e5087e54",
+      "versionado": false
+    },
+    "tables/E15_suficiencia_distractor_v2.csv": {
+      "sha256": "7074d0ef2376afe8fca304d7cf0f02ee2c6e41bda746ec7262646863f20c4853",
+      "versionado": false
+    },
+    "tables/E15_suficiencia_distractor_v2_redaccion.csv": {
+      "sha256": "7074d0ef2376afe8fca304d7cf0f02ee2c6e41bda746ec7262646863f20c4853",
       "versionado": false
     },
     "tables/E15_suficiencia_non_oracle.csv": {
