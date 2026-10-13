@@ -18,7 +18,7 @@ from mecanico_ia_exp.data.exploration import cliffs_delta, noise_floor_max_delta
 from mecanico_ia_exp.data.splits import PARTICIONES, audit_masks, split_by_session
 from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.features.temporal import FEATURE_NAMES, extract_features
-from mecanico_ia_exp.obd.auditoria import exigir_auditoria_limpia
+from mecanico_ia_exp.obd.auditoria import auditar, exigir_auditoria_limpia
 from mecanico_ia_exp.obd.faults import FAULTS, NORMAL_ID
 from mecanico_ia_exp.obd.procedencia import ruta_de
 from mecanico_ia_exp.timeseries.windowing import WindowConfig, make_windows
@@ -149,9 +149,21 @@ def run_preprocess(dataset_id: str = DATASET, *, etiqueta: str = "") -> int:
     manifiesto_de_procedencia = ruta_de(dataset_id)
     if manifiesto_de_procedencia.is_file():
         manifiesto = json.loads(manifiesto_de_procedencia.read_text("utf-8"))
-        print(f"\nAuditoría del generador ({manifiesto_de_procedencia.name}):")
-        for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
-            print(f"  {comprobacion}")
+        esquema = manifiesto.get("expression", {}).get("esquema", "vigente")
+        if esquema == "historico":
+            # Un conjunto reconstruido en esquema histórico no trae las columnas
+            # de expresión, así que la comprobación 8 no se puede verificar. Se
+            # informa la auditoría entera sin bloquear, igual que con los tres
+            # conjuntos congelados, porque es exactamente lo que es: uno de
+            # ellos, reconstruido.
+            print(f"\nAuditoría del generador ({manifiesto_de_procedencia.name}, "
+                  "esquema histórico, informativa):")
+            for comprobacion in auditar(datos, manifiesto):
+                print(f"  {comprobacion}")
+        else:
+            print(f"\nAuditoría del generador ({manifiesto_de_procedencia.name}):")
+            for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
+                print(f"  {comprobacion}")
     elif dataset_id in ANTERIORES_AL_MANIFIESTO:
         print(
             f"\nAVISO: {dataset_id} es anterior al manifiesto de procedencia, así que la "
