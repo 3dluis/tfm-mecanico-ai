@@ -193,9 +193,20 @@ def test_censar_no_toca_nada(tmp_path) -> None:
 
 
 def test_el_censo_usa_rutas_relativas_a_la_raiz() -> None:
+    """Relativas, y presentes **las versionadas**.
+
+    Exigir que estén todas haría fallar este test en un clon recién hecho, que
+    es justamente el escenario en que tiene que pasar: las no versionadas
+    faltan ahí por diseño.
+    """
     declaradas = json.loads(REGISTRO_HISTORICO.read_text("utf-8"))["huellas_sha256"]
     assert all(not ruta.startswith("/") for ruta in declaradas)
-    assert all((paths.ROOT / ruta).is_file() for ruta in declaradas)
+    faltan = [
+        ruta
+        for ruta, entrada in declaradas.items()
+        if entrada["versionado"] and not (paths.ROOT / ruta).is_file()
+    ]
+    assert not faltan, f"artefactos versionados que no están: {faltan}"
 
 
 # ------------------------------------------- los siete ejecutores, uno por uno
