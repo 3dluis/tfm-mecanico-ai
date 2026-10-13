@@ -1,4 +1,4 @@
-# Impacto de L-26 sobre E13 y sobre el «17/17 válidas»
+# Impacto de L-26 sobre E13, sobre el «17/17 válidas» y sobre E19
 
 **Fecha:** 13 de octubre de 2026 · **Qué es:** el análisis de impacto que el encargo pide, con las
 cifras medidas · **Qué NO es:** una modificación de ningún resultado. **Los registros de E13 y de P1
@@ -23,6 +23,42 @@ El segundo caso es el grave y no se había visto hasta ahora. **La afirmación c
 correcto** —`OBS001`— y **corrompe el valor que cita**. No es un redondeo: 0,083801 redondeado a
 cinco decimales es 0,08380, no 0,08381.
 
+## 1 bis. **La evaluación final también está afectada, y más**
+
+Al extender la auditoría a `E19_evaluacion_final_v3.json` —que guarda las salidas del redactor en otra
+forma, en `strata[*].writing.runs`— aparece lo que no se había mirado:
+
+| | Abstenciones con cifra ajena | Afirmaciones con cifra ajena | **Salidas afectadas** |
+|---|---|---|---|
+| E13, los 17 casos anotados | 3 de 14 | 2 de 9 | 4 de 17 |
+| **E19, la evaluación final** | **3 de 26** | **8 de 27** | **7 de 35** |
+
+Por estrato: **5 de 22** en el operativo, **2 de 11** en el comparativo, **0 de 2** en el adverso.
+
+**Y el peor caso de todo el trabajo está aquí.** En `operativo/C07_partial`:
+
+```
+verificador:  "cobertura 0.00 < 0.80"
+redactor:     "cobertura 0.852 < 0.90"
+```
+
+El redactor inventó **el valor y el umbral**. La comparación resultante, 0,852 < 0,90, es
+aritméticamente **cierta**, de modo que no hay nada en la frase que delate el error: es más peligrosa
+que la internamente falsa de `C07` en E13, porque se lee impecable y no se refiere a nada.
+
+En `C03_o2_slow_response` del estrato operativo, **cinco** de sus afirmaciones llevan un valor que no
+sale de la observación que citan, incluida una con signo: −0,07437.
+
+**Qué significa para la cifra principal del trabajo.** El informe de E19 publica «35/35 salidas
+válidas, 35/35 respetan el veredicto, cero citas falsas». Las tres cifras **siguen siendo ciertas** y
+ninguna se retira. Lo que ya no se puede afirmar con ellas es que el texto de la evaluación final sea
+numéricamente fiel: **siete de las treinta y cinco** contienen al menos una cifra que no procede de
+los datos que el modelo recibió.
+
+**Qué NO significa.** Ninguna de las dos tasas de E19 cambia. `T_FC = 0/14` y `T_AI = 2/8` las produce
+el **verificador determinista**, que no usa modelo de lenguaje. El defecto está en el texto que
+acompaña a la decisión, no en la decisión.
+
 ## 2. Lo medido, configuración por configuración
 
 | Configuración | Abstenciones con cifra ajena | Afirmaciones con cifra ajena | Salidas con defecto |
@@ -31,6 +67,7 @@ cinco decimales es 0,08380, no 0,08381.
 | Adaptador v1 | 1 de 8 | 0 de 9 | 1 |
 | **Adaptador v2, el canónico** | **3 de 14** | **2 de 9** | **5** |
 | Adaptador v2 sobre los casos de P1 | 1 de 6 | — (ninguna explicación) | 1 |
+| **E19, la evaluación final** | **3 de 26** | **8 de 27** | **7 de 35** |
 
 **Detalle del canónico, que es el que sostiene las cifras publicadas:**
 
@@ -82,12 +119,13 @@ inventadas · 0 fallos de esquema**.
 |---|---|---|
 | **PI.1** diagnóstico, calibración, atribución | **no** | el redactor no diagnostica |
 | **PI.2** trazabilidad | **sí, y es el daño principal** | la cadena «afirmación → observación → fragmento» está verificada en sus **enlaces** y no en sus **valores**. Un lector que compruebe el identificador lo encontrará; si comprueba el número, en dos casos de nueve no coincidirá |
-| **PI.3** reconocimiento de insuficiencia | **no la decisión; sí su explicación** | la decisión la toma un criterio determinista sin modelo de lenguaje y no está afectada. El **motivo escrito** sí: tres de catorce abstenciones lo justifican con una cifra que el verificador no produjo |
+| **PI.3** reconocimiento de insuficiencia | **no la decisión; sí su explicación** | la decisión la toma un criterio determinista sin modelo de lenguaje y no está afectada. El **motivo escrito** sí: tres de catorce abstenciones en E13 y tres de veintiséis en E19 lo justifican con una cifra que el verificador no produjo, una de ellas con el valor **y** el umbral inventados |
 | **PI.4** rechazo de evidencia impertinente | **no** | P1 se decide con el verificador; su única salida afectada es la justificación escrita de `D01` |
 
 **Lo que NO cambia, y conviene decirlo con la misma claridad:** ninguna decisión del sistema es
-distinta por este defecto. Las 17 de E15, las 68 de E19 y las 6 de P1 las toma un criterio
-determinista que no usa el modelo de lenguaje. **El defecto está en el texto, no en la decisión.**
+distinta por este defecto, y **ninguna cifra de resultado se mueve**. Las 17 decisiones de E15, las de
+E19 —con `T_FC = 0/14` y `T_AI = 2/8`— y las 6 de P1 las toma un criterio determinista que no usa el
+modelo de lenguaje. **El defecto está en el texto, no en la decisión.**
 
 Y eso es exactamente lo que el hallazgo demuestra, en una forma que vale como resultado:
 **una decisión correcta no garantiza una explicación correcta.** Es la separación entre decidir y
@@ -101,6 +139,8 @@ protegió la parte que importaba y dejó sin proteger la que el usuario lee.
 | `docs/experiments/E13_agente_slm.md` | ya lleva la nota del 13-10-2026; se **amplía** con las dos afirmaciones de `C03` y con el recuento de 5 de 23 |
 | `docs/limitations.md` · `L-26` | se **amplía**: no es solo el campo de motivos, también el valor de las afirmaciones |
 | `docs/experiment-index.md` | la fila de E13 remite a este análisis |
+| `docs/experiments/E19_evaluacion_final.md` | se **amplía**: 7 de sus 35 salidas contienen una cifra ajena, y las dos tasas no cambian |
+| `notebooks/03_analisis_e19.ipynb` | se añade a sus limitaciones |
 | `docs/memoria/cap5_resultados.md` · Tabla 5.7 | entrada `A-2` de la matriz de impacto; la cifra no cambia, cambia lo que se afirma con ella |
 | `docs/memoria/cap6_conclusiones.md` · OE4 | entrada `A-5`: «no cita nada que no se le haya entregado» es cierto e **incompleto** |
 | **Los registros `experiments/E13_*.json` y los de P1** | **no se tocan.** Son la evidencia de lo que ocurrió |
@@ -112,8 +152,8 @@ protegió la parte que importaba y dejó sin proteger la que el usuario lee.
    modelo base frente a 5 de 23 del adaptador canónico— y **el número de casos no lo sostiene**. Con
    estos tamaños, la diferencia es compatible con el azar del muestreo. Para afirmarlo haría falta
    una medición diseñada para eso, sobre el conjunto de evaluación independiente que está congelado.
-2. **Que el defecto afecte al 22 % de las salidas** en ningún sentido poblacional. Cinco de
-   veintitrés describe veintitrés salidas sobre cinco ventanas de telemetría.
+2. **Ninguna tasa poblacional.** Cinco de veintitrés en E13 y siete de treinta y cinco en E19
+   describen esas salidas, sobre cinco y diez ventanas de telemetría respectivamente.
 3. **Que el mecanismo del fallo esté establecido.** Los dos patrones observados —sustituir una
    magnitud por otra y corromper dígitos— son los típicos de un modelo de lenguaje copiando números,
    y aquí solo están **descritos**, no explicados.

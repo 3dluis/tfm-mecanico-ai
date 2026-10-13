@@ -8029,7 +8029,7 @@ ventana etiquetada con la condición de cada sesión. 22 ejecuciones.</li>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       e8aa7bb
+commit       2fd5648
 arbol        sucio
 </pre>
 </div>
@@ -9892,10 +9892,33 @@ que no permite estimarlo con precisión.</li>
 <li><strong>Los denominadores son pequeños</strong>: 14, 8 y 10. Un solo caso mueve <code>T_AI</code> en 0,125.</li>
 <li><strong>El reparto 8/14 no estaba pre-registrado.</strong> La regla sí; el reparto que produjo, no.</li>
 <li><strong>La condición con distractor quedó fuera</strong> de los casos elegibles, porque no medía lo que decía
-medir. PI.4 no puede interpretarse hasta su rediseño.</li>
-<li><strong>El conjunto de prueba se abrió tres veces</strong>, contando los dos intentos interrumpidos. Las tres
-están registradas en <code>docs/methodology/registro-aperturas-test.md</code>, distinguiendo apertura
-técnica, exposición de etiquetas y uso efectivo de resultados. No se oculta.</li>
+medir: dos de las tres tenían la misma configuración que la condición parcial. <strong>Se rediseñó y se
+ejecutó aparte el 13 de octubre de 2026</strong> —seis abstenciones de seis, las seis por insuficiencia de
+la evidencia y ninguna por confianza baja—, y esa medición <strong>no forma parte de E19</strong>:
+<code>docs/experiments/P1_distractor_v2.md</code>.</li>
+<li><strong>El conjunto de prueba se abrió cinco veces</strong>, no tres. Las tres de E19 —contando los dos intentos
+interrumpidos—, una comprobación pre-registrada de las ablaciones el 13 de octubre y una <strong>apertura
+accidental</strong> que solo leyó identificadores de sesión. Las cinco están registradas en
+<code>docs/methodology/registro-aperturas-test.md</code>, clasificadas en <strong>cinco niveles</strong>: apertura técnica,
+lectura de identificadores, exposición de etiquetas, exposición de predicciones y utilización de
+resultados. En cuatro de las cinco hubo exposición de etiquetas y de predicciones. <strong>No se afirma
+que el conjunto permanezca intacto.</strong></li>
+<li><strong>Siete de las treinta y cinco salidas del redactor contienen una cifra que el verificador no
+produjo</strong> (<code>L-26</code>): 3 de 26 abstenciones y 8 de 27 afirmaciones. El peor caso está en
+<code>operativo/C07_partial</code>, donde el redactor escribió «cobertura 0.852 &lt; 0.90» y el verificador había
+escrito «cobertura 0.00 &lt; 0.80»: inventó el valor <strong>y</strong> el umbral, y la comparación resultante es
+aritméticamente cierta, así que nada en la frase delata el error. <strong>Ninguna de las dos tasas cambia
+por ello</strong>, porque las produce el verificador determinista; lo que cambia es que el texto de la
+evaluación final no es numéricamente fiel. Las tres barreras lo dejan pasar.</li>
+<li><strong>El adaptador del redactor se ajustó sobre ventanas de validación</strong> (<code>L-23</code>). E19 mide sobre
+prueba y su solape con los ejemplos de ajuste es <strong>cero ventanas y cero sesiones</strong>, de modo que sus
+cifras de redacción no están contaminadas por esa vía. Lo que sigue siendo cierto es que el
+adaptador no se ha reentrenado, y el reentrenamiento está <strong>detenido por memoria insuficiente</strong>:
+necesita más de 17 GB por paso (<code>docs/experiments/incidencia-p2-02.md</code>).</li>
+<li><strong><code>synthetic_v3</code>, el conjunto de esta evaluación, no es reconstruible</strong> con el generador publicado
+(<code>L-25</code>): es pre-calibración y ninguna de sus 216 sesiones se reproduce. Las cifras de E19 son
+correctas y <strong>no son reproducibles por un tercero</strong> sin los ficheros procesados, que no se
+distribuyen por tamaño.</li>
 <li><strong>Todo es sintético.</strong> La validez externa no está establecida.</li>
 <li><strong>Una sola ejecución.</strong> No hay repeticiones ni intervalos de confianza.</li>
 </ol>

@@ -9,6 +9,27 @@ congeladas:** `docs/methodology/congelacion-anotacion-e19.md`, ancladas en el co
 Este informe presenta lo medido, no lo deseable. El resultado primario está separado de los dos
 análisis descriptivos, los errores se enumeran todos y las limitaciones van al final sin atenuar.
 
+> **Nota del 13 de octubre de 2026 — siete de las treinta y cinco salidas del redactor contienen una
+> cifra que el verificador no produjo.** Auditado con `scripts/auditar_cifras_redactadas.py`: 3 de 26
+> abstenciones y 8 de 27 afirmaciones, repartidas en 5 de las 22 salidas del estrato operativo, 2 de
+> las 11 del comparativo y 0 de las 2 del adverso. El peor caso es `operativo/C07_partial`, donde el
+> redactor escribió «cobertura 0.852 < 0.90» y el verificador había escrito «cobertura 0.00 < 0.80»:
+> **inventó el valor y el umbral**, y la comparación resultante es aritméticamente cierta, de modo que
+> nada en la frase delata el error. En `C03_o2_slow_response`, cinco afirmaciones llevan un valor que
+> no sale de la observación que citan.
+>
+> **Qué NO cambia:** las dos tasas. `T_FC = 0/14` y `T_AI = 2/8` las produce el **verificador
+> determinista**, que no usa modelo de lenguaje, y ninguna decisión de las treinta y cinco es distinta
+> por este defecto. Tampoco cambian las tres cifras de redacción publicadas —35/35 válidas, 35/35
+> respetando el veredicto, cero citas falsas—: son ciertas y miden lo que miden. Lo que ya no se puede
+> afirmar con ellas es que el texto de la evaluación final sea **numéricamente fiel**.
+>
+> Las tres barreras del trabajo dejan pasar estas salidas, porque comprueban que el identificador
+> citado se entregara y no que el número dicho sea cierto. Es la limitación `L-26`; el análisis está en
+> [`../audits/impacto-l26-e13.md`](../audits/impacto-l26-e13.md) y la corrección propuesta, prospectiva
+> y sin implementar, en
+> [`../methodology/propuesta-validador-numerico.md`](../methodology/propuesta-validador-numerico.md).
+
 ## 1. Estado final y los tres intentos
 
 | Intento | Fecha | Hasta dónde llegó | Artefactos |
