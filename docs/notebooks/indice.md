@@ -38,8 +38,9 @@ caso, un acelerador. Cada notebook FULL documenta sus requisitos.
 | [`01_exploracion_obd`](html/01_exploracion_obd.html) | E2, E4, E5 | reanálisis + ilustrativa | DEMO | si las señales contienen estructura diagnóstica y de qué forma |
 | [`02_comparacion_modelos`](html/02_comparacion_modelos.html) | E6, E7 | visualización histórica | DEMO | si el modelo temporal supera a la línea base, y por qué la pregunta sigue abierta |
 | [`03_analisis_e19`](html/03_analisis_e19.html) | E19 | reanálisis sobre congelado | DEMO | si el criterio de suficiencia evita la falsa confianza sobre el conjunto de prueba |
+| [`04_explicabilidad`](html/04_explicabilidad.html) | E9, E18 (`A1`) | visualización histórica | DEMO | qué señal sostiene cada diagnóstico, y cuánto aporta la atribución |
 
-Los cuatro se ejecutan desde un kernel limpio en menos de dos minutos cada uno y están verificados
+Los cinco se ejecutan desde un kernel limpio en menos de dos minutos cada uno y están verificados
 por `tests/test_notebooks.py`.
 
 ## Notebooks heredados, pendientes de desarrollar
@@ -58,7 +59,7 @@ reescribirán conservando su número y su fase.
 | `04_preprocessing_features` | E5 | plantilla | los 139 descriptores, explicados |
 | `05_model_training` | E6 | plantilla | cubierto por `02_comparacion_modelos` |
 | `06_model_evaluation` | E7 | plantilla | cubierto por `02_comparacion_modelos` |
-| `07_xai` | E9 | plantilla | atribución de Shapley; **pendiente** |
+| `07_xai` | E9 | plantilla | cubierto por `04_explicabilidad` |
 | `08_rag_corpus` | E10, E11 | plantilla | FULL: exige el corpus y pgvector |
 | `09_retrieval_evaluation` | E12 | plantilla | FULL: exige pgvector |
 | `10_llm_agent` | E13 | plantilla | FULL: exige los pesos del adaptador |
@@ -73,8 +74,6 @@ reescribirán conservando su número y su fase.
 
 **No se crean notebooks vacíos para funcionalidad inexistente.** Faltan:
 
-- **Atribución (E9).** El experimento está cerrado y tiene registro; el notebook es el siguiente de
-  la lista y se puede hacer en modo DEMO leyendo `artifacts/tables/E9_*.csv`.
 - **Corpus, recuperación, suficiencia y abstención (E10–E16).** Son FULL: dependen del corpus
   documental, que no se redistribuye. Su notebook puede leer los registros en DEMO y declarar la
   parte no reproducible, y así se hará.
