@@ -56,9 +56,22 @@ fallos concurrentes y ruido de adquisición.
 
 **Límite encontrado que sí trasladaría:** el termostato bloqueado es
 **físicamente indetectable** mientras el motor no habría superado su techo de
-71 °C. Las ventanas que el modelo falla tienen 54,3 °C de media; las que acierta,
-70,7. Ningún clasificador distingue dos señales idénticas, y eso ocurre igual en
+71 °C. Ningún clasificador distingue dos señales idénticas, y eso ocurre igual en
 un coche real.
+
+> **`NO UTILIZABLES 2026-10-12`** las dos cifras que esta nota traía —«las ventanas que el modelo
+> falla tienen 54,3 °C de media; las que acierta, 70,7»—. **No tienen registro**: ninguna tabla ni
+> ningún JSON del repositorio las contiene, de modo que no se pueden verificar. Es uno de los cinco
+> casos de `EVID-MAJ-019`. No se citan en ningún sitio como utilizables hasta regenerarlas como
+> artefacto, y el protocolo para hacerlo está en `docs/diseno-pi1/08-analisis-por-fallo.md`: una
+> reejecución de E6 **con destino propio**, guardando la predicción de cada ventana, y el mismo
+> estadístico —la **media** de `coolant_temperature_mean` por grupo, no el máximo—.
+>
+> Lo que **sí** está medido, y no depende de esas dos cifras, es que el fallo del termostato no
+> altera la trayectoria mientras el refrigerante no supera su tope: la desviación frente al
+> contrafactual es **exactamente cero**, y en una sesión de calentamiento eso deja **once de quince**
+> ventanas etiquetadas sin ninguna señal observable del fallo
+> (`docs/methodology/expresion-efectiva-del-fallo.md`).
 
 ---
 
