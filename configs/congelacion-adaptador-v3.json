@@ -109,7 +109,18 @@
     "3": "11 min 30, detenido por decision con la causa MEDIDA: 25,4 GB de huella fisica en 24 GB, 22,8 GB en el asignador de Metal",
     "4": "fallo en el primer paso con techo 0,70: informacion util, el numero que falta",
     "5": "techo 0,85: fallo en la pasada hacia atras. Informacion: el pico real es ~15,6 GB",
-    "6": "techo 0,95 (16,9 GB), vaciado por paso"
+    "6": "techo 0,95: ENTRENO 10 ejemplos (epoca 1, paso 10/101, perdida 1,0785) y fallo en uno mas largo pidiendo ~17,0 GB. La alternativa A se agota aqui: la necesidad no es un pico fijo, crece con la longitud del ejemplo, y 47 de 101 ejemplos llegan al tope de 3072 tokens"
   },
-  "dato_del_ajuste_que_conviene_registrar": "47 de los 101 ejemplos de entrenamiento se recortan al tope de 3072 tokens. Es casi la mitad, y no se cambia el tope: cambiarlo seria modificar un hiperparametro congelado. Queda declarado"
+  "dato_del_ajuste_que_conviene_registrar": "47 de los 101 ejemplos de entrenamiento se recortan al tope de 3072 tokens. Es casi la mitad, y no se cambia el tope: cambiarlo seria modificar un hiperparametro congelado. Queda declarado",
+  "estado": "ALTERNATIVA A AGOTADA con la causa medida. El ajuste necesita >17 GB por paso y la maquina tiene 24 GB en total. La decision vuelve al autor entre B (CPU), D (otra maquina) o E (cerrar P2 como limitacion). C queda descartada: bajar el tope de longitud seria modificar un hiperparametro congelado para que quepa",
+  "distribucion_de_longitudes_medida": {
+    "tokenizador": "Qwen/Qwen2.5-3B-Instruct, sobre los 101 ejemplos de ajuste",
+    "minimo": 984,
+    "mediana": 2874,
+    "maximo": 4361,
+    "percentil_75": 3586,
+    "percentil_90": 4348,
+    "al_tope_de_3072_o_mas": "47 de 101",
+    "por_que_importa": "el pico de memoria de un paso lo fija la longitud del ejemplo; los que topan piden ~17 GB"
+  }
 }

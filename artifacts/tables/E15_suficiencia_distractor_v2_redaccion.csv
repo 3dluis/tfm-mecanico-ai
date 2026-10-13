@@ -1,0 +1,7 @@
+case_id_gold,fault_id,predicted_class,prediction_correct,case_id,corpus_variant,n_excluded_chunks,expected_action,decision,correct,sufficiency,reasons,confidence,model_confidence,calibrated,n_observations,n_documents_retrieved,n_documents_applicable,n_distinct_sources,best_retrieval_score,claim_coverage,n_claims
+P01_vacuum_leak_partial_v2,F01_vacuum_leak,F01_vacuum_leak,True,F01_vacuum_leak__idle__10@120s,PARTIAL,61,ABSTAIN,ABSTAIN,True,INSUFFICIENT_EVIDENCE,LOW_CLAIM_COVERAGE,0.9078,0.6851,True,5,10,4,1,0.5176,0.0,3
+D01_vacuum_leak_distractor_v2,F01_vacuum_leak,F01_vacuum_leak,True,F01_vacuum_leak__idle__10@120s,DISTRACTOR,51,ABSTAIN,ABSTAIN,True,INSUFFICIENT_EVIDENCE,LOW_CLAIM_COVERAGE,0.9078,0.6851,True,5,10,5,1,0.5176,0.0,3
+P02_thermostat_partial_v2,F03_thermostat_stuck,F03_thermostat_stuck,True,F03_thermostat_stuck__urban__08@120s,PARTIAL,16,ABSTAIN,ABSTAIN,True,INSUFFICIENT_EVIDENCE,LOW_CLAIM_COVERAGE,1.0,0.9482,True,5,6,4,1,0.3653,0.0,3
+D02_thermostat_distractor_v2,F03_thermostat_stuck,F03_thermostat_stuck,True,F03_thermostat_stuck__urban__08@120s,DISTRACTOR,4,ABSTAIN,ABSTAIN,True,INSUFFICIENT_EVIDENCE,LOW_CLAIM_COVERAGE,1.0,0.9482,True,5,9,7,1,0.3653,0.0,3
+P03_o2_partial_v2,F04_o2_lag,F04_o2_lag,True,F04_o2_lag__idle__02@120s,PARTIAL,11,ABSTAIN,ABSTAIN,True,INSUFFICIENT_EVIDENCE,LOW_CLAIM_COVERAGE,1.0,0.9546,True,5,9,5,1,0.4595,0.0,3
+D03_o2_distractor_v2,F04_o2_lag,F04_o2_lag,True,F04_o2_lag__idle__02@120s,DISTRACTOR,6,ABSTAIN,ABSTAIN,True,INSUFFICIENT_EVIDENCE,LOW_CLAIM_COVERAGE,1.0,0.9546,True,5,10,6,1,0.4595,0.0,3

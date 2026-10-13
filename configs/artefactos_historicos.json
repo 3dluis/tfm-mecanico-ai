@@ -1,5 +1,5 @@
 {
-  "tomado_el": "2026-10-13T17:54:49.136197+00:00",
+  "tomado_el": "2026-10-13T18:14:50.266649+00:00",
   "cambios_aceptados_a_proposito": false,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
@@ -19,7 +19,7 @@
     "configs/goldset_mazda3_bk.yaml",
     "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 156,
+  "n_artefactos": 158,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": {
       "sha256": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
@@ -543,6 +543,14 @@
     },
     "artifacts/tables/E15_suficiencia_adverse_v2_2.csv": {
       "sha256": "153938201bda9198d8d543ac21b2c7df8c3fa15e934e40b250088833e5087e54",
+      "versionado": true
+    },
+    "artifacts/tables/E15_suficiencia_distractor_v2.csv": {
+      "sha256": "7074d0ef2376afe8fca304d7cf0f02ee2c6e41bda746ec7262646863f20c4853",
+      "versionado": true
+    },
+    "artifacts/tables/E15_suficiencia_distractor_v2_redaccion.csv": {
+      "sha256": "7074d0ef2376afe8fca304d7cf0f02ee2c6e41bda746ec7262646863f20c4853",
       "versionado": true
     },
     "artifacts/tables/E15_suficiencia_non_oracle.csv": {

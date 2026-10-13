@@ -36,6 +36,7 @@ estas son las que documentan los informes de fase y las que un revisor puede reg
 | `E9_atribuciones_synthetic_v2.csv`, `E9_resumen_synthetic_v2.csv` | E9 | `xai_runner.py` | `E9_xai_synthetic_v2.json` | `docs/experiments/E9_atribucion.md` |
 | `E12_retrieval_por_caso.csv`, `E12_retrieval_por_estrategia.csv` | E12 (**RERUN-A, 13-09-2026**, recuperación canónica) | `retrieval_runner.py` | `E12_retrieval.json` (commit `e93dda9`) | cap. 5 §PI.2 |
 | `E15_suficiencia.csv`, `E15_suficiencia_non_oracle.csv` | E15 (**RERUN-A, 13-09-2026**) | `sufficiency_runner.py` | `E15_suficiencia.json`, `E15_suficiencia_non_oracle.json` | cap. 5 §PI.3 y PI.4 |
+| `E15_suficiencia_distractor_v2.csv`, `E15_suficiencia_distractor_v2_redaccion.csv` | **P1, rediseño de la condición con distractor** (13-10-2026, commit `3281758`) | `sufficiency_runner.py` con `--goldset goldset_mazda3_bk_distractor_v2.yaml` | `E15_suficiencia_distractor_v2.json`, `E15_suficiencia_distractor_v2_redaccion.json`, `E13_agente_transformers-lora@slm_lora_v2_distractor_v2_redaccion.json` | `docs/experiments/P1_distractor_v2.md`; cap. 5 §PI.4 cuando se incorpore |
 | `E15b_barrido_umbral.csv` | E15b | `threshold_runner.py` | `E15b_barrido_umbral.json` (commit `35d2360`) | `docs/methodology/criterio-umbral-enmienda-01.md` |
 
 Las tablas de E12 y E15 anteriores a RERUN-A no se versionaron en su día; sus valores caso a
