@@ -41,16 +41,6 @@ def main(argv: list[str] | None = None) -> int:
     ):
         sub = subparsers.add_parser(nombre, help=ayuda)
         sub.add_argument("--dataset-id", default="synthetic_v2")
-        if nombre != "preprocess":
-            sub.add_argument(
-                "--etiqueta",
-                default="",
-                help=(
-                    "identifica la ejecución y entra en el nombre de todos sus artefactos; "
-                    "sin ella se usan los nombres históricos y la ejecución se niega a "
-                    "sobrescribirlos"
-                ),
-            )
     train_baseline = subparsers.choices["train-baseline"]
     train_baseline.add_argument(
         "--por-ventana",
@@ -184,6 +174,30 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
 
+    # La etiqueta va a TODOS los ejecutores que escriben artefactos, y en un solo
+    # sitio para que añadir un subcomando sin ella se note. Sin etiqueta, el
+    # ejecutor conserva los nombres históricos y se niega a sobrescribirlos; sin
+    # esta opción, esos subcomandos no podrían reejecutarse desde la línea de
+    # órdenes, que es peor que no protegerlos.
+    for nombre in (
+        "train-baseline",
+        "train-temporal",
+        "xai",
+        "eval-retrieval",
+        "threshold-sweep",
+        "training-data",
+        "ablations",
+    ):
+        subparsers.choices[nombre].add_argument(
+            "--etiqueta",
+            default="",
+            help=(
+                "identifica la ejecución y entra en el nombre de todos sus artefactos; "
+                "sin ella se usan los nombres históricos y la ejecución se niega a "
+                "sobrescribirlos"
+            ),
+        )
+
     args = parser.parse_args(argv)
 
     if args.command == "doctor":
@@ -234,24 +248,24 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "xai":
         from mecanico_ia_exp.experiments.xai_runner import run_xai
 
-        return run_xai()
+        return run_xai(etiqueta=args.etiqueta)
 
     if args.command == "eval-retrieval":
         from mecanico_ia_exp.experiments.retrieval_runner import (
             run_retrieval_evaluation,
         )
 
-        return run_retrieval_evaluation()
+        return run_retrieval_evaluation(etiqueta=args.etiqueta)
 
     if args.command == "threshold-sweep":
         from mecanico_ia_exp.experiments.threshold_runner import run_threshold_sweep
 
-        return run_threshold_sweep(args.dataset_id)
+        return run_threshold_sweep(args.dataset_id, etiqueta=args.etiqueta)
 
     if args.command == "training-data":
         from mecanico_ia_exp.experiments.training_runner import run_training_data
 
-        return run_training_data()
+        return run_training_data(etiqueta=args.etiqueta)
 
     if args.command == "finetune-slm":
         from mecanico_ia_exp.llm.finetune import FinetuneConfig, finetune
@@ -283,6 +297,7 @@ def main(argv: list[str] | None = None) -> int:
             args.dataset_id,
             ablation=args.ablation,
             oracle=args.mode == "oracle",
+            etiqueta=args.etiqueta,
         )
 
     if args.command == "final-evaluation":
