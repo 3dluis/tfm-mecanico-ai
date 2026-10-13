@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from mecanico_ia_exp.abstention.sufficiency import POLITICAS, VERIFIER_VERSION
 from mecanico_ia_exp.config import paths
@@ -437,9 +438,40 @@ def main(argv: list[str] | None = None) -> int:
         if congelacion.is_file():
             import hashlib
 
-            declaradas = json.loads(congelacion.read_text("utf-8"))["datos_de_ajuste"][
-                "huellas_sha256_16"
-            ]
+            congelado = json.loads(congelacion.read_text("utf-8"))
+
+            # Las huellas no bastan: comprobarlas y después ajustar con OTRO
+            # directorio de datos, o con otro número de épocas, produciría un
+            # adaptador que no es el congelado con apariencia de serlo. Se ata
+            # también el origen de los datos y los hiperparámetros que el fichero
+            # declara.
+            # Se compara el directorio que de verdad se va a usar, no la etiqueta:
+            # omitir `--datos` resolvía al conjunto histórico y la comprobación
+            # anterior lo dejaba pasar por estar vacía la etiqueta.
+            # Comparación EXACTA del nombre de directorio. Buscarlo como
+            # subcadena dejaba pasar el histórico, porque `slm_finetune_prepared`
+            # está contenido en `slm_finetune_prepared_sin_contaminacion`.
+            esperado = congelado["datos_de_ajuste"]["ficheros"]["preparados"]
+            directorio_congelado = Path(esperado).parent.name
+            directorio = f"slm_finetune_prepared{sufijo_datos}"
+            if directorio != directorio_congelado:
+                print(
+                    f"{congelacion.name} congela los ejemplos de «{esperado}» y se ha pedido "
+                    f"ajustar con «{directorio}».\n"
+                    "Un adaptador entrenado con otros datos no es el experimento congelado.\n"
+                    "\nNo se ajusta nada."
+                )
+                return 1
+            epocas = int(congelado["hiperparametros"]["epochs"])
+            if args.epochs != epocas:
+                print(
+                    f"{congelacion.name} congela {epocas} épocas y se han pedido "
+                    f"{args.epochs}. El criterio de parada es parte del experimento "
+                    "congelado.\n\nNo se ajusta nada."
+                )
+                return 1
+
+            declaradas = congelado["datos_de_ajuste"]["huellas_sha256_16"]
             discrepantes = []
             for relativa, esperada in sorted(declaradas.items()):
                 fichero = paths.DATA_PROCESSED / relativa
@@ -458,8 +490,8 @@ def main(argv: list[str] | None = None) -> int:
                 )
                 return 1
             print(
-                f"congelación verificada: los {len(declaradas)} ficheros de ajuste coinciden "
-                f"con {congelacion.name}"
+                f"congelación verificada: {len(declaradas)} ficheros, origen de los datos y "
+                f"{epocas} épocas coinciden con {congelacion.name}"
             )
 
         h = finetune(
