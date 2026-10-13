@@ -2,11 +2,20 @@
 
 Solo se usan entrenamiento y validación. El test permanece cerrado hasta E19, y
 ``load_partition`` lo impide por construcción.
+
+**Sobre los destinos.** Este ejecutor escribía en seis rutas fijas --un registro,
+tres tablas y dos figuras--, que son los artefactos publicados de E6. Reejecutarlo
+para obtener predicciones por ventana los habría sobrescrito, de modo que la
+verificación habría destruido la evidencia que verifica. Ahora toda ejecución
+lleva **etiqueta**: sin ella se conservan los nombres históricos y la ejecución
+**se niega a escribir** si ya existen; con ella, los seis artefactos van a rutas
+propias y el registro declara de qué protocolo salen.
 """
 
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -14,6 +23,7 @@ import pandas as pd
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
 from mecanico_ia_exp.evaluation.metrics import evaluate_classification
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.models.baseline import (
     BaselineConfig,
     train_baseline,
@@ -24,9 +34,50 @@ from mecanico_ia_exp.visualization import modeling
 
 DATASET = "synthetic_v2"
 
+#: Protocolo del que salen las cifras publicadas de E6: bosque **sin calibrar**,
+#: con el ECE calculado sobre ``predict_proba`` en crudo. Se nombra para que una
+#: ejecución con otro protocolo no se confunda con esta.
+PROTOCOLO_HISTORICO = "E6_v1_bosque_sin_calibrar"
 
-def run_baseline(dataset_id: str = DATASET) -> int:
-    """Entrena el baseline, lo evalúa en validación y guarda los artefactos."""
+
+def destinos_de(dataset_id: str, etiqueta: str = "") -> dict[str, Path]:
+    """Los seis artefactos que una ejecución escribe, más el de por ventana.
+
+    Juntos y antes de escribir el primero, porque es la única forma de
+    comprobar que ninguno pisa a un artefacto anterior.
+    """
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    base = f"E6{sufijo}"
+    return {
+        "registro": paths.EXPERIMENTS / f"{base}_baseline_{dataset_id}.json",
+        "tabla_por_clase": paths.TABLES / f"{base}_baseline_por_clase_{dataset_id}.csv",
+        "tabla_confusion": paths.TABLES / f"{base}_baseline_confusion_{dataset_id}.csv",
+        "tabla_importancias": paths.TABLES / f"{base}_baseline_importancias_{dataset_id}.csv",
+        "figura_confusion": paths.FIGURES / f"FIG-{base}-01_confusion_baseline.png",
+        "figura_limite": paths.FIGURES / f"FIG-{base}-02_limite_evidencia_f03.png",
+        "por_ventana": paths.TABLES / f"{base}_predicciones_por_ventana_{dataset_id}.csv",
+    }
+
+
+def run_baseline(
+    dataset_id: str = DATASET,
+    *,
+    etiqueta: str = "",
+    por_ventana: bool = False,
+) -> int:
+    """Entrena el baseline, lo evalúa en validación y guarda los artefactos.
+
+    ``etiqueta`` identifica la ejecución y entra en el nombre de **todos** los
+    artefactos. ``por_ventana`` añade la predicción de cada ventana con su
+    sesión y su temperatura media, que es lo que permite cruzar los errores del
+    termostato con la expresión efectiva del fallo en lugar de inferirla de
+    estadísticos agregados.
+    """
+    destinos = destinos_de(dataset_id, etiqueta)
+    if not por_ventana:
+        destinos.pop("por_ventana")
+    exigir_libres(destinos)
+
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
     clases = tuple(sorted(set(entrenamiento.y.tolist())))
@@ -82,9 +133,9 @@ def run_baseline(dataset_id: str = DATASET) -> int:
         .to_string()
     )
 
-    tablas = paths.ensure(paths.TABLES)
-    informe.per_class.to_csv(tablas / f"E6_baseline_por_clase_{dataset_id}.csv", index=False)
-    informe.confusion.to_csv(tablas / f"E6_baseline_confusion_{dataset_id}.csv")
+    paths.ensure(paths.TABLES)
+    informe.per_class.to_csv(destinos["tabla_por_clase"], index=False)
+    informe.confusion.to_csv(destinos["tabla_confusion"])
 
     importancias = pd.DataFrame(
         {
@@ -92,13 +143,29 @@ def run_baseline(dataset_id: str = DATASET) -> int:
             "importance": np.asarray(modelo.feature_importances_, dtype=np.float64),
         }
     ).sort_values("importance", ascending=False)
-    importancias.to_csv(tablas / f"E6_baseline_importancias_{dataset_id}.csv", index=False)
+    importancias.to_csv(destinos["tabla_importancias"], index=False)
 
-    experimentos = paths.ensure(paths.EXPERIMENTS)
-    (experimentos / f"E6_baseline_{dataset_id}.json").write_text(
+    if por_ventana:
+        pd.DataFrame(
+            {
+                "session_id": validacion.meta["session_id"].to_numpy(),
+                "t_start": validacion.meta["t_start"].to_numpy(),
+                "t_end": validacion.meta["t_end"].to_numpy(),
+                "y_true": validacion.y,
+                "y_pred": predicciones,
+                "coolant_temperature_mean": validacion.features[
+                    :, entrenamiento.feature_names.index("coolant_temperature_mean")
+                ],
+            }
+        ).to_csv(destinos["por_ventana"], index=False)
+
+    paths.ensure(paths.EXPERIMENTS)
+    destinos["registro"].write_text(
         json.dumps(
             {
                 "experiment_id": "E6_baseline",
+                "protocolo": PROTOCOLO_HISTORICO,
+                "etiqueta": etiqueta or None,
                 "dataset_id": dataset_id,
                 "model": "RandomForestClassifier",
                 "config": {
@@ -121,10 +188,10 @@ def run_baseline(dataset_id: str = DATASET) -> int:
         + "\n",
         encoding="utf-8",
     )
-    figuras = paths.ensure(paths.FIGURES)
+    paths.ensure(paths.FIGURES)
     modeling.fig_confusion(
         informe.confusion,
-        figuras / "FIG-E6-01_confusion_baseline.png",
+        destinos["figura_confusion"],
         "Bosque aleatorio sobre validación",
     )
 
@@ -137,12 +204,9 @@ def run_baseline(dataset_id: str = DATASET) -> int:
         validacion.features[es_f03, columna],
         predicciones[es_f03] == "F03_thermostat_stuck",
         FAULTS["F03_thermostat_stuck"].default_params["temp_cap_c"],
-        figuras / "FIG-E6-02_limite_evidencia_f03.png",
+        destinos["figura_limite"],
     )
-    print("\nfigura  FIG-E6-01_confusion_baseline.png, FIG-E6-02_limite_evidencia_f03.png")
 
-    print(
-        "tabla   E6_baseline_por_clase.csv, E6_baseline_confusion.csv, E6_baseline_importancias.csv"
-    )
-    print(f"registro experiments/E6_baseline_{dataset_id}.json")
+    for clave, ruta in sorted(destinos.items()):
+        print(f"{clave:20s} {ruta.relative_to(paths.ROOT)}")
     return 0

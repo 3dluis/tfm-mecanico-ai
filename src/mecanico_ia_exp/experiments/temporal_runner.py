@@ -1,27 +1,64 @@
 """Ejecución de E7: modelo temporal y su comparación con el baseline.
 
 Solo entrenamiento y validación. El test sigue cerrado.
+
+**Dos salvedades sobre lo que este ejecutor mide.** La primera, que la época se
+elige mirando la misma partición de validación sobre la que después se reporta:
+el bosque no tiene paso de selección equivalente, así que la comparación entre
+los dos no es simétrica. La segunda, que ninguno de los dos calibra --el error de
+calibración sale de ``predict_proba`` en crudo--, de modo que la diferencia de
+ECE publicada no es una diferencia entre calibradores. Las dos se corrigen en el
+protocolo de PI.1, con tres particiones internas
+(``data/interno.py``), y ese protocolo **no sobrescribe** estas cifras: escribe
+con etiqueta propia.
 """
 
 from __future__ import annotations
 
 import json
 import time
+from pathlib import Path
 
 import numpy as np
 
 from mecanico_ia_exp.config import paths
 from mecanico_ia_exp.data.dataset import load_partition
 from mecanico_ia_exp.evaluation.metrics import evaluate_classification
+from mecanico_ia_exp.experiments.destinos import exigir_libres
 from mecanico_ia_exp.models.temporal import TemporalConfig
 from mecanico_ia_exp.models.training import train_temporal
 from mecanico_ia_exp.visualization import modeling
 
 DATASET = "synthetic_v2"
 
+#: Protocolo del que salen las cifras publicadas de E7: época elegida sobre la
+#: validación que se reporta y red **sin calibrar**.
+PROTOCOLO_HISTORICO = "E7_v1_epoca_sobre_validacion_sin_calibrar"
 
-def run_temporal(dataset_id: str = DATASET) -> int:
-    """Entrena la GRU, la evalúa en validación y la contrasta con el baseline."""
+
+def destinos_de(dataset_id: str, etiqueta: str = "") -> dict[str, Path]:
+    """Los artefactos que una ejecución escribe, antes de escribir el primero."""
+    sufijo = f"_{etiqueta}" if etiqueta else ""
+    base = f"E7{sufijo}"
+    return {
+        "registro": paths.EXPERIMENTS / f"{base}_temporal_{dataset_id}.json",
+        "tabla_por_clase": paths.TABLES / f"{base}_temporal_por_clase_{dataset_id}.csv",
+        "tabla_confusion": paths.TABLES / f"{base}_temporal_confusion_{dataset_id}.csv",
+        "figura_confusion": paths.FIGURES / f"FIG-{base}-01_confusion_temporal.png",
+        "figura_entrenamiento": paths.FIGURES / f"FIG-{base}-02_entrenamiento.png",
+        "normalizador_media": paths.MODELS / f"{base}_standardizer_mean.npy",
+        "normalizador_escala": paths.MODELS / f"{base}_standardizer_scale.npy",
+    }
+
+
+def run_temporal(dataset_id: str = DATASET, *, etiqueta: str = "") -> int:
+    """Entrena la GRU, la evalúa en validación y la contrasta con el baseline.
+
+    ``etiqueta`` entra en el nombre de todos los artefactos. Sin ella se
+    conservan los nombres históricos y la ejecución **se niega a escribir** si ya
+    existen, porque las cifras de E7 son evidencia publicada.
+    """
+    destinos = exigir_libres(destinos_de(dataset_id, etiqueta))
     entrenamiento = load_partition("train", dataset_id=dataset_id)
     validacion = load_partition("validation", dataset_id=dataset_id)
     clases = tuple(sorted(set(entrenamiento.y.tolist())))
@@ -89,14 +126,14 @@ def run_temporal(dataset_id: str = DATASET) -> int:
             f"\n{veredicto}"
         )
 
-    tablas = paths.ensure(paths.TABLES)
-    informe.per_class.to_csv(tablas / f"E7_temporal_por_clase_{dataset_id}.csv", index=False)
-    informe.confusion.to_csv(tablas / f"E7_temporal_confusion_{dataset_id}.csv")
+    paths.ensure(paths.TABLES)
+    informe.per_class.to_csv(destinos["tabla_por_clase"], index=False)
+    informe.confusion.to_csv(destinos["tabla_confusion"])
 
-    figuras = paths.ensure(paths.FIGURES)
+    paths.ensure(paths.FIGURES)
     modeling.fig_confusion(
         informe.confusion,
-        figuras / "FIG-E7-01_confusion_temporal.png",
+        destinos["figura_confusion"],
         "GRU bidireccional sobre validación",
     )
     modeling.fig_curvas_entrenamiento(
@@ -104,14 +141,16 @@ def run_temporal(dataset_id: str = DATASET) -> int:
         entrenado.history.val_loss,
         entrenado.history.val_macro_f1,
         entrenado.history.best_epoch,
-        figuras / "FIG-E7-02_entrenamiento.png",
+        destinos["figura_entrenamiento"],
     )
 
-    experimentos = paths.ensure(paths.EXPERIMENTS)
-    (experimentos / f"E7_temporal_{dataset_id}.json").write_text(
+    paths.ensure(paths.EXPERIMENTS)
+    destinos["registro"].write_text(
         json.dumps(
             {
                 "experiment_id": "E7_temporal",
+                "protocolo": PROTOCOLO_HISTORICO,
+                "etiqueta": etiqueta or None,
                 "dataset_id": dataset_id,
                 "model": "GRU bidireccional",
                 "device": entrenado.device,
@@ -141,10 +180,10 @@ def run_temporal(dataset_id: str = DATASET) -> int:
         + "\n",
         encoding="utf-8",
     )
-    np.save(paths.ensure(paths.MODELS) / "E7_standardizer_mean.npy", entrenado.standardizer.mean)
-    np.save(paths.ensure(paths.MODELS) / "E7_standardizer_scale.npy", entrenado.standardizer.scale)
+    paths.ensure(paths.MODELS)
+    np.save(destinos["normalizador_media"], entrenado.standardizer.mean)
+    np.save(destinos["normalizador_escala"], entrenado.standardizer.scale)
 
-    print("\nfigura  FIG-E7-01_confusion_temporal.png, FIG-E7-02_entrenamiento.png")
-    print("tabla   E7_temporal_por_clase.csv, E7_temporal_confusion.csv")
-    print(f"registro experiments/E7_temporal_{dataset_id}.json")
+    for clave, ruta in sorted(destinos.items()):
+        print(f"{clave:22s} {ruta.relative_to(paths.ROOT)}")
     return 0

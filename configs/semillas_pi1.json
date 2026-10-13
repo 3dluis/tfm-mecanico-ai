@@ -1,0 +1,9 @@
+{
+  "preregistrado_el": "2026-10-12",
+  "para_que": "las cinco réplicas de la curva de volumen y la escalera de ablación de PI.1",
+  "regla": "las comparaciones se hacen APAREADAS por semilla: la misma semilla fija el reparto interno, el orden de las sesiones de los subconjuntos anidados y la inicialización de los dos modelos",
+  "no_se_eligen_por_resultado": "las cinco quedan fijadas aquí, antes de generar synthetic_v4 y antes de entrenar nada; una semilla no se sustituye porque su resultado sea desfavorable, y si una celda hay que descartarla por un fallo tecnico se documenta con su motivo en lugar de rehacerla con otra semilla",
+  "procedencia": "la primera es 20260901, la del resto del laboratorio, para que una replica reproduzca el reparto ya auditado; las otras cuatro son 20260901 + 1000*k, derivadas y no sorteadas, para que su origen sea verificable de un vistazo",
+  "semillas": [20260901, 20261901, 20262901, 20263901, 20264901],
+  "dependencia_que_no_se_puede_ignorar": "las cinco replicas comparten las MISMAS sesiones de validacion y de prueba, de modo que no son cinco muestras independientes: su dispersion mide variabilidad de ajuste, no variabilidad de evaluacion, y el intervalo que se lea de ellas subestima la incertidumbre total"
+}
