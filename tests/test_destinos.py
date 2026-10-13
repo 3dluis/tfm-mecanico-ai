@@ -14,7 +14,15 @@ import json
 import pytest
 
 from mecanico_ia_exp.config import paths
-from mecanico_ia_exp.experiments import baseline_runner, temporal_runner
+from mecanico_ia_exp.experiments import (
+    ablation_runner,
+    baseline_runner,
+    retrieval_runner,
+    temporal_runner,
+    threshold_runner,
+    training_runner,
+    xai_runner,
+)
 from mecanico_ia_exp.experiments.destinos import (
     PATRONES_HISTORICOS,
     REGISTRO_HISTORICO,
@@ -181,3 +189,49 @@ def test_el_censo_usa_rutas_relativas_a_la_raiz() -> None:
     declaradas = json.loads(REGISTRO_HISTORICO.read_text("utf-8"))["huellas_sha256"]
     assert all(not ruta.startswith("/") for ruta in declaradas)
     assert all((paths.ROOT / ruta).is_file() for ruta in declaradas)
+
+
+# ------------------------------------------- los siete ejecutores, uno por uno
+
+#: Cada ejecutor con su función de destinos y los argumentos que necesita. La
+#: lista existe para que añadir un ejecutor sin etiqueta rompa un test.
+EJECUTORES = (
+    ("E6 baseline", baseline_runner.destinos_de, ("synthetic_v2",)),
+    ("E7 temporal", temporal_runner.destinos_de, ("synthetic_v2",)),
+    ("E9 atribución", xai_runner.destinos_de, ("synthetic_v2",)),
+    ("E12 recuperación", retrieval_runner.destinos_de, ()),
+    ("E15b barrido", threshold_runner.destinos_de, ()),
+    ("E13b datos de ajuste", training_runner.destinos_de, ()),
+    ("E18 ablación A1", ablation_runner.destinos_de, ("A1",)),
+)
+
+
+@pytest.mark.parametrize(("nombre", "destinos_de", "args"), EJECUTORES)
+def test_toda_etiqueta_cambia_todos_los_destinos(nombre, destinos_de, args) -> None:
+    """Proteger solo el registro deja expuestas las tablas y las figuras.
+
+    Es el error que ya ocurrió dos veces: la primera con el identificador del
+    conjunto, la segunda con el del experimento.
+    """
+    historicos = destinos_de(*args)
+    etiquetados = destinos_de(*args, "una_etiqueta")
+    assert set(historicos) == set(etiquetados)
+    for clave in historicos:
+        assert historicos[clave] != etiquetados[clave], f"{nombre}: {clave} no cambió de ruta"
+
+
+@pytest.mark.parametrize(("nombre", "destinos_de", "args"), EJECUTORES)
+def test_los_destinos_historicos_estan_censados(nombre, destinos_de, args) -> None:
+    """Si un artefacto publicado no está en el censo, nada vigila que no cambie."""
+    declaradas = json.loads(REGISTRO_HISTORICO.read_text("utf-8"))["huellas_sha256"]
+    for clave, ruta in destinos_de(*args).items():
+        if not ruta.exists():
+            continue
+        relativa = str(ruta.relative_to(paths.ROOT))
+        assert relativa in declaradas, f"{nombre}: {clave} existe y no está censado"
+
+
+def test_las_ablaciones_sobre_prueba_exigen_etiqueta() -> None:
+    """Repetir E18 sobre prueba sin etiqueta borraría la ejecución publicada."""
+    with pytest.raises(ArtefactoOcupadoError, match="su propia etiqueta"):
+        ablation_runner.run_ablations("synthetic_v2", particion="test", allow_test=True, reason="x")
