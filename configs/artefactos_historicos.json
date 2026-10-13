@@ -1,5 +1,5 @@
 {
-  "tomado_el": "2026-10-13T04:03:05.579493+00:00",
+  "tomado_el": "2026-10-13T11:36:45.781440+00:00",
   "cambios_aceptados_a_proposito": false,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
@@ -19,7 +19,7 @@
     "configs/goldset_mazda3_bk.yaml",
     "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 142,
+  "n_artefactos": 150,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": {
       "sha256": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
@@ -105,16 +105,32 @@
       "sha256": "2678fb31db343d061ad7360a4e42dc0362ded8677148dac36825c8468bd93911",
       "versionado": true
     },
+    "experiments/E18_ablacion_A1_prueba.json": {
+      "sha256": "ae47297de26a2bf1dd3a2f00580b066b2b4f1572592df114c31b88b0156cd69f",
+      "versionado": true
+    },
     "experiments/E18_ablacion_A2.json": {
       "sha256": "392c1aef7ccc0432218af3df8ccb8245efc5b6947d065995a5acd019cb919f84",
+      "versionado": true
+    },
+    "experiments/E18_ablacion_A2_prueba.json": {
+      "sha256": "116e7a16a08e150e27a24cc7e5c793c3d17875616b1e1748701042d2fa9aff1f",
       "versionado": true
     },
     "experiments/E18_ablacion_A3.json": {
       "sha256": "1247d4732387652ecfa53a235d15e7286f6600170797a33dbcb4d98a5f865c84",
       "versionado": true
     },
+    "experiments/E18_ablacion_A3_prueba.json": {
+      "sha256": "09f4a919c96879deb48d88339f7e9b2a2a774f4c417ab28a5d1e10554bfe0dbf",
+      "versionado": true
+    },
     "experiments/E18_ablacion_A4.json": {
       "sha256": "fa140b6a337c93c02e97570d512f8e8dee013a43622b5308e757e43a81e84af0",
+      "versionado": true
+    },
+    "experiments/E18_ablacion_A4_prueba.json": {
+      "sha256": "696a2eeb413052f596684e130433d3ab9c721c270375e161adf3e167d3fff646",
       "versionado": true
     },
     "experiments/E19_anotacion.json": {
@@ -249,16 +265,32 @@
       "sha256": "6d8138e6fbcfeb2341f1668b92c9ea64ef4afc6fe67233ca1d434bd46b6a7a17",
       "versionado": false
     },
+    "tables/E18_ablacion_A1_prueba.csv": {
+      "sha256": "73946355e60d10e1da8f6e7793db2919a7c390e54a508bacda28bf1291a14cba",
+      "versionado": false
+    },
     "tables/E18_ablacion_A2.csv": {
       "sha256": "5ba7e8b88e090cbe46870bd1076279d9e406cb2e4234f90ad2ad33457ab2ecbc",
+      "versionado": false
+    },
+    "tables/E18_ablacion_A2_prueba.csv": {
+      "sha256": "72cd9c8465ee9cb5383a02383bb7a2aaa3aa0653ae3b142ade47c77d3c9778cc",
       "versionado": false
     },
     "tables/E18_ablacion_A3.csv": {
       "sha256": "8ec7b4b81e5abe15b5f10286be3364b34d6a2d5ceaf0360a385284c6113905a9",
       "versionado": false
     },
+    "tables/E18_ablacion_A3_prueba.csv": {
+      "sha256": "5e976d86e8aded25468b5a487f3f4856e5ac2c22cbb11f3bfd6b5233186692c4",
+      "versionado": false
+    },
     "tables/E18_ablacion_A4.csv": {
       "sha256": "eaa599152d4707aa34f89e2832bcc47d18a8abd4a633b8425600b16acbf802aa",
+      "versionado": false
+    },
+    "tables/E18_ablacion_A4_prueba.csv": {
+      "sha256": "9ca0ebb8c44bfc223c1b027fe08ea60c8801416a00766a7782456d7fb6e2473b",
       "versionado": false
     },
     "tables/E19_evaluacion_final_v3.csv": {
