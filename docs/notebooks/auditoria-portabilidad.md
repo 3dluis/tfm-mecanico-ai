@@ -42,6 +42,13 @@ significa._»—, de modo que **ninguno cumple hoy los quince contenidos obligat
 Decisión: **no se duplican ni se tiran.** Los que se reescriben en esta entrega conservan su número y
 su fase; los demás quedan como están, marcados en el índice con lo que les falta.
 
+**Una corrección que sí se les aplicó a cinco de ellos.** `03_timeseries_eda`,
+`04_preprocessing_features`, `06_model_evaluation`, `07_xai` y `09_retrieval_evaluation` leían sus
+tablas y figuras de `paths.TABLES` y `paths.FIGURES`, que están **fuera del control de versiones**:
+funcionaban en la máquina del autor y habrían fallado en la del tribunal. Ahora leen de
+`artifacts/`, que es la copia versionada. Hay un test que recorre **todos** los notebooks del
+repositorio y falla si alguno vuelve a leer de un directorio que un clon no trae.
+
 ## 2. Lo que un clon del repositorio sí trae
 
 Esto es lo que decide qué puede ejecutarse sin mi equipo. Comprobado con `git ls-files`:

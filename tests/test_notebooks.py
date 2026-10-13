@@ -358,3 +358,19 @@ def test_la_raiz_se_encuentra_desde_cualquier_directorio(nombre: str, tmp_path: 
         )
         assert resultado.returncode == 0, f"{nombre} desde {desde}: {resultado.stderr[-300:]}"
         assert "python" in resultado.stdout
+
+
+@pytest.mark.parametrize("nombre", sorted(p.name for p in NOTEBOOKS.glob("*.ipynb")))
+def test_ningun_notebook_lee_de_un_directorio_que_un_clon_no_trae(nombre: str) -> None:
+    """`tables/` y `figures/` están fuera de Git: un clon no los tiene.
+
+    Leer de ahí hace que el notebook funcione en la máquina del autor y falle en
+    la del tribunal, que es el modo de fallo que toda esta entrega existe para
+    evitar. `artifacts/` es la copia versionada.
+    """
+    codigo = _texto(_cargar(nombre), "code")
+    for prohibido in ("paths.TABLES", "paths.FIGURES", "paths.DATA_RAW_SYNTHETIC"):
+        assert prohibido not in codigo, (
+            f"{nombre} lee de {prohibido}, que un clon recién hecho no trae; "
+            "usa artifacts/ o soporte.tabla()/soporte.figura()"
+        )
