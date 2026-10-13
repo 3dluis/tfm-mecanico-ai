@@ -44,8 +44,8 @@ Los pasos A y B no tocan ningún resultado y pueden hacerse mientras se revisa e
 | B | ninguno | medio día | tres cambios de procedencia y sus pruebas |
 | C | minutos | una hora | generación, preprocesado y los cinco criterios |
 | D | minutos | una hora | reparto, subconjuntos y las tres pruebas de fuga |
-| E | ninguno | un día | es el cambio con más riesgo de implementación |
-| F | ~35 min | medio día | cinco variantes del bosque, que cuestan segundos cada una, y la red recurrente, que es la única cara: veinte ejecuciones de hasta 135 s. Bajo `launchd`, como la ejecución de E19 que funcionó |
+| E | ninguno | un día | es el cambio con más riesgo de implementación: partición interna por sesión, selección de época ahí, y calibración de los dos modelos sobre ella |
+| F | ~35 min | medio día | cien celdas del bosque, segundos cada una, y veinte de la red, hasta 135 s cada una. **La calibración no añade ajustes**: se hace sobre la partición interna de desarrollo, que ya existe, y no por validación cruzada; con pliegues agrupados habrían sido cinco ajustes más por celda de red y varias horas en lugar de media. Bajo `launchd`, como la ejecución de E19 que funcionó |
 | G | minutos | un día | el análisis, no el cómputo, es lo que lleva tiempo |
 | H | ninguno | medio día | |
 
