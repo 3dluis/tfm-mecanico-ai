@@ -98,20 +98,34 @@ Esto es lo que decide la pregunta:
 | La ventaja está en ventanas **sin** expresar | no es información temporal: es azar o ajuste a idiosincrasias de las sesiones. **La hipótesis del termostato cae** |
 | No hay ventaja al separar | la ventaja agregada venía del reparto entre los dos grupos y no de detectar mejor |
 
-**Paso 4. Dar registro a las dos cifras huérfanas, sobre el conjunto que describen.** Las cifras «las
-ventanas que el modelo falla tienen 54,3 °C de media; las que acierta, 70,7» describen la validación de
-**`synthetic_v2`**, no de `synthetic_v4`. Calcularlas con las predicciones del conjunto nuevo no las
-sostendría ni las corregiría: sería otra medida de otra cosa.
+**Paso 4. Dar registro a las cifras del termostato, sobre el conjunto que describen y con el
+estadístico que usaron.** Y aquí hay que empezar por una corrección: esas cifras no son huérfanas en el
+sentido de inventadas. Proceden de un análisis que el informe de E6 documenta, con su tabla completa:
 
-Lo que hay que hacer es una **reejecución de E6 sobre `synthetic_v2`**, con su semilla y su
-configuración, registrando esta vez las predicciones por ventana, y calcular el estadístico sobre esas
-predicciones y el máximo de refrigerante de esas mismas ventanas. No es un experimento nuevo: es volver
-a ejecutar lo que ya está publicado, y tiene una ventaja añadida —si las métricas agregadas no
-reproducen las del registro de E6, eso es un hallazgo de reproducibilidad y hay que pararse ahí—.
+| | n | Temperatura media | Rango |
+|---|---|---|---|
+| Detectadas | 9 | 70,7 °C | 68,6 – 71,1 |
+| No detectadas | 5 | 54,3 °C | 42,8 – 64,9 |
+
+y con un desglose que no había tenido en cuenta y que importa mucho: **por régimen, urbano 7 de 7 y
+calentamiento 2 de 7**. Es decir que el análisis por ventana **se hizo** en su momento y localizó los
+cinco errores en el calentamiento; lo que no se persistió fue el artefacto intermedio. Las cinco
+ventanas no detectadas son las cinco de calentamiento que el conjunto tiene por debajo del techo, y eso
+corrobora la hipótesis desde un análisis anterior e independiente.
+
+Lo que hay que hacer, por tanto, es una **reejecución de E6 sobre `synthetic_v2`** —su semilla, su
+configuración— registrando esta vez las predicciones por ventana, y recalcular **el mismo estadístico**:
+la media de `coolant_temperature_mean` de cada grupo, con su rango, y el desglose por régimen. **No el
+máximo**: usar otro estadístico daría otro número y podría llevar a retirar como no reproducible una
+cifra que sí lo es.
+
+Se compara contra las cuatro cifras publicadas y los dos rangos. No es un experimento nuevo: es volver a
+ejecutar lo ya publicado, y trae una comprobación de regalo —si las métricas agregadas no reproducen el
+registro de E6, hay que pararse ahí—.
 
 Este paso no necesita `synthetic_v4` y puede hacerse en la Fase A. Si la reejecución no reproduce E6, o
-si el estadístico sale distinto de 54,3 y 70,7, las dos cifras **se retiran** de la matriz de validación
-en lugar de corregirse en silencio, y se dice por qué.
+si el estadístico sale distinto, las cifras **se retiran** de la matriz de validación en lugar de
+corregirse en silencio, y se dice por qué.
 
 **Paso 5. Repetir lo mismo con el fallo de encendido**, que es la condición más débil en los dos
 modelos y sobre prueba —F1 0,4444 en E19— y cuya intermitencia produce el mismo tipo de ventanas sin
