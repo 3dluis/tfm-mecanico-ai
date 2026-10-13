@@ -612,3 +612,45 @@ def test_el_modo_distingue_el_registro_del_agente() -> None:
     no_oracular = destinos_de("non_oracle", llm=llm)["agente"]
     assert oracular != no_oracular
     assert "non_oracle" in no_oracular.name
+
+
+def test_la_ficha_del_conjunto_no_se_censa_porque_lleva_marca_de_tiempo() -> None:
+    """`created_at` cambia en toda reconstrucción legítima.
+
+    Censarla daría una alarma cada vez que alguien reconstruye el conjunto, y
+    una alarma que salta siempre deja de mirarse. Lo que se vigila es el
+    parquet, que sí es reproducible bit a bit.
+    """
+    declaradas = json.loads(REGISTRO_HISTORICO.read_text("utf-8"))["huellas_sha256"]
+    fichas = [r for r in declaradas if r.endswith(".meta.json") and "data/raw" in r]
+    assert not fichas, f"censadas fichas con marca de tiempo: {fichas}"
+    parquets = [r for r in declaradas if r.endswith(".parquet") and "data/raw" in r]
+    assert parquets, "el parquet sí tiene que estar censado: es el dato"
+
+
+def test_los_dos_incidentes_de_artefactos_siguen_documentados() -> None:
+    """No se borran del historial aunque estén resueltos.
+
+    Los dos los causó el trabajo sobre el repositorio y los detectó el censo. Un
+    repositorio que se entrega como evidencia no esconde sus propios errores.
+    """
+    for nombre, marca in (
+        ("incidencia-artefactos-e5.md", "INC-E5-01"),
+        ("incidencia-artefactos-e15.md", "INC-E15-01"),
+    ):
+        documento = paths.DOCS / "experiments" / nombre
+        assert documento.is_file(), f"falta {nombre}"
+        texto = documento.read_text("utf-8")
+        assert marca in texto
+        assert "no se declara" in texto.lower() or "no restaurada" in texto.lower()
+
+
+def test_el_procedimiento_de_reconstruccion_esta_documentado() -> None:
+    """Una prueba que necesita recursos externos tiene que decir cómo obtenerlos."""
+    documento = paths.DOCS / "reproducir-desde-cero.md"
+    assert documento.is_file()
+    texto = documento.read_text("utf-8")
+    for pieza in ("reconstruir_datos.sh", "esquema historico", "no se puede reproducir"):
+        assert pieza in texto, f"el procedimiento no explica «{pieza}»"
+    for guion in ("scripts/reconstruir_datos.sh", "scripts/verificar_reconstruccion.py"):
+        assert (paths.ROOT / guion).is_file(), f"falta {guion}"

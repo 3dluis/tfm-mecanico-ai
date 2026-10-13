@@ -119,4 +119,5 @@ markers = [
     "llm: requiere un proveedor LLM configurado",
     "slow: ejecución larga (entrenamiento, corpus completo)",
     "notebook: ejecuta un notebook entero desde un kernel limpio (minutos)",
+    "conjunto: necesita synthetic_v2 preprocesado; se reconstruye con scripts/reconstruir_datos.sh",
 ]

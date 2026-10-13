@@ -39,8 +39,25 @@ sobre el conjunto que sigue en disco.
 | `E5_estudio_ventana.csv` | `b8d8d380ff01f045` | `b8d8d380ff01f045` — **idéntica** |
 | `E5_reparto.csv` | `68710f9019cdad8a` | `68710f9019cdad8a` — **idéntica** |
 
-Las **dos figuras** se regeneraron de los mismos datos y no son byte a byte iguales: la salida PNG de
-matplotlib no es reproducible bit a bit entre ejecuciones. Su contenido es el mismo.
+Las **dos figuras** se regeneraron de los mismos datos y **no** son byte a byte iguales: la salida
+PNG de matplotlib no es reproducible bit a bit entre ejecuciones.
+
+**Y aquí hay que ser preciso, porque la tentación es decir que están restauradas.** No lo están en
+el sentido fuerte: no existe una referencia verificable contra la que compararlas. Las copias
+publicadas en `artifacts/figures/` tienen huellas distintas de las que el censo esperaba, igual que
+las tablas, así que tampoco sirven de referencia byte a byte. Lo que se puede afirmar es más
+estrecho y es lo que se afirma:
+
+| | Referencia verificable | Estado |
+|---|---|---|
+| `E5_estudio_ventana.csv` | sí, `artifacts/tables/` | **idéntica bit a bit** |
+| `E5_reparto.csv` | sí, `artifacts/tables/` | **idéntica bit a bit** |
+| `FIG-E5-01_estudio_ventana.png` | **no** | regenerada del mismo dato y de la misma orden; **no verificada** |
+| `FIG-E5-02_particiones.png` | **no** | ídem |
+
+Las dos figuras se declaran **regeneradas, no restauradas**. Salen de los mismos datos —cuyas tablas
+sí están verificadas— y de la misma orden, pero no hay huella contra la que contrastarlas. No se
+declara equivalencia porque el gráfico parezca el mismo.
 
 **Una observación que conviene registrar, porque no la causó este incidente:** las huellas que el
 censo esperaba para las dos tablas —`c487e25435da9402` y `cffd1ee3d5144a52`— **no coincidían con las

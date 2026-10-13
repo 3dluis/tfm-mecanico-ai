@@ -1,6 +1,6 @@
 {
-  "tomado_el": "2026-10-13T03:19:02.409244+00:00",
-  "cambios_aceptados_a_proposito": true,
+  "tomado_el": "2026-10-13T04:03:05.579493+00:00",
+  "cambios_aceptados_a_proposito": false,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
   "patrones": [
@@ -9,7 +9,6 @@
     "tables/*.csv",
     "figures/*.png",
     "data/raw/synthetic/*.parquet",
-    "data/raw/synthetic/*.meta.json",
     "models/*.npy",
     "models/*/finetune_config.json",
     "data/processed/slm_finetune/*.jsonl",
@@ -20,7 +19,7 @@
     "configs/goldset_mazda3_bk.yaml",
     "configs/politica_suficiencia*.json"
   ],
-  "n_artefactos": 146,
+  "n_artefactos": 142,
   "huellas_sha256": {
     "experiments/E12_retrieval.json": {
       "sha256": "87ba41f4b60ca65cc19fd2c74d16640eee2addfc643ce88db59929496d2b5c9a",
@@ -242,10 +241,6 @@
       "sha256": "d038a2dd54de971d5d9c9437122c8123a1121c22cfa566b5ed34f50c10035f72",
       "versionado": false
     },
-    "tables/E15_suficiencia_verifier_v1.csv": {
-      "sha256": "1adee19a54e3ad9aa8546b7c96a8178088264604f08d1fa11e529ac8bfdcef3a",
-      "versionado": false
-    },
     "tables/E15b_barrido_umbral.csv": {
       "sha256": "203a5d7ce815b49df0c46fce48785bce1c5df7d696bc9d39d7cf38cd9d83bd3d",
       "versionado": false
@@ -446,22 +441,6 @@
       "sha256": "d87eaafc080d1d77a89935d35de71789397fa83aad3a362e3ec81a39c3bf5cae",
       "versionado": false
     },
-    "data/raw/synthetic/synthetic_sample.meta.json": {
-      "sha256": "744ff69e4a4634dc184b17a02184f127f290e8a8546b0622dce71a629f9dd39b",
-      "versionado": false
-    },
-    "data/raw/synthetic/synthetic_v1.meta.json": {
-      "sha256": "80e457c8b9985359fe16fa9ad289f51d0be8de44e447118913ff1527d599781f",
-      "versionado": false
-    },
-    "data/raw/synthetic/synthetic_v2.meta.json": {
-      "sha256": "7ca3251f970f43815fb11cf4a3e8c3a5df94d522ef2fea0859240d0d71c9cc46",
-      "versionado": false
-    },
-    "data/raw/synthetic/synthetic_v3.meta.json": {
-      "sha256": "5837087e1d2ebef73d6a870de1aa0848cde088f2acfc305f43f86b630d186def",
-      "versionado": false
-    },
     "models/E7_standardizer_mean.npy": {
       "sha256": "ffc92d3b115a8258640c03e4641468ae9c587f2e9c688c08edb4ec13146dc8b9",
       "versionado": false
@@ -605,6 +584,10 @@
     "configs/goldset_mazda3_bk.yaml": {
       "sha256": "7fadc49fc7daaad1d84fb0ebe625b061ed4664a99adea7b548c105533644a25a",
       "versionado": true
+    },
+    "tables/E15_suficiencia_verifier_v1.csv": {
+      "sha256": "1adee19a54e3ad9aa8546b7c96a8178088264604f08d1fa11e529ac8bfdcef3a",
+      "versionado": false
     }
   }
 }
