@@ -177,7 +177,21 @@ def run_training_data(
     semilla = 0
 
     for fault_id, caso in sorted(por_fallo.items()):
-        indices = np.flatnonzero((validacion.y == fault_id) & aciertos)[:ventanas_por_condicion]
+        # Las ventanas se reparten **entre sesiones**, no se toman las primeras.
+        # Tomar las primeras concentraba los doce ejemplos de cada condición en
+        # una o dos sesiones, lo que produce ejemplos casi duplicados --ventanas
+        # consecutivas comparten la mitad de sus muestras-- y deja el reparto
+        # interno del ajuste sin sesiones que separar.
+        candidatas = np.flatnonzero((validacion.y == fault_id) & aciertos)
+        por_sesion: dict[str, list[int]] = {}
+        for i in candidatas:
+            por_sesion.setdefault(str(validacion.meta.iloc[i]["session_id"]), []).append(int(i))
+        indices_ordenados: list[int] = []
+        for k in range(max((len(v) for v in por_sesion.values()), default=0)):
+            for sesion in sorted(por_sesion):
+                if k < len(por_sesion[sesion]):
+                    indices_ordenados.append(por_sesion[sesion][k])
+        indices = np.array(indices_ordenados[:ventanas_por_condicion], dtype=int)
         if indices.size == 0:
             continue
         codigos = DIAGNOSTICO_A_DTC.get(fault_id, ())
@@ -291,15 +305,30 @@ def run_training_data(
     for clave, n in sorted(reparto.items()):
         print(f"  {clave:<20} {n}")
 
-    # Reparto en entrenamiento y validación del ajuste, POR CASO: dos variantes
-    # del mismo caso comparten observaciones, y separarlas al azar filtraría
-    # información entre particiones igual que ocurriría con las ventanas.
-    # Partición por **ventana de origen**, que es la unidad independiente. Las
-    # variantes de corpus de una misma ventana comparten `case_id` y caen juntas:
-    # repartirlas entre particiones sería fuga, aunque los prompts difieran.
+    # Reparto en entrenamiento y validación del ajuste, **POR SESIÓN**.
+    #
+    # Repartir por ventana no basta, y es un defecto que estuvo aquí: dos
+    # ventanas consecutivas de la misma sesión comparten la mitad de sus
+    # muestras, de modo que `F05_misfire__idle__02@240s` en entrenamiento y
+    # `@300s` en validación dejaban que la pérdida de validación del ajuste
+    # midiera sobre datos que el adaptador acababa de ver. Es la misma fuga que
+    # el reparto del conjunto principal evita desde E5, y que aquí no se había
+    # propagado.
+    #
+    # Las variantes de corpus de una misma ventana comparten `case_id` y la
+    # ventana comparte sesión, así que agrupar por sesión las mantiene juntas.
     casos = sorted({e.case_id for e in ejemplos})
-    corte = int(len(casos) * 0.85)
-    casos_train = set(casos[:corte])
+
+    # Y **estratificado por condición**. Ordenar las sesiones y cortar por el 85 %
+    # dejaba una validación interna con una sola condición --las dos últimas por
+    # orden alfabético eran las dos de encendido--, de modo que la pérdida de
+    # validación del ajuste habría medido el comportamiento ante un solo tipo de
+    # caso. Tomando la última sesión de cada condición, cubre las cinco.
+    por_condicion: dict[str, list[str]] = {}
+    for sesion in sorted({e.case_id.split("@")[0] for e in ejemplos}):
+        por_condicion.setdefault(sesion.split("__")[0], []).append(sesion)
+    sesiones_valid = {lista[-1] for lista in por_condicion.values() if len(lista) > 1}
+    casos_train = {e.case_id for e in ejemplos if e.case_id.split("@")[0] not in sesiones_valid}
 
     paths.ensure(destinos["ejemplos_train"].parent)
     # La comprobación de contaminación va **antes** de escribir un solo ejemplo.
@@ -323,13 +352,23 @@ def run_training_data(
             "--particion-ejemplos train."
         )
 
-    for nombre, seleccion in (
-        ("train", [e for e in ejemplos if e.case_id in casos_train]),
-        ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
-    ):
-        ruta = destinos[f"ejemplos_{nombre}"]
-        ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
-        print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
+    # Si algo falla después de escribir los `.jsonl`, se borran. Un destino a
+    # medias bloquea el reintento, porque la negativa a sobrescribir no distingue
+    # «ya está hecho» de «quedó a medias», y eso ya pasó una vez.
+    escritos: list[Path] = []
+    try:
+        for nombre, seleccion in (
+            ("train", [e for e in ejemplos if e.case_id in casos_train]),
+            ("valid", [e for e in ejemplos if e.case_id not in casos_train]),
+        ):
+            ruta = destinos[f"ejemplos_{nombre}"]
+            ruta.write_text("\n".join(e.to_jsonl() for e in seleccion) + "\n", encoding="utf-8")
+            escritos.append(ruta)
+            print(f"  {ruta.relative_to(paths.ROOT)}  {len(seleccion)} ejemplos")
+    except Exception:
+        for ruta in escritos:
+            ruta.unlink(missing_ok=True)
+        raise
 
     huellas = {
         n: hashlib.sha256(destinos[f"ejemplos_{n}"].read_bytes()).hexdigest()[:16]
@@ -342,10 +381,12 @@ def run_training_data(
             "experiment_id": "E13b_training_data",
             "n_examples": len(ejemplos),
             "n_cases": len(casos),
-            "split_by": "source_window",
+            "split_by": "source_session",
             "split_unit_note": (
-                "las variantes de corpus de una misma ventana comparten case_id y "
-                "caen en la misma partición"
+                "por SESIÓN y estratificado por condición: dos ventanas consecutivas "
+                "comparten la mitad de sus muestras, de modo que repartir por ventana dejaba "
+                "que la pérdida de validación del ajuste midiera sobre datos vistos; y cortar "
+                "por orden dejaba la validación interna con una sola condición"
             ),
             "split_seed": 20260901,
             "distribution": reparto,

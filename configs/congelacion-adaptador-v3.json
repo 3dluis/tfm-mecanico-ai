@@ -13,28 +13,31 @@
     "por_que": "es la unica disjunta por construccion de validacion y de prueba, porque el reparto es por sesion",
     "comprobacion": "ninguna sesion de los ejemplos aparece en validacion ni en prueba; se comprueba ANTES de escribir ningun ejemplo, leyendo el reparto de synthetic_v2_preprocess.json y sin abrir ninguna particion",
     "registro": "experiments/E13b_training_data_sin_contaminacion.json",
-    "n_ejemplos": 112,
+    "n_ejemplos": 110,
     "n_casos": 60,
     "reparto": {
-      "FULL/EXPLAIN": 48,
-      "FULL/ABSTAIN": 12,
+      "FULL/ABSTAIN": 14,
+      "FULL/EXPLAIN": 46,
+      "PARTIAL/ABSTAIN": 19,
       "PARTIAL/EXPLAIN": 12,
-      "PARTIAL/ABSTAIN": 20,
-      "ABSENT/ABSTAIN": 20
+      "ABSENT/ABSTAIN": 19
     },
     "ficheros": {
       "crudos": "data/processed/slm_finetune_sin_contaminacion/{train,valid}.jsonl",
       "preparados": "data/processed/slm_finetune_prepared_sin_contaminacion/{train,valid}.jsonl",
-      "n_train": 94,
-      "n_valid": 18
+      "n_train": 101,
+      "n_valid": 9
     },
-    "duplicados": "los ejemplos se reparten por VENTANA DE ORIGEN, no por ejemplo: las tres variantes de corpus de una misma ventana comparten case_id y caen en la misma particion interna, de modo que no hay solape entre el train y el valid del ajuste",
+    "duplicados": "reparto interno POR SESION y estratificado por condicion. Por ventana no bastaba: dos ventanas consecutivas de la misma sesion comparten la mitad de sus muestras, de modo que la perdida de validacion del ajuste habria medido sobre datos vistos. Y cortar por orden dejaba la validacion interna con una sola condicion. Comprobado: cero solape de sesiones y las cinco condiciones presentes",
     "huellas_sha256_16": {
-      "slm_finetune_sin_contaminacion/train.jsonl": "fc2b601e74455c4f",
-      "slm_finetune_sin_contaminacion/valid.jsonl": "9ffd930b567780f8",
-      "slm_finetune_prepared_sin_contaminacion/train.jsonl": "06f9119c31739bf6",
-      "slm_finetune_prepared_sin_contaminacion/valid.jsonl": "4bda51e0b823e20a"
-    }
+      "slm_finetune_sin_contaminacion/train.jsonl": "1497d82858e02798",
+      "slm_finetune_sin_contaminacion/valid.jsonl": "60c3aab2a3df1b4e",
+      "slm_finetune_prepared_sin_contaminacion/train.jsonl": "c2577c0c3e7adb01",
+      "slm_finetune_prepared_sin_contaminacion/valid.jsonl": "123c7ec6224e0088"
+    },
+    "n_sesiones_distintas": 40,
+    "seleccion_de_ventanas": "repartidas ENTRE SESIONES, no las primeras: tomar las primeras concentraba los ejemplos de cada condicion en una o dos sesiones y producia ejemplos casi duplicados, porque dos ventanas consecutivas comparten la mitad de sus muestras",
+    "validacion_interna_pequena": "son 9 ejemplos de 110. Es poco para estimar nada, y no hace falta que sea mas: NO se usa para elegir epoca --el criterio de parada son cuatro epocas completas-- sino solo para publicar si la perdida sube, que es diagnostico y no seleccion"
   },
   "hiperparametros": {
     "heredados_de": "models/slm_lora_v2/finetune_config.json, sin cambiar ninguno",
@@ -82,5 +85,7 @@
     "si el ajuste se interrumpe, el adaptador parcial no se usa: se borra y se repite con identificador propio",
     "si los ficheros de ejemplos no coinciden con las huellas que este fichero declara, no se ajusta",
     "si models/slm_lora_v3 ya existe, el ejecutor se niega"
-  ]
+  ],
+  "recongelado_el": "2026-10-13",
+  "motivo_del_recongelado": "la revision independiente encontro que el reparto interno era por ventana y dejaba sesiones a los dos lados; corregirlo cambia los ficheros, de modo que la congelacion se rehace ANTES de ajustar. El ajuste no habia llegado a ejecutarse (INC-P2-01)"
 }
