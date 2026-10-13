@@ -68,6 +68,11 @@ class ProcedenciaIncompletaError(RuntimeError):
     """El manifiesto no permite reconstruir lo que dice reconstruir."""
 
 
+def ruta_de(dataset_id: str) -> Path:
+    """Dónde vive el manifiesto de un conjunto. Junto a su parquet, no aparte."""
+    return paths.DATA_RAW_SYNTHETIC / f"{dataset_id}.provenance.json"
+
+
 def huella_16(ruta: Path) -> str:
     """Primeros dieciséis caracteres del SHA-256 de un fichero."""
     return hashlib.sha256(ruta.read_bytes()).hexdigest()[:16]

@@ -1,5 +1,5 @@
 {
-  "tomado_el": "2026-10-13T03:06:06.164525+00:00",
+  "tomado_el": "2026-10-13T03:19:02.409244+00:00",
   "cambios_aceptados_a_proposito": true,
   "para_que": "detectar que una ejecución nueva modificó un artefacto histórico; tables/, figures/ y data/ están fuera de Git y no tienen otra protección",
   "sobre_las_ausencias": "un artefacto con versionado=false que falta NO es una desviación: es el estado normal de un clon recién hecho, porque Git no lo lleva. Uno con versionado=true que falta sí lo es, y cualquiera que haya cambiado también",
@@ -295,11 +295,11 @@
       "versionado": false
     },
     "tables/E5_estudio_ventana.csv": {
-      "sha256": "c487e25435da94028d900d6c72d0df19cc82f7185cf817cc00d2ff3b814ca641",
+      "sha256": "b8d8d380ff01f04528cb4fb53e684815f38eeeac4965ad25e4b9b85b5c584e11",
       "versionado": false
     },
     "tables/E5_reparto.csv": {
-      "sha256": "cffd1ee3d5144a5251b3aa12e02eb8ec8e0c97f35567e910eb582de5cac430fe",
+      "sha256": "68710f9019cdad8a17412e11a7b1fd41e9c7425c58c844ce6e85e092189600f7",
       "versionado": false
     },
     "tables/E6_baseline_confusion.csv": {
@@ -407,11 +407,11 @@
       "versionado": false
     },
     "figures/FIG-E5-01_estudio_ventana.png": {
-      "sha256": "6719ece286c037c32abf028faa0633e1df2570519f3a44311c12cad134b3e477",
+      "sha256": "e7d1b2ff7073a5d7110bbdac12d14cbfc6d84ba3f436c4a47dab1a72cc4fe056",
       "versionado": false
     },
     "figures/FIG-E5-02_particiones.png": {
-      "sha256": "95f8468d41ffb61e55c6ecddfc86edb6db2428c7c8ce48da66d3e3aabba2c83b",
+      "sha256": "7fe2010a0eaf94999f4aab72d67723b16834371134ef3db0995f9c4de54fa81b",
       "versionado": false
     },
     "figures/FIG-E6-01_confusion_baseline.png": {

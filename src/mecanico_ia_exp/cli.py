@@ -246,10 +246,33 @@ def main(argv: list[str] | None = None) -> int:
         datos, metadata = generate_dataset(
             specs, dataset_id=args.dataset_id, seed=args.seed, notes="Plan equilibrado E2."
         )
+        from mecanico_ia_exp.obd.auditoria import (
+            AuditoriaDelGeneradorError,
+            exigir_auditoria_limpia,
+        )
+        from mecanico_ia_exp.obd.procedencia import construir, escribir, ruta_de
+
+        manifiesto = construir(specs, datos, dataset_id=args.dataset_id, seed=args.seed)
+
+        # La auditoría va ANTES de escribir, no después. Un conjunto que no la
+        # pasa no llega a existir en disco, y así no hay forma de entrenar sobre
+        # él por descuido. `synthetic_v3` se generó sin este paso, con el motor
+        # sin calibrar, y nadie lo notó hasta que una conclusión publicada hubo
+        # que retirarla.
+        print("\nAuditoría del generador:")
+        try:
+            for comprobacion in exigir_auditoria_limpia(datos, manifiesto):
+                print(f"  {comprobacion}")
+        except AuditoriaDelGeneradorError as error:
+            print(f"\n{error}\n\nNo se escribe nada.")
+            return 1
+
         destino = paths.ensure(paths.DATA_RAW_SYNTHETIC) / f"{args.dataset_id}.parquet"
         datos.to_parquet(destino, index=False)
         metadata.write(destino.with_suffix(".meta.json"))
-        print(f"{len(datos)} muestras en {metadata.n_sessions} sesiones -> {destino.name}")
+        escribir(ruta_de(args.dataset_id), manifiesto)
+        print(f"\n{len(datos)} muestras en {metadata.n_sessions} sesiones -> {destino.name}")
+        print(f"procedencia por sesión -> {ruta_de(args.dataset_id).name}")
         return 0
 
     if args.command == "eda":
