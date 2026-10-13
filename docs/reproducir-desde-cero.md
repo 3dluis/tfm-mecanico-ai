@@ -65,8 +65,21 @@ Tres defectos que esta máquina no mostraba, y por eso se valida en un clon y no
 
 ## Lo que no se puede reproducir, y por qué
 
+Se comprueba muestra a muestra, que es más estricto que contrastar las huellas de los ficheros
+procesados: esas pueden coincidir aunque las señales sean otras, porque el ventanado y el reparto
+dependen de identificadores e instantes y no de valores.
+
+```bash
+uv run python scripts/medir_reconstruccion_cruda.py
+# synthetic_v1   NO RECONSTRUIBLE   idénticas 0 de 36 · diferencia máxima 1973.10
+# synthetic_v2   RECONSTRUIBLE      idénticas 72 de 72
+# synthetic_v3   NO RECONSTRUIBLE   idénticas 0 de 216 · diferencia máxima 1983.48
+```
+
+
 | Qué | Por qué | Consecuencia |
 |---|---|---|
+| **`synthetic_v1`** | es **pre-calibración**, como `synthetic_v3`, y se comprobó el 13-10-2026: cero de 36 sesiones idénticas, diferencia máxima 1 973 rpm. El control sobre `synthetic_v2` da 72 de 72 | las seis figuras y las cinco tablas de **E4**, el análisis exploratorio, no son reproducibles por un tercero. El guion se niega a regenerarlo |
 | **`synthetic_v3`** | es **pre-calibración**: se generó antes del commit que calibró el generador contra el manual de taller. El generador publicado produce otras señales: cero de 216 sesiones idénticas | la comparación de volumen de E6 y E7 **sobre `synthetic_v3`** no es reproducible por un tercero, ni lo son las quince ventanas del conjunto de evaluación independiente del redactor, que salen de su partición de validación. Las cifras publicadas de diagnóstico y la evaluación final **no** salen de este conjunto: salen de `synthetic_v2`, que sí se reconstruye. Se conserva sin regenerar, por decisión documentada |
 | **El corpus documental** | 3 055 PDF de un manual con licencia; no se redistribuye | E11–E15 no se pueden ejecutar sin conseguirlo |
 | **El índice documental** | se construye del corpus | las pruebas con marcador `db` no se ejecutan |

@@ -831,3 +831,33 @@ def test_el_guion_de_estado_de_pruebas_existe_y_declara_las_tres() -> None:
         assert categoria in texto
     # Y no declara satisfactoria una categoría que no ha ejecutado.
     assert "no se han ejecutado" in texto
+
+
+def test_el_guion_de_reconstruccion_se_niega_con_los_dos_conjuntos_precalibracion() -> None:
+    """`synthetic_v1` y `synthetic_v3` producen otro conjunto con el mismo nombre.
+
+    Es el fallo peor de los dos posibles: no se nota. El ventanado y el reparto
+    reproducen bit a bit porque dependen de identificadores e instantes, de modo
+    que una reconstrucción equivocada pasa las pruebas midiendo otras señales.
+    La medición que lo demuestra está en `scripts/medir_reconstruccion_cruda.py`.
+    """
+    guion = (paths.ROOT / "scripts" / "reconstruir_datos.sh").read_text("utf-8")
+    assert "synthetic_v1|synthetic_v3" in guion, (
+        "el guion tiene que negarse con los dos conjuntos anteriores a la calibración"
+    )
+    assert "medir_reconstruccion_cruda.py" in guion, (
+        "el guion tiene que decir cómo comprobar la negativa"
+    )
+
+
+def test_el_registro_declara_los_dos_conjuntos_no_reconstruibles() -> None:
+    import json
+
+    registro = json.loads(
+        (paths.ROOT / "configs" / "datos_no_reconstruibles.json").read_text("utf-8")
+    )
+    for conjunto in ("synthetic_v1", "synthetic_v3"):
+        assert registro[conjunto]["estado"] == "NO_RECONSTRUIBLE", f"falta {conjunto}"
+    assert registro["synthetic_v2"]["estado"] == "RECONSTRUIBLE Y VERIFICADO", (
+        "el control que da sentido a la medición es que synthetic_v2 sí reproduzca"
+    )
