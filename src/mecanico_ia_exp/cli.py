@@ -83,6 +83,14 @@ def main(argv: list[str] | None = None) -> int:
     ft = subparsers.add_parser("finetune-slm", help="ajustar el SLM con LoRA")
     ft.add_argument("--epochs", type=int, default=4)
     ft.add_argument(
+        "--datos",
+        default="",
+        help=(
+            "etiqueta del conjunto de ejemplos: usa "
+            "data/processed/slm_finetune_prepared_<etiqueta>. Sin ella, el histórico"
+        ),
+    )
+    ft.add_argument(
         "--adapter-dir",
         default="slm_lora",
         help="subdirectorio de models/ donde guardar el adaptador (no pisa otros)",
@@ -410,9 +418,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "finetune-slm":
         from mecanico_ia_exp.llm.finetune import FinetuneConfig, finetune
 
+        sufijo_datos = f"_{args.datos}" if args.datos else ""
+        destino_adaptador = paths.MODELS / args.adapter_dir
+        if destino_adaptador.exists() and any(destino_adaptador.iterdir()):
+            print(
+                f"Ya existe models/{args.adapter_dir} y no se sobrescribe: un adaptador "
+                "congelado sostiene cifras publicadas.\n\nNo se escribe nada."
+            )
+            return 1
         h = finetune(
-            paths.DATA_PROCESSED / "slm_finetune_prepared",
-            paths.MODELS / args.adapter_dir,
+            paths.DATA_PROCESSED / f"slm_finetune_prepared{sufijo_datos}",
+            destino_adaptador,
             FinetuneConfig(epochs=args.epochs),
         )
         print(f"\nadaptador guardado en models/{args.adapter_dir} · {h.seconds:.0f} s")
