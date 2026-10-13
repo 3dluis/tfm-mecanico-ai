@@ -15,7 +15,7 @@ no se da ninguna proporción.
 
 | Clase | Cuántas | Qué son |
 |---|---|---|
-| **Falsas hoy** | **6** | dicen algo que ya no es cierto. Dos están en el primer párrafo de su capítulo |
+| **Falsas hoy** | **6** + 2 | dicen algo que ya no es cierto. Dos están en el primer párrafo de su capítulo. Las seis se corrigieron el 13-10; las dos añadidas ese mismo día al verificar las figuras (`F-7`, `F-8`) **siguen sin corregir** |
 | **Incompletas o excesivas** | **10** | la cifra es correcta y lo que se afirma con ella va más allá, o le falta una salvedad |
 | **Ausentes** | **6** | contenido que los capítulos no contemplan y que hace falta |
 
@@ -45,6 +45,21 @@ Estas no admiten matiz: dicen algo que ya no es cierto.
 | **F-4** | cap. 5, §PI.3/PI.4 | «**la condición con distractor y filtro no añade** en ninguno de los tres fallos un distractor que la parcial no tuviera» y su causa atribuida al filtro de motor | la causa **no era el filtro**: `C12` y `C16` tenían **exactamente la misma configuración** que `C11` y `C15`, y el único campo que difería no lo lee el recorrido de suficiencia | `docs/methodology/protocolo-distractor-v2.md` §1 |
 | **F-5** | cap. 6, obj. general | «el rediseño de la condición con distractor **queda como trabajo posterior**; mientras no se haga, **PI.4 seguirá sin poder interpretarse**» | **se hizo el 13-10-2026.** 6/6 abstenciones, las seis por insuficiencia de la evidencia y ninguna por confianza baja | `docs/experiments/P1_distractor_v2.md` |
 | **F-6** | cap. 5, párrafo 1 y cap. 6, párrafo 1 | «Son resultados parciales: **la evaluación final sobre el conjunto de prueba queda pendiente**» | E19 se ejecutó el 12-10-2026 y está medida | `e19-medido`, `experiments/E19_evaluacion_final_v3.json` |
+
+## 2 bis. Dos más, encontradas al verificar la procedencia de las figuras — **SIN CORREGIR**
+
+Aparecieron el mismo 13 de octubre, al comprobar de dónde sale cada figura candidata a entrar en los
+capítulos. Las dos están propuestas, con sus cinco columnas, en
+[`propuesta-figuras-cap5-cap6.md`](propuesta-figuras-cap5-cap6.md) §0, y **ninguna se ha aplicado**.
+
+| # | Dónde | Qué dice | Por qué es falso | Evidencia |
+|---|---|---|---|---|
+| **F-7** | cap. 6, OE2 | «`synthetic_v3`, **del que salen E6, E7 y la evaluación final**, no es reconstruible» | las tres ejecuciones publicadas declaran `dataset_id: synthetic_v2`, que **sí** se reconstruye bit a bit. De `synthetic_v3` sale la comparación de volumen, no las cifras publicadas. El complemento «sobre `synthetic_v3`» se perdió al resumir el registro en `L-25`, y el sufijo `_v3` del fichero de E19, que numera el **tercer intento**, ayudó a la confusión | `E6_baseline_synthetic_v2.json`, `E7_temporal_synthetic_v2.json`, `E19_evaluacion_final_v3.json`, `configs/datos_no_reconstruibles.json`, `configs/manifest_e19.json` |
+| **F-8** | cap. 5, análisis descriptivo | «dos de los cinco fallos no son visibles en las medias: **el fallo de encendido y el termostato bloqueado**» | el termostato es el **más** visible en la media: 69,2 °C frente a 81,4 °C, y delta de Cliff −0,75 **por nivel**. Los dos sin firma en medias son la **sonda lenta** —−1,00 por dispersión— y el fallo de encendido | `E2_datos_sinteticos.md` hallazgo 2, `E4_eda_temporal.md`, `artifacts/tables/E4_separabilidad.csv` |
+
+`F-7` alcanza también a `L-25` en `docs/limitations.md` y a la entrada `A-4` de la sección
+siguiente, que son por donde la frase llegó al capítulo. `F-8` alcanza a
+`docs/diseno-pi1/09-matriz-conclusiones-afectadas.md`, que revisó esa misma frase y la marcó válida.
 
 ## 3. Las que no son falsas pero prometen más de lo que la evidencia sostiene
 
