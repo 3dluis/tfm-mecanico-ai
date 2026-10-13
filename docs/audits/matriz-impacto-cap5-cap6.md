@@ -27,7 +27,13 @@ dejado atrás.
 **Lo que no es tranquilizador:** tres afirmaciones del capítulo 5 y tres del 6 son **falsas hoy**, y
 una de cada capítulo aparece en su primer párrafo, que es lo primero que un tribunal lee.
 
-## 2. Las seis que son falsas hoy
+## 2. Las seis que son falsas hoy — **CORREGIDAS el 13-10-2026**
+
+> **Estado.** Las seis se corrigieron el mismo día, en dos pasos: la propuesta con las cinco
+> columnas exigidas está en [`correccion-cap5-cap6-paso-a.md`](correccion-cap5-cap6-paso-a.md) y la
+> aplicación conserva en cada caso lo que el capítulo decía, dentro de una nota fechada. Ninguna
+> cifra se modificó. `tests/test_memoria_afirmaciones.py` comprueba que ninguna de las seis frases
+> vuelva al texto como afirmación.
 
 Estas no admiten matiz: dicen algo que ya no es cierto.
 
