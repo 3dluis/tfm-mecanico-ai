@@ -17,7 +17,7 @@ cd mecanico-ia-exp
 # 1. Dependencias. Los cinco extras, no dos: `transformers`, `peft`,
 #    `sentence-transformers` y `huggingface-hub` se importan en src, y sin ellos
 #    fallan cuatro pruebas y seis comprobaciones de tipado.
-uv sync --extra nb --extra ml --extra embeddings --extra finetune --extra llm
+uv sync --extra nb --extra ml --extra embeddings --extra finetune --extra llm --extra docx
 
 # 2. Reconstruir el conjunto que no se distribuye y COMPROBAR sus huellas
 bash scripts/reconstruir_datos.sh
