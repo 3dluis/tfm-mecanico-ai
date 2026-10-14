@@ -533,8 +533,13 @@ Las tres cifras son **0 de 14** de falsa confianza, sobre siete ventanas de siet
 8** de abstención innecesaria, sobre ocho ventanas de ocho sesiones; y una cobertura de **6 de 10**
 con evidencia completa. La primera es el resultado que el diseño buscaba y es también el que más
 fácil resulta sobreinterpretar: con un numerador de cero y un denominador de catorce, el intervalo
-de Wilson al 95 % va de 0 a **0,215**. Lo medido es que en esta muestra no ocurrió, no que no pueda
-ocurrir, y la diferencia entre las dos frases es la que separa un resultado de una garantía. Los
+de Wilson al 95 % va de 0 a **0,215**. Ese límite superior no es una propiedad del sistema sino de
+la medición: depende del nivel de confianza elegido —al 99 % sería más alto— y del modelo
+estadístico, que aquí es el de Wilson para una proporción binomial, elegido porque el de Wald
+colapsa a cero cuando el numerador lo es. Supone además que las catorce ejecuciones son
+independientes, y proceden de siete ventanas, de modo que el intervalo real es más ancho que el
+calculado. Lo medido es que en esta muestra no ocurrió, no que no pueda ocurrir, y la diferencia
+entre las dos frases es la que separa una observación de una garantía operativa. Los
 otros dos intervalos son igual de anchos: la abstención innecesaria es compatible con cualquier tasa
 entre 0,071 y 0,591, y la cobertura, entre 0,313 y 0,832. La cobertura de 6 de 10 tampoco se lee
 como cuatro oportunidades perdidas: dos de esas diez ejecuciones llevaban un diagnóstico incorrecto

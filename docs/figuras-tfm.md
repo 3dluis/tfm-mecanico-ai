@@ -3,8 +3,8 @@
 **Fecha:** 13 de octubre de 2026 · **Qué es:** el registro de cada figura de los capítulos 5 y 6,
 con la cadena completa que la une a los datos y al resultado original · **Qué permite:** rastrear
 cualquier trazo del documento hasta la configuración que lo produjo, en los dos sentidos ·
-**Estado:** las dieciséis están **incorporadas** a los capítulos; las dos de los anexos están
-generadas y pendientes de que se aprueben los anexos
+**Estado:** las dieciocho están **incorporadas**: dieciséis en los capítulos 5 y 6, y dos en los
+anexos A y B
 
 ```
 TFM → figura → notebook o guion → experimento → artefacto → configuración → conjunto
@@ -47,8 +47,8 @@ solo emitía PNG.
 | 6.1 | 6 | Conclusiones sobre los objetivos | E1–E19 (etiquetas de etapa) | sin conjunto: es la arquitectura | incorporada |
 | 6.2 | 6 | Conclusiones sobre los objetivos | E1–E19 (uno por fila) | sin conjunto: es documental | incorporada |
 | 6.3 | 6 | Limitaciones | E15 | `synthetic_v2`, validación | incorporada |
-| B.1 | anexo B | Dataset sintético OBD-II | E4 | `synthetic_v1`, sesiones pareadas | generada, pendiente de anexo |
-| D.1 | anexo D | Resultados complementarios | E6 y E7 | `synthetic_v2`, validación | generada, pendiente de anexo |
+| A.1 | anexo A | Arquitectura y datos experimentales · §A.6 | E4 | `synthetic_v1`, sesiones pareadas | incorporada |
+| B.1 | anexo B | Evidencia experimental complementaria · §B.2 | E6 y E7 | `synthetic_v2`, validación | incorporada |
 
 ## 3. Protocolo, fichero, procedimiento de generación y límites
 
@@ -70,8 +70,8 @@ solo emitía PNG.
 | 6.1 | dibujada desde la descripción de la arquitectura | `FIG-6-01_recorrido_experimental` | notebook `00_introduccion.ipynb` ← `docs/experiment-index.md` | **ilustrativa**: dibuja el diseño, no su comportamiento; la separación no se ablacionó |
 | 6.2 | el estado de cada fila es el que el capítulo afirma en prosa | `FIG-6-02_objetivos_y_evidencia` | `scripts/figuras_memoria.py` | no es una medición; «parcial» iguala en una etiqueta situaciones distintas |
 | 6.3 | las políticas de referencia se definieron **después** de medir el criterio | `FIG-6-03_compromiso_cobertura_abstencion` | `scripts/figuras_memoria.py` ← `artifacts/tables/E15_suficiencia.csv` | las referencias no son una línea base independiente; 3 y 5 ventanas |
-| B.1 | misma semilla y mismo régimen con y sin fallo; antes de la marca las dos series coinciden exactamente | `FIG-B-01_series_normal_vs_fallo` | copiada de `artifacts/figures/FIG-E4-01_series_normal_vs_fallo.png`; **no se puede redibujar**: la función genera sus propias sesiones y el generador cambió el 1-09-2026 | una sesión por condición; `synthetic_v1` no se reconstruye; sin SVG |
-| D.1 | una ejecución por modelo | `FIG-D-01_f1_por_clase` | `scripts/figuras_memoria.py` ← `E6_baseline_por_clase_synthetic_v2.csv` y `E7_temporal_por_clase_synthetic_v2.csv` | una ejecución por celda; una diferencia de 0,032 sobre 14 ventanas es ventana y media |
+| A.1 | misma semilla y mismo régimen con y sin fallo; antes de la marca las dos series coinciden exactamente | `FIG-A-01_series_normal_vs_fallo` | copiada de `artifacts/figures/FIG-E4-01_series_normal_vs_fallo.png`; **no se puede redibujar**: la función genera sus propias sesiones y el generador cambió el 1-09-2026 | una sesión por condición; `synthetic_v1` no se reconstruye; sin SVG |
+| B.1 | una ejecución por modelo | `FIG-B-01_f1_por_clase` | `scripts/figuras_memoria.py` ← `E6_baseline_por_clase_synthetic_v2.csv` y `E7_temporal_por_clase_synthetic_v2.csv` | una ejecución por celda; una diferencia de 0,032 sobre 14 ventanas es ventana y media |
 
 Todas viven en `artifacts/figures/memoria/`, en PNG y, salvo las dos copiadas de `artifacts/figures/`,
 también en SVG.
@@ -80,7 +80,7 @@ también en SVG.
 
 Lo que sigue es lo que se comprobó antes de aceptar cada figura, no lo que su nombre promete.
 
-- **Las cuatro de E6 y E7** —`5.3`, `5.5`, y las que alimentan `5.4` y `D.1`— se cotejaron **celda a
+- **Las cuatro de E6 y E7** —`5.3`, `5.5`, y las que alimentan `5.4` y `B.1`— se cotejaron **celda a
   celda** contra `artifacts/tables/E6_baseline_confusion_synthetic_v2.csv` y
   `E7_temporal_confusion_synthetic_v2.csv`. Coinciden. La comprobación importaba porque la hora de
   generación en disco de las figuras históricas, las 15:44 del 1 de septiembre de 2026, es anterior

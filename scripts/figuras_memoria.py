@@ -740,8 +740,8 @@ class Figura:
 FIGURAS: tuple[Figura, ...] = (
     Figura("5.1", "FIG-5-01_particiones", fig_5_01_particiones),
     Figura(
-        "B.1",
-        "FIG-B-01_series_normal_vs_fallo",
+        "A.1",
+        "FIG-A-01_series_normal_vs_fallo",
         copia_de=HISTORICAS / "FIG-E4-01_series_normal_vs_fallo.png",
         motivo_de_la_copia=(
             "no se puede redibujar: la función genera sus propias sesiones con el generador "
@@ -750,7 +750,7 @@ FIGURAS: tuple[Figura, ...] = (
     ),
     Figura("5.2", "FIG-5-02_separabilidad", fig_5_03_separabilidad),
     Figura("5.3", "FIG-5-03_confusiones", fig_5_04_confusiones),
-    Figura("D.1", "FIG-D-01_f1_por_clase", fig_5_05_por_clase),
+    Figura("B.1", "FIG-B-01_f1_por_clase", fig_5_05_por_clase),
     Figura("5.7", "FIG-5-07_calibracion", fig_5_06_calibracion),
     Figura(
         "5.5",

@@ -20,10 +20,10 @@ import pytest
 
 from mecanico_ia_exp.config import paths
 
-CAPITULOS = ("cap5_resultados.md", "cap6_conclusiones.md")
+CAPITULOS = ("cap5_resultados.md", "cap6_conclusiones.md", "anexos.md")
 
 #: «**Figura 5.3. Título.**» en una línea propia.
-TITULO = re.compile(r"^\*\*Figura (\d+)\.(\d+)\. (.+?)\*\*$", re.MULTILINE)
+TITULO = re.compile(r"^\*\*Figura ([A-Z]|\d+)\.(\d+)\. (.+?)\*\*$", re.MULTILINE)
 #: «![texto alternativo](ruta)»
 IMAGEN = re.compile(r"^!\[(.*?)\]\((.+?)\)$", re.MULTILINE)
 #: El pie de procedencia, en cursiva y empezando por «Fuente:».
@@ -50,12 +50,18 @@ def _dpi(ruta: Path) -> int:
 @pytest.mark.parametrize("nombre", CAPITULOS)
 def test_la_numeracion_de_las_figuras_sigue_el_orden_de_lectura(nombre: str) -> None:
     """Insertar una figura en medio descoloca las siguientes y nadie lo nota."""
-    numeros = [(int(c), int(f)) for c, f, _ in TITULO.findall(_texto(nombre))]
+    numeros = [(c, int(f)) for c, f, _ in TITULO.findall(_texto(nombre))]
     assert numeros, f"{nombre} no tiene ninguna figura"
-    capitulo = numeros[0][0]
-    esperado = [(capitulo, i) for i in range(1, len(numeros) + 1)]
-    assert numeros == esperado, (
-        f"la numeración de {nombre} no es correlativa: {['.'.join(map(str, n)) for n in numeros]}"
+    # En los anexos cada uno lleva su propia letra y su propia serie.
+    vistos: dict[str, int] = {}
+    descolocadas = []
+    for serie, numero in numeros:
+        esperado = vistos.get(serie, 0) + 1
+        if numero != esperado:
+            descolocadas.append(f"{serie}.{numero}, se esperaba {serie}.{esperado}")
+        vistos[serie] = numero
+    assert not descolocadas, (
+        f"la numeración de {nombre} no es correlativa: {'; '.join(descolocadas)}"
     )
 
 
