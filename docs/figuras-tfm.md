@@ -45,35 +45,36 @@ La cadena que la tabla recorre es la que el trabajo exige:
 experimento → conjunto → partición → notebook → función de visualización → figura → capítulo
 ```
 
-La huella es el SHA-256 del PNG, truncado a dieciséis caracteres. Las figuras son **deterministas**:
+La página del PDF se lee del entregable: se busca el **pie** de cada figura, que es texto, y no la
+imagen. La huella es el SHA-256 del PNG, truncado a dieciséis caracteres. Las figuras son **deterministas**:
 regenerarlas sin tocar el registro del que leen devuelve el mismo fichero byte a byte, de modo que
 una huella distinta significa que el dato de origen cambió.
 
-| Fig. | Experimento | Conjunto | Partición | Notebook | Función o copia | Fichero | Huella (SHA-256, 16) | Ubicación |
-|---|---|---|---|---|---|---|---|---|
-| 5.1 | E5, ventanado y reparto | `synthetic_v2` | las tres | `01_exploracion_obd` | `datos.fig_particiones()` | `FIG-5-01_particiones.png` | `6f3d6d68c9cd9198` | cap. 5 · Análisis descriptivo de la muestra |
-| 5.2 | E4, análisis exploratorio | `synthetic_v1` | bloques de 60 s | `01_exploracion_obd` | `datos.fig_separabilidad()` | `FIG-5-02_separabilidad.png` | `bbf28e8e0340d3f0` | cap. 5 · Análisis descriptivo de la muestra |
-| 5.3 | análisis contrafactual T2, derivado de E2 y E5 | `synthetic_v2` | entrenamiento | `06_expresion_del_fallo` | `temporal.fig_forma_del_fallo()` | `FIG-5-03_forma_del_fallo.png` | `3d7cf77bd3a4391b` | cap. 5 · Análisis descriptivo de la muestra |
-| 5.4 | E4 y E5 | `synthetic_v2` | entrenamiento | `01_exploracion_obd` | `mezcla_pobre.fig_mezcla_pobre()` | `FIG-5-04_mezcla_pobre.png` | `8839199cb5fd04f6` | cap. 5 · Análisis descriptivo de la muestra |
-| 5.5 | E6 y E7 | `synthetic_v2` | validación | `02_comparacion_modelos` | `diagnostico.fig_confusiones()` | `FIG-5-05_confusiones.png` | `1b804c53d2272d76` | cap. 5 · PI.1 · Diagnóstico, calibración y atribución |
-| 5.6 | E6 y E7 sobre los dos conjuntos | `synthetic_v2 y synthetic_v3` | validación | `02_comparacion_modelos` | `diagnostico.fig_confusor_de_volumen()` | `FIG-5-06_confusor_volumen.png` | `2294121e76175798` | cap. 5 · PI.1 |
-| 5.7 | E6 | `synthetic_v2` | validación, las 14 ventanas de F03 | `02_comparacion_modelos` | copiada de `FIG-E6-02_limite_evidencia_f03.png` | `FIG-5-07_limite_evidencia_termostato.png` | `e80ea0ab1290c673` | cap. 5 · PI.1 |
-| 5.8 | E6, fase G del diseño de PI.1 | `synthetic_v2` | validación, las 70 ventanas con fallo | `06_expresion_del_fallo` | copiada de `FIG-N06-01_expresion_y_aciertos.png` | `FIG-5-08_expresion_del_fallo.png` | `b7ae3b6b3d88d920` | cap. 5 · PI.1 |
-| 5.9 | E5 y E6 | `synthetic_v2` | entrenamiento, una ventana | `01_exploracion_obd` | `temporal.fig_ventana_y_descriptor()` | `FIG-5-09_ventana_y_descriptor.png` | `31f797dae0785205` | cap. 5 · PI.1 |
-| 5.10 | E6, calibrado en E15 | `synthetic_v2` | validación | `02_comparacion_modelos` | `calibracion.fig_calibracion()` | `FIG-5-10_calibracion.png` | `4a58b07d8124a50d` | cap. 5 · PI.1 |
-| 5.11 | E9, atribución | `synthetic_v2` | validación, 18 casos | `04_explicabilidad` | copiada de `FIG-NB04-01_mapa_atribucion.png` | `FIG-5-11_mapa_atribucion.png` | `7513c9ef7ea5e8dd` | cap. 5 · PI.1 |
-| 5.12 | E12, reejecución canónica | `corpus del vehículo` | 6 casos, 5 puntuados | `no tiene notebook propio` | `recuperacion.fig_recuperacion()` | `FIG-5-12_recuperacion.png` | `1e88235ef0f63fa9` | cap. 5 · PI.2 · Recuperación y trazabilidad |
-| 5.13 | E15, verificador v2.1 | `synthetic_v2` | 17 casos sobre 5 ventanas | `05_suficiencia_y_abstencion` | copiada de `FIG-N05-01_aplicables_vs_cobertura.png` | `FIG-5-13_aplicables_vs_cobertura.png` | `1f3e12cc72c4c7b7` | cap. 5 · PI.3 y PI.4 |
-| 5.14 | E18, cuatro ablaciones | `synthetic_v2` | los mismos 17 casos | `04_explicabilidad` | `ablaciones.fig_ablaciones()` | `FIG-5-14_ablaciones.png` | `f9adce6db2bfb383` | cap. 5 · Contribución de cada componente |
-| 5.15 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | copiada de `FIG-NB03-01_primario.png` | `FIG-5-15_evaluacion_final.png` | `1fd19e73ee4e7e0e` | cap. 5 · La evaluación final sobre el conjunto de prueba |
-| 5.16 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | copiada de `FIG-NB03-02_decisiones.png` | `FIG-5-16_decisiones_e19.png` | `43466ceaeb89f890` | cap. 5 · La evaluación final sobre el conjunto de prueba |
-| 5.17 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | `decision.fig_decisiones_y_umbral()` | `FIG-5-17_decisiones_y_umbral.png` | `223c5d4d98fb3507` | cap. 5 · La evaluación final sobre el conjunto de prueba |
-| 6.1 | E1–E19 (etiquetas de etapa) | `sin conjunto: es la arquitectura` | — | `00_introduccion` | copiada de `FIG-NB00-01_recorrido.png` | `FIG-6-01_recorrido_experimental.png` | `bc597db112e7b4a6` | cap. 6 · Conclusiones sobre los objetivos |
-| 6.2 | E1–E19 (uno por fila) | `sin conjunto: es documental` | — | `no tiene notebook propio` | `sintesis.fig_objetivos()` | `FIG-6-02_objetivos_y_evidencia.png` | `23b55c185ef7ffbd` | cap. 6 · Conclusiones sobre los objetivos |
-| 6.3 | E15 | `synthetic_v2` | validación | `05_suficiencia_y_abstencion` | `sintesis.fig_compromiso()` | `FIG-6-03_compromiso_cobertura_abstencion.png` | `e482ede01d9ec9da` | cap. 6 · Limitaciones |
-| A.1 | E4 | `synthetic_v1` | sesiones pareadas | `01_exploracion_obd` | copiada de `FIG-E4-01_series_normal_vs_fallo.png` | `FIG-A-01_series_normal_vs_fallo.png` | `4d357282d5e1a58d` | anexo A · §A.6 |
-| A.2 | análisis contrafactual T2, derivado de E2 y E5 | `synthetic_v2` | entrenamiento | `06_expresion_del_fallo` | `temporal.fig_pareja_contrafactual()` | `FIG-A-02_pareja_contrafactual.png` | `d0ff79dd2feb7606` | anexo A · §A.7 |
-| B.1 | E6 y E7 | `synthetic_v2` | validación | `02_comparacion_modelos` | `diagnostico.fig_f1_por_clase()` | `FIG-B-01_f1_por_clase.png` | `b1ac8ba9ea221d31` | anexo B · §B.2 |
+| Fig. | Experimento | Conjunto | Partición | Notebook | Función o copia | Fichero | Huella (SHA-256, 16) | Ubicación | Pág. PDF |
+|---|---|---|---|---|---|---|---|---|---|
+| 5.1 | E5, ventanado y reparto | `synthetic_v2` | las tres | `01_exploracion_obd` | `datos.fig_particiones()` | `FIG-5-01_particiones.png` | `6f3d6d68c9cd9198` | cap. 5 · Análisis descriptivo de la muestra | 54 |
+| 5.2 | E4, análisis exploratorio | `synthetic_v1` | bloques de 60 s | `01_exploracion_obd` | `datos.fig_separabilidad()` | `FIG-5-02_separabilidad.png` | `bbf28e8e0340d3f0` | cap. 5 · Análisis descriptivo de la muestra | 57 |
+| 5.3 | análisis contrafactual T2, derivado de E2 y E5 | `synthetic_v2` | entrenamiento | `06_expresion_del_fallo` | `temporal.fig_forma_del_fallo()` | `FIG-5-03_forma_del_fallo.png` | `3d7cf77bd3a4391b` | cap. 5 · Análisis descriptivo de la muestra | 59 |
+| 5.4 | E4 y E5 | `synthetic_v2` | entrenamiento | `01_exploracion_obd` | `mezcla_pobre.fig_mezcla_pobre()` | `FIG-5-04_mezcla_pobre.png` | `8839199cb5fd04f6` | cap. 5 · Análisis descriptivo de la muestra | 62 |
+| 5.5 | E6 y E7 | `synthetic_v2` | validación | `02_comparacion_modelos` | `diagnostico.fig_confusiones()` | `FIG-5-05_confusiones.png` | `1b804c53d2272d76` | cap. 5 · PI.1 · Diagnóstico, calibración y atribución | 66 |
+| 5.6 | E6 y E7 sobre los dos conjuntos | `synthetic_v2 y synthetic_v3` | validación | `02_comparacion_modelos` | `diagnostico.fig_confusor_de_volumen()` | `FIG-5-06_confusor_volumen.png` | `2294121e76175798` | cap. 5 · PI.1 | 68 |
+| 5.7 | E6 | `synthetic_v2` | validación, las 14 ventanas de F03 | `02_comparacion_modelos` | copiada de `FIG-E6-02_limite_evidencia_f03.png` | `FIG-5-07_limite_evidencia_termostato.png` | `e80ea0ab1290c673` | cap. 5 · PI.1 | 69 |
+| 5.8 | E6, fase G del diseño de PI.1 | `synthetic_v2` | validación, las 70 ventanas con fallo | `06_expresion_del_fallo` | copiada de `FIG-N06-01_expresion_y_aciertos.png` | `FIG-5-08_expresion_del_fallo.png` | `b7ae3b6b3d88d920` | cap. 5 · PI.1 | 71 |
+| 5.9 | E5 y E6 | `synthetic_v2` | entrenamiento, una ventana | `01_exploracion_obd` | `temporal.fig_ventana_y_descriptor()` | `FIG-5-09_ventana_y_descriptor.png` | `31f797dae0785205` | cap. 5 · PI.1 | 73 |
+| 5.10 | E6, calibrado en E15 | `synthetic_v2` | validación | `02_comparacion_modelos` | `calibracion.fig_calibracion()` | `FIG-5-10_calibracion.png` | `4a58b07d8124a50d` | cap. 5 · PI.1 | 76 |
+| 5.11 | E9, atribución | `synthetic_v2` | validación, 18 casos | `04_explicabilidad` | copiada de `FIG-NB04-01_mapa_atribucion.png` | `FIG-5-11_mapa_atribucion.png` | `7513c9ef7ea5e8dd` | cap. 5 · PI.1 | 78 |
+| 5.12 | E12, reejecución canónica | `corpus del vehículo` | 6 casos, 5 puntuados | `no tiene notebook propio` | `recuperacion.fig_recuperacion()` | `FIG-5-12_recuperacion.png` | `1e88235ef0f63fa9` | cap. 5 · PI.2 · Recuperación y trazabilidad | 80 |
+| 5.13 | E15, verificador v2.1 | `synthetic_v2` | 17 casos sobre 5 ventanas | `05_suficiencia_y_abstencion` | copiada de `FIG-N05-01_aplicables_vs_cobertura.png` | `FIG-5-13_aplicables_vs_cobertura.png` | `1f3e12cc72c4c7b7` | cap. 5 · PI.3 y PI.4 | 85 |
+| 5.14 | E18, cuatro ablaciones | `synthetic_v2` | los mismos 17 casos | `04_explicabilidad` | `ablaciones.fig_ablaciones()` | `FIG-5-14_ablaciones.png` | `f9adce6db2bfb383` | cap. 5 · Contribución de cada componente | 92 |
+| 5.15 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | copiada de `FIG-NB03-01_primario.png` | `FIG-5-15_evaluacion_final.png` | `1fd19e73ee4e7e0e` | cap. 5 · La evaluación final sobre el conjunto de prueba | 97 |
+| 5.16 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | copiada de `FIG-NB03-02_decisiones.png` | `FIG-5-16_decisiones_e19.png` | `43466ceaeb89f890` | cap. 5 · La evaluación final sobre el conjunto de prueba | 98 |
+| 5.17 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | `decision.fig_decisiones_y_umbral()` | `FIG-5-17_decisiones_y_umbral.png` | `1cec118daf16d607` | cap. 5 · La evaluación final sobre el conjunto de prueba | 100 |
+| 6.1 | E1–E19 (etiquetas de etapa) | `sin conjunto: es la arquitectura` | — | `00_introduccion` | copiada de `FIG-NB00-01_recorrido.png` | `FIG-6-01_recorrido_experimental.png` | `bc597db112e7b4a6` | cap. 6 · Conclusiones sobre los objetivos | 107 |
+| 6.2 | E1–E19 (uno por fila) | `sin conjunto: es documental` | — | `no tiene notebook propio` | `sintesis.fig_objetivos()` | `FIG-6-02_objetivos_y_evidencia.png` | `23b55c185ef7ffbd` | cap. 6 · Conclusiones sobre los objetivos | 112 |
+| 6.3 | E15 | `synthetic_v2` | validación | `05_suficiencia_y_abstencion` | `sintesis.fig_compromiso()` | `FIG-6-03_compromiso_cobertura_abstencion.png` | `e482ede01d9ec9da` | cap. 6 · Limitaciones | 117 |
+| A.1 | E4 | `synthetic_v1` | sesiones pareadas | `01_exploracion_obd` | copiada de `FIG-E4-01_series_normal_vs_fallo.png` | `FIG-A-01_series_normal_vs_fallo.png` | `4d357282d5e1a58d` | anexo A · §A.6 | 132 |
+| A.2 | análisis contrafactual T2, derivado de E2 y E5 | `synthetic_v2` | entrenamiento | `06_expresion_del_fallo` | `temporal.fig_pareja_contrafactual()` | `FIG-A-02_pareja_contrafactual.png` | `d0ff79dd2feb7606` | anexo A · §A.7 | 134 |
+| B.1 | E6 y E7 | `synthetic_v2` | validación | `02_comparacion_modelos` | `diagnostico.fig_f1_por_clase()` | `FIG-B-01_f1_por_clase.png` | `b1ac8ba9ea221d31` | anexo B · §B.2 | 138 |
 
 | Fig. | Limitaciones declaradas en su pie |
 |---|---|
