@@ -468,10 +468,13 @@ copiadas de artefactos históricos— también en SVG. Las tablas con extensión
 |---|---|---|---|---|
 | Figura 5.1 | E5 | ventanado y reparto | `FIG-5-01_particiones` | `figuras_memoria.py` ← `synthetic_v2_meta.parquet` y `E5_reparto.csv` |
 | Figura 5.2 | E4 | separabilidad por señal | `FIG-5-02_separabilidad` | `figuras_memoria.py` ← `E4_separabilidad.csv` |
+| Figura 5.3 | contrafactual T2 | forma temporal de cada fallo | `FIG-5-03_forma_del_fallo` | `figuras_memoria.py` ← `artifacts/contrafactual/T2_contrafactual_synthetic_v2.parquet`, que produce `scripts/contrafactual_t2.py` |
+| Figura 5.4 | E4 y E5 | qué separa las dos averías de mezcla pobre | `FIG-5-04_mezcla_pobre` | `figuras_memoria.py` ← `synthetic_v2_features.npy` y su `meta.parquet`, partición de entrenamiento |
 | Figura 5.5 | E6 y E7 | matrices de confusión | `FIG-5-05_confusiones` | `figuras_memoria.py` ← `E6_baseline_confusion_synthetic_v2.csv` y `E7_temporal_confusion_synthetic_v2.csv` |
 | Figura 5.6 | E6 y E7 | comparación entre conjuntos | `FIG-5-06_confusor_volumen` | `figuras_memoria.py` ← `E6_baseline_synthetic_v{2,3}.json` y `E7_temporal_synthetic_v{2,3}.json` |
 | Figura 5.7 | E6 | límite de evidencia del termostato | `FIG-5-07_limite_evidencia_termostato` | copiada de `FIG-E6-02_limite_evidencia_f03.png`; **no se puede redibujar** |
 | Figura 5.8 | E6, fase G | expresión efectiva del fallo | `FIG-5-08_expresion_del_fallo` | notebook `06_expresion_del_fallo.ipynb` |
+| Figura 5.9 | E5 y E6 | de la señal al descriptor | `FIG-5-09_ventana_y_descriptor` | `figuras_memoria.py` ← `T2_contrafactual_synthetic_v2.parquet` y `synthetic_v2_features.npy` |
 | Figura 5.10 | E6, calibrado en E15 | calibración antes y después | `FIG-5-10_calibracion` | `figuras_memoria.py` ← `E15_suficiencia.json` |
 | Figura 5.11 | E9 | mapa de atribución | `FIG-5-11_mapa_atribucion` | notebook `04_explicabilidad.ipynb` ← `E9_atribuciones_synthetic_v2.csv` |
 | Figura 5.12 | E12 | recuperación por estrategia | `FIG-5-12_recuperacion` | `figuras_memoria.py` ← `E12_retrieval_por_estrategia.csv` |
@@ -479,10 +482,12 @@ copiadas de artefactos históricos— también en SVG. Las tablas con extensión
 | Figura 5.14 | E18 | efecto de cada ablación | `FIG-5-14_ablaciones` | `figuras_memoria.py` ← `E18_ablacion_A1.json` a `A4.json` |
 | Figura 5.15 | E19 | las tres cifras finales | `FIG-5-15_evaluacion_final` | notebook `03_analisis_e19.ipynb` ← `E19_evaluacion_final_v3.csv` |
 | Figura 5.16 | E19 | decisión por ejecución | `FIG-5-16_decisiones_e19` | notebook `03_analisis_e19.ipynb` |
+| Figura 5.17 | E19 | las 35 ejecuciones frente al umbral | `FIG-5-17_decisiones_y_umbral` | `figuras_memoria.py` ← `E19_evaluacion_final_v3.csv` |
 | Figura 6.1 | E1–E19 | recorrido experimental | `FIG-6-01_recorrido_experimental` | notebook `00_introduccion.ipynb` |
 | Figura 6.2 | E1–E19 | objetivos y evidencia | `FIG-6-02_objetivos_y_evidencia` | `figuras_memoria.py` |
 | Figura 6.3 | E15 | compromiso entre los dos errores | `FIG-6-03_compromiso_cobertura_abstencion` | `figuras_memoria.py` ← `E15_suficiencia.csv` |
 | Figura A.1 | E4 | señal testigo por condición | `FIG-A-01_series_normal_vs_fallo` | copiada de `FIG-E4-01_series_normal_vs_fallo.png`; **no se puede redibujar** |
+| Figura A.2 | contrafactual T2 | la pareja con fallo y sin él | `FIG-A-02_pareja_contrafactual` | `figuras_memoria.py` ← `T2_contrafactual_synthetic_v2.parquet` |
 | Figura B.1 | E6 y E7 | F1 por condición | `FIG-B-01_f1_por_clase` | `figuras_memoria.py` ← tablas por clase de E6 y E7 |
 | Tabla 5.1 | E6 y E7 | rendimiento de los modelos | — | `E6_baseline_synthetic_v2.json`, `E7_temporal_synthetic_v2.json` |
 | Tabla 5.2 | E6 y E15 | calibración de la confianza | — | `E15_suficiencia.json`, bloque `calibration` |
@@ -492,6 +497,7 @@ copiadas de artefactos históricos— también en SVG. Las tablas con extensión
 | Tabla 5.6 | E15 | los dos errores y las políticas triviales | — | `E15_suficiencia.json` |
 | Tabla 5.7 | E13 | salidas del modelo de lenguaje | — | `E13_agente_transformers*.json` |
 | Tabla 5.8 | E18 | efecto de cada componente | — | `E18_ablacion_A1.json` a `A4.json` |
+| Tabla B.5 | E4 y E5 | separabilidad entre las dos averías de mezcla pobre | — | `synthetic_v2_features.npy`, partición de entrenamiento |
 
 *Fuente: elaboración propia. La columna de la izquierda es la numeración del documento; la de la derecha, el procedimiento y el registro. Las dos figuras marcadas como no redibujables se explican en sus apartados: la primera necesita una predicción por ventana que el registro de E6 no guarda, y la segunda procede de un generador que ya no existe.*
 
