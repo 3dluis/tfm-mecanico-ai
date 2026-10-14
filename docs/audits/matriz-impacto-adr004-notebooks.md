@@ -32,7 +32,7 @@ Buscado en todo el repositorio por las dos formulaciones.
 |---|---|---|---|
 | `notebooks/00_introduccion.ipynb` | §1, cita en bloque | la amplia, presentada como «la pregunta de investigación» | **sustituir** por la canónica |
 | ídem | §1, párrafo siguiente | «La pregunta tiene cuatro verbos: identificar, generar, validar e incorporar» | **reescribir**: los verbos de la canónica son explicar, rastrear y reconocer |
-| `docs/notebooks/html/00_introduccion.html` | derivado | ídem | **regenerar** del notebook corregido |
+| `notebooks/html/00_introduccion.html` | derivado | ídem | **regenerar** del notebook corregido |
 | `docs/notebook-traceability.md` | encabezado «La pregunta principal» | la amplia | **sustituir** por la canónica |
 
 ### 2.2 Documentos que **mencionan** la amplia correctamente, como superada

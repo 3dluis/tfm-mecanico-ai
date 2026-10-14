@@ -34,13 +34,13 @@ caso, un acelerador. Cada notebook FULL documenta sus requisitos.
 
 | Notebook | Experimentos | Modalidad | Modo | Qué responde |
 |---|---|---|---|---|
-| [`00_introduccion`](html/00_introduccion.html) | E1–E19 | visualización histórica + ilustrativa | DEMO | el recorrido completo y el estado de la evidencia |
-| [`01_exploracion_obd`](html/01_exploracion_obd.html) | E2, E4, E5 | reanálisis + ilustrativa | DEMO | si las señales contienen estructura diagnóstica y de qué forma |
-| [`02_comparacion_modelos`](html/02_comparacion_modelos.html) | E6, E7 | visualización histórica | DEMO | si el modelo temporal supera a la línea base, y por qué la pregunta sigue abierta |
-| [`03_analisis_e19`](html/03_analisis_e19.html) | E19 | reanálisis sobre congelado | DEMO | si el criterio de suficiencia evita la falsa confianza sobre el conjunto de prueba |
-| [`04_explicabilidad`](html/04_explicabilidad.html) | E9, E18 (`A1`) | visualización histórica | DEMO | qué señal sostiene cada diagnóstico, y cuánto aporta la atribución |
-| [`05_suficiencia_y_abstencion`](html/05_suficiencia_y_abstencion.html) | E15, E18 (`A1`–`A4`), **P1** | visualización histórica | DEMO | cuándo el sistema se niega a explicar, qué componente lo decide y qué hace ante evidencia que parece pertinente |
-| [`06_expresion_del_fallo`](html/06_expresion_del_fallo.html) | E6, E7, fase G de PI.1 | **reanálisis** | FULL (necesita `synthetic_v2` reconstruido) | `fault_active` frente a `fault_expressed`: por qué el modelo acierta donde acierta, y por qué `synthetic_v2` y `synthetic_v3` no son el mismo instrumento |
+| [`00_introduccion`](../../notebooks/html/00_introduccion.html) | E1–E19 | visualización histórica + ilustrativa | DEMO | el recorrido completo y el estado de la evidencia |
+| [`01_exploracion_obd`](../../notebooks/html/01_exploracion_obd.html) | E2, E4, E5 | reanálisis + ilustrativa | DEMO | si las señales contienen estructura diagnóstica y de qué forma |
+| [`02_comparacion_modelos`](../../notebooks/html/02_comparacion_modelos.html) | E6, E7 | visualización histórica | DEMO | si el modelo temporal supera a la línea base, y por qué la pregunta sigue abierta |
+| [`03_analisis_e19`](../../notebooks/html/03_analisis_e19.html) | E19 | reanálisis sobre congelado | DEMO | si el criterio de suficiencia evita la falsa confianza sobre el conjunto de prueba |
+| [`04_explicabilidad`](../../notebooks/html/04_explicabilidad.html) | E9, E18 (`A1`) | visualización histórica | DEMO | qué señal sostiene cada diagnóstico, y cuánto aporta la atribución |
+| [`05_suficiencia_y_abstencion`](../../notebooks/html/05_suficiencia_y_abstencion.html) | E15, E18 (`A1`–`A4`), **P1** | visualización histórica | DEMO | cuándo el sistema se niega a explicar, qué componente lo decide y qué hace ante evidencia que parece pertinente |
+| [`06_expresion_del_fallo`](../../notebooks/html/06_expresion_del_fallo.html) | E6, E7, fase G de PI.1 | **reanálisis** | FULL (necesita `synthetic_v2` reconstruido) | `fault_active` frente a `fault_expressed`: por qué el modelo acierta donde acierta, y por qué `synthetic_v2` y `synthetic_v3` no son el mismo instrumento |
 
 Los cinco se ejecutan desde un kernel limpio en menos de dos minutos cada uno y están verificados
 por `tests/test_notebooks.py`.
