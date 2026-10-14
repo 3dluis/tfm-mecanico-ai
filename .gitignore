@@ -61,6 +61,16 @@ experiments/runs/**
 # se versiona es la copia en HTML, que es lo que el tribunal lee sin ejecutar.
 notebooks/salida/
 
-# Documento entregable: se genera con scripts/montar_docx.py y no se versiona.
-# Lo versionado es el procedimiento y el texto fuente, no el binario resultante.
-entregables/
+# Entregables. El directorio **no** se excluye entero: lo que no se versiona son
+# los binarios regenerables y el paquete de entrega. El procedimiento que los
+# produce, el texto fuente y los artefactos científicos sí están en el índice.
+/entregables/memoria.docx
+/entregables/memoria.pdf
+
+# Repositorio independiente de entrega académica. Tiene su propio `.git` y su
+# propio historial: no es un submódulo ni un subtree, y el repositorio principal
+# no lo versiona para no anidar dos historiales.
+/entregables/trabajo_practico/
+
+# Archivo ZIP generado
+/entregables/trabajo_practico.zip
