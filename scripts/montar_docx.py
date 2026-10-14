@@ -506,12 +506,84 @@ def anadir_estilos(xml_estilos: str) -> str:
     return xml_estilos.replace("</w:styles>", "".join(nuevos) + "</w:styles>")
 
 
+def pedir_actualizacion_de_campos(settings_xml: str) -> str:
+    """Pide a la aplicación que actualice los campos al abrir el documento.
+
+    Los tres índices son **campos nativos**, no texto: están vacíos hasta que la
+    aplicación los evalúa. Sin esto, el PDF de revisión sale con los tres
+    índices mostrando «Actualice el índice desde Word (F9)» en lugar de sus
+    entradas, que es exactamente lo que un tribunal no debería encontrarse.
+
+    ``w:updateFields`` es la marca estándar de OOXML para eso, y la honran tanto
+    Word como LibreOffice. No sustituye los campos por texto fijo: sigue habiendo
+    campos, y el documento sigue siendo editable.
+    """
+    if "<w:updateFields" in settings_xml:
+        return settings_xml
+    marca = '<w:updateFields w:val="true"/>'
+    inicio = settings_xml.index("<w:settings")
+    cierre = settings_xml.index(">", inicio) + 1
+    return settings_xml[:cierre] + marca + settings_xml[cierre:]
+
+
+def _reescribir_fragmentos(parrafo: str, texto: str) -> str:
+    """Pone todo el texto en el primer ``<w:t>`` del párrafo y vacía los demás.
+
+    Conserva el formato del primer fragmento, que es el que la plantilla eligió
+    para ese párrafo.
+    """
+    piezas: list[str] = []
+    ultimo = 0
+    for i, fragmento in enumerate(re.finditer(r"(<w:t[^>]*>).*?</w:t>", parrafo, re.S)):
+        piezas.append(parrafo[ultimo : fragmento.start()])
+        piezas.append(f"{fragmento.group(1)}{texto if i == 0 else ''}</w:t>")
+        ultimo = fragmento.end()
+    piezas.append(parrafo[ultimo:])
+    return "".join(piezas)
+
+
+def _rellenar_marcador_partido(xml: str, marcador: str, valor: str) -> tuple[str, int]:
+    """Sustituye un marcador aunque el XML lo tenga troceado en varios fragmentos.
+
+    Word parte el texto de un párrafo en varios ``<w:r>`` por motivos que no
+    tienen que ver con el contenido —una marca de revisión ortográfica basta—, de
+    modo que el de la portada llega como `['[', 'Título del trabajo de fin de ',
+    'master]']`. Una sustitución sobre la cadena del XML no lo encuentra, y el
+    marcador sobrevive hasta el PDF sin que nada avise.
+
+    Se trabaja por párrafo: si el texto **concatenado** contiene el marcador, el
+    primer fragmento recibe el resultado y los demás se vacían, con lo que se
+    conserva el formato del primero, que es el que la plantilla eligió.
+    """
+    sustituidos = 0
+    piezas: list[str] = []
+    ultimo = 0
+    for parrafo in re.finditer(r"<w:p\b.*?</w:p>", xml, re.S):
+        fragmentos = re.findall(r"<w:t[^>]*>(.*?)</w:t>", parrafo.group(0), re.S)
+        if len(fragmentos) < 2 or marcador not in "".join(fragmentos):
+            continue
+        # El primer fragmento recibe el texto entero y los demás se vacían.
+        nuevo_parrafo = _reescribir_fragmentos(
+            parrafo.group(0), "".join(fragmentos).replace(marcador, valor)
+        )
+        piezas.append(xml[ultimo : parrafo.start()])
+        piezas.append(nuevo_parrafo)
+        ultimo = parrafo.end()
+        sustituidos += 1
+    piezas.append(xml[ultimo:])
+    return "".join(piezas), sustituidos
+
+
 def rellenar_marcadores(xml: str, datos: dict[str, str]) -> tuple[str, int]:
     """Sustituye los marcadores de la plantilla por los datos de la portada."""
     sustituidos = 0
     for marcador, campo in MARCADORES.items():
         valor = (datos.get(campo) or "").strip()
-        if not valor or marcador not in xml:
+        if not valor:
+            continue
+        xml, partidos = _rellenar_marcador_partido(xml, marcador, valor)
+        sustituidos += partidos
+        if marcador not in xml:
             continue
         sustituidos += xml.count(marcador)
         xml = xml.replace(marcador, valor)
@@ -565,6 +637,10 @@ def montar(plantilla: Path, salida: Path, datos: dict[str, str] | None = None) -
         documento_final, seccion = _adoptar_seccion_del_cuerpo(documento_final, xml_plantilla)
         cambios["sección del cuerpo tomada de la plantilla"] = seccion
         partes["word/document.xml"] = documento_final.encode("utf-8")
+        if "word/settings.xml" in partes:
+            partes["word/settings.xml"] = pedir_actualizacion_de_campos(
+                partes["word/settings.xml"].decode("utf-8")
+            ).encode("utf-8")
         partes["word/styles.xml"] = anadir_estilos(
             partes["word/styles.xml"].decode("utf-8")
         ).encode("utf-8")

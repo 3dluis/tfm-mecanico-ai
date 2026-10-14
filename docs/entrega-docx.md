@@ -17,6 +17,21 @@ uv run python scripts/verificar_docx.py entregables/memoria.docx \
 `entregables/` está fuera del control de versiones. Lo versionado es el procedimiento y el texto
 fuente; el binario se regenera.
 
+### Lo que el PDF no trae, y por qué
+
+Los tres índices son **campos nativos de Word**, no texto fijo. El documento lleva la marca
+`w:updateFields`, de modo que Word ofrece actualizarlos al abrirlo y `F9` los rellena. La conversión
+a PDF de LibreOffice en modo desatendido **no evalúa esos campos**, así que el PDF de revisión
+muestra en su lugar la línea «Actualice el índice desde Word (F9)».
+
+No se sustituyen por texto estático: un índice escrito a mano se desincroniza con el documento en
+cuanto cambia una página, y el aviso impreso es preferible a una lista de páginas que miente. Para
+un PDF con los índices rellenos, el camino es abrir el DOCX en Word, actualizar los campos y
+exportar desde allí.
+
+Se intentó actualizarlos mediante el puente UNO de LibreOffice; el proceso no se sostuvo en este
+equipo y la vía queda documentada como no resuelta, no como imposible.
+
 ## 2. Herramientas, con su versión
 
 | Herramienta | Versión usada | Para qué | Cómo se instala |
