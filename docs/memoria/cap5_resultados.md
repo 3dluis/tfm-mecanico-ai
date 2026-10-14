@@ -46,7 +46,7 @@ recoge esa medida para las doce señales y las cinco condiciones.
 
 ![Mapa de calor de la delta de Cliff por señal y condición: la fuga de vacío y la deriva separan por el nivel de los ajustes de combustible, el termostato por el nivel de la temperatura del refrigerante, la sonda lenta solo por la dispersión de la propia sonda, y el fallo de encendido alcanza un único efecto grande.](../../artifacts/figures/memoria/FIG-5-02_separabilidad.png)
 
-*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, bloques de 60 s. Protocolo: delta de Cliff frente a la condición sin fallo, calculada por separado sobre la media del bloque y sobre su desviación; se etiquetan las celdas con efecto grande, |delta| ≥ 0,474. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, bloques de 60 s; es **pre-calibración** y no se reconstruye con el generador publicado. Protocolo: delta de Cliff frente a la condición sin fallo, calculada por separado sobre la media del bloque y sobre su desviación; se etiquetan las celdas con efecto grande, |delta| ≥ 0,474. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
 Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos. Tres se separan por
 el nivel y con efecto máximo o casi: la fuga de vacío y la deriva del caudalímetro en el ajuste de

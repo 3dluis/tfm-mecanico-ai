@@ -119,6 +119,10 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
 # son títulos y pies que se imprimen, donde «0–1» con guion largo y el signo
 # menos son la tipografía correcta, y los pies de procedencia son párrafos.
 "scripts/figuras_memoria.py" = ["E501", "RUF001", "RUF002", "RUF003"]
+# Los módulos que dibujan las figuras de la memoria están en el mismo caso:
+# sus cadenas son rótulos y pies que se imprimen, donde «0–1» con guion largo
+# y el signo menos tipográfico son lo correcto.
+"src/mecanico_ia_exp/visualization/memoria/*.py" = ["RUF001", "RUF002", "RUF003"]
 
 [tool.mypy]
 python_version = "3.11"

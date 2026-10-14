@@ -1,0 +1,62 @@
+"""Las figuras de la memoria, una función por figura y una sola implementación.
+
+**Por qué este paquete existe.** Las figuras del documento se dibujaban desde un
+guion de `scripts/`, fuera del paquete y fuera de la comprobación de tipos. Eso
+tenía dos consecuencias: el código científico que produce una figura no se podía
+importar desde un notebook, y nada impedía que la misma figura acabara dibujada
+dos veces de dos maneras distintas.
+
+Aquí vive la implementación. El guion `scripts/figuras_memoria.py` queda como lo
+que debe ser: un registro de qué figura lleva cada número y una orden de consola.
+
+**Qué garantiza cada función.** Recibe los datos de un registro de ejecución o de
+una tabla congelada, y **no escribe ningún valor a mano**. Si el registro no está,
+falla; no inventa el dato ni lo aproxima.
+
+**Dónde se dibuja.** Todas a 5,9 pulgadas de ancho, que es el ancho útil de la
+página con los márgenes de la plantilla. Una figura más ancha la escala el
+procesador de textos al entrar, y el escalado encoge las etiquetas.
+"""
+
+from __future__ import annotations
+
+from mecanico_ia_exp.visualization.memoria.ablaciones import fig_ablaciones, tasas_e15
+from mecanico_ia_exp.visualization.memoria.base import (
+    ANCHO_DE_PAGINA,
+    CONDICION,
+    estilo_para_impresion,
+    guardar,
+    numero,
+    pie,
+    titulo,
+)
+from mecanico_ia_exp.visualization.memoria.calibracion import fig_calibracion
+from mecanico_ia_exp.visualization.memoria.datos import fig_particiones, fig_separabilidad
+from mecanico_ia_exp.visualization.memoria.diagnostico import (
+    fig_confusiones,
+    fig_confusor_de_volumen,
+    fig_f1_por_clase,
+)
+from mecanico_ia_exp.visualization.memoria.recuperacion import fig_recuperacion
+from mecanico_ia_exp.visualization.memoria.sintesis import fig_compromiso, fig_objetivos
+
+__all__ = [
+    "ANCHO_DE_PAGINA",
+    "CONDICION",
+    "estilo_para_impresion",
+    "fig_ablaciones",
+    "fig_calibracion",
+    "fig_compromiso",
+    "fig_confusiones",
+    "fig_confusor_de_volumen",
+    "fig_f1_por_clase",
+    "fig_objetivos",
+    "fig_particiones",
+    "fig_recuperacion",
+    "fig_separabilidad",
+    "guardar",
+    "numero",
+    "pie",
+    "tasas_e15",
+    "titulo",
+]

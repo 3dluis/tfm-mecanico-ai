@@ -146,7 +146,7 @@ señal y condición a condición.
 
 ![Cinco paneles, uno por condición: antes de la marca de entrada del fallo las dos series coinciden exactamente, y la divergencia posterior es el efecto de la condición.](../../artifacts/figures/memoria/FIG-A-01_series_normal_vs_fallo.png)
 
-*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, sesiones pareadas. Protocolo: misma semilla, mismo régimen urbano y mismo perfil de conducción con y sin el fallo; antes del instante de entrada las dos series coinciden exactamente, de modo que toda divergencia posterior es la condición. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
+*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, sesiones pareadas; es **pre-calibración** y no se reconstruye con el generador publicado. Protocolo: misma semilla, mismo régimen urbano y mismo perfil de conducción con y sin el fallo; antes del instante de entrada las dos series coinciden exactamente, de modo que toda divergencia posterior es la condición. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
 
 La comparación es pareada a propósito: sin parear, la mayor parte de la diferencia visible sería la
 forma de conducir y no la condición. En el panel de la fuga de vacío el ajuste de combustible se
