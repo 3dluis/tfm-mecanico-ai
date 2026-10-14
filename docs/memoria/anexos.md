@@ -418,9 +418,9 @@ necesita el conjunto reconstruido.
 | `06_expresion_del_fallo` | expresión efectiva del fallo, ventana a ventana | reproducción |
 
 Cada uno declara en su cabecera la modalidad, el conjunto, el commit y qué se puede y qué no se
-puede concluir de lo que muestra. Sus versiones **HTML**, con las figuras y las tablas dentro, están
-en `docs/notebooks/html/` y se abren sin instalar nada ni ejecutar una celda: son la vía de lectura
-para quien quiera revisar sin reproducir.
+puede concluir de lo que muestra. Cada uno tiene además una versión **HTML** que acompaña al
+notebook, con sus figuras y sus tablas dentro, y que se abre sin instalar nada ni ejecutar una
+celda: es la vía de lectura para quien quiera revisar sin reproducir.
 
 ## C.4 · Los guiones de verificación
 
