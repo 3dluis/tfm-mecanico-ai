@@ -29,6 +29,7 @@ __all__ = [
     "COLOR_MAL",
     "COLOR_RED",
     "CONDICION",
+    "CONTRAFACTUAL",
     "DESTINO",
     "HISTORICAS",
     "INK_MUTED",
@@ -50,6 +51,13 @@ TABLAS = paths.ROOT / "artifacts" / "tables"
 REGISTROS = paths.ROOT / "experiments"
 HISTORICAS = paths.ROOT / "artifacts" / "figures"
 SALIDA_NOTEBOOKS = paths.ROOT / "notebooks" / "salida"
+
+#: El artefacto derivado del análisis contrafactual T2. Lo produce
+#: `scripts/contrafactual_t2.py`, vive en su propio directorio y **no es un
+#: conjunto de datos**: no tiene ventanado ni particiones, no entra en ningún
+#: entrenamiento y no modifica ninguna métrica. Las figuras que lo usan lo
+#: declaran en su pie.
+CONTRAFACTUAL = paths.ROOT / "artifacts" / "contrafactual" / "T2_contrafactual_synthetic_v2.parquet"
 
 #: Nombres legibles de las seis condiciones. El identificador se conserva en el
 #: eje cuando la figura lo necesita para cruzarse con una tabla.
