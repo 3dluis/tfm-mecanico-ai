@@ -1,0 +1,120 @@
+{
+  "que_es": "Trayectorias con fallo y sus contrafactuales sin fallo, de sesiones de entrenamiento de synthetic_v2. ARTEFACTO DERIVADO PARA ANALISIS VISUAL.",
+  "que_no_es": [
+    "no entra en entrenamiento, validacion ni prueba",
+    "no modifica ninguna metrica historica",
+    "no se usa para ajustar ningun modelo",
+    "no es una evaluacion nueva ni independiente",
+    "no es un conjunto de datos: no tiene particiones ni ventanado"
+  ],
+  "generado_el": "2026-10-14T18:51:09+00:00",
+  "commit": "864da39d1033fc294c7ca30146928598a3dab0a5",
+  "conjunto_de_origen": "synthetic_v2",
+  "plan": {
+    "semilla": 20260901,
+    "sesiones_por_fallo": 12
+  },
+  "mecanismo": "El motor de senales avanza al margen del fallo: la trayectoria sana es el valor que generate_session pasa a la funcion de fallo. El contrafactual se obtiene con la misma especificacion y fault_id=F00_normal. No hay generador nuevo.",
+  "verificacion": "Cada sesion original se regenero con el esquema historico y se comparo muestra a muestra con synthetic_v2.parquet: identicas con tolerancia 1e-9. Y las dos trayectorias de cada pareja son identicas antes del instante de entrada.",
+  "huella_del_conjunto_de_origen": {
+    "data/raw/synthetic/synthetic_v2.parquet": "e3d36e6417fee3a5e2a6457d403ccf5c788ecebda948ddcd9050ff8c31817b37"
+  },
+  "huellas_del_generador": {
+    "src/mecanico_ia_exp/obd/synthetic.py": "06ec228f2270f920c2af04228cc6e3c47eb8cf5eae18e99da03b4959127bbcff",
+    "src/mecanico_ia_exp/obd/signals.py": "af4f22e1bf7cc10510ae1ccb47cfff099c60f7ef97c31eeb4aebb7ddd77aec99",
+    "src/mecanico_ia_exp/obd/faults.py": "8391854af06848c6284b879b98618911a7d87c656a49ca666ef905d4e32ccc2e",
+    "src/mecanico_ia_exp/obd/expresion.py": "db937aaafe877a7cdb21a0d8c817316098424372486983ac1ce4de51b0c599f6"
+  },
+  "sesiones": [
+    {
+      "session_id": "F01_vacuum_leak__highway__01",
+      "fault_id": "F01_vacuum_leak",
+      "regime": "highway",
+      "particion_de_origen": "train",
+      "seed": 2116099460,
+      "duration_s": 600.0,
+      "sample_rate_hz": 1.0,
+      "ambient_temp_c": 20.50474926490843,
+      "fault_onset_s": 120.0,
+      "senales_alteradas": [
+        "map",
+        "stft_bank1",
+        "ltft_bank1"
+      ],
+      "muestras_con_expresion": 480,
+      "muestras_totales": 600
+    },
+    {
+      "session_id": "F02_maf_drift__highway__09",
+      "fault_id": "F02_maf_drift",
+      "regime": "highway",
+      "particion_de_origen": "train",
+      "seed": 1604792588,
+      "duration_s": 600.0,
+      "sample_rate_hz": 1.0,
+      "ambient_temp_c": 22.960734648906886,
+      "fault_onset_s": 120.0,
+      "senales_alteradas": [
+        "maf",
+        "stft_bank1",
+        "ltft_bank1"
+      ],
+      "muestras_con_expresion": 479,
+      "muestras_totales": 600
+    },
+    {
+      "session_id": "F03_thermostat_stuck__highway__05",
+      "fault_id": "F03_thermostat_stuck",
+      "regime": "highway",
+      "particion_de_origen": "train",
+      "seed": 1324327852,
+      "duration_s": 600.0,
+      "sample_rate_hz": 1.0,
+      "ambient_temp_c": 16.060333397119823,
+      "fault_onset_s": 120.0,
+      "senales_alteradas": [
+        "coolant_temperature"
+      ],
+      "muestras_con_expresion": 480,
+      "muestras_totales": 600
+    },
+    {
+      "session_id": "F04_o2_lag__highway__01",
+      "fault_id": "F04_o2_lag",
+      "regime": "highway",
+      "particion_de_origen": "train",
+      "seed": 508102929,
+      "duration_s": 600.0,
+      "sample_rate_hz": 1.0,
+      "ambient_temp_c": 22.625107502896476,
+      "fault_onset_s": 120.0,
+      "senales_alteradas": [
+        "stft_bank1",
+        "oxygen_sensor"
+      ],
+      "muestras_con_expresion": 480,
+      "muestras_totales": 600
+    },
+    {
+      "session_id": "F05_misfire__idle__02",
+      "fault_id": "F05_misfire",
+      "regime": "idle",
+      "particion_de_origen": "train",
+      "seed": 1119359397,
+      "duration_s": 600.0,
+      "sample_rate_hz": 1.0,
+      "ambient_temp_c": 25.345815340094525,
+      "fault_onset_s": 120.0,
+      "senales_alteradas": [
+        "rpm",
+        "engine_load",
+        "stft_bank1",
+        "oxygen_sensor"
+      ],
+      "muestras_con_expresion": 16,
+      "muestras_totales": 600
+    }
+  ],
+  "huella_sha256": "3d3df8d23bbb5fd778d4f5b2fddb8aba2b06c22f86a02dd7054b0cbac4ca405a",
+  "filas": 6000
+}

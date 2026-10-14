@@ -775,7 +775,7 @@ curiosidad.
 
 ## 17. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** Este notebook sostiene el apartado «La evaluación final sobre el conjunto de prueba» del capítulo 5, con la **Figura 5.12** —las tres cifras con sus denominadores— y la **Figura 5.13** —la decisión de cada una de las 22 ejecuciones—. Lo que la evaluación cambia en los objetivos está en el capítulo 6, en OE3, OE5 y el objetivo general.
+**Dónde aparece esto en la memoria.** Este notebook sostiene el apartado «La evaluación final sobre el conjunto de prueba» del capítulo 5, con la **Figura 5.15** —las tres cifras con sus denominadores— y la **Figura 5.16** —la decisión de cada una de las 22 ejecuciones—. Lo que la evaluación cambia en los objetivos está en el capítulo 6, en OE3, OE5 y el objetivo general.
 
 - `docs/experiments/E19_evaluacion_final.md` — informe completo de la fase
 - `docs/methodology/congelacion-anotacion-e19.md` — las reglas, congeladas antes de abrir

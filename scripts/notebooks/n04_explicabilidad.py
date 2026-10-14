@@ -473,7 +473,7 @@ ejecutar el explicador por permutación, que es lo caro del proceso. En modo FUL
 
 ## 15. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** El mapa de atribución es la **Figura 5.8** del capítulo 5, en el apartado de PI.1, y el resumen por diagnóstico está en el anexo B, **Tabla B.3**. La lectura de la ablación `A1` que este notebook discute aparece junto a la **Figura 5.11**.
+**Dónde aparece esto en la memoria.** El mapa de atribución es la **Figura 5.11** del capítulo 5, en el apartado de PI.1, y el resumen por diagnóstico está en el anexo B, **Tabla B.3**. La lectura de la ablación `A1` que este notebook discute aparece junto a la **Figura 5.14**.
 
 - `docs/experiments/E9_atribucion.md` — informe de la fase
 - `experiments/E9_xai_synthetic_v2.json` — registro, con el fondo y su huella

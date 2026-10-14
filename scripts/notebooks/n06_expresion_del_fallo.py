@@ -437,7 +437,7 @@ lo son**: se midieron sobre el conjunto que hay, y su registro lo acredita. Lo q
     md("""\
 ## 12. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** La expresión efectiva del fallo es la **Figura 5.6** del capítulo 5, en el apartado de PI.1, junto al límite de evidencia del termostato de la **Figura 5.5**. La diferencia entre los tres conjuntos sintéticos está tabulada en el anexo A, apartado A.5.
+**Dónde aparece esto en la memoria.** La expresión efectiva del fallo es la **Figura 5.8** del capítulo 5, en el apartado de PI.1, junto al límite de evidencia del termostato de la **Figura 5.7**. La diferencia entre los tres conjuntos sintéticos está tabulada en el anexo A, apartado A.5.
 
 | Cifra de este notebook | De dónde sale |
 |---|---|

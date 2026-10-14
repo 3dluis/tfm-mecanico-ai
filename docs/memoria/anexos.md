@@ -92,7 +92,7 @@ en el capítulo 5.
 
 Parámetros con que se generaron: severidad 0,6 en la fuga; deriva del 18 % con rampa de 300 s en el
 caudalímetro; techo de 71 °C en el termostato; suavizado de 0,82 en la sonda; y tasa del 2 % con
-caída de 260 rpm en el fallo de encendido. El techo de 71 °C es el parámetro que la Figura 5.5 del
+caída de 260 rpm en el fallo de encendido. El techo de 71 °C es el parámetro que la Figura 5.7 del
 capítulo 5 usa como línea de referencia, y es declarado, no ajustado a los datos.
 
 ## A.4 · La calibración contra el manual de taller
@@ -164,6 +164,49 @@ instrumento declarados, y no como una figura que un tercero pueda regenerar. Lo 
 forma de cada fallo— sigue siendo válido; lo que no puede hacerse es tomar sus valores como los del
 conjunto con que se entrenaron los modelos.
 
+## A.7 · La misma comparación, ahora sobre el conjunto canónico
+
+La Figura A.1 es un artefacto histórico y no se regenera. La comparación que ilustra sí puede
+hacerse hoy, sobre el conjunto con el que se entrenaron los modelos, porque el generador calcula la
+trayectoria sin avería en cada muestra: el motor de señales avanza al margen del fallo, de modo que
+el valor que la función de fallo recibe **es** la trayectoria sana de esa misma sesión. No hay que
+simularla aparte ni que generar una sesión nueva. La Figura A.2 presenta esa comparación para las
+cinco condiciones, sobre sesiones de la partición de entrenamiento.
+
+**Figura A.2. La misma sesión con el fallo y sin él, por condición, sobre el conjunto canónico.**
+
+![Cinco paneles, uno por condición, cada uno con dos series superpuestas: la sesión con el fallo y la misma sesión sin él. Antes de la marca de entrada las dos coinciden exactamente. Después, el ajuste a largo plazo se separa en la fuga de vacío y en la deriva del caudalímetro, la temperatura del refrigerante se estanca en el termostato, la oscilación de la sonda se amortigua hasta una banda estrecha, y en el fallo de encendido las dos series siguen coincidiendo salvo en dieciséis muestras.](../../artifacts/figures/memoria/FIG-A-02_pareja_contrafactual.png)
+
+*Fuente: elaboración propia. Experimento: análisis contrafactual T2, **derivado** de E2 y E5; no es un experimento nuevo. Conjunto: `synthetic_v2`, cinco sesiones de la partición de **entrenamiento**, una por condición, seleccionadas por regla declarada —la primera en orden alfabético en que el fallo llega a expresarse—. Variables: en cada panel, la señal que más se aparta de su contrafactual en esa condición. Protocolo: la trayectoria contrafactual se obtiene con la misma especificación de sesión —misma semilla, mismo régimen, misma temperatura ambiente, misma duración, misma cadencia— y el fallo desactivado. Antes de generarla se verificó que cada sesión original se reproduce muestra a muestra frente al conjunto congelado, con tolerancia 1e-9, y que las dos trayectorias de cada pareja son idénticas antes del instante de entrada. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
+
+**Qué estatuto tiene este artefacto.** Es un **artefacto derivado para análisis visual**. No entra en
+entrenamiento, en validación ni en prueba; no modifica ninguna métrica histórica; no se usa para
+ajustar ningún modelo; no es una evaluación nueva ni independiente; y no es un conjunto de datos,
+porque no tiene ventanado ni particiones. Vive en su propio directorio, con la configuración de cada
+sesión, la huella del conjunto de origen, las huellas de los cuatro ficheros que definen el
+generador y la huella del resultado.
+
+Lo que los cinco paneles muestran, condición a condición: en la fuga de vacío y en la deriva del
+caudalímetro, el ajuste a largo plazo se despega de su contrafactual y se estabiliza en una meseta,
+más alta en la deriva; en el termostato, la temperatura del refrigerante cae a su tope de 71 °C
+mientras la sana sigue en torno a 81, que es la firma por ausencia de calentamiento; en la sonda
+lenta, la amplitud de la oscilación se reduce a una banda estrecha mientras la sana sigue oscilando
+en todo su recorrido, que es la razón de que esta condición se separe por la dispersión y no por el
+nivel; y en el fallo de encendido, las dos series siguen coincidiendo salvo en dieciséis muestras.
+
+Hay además un detalle que solo la comparación pareada deja ver. La ficha de la fuga de vacío declara
+cuatro señales afectadas, y en la sesión dibujada **solo tres se alteran**: el régimen no cambia,
+porque el generador solo lo perturba por debajo de 5 km/h y la sesión es de autopista. La firma
+declarada de una condición no se expresa entera en todos los regímenes de conducción, lo que importa
+cuando una explicación se apoya en que una señal «debería» haber cambiado.
+
+**Limitaciones.** Es **una sesión por condición**, no una muestra. El contraste pareado aísla el
+efecto del fallo del perfil de conducción, pero **una desviación observable no implica que un
+clasificador pueda detectar el fallo**, y la ausencia de desviación detectable en un tramo **no
+demuestra que el diagnóstico sea imposible**: dice que en ese tramo, bajo el criterio declarado, no
+hay señal. Y son datos sintéticos: lo que la figura prueba es que el instrumento produce las formas
+que sus fichas declaran, no una propiedad de los vehículos.
+
 ---
 
 # Anexo B · Evidencia experimental complementaria
@@ -204,7 +247,7 @@ la única condición en que la red recurrente gana. La Figura B.1 da el detalle 
 
 *Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación. Protocolo: una ejecución por modelo, semilla 20260901; n es el número de ventanas de la clase en validación. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
 
-La Figura 5.3 del capítulo 5 muestra **adónde** van los errores de cada modelo; esta muestra
+La Figura 5.5 del capítulo 5 muestra **adónde** van los errores de cada modelo; esta muestra
 **cuánto** pesa cada condición en la diferencia agregada, que es lo que aquella no puede decir. La
 red gana en una sola condición, el termostato, por 0,032, y pierde en las otras cinco, con el máximo
 en el fallo de encendido, 0,167. La lectura es que la desventaja agregada de 0,056 en F1 macro no se
@@ -239,7 +282,7 @@ ventanas equivale a una ventana y media.
 
 La fila de la deriva del caudalímetro es la que más dice: entre sus señales principales **no aparece
 el caudal de aire**, que es la señal averiada. El modelo detecta la deriva por cómo la centralita la
-compensa. La Figura 5.8 del capítulo 5 lo muestra para las seis condiciones, y es la razón de que
+compensa. La Figura 5.11 del capítulo 5 lo muestra para las seis condiciones, y es la razón de que
 las plantillas de afirmación del verificador no admitan «el caudalímetro deriva porque el caudal es
 bajo».
 
@@ -283,6 +326,46 @@ sostiene, y se comprueba con una orden, es que **el instrumento no cambió entre
 y la medición**: umbrales, casos elegibles, reglas de selección, política y código son los mismos.
 
 *Fuente: elaboración propia a partir del registro de aperturas del conjunto de prueba, que guarda de cada una la fecha, el motivo, la configuración, el alcance, la exposición y las métricas consultadas.*
+
+## B.6 · Qué separa las dos averías de mezcla pobre
+
+El capítulo 5 muestra en la Figura 5.4 que los descriptores que **avisan** de una mezcla pobre no son
+los que **distinguen** cuál de sus dos causas la produjo. La tabla siguiente da las cifras completas
+de los diez descriptores que esa figura resume, para que la afirmación se pueda comprobar sin
+recurrir a la lectura de un gráfico.
+
+**Tabla B.5. Separabilidad de los descriptores entre la fuga de vacío y la deriva del caudalímetro.**
+
+| Descriptor | Delata que algo va mal | Distingue una avería de la otra |
+| --- | --- | --- |
+| `stft_bank1_mean` | 1,00 | 0,50 |
+| `ltft_bank1_max` | 1,00 | 0,52 |
+| `stft_bank1_max` | 1,00 | 0,46 |
+| `ltft_bank1_mean` | 0,99 | 0,40 |
+| `map_min` | 0,01 | 0,80 |
+| `ltft_bank1_delta_min` | 0,50 | 0,69 |
+| `ltft_bank1_n_events` | 0,02 | 0,64 |
+| `maf_min` | 0,13 | 0,64 |
+| `stft_bank1_slope` | 0,04 | 0,58 |
+| `maf_over_rpm_load` | 0,19 | 0,09 |
+
+*Fuente: elaboración propia a partir de `synthetic_v2_features.npy`, partición de entrenamiento: 56
+ventanas por condición de fallo y 112 sin fallo. Las dos columnas son |delta de Cliff|. «Delata que
+algo va mal» es la menor de las dos comparaciones frente a la condición sin fallo, porque un
+descriptor solo sirve de aviso si delata a las dos averías. El corte convencional de efecto grande
+es 0,474. Es un tamaño de efecto **descriptivo**: las ventanas de una misma sesión no son
+independientes, de modo que no se acompaña de contraste ni de intervalo, y separabilidad descriptiva
+no es rendimiento de clasificación demostrado.*
+
+La última fila es la que conviene no pasar por alto. El cociente `maf_over_rpm_load` se construyó en
+el capítulo 4 como descriptor informado por la física, con el razonamiento de que si el caudalímetro
+subestima el aire admitido, el cociente entre el caudal medido y el que corresponde al producto de
+régimen y carga debería bajar aunque el caudal absoluto siguiera pareciendo normal. Sobre
+`synthetic_v2` no cumple: 0,19 frente a la condición sin fallo y 0,09 entre las dos averías. Su
+comentario de diseño lo declaraba pendiente de comprobación sobre datos reales; esta tabla añade que
+sobre estos datos sintéticos tampoco funciona, y que lo que de hecho separa las dos causas es el
+mínimo de la presión de colector —una señal que la fuga toca y la deriva no— junto con tres
+descriptores de la forma del ajuste a largo plazo dentro de la ventana.
 
 ---
 
@@ -385,17 +468,17 @@ copiadas de artefactos históricos— también en SVG. Las tablas con extensión
 |---|---|---|---|---|
 | Figura 5.1 | E5 | ventanado y reparto | `FIG-5-01_particiones` | `figuras_memoria.py` ← `synthetic_v2_meta.parquet` y `E5_reparto.csv` |
 | Figura 5.2 | E4 | separabilidad por señal | `FIG-5-02_separabilidad` | `figuras_memoria.py` ← `E4_separabilidad.csv` |
-| Figura 5.3 | E6 y E7 | matrices de confusión | `FIG-5-03_confusiones` | `figuras_memoria.py` ← `E6_baseline_confusion_synthetic_v2.csv` y `E7_temporal_confusion_synthetic_v2.csv` |
-| Figura 5.4 | E6 y E7 | comparación entre conjuntos | `FIG-5-04_confusor_volumen` | `figuras_memoria.py` ← `E6_baseline_synthetic_v{2,3}.json` y `E7_temporal_synthetic_v{2,3}.json` |
-| Figura 5.5 | E6 | límite de evidencia del termostato | `FIG-5-05_limite_evidencia_termostato` | copiada de `FIG-E6-02_limite_evidencia_f03.png`; **no se puede redibujar** |
-| Figura 5.6 | E6, fase G | expresión efectiva del fallo | `FIG-5-06_expresion_del_fallo` | notebook `06_expresion_del_fallo.ipynb` |
-| Figura 5.7 | E6, calibrado en E15 | calibración antes y después | `FIG-5-07_calibracion` | `figuras_memoria.py` ← `E15_suficiencia.json` |
-| Figura 5.8 | E9 | mapa de atribución | `FIG-5-08_mapa_atribucion` | notebook `04_explicabilidad.ipynb` ← `E9_atribuciones_synthetic_v2.csv` |
-| Figura 5.9 | E12 | recuperación por estrategia | `FIG-5-09_recuperacion` | `figuras_memoria.py` ← `E12_retrieval_por_estrategia.csv` |
-| Figura 5.10 | E15 | aplicables frente a cobertura | `FIG-5-10_aplicables_vs_cobertura` | notebook `05_suficiencia_y_abstencion.ipynb` ← `E15_suficiencia.csv` |
-| Figura 5.11 | E18 | efecto de cada ablación | `FIG-5-11_ablaciones` | `figuras_memoria.py` ← `E18_ablacion_A1.json` a `A4.json` |
-| Figura 5.12 | E19 | las tres cifras finales | `FIG-5-12_evaluacion_final` | notebook `03_analisis_e19.ipynb` ← `E19_evaluacion_final_v3.csv` |
-| Figura 5.13 | E19 | decisión por ejecución | `FIG-5-13_decisiones_e19` | notebook `03_analisis_e19.ipynb` |
+| Figura 5.5 | E6 y E7 | matrices de confusión | `FIG-5-05_confusiones` | `figuras_memoria.py` ← `E6_baseline_confusion_synthetic_v2.csv` y `E7_temporal_confusion_synthetic_v2.csv` |
+| Figura 5.6 | E6 y E7 | comparación entre conjuntos | `FIG-5-06_confusor_volumen` | `figuras_memoria.py` ← `E6_baseline_synthetic_v{2,3}.json` y `E7_temporal_synthetic_v{2,3}.json` |
+| Figura 5.7 | E6 | límite de evidencia del termostato | `FIG-5-07_limite_evidencia_termostato` | copiada de `FIG-E6-02_limite_evidencia_f03.png`; **no se puede redibujar** |
+| Figura 5.8 | E6, fase G | expresión efectiva del fallo | `FIG-5-08_expresion_del_fallo` | notebook `06_expresion_del_fallo.ipynb` |
+| Figura 5.10 | E6, calibrado en E15 | calibración antes y después | `FIG-5-10_calibracion` | `figuras_memoria.py` ← `E15_suficiencia.json` |
+| Figura 5.11 | E9 | mapa de atribución | `FIG-5-11_mapa_atribucion` | notebook `04_explicabilidad.ipynb` ← `E9_atribuciones_synthetic_v2.csv` |
+| Figura 5.12 | E12 | recuperación por estrategia | `FIG-5-12_recuperacion` | `figuras_memoria.py` ← `E12_retrieval_por_estrategia.csv` |
+| Figura 5.13 | E15 | aplicables frente a cobertura | `FIG-5-13_aplicables_vs_cobertura` | notebook `05_suficiencia_y_abstencion.ipynb` ← `E15_suficiencia.csv` |
+| Figura 5.14 | E18 | efecto de cada ablación | `FIG-5-14_ablaciones` | `figuras_memoria.py` ← `E18_ablacion_A1.json` a `A4.json` |
+| Figura 5.15 | E19 | las tres cifras finales | `FIG-5-15_evaluacion_final` | notebook `03_analisis_e19.ipynb` ← `E19_evaluacion_final_v3.csv` |
+| Figura 5.16 | E19 | decisión por ejecución | `FIG-5-16_decisiones_e19` | notebook `03_analisis_e19.ipynb` |
 | Figura 6.1 | E1–E19 | recorrido experimental | `FIG-6-01_recorrido_experimental` | notebook `00_introduccion.ipynb` |
 | Figura 6.2 | E1–E19 | objetivos y evidencia | `FIG-6-02_objetivos_y_evidencia` | `figuras_memoria.py` |
 | Figura 6.3 | E15 | compromiso entre los dos errores | `FIG-6-03_compromiso_cobertura_abstencion` | `figuras_memoria.py` ← `E15_suficiencia.csv` |

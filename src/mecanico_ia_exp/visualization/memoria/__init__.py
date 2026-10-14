@@ -32,31 +32,53 @@ from mecanico_ia_exp.visualization.memoria.base import (
 )
 from mecanico_ia_exp.visualization.memoria.calibracion import fig_calibracion
 from mecanico_ia_exp.visualization.memoria.datos import fig_particiones, fig_separabilidad
+from mecanico_ia_exp.visualization.memoria.decision import (
+    decisiones_de_e19,
+    fig_decisiones_y_umbral,
+)
 from mecanico_ia_exp.visualization.memoria.diagnostico import (
     fig_confusiones,
     fig_confusor_de_volumen,
     fig_f1_por_clase,
 )
+from mecanico_ia_exp.visualization.memoria.mezcla_pobre import (
+    fig_mezcla_pobre,
+    separabilidad_entre_mezclas_pobres,
+)
 from mecanico_ia_exp.visualization.memoria.recuperacion import fig_recuperacion
 from mecanico_ia_exp.visualization.memoria.sintesis import fig_compromiso, fig_objetivos
+from mecanico_ia_exp.visualization.memoria.temporal import (
+    fig_forma_del_fallo,
+    fig_pareja_contrafactual,
+    fig_ventana_y_descriptor,
+    recuento_de_expresion,
+)
 
 __all__ = [
     "ANCHO_DE_PAGINA",
     "CONDICION",
+    "decisiones_de_e19",
     "estilo_para_impresion",
     "fig_ablaciones",
     "fig_calibracion",
     "fig_compromiso",
     "fig_confusiones",
     "fig_confusor_de_volumen",
+    "fig_decisiones_y_umbral",
     "fig_f1_por_clase",
+    "fig_forma_del_fallo",
+    "fig_mezcla_pobre",
     "fig_objetivos",
+    "fig_pareja_contrafactual",
     "fig_particiones",
     "fig_recuperacion",
     "fig_separabilidad",
+    "fig_ventana_y_descriptor",
     "guardar",
     "numero",
     "pie",
+    "recuento_de_expresion",
+    "separabilidad_entre_mezclas_pobres",
     "tasas_e15",
     "titulo",
 ]

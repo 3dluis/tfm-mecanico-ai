@@ -61,6 +61,94 @@ usa—, y la medición es sobre bloques de 60 segundos y no sobre las ventanas d
 entrena. Para la pregunta de investigación, esta figura delimita por anticipado qué afirmaciones
 sobre una señal pueden tener soporte observacional y cuáles no.
 
+La Figura 5.2 dice **con qué señal** se separa cada condición, y no dice **cuándo**. Esa segunda
+pregunta importa tanto como la primera: un fallo que altera la trayectoria en todo momento deja
+firma en cualquier ventana que se tome, y uno que la altera durante tres segundos de cada ciento
+veinte deja la mayoría de sus ventanas sin nada que aprender. El objetivo de este análisis es medir
+esa diferencia sin recurrir a una comparación entre sesiones distintas, que confundiría el efecto
+del fallo con el del perfil de conducción. La medida es la desviación de cada muestra frente a **su
+propia trayectoria contrafactual**: el valor que esa misma sesión, con la misma semilla y el mismo
+perfil, habría tenido sin la avería. La magnitud se expresa en unidades del umbral de
+observabilidad, de modo que las cinco condiciones son comparables entre sí aunque sus señales no lo
+sean. La Figura 5.3 la presenta para las cinco condiciones.
+
+**Figura 5.3. Desviación de cada condición de fallo frente a su propia trayectoria sin avería, a lo largo de la sesión.**
+
+![Dos paneles. Arriba, la desviación frente al contrafactual de las cinco condiciones a lo largo de 600 segundos: la deriva del caudalímetro sube en rampa durante cinco minutos hasta estabilizarse, la fuga de vacío sube más deprisa hasta una meseta más baja, el termostato salta a un valor constante en el instante de entrada, la sonda lenta oscila entre diez y cien, y el fallo de encendido permanece en cero exacto salvo siete picos breves. Abajo, el régimen de la sesión con fallo de encendido superpuesto al de la misma sesión sin él: las dos curvas coinciden salvo en dieciséis muestras.](../../artifacts/figures/memoria/FIG-5-03_forma_del_fallo.png)
+
+*Fuente: elaboración propia. Experimento: análisis contrafactual T2, derivado de E2 y E5. Conjunto: `synthetic_v2`, cinco sesiones de la partición de **entrenamiento**, una por condición, seleccionadas por regla declarada; el conjunto de prueba no interviene. Variables: la desviación máxima por muestra frente al contrafactual, en unidades del umbral de observabilidad —una décima del ruido propio del generador—, y el régimen en min⁻¹. Protocolo: el contrafactual no se simula aparte; el motor de señales avanza al margen del fallo, de modo que la trayectoria sana es el valor que el generador calcula en cada instante. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+
+La figura reparte las cinco condiciones en tres formas distintas. La deriva del caudalímetro y la
+fuga de vacío **se instalan progresivamente**: la primera en una rampa de cinco minutos, que es la
+constante que su ficha declara, y la segunda más deprisa. El termostato bloqueado **salta** a un
+valor constante en el instante de entrada y se queda ahí, porque su mecanismo es un tope y no una
+deriva. La sonda lenta oscila en una banda ancha, que es la amortiguación de su conmutación vista
+como desviación. Y el fallo de encendido es el único cuya desviación vuelve a **cero exacto** entre
+episodio y episodio: en la sesión dibujada altera 16 de las 480 muestras del tramo con fallo, el
+3,3 %, repartidas en siete episodios de uno a tres segundos. Las otras cuatro condiciones alteran
+entre el 99,8 % y el 100 % de ese tramo. Esa cifra es la explicación de por qué el bosque detecta el
+fallo de encendido en 7 de sus 14 ventanas de validación mientras acierta las catorce de la fuga y
+las catorce de la deriva: no es que el modelo falle en unas ventanas y acierte en otras por azar,
+sino que en buena parte de las ventanas del encendido **no hay nada que detectar**.
+
+**Las limitaciones son tres.** La primera es que se dibuja **una sesión por condición**, elegida por
+una regla declarada —la primera de entrenamiento, en orden alfabético, en la que el fallo llega a
+expresarse— y no una muestra: las proporciones de otra sesión serían parecidas pero no idénticas, y
+en particular la del fallo de encendido depende de la tasa de aparición, que es aleatoria. La
+segunda es que el umbral de observabilidad es un **parámetro declarado** de este protocolo y no una
+magnitud del vehículo; se comprobó que el reparto no depende de él, porque exigiendo diez veces más
+—una desviación típica completa del ruido del generador en lugar de una décima— los recuentos pasan
+de 480 a 480, de 479 a 471, de 480 a 480, de 480 a 463 y de 16 a 16. La tercera, y la que más
+gobierna la lectura: esto describe **el instrumento**, no un motor real. La figura muestra que el
+generador produce las formas temporales que sus fichas declaran, lo cual es una comprobación del
+instrumento y no un hallazgo sobre vehículos. Para la pregunta de investigación su aportación es
+delimitar qué parte del material permitía aprender algo: fija el techo observacional por debajo del
+cual ningún modelo, de la arquitectura que sea, podría haber hecho mejor.
+
+Queda una pregunta que la Figura 5.2 deja planteada y no resuelve. La fuga de vacío y la deriva del
+caudalímetro se separan **las dos** de la condición sin fallo por el nivel del ajuste de combustible,
+con delta de Cliff 1,00 las dos. Eso dice que las dos se detectan, y no dice cómo se distinguen
+**entre sí**, que es justamente lo que un taller necesita: las dos averías tienen reparaciones
+distintas. El objetivo de este análisis es medir, descriptor a descriptor, dos cosas separadas —si
+delata que algo va mal y si dice cuál de las dos es— y comprobar de paso qué hace el descriptor
+informado por la física que el capítulo 4 construyó precisamente para delatar un caudalímetro que
+subestima. La Figura 5.4 presenta las dos medidas juntas.
+
+**Figura 5.4. Qué descriptores avisan de la mezcla pobre y cuáles distinguen entre sus dos causas.**
+
+![Dos paneles. Arriba, cada ventana situada por su ajuste de combustible a corto y a largo plazo: las ventanas sin fallo se agrupan en el origen y las de las dos averías se extienden sobre la misma recta, solapándose. Abajo, nueve descriptores con dos barras cada uno: los cuatro de nivel de los ajustes separan de la condición sin fallo con delta de Cliff de 0,99 a 1,00 pero distinguen las dos averías entre sí solo entre 0,40 y 0,52, mientras que el mínimo de presión de colector y tres descriptores de variación hacen lo contrario, y el cociente informado por la física no hace ninguna de las dos cosas.](../../artifacts/figures/memoria/FIG-5-04_mezcla_pobre.png)
+
+*Fuente: elaboración propia. Experimentos: E4 y E5. Conjunto: `synthetic_v2`, **solo la partición de entrenamiento**: 56 ventanas por condición de fallo y 112 sin fallo; una figura descriptiva no justifica abrir el conjunto reservado. Variables: los 139 descriptores por ventana de la fase de preprocesado. Protocolo: delta de Cliff en valor absoluto, calculada dos veces —de cada avería frente a la condición sin fallo, conservando la menor de las dos, y de una avería frente a la otra—; la selección mostrada son los cuatro mejores de cada orden más el cociente declarado. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+
+El resultado separa dos papeles que es fácil confundir. Los descriptores que **avisan** son los
+niveles de las dos correcciones de combustible, con delta de Cliff entre 0,99 y 1,00 frente a la
+condición sin fallo; pero para decir cuál de las dos averías es, esos mismos descriptores se quedan
+entre 0,40 y 0,52, por debajo del corte convencional de efecto grande. Los que **distinguen** son
+otros: el mínimo de la presión de colector alcanza 0,80, y le siguen tres descriptores de la forma
+del ajuste a largo plazo dentro de la ventana —el salto descendente máximo, 0,69; el recuento de
+eventos, 0,64— y el mínimo del caudal, 0,64. La lectura mecánica es coherente: la fuga de vacío
+entra por el colector y eleva su presión, mientras la deriva del caudalímetro no toca esa señal, de
+modo que la presión de colector no avisa de nada por sí sola —0,01 frente a la condición sin fallo—
+pero separa las dos causas mejor que ninguna otra cosa. **Y hay un resultado negativo que conviene
+no esconder:** el cociente `maf_over_rpm_load`, el descriptor informado por la física que se
+construyó para delatar un caudalímetro que subestima el aire admitido, no cumple en este conjunto lo
+que su diseño esperaba: 0,19 frente a la condición sin fallo y 0,09 entre las dos averías, es decir,
+ni avisa ni distingue. El capítulo 4 lo declaró como pendiente de comprobación sobre datos reales;
+sobre estos datos sintéticos, directamente no funciona.
+
+**Las limitaciones gobiernan cuánto de esto se puede afirmar.** La delta de Cliff es un tamaño de
+efecto **descriptivo**, y aquí las ventanas de una misma sesión no son independientes entre sí —cada
+condición aporta 56 ventanas procedentes de 8 sesiones—, de modo que no se acompaña de contraste ni
+de intervalo y no debe leerse como una estimación. Separabilidad descriptiva **no es rendimiento de
+clasificación demostrado**: que un descriptor separe dos condiciones no implica que el modelo lo use
+ni que acierte por él, y el apartado de atribución muestra un caso en que el modelo ignora la señal
+que su ficha declara. Y nada de esto se afirma de un vehículo real: son datos sintéticos generados
+por un mecanismo conocido, y lo que la figura prueba es que **en este instrumento** las dos averías
+se distinguen por la forma y no por el nivel. Su aportación a la pregunta de investigación es
+acotada y concreta: muestra que una explicación que justificara la deriva del caudalímetro «porque
+los ajustes de combustible están altos» sería indistinguible de la que justificaría una fuga de
+vacío, y por eso las plantillas de afirmación del verificador no permiten formularla así.
+
 El estudio de ventana del capítulo 4 fijó 120 segundos como longitud en la que los descriptores separables coinciden con los mecanismos físicos declarados para cada fallo. En particular, la deriva del caudalímetro no se detecta en el caudal medido sino en las correcciones de combustible con que la centralita la compensa. Esto condiciona qué puede afirmar legítimamente el agente: «el caudalímetro deriva porque el caudal es bajo» sería falso, y las plantillas de afirmación del verificador no permiten formularlo.
 
 ## Resultados obtenidos
@@ -84,11 +172,11 @@ El modelo temporal no supera al tabular. Por clase acierta dos ventanas más en 
 Las cifras agregadas de la Tabla 5.1 no dicen adónde van los errores de cada modelo, y para un
 sistema que después va a explicar su diagnóstico esa es la pregunta que más pesa: equivocarse hacia
 «sin fallo» produce una omisión, y equivocarse hacia otro fallo produce una explicación bien
-construida sobre una avería que no existe. La Figura 5.3 pone las dos matrices de confusión juntas.
+construida sobre una avería que no existe. La Figura 5.5 pone las dos matrices de confusión juntas.
 
-**Figura 5.3. Matrices de confusión del bosque aleatorio y de la red recurrente sobre la partición de validación.**
+**Figura 5.5. Matrices de confusión del bosque aleatorio y de la red recurrente sobre la partición de validación.**
 
-![Matrices de confusión de los dos modelos: los doce errores del bosque van todos a la condición sin fallo, mientras la red produce además cuatro diagnósticos cruzados entre condiciones.](../../artifacts/figures/memoria/FIG-5-03_confusiones.png)
+![Matrices de confusión de los dos modelos: los doce errores del bosque van todos a la condición sin fallo, mientras la red produce además cuatro diagnósticos cruzados entre condiciones.](../../artifacts/figures/memoria/FIG-5-05_confusiones.png)
 
 *Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación, 98 ventanas de 12 sesiones. Protocolo: una ejecución por modelo, semilla 20260901, reparto por sesión. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -108,12 +196,12 @@ y el comportamiento ante una sustitución solo se ha observado en el escenario a
 describe más adelante.
 
 La comparación entre los dos conjuntos merece verse, porque es un resultado negativo que estuvo a
-punto de leerse como positivo. La Figura 5.4 la presenta tal como es, con las dos variables que se
+punto de leerse como positivo. La Figura 5.6 la presenta tal como es, con las dos variables que se
 mueven a la vez nombradas en el propio eje.
 
-**Figura 5.4. Comparación del rendimiento de los dos modelos entre los dos conjuntos sintéticos.**
+**Figura 5.6. Comparación del rendimiento de los dos modelos entre los dos conjuntos sintéticos.**
 
-![Cuatro barras: con el conjunto de 72 sesiones y generador calibrado el bosque supera a la red; con el de 216 sesiones y generador sin calibrar el orden se invierte.](../../artifacts/figures/memoria/FIG-5-04_confusor_volumen.png)
+![Cuatro barras: con el conjunto de 72 sesiones y generador calibrado el bosque supera a la red; con el de 216 sesiones y generador sin calibrar el orden se invierte.](../../artifacts/figures/memoria/FIG-5-06_confusor_volumen.png)
 
 *Fuente: elaboración propia. Experimentos: E6 y E7 sobre los dos conjuntos. Conjuntos: `synthetic_v2`, 72 sesiones con el generador calibrado contra el manual, y `synthetic_v3`, 216 sesiones con el generador anterior a esa calibración. Protocolo: una ejecución por celda, semilla 20260901. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -134,13 +222,13 @@ El fallo de encendido se detecta en 7 de las 14 ventanas de validación de esa c
 Las dos condiciones que el modelo falla, el termostato y el fallo de encendido, lo hacen por razones
 distintas, y la del termostato es comprobable sobre la propia muestra. El fallo impone un techo a la
 temperatura del refrigerante; mientras el motor no habría superado ese techo por sí mismo, el fallo
-no impone nada y la señal del motor averiado es idéntica a la del sano. La Figura 5.5 cruza, para
+no impone nada y la señal del motor averiado es idéntica a la del sano. La Figura 5.7 cruza, para
 cada una de las catorce ventanas de esa condición, si el modelo acertó con la temperatura media de
 la ventana.
 
-**Figura 5.5. Acierto del modelo en cada ventana del termostato bloqueado, frente a la temperatura media del refrigerante.**
+**Figura 5.7. Acierto del modelo en cada ventana del termostato bloqueado, frente a la temperatura media del refrigerante.**
 
-![Catorce puntos: las cinco ventanas no detectadas están todas por debajo del techo de 71 °C que el fallo impone, y las nueve detectadas se agrupan junto a él.](../../artifacts/figures/memoria/FIG-5-05_limite_evidencia_termostato.png)
+![Catorce puntos: las cinco ventanas no detectadas están todas por debajo del techo de 71 °C que el fallo impone, y las nueve detectadas se agrupan junto a él.](../../artifacts/figures/memoria/FIG-5-07_limite_evidencia_termostato.png)
 
 *Fuente: elaboración propia. Experimento: E6. Conjunto: `synthetic_v2`, las 14 ventanas de validación de la condición de termostato bloqueado. Protocolo: cada punto es una ventana; la línea marca el techo de temperatura que el fallo impone, 71 °C, que es un parámetro declarado del generador y no una línea ajustada a los datos. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -161,11 +249,11 @@ lleve la etiqueta de una condición significa que la sesión tenía el fallo act
 significa que el fallo haya dejado alteración observable en ninguna de sus señales. Las dos cosas se
 pueden separar generando, con la misma semilla, la trayectoria con fallo y la trayectoria sin él, y
 contando qué fracción de las muestras de la ventana difiere por encima del suelo de ruido de cada
-señal. La Figura 5.6 presenta esa fracción ventana a ventana.
+señal. La Figura 5.8 presenta esa fracción ventana a ventana.
 
-**Figura 5.6. Expresión efectiva del fallo en cada ventana de validación, y ventanas que el modelo de diagnóstico falla.**
+**Figura 5.8. Expresión efectiva del fallo en cada ventana de validación, y ventanas que el modelo de diagnóstico falla.**
 
-![A la izquierda, la fracción de cada ventana con señal observable: completa en la fuga, la deriva y la sonda; nula en cinco ventanas del termostato y casi nula en todas las del fallo de encendido. A la derecha, el recuento de ventanas sin señal junto al de ventanas falladas.](../../artifacts/figures/memoria/FIG-5-06_expresion_del_fallo.png)
+![A la izquierda, la fracción de cada ventana con señal observable: completa en la fuga, la deriva y la sonda; nula en cinco ventanas del termostato y casi nula en todas las del fallo de encendido. A la derecha, el recuento de ventanas sin señal junto al de ventanas falladas.](../../artifacts/figures/memoria/FIG-5-08_expresion_del_fallo.png)
 
 *Fuente: elaboración propia. Experimento: E6, medición añadida el 12 de octubre de 2026. Conjunto: `synthetic_v2`, partición de validación, las 70 ventanas etiquetadas con alguna condición de fallo. Protocolo: para cada ventana se compara la trayectoria con fallo con la trayectoria sin fallo de la misma semilla, y una muestra cuenta como alterada si la diferencia supera el 10 % de la desviación típica de esa señal. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -183,6 +271,42 @@ predicción por ventana. La contribución a la pregunta de investigación es que
 y la evidencia disponible en él son cosas distintas, que es la misma distinción que el verificador
 de suficiencia aplica después sobre la evidencia documental.
 
+La Figura 5.8 cuenta qué fracción de cada ventana lleva señal, y deja sin responder una pregunta más
+concreta: qué le llega exactamente al modelo de esa fracción. El modelo no ve la ventana; ve 139
+números calculados sobre ella. El objetivo de este análisis es hacer visible esa traducción sobre un
+caso, siguiendo una misma ventana de fallo de encendido desde la señal a un hertzio hasta los
+descriptores que de ella salen, y comparar esos descriptores con los de las ventanas sin fallo **del
+mismo régimen de conducción**, porque compararlos con todas las ventanas sin fallo mediría el
+régimen y no el fallo. La Figura 5.9 recorre los tres pasos.
+
+**Figura 5.9. De la señal al descriptor: una ventana de fallo de encendido y los números con que el modelo la recibe.**
+
+![Tres paneles. Arriba, la sesión completa de régimen con la ventana de 120 segundos sombreada. En medio, esa ventana con su media y su banda de desviación típica, y las tres muestras que el fallo altera marcadas. Abajo, cinco descriptores de régimen de la ventana comparados con la mediana de las ventanas sin fallo del mismo régimen: la media se aparta menos de dos escalas robustas, mientras el mínimo se aparta casi diez.](../../artifacts/figures/memoria/FIG-5-09_ventana_y_descriptor.png)
+
+*Fuente: elaboración propia. Experimentos: E5 y E6. Conjunto: `synthetic_v2`, una ventana de la partición de **entrenamiento**; los paneles primero y segundo proceden del análisis contrafactual T2 y el tercero del conjunto procesado que el modelo consume. Variables: el régimen en min⁻¹ y cinco de sus descriptores por ventana —media, desviación típica, mínimo, salto descendente máximo y recuento de eventos—. Protocolo: el apartamiento se mide en escalas robustas, con la desviación absoluta mediana de las 42 ventanas sin fallo del mismo régimen como unidad. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+
+Los tres paneles muestran la misma ventana a tres distancias. En la señal, el fallo son tres muestras
+de un episodio sobre ciento veinte. En el resumen, esa caída queda dentro de la banda de una
+desviación típica y la media apenas se mueve: 687,9 min⁻¹ frente a los 690,3 de la mediana sin fallo
+del mismo régimen, menos de dos escalas robustas. En los descriptores, en cambio, el reparto es muy
+desigual: el **mínimo** se aparta 9,6 escalas —600,0 frente a 659,3—, la desviación típica 6,2 y el
+salto descendente máximo 4,3, mientras el recuento de eventos pasa de 0 a 2. Lo que esto permite
+interpretar es concreto: el descriptor que un lector miraría primero, la media, es precisamente el
+que menos registra este fallo, y la detección depende por completo de los descriptores que guardan
+el extremo y la variación. Es la justificación empírica de la decisión del capítulo 4 de no limitar
+el vector de descriptores a momentos de primer orden.
+
+**Las limitaciones.** Es **una ventana elegida como ilustración**, no una muestra: el fenómeno es
+general —lo sostiene la Figura 5.3— pero las cifras de esta figura son las de este caso. La ventana
+procede de una sesión en ralentí, y ahí el efecto del fallo sobre el régimen queda **truncado por el
+límite físico inferior** que el generador impone, de modo que el mínimo de 600,0 es el suelo del
+instrumento y no la profundidad real de la caída; en un régimen más alto el mismo episodio produciría
+una caída mayor. Y el apartamiento en escalas robustas describe cuán inusual es esta ventana frente a
+las sin fallo del mismo régimen: no es una probabilidad ni un contraste. Para la pregunta de
+investigación, la figura delimita de dónde puede venir una explicación legítima: una afirmación sobre
+el fallo de encendido apoyada en la media del régimen no tendría soporte observacional, y la que se
+apoya en el mínimo y en el recuento de eventos sí lo tiene.
+
 La confianza del bosque estaba mal calibrada, y en la dirección menos habitual:
 
 **Tabla 5.2. Calibración de la confianza del modelo de diagnóstico.**
@@ -198,11 +322,11 @@ El modelo estaba infraconfiado. Como esa confianza alimenta el criterio de sufic
 
 La Tabla 5.2 da las cuatro cifras; lo que no da es la dirección, y la dirección es aquí lo decisivo,
 porque determina qué habría pasado si el umbral del verificador se hubiera puesto sobre la
-probabilidad cruda. La Figura 5.7 sitúa las dos configuraciones en el plano que lo hace evidente.
+probabilidad cruda. La Figura 5.10 sitúa las dos configuraciones en el plano que lo hace evidente.
 
-**Figura 5.7. Confianza declarada frente a acierto observado, antes y después de calibrar.**
+**Figura 5.10. Confianza declarada frente a acierto observado, antes y después de calibrar.**
 
-![Plano de confianza declarada contra acierto: el punto sin calibrar queda por encima de la diagonal, con confianza 0,738 y acierto 0,878; el calibrado queda sobre ella, con 0,886 y 0,878.](../../artifacts/figures/memoria/FIG-5-07_calibracion.png)
+![Plano de confianza declarada contra acierto: el punto sin calibrar queda por encima de la diagonal, con confianza 0,738 y acierto 0,878; el calibrado queda sobre ella, con 0,886 y 0,878.](../../artifacts/figures/memoria/FIG-5-10_calibracion.png)
 
 *Fuente: elaboración propia. Experimento: E6, con la calibración ajustada en E15. Conjunto: `synthetic_v2`, partición de validación, 98 ventanas. Protocolo: regresión isotónica con validación cruzada de cinco pliegues sobre entrenamiento; error de calibración esperado sobre diez tramos. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -220,11 +344,11 @@ pieza del diseño que de otro modo parecería un tecnicismo: la confianza que en
 suficiencia está calibrada, y no haberlo hecho habría producido abstenciones por un defecto del
 instrumento y no por falta de evidencia.
 
-La atribución por valores de Shapley, calculada sobre dieciocho casos de validación con un fondo de cien ventanas sin fallo de entrenamiento, produce la evidencia observacional que las etapas posteriores consumen. Contrastada con las señales que el generador declara para cada fallo, se comporta de forma desigual. En la fuga de vacío, el termostato y la sonda de oxígeno, todas las señales atribuidas entre las seis principales son señales declaradas. En la deriva del caudalímetro el caudal medido no aparece: el modelo detecta el fallo por las correcciones de combustible, lo que coincide con el análisis exploratorio. En el fallo de encendido, cuatro de las seis señales principales no están declaradas para esa condición, entre ellas la temperatura del refrigerante, cuya separación aparente el estudio de ventana había situado por debajo del suelo de ruido; las dos señales declaradas que aparecen concentran, con todo, varias veces más importancia acumulada que las cuatro no declaradas. La atribución es fiel al modelo y, en ese fallo, mezcla el mecanismo del vehículo con señales que no le pertenecen. El registro de esta fase, `E9_xai_synthetic_v2.json`, es anterior a la obligatoriedad del identificador de versión. La Figura 5.8 recoge el reparto completo del peso explicativo.
+La atribución por valores de Shapley, calculada sobre dieciocho casos de validación con un fondo de cien ventanas sin fallo de entrenamiento, produce la evidencia observacional que las etapas posteriores consumen. Contrastada con las señales que el generador declara para cada fallo, se comporta de forma desigual. En la fuga de vacío, el termostato y la sonda de oxígeno, todas las señales atribuidas entre las seis principales son señales declaradas. En la deriva del caudalímetro el caudal medido no aparece: el modelo detecta el fallo por las correcciones de combustible, lo que coincide con el análisis exploratorio. En el fallo de encendido, cuatro de las seis señales principales no están declaradas para esa condición, entre ellas la temperatura del refrigerante, cuya separación aparente el estudio de ventana había situado por debajo del suelo de ruido; las dos señales declaradas que aparecen concentran, con todo, varias veces más importancia acumulada que las cuatro no declaradas. La atribución es fiel al modelo y, en ese fallo, mezcla el mecanismo del vehículo con señales que no le pertenecen. El registro de esta fase, `E9_xai_synthetic_v2.json`, es anterior a la obligatoriedad del identificador de versión. La Figura 5.11 recoge el reparto completo del peso explicativo.
 
-**Figura 5.8. Peso explicativo de cada señal por condición, frente a las señales que el generador declara.**
+**Figura 5.11. Peso explicativo de cada señal por condición, frente a las señales que el generador declara.**
 
-![Mapa de calor del peso de cada señal por condición, con un punto en las señales que la ficha del fallo declara: en la deriva del caudalímetro la columna del caudal está vacía y el peso recae en los dos ajustes de combustible.](../../artifacts/figures/memoria/FIG-5-08_mapa_atribucion.png)
+![Mapa de calor del peso de cada señal por condición, con un punto en las señales que la ficha del fallo declara: en la deriva del caudalímetro la columna del caudal está vacía y el peso recae en los dos ajustes de combustible.](../../artifacts/figures/memoria/FIG-5-11_mapa_atribucion.png)
 
 *Fuente: elaboración propia. Experimento: E9, atribución. Conjunto: `synthetic_v2`, 18 casos de validación. Protocolo: valores de Shapley por permutación, con un fondo de cien ventanas sin fallo de entrenamiento; el punto marca las señales que la ficha del fallo declara. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -261,12 +385,12 @@ La recuperación semántica pura no encuentra el procedimiento correcto del manu
 La tabla procede de la reejecución del 13 de septiembre de 2026 sobre los seis casos anotados de esa fase, con la consulta en inglés y el mapa de códigos de avería congelado para esta comparación. Cinco casos se puntúan; el sexto, con la evidencia retirada del índice, se evalúa pero no entra en las métricas porque no tiene fichero relevante. El informe de fase del 1 de septiembre recogía cuatro estrategias con valores que no se reproducen desde el registro, y la tabla cita el registro. Respecto de la ejecución anterior a la corrección del índice cambiaron dos celdas de la estrategia guiada: la precisión, de 0,240 a 0,260, y el nDCG, de 0,642 a 0,653. Las métricas se publican por estrategia y no por condición de evidencia, porque los cinco casos puntuados tienen todos la evidencia completa. Sobre documentación técnica, la similitud semántica entre una consulta en lenguaje natural y un procedimiento de taller es baja, y lo que los une es un identificador exacto. El sistema final usa la estrategia guiada, con la híbrida como respaldo.
 
 La Tabla 5.3 ordena cinco estrategias por cinco métricas, y el contraste que importa queda repartido
-entre veinticinco celdas. La Figura 5.9 lo separa en las dos preguntas que de verdad se hacen sobre
+entre veinticinco celdas. La Figura 5.12 lo separa en las dos preguntas que de verdad se hacen sobre
 una recuperación: si encuentra el documento, y en qué posición lo deja.
 
-**Figura 5.9. Recuperación del procedimiento relevante del manual según la estrategia de consulta.**
+**Figura 5.12. Recuperación del procedimiento relevante del manual según la estrategia de consulta.**
 
-![A la izquierda, casos en que el procedimiento aparece entre los diez primeros: cero con la recuperación semántica pura y cinco de cinco con la guiada por el diagnóstico. A la derecha, MRR, nDCG y precisión de cada estrategia.](../../artifacts/figures/memoria/FIG-5-09_recuperacion.png)
+![A la izquierda, casos en que el procedimiento aparece entre los diez primeros: cero con la recuperación semántica pura y cinco de cinco con la guiada por el diagnóstico. A la derecha, MRR, nDCG y precisión de cada estrategia.](../../artifacts/figures/memoria/FIG-5-12_recuperacion.png)
 
 *Fuente: elaboración propia. Experimento: E12, reejecución canónica del 13 de septiembre de 2026. Conjunto: corpus documental del vehículo de referencia; seis casos anotados, cinco puntuados. Protocolo: consulta en inglés, mapa de códigos de avería congelado para la comparación, diez primeros resultados; el sexto caso, con la evidencia retirada del índice, se evalúa pero no entra en las métricas porque no tiene fichero relevante. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -334,12 +458,12 @@ Los diecisiete casos no son diecisiete observaciones independientes. Proceden de
 > **Corrección del 13 de octubre de 2026.** El texto de este párrafo decía antes: «porque el diagnóstico de esa condición, que se describe más abajo, las deja como diagnóstico y no como condición puntuable». La conclusión era correcta y la causa atribuida, falsa: se culpaba al filtro de motor, y lo medido en octubre de 2026 es que dos de las tres condiciones con distractor tenían **exactamente la misma configuración** que su condición parcial, porque el único campo que las distinguía —el fichero distractor declarado— no lo lee el recorrido de suficiencia. Corrección `F-4`.
 
 La Tabla 5.5 publica por caso los documentos aplicables y la cobertura alcanzada, que son las dos
-magnitudes que el criterio de suficiencia mantiene separadas. La Figura 5.10 las enfrenta por
+magnitudes que el criterio de suficiencia mantiene separadas. La Figura 5.13 las enfrenta por
 condición de evidencia, que es donde la separación se vuelve visible.
 
-**Figura 5.10. Documentos aplicables recuperados y cobertura de afirmaciones alcanzada, por condición de evidencia.**
+**Figura 5.13. Documentos aplicables recuperados y cobertura de afirmaciones alcanzada, por condición de evidencia.**
 
-![Dos paneles: a la izquierda, los documentos aplicables por condición, entre tres y ocho salvo en la de evidencia retirada; a la derecha, la cobertura de afirmaciones, que solo es distinta de cero en la condición de evidencia completa.](../../artifacts/figures/memoria/FIG-5-10_aplicables_vs_cobertura.png)
+![Dos paneles: a la izquierda, los documentos aplicables por condición, entre tres y ocho salvo en la de evidencia retirada; a la derecha, la cobertura de afirmaciones, que solo es distinta de cero en la condición de evidencia completa.](../../artifacts/figures/memoria/FIG-5-13_aplicables_vs_cobertura.png)
 
 *Fuente: elaboración propia. Experimento: E15, verificador en su tercera versión. Conjunto: `synthetic_v2`, los 17 casos anotados sobre 5 ventanas de validación. Protocolo: modo oracular; el color distingue la decisión tomada, y las cinco condiciones de evidencia aparecen completas. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -427,12 +551,12 @@ que incluye las tres ejecuciones de la condición con distractor y filtro de mot
 
 *Fuente: elaboración propia a partir de `E18_ablacion_A1.json` a `E18_ablacion_A4.json`.*
 
-La tabla da los cuatro recuentos; lo que la Figura 5.11 añade es la escala relativa de los dos
+La tabla da los cuatro recuentos; lo que la Figura 5.14 añade es la escala relativa de los dos
 errores, que leídos en columnas de fracciones se confunden con facilidad.
 
-**Figura 5.11. Falsa confianza y abstención innecesaria de la configuración canónica y de las cuatro ablaciones.**
+**Figura 5.14. Falsa confianza y abstención innecesaria de la configuración canónica y de las cuatro ablaciones.**
 
-![Dos paneles de barras: la falsa confianza pasa de 0 de 9 en la configuración canónica a 9 de 9 con una puerta de confianza sola, mientras retirar la atribución no cambia ninguna de las dos cifras.](../../artifacts/figures/memoria/FIG-5-11_ablaciones.png)
+![Dos paneles de barras: la falsa confianza pasa de 0 de 9 en la configuración canónica a 9 de 9 con una puerta de confianza sola, mientras retirar la atribución no cambia ninguna de las dos cifras.](../../artifacts/figures/memoria/FIG-5-14_ablaciones.png)
 
 *Fuente: elaboración propia. Experimento: E18, ablaciones pre-registradas y ejecutadas el 1 de octubre de 2026. Conjunto: `synthetic_v2`, los mismos 17 casos. Protocolo: cada ablación cambia una pieza y deja el resto idéntico; ninguna redacta. La falsa confianza se cuenta sobre nueve ejecuciones procedentes de tres ventanas y la abstención innecesaria sobre cinco ejecuciones de cinco ventanas. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -570,12 +694,12 @@ suficiencia y con un conjunto anotado sellado antes de abrir la partición.
 El estrato operativo consta de **22 ejecuciones** sobre once casos anotados y diez sesiones
 distintas. Catorce de ellas debían terminar en abstención y ocho debían terminar en explicación; a
 esas ocho se añaden dos ejecuciones con evidencia completa cuyo diagnóstico de partida era
-incorrecto, en las que abstenerse era lo que correspondía. La Figura 5.12 da las tres cifras con sus
+incorrecto, en las que abstenerse era lo que correspondía. La Figura 5.15 da las tres cifras con sus
 denominadores.
 
-**Figura 5.12. Las tres cifras de la evaluación final, con su numerador y su denominador.**
+**Figura 5.15. Las tres cifras de la evaluación final, con su numerador y su denominador.**
 
-![Tres paneles: falsa confianza 0 de 14, abstención innecesaria 2 de 8 y cobertura con evidencia completa 6 de 10, cada uno con el número de ventanas y de sesiones que lo sostiene.](../../artifacts/figures/memoria/FIG-5-12_evaluacion_final.png)
+![Tres paneles: falsa confianza 0 de 14, abstención innecesaria 2 de 8 y cobertura con evidencia completa 6 de 10, cada uno con el número de ventanas y de sesiones que lo sostiene.](../../artifacts/figures/memoria/FIG-5-15_evaluacion_final.png)
 
 *Fuente: elaboración propia. Experimento: E19, evaluación final. Conjunto: `synthetic_v2`, **partición de prueba**. Protocolo: política de suficiencia v2.2, conjunto anotado sellado antes de abrir la partición, estrato operativo. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -593,12 +717,12 @@ entre las dos frases es la que separa una observación de una garantía operativ
 otros dos intervalos son igual de anchos: la abstención innecesaria es compatible con cualquier tasa
 entre 0,071 y 0,591, y la cobertura, entre 0,313 y 0,832. La cobertura de 6 de 10 tampoco se lee
 como cuatro oportunidades perdidas: dos de esas diez ejecuciones llevaban un diagnóstico incorrecto
-y abstenerse era lo correcto en ellas. La parte evitable del coste es la otra cifra, 2 de 8. Caso a caso, la Figura 5.13 muestra en qué
+y abstenerse era lo correcto en ellas. La parte evitable del coste es la otra cifra, 2 de 8. Caso a caso, la Figura 5.16 muestra en qué
 ejecución se tomó cada decisión.
 
-**Figura 5.13. Decisión del sistema en cada una de las 22 ejecuciones del estrato operativo.**
+**Figura 5.16. Decisión del sistema en cada una de las 22 ejecuciones del estrato operativo.**
 
-![Cada ejecución como un punto, por caso anotado y condición de evidencia: todas las de evidencia parcial y retirada terminan en abstención correcta, y las dos abstenciones innecesarias son las de la deriva del caudalímetro y el fallo de encendido con evidencia completa.](../../artifacts/figures/memoria/FIG-5-13_decisiones_e19.png)
+![Cada ejecución como un punto, por caso anotado y condición de evidencia: todas las de evidencia parcial y retirada terminan en abstención correcta, y las dos abstenciones innecesarias son las de la deriva del caudalímetro y el fallo de encendido con evidencia completa.](../../artifacts/figures/memoria/FIG-5-16_decisiones_e19.png)
 
 *Fuente: elaboración propia. Experimento: E19. Conjunto: `synthetic_v2`, partición de prueba. Protocolo: cada punto es una ejecución, y los dos puntos de una misma fila son sesiones distintas del mismo caso anotado. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
 
@@ -610,6 +734,53 @@ la conserva como categoría para que se vea que el error existe en el diseño y 
 la figura no puede mostrar es la novedad del conjunto: estas ventanas no se usaron para ajustar
 nada, pero el criterio que las decide sí se ajustó antes sobre otras, y la evaluación mide si ese
 criterio se mantiene, no si es el mejor posible.
+
+La Figura 5.16 dice **qué** decidió el sistema en cada caso del estrato operativo, y no dice **con
+cuánta confianza** ni a qué distancia quedó cada decisión de la puerta que la gobierna. Esa distancia
+es lo que permite distinguir un acierto holgado de uno que estuvo cerca de no serlo, y es la
+pregunta que queda abierta al leer que hubo dos abstenciones innecesarias. El objetivo de este
+análisis es situar las **35 ejecuciones registradas** —no solo las 22 del estrato operativo— sobre el
+eje de la confianza calibrada, con el umbral marcado, señalando en cada una si la decisión fue
+correcta, si el diagnóstico del modelo lo era, cuánta cobertura de afirmaciones alcanzó y cuántos
+documentos aplicables recibió. La Figura 5.17 lo presenta.
+
+**Figura 5.17. Las 35 ejecuciones de la evaluación final, situadas respecto del umbral de confianza.**
+
+![Treinta y cinco ejecuciones ordenadas por estrato y confianza, con el umbral de 0,79 marcado: cuatro ejecuciones quedan por debajo y son las cuatro de las dos abstenciones innecesarias, la de la deriva del caudalímetro a 0,573 y la del fallo de encendido a 0,491; todas las demás quedan por encima, y las que el modelo diagnosticó mal son abstenciones correctas por evidencia insuficiente.](../../artifacts/figures/memoria/FIG-5-17_decisiones_y_umbral.png)
+
+*Fuente: elaboración propia. Experimento: E19, evaluación final, tercer intento; el sufijo del registro es el número de intento y no una versión del conjunto de datos. Conjunto: `synthetic_v2`, partición de prueba. Variables: confianza calibrada del diagnóstico, decisión esperada y tomada, acierto del diagnóstico del modelo, cobertura de afirmaciones y número de documentos aplicables. Protocolo: una marca por ejecución registrada, agrupadas por estrato; el umbral dibujado es el de la política de suficiencia vigente, 0,79. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+
+La figura muestra una separación limpia que las tablas no dejaban ver. **Cuatro de las 35 ejecuciones
+quedan por debajo del umbral, y son exactamente las cuatro de las dos abstenciones innecesarias**:
+la deriva del caudalímetro a 0,573 y el fallo de encendido a 0,491, cada una repetida en dos
+ejecuciones. Ninguna decisión correcta queda por debajo del umbral y ninguna de las dos abstenciones
+indebidas queda por encima. La puerta de confianza, por tanto, no se equivocó por estar mal situada:
+se equivocó porque el modelo de diagnóstico estaba genuinamente poco seguro en esas dos ventanas, y
+el criterio hizo con esa inseguridad lo que estaba escrito que hiciera. La figura muestra también
+el otro lado del mismo mecanismo: cuatro ejecuciones con el diagnóstico del modelo **incorrecto**
+—marcadas con borde oscuro— terminan en abstención correcta, porque la evidencia documental no
+cubría las afirmaciones; ahí el criterio de suficiencia evitó una explicación equivocada que la
+confianza, alta en todas ellas, no habría evitado.
+
+Hay un detalle más que la figura hace visible y que merece enunciarse con cuidado. El caso de la
+deriva del caudalímetro aparece sobre **dos sesiones distintas**: en la de autopista da confianza
+0,573 y se abstiene cuando debía explicar, y en la de calentamiento da 0,851 y explica
+correctamente. Mirando las ocho sesiones de la evaluación, las dos abstenciones innecesarias están
+las dos en sesiones de autopista, que es también donde se dan las dos confianzas más bajas de toda
+la tabla; en ralentí y en calentamiento ninguna ejecución baja de 0,85.
+
+**Esto es una observación descriptiva sobre dos errores, y nada más.** Con `n = 2` no hay contraste
+posible y no se estima ningún efecto: **no se afirma que la conducción en autopista cause una
+reducción de la confianza**, y la coincidencia podría deberse al caso anotado, a la ventana concreta
+o al azar con la misma facilidad que al régimen. Las 35 ejecuciones tampoco son 35 observaciones
+independientes: repiten casos entre los tres estratos y proceden de ocho ventanas. Y una advertencia
+que importa al método: **el umbral no se revisa a la vista de esta figura**. La política de
+suficiencia está congelada desde antes de abrir el conjunto de prueba, y moverla ahora para que las
+dos abstenciones cayeran del lado correcto sería ajustar el criterio a los datos reservados, que es
+exactamente lo que el protocolo existía para impedir. Para la pregunta de investigación, la
+aportación de la figura es identificar **dónde** está el límite del sistema: no en el criterio de
+suficiencia, que se comportó como estaba escrito, sino en la confianza del modelo de diagnóstico
+sobre las dos condiciones que la Figura 5.3 ya había señalado como las de señal más pobre.
 
 Una salvedad de otra naturaleza acompaña a estas cifras y conviene darla aquí y no en las
 limitaciones, porque afecta a cómo se leen. Al auditar el texto que el modelo de lenguaje redactó en
