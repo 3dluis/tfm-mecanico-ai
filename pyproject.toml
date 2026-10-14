@@ -72,6 +72,14 @@ finetune = [
     "transformers>=4.44",
     "huggingface-hub>=0.25",
 ]
+# Montaje del documento entregable. Pandoc convierte el Markdown y `python-docx`
+# ensambla el resultado sobre una COPIA de la plantilla oficial: los estilos, la
+# portada, los encabezados y los campos de índice no los produce la conversión y
+# hay que ponerlos a propósito. Pandoc es una herramienta del sistema y no una
+# dependencia de Python; su versión se fija en `docs/entrega-docx.md`.
+docx = [
+    "python-docx>=1.1",
+]
 
 [dependency-groups]
 dev = [

@@ -16,6 +16,7 @@ algo que la entrega exige, para que sirva de puerta en una comprobación.
 from __future__ import annotations
 
 import argparse
+import html
 import re
 import struct
 import sys
@@ -41,6 +42,7 @@ EXIGIDO = (
     "estilos de la plantilla",
     "índice automático",
     "índice de figuras",
+    "índice de tablas",
     "pies de figura",
     "imágenes incrustadas",
     "resolución de impresión",
@@ -69,7 +71,11 @@ def _dpi_png(datos: bytes) -> int:
     return round(x * 0.0254) if unidad == 1 else 0
 
 
-def inspeccionar(ruta: Path, estilos_exigidos: tuple[str, ...]) -> list[Hallazgo]:
+def inspeccionar(
+    ruta: Path,
+    estilos_exigidos: tuple[str, ...],
+    imagenes_de_la_plantilla: frozenset[bytes] = frozenset(),
+) -> list[Hallazgo]:
     hallazgos: list[Hallazgo] = []
     with zipfile.ZipFile(ruta) as fichero:
         documento = _xml(fichero, "word/document.xml")
@@ -104,15 +110,36 @@ def inspeccionar(ruta: Path, estilos_exigidos: tuple[str, ...]) -> list[Hallazgo
                 "TOC" in texto_campos,
             )
         )
-        indice_figuras = bool(
-            re.search(r"TOC\s+\\[ch]\s+\"?Figura", texto_campos)
-            or 'w:val="Tabladeilustraciones"' in documento
+
+        # Un índice de ilustraciones puede construirse por rótulo (\\c) o por
+        # estilo de párrafo (\\t): las dos formas son campos nativos de Word. El
+        # texto del campo viene escapado en el XML, de modo que se desescapa
+        # antes de buscar: «\\t "PieDeFigura;1"» llega como «&quot;».
+        campos_legibles = html.unescape(texto_campos)
+
+        def _hay_indice(*claves: str) -> bool:
+            """Un campo TOC construido por rótulo (\\c) o por estilo (\\t)."""
+            return any(
+                f'\\c "{clave}' in campos_legibles or f'\\t "{clave}' in campos_legibles
+                for clave in claves
+            )
+
+        indice_figuras = _hay_indice("Figura", "PieDeFigura") or (
+            'w:val="Tabladeilustraciones"' in documento
         )
         hallazgos.append(
             Hallazgo(
                 "índice de figuras",
                 "presente" if indice_figuras else "no se encuentra",
                 indice_figuras,
+            )
+        )
+        indice_tablas = _hay_indice("Tabla", "PieDeTabla")
+        hallazgos.append(
+            Hallazgo(
+                "índice de tablas",
+                "presente" if indice_tablas else "no se encuentra",
+                indice_tablas,
             )
         )
         referencias = texto_campos.count("REF ")
@@ -126,7 +153,7 @@ def inspeccionar(ruta: Path, estilos_exigidos: tuple[str, ...]) -> list[Hallazgo
 
         parrafos = re.findall(r"<w:p[ >].*?</w:p>", documento, re.S)
         textos = ["".join(re.findall(r"<w:t[^>]*>(.*?)</w:t>", p, re.S)).strip() for p in parrafos]
-        pies = [t for t in textos if re.match(r"^Figura \d+\.\d+\.", t)]
+        pies = [t for t in textos if re.match(r"^Figura (?:[A-Z]|\d+)\.\d+\.", t)]
         hallazgos.append(
             Hallazgo("pies de figura", f"{len(pies)} con la forma «Figura N.M.»", bool(pies))
         )
@@ -136,14 +163,48 @@ def inspeccionar(ruta: Path, estilos_exigidos: tuple[str, ...]) -> list[Hallazgo
         )
 
         medios = [n for n in fichero.namelist() if n.startswith("word/media/")]
-        hallazgos.append(Hallazgo("imágenes incrustadas", f"{len(medios)} ficheros", bool(medios)))
+        # Las imágenes de la plantilla —logotipos de la portada y de los
+        # encabezados— traen la resolución de la plantilla y no son figuras del
+        # trabajo. Solo se mide la resolución de lo que el cuerpo referencia.
+        relaciones = _xml(fichero, "word/_rels/document.xml.rels")
+        usados = set(re.findall(r'r:(?:id|embed)="(rId\d+)"', documento))
+        del_cuerpo = {
+            f"word/{destino}"
+            for identificador, destino in re.findall(
+                r'Id="(rId\d+)"[^>]*Target="(media/[^"]+)"', relaciones
+            )
+            if identificador in usados
+        }
+        hallazgos.append(
+            Hallazgo(
+                "imágenes incrustadas",
+                f"{len(medios)} en el fichero, {len(del_cuerpo)} referenciadas desde el cuerpo",
+                bool(del_cuerpo),
+            )
+        )
         bajas = []
-        for nombre in medios:
-            if not nombre.lower().endswith(".png"):
+        de_la_plantilla = 0
+        for nombre in sorted(del_cuerpo):
+            if not nombre.lower().endswith(".png") or nombre not in medios:
                 continue
-            puntos = _dpi_png(fichero.read(nombre))
+            datos = fichero.read(nombre)
+            # Un logotipo de la portada no es una figura del trabajo: si el
+            # fichero es byte a byte el de la plantilla, su resolución es la que
+            # la titulación entrega y no algo que este documento pueda corregir.
+            if datos in imagenes_de_la_plantilla:
+                de_la_plantilla += 1
+                continue
+            puntos = _dpi_png(datos)
             if puntos and puntos < 200:
                 bajas.append(f"{Path(nombre).name} a {puntos} ppp")
+        if de_la_plantilla:
+            hallazgos.append(
+                Hallazgo(
+                    "imágenes de la plantilla",
+                    f"{de_la_plantilla} sin medir: vienen de la plantilla sin modificar",
+                    None,
+                )
+            )
         hallazgos.append(
             Hallazgo(
                 "resolución de impresión",
@@ -184,9 +245,15 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     exigidos = ESTILOS_DE_LA_PLANTILLA
+    imagenes_de_la_plantilla: frozenset[bytes] = frozenset()
     if args.plantilla is not None and args.plantilla.is_file():
         with zipfile.ZipFile(args.plantilla) as plantilla:
             estilos = _xml(plantilla, "word/styles.xml")
+            imagenes_de_la_plantilla = frozenset(
+                plantilla.read(nombre)
+                for nombre in plantilla.namelist()
+                if nombre.startswith("word/media/")
+            )
         personalizados = re.findall(
             r'<w:style [^>]*w:styleId="([^"]+)"[^>]*>(?:(?!</w:style>).)*?<w:qFormat/>',
             estilos,
@@ -196,7 +263,7 @@ def main(argv: list[str] | None = None) -> int:
             exigidos = tuple(sorted(set(personalizados) - {"Normal"}))
         print(f"estilos tomados de la plantilla: {', '.join(exigidos)}\n")
 
-    hallazgos = inspeccionar(args.docx, exigidos)
+    hallazgos = inspeccionar(args.docx, exigidos, imagenes_de_la_plantilla)
     ancho = max(len(h.concepto) for h in hallazgos)
     fallos = 0
     for hallazgo in hallazgos:

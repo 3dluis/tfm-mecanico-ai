@@ -116,13 +116,13 @@ Word:
 | | Palabras | Observación |
 |---|---|---|
 | Resumen y abstract | 702 | |
-| Capítulos 1 a 6 | 31 565 | el capítulo 5 son 12 919 y el 4, 8 493 |
+| Capítulos 1 a 6 | 31 665 | el capítulo 5 son 12 997 y el 4, 8 493 |
 | Bibliografía | 1 142 | |
-| **Cuerpo del trabajo** | **33 408** | |
-| **Anexos** | **4 037** | **10,8 % del cuerpo**, dentro del 20 % que la plantilla toma como referencia |
+| **Cuerpo del trabajo** | **33 509** | |
+| **Anexos** | **4 095** | **12,2 % del cuerpo**, dentro del 20 % que la plantilla toma como referencia |
 
 **Hay un problema de extensión, y no está en los anexos.** La nota al pie de la plantilla fija un
-mínimo de 50 000 palabras y un máximo de 60 000. El cuerpo tiene 33 408, es decir **16 592 por debajo
+mínimo de 50 000 palabras y un máximo de 60 000. El cuerpo tiene 33 509, es decir **16 491 por debajo
 del mínimo**. Los anexos no lo resuelven: no puntúan, y la sesión informativa del curso fija su
 mínimo «sin anexos», de modo que ampliarlos para alcanzar la cifra sería contraproducente además de
 inútil.
@@ -132,7 +132,7 @@ hay **tres cifras oficiales incompatibles** —50 000 a 60 000 palabras en la no
 plantilla; 31 a 73 páginas en las recomendaciones por capítulo; y un mínimo de 60 páginas sin anexos
 en la sesión informativa del curso, con «no apto» aparejado—. Según cuál rija, el trabajo cumple o
 no cumple, y este documento no puede resolverlo. Lo que sí puede decir es que **el recuento de
-palabras ha pasado de 12 550 a 33 408** desde que la cuestión se planteó, y que el margen que queda
+palabras ha pasado de 12 550 a 33 509** desde que la cuestión se planteó, y que el margen que queda
 hasta el mínimo de palabras corresponde al cuerpo, no a los anexos.
 
 La comprobación definitiva se hace sobre el documento montado: `scripts/verificar_docx.py` informa
