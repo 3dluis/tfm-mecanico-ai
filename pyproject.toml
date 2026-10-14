@@ -107,6 +107,10 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
 # tipografía correcta, no caracteres confundibles colados por descuido, y las
 # líneas largas son párrafos. Lo que sí se exige aquí es todo lo demás.
 "scripts/notebooks/n*.py" = ["E501", "RUF001", "RUF002", "RUF003"]
+# El generador de las figuras de la memoria está en el mismo caso: sus cadenas
+# son títulos y pies que se imprimen, donde «0–1» con guion largo y el signo
+# menos son la tipografía correcta, y los pies de procedencia son párrafos.
+"scripts/figuras_memoria.py" = ["E501", "RUF001", "RUF002", "RUF003"]
 
 [tool.mypy]
 python_version = "3.11"
