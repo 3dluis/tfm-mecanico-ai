@@ -69,13 +69,13 @@ una huella distinta significa que el dato de origen cambió.
 | 5.15 | E18, cuatro ablaciones | `synthetic_v2` | los mismos 17 casos | `05_suficiencia` | `ablaciones.fig_ablaciones()` | `FIG-5-15_ablaciones.png` | `f9f67da668a9012a` | cap. 5 · Contribución de cada componente | 7 |
 | 5.16 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | copiada de `FIG-NB03-01_primario.png` | `FIG-5-16_evaluacion_final.png` | `1fd19e73ee4e7e0e` | cap. 5 · La evaluación final sobre el conjunto de prueba | 7 |
 | 5.17 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | copiada de `FIG-NB03-02_decisiones.png` | `FIG-5-17_decisiones_e19.png` | `43466ceaeb89f890` | cap. 5 · La evaluación final sobre el conjunto de prueba | 7 |
-| 5.18 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | `decision.fig_decisiones_y_umbral()` | `FIG-5-18_decisiones_y_umbral.png` | `1cec118daf16d607` | cap. 5 · La evaluación final sobre el conjunto de prueba | — |
+| 5.18 | E19, tercer intento | `synthetic_v2` | **prueba** | `03_analisis_e19` | `decision.fig_decisiones_y_umbral()` | `FIG-5-18_decisiones_y_umbral.png` | `1cec118daf16d607` | cap. 5 · La evaluación final sobre el conjunto de prueba | 7 |
 | 6.1 | E1–E19 (etiquetas de etapa) | `sin conjunto: es la arquitectura` | — | `00_introduccion` | copiada de `FIG-NB00-01_recorrido.png` | `FIG-6-01_recorrido_experimental.png` | `bc597db112e7b4a6` | cap. 6 · Conclusiones sobre los objetivos | 7 |
 | 6.2 | E1–E19 (uno por fila) | `sin conjunto: es documental` | — | `00_introduccion` | `sintesis.fig_objetivos()` | `FIG-6-02_objetivos_y_evidencia.png` | `23b55c185ef7ffbd` | cap. 6 · Conclusiones sobre los objetivos | 7 |
 | 6.3 | E15 | `synthetic_v2` | validación | `05_suficiencia` | `sintesis.fig_compromiso()` | `FIG-6-03_compromiso_cobertura_abstencion.png` | `e482ede01d9ec9da` | cap. 6 · Limitaciones | 7 |
 | A.1 | E4 | `synthetic_v1` | sesiones pareadas | `01_exploracion_obd` | copiada de `FIG-E4-01_series_normal_vs_fallo.png` | `FIG-A-01_series_normal_vs_fallo.png` | `4d357282d5e1a58d` | anexo A · §A.6 | 7 |
 | A.2 | análisis contrafactual T2, derivado de E2 y E5 | `synthetic_v2` | entrenamiento | `06_expresion_del_fallo` | `temporal.fig_pareja_contrafactual()` | `FIG-A-02_pareja_contrafactual.png` | `d0ff79dd2feb7606` | anexo A · §A.7 | 7 |
-| B.1 | E6 y E7 | `synthetic_v2` | validación | `02_comparacion_modelos` | `diagnostico.fig_f1_por_clase()` | `FIG-B-01_f1_por_clase.png` | `b1ac8ba9ea221d31` | anexo B · §B.2 | 7 |
+| B.1 | E6 y E7 | `synthetic_v2` | validación | `02_comparacion_modelos` | `diagnostico.fig_f1_por_clase()` | `FIG-B-01_f1_por_clase.png` | `b1ac8ba9ea221d31` | anexo B · §B.2 | 8 |
 
 | Fig. | Limitaciones declaradas en su pie |
 |---|---|
