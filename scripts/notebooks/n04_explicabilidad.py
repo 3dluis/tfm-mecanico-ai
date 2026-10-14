@@ -188,7 +188,7 @@ compuestas = sorted(c for c in matriz.columns if c not in simples)
 matriz = matriz.reindex(columns=simples + compuestas)
 normalizada = matriz.div(matriz.sum(axis=1), axis=0)
 
-fig, eje = plt.subplots(figsize=(9.4, 4.2))
+fig, eje = plt.subplots(figsize=(5.9, 4.4))
 imagen = eje.imshow(normalizada.to_numpy(), cmap=SEQUENTIAL, aspect="auto")
 eje.set_xticks(range(len(normalizada.columns)), normalizada.columns, rotation=55,
                ha="right", fontsize=7)

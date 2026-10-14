@@ -217,7 +217,7 @@ from mecanico_ia_exp.visualization.style import CATEGORICAL, apply_style
 
 apply_style()
 
-fig, ejes = plt.subplots(1, 3, figsize=(9.8, 3.6))
+fig, ejes = plt.subplots(1, 3, figsize=(5.9, 3.0))
 COLORES = [CATEGORICAL[2], CATEGORICAL[1], CATEGORICAL[0]]
 
 for eje, (nombre, fila), color in zip(ejes, primario.iterrows(), COLORES, strict=False):
@@ -325,7 +325,7 @@ vista = vista.sort_values(["corpus_variant", "case_id_gold"])
 vista.reset_index(drop=True)"""),
     code("""\
 ORDEN_VARIANTE = ["FULL", "PARTIAL", "ABSENT"]
-fig, eje = plt.subplots(figsize=(9.8, 5.4))
+fig, eje = plt.subplots(figsize=(5.9, 5.0))
 
 marcadores = {("EXPLAIN", True): "o", ("ABSTAIN", True): "s",
               ("EXPLAIN", False): "X", ("ABSTAIN", False): "D"}

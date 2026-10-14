@@ -77,6 +77,31 @@ COLOR_BIEN = CATEGORICAL[5]
 COLOR_MAL = CATEGORICAL[7]
 
 
+#: Ancho útil de la página con los márgenes de la plantilla: 21 cm menos 3,0 a
+#: cada lado son 15 cm, que son 5,9 pulgadas. Una figura más ancha que esto la
+#: escala Word al entrar, y el escalado encoge las etiquetas: a 9,6 pulgadas, una
+#: etiqueta de 7 puntos se imprime a 4,3. Dibujar a la medida de la página es lo
+#: que hace que un punto de la figura sea un punto en el papel.
+ANCHO_DE_PAGINA = 5.9
+
+
+def estilo_para_impresion() -> None:
+    """El estilo común, con los cuerpos subidos para lectura en papel."""
+    apply_style()
+    import matplotlib as mpl
+
+    mpl.rcParams.update(
+        {
+            "font.size": 8.5,
+            "axes.titlesize": 9.5,
+            "axes.labelsize": 8.5,
+            "xtick.labelsize": 8,
+            "ytick.labelsize": 8,
+            "legend.fontsize": 8,
+        }
+    )
+
+
 def _num(valor: float, decimales: int = 3, *, signo: bool = False) -> str:
     """Las cifras de la memoria llevan coma decimal, también dentro de la figura."""
     texto = f"{valor:+.{decimales}f}" if signo else f"{valor:.{decimales}f}"
@@ -125,8 +150,8 @@ def fig_5_01_particiones() -> Figure:
     orden = ["train", "validation", "test"]
     etiquetas = {"train": "entrenamiento", "validation": "validación", "test": "prueba"}
 
-    apply_style()
-    fig, eje = plt.subplots(figsize=(7.2, 3.2))
+    estilo_para_impresion()
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 3.4))
     clases = list(CONDICION)
     izquierda = np.zeros(len(clases))
     for i, particion in enumerate(orden):
@@ -177,8 +202,8 @@ def fig_5_03_separabilidad() -> Figure:
     senales = list(dict.fromkeys(tabla.signal))
     fallos = [c for c in CONDICION if c != "F00_normal"]
 
-    apply_style()
-    fig, ejes = plt.subplots(1, 2, figsize=(9.6, 5.2), sharey=True)
+    estilo_para_impresion()
+    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 8.6), sharex=True)
     for eje, (columna, titulo) in zip(
         ejes,
         [("delta_level", "Nivel (media del bloque)"), ("delta_dispersion", "Dispersión")],
@@ -256,8 +281,8 @@ def fig_5_04_confusiones() -> Figure:
     bosque = pd.read_csv(TABLAS / "E6_baseline_confusion_synthetic_v2.csv", index_col=0)
     red = pd.read_csv(TABLAS / "E7_temporal_confusion_synthetic_v2.csv", index_col=0)
 
-    apply_style()
-    fig, ejes = plt.subplots(1, 2, figsize=(9.0, 4.2), sharey=True)
+    estilo_para_impresion()
+    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 7.6))
     _confusion(ejes[0], bosque, "Bosque aleatorio (E6) · 12 errores, los 12 a «sin fallo»")
     _confusion(ejes[1], red, "GRU bidireccional (E7) · 17 errores, 4 de ellos cruzados")
     ejes[0].set_ylabel("condición anotada")
@@ -283,8 +308,10 @@ def fig_5_05_por_clase() -> Figure:
     clases = [clases[i] for i in orden]
     diferencia = diferencia[orden]
 
-    apply_style()
-    fig, ejes = plt.subplots(1, 2, figsize=(9.6, 3.6), gridspec_kw={"width_ratios": [1.5, 1]})
+    estilo_para_impresion()
+    fig, ejes = plt.subplots(
+        2, 1, figsize=(ANCHO_DE_PAGINA, 6.4), gridspec_kw={"height_ratios": [1.5, 1]}
+    )
     y = np.arange(len(clases))
     ejes[0].barh(
         y - 0.19, bosque.loc[clases, "f1"], height=0.36, color=COLOR_BOSQUE, label="bosque (E6)"
@@ -335,8 +362,8 @@ def fig_5_06_calibracion() -> Figure:
     registro = json.loads((REGISTROS / "E15_suficiencia.json").read_text("utf-8"))
     calibracion = registro["calibration"]
 
-    apply_style()
-    fig, eje = plt.subplots(figsize=(5.6, 4.6))
+    estilo_para_impresion()
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 5.0))
     eje.plot([0.6, 1.0], [0.6, 1.0], color=INK_MUTED, ls=":", lw=1.0)
     eje.text(0.665, 0.645, "calibración perfecta", fontsize=6.8, color=INK_SECONDARY, rotation=37)
     eje.fill_between([0.6, 1.0], [0.6, 1.0], 1.0, color=CATEGORICAL[0], alpha=0.04)
@@ -387,8 +414,8 @@ def fig_5_09_confusor() -> Figure:
         "synthetic_v3": (f1("E6_baseline_synthetic_v3.json"), f1("E7_temporal_synthetic_v3.json")),
     }
 
-    apply_style()
-    fig, eje = plt.subplots(figsize=(7.2, 3.8))
+    estilo_para_impresion()
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 4.0))
     x = np.array([0.0, 1.0])
     for desplazamiento, color, etiqueta, indice in (
         (-0.15, COLOR_BOSQUE, "bosque aleatorio (E6)", 0),
@@ -447,8 +474,10 @@ def fig_5_11_recuperacion() -> Figure:
     }
     tabla = tabla.set_index("strategy").reindex(list(nombres))
 
-    apply_style()
-    fig, ejes = plt.subplots(1, 2, figsize=(9.6, 3.4), gridspec_kw={"width_ratios": [1, 1.25]})
+    estilo_para_impresion()
+    fig, ejes = plt.subplots(
+        2, 1, figsize=(ANCHO_DE_PAGINA, 6.2), gridspec_kw={"height_ratios": [1, 1.25]}
+    )
     y = np.arange(len(tabla))
     aciertos = tabla["hit_rate"].to_numpy() * 5
     colores = [COLOR_BIEN if a == 5 else COLOR_MAL if a == 0 else CATEGORICAL[3] for a in aciertos]
@@ -551,8 +580,8 @@ def fig_5_13_ablaciones() -> Figure:
             )
         )
 
-    apply_style()
-    fig, ejes = plt.subplots(1, 2, figsize=(9.6, 3.8), sharey=True)
+    estilo_para_impresion()
+    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 7.2), sharex=True)
     y = np.arange(len(filas))
     for eje, (indice_num, indice_den, titulo, color) in zip(
         ejes,
@@ -619,8 +648,8 @@ def fig_6_01_objetivos() -> Figure:
     ]
     colores = {"cumplido": COLOR_BIEN, "parcial": CATEGORICAL[3], "pendiente": COLOR_MAL}
 
-    apply_style()
-    fig, eje = plt.subplots(figsize=(8.4, 3.6))
+    estilo_para_impresion()
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 3.8))
     for i, (identificador, nombre, evidencia, estado) in enumerate(objetivos):
         y = len(objetivos) - i - 1
         eje.add_patch(
@@ -681,8 +710,8 @@ def fig_6_02_compromiso() -> Figure:
         ),
     ]
 
-    apply_style()
-    fig, eje = plt.subplots(figsize=(6.6, 4.6))
+    estilo_para_impresion()
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 5.2))
     for nombre, fc, ai, texto_fc, texto_ai, color in politicas:
         eje.scatter(fc, ai, s=140, color=color, zorder=3)
         # La política que explica siempre está pegada al borde derecho: su
