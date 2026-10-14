@@ -62,12 +62,34 @@ sesión informativa exige y de la que no hay constancia. Está registrado como l
 **No se cambia el título.** Lo que se propone es llevarlo a la consulta con el director, con dos
 opciones concretas en lugar de una duda abierta:
 
-| Opción | Título | A favor | En contra |
-|---|---|---|---|
-| **A · mantenerlo** | «Sistema inteligente para el diagnóstico y mantenimiento predictivo de vehículos» | es el registrado y el que consta en la propuesta aprobada; cambiarlo a estas alturas puede tener coste administrativo | el tribunal leerá «mantenimiento predictivo» en la portada y no lo encontrará en ningún capítulo. Es la primera pregunta que haría cualquier miembro del tribunal |
-| **B · ajustarlo al alcance** | **«Diagnóstico vehicular explicable a partir de datos OBD-II: trazabilidad de la evidencia y abstención ante evidencia insuficiente»** | describe lo que el trabajo hace y nombra su contribución; la sesión informativa **autoriza expresamente** el cambio | exige comunicarlo y consensuarlo, y rehacer la portada |
+### Opción A · mantener el título registrado
 
-La recomendación, si se pide: **la opción B**, por una razón que no es de estilo. Un título que
+| | |
+|---|---|
+| **Título** | «Sistema inteligente para el diagnóstico y mantenimiento predictivo de vehículos» |
+| **Ventajas** | es el que consta en la propuesta aprobada el 14 de julio de 2026 y el que figura en los registros administrativos del título. No exige ningún trámite ni ninguna comunicación adicional. Mantiene la continuidad con la documentación de seguimiento ya entregada |
+| **Limitaciones** | promete dos capacidades que la matriz clasifica como **ausentes**: mantenimiento predictivo e identificación de patrones no representados. Y **no nombra** las dos que el trabajo sí sostiene: la trazabilidad de la evidencia y la abstención |
+| **Consecuencias académicas** | el tribunal lee el título antes que nada, y la primera pregunta previsible es «¿dónde está el mantenimiento predictivo?». Responder consume tiempo de defensa en explicar una ausencia en lugar de exponer un resultado. El riesgo no es de suspenso sino de **desplazamiento del foco**: la discusión empieza por lo que falta |
+
+### Opción B · ajustar el título al alcance evaluado
+
+| | |
+|---|---|
+| **Título** | **«Diagnóstico vehicular explicable a partir de datos OBD-II: trazabilidad de la evidencia y abstención ante evidencia insuficiente»** |
+| **Ventajas** | cada una de sus cuatro piezas corresponde a una capacidad **demostrada** o **demostrada con alcance** en la matriz. Nombra la contribución. La sesión informativa **autoriza expresamente** el cambio: «el título propuesto tiene carácter orientativo y puede ser modificado» |
+| **Limitaciones** | exige comunicarlo y consensuarlo con el director, que es precisamente el trámite que la sesión informativa pide y del que no hay constancia —limitación `L-13`—. Obliga a rehacer la portada y a revisar las menciones del título en los informes de seguimiento |
+| **Consecuencias académicas** | el tribunal encuentra en el documento lo que el título anuncia. El riesgo se desplaza al trámite: si el cambio no se comunica en forma, la portada diría una cosa y el registro otra, que es peor que cualquiera de las dos opciones |
+
+### Una tercera, intermedia, por si el director la prefiere
+
+| | |
+|---|---|
+| **Título** | «Sistema inteligente para el diagnóstico vehicular explicable a partir de datos OBD-II» |
+| **Qué hace** | conserva «sistema inteligente» y «diagnóstico», que son del título registrado, y **retira** el mantenimiento predictivo sin añadir nada que haya que defender |
+| **Cuándo conviene** | si el director prefiere un cambio mínimo que no obligue a rehacer la propuesta pero elimine la promesa que el trabajo no cumple |
+| **Lo que sigue sin nombrar** | la trazabilidad y la abstención, que son la contribución |
+
+La recomendación, si se pide: **la opción B**, y la C si el director prefiere un cambio mínimo. La razón no es de estilo. Un título que
 promete mantenimiento predictivo obliga al autor a explicar en la defensa por qué no lo hay, y esa
 explicación consume tiempo del tribunal en algo que no es el trabajo. Un título ajustado al alcance
 convierte esa pregunta en innecesaria.
