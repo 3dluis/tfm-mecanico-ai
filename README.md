@@ -1,3 +1,112 @@
+# Trabajo práctico del TFM · paquete de entrega
+
+Este directorio **es** el trabajo práctico del Trabajo Fin de Máster en Inteligencia Artificial
+(UAX, Luis Daniel Díaz, 2026), empaquetado para que se pueda leer, ejecutar y verificar sin
+depender de ningún otro repositorio ni de la máquina en que se construyó.
+
+> **Estado: BORRADOR PARA REVISIÓN DEL TUTOR.** No es la entrega definitiva. Quedan decisiones
+> abiertas sobre la extensión, el título y los datos institucionales de la portada.
+
+## Qué hay aquí
+
+| Dónde | Qué es |
+|---|---|
+| `memoria/` | la memoria académica, en `.docx` editable y en `.pdf` |
+| `notebooks/` | los siete notebooks científicos, uno por bloque experimental |
+| `notebooks/html/` | **los mismos notebooks ya ejecutados**, con sus figuras dentro: se abren en un navegador sin instalar nada |
+| `src/mecanico_ia_exp/` | el código: generador de señales, modelos, recuperación, verificador de suficiencia y las funciones de visualización |
+| `artifacts/` | las tablas, las métricas, las figuras del documento y el análisis contrafactual |
+| `experiments/` | el registro JSON de cada ejecución, con su commit, su semilla y sus métricas |
+| `data/` | la muestra redistribuible y los conjuntos sintéticos que sí pueden viajar |
+| `configs/` | la configuración, los manifiestos y el censo de artefactos históricos |
+| `docs/` | la documentación del laboratorio: metodología, decisiones, auditorías y limitaciones |
+| `scripts/` | instalación, ejecución y verificación del paquete |
+| `tests/` | las pruebas que sostienen lo anterior |
+| `.git/` | **el historial completo**, 424 commits desde el 1 de septiembre de 2026 |
+
+## Por dónde empezar, según lo que se quiera hacer
+
+**Leer sin instalar nada.** `memoria/memoria.pdf` y, para ver la evidencia, los HTML de
+`notebooks/html/`. No hacen falta Python ni Jupyter: se abren en cualquier navegador y traen
+dentro sus figuras y sus tablas.
+
+**Revisar en quince minutos.** [`JURY_GUIDE.md`](JURY_GUIDE.md).
+
+**Ejecutar los notebooks.**
+
+```bash
+bash scripts/instalar.sh            # necesita internet UNA vez, para las dependencias
+bash scripts/ejecutar_notebooks.sh  # a partir de aquí, sin red
+```
+
+**Comprobar que el paquete está completo.**
+
+```bash
+uv run python scripts/verificar_entrega.py
+```
+
+Recorre nueve familias —ficheros, dependencias, notebooks, figuras, métricas, datos,
+documentación, huellas y Git— y termina con código distinto de cero si algo falta. Las huellas
+que compara están en `MANIFEST.json`, que se regenera con `scripts/generar_manifiesto.py`.
+
+## Qué se puede reproducir y qué no
+
+**Se reproduce.** Todas las figuras del documento se regeneran desde los registros congelados
+con `uv run python scripts/figuras_memoria.py`. El conjunto canónico `synthetic_v2` se
+reconstruye **bit a bit** desde su plan y su semilla, y hay una medición que lo comprueba sesión
+a sesión. Los siete notebooks se ejecutan en CPU, sin red y sin servicios externos.
+
+**No se reproduce, y está dicho dónde.** Dos conjuntos, `synthetic_v1` y `synthetic_v3`, son
+anteriores a la calibración del generador contra el manual de taller: el generador publicado
+produce **otras señales**, de modo que no se pueden reconstruir y no se intenta. Dos figuras son
+artefactos históricos cuya rutina ya no existe o cuyos datos intermedios no se guardaron; viajan
+con su huella y con el motivo. El anexo C de la memoria lo detalla.
+
+**No viaja, y por qué.** El manual de taller del fabricante tiene una licencia que no permite
+redistribuirlo, y con él no viajan el índice documental ni los embeddings, que se construyen de
+él. Los adaptadores del modelo de lenguaje pesan 28 MB cada uno y derivan de un modelo base con
+licencia propia: viaja su configuración, que es lo que hace auditable el ajuste. `MANIFEST.json`
+enumera cada exclusión con su motivo.
+
+## Las dos modalidades
+
+**DEMO** es lo que este paquete entrega entero: CPU, sin GPU, sin PostgreSQL, sin credenciales y
+sin red durante la ejecución. Permite explorar las señales, regenerar las figuras, consultar las
+métricas y las atribuciones, analizar la evaluación final y leer los resultados negativos.
+
+**FULL** reejecuta las fases que dependen de los recursos de arriba. **No es autónoma**: exige
+el manual, el índice vectorial y, para el ajuste del redactor, una GPU. Donde una prueba o un
+notebook necesita algo que no está, **se detiene diciendo qué falta y cómo obtenerlo**, en lugar
+de saltarse el paso en silencio.
+
+## El historial
+
+El repositorio conserva el historial real del trabajo: **424 commits** entre el 1 de septiembre
+y el 14 de octubre de 2026, en dieciséis ramas, con sus fechas y su autoría originales. Se
+construyó **por clonación**, sin reescribir nada, de modo que los identificadores de commit son
+los mismos que los del repositorio de trabajo y cualquier referencia de la documentación a un
+commit sigue resolviendo.
+
+```bash
+git log --oneline --graph --all | head -40      # la evolución
+git log --format='%h %ad %s' --date=short       # con fechas
+git show <commit>                               # un cambio concreto
+git fsck --full                                 # integridad de los objetos
+```
+
+Incluye lo que salió mal: la interrupción de la evaluación final y sus tres intentos, la
+contaminación del adaptador, la retirada de una conclusión sobre el volumen de datos y las
+correcciones de la memoria, cada una con su commit.
+
+## Verificar una huella
+
+```bash
+shasum -a 256 memoria/memoria.pdf
+uv run python -c "import json;print(json.load(open('MANIFEST.json'))['huellas_sha256']['memoria/memoria.pdf'])"
+```
+
+---
+
 # Mecánico IA: repositorio experimental del TFM
 
 Artefacto experimental del Trabajo Fin de Máster en Inteligencia Artificial (UAX, Luis Daniel
@@ -131,10 +240,10 @@ clon del repositorio, sin GPU, sin base de datos y sin descargas.
 
 | Notebook | Qué responde | Leer | Experimentos |
 |---|---|---|---|
-| `00_introduccion` | el recorrido completo y el estado de la evidencia | [HTML](docs/notebooks/html/00_introduccion.html) | E1–E19 |
-| `01_exploracion_obd` | si las señales OBD-II contienen estructura diagnóstica | [HTML](docs/notebooks/html/01_exploracion_obd.html) | E2, E4, E5 |
-| `02_comparacion_modelos` | si el modelo temporal supera a la línea base | [HTML](docs/notebooks/html/02_comparacion_modelos.html) | E6, E7 |
-| `03_analisis_e19` | si el criterio de suficiencia evita la falsa confianza | [HTML](docs/notebooks/html/03_analisis_e19.html) | E19 |
+| `00_introduccion` | el recorrido completo y el estado de la evidencia | [HTML](notebooks/html/00_introduccion.html) | E1–E19 |
+| `01_exploracion_obd` | si las señales OBD-II contienen estructura diagnóstica | [HTML](notebooks/html/01_exploracion_obd.html) | E2, E4, E5 |
+| `02_comparacion_modelos` | si el modelo temporal supera a la línea base | [HTML](notebooks/html/02_comparacion_modelos.html) | E6, E7 |
+| `03_analisis_e19` | si el criterio de suficiencia evita la falsa confianza | [HTML](notebooks/html/03_analisis_e19.html) | E19 |
 
 ```
 uv sync --extra nb
@@ -212,7 +321,7 @@ Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de ca
 | `data/` | Muestra redistribuible en `data/samples/`; el resto se regenera (`data/README.md`) |
 | `notebooks/` | Documentos científicos ejecutables; importan del paquete y no duplican lógica. Escritos desde `scripts/notebooks/` |
 | `notebooks/salida/` | Donde escriben los notebooks. **Nunca** en `experiments/`, `tables/`, `figures/` ni `data/` |
-| `docs/notebooks/html/` | Copia en HTML de cada notebook, legible sin ejecutar nada |
+| `notebooks/html/` | Copia en HTML de cada notebook, legible sin ejecutar nada |
 | `tests/` | 400 pruebas: políticas de suficiencia, aislamiento de embeddings, contrato de RERUN-A, cierre del test |
 
 ## Trazabilidad
