@@ -113,7 +113,9 @@ ETAPAS = [
     ("Resultado experimental", "falsa confianza,\\nabstención innecesaria", "E19"),
 ]
 
-fig, ax = plt.subplots(figsize=(9.5, 7.6))
+# Ancho de la página de la memoria, 5,9 pulgadas: dibujar a esa medida
+# evita que Word escale la figura y encoja sus rótulos.
+fig, ax = plt.subplots(figsize=(5.9, 7.0))
 ax.set_xlim(0, 10)
 ax.set_ylim(0, len(ETAPAS) * 1.05)
 ax.axis("off")

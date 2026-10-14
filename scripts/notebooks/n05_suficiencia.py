@@ -206,9 +206,9 @@ fig, ejes = soporte.lienzo(
     dataset="synthetic_v2, validación · los 17 casos anotados, en sus 5 condiciones",
     procedencia="artifacts/tables/E15_suficiencia.csv",
     titulo="Documentos aplicables frente a cobertura de afirmaciones, por condición de evidencia",
-    columnas=2,
-    ancho=10.0,
-    alto=3.4,
+    filas=2,
+    ancho=5.9,
+    alto=3.2,
 )
 
 # Las CINCO condiciones del conjunto. Hasta el 13-10-2026 esta lista tenía

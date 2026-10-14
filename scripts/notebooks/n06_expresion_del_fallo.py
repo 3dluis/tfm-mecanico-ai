@@ -231,8 +231,8 @@ fig, ejes = soporte.lienzo(
     dataset="synthetic_v2, validación · 70 ventanas etiquetadas con un fallo",
     procedencia="generador reconstruido desde SessionSpec; aciertos de E6_baseline_synthetic_v2.json",
     titulo="Expresión efectiva del fallo por ventana, y aciertos del modelo de diagnóstico",
-    columnas=2,
-    ancho=10.5,
+    filas=2,
+    ancho=5.9,
     alto=3.6,
 )
 
