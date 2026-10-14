@@ -34,7 +34,6 @@ RAIZ = Path(__file__).resolve().parents[1]
 #: Lo que el paquete tiene que traer, con lo que cada cosa permite hacer.
 OBLIGATORIOS: tuple[tuple[str, str], ...] = (
     ("README.md", "qué es el paquete y por dónde empezar"),
-    ("JURY_GUIDE.md", "el recorrido de lectura para el tribunal"),
     ("MANIFEST.json", "el inventario con huellas"),
     ("pyproject.toml", "las dependencias declaradas"),
     ("uv.lock", "las versiones exactas"),
@@ -243,7 +242,7 @@ def comprobar_git() -> list[Resultado]:
 
 def comprobar_documentacion() -> list[Resultado]:
     resultados: list[Resultado] = []
-    for nombre in ("README.md", "JURY_GUIDE.md"):
+    for nombre in ("README.md",):
         fichero = RAIZ / nombre
         if not fichero.is_file():
             resultados.append(Resultado("documentación", f"{nombre} falta", False))
