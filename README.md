@@ -160,7 +160,7 @@ Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
 ```
 uv sync --extra nb --extra ml
 bash scripts/reconstruir_datos.sh    # reconstruye lo que no se distribuye, y COMPRUEBA sus huellas
-uv run pytest                        # 895 pasan sin reconstruir; 912 tras reconstruir
+uv run pytest                        # 902 pasan sin reconstruir; 919 tras reconstruir
 uv run ruff check . && uv run mypy src
 uv run jupyter lab notebooks/
 ```
