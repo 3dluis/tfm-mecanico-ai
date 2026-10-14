@@ -108,7 +108,7 @@ Capítulo a capítulo, frente a la recomendación de la plantilla:
 2. **La propia plantilla se contradice**, y dos de sus tres indicaciones describen un trabajo de
    medio centenar de páginas. Tomar la nota al pie como norma obligaría a ignorar las otras dos
    indicaciones del mismo documento.
-3. **Alcanzar 50 000 palabras exigiría añadir un 40 % de texto.** Con la evidencia disponible, ese
+3. **Alcanzar 50 000 palabras exigiría añadir un 29 % de texto** sobre las 38 803 actuales. Con la evidencia disponible, ese
    texto solo podría salir de repetir explicaciones, describir el código o alargar lo ya dicho, y
    las tres cosas empeoran el trabajo en los criterios que la rúbrica **sí** puntúa: presentación,
    evaluación global y desarrollo.

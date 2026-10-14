@@ -17,10 +17,10 @@ La primera es la extensión. He encontrado indicaciones distintas en los documen
 plantilla lleva una nota al pie que habla de un mínimo de 50 000 palabras, mientras que las
 recomendaciones de extensión por capítulo de esa misma plantilla suman entre 31 y 73 páginas, y la
 sesión informativa del curso indica un mínimo orientativo de 60 páginas sin contar anexos. La
-memoria está ahora en 91 páginas de capítulos, sin anexos ni bibliografía, con unas 36 000 palabras
-en total. Cumple la cifra de la sesión informativa con margen, pero no llega a la de la nota al pie.
+memoria está ahora en 105 páginas de capítulos, sin anexos ni bibliografía, con unas 39 000
+palabras en total. Cumple la cifra de la sesión informativa con margen, pero no llega a la de la nota al pie.
 ¿Cuál de las dos debería tomar como referencia? Lo pregunto porque alcanzar las 50 000 palabras
-supondría añadir alrededor de un 40 % de texto, y con el trabajo experimental que hay hecho no veo
+supondría añadir alrededor de un 30 % de texto, y con el trabajo experimental que hay hecho no veo
 cómo hacerlo sin repetir explicaciones.
 
 La segunda es el título. El registrado es «Sistema inteligente para el diagnóstico y mantenimiento
@@ -34,8 +34,9 @@ alcance real? Si lo segundo, te propongo algo del estilo de «Diagnóstico vehic
 partir de datos OBD-II: trazabilidad de la evidencia y abstención ante evidencia insuficiente», pero
 me adapto a lo que veas.
 
-Te agradezco mucho la orientación de estos meses; me ha servido especialmente para ordenar la parte
-experimental. En cuanto me confirmes estos dos puntos te paso la memoria completa.
+Te agradezco mucho la orientación de estos meses y el tiempo que le dedicas a revisar el trabajo; me
+ha servido especialmente para ordenar la parte experimental y para decidir qué se podía afirmar con
+lo que teníamos medido. En cuanto me confirmes estos dos puntos te paso la memoria completa.
 
 Un saludo,
 Luis Daniel Díaz
@@ -44,7 +45,7 @@ Luis Daniel Díaz
 
 ## Notas para el autor, que NO van en el correo
 
-- **Longitud**: 330 palabras. Dos preguntas concretas, con la cifra que cada una necesita y nada
+- **Longitud**: 350 palabras. Dos preguntas concretas, con la cifra que cada una necesita y nada
   más. No menciona experimentos, ni métricas, ni hallazgos.
 - **Lo que deliberadamente no dice**: que la rúbrica oficial no puntúa la extensión. Es un argumento
   fuerte, pero ponerlo por escrito convierte una consulta en una defensa anticipada. Si David
