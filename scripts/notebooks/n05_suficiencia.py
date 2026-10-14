@@ -689,7 +689,7 @@ se compra con abstenciones innecesarias, y ese precio se publica en lugar de esc
     md("""\
 ## 13. Trazabilidad
 
-**Dónde aparece esto en la memoria.** Las decisiones caso a caso son la **Tabla 5.5**; los dos errores y las políticas triviales, la **Tabla 5.6** y la **Figura 6.3**; los documentos aplicables frente a la cobertura, la **Figura 5.13**; y las ablaciones, la **Tabla 5.8** y la **Figura 5.14**. El barrido del umbral está en el anexo B, apartado B.4.
+**Dónde aparece esto en la memoria.** Las decisiones caso a caso son la **Tabla 5.5**; los dos errores y las políticas triviales, la **Tabla 5.6** y la **Figura 6.3**; los documentos aplicables frente a la cobertura, la **Figura 5.14**; y las ablaciones, la **Tabla 5.8** y la **Figura 5.15**. El barrido del umbral está en el anexo B, apartado B.4.
 
 | Cifra de este notebook | Artefacto | Registro | Informe |
 |---|---|---|---|

@@ -98,9 +98,14 @@ def fig_ablaciones() -> Figure:
         eje.set_xlim(0, max(denominadores) + 2.2)
         eje.grid(visible=True, axis="x")
         eje.set_axisbelow(True)
-    ejes[0].set_yticks(y)
-    ejes[0].set_yticklabels([f[0] for f in filas], fontsize=7)
-    ejes[0].invert_yaxis()
+    # Los dos paneles llevan sus etiquetas y se invierten los dos. Antes solo el
+    # de arriba: el de abajo mostraba 0, 1, 2, 3 y 4, y además en orden contrario,
+    # de modo que emparejar una configuración con sus dos errores exigía leer al
+    # revés sin que nada lo advirtiera.
+    for eje in ejes:
+        eje.set_yticks(y)
+        eje.set_yticklabels([f[0] for f in filas], fontsize=7)
+        eje.invert_yaxis()
 
     titulo(fig, "Lo que sostiene el resultado es el criterio de suficiencia, no la atribución")
     pie(

@@ -31,7 +31,11 @@ from mecanico_ia_exp.visualization.memoria.base import (
     titulo,
 )
 from mecanico_ia_exp.visualization.memoria.calibracion import fig_calibracion
-from mecanico_ia_exp.visualization.memoria.datos import fig_particiones, fig_separabilidad
+from mecanico_ia_exp.visualization.memoria.datos import (
+    fig_particiones,
+    fig_separabilidad_dispersion,
+    fig_separabilidad_nivel,
+)
 from mecanico_ia_exp.visualization.memoria.decision import (
     decisiones_de_e19,
     fig_decisiones_y_umbral,
@@ -72,7 +76,8 @@ __all__ = [
     "fig_pareja_contrafactual",
     "fig_particiones",
     "fig_recuperacion",
-    "fig_separabilidad",
+    "fig_separabilidad_dispersion",
+    "fig_separabilidad_nivel",
     "fig_ventana_y_descriptor",
     "guardar",
     "numero",

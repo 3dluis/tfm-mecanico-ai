@@ -507,7 +507,7 @@ se afirma de un vehículo real.
 **Relación con la pregunta de investigación.** Sostiene PI.1 por su lado restrictivo: una explicación
 que justificara la deriva del caudalímetro «porque los ajustes de combustible están altos» sería
 indistinguible de la que justificaría una fuga de vacío, y por eso las plantillas de afirmación del
-verificador no permiten formularla así. En la memoria es la **Figura 5.4** y la **Tabla B.5**."""),
+verificador no permiten formularla así. En la memoria es la **Figura 5.5** y la **Tabla B.5**."""),
     md("""\
 ## 11. Correlaciones: la estructura que un modelo puede explotar
 
@@ -682,7 +682,7 @@ no una probabilidad ni un contraste.
 **Relación con la pregunta de investigación.** Delimita de dónde puede venir una explicación legítima
 bajo PI.1: una afirmación sobre el fallo de encendido apoyada en la media del régimen no tendría
 soporte observacional; la que se apoya en el mínimo y en el recuento de eventos sí lo tiene. En la
-memoria es la **Figura 5.9**."""),
+memoria es la **Figura 5.10**."""),
     md("""\
 ## 14. El reparto sin fuga
 
@@ -767,13 +767,22 @@ una de las cinco condiciones, el delta de Cliff frente a la condición sin fallo
 separado sobre la media del bloque y sobre su dispersión. Se etiquetan solo las celdas con efecto
 grande, |delta| ≥ 0,474, que es la convención de lectura habitual."""),
     code("""\
-from mecanico_ia_exp.visualization.memoria import fig_separabilidad
+from mecanico_ia_exp.visualization.memoria import (
+    fig_separabilidad_dispersion,
+    fig_separabilidad_nivel,
+)
 
-fig = fig_separabilidad()
-soporte.exportar(fig, "FIG-NB01-05_separabilidad", subdirectorio="01_exploracion_obd")
+# Dos mapas y no dos paneles de uno: comparten las doce filas y las cinco
+# columnas, y apilados solo el de arriba conservaba los nombres de las señales.
+fig = fig_separabilidad_nivel()
+soporte.exportar(fig, "FIG-NB01-05_separabilidad_nivel", subdirectorio="01_exploracion_obd")
+plt.show()
+
+fig = fig_separabilidad_dispersion()
+soporte.exportar(fig, "FIG-NB01-06_separabilidad_dispersion", subdirectorio="01_exploracion_obd")
 plt.show()"""),
     md("""\
-**Qué muestra.** Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos.
+**Qué muestran.** Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos.
 Tres se separan por el **nivel** y con efecto máximo o casi: la fuga de vacío y la deriva del
 caudalímetro en el ajuste de combustible a corto plazo, y el termostato en la temperatura del
 refrigerante. La sonda lenta alcanza el efecto máximo **solo por la dispersión**, con un nivel de
@@ -789,8 +798,8 @@ no implica que el modelo la use, y el análisis de atribución muestra un caso e
 medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Y sale
 de `synthetic_v1`, que es **pre-calibración** y no se reconstruye con el generador publicado.
 
-**Relación con la hipótesis.** Delimita por anticipado qué afirmaciones sobre una señal pueden tener
-soporte observacional bajo PI.1 y cuáles no."""),
+**Relación con la hipótesis.** Delimitan por anticipado qué afirmaciones sobre una señal pueden
+tener soporte observacional bajo PI.1 y cuáles no. En la memoria son las **Figuras 5.2 y 5.3**."""),
     md("""\
 ## 16. Resultados negativos y limitaciones
 
@@ -875,7 +884,7 @@ tablas versionadas. Las figuras de E4 se muestran tal cual, sin recalcularlas.
 
 ## 20. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** El reparto de la muestra es la **Figura 5.1** y la separabilidad por señal, la **Figura 5.2**, las dos en el análisis descriptivo del capítulo 5. Las doce señales y las cinco condiciones están tabuladas en el anexo A, apartados A.2 y A.3, y la serie testigo de cada fallo es la **Figura A.1**.
+**Dónde aparece esto en la memoria.** El reparto de la muestra es la **Figura 5.1** y la separabilidad por señal, las **Figuras 5.2** y **5.3** —una por vía, nivel y dispersión—, en el análisis descriptivo del capítulo 5. Las doce señales y las cinco condiciones están tabuladas en el anexo A, apartados A.2 y A.3, y la serie testigo de cada fallo es la **Figura A.1**.
 
 - `docs/experiments/E2_datos_sinteticos.md`, `E4_eda_temporal.md`, `E5_preprocesamiento.md`
 - `artifacts/tables/E4_descriptivos.csv`, `E4_separabilidad.csv`, `E5_estudio_ventana.csv`, `E5_reparto.csv`

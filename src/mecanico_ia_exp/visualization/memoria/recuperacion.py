@@ -61,7 +61,10 @@ def fig_recuperacion() -> Figure:
             label={"mrr": "MRR", "ndcg_at_k": "nDCG@10", "precision_at_k": "P@10"}[columna],
         )
     ejes[1].set_yticks(y)
-    ejes[1].set_yticklabels([])
+    # Las etiquetas se repiten en el panel de abajo. Dejarlo sin ellas obligaba a
+    # contar filas para saber de qué estrategia era cada grupo de barras, y con
+    # cinco filas y tres barras por fila eso se cuenta mal.
+    ejes[1].set_yticklabels([nombres[s] for s in tabla.index], fontsize=7.5)
     ejes[1].invert_yaxis()
     ejes[1].set_xlabel("valor de la métrica (0–1)")
     ejes[1].grid(visible=True, axis="x")
