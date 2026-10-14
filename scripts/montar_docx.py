@@ -191,6 +191,26 @@ def _campo(instruccion: str, texto_provisional: str) -> str:
     )
 
 
+def _commit() -> str:
+    """El commit del que sale el documento, para que la correspondencia se compruebe."""
+    try:
+        salida = subprocess.run(
+            ["git", "-C", str(paths.ROOT), "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return ""
+    sucio = subprocess.run(
+        ["git", "-C", str(paths.ROOT), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+        check=False,
+    ).stdout.strip()
+    return salida.stdout.strip() + (" con cambios sin confirmar" if sucio else "")
+
+
 def _marca_de_estado(datos: dict[str, str]) -> str:
     """Un sello visible mientras el documento no sea la entrega final.
 
@@ -208,7 +228,14 @@ def _marca_de_estado(datos: dict[str, str]) -> str:
         '<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:i/><w:sz w:val="22"/></w:rPr>'
         "<w:t>Este documento no es la entrega final. Quedan decisiones abiertas sobre la "
         "extensión exigida, el título y los datos institucionales de la portada.</w:t></w:r></w:p>"
-        '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
+        + (
+            '<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="480"/></w:pPr>'
+            f'<w:r><w:rPr><w:sz w:val="18"/></w:rPr><w:t>Generado desde el commit {_commit()} '
+            "del repositorio del trabajo.</w:t></w:r></w:p>"
+            if _commit()
+            else ""
+        )
+        + '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
     )
 
 
