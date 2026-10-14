@@ -1,6 +1,6 @@
 # Informe de conformidad del documento con la plantilla oficial
 
-**Fecha:** 13 de octubre de 2026 · **Documento:** `entregables/memoria.docx`, montado con
+**Fecha:** 14 de octubre de 2026 · **Documento:** `entregables/memoria.docx`, montado con
 `scripts/montar_docx.py` · **Estado: PRELIMINAR.** No es la entrega definitiva, y el apartado 6 dice
 por qué · **Cómo se reproduce:** las tres órdenes de `docs/entrega-docx.md` §1
 
@@ -10,7 +10,7 @@ por qué · **Cómo se reproduce:** las tres órdenes de `docs/entrega-docx.md` 
 |---|---|---|
 | Portada institucional, con el escudo y los rótulos de la titulación | **sí** | se trae de la plantilla, verbatim, con su sección y su configuración de página |
 | Márgenes | **sí** | 2,5 cm arriba y abajo, 3,0 cm a izquierda y derecha, 1,25 cm de encabezado y pie: los de la plantilla, sin tocar |
-| Encabezados y pies | **sí** | escudo y autor en el encabezado, título y número de página en el pie, en las 118 páginas salvo las de portada |
+| Encabezados y pies | **sí** | escudo y autor en el encabezado, título y número de página en el pie, en las 123 páginas salvo las de portada |
 | Estilos propios de la titulación | **sí**, cinco de siete | «Título 1», «Título Apartado», «Título subapartado», «Cita Literal APA» y «Bibliografía APA». Los dos restantes son los de viñeta, y el texto no usa listas con viñeta |
 | Numeración de apartados | **sí**, y reiniciada por capítulo | cada capítulo tiene su propia instancia de la lista; sin ello el primer apartado del capítulo 5 salía como «17» |
 | Índice general | **sí**, campo nativo | se actualiza desde Word con F9 |
@@ -28,7 +28,7 @@ lo que esta comprobación sabe medir»** y devuelve 0.
 
 | Requisito | Estado | Motivo |
 |---|---|---|
-| **Extensión mínima de 50 000 palabras** | **no**: 35 878 | es la decisión abierta `D-01`, con tres cifras oficiales incompatibles. Los anexos no la resuelven: no puntúan, y el mínimo de la sesión informativa es «sin anexos». Se detalla en `propuesta-anexos.md` §8 |
+| **Extensión mínima de 50 000 palabras** | **no**: 35 878 | es la decisión abierta `D-01`. **Auditoría normativa completa en `requisitos-extension-tfm.md`**: la rúbrica oficial, recuperada el 14-10-2026, **no puntúa la extensión**; la única cifra con consecuencia declarada es la de 60 páginas sin anexos, y el documento tiene 91 páginas de capítulos |
 | **Director y fecha en la portada** | **pendientes** | su dato no consta en el repositorio y no se inventa. El documento **enseña los marcadores** `[Director/a]` y `[Fecha (mes y año)]`, para que no pasen inadvertidos. Se rellenan en `configs/portada-tfm.json` |
 | **Título** | **el registrado** | la decisión abierta `D-06` observa que ya no describe el alcance ejecutado, que es más estrecho. Cambiarlo es del autor y del director |
 | **Referencias cruzadas con campos `REF`** | **no las hay** | decisión declarada: la numeración de figuras y tablas es literal en el texto fuente y una prueba comprueba que sea correlativa. El razonamiento está en `docs/entrega-docx.md` §5 |
@@ -59,7 +59,7 @@ tres anexos.
 | Leyendas superpuestas | ninguna; las tres que las tenían se redibujaron antes de incorporarlas |
 | Tablas partidas entre páginas | las dos largas se parten, y repiten su fila de cabecera |
 | Proporciones | respetadas: Word escala al ancho útil y no recorta |
-| Legibilidad | las figuras de dos paneles quedan al 80 % del ancho útil y sus leyendas son de 7 puntos. **Se leen, y están en el límite**: conviene mirarlas en papel antes de dar el documento por cerrado |
+| Legibilidad | **corregida el 14-10-2026.** Las figuras se dibujan ahora a 5,9 pulgadas, el ancho útil de la página, de modo que Word no las escala y un punto de la figura es un punto en el papel. Las de dos paneles pasaron a paneles apilados |
 | URL largas en la bibliografía | el texto justificado las estira y aparecen con espacios dentro. Es cosmético y se corrige en Word si molesta |
 
 ## 5. Control de calidad
