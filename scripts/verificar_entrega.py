@@ -48,7 +48,6 @@ OBLIGATORIOS: tuple[tuple[str, str], ...] = (
     ("configs", "la configuración y los manifiestos"),
     ("data/samples", "la muestra redistribuible"),
     ("scripts", "los guiones de instalación y ejecución"),
-    ("docs", "la documentación del laboratorio"),
 )
 
 NOTEBOOKS: tuple[str, ...] = (
@@ -155,24 +154,24 @@ def comprobar_notebooks() -> list[Resultado]:
 
 
 def comprobar_figuras() -> list[Resultado]:
-    """Cada figura que el documento referencia tiene que haber viajado."""
-    resultados: list[Resultado] = []
+    """Cada figura que el registro declara tiene que haber viajado.
+
+    La lista sale de `scripts/figuras_memoria.py`, que es el registro de qué
+    figura lleva cada número en el documento y la única fuente que decide eso.
+    Antes se leía del texto fuente de la memoria; ese texto ya no viaja en el
+    paquete, y leerlo del registro es además más directo.
+    """
     directorio = RAIZ / "artifacts" / "figures" / "memoria"
-    if not directorio.is_dir():
-        return [Resultado("figuras", "no está artifacts/figures/memoria", False)]
-    referencias: set[str] = set()
-    for capitulo in sorted((RAIZ / "docs" / "memoria").glob("*.md")):
-        for linea in capitulo.read_text("utf-8").splitlines():
-            for encontrada in re.findall(
-                r"artifacts/figures/memoria/([A-Za-z0-9_.-]+\.(?:png|svg))", linea
-            ):
-                referencias.add(encontrada)
-    for referencia in sorted(referencias):
-        resultados.append(
-            Resultado("figuras", referencia, (directorio / referencia).is_file())
-        )
+    registro = RAIZ / "scripts" / "figuras_memoria.py"
+    if not directorio.is_dir() or not registro.is_file():
+        return [Resultado("figuras", "falta el registro o el directorio de figuras", False)]
+    nombres = re.findall(r'"(FIG-[A-Z0-9-]+_[a-z0-9_]+)"', registro.read_text("utf-8"))
+    resultados = [
+        Resultado("figuras", f"{nombre}.png", (directorio / f"{nombre}.png").is_file())
+        for nombre in sorted(set(nombres))
+    ]
     resultados.append(
-        Resultado("figuras", f"{len(referencias)} referenciadas por el documento", bool(referencias))
+        Resultado("figuras", f"{len(set(nombres))} declaradas por el registro", bool(nombres))
     )
     return resultados
 
