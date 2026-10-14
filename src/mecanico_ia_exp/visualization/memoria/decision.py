@@ -103,7 +103,7 @@ def fig_decisiones_y_umbral() -> Figure:
             i,
             f"cob. {numero(float(coberturas[i]), 1)} · {int(documentos[i])} doc.",
             va="center",
-            fontsize=5.6,
+            fontsize=6.4,
             color=INK_MUTED,
         )
 
@@ -132,7 +132,7 @@ def fig_decisiones_y_umbral() -> Figure:
             f"{'callar' if f.expected_decision == 'ABSTAIN' else 'explicar'}"
             for f in datos.itertuples()
         ],
-        fontsize=5.8,
+        fontsize=6.6,
     )
     eje.set_ylim(-0.8, len(datos) - 0.2)
     eje.set_xlim(0.42, 1.26)
