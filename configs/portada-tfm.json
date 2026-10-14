@@ -7,5 +7,7 @@
   "director": "",
   "director_nota": "PENDIENTE: el nombre del director no consta en el repositorio y no se inventa.",
   "fecha": "",
-  "fecha_nota": "PENDIENTE: depende de la convocatoria, que es una decisión del autor."
+  "fecha_nota": "PENDIENTE: depende de la convocatoria, que es una decisión del autor.",
+  "estado_del_documento": "BORRADOR PARA REVISIÓN DEL TUTOR",
+  "estado_nota": "Se imprime en la portada y en el pie. Vaciar este campo cuando el documento deje de ser un borrador; mientras tenga valor, el documento NO es la entrega final."
 }

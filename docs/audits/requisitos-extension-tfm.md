@@ -68,24 +68,24 @@ consecuencia.
 
 ## 5. Dónde está el documento, medido
 
-Medido sobre `entregables/memoria.pdf`, 118 páginas, con el formato de la plantilla.
+Medido sobre `entregables/memoria.pdf` tras las ampliaciones del 14-10-2026: **133 páginas**.
 
 | Parte | Páginas | Palabras |
 |---|---|---|
-| Portada, índices, resumen y abstract | 1-6 | 702 |
-| **Capítulos 1 a 6** | **7-97 · 91 páginas** | **31 665** |
-| Bibliografía | 98-103 · 6 páginas | 1 142 |
-| Anexos A, B y C | 104-118 · **15 páginas** | 4 095 |
-| **Total** | **118** | **35 878** |
+| Portada, sello de borrador, índices, resumen y abstract | 1-7 | 702 |
+| **Capítulos 1 a 6** | **8-112 · 105 páginas** | **34 611** |
+| Bibliografía | 113-118 · 6 páginas | 1 142 |
+| Anexos A, B y C | 119-133 · **15 páginas** | 4 237 |
+| **Total** | **133** | **38 803** en el documento montado |
 
 Y frente a cada requisito:
 
 | Requisito | Cifra | El documento | Resultado |
 |---|---|---|---|
-| **[S]** mínimo 60 páginas sin anexos ni código | 60 | **91** | **cumple**, con 31 páginas de margen |
-| **[P]** anexos ≤ 20 % | 20 % | 15 de 118 = **12,7 %**; sobre el proyecto sin anexos, 14,6 % | **cumple** |
-| **[P]** recomendación por capítulo, 31-73 páginas | 73 | **91** | **excede** en 18 páginas |
-| **[P]** nota al pie, 50 000-60 000 palabras | 50 000 | **35 878** | **no alcanza**, por 14 122 palabras |
+| **[S]** mínimo 60 páginas sin anexos ni código | 60 | **105** | **cumple**, con 45 páginas de margen |
+| **[P]** anexos ≤ 20 % | 20 % | 15 de 133 = **11,3 %** | **cumple** |
+| **[P]** recomendación por capítulo, 31-73 páginas | 73 | **105** | **excede** en 32 páginas |
+| **[P]** nota al pie, 50 000-60 000 palabras | 50 000 | **38 803** | **no alcanza**, por 11 197 palabras |
 
 Capítulo a capítulo, frente a la recomendación de la plantilla:
 

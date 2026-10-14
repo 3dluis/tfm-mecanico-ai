@@ -191,6 +191,27 @@ def _campo(instruccion: str, texto_provisional: str) -> str:
     )
 
 
+def _marca_de_estado(datos: dict[str, str]) -> str:
+    """Un sello visible mientras el documento no sea la entrega final.
+
+    Va en su propia página, después de la portada y antes de los índices: un
+    documento que circula para revisión tiene que decir que lo es en el primer
+    sitio donde alguien mira, y tiene que dejar de decirlo con solo vaciar un
+    campo del fichero de portada.
+    """
+    marca = (datos.get("estado_del_documento") or "").strip()
+    if not marca:
+        return ""
+    return (
+        '<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="2400" w:after="240"/></w:pPr>'
+        f'<w:r><w:rPr><w:b/><w:sz w:val="36"/></w:rPr><w:t>{marca}</w:t></w:r></w:p>'
+        '<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:i/><w:sz w:val="22"/></w:rPr>'
+        "<w:t>Este documento no es la entrega final. Quedan decisiones abiertas sobre la "
+        "extensión exigida, el título y los datos institucionales de la portada.</w:t></w:r></w:p>"
+        '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
+    )
+
+
 def _indices() -> str:
     """Índice general, de figuras y de tablas, los tres como campos de Word.
 
@@ -439,6 +460,7 @@ def montar(plantilla: Path, salida: Path, datos: dict[str, str] | None = None) -
         documento_final = (
             documento[:inicio]
             + portada
+            + _marca_de_estado(datos)
             + _indices()
             + cuerpo
             + documento[documento.rindex("</w:body>") :]

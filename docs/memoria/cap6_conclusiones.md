@@ -60,6 +60,113 @@ al que le falta una medición independiente y otro cuya reproducibilidad tiene d
 declarados—, y la figura las iguala en una sola etiqueta. El detalle de cada una está en los
 párrafos anteriores, y la figura no los sustituye.
 
+## Contribuciones del trabajo
+
+Las contribuciones se separan en tres planos, porque no tienen el mismo estatuto: lo construido, lo
+medido y el procedimiento con que se midió. El orden importa, y el apartado termina diciendo bajo
+qué condiciones dejan de ser válidas.
+
+### Contribuciones técnicas
+
+Lo que se ha construido y funciona, que es el plano más débil de los tres y conviene declararlo
+primero. El trabajo implementa un recorrido de ocho etapas en el que la decisión de explicar o
+abstenerse **no la toma el modelo de lenguaje** sino un verificador determinista, y en el que cada
+afirmación conserva la observación de telemetría que la origina y los fragmentos documentales que
+superaron sus comprobaciones. Sobre esa arquitectura se añaden tres piezas: un criterio de
+suficiencia que combina confianza calibrada, aplicabilidad documental, número de fuentes y cobertura
+de afirmaciones; un generador de telemetría sintética parametrizado contra el manual de taller del
+vehículo, con cada constante trazada a su cita; y una barrera externa que rechaza cualquier
+identificador documental que el modelo no haya recibido.
+
+Ninguna de las tres piezas es nueva por separado, y combinarlas no es por sí mismo una aportación.
+Lo que el trabajo puede decir de ellas es que funcionan y que están disponibles para reproducir sus
+resultados; afirmar más exigiría una comparación contra una arquitectura alternativa que no se ha
+hecho.
+
+### Contribuciones experimentales
+
+Lo que se ha medido y sostiene una afirmación. Son cuatro, y cada una lleva el alcance dentro.
+
+**Tener documentación aplicable no equivale a tener soporte, y la diferencia es medible.** Con cinco,
+seis y siete fragmentos del vehículo correcto y con el código de avería correcto delante, la
+cobertura de afirmaciones del verificador es **0,00** en todos los casos de evidencia parcial y con
+distractor. La ablación lo confirma desde el otro lado: retirando el criterio de suficiencia y
+exigiendo solo que exista algún fragmento aplicable, el sistema explica **seis de las nueve**
+ejecuciones que debían terminar en abstención. Es la observación que motiva la pregunta de
+investigación, y es la que el trabajo mide con más claridad. Su alcance: diecisiete ejecuciones
+sobre cinco ventanas de un vehículo, con datos sintéticos.
+
+**Una decisión correcta no garantiza una explicación correcta.** El verificador decide bien y el
+modelo de lenguaje que redacta esa decisión escribe cifras que no recibió: **siete de las treinta y
+cinco salidas** de la evaluación final contienen al menos un número que el verificador no produjo, y
+el peor caso escribe una comparación aritméticamente cierta con un valor y un umbral inventados, de
+modo que nada dentro de la frase delata el error. Las tres barreras del sistema lo dejan pasar
+porque comprueban que el identificador citado se hubiera entregado, **no que el número dicho sea
+cierto**. Ninguna de las dos tasas de la evaluación cambia por ello. Es un hueco en la trazabilidad
+que el trabajo no había declarado y que ahora declara.
+
+**Existen límites de evidencia identificables por anticipado, y en ellos abstenerse es lo correcto.**
+El termostato bloqueado impone un techo de temperatura; mientras el motor no habría superado ese
+techo por sí mismo, la señal del motor averiado y la del sano son idénticas. Las cinco ventanas que
+el modelo no detecta están todas por debajo de él. No es una limitación del modelo sino de la
+evidencia disponible, y la distinción entre llevar la etiqueta de un fallo y contener señal
+observable de él lo generaliza a las demás condiciones.
+
+**Lo que protege frente a evidencia aparentemente pertinente no es la aplicabilidad.** Un fragmento
+del motor correcto y con el código del fallo supera entera la comprobación de aplicabilidad; lo que
+lo rechaza es exigir que hable de la señal observada. Alcance: tres casos construidos, seis
+ejecuciones, sin estimación de tasa.
+
+### Contribución metodológica, complementaria y acotada
+
+Se enuncia aparte y después porque no responde a la pregunta de investigación, y con el alcance que
+la evidencia aguanta:
+
+> Un procedimiento para sostener de forma verificable, y a coste casi nulo, que las decisiones de
+> diseño de un experimento no se modificaron entre la primera exposición al conjunto reservado y la
+> medición, junto con un registro graduado de esas exposiciones en cinco niveles. Pensado para el
+> caso de un solo operador con asistencia de agentes, donde no hay separación de funciones que
+> garantice nada. Su valor demostrado es la **detección y el registro honesto**, **no la
+> prevención**.
+
+Lo que detectó, con fecha: la contaminación del conjunto de ajuste del modelo de lenguaje, cuyos
+ejemplos salían de la partición donde se le medía; cuatro artefactos sobrescritos al probar una
+comprobación; una tabla publicada borrada sin copia; una apertura accidental del conjunto de prueba;
+un diagnóstico equivocado de la causa del fallo de la condición con distractor; y la causa del fallo
+del reentrenamiento. Seis casos en seis semanas.
+
+Lo que **no** evitó, que es la parte que obliga a la prudencia: la contaminación existía desde el 2
+de septiembre y tardó **seis semanas** en detectarse; el diagnóstico equivocado de la condición con
+distractor estuvo publicado **cinco semanas**; la apertura accidental se detectó después de
+producirse; los cuatro artefactos ya estaban sobrescritos cuando el censo lo advirtió; y la tabla
+borrada es **irreversible**.
+
+De las seis piezas del procedimiento, **cinco son aplicación correcta de práctica conocida** —el
+pre-registro, las huellas criptográficas, la comprobación de disyunción entre particiones, el
+registro de incidencias y la verificación en un gate de calidad—, y presentarlas de otro modo sería
+insostenible. No hay comparación contra su ausencia, no hay más de un caso, no hay coste medido y no
+hay evidencia de que sea transferible a un equipo.
+
+### Limitaciones de las contribuciones
+
+Las cuatro contribuciones experimentales dejan de ser válidas fuera de las condiciones en que se
+obtuvieron, y conviene nombrarlas juntas. Todas proceden de **un vehículo**, de **telemetría
+sintética** y de un **catálogo cerrado de cinco fallos**. Las unidades independientes son pocas: tres
+y cinco ventanas en validación, siete y ocho en prueba, tres casos en el rediseño del distractor.
+El criterio que produce las cifras de decisión **se revisó dos veces sobre los mismos casos con los
+que se evalúa**, y el modelo de lenguaje se ajustó con ventanas que incluyen las de tres de los
+casos en que se le mide. Las ventanas evaluadas son ventanas que el modelo diagnostica
+correctamente, de modo que las tasas describen el comportamiento del agente **cuando el diagnóstico
+de partida es acertado** y deben leerse como cota superior.
+
+Tres cosas que el trabajo **no** ha demostrado y que conviene no dar por supuestas. No ha demostrado
+que el sistema detecte averías ajenas a su catálogo: no lo intenta. No ha demostrado que la
+correspondencia entre una afirmación y su evidencia coincida con el juicio de un experto, porque el
+conjunto anotado no incluye qué afirmaciones serían admisibles: la trazabilidad se cumple **por
+construcción y no por medición**. Y no ha demostrado que el comportamiento observado se deba a
+separar la decisión de la redacción: esa separación no se ablacionó, y lo medido es el
+comportamiento de un sistema que la implementa.
+
 ## Limitaciones
 
 La interpretación de los resultados está condicionada, en primer lugar, por la procedencia de los datos. La evaluación utiliza telemetría OBD-II sintética, lo que permite controlar las condiciones representadas y reproducir los experimentos, pero no incorpora toda la variabilidad presente en un vehículo en operación. Factores como el desgaste de los componentes, las condiciones ambientales, las diferencias entre conductores, el ruido de los sensores y la interacción entre fallos quedan fuera del entorno experimental actual.

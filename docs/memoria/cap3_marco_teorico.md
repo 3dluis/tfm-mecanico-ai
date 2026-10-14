@@ -86,6 +86,40 @@ El motivo es el mismo que separa decidir de redactar: si la disposición a abste
 
 **Lo que la evidencia revisada no permite afirmar.** Que pedirle a un modelo de lenguaje que reconozca su ignorancia baste, ni tampoco que sea inútil: los estudios revisados miden esa capacidad sobre preguntas de dominio general y no sobre documentación técnica de vehículo, donde la evidencia pertinente es un procedimiento concreto y no un pasaje enciclopédico. La comparación entre una abstención decidida por el modelo y otra decidida fuera de él no se encontró resuelta en el corpus revisado. Este trabajo tampoco la resuelve: implementa la segunda y mide lo que consigue, sin contrastarla experimentalmente con la primera.
 
+## Qué mide cada frente, y qué deja sin medir
+
+Los cuatro frentes de esta revisión no comparten objeto ni unidad de medida, y esa es precisamente
+la razón de que el vacío aparezca entre ellos y no dentro de ninguno. La tabla siguiente resume qué
+establece cada grupo de trabajos revisados y qué queda fuera de lo que mide.
+
+**Tabla 3.1. Qué establece cada frente de la revisión y qué deja sin medir.**
+
+| Frente | Trabajos revisados | Qué establecen | Qué no miden |
+|---|---|---|---|
+| **Diagnóstico sobre telemetría de vehículo** | Michailidis et al. (2025); Rimpas et al. (2020); Jun et al. (2025); Prytz et al. (2015); Hossain et al. (2024); Abboush et al. (2026) | que la telemetría OBD-II admite clasificación de estados y detección de anomalías con rendimiento útil, y que el acceso a datos reales es la limitación estructural del área | **la explicación** del diagnóstico. La salida es una clase o una puntuación de anomalía; qué la sostiene documentalmente queda fuera |
+| **Explicabilidad de modelos de diagnóstico** | Lundberg y Lee (2017); Brusa et al. (2023); Haque et al. (2025); Li y van Leeuwen (2023); Lu et al. (2025) | que la atribución identifica qué variables contribuyen a una predicción, y que esa atribución puede contrastarse con el mecanismo físico declarado | **si lo atribuido basta**. La atribución explica el modelo, no justifica la hipótesis: nada en ella dice si existe documentación que la respalde |
+| **Recuperación aumentada sobre documentación técnica** | Lewis et al. (2020); Gao et al. (2023); Nam et al. (2025); Mahale et al. (2025); Lin y Miao (2025); Khan et al. (2024); Das et al. (2025); Liu et al. (2025) | que anclar la respuesta en documentos recuperados funciona sobre manuales de vehículo, y que el ajuste de bajo rango permite hacerlo con modelos pequeños | **la correspondencia afirmación a afirmación** con la evidencia concreta, y el comportamiento cuando la documentación recuperada está incompleta, falta o se parece al caso sin serle aplicable |
+| **Alucinación y su mitigación** | Ji et al. (2023); Shuster et al. (2021); Béchard y Marquez Ayala (2024) | que la recuperación **reduce** la alucinación y que el formato estructurado la reduce más, con medidas sobre conversación y sobre salidas estructuradas | que la reducción **baste**. Ninguno de los revisados mide si cada número de una salida procede de los datos que el sistema recibió |
+| **Abstención** | Chow (1970); Geifman y El-Yaniv (2017) | que no responder es una salida legítima cuya calidad se mide por la relación entre riesgo y cobertura, y no un fallo | que la decisión de abstenerse pueda **delegarse fuera del modelo** y evaluarse así. Los dos trabajan sobre el propio clasificador, no sobre evidencia documental externa |
+| **Calibración de la confianza** | Guo et al. (2017); Niculescu-Mizil y Caruana (2005); Zadrozny y Elkan (2002); Naeini et al. (2015) | que la probabilidad que un clasificador declara no coincide con su acierto, y cómo corregirlo | nada sobre el uso de esa confianza como **puerta de decisión** junto a evidencia documental |
+
+*Fuente: elaboración propia a partir de los trabajos citados.*
+
+La tabla hace visible una asimetría. Cada frente mide con rigor dentro de su objeto, y ninguno mide
+la unión: el diagnóstico no llega a la documentación, la explicabilidad no llega a la suficiencia, la
+recuperación no llega a la verificación afirmación a afirmación, y la abstención se ha formulado
+sobre el clasificador y no sobre la evidencia que lo acompaña. Entre los trabajos revisados no se
+identificó ninguno que recorriera la cadena completa ni que midiera el punto en que una hipótesis
+bien formada se queda sin respaldo documental.
+
+Hay que decir también qué **no** autoriza esa asimetría a concluir. No autoriza a afirmar que el
+problema esté sin resolver en la literatura, sino que no se identificó resuelto **en el corpus
+revisado**, que tiene los límites que este capítulo declara: una revisión inspirada en PRISMA sin su
+flujo formal, sin protocolo registrado y sin cribado por duplicado. Y no autoriza a presentar la
+articulación de los cuatro frentes como una aportación por sí misma: combinar componentes conocidos
+no es un resultado mientras no se mida qué aporta la combinación, que es lo que las ablaciones del
+capítulo 5 intentan responder.
+
 ## Vacío y posicionamiento
 
 La revisión converge en un vacío que aparece por varios lados a la vez. Los trabajos de diagnóstico sobre OBD-II clasifican estados, detectan anomalías y atribuyen la predicción a unas variables u otras, y ahí se detienen: no se identificó, dentro del corpus revisado, una evaluación donde esas observaciones alimenten una hipótesis diagnóstica que deba después contrastarse con documentación antes de darse por buena.

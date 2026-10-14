@@ -510,6 +510,57 @@ ejecuciones se abstenían antes y se abstienen después, pero antes se abstenía
 abstienen porque no hay evidencia aplicable que aceptar. La prueba de regresión del repositorio
 conserva las dos conductas a la vista, la anterior y la corregida.
 
+### El rediseño de la condición con distractor
+La condición con distractor y filtro de motor, tal como se describió más arriba, no manipulaba la
+variable que decía manipular: su configuración era idéntica a la de la condición parcial
+correspondiente. Sin una condición que de verdad introdujera evidencia de alcance equivocado, PI.4
+no tenía respuesta interpretable. El rediseño se ejecutó el **13 de octubre de 2026**, y este
+apartado recoge qué se buscaba, cómo se construyó y qué midió.
+
+**El objetivo** era estrecho y conviene enunciarlo así: comprobar si el sistema rechaza un fragmento
+documental que **sí** es del vehículo y del motor correctos y **sí** lleva el código de avería del
+fallo, pero que no habla de la señal que la atribución observa. Es la forma más difícil del
+distractor, porque las dos barreras que el diseño había previsto —el filtro de motor y el validador
+de aplicabilidad— no tienen nada que objetarle.
+
+**El diseño** parte de la condición parcial de cada uno de tres fallos —fuga de vacío, termostato y
+sonda lenta— y le añade documentos de ese perfil. Cada caso con distractor se compara con su
+condición parcial **sobre la misma ventana de telemetría**, de modo que las dos filas de cada par
+comparten datos, modelo, atribución y confianza calibrada: lo único que cambia entre ellas es el
+contenido del índice documental. Tres pares, seis ejecuciones, **tres unidades de observación**.
+
+**Los criterios se fijaron antes de medir**, y uno de ellos era de alcanzabilidad: antes de mirar
+ningún veredicto se comprobó, con una ejecución de recuperación sola —sin verificador, sin paquete
+de evidencia y sin modelo de lenguaje—, que el distractor llegase efectivamente al verificador. En
+los tres pares llegó: uno, tres y un fragmento respectivamente, sobre cinco, siete y seis documentos
+aplicables. El protocolo declaraba además qué resultado apoyaría PI.4 y cuál no: «que el sistema se
+abstenga en los tres, y que el motivo registrado sea la insuficiencia de la evidencia y no la baja
+confianza del modelo. Si se abstiene por confianza baja, la condición no habrá medido el rechazo de
+evidencia impertinente: habrá medido otra vez la puerta de confianza».
+
+**El resultado** es que el sistema se abstuvo en las **seis ejecuciones**, y en las seis el motivo
+registrado fue la insuficiencia de la evidencia. Las confianzas calibradas de los seis casos —0,908
+y 1,000— están **por encima** del umbral de 0,79, de modo que la puerta de confianza no intervino.
+Lo que rechazó la evidencia fue la comprobación de que el fragmento hablara de la señal observada.
+El modelo de lenguaje produjo seis salidas válidas, respetó el veredicto en las seis y **no mencionó
+ningún fragmento del distractor** en ninguna.
+
+**Las limitaciones son las que gobiernan la lectura.** Son **tres casos construidos**, y las seis
+ejecuciones proceden de tres ventanas: el recuento se publica como seis abstenciones en seis
+ejecuciones sobre tres casos, y **no como una tasa**. Con `n = 3` no se estima ningún rendimiento
+general, y un resultado de seis sobre seis en tres situaciones elegidas no dice nada sobre la
+frecuencia con que el sistema acertaría ante distractores no elegidos. Los tres distractores son los
+que el corpus permitía construir: para la fuga de vacío solo se encontró un documento alcanzable con
+ese perfil, de modo que el espacio de evidencia aparentemente pertinente no se ha agotado ni se ha
+muestreado. Y la comprobación se hace sobre ventanas que el modelo diagnostica correctamente.
+
+**Lo que esto aporta a la validación de la evidencia** es la pieza que faltaba, y es más estrecha y
+más informativa de lo que el diseño anterior pretendía. Lo que protege al sistema de un documento
+que parece pertinente **no es la aplicabilidad**: un fragmento del motor correcto y con el código
+correcto la supera entera. Es la comprobación de soporte, es decir, exigir que el documento hable de
+la señal que la observación señala. PI.4 pasa de no tener respuesta interpretable a tener una
+medición acotada a sus tres casos, y la calificación global del trabajo no se mueve por ello.
+
 ### La evaluación final sobre el conjunto de prueba
 Todo lo anterior se mide sobre validación y con un criterio que se revisó dos veces sobre los mismos
 casos. La evaluación final, ejecutada el **12 de octubre de 2026** en el tercero de tres intentos,
