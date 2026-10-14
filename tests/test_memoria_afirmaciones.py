@@ -16,6 +16,7 @@ los artefactos contradicen.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pytest
@@ -87,12 +88,17 @@ def test_las_correcciones_conservan_lo_que_el_texto_decia(nombre: str) -> None:
     """Una corrección que borra el texto anterior pierde la trazabilidad."""
     texto = (paths.ROOT / "docs" / "memoria" / nombre).read_text("utf-8")
     assert "Corrección del 13 de octubre de 2026" in texto
-    assert "correccion-cap5-cap6-paso-a.md" in texto, (
-        "la nota tiene que remitir a la propuesta que la motivó"
+    # Desde la revisión de autonomía documental, la nota ya no lleva la ruta del
+    # documento interno: lleva el identificador de la corrección, y el anexo C
+    # dice dónde está cada uno. La trazabilidad no desaparece, cambia de sitio.
+    identificadores = re.findall(r"`F-\d`", texto)
+    assert identificadores, (
+        f"{nombre}: ninguna nota cita el identificador de su corrección, y sin él"
+        " la nota no se puede rastrear"
     )
-    assert "propuesta-figuras-cap5-cap6.md" in texto, (
-        "F-7 y F-8 salieron de la verificación de procedencia de las figuras:"
-        " la nota tiene que remitir a esa propuesta"
+    anexos = (paths.ROOT / "docs" / "memoria" / "anexos.md").read_text("utf-8")
+    assert "`F-1` a `F-8`" in anexos, (
+        "el anexo C tiene que decir dónde están los documentos de las correcciones"
     )
 
 

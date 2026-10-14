@@ -8,31 +8,11 @@ Los trabajos revisados han utilizado esta telemetría para clasificar estilos de
 
 Para quien debe intervenir sobre el vehículo, esa diferencia importa. No basta con recibir el nombre de una avería. Es necesario saber qué señales la sostienen, en qué intervalo temporal apareció el comportamiento relevante y qué establece la documentación técnica aplicable al vehículo y al motor analizados. El problema deja entonces de ser únicamente predictivo: pasa a ser también un problema de evidencia.
 
-Conviene detenerse en por qué esa diferencia importa, porque es lo que justifica que el trabajo
-exista. Una explicación diagnóstica no se lee como se lee una predicción: se lee para **decidir una
-intervención**. Quien la recibe va a desmontar una pieza, pedir un recambio o devolver un vehículo
-al cliente diciendo que no tiene nada. Los dos errores posibles no son simétricos, y ninguno de los
-dos es el que las métricas de clasificación miden. Una explicación que señala el componente
-equivocado conduce a sustituir una pieza sana: el coste es el recambio, el tiempo y, sobre todo, que
-la avería sigue ahí. Una explicación que no se produce cuando debería haberse producido cuesta una
-oportunidad de diagnóstico, y eso es recuperable. La asimetría se vuelve más incómoda cuando la
-explicación es **plausible**: un texto bien escrito, que nombra señales reales y cita un
-procedimiento del manual, es indistinguible de uno sostenido por la evidencia para quien no puede
-comprobarlo, y precisamente el taller es un sitio donde no se comprueba. Se actúa.
+Conviene detenerse en por qué esa diferencia importa, porque es lo que justifica que el trabajo exista. Una explicación diagnóstica no se lee como se lee una predicción: se lee para **decidir una intervención**. Quien la recibe va a desmontar una pieza, pedir un recambio o devolver un vehículo al cliente diciendo que no tiene nada. Los dos errores posibles no son simétricos, y ninguno de los dos es el que las métricas de clasificación miden. Una explicación que señala el componente equivocado conduce a sustituir una pieza sana: el coste es el recambio, el tiempo y, sobre todo, que la avería sigue ahí. Una explicación que no se produce cuando debería haberse producido cuesta una oportunidad de diagnóstico, y eso es recuperable. La asimetría se vuelve más incómoda cuando la explicación es **plausible**: un texto bien escrito, que nombra señales reales y cita un procedimiento del manual, es indistinguible de uno sostenido por la evidencia para quien no puede comprobarlo, y precisamente el taller es un sitio donde no se comprueba. Se actúa.
 
-Esa es la razón de que el problema no se reduzca a mejorar la exactitud del diagnóstico. Un sistema
-que acierte el 95 % de las veces y explique de forma convincente el 100 % traslada al taller una
-confianza que no tiene fundamento en el 5 % restante, y no ofrece ninguna señal que distinga un caso
-del otro. Lo que falta no es precisión: es que el sistema **sepa cuándo no sabe**, y que lo diga
-antes de que alguien actúe sobre su explicación.
+Esa es la razón de que el problema no se reduzca a mejorar la exactitud del diagnóstico. Un sistema que acierte el 95 % de las veces y explique de forma convincente el 100 % traslada al taller una confianza que no tiene fundamento en el 5 % restante, y no ofrece ninguna señal que distinga un caso del otro. Lo que falta no es precisión: es que el sistema **sepa cuándo no sabe**, y que lo diga antes de que alguien actúe sobre su explicación.
 
-La documentación técnica agrava el problema en lugar de resolverlo, y conviene no dar por supuesto
-lo contrario. Un manual de taller contiene procedimientos de muchas configuraciones mecánicas
-emparentadas —en el vehículo de referencia de este trabajo, tres motores que comparten una parte de
-su documentación—, de modo que un procedimiento recuperado puede ser del fabricante correcto, llevar
-el código de avería correcto y no ser aplicable al motor que se tiene delante. Tener una referencia
-y tener soporte no son lo mismo, y la distancia entre las dos cosas es justamente donde una
-explicación plausible se separa de una explicación sostenida.
+La documentación técnica agrava el problema en lugar de resolverlo, y conviene no dar por supuesto lo contrario. Un manual de taller contiene procedimientos de muchas configuraciones mecánicas emparentadas —en el vehículo de referencia de este trabajo, tres motores que comparten una parte de su documentación—, de modo que un procedimiento recuperado puede ser del fabricante correcto, llevar el código de avería correcto y no ser aplicable al motor que se tiene delante. Tener una referencia y tener soporte no son lo mismo, y la distancia entre las dos cosas es justamente donde una explicación plausible se separa de una explicación sostenida.
 
 Los modelos de lenguaje parecen útiles en ese punto. Pueden leer documentación técnica, organizar información y convertir resultados especializados en explicaciones comprensibles. Los trabajos que los combinan con recuperación aumentada por generación, grafos de conocimiento o sistemas diagnósticos muestran que esta integración ya se está explorando (Lin y Miao, 2025, REF-072; Mahale, Kolhar y More, 2025, REF-077; Nam et al., 2025, REF-086; Khan et al., 2024, REF-062). Pero la capacidad de redactar una explicación introduce otro problema: un texto puede resultar convincente incluso cuando la evidencia que debería sostenerlo es débil, incompleta o inexistente.
 

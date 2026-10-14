@@ -66,7 +66,7 @@ esa medición **no** cubre: la separación misma no se ablacionó.
 | `oxygen_sensor` | V | 0 – 1,275 | tensión de la sonda lambda anterior al catalizador |
 | `ignition_timing` | ° antes del PMS | −64 – 64 | avance del encendido |
 
-*Fuente: elaboración propia a partir de `src/mecanico_ia_exp/obd/signals.py`.*
+*Fuente: elaboración propia a partir de la especificación de señales del generador.*
 
 Los rangos no son decorativos: el generador recorta a ellos cada valor antes de escribirlo, y ese
 recorte es la razón de que una reconstrucción con otro generador pueda coincidir en una fracción de
@@ -88,7 +88,7 @@ en el capítulo 5.
 | **F04** sonda lambda de respuesta lenta | `oxygen_sensor`, `stft_bank1` | persistente; amortiguación de la oscilación característica | menor amplitud y frecuencia de conmutación de la sonda; ajuste a corto plazo más ruidoso |
 | **F05** fallo de encendido intermitente | `rpm`, `engine_load`, `stft_bank1`, `oxygen_sensor` | episódico: eventos de 1 a 3 s con tasa de aparición baja | caídas breves de régimen con salto de carga y desplazamiento de la sonda hacia mezcla rica |
 
-*Fuente: elaboración propia a partir de `src/mecanico_ia_exp/obd/faults.py`.*
+*Fuente: elaboración propia a partir de la especificación de condiciones de fallo del generador.*
 
 Parámetros con que se generaron: severidad 0,6 en la fuga; deriva del 18 % con rampa de 300 s en el
 caudalímetro; techo de 71 °C en el termostato; suavizado de 0,82 en la sonda; y tasa del 2 % con
@@ -110,7 +110,7 @@ del que sale y la cita literal que la respalda.
 | Caudal máximo del caudalímetro | ~90 g/s en transitorios | 59,5 g/s | «MAF sensor signal is more than 59.5 g/s» |
 | Avance del encendido | sin respaldo | 9 – 11 ° antes del PMS | «Ignition timing (test mode on) (BTDC°) 9 - 11» |
 
-*Fuente: elaboración propia a partir de `configs/calibracion_mazda3_bk.yaml`, extraído el 1 de septiembre de 2026 del manual de taller del vehículo de referencia.*
+*Fuente: elaboración propia a partir de la ficha de calibración del generador, extraída el 1 de septiembre de 2026 del manual de taller del vehículo de referencia. Cada constante conserva en esa ficha el fichero del manual del que sale y su cita literal.*
 
 Calibrar contra el manual de un vehículo real **no convierte los datos en reales**. Siguen siendo
 sintéticos; lo que cambia es que sus parámetros dejan de ser arbitrarios y pasan a estar
@@ -146,7 +146,7 @@ señal y condición a condición.
 
 ![Cinco paneles, uno por condición: antes de la marca de entrada del fallo las dos series coinciden exactamente, y la divergencia posterior es el efecto de la condición.](../../artifacts/figures/memoria/FIG-A-01_series_normal_vs_fallo.png)
 
-*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, sesiones pareadas. Protocolo: misma semilla, mismo régimen urbano y mismo perfil de conducción con y sin el fallo; antes del instante de entrada las dos series coinciden exactamente, de modo que toda divergencia posterior es la condición. Artefacto: `artifacts/figures/memoria/FIG-A-01_series_normal_vs_fallo.png`, copiado sin modificar de `artifacts/figures/FIG-E4-01_series_normal_vs_fallo.png`.*
+*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, sesiones pareadas. Protocolo: misma semilla, mismo régimen urbano y mismo perfil de conducción con y sin el fallo; antes del instante de entrada las dos series coinciden exactamente, de modo que toda divergencia posterior es la condición. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
 
 La comparación es pareada a propósito: sin parear, la mayor parte de la diferencia visible sería la
 forma de conducir y no la condición. En el panel de la fuga de vacío el ajuste de combustible se
@@ -188,7 +188,7 @@ cometer al leerlo. Esta tabla fija cuál es cuál.
 | **Exploratorio** | describe la muestra, no evalúa un sistema | E4, sobre `synthetic_v1`; la medición translingüe, sin registro de ejecución |
 | **Pendiente** | diseñado y sin ejecutar | el reentrenamiento del adaptador, detenido por memoria insuficiente; la curva de volumen con subconjuntos anidados; el conjunto de evaluación independiente del redactor; el validador numérico |
 
-*Fuente: elaboración propia a partir de `docs/experiment-index.md` y `docs/limitations.md`.*
+*Fuente: elaboración propia a partir del índice de experimentos y del registro de limitaciones del repositorio.*
 
 Ningún resultado afectado por contaminación se utiliza en el cuerpo del trabajo como evidencia
 independiente de generalización, y el capítulo 5 lo declara donde aparece.
@@ -202,7 +202,7 @@ la única condición en que la red recurrente gana. La Figura B.1 da el detalle 
 
 ![Dos paneles: a la izquierda el F1 de cada condición para el bosque y la red; a la derecha su diferencia, con la red ganando solo en el termostato por 0,032 y perdiendo en las otras cinco, hasta 0,167 en el fallo de encendido.](../../artifacts/figures/memoria/FIG-B-01_f1_por_clase.png)
 
-*Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación. Protocolo: una ejecución por modelo, semilla 20260901; n es el número de ventanas de la clase en validación. Artefacto: `artifacts/figures/memoria/FIG-B-01_f1_por_clase.png`, generado por `scripts/figuras_memoria.py` a partir de `artifacts/tables/E6_baseline_por_clase_synthetic_v2.csv` y `E7_temporal_por_clase_synthetic_v2.csv`.*
+*Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación. Protocolo: una ejecución por modelo, semilla 20260901; n es el número de ventanas de la clase en validación. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
 
 La Figura 5.3 del capítulo 5 muestra **adónde** van los errores de cada modelo; esta muestra
 **cuánto** pesa cada condición en la diferencia agregada, que es lo que aquella no puede decir. La
@@ -235,7 +235,7 @@ ventanas equivale a una ventana y media.
 | Fuga de vacío | 3 | 0,722 | `ltft_bank1`, `stft_bank1`, `map`, `rpm` | sí |
 | Deriva del caudalímetro | 3 | 0,656 | `ltft_bank1`, `stft_bank1`, `stft_bank1+ltft_bank1` | sí |
 
-*Fuente: elaboración propia a partir de `artifacts/tables/E9_resumen_synthetic_v2.csv`. Tabla completa en el repositorio.*
+*Fuente: elaboración propia a partir del resumen de atribución de E9. La tabla con las seis condiciones está en el repositorio.*
 
 La fila de la deriva del caudalímetro es la que más dice: entre sus señales principales **no aparece
 el caudal de aire**, que es la señal averiada. El modelo detecta la deriva por cómo la centralita la
@@ -258,7 +258,7 @@ declara en el capítulo 5. Las diecisiete decisiones del conjunto anotado no cam
 umbral entre 0,60 y 0,90, de modo que el resultado publicado no depende de la elección entre 0,72 y
 0,79.
 
-*Fuente: `artifacts/tables/E15b_barrido_umbral.csv`, 100 puntos; criterio y enmienda en `docs/methodology/criterio-umbral.md` y `criterio-umbral-enmienda-01.md`.*
+*Fuente: elaboración propia a partir del barrido de umbral de E15b, 100 puntos. El criterio original y su enmienda están fechados por separado en el repositorio; su localización, en la tabla C.5.*
 
 ## B.5 · Las cinco aperturas del conjunto de prueba
 
@@ -282,7 +282,7 @@ solo leyó identificadores. En cuatro hubo exposición de etiquetas y de predicc
 sostiene, y se comprueba con una orden, es que **el instrumento no cambió entre la primera apertura
 y la medición**: umbrales, casos elegibles, reglas de selección, política y código son los mismos.
 
-*Fuente: `docs/methodology/registro-aperturas-test.md`, con fecha, motivo, configuración, alcance, exposición y métricas de cada una.*
+*Fuente: elaboración propia a partir del registro de aperturas del conjunto de prueba, que guarda de cada una la fecha, el motivo, la configuración, el alcance, la exposición y las métricas consultadas.*
 
 ---
 
@@ -367,4 +367,57 @@ Las pruebas que dependen de cualquiera de estos recursos **se detienen diciendo 
 orden se obtiene**, en lugar de pasar en silencio. Es una decisión de diseño: una prueba que se salta
 sin avisar es peor que una que falla.
 
-*Fuente: `docs/reproducir-desde-cero.md`, validado desde un clon limpio el 13 de octubre de 2026, con todos los pasos en verde; y `configs/datos_no_reconstruibles.json`.*
+*Fuente: elaboración propia. El procedimiento de reproducción se validó desde un clon limpio el 13 de octubre de 2026 con todos los pasos en verde, y la medición de reconstructibilidad está registrada en el repositorio.*
+
+## C.6 · De la referencia académica al artefacto del repositorio
+
+Cada figura y cada tabla del documento se corresponde con un fichero del repositorio, un
+procedimiento que lo genera y un registro de ejecución del que salen sus números. El cuerpo del
+trabajo no lleva esas rutas, para no interrumpir la lectura; están aquí.
+
+Las figuras viven en `artifacts/figures/memoria/`, en PNG a 300 puntos por pulgada y —salvo las dos
+copiadas de artefactos históricos— también en SVG. Las tablas con extensión `.csv` están en
+`artifacts/tables/`, y los registros de ejecución con extensión `.json`, en `experiments/`.
+
+**Tabla C.5. Correspondencia entre cada figura y tabla del documento y su artefacto en el repositorio.**
+
+| Referencia | Experimento | Qué muestra | Fichero de la figura | Qué lo produce, y de qué registro sale |
+|---|---|---|---|---|
+| Figura 5.1 | E5 | ventanado y reparto | `FIG-5-01_particiones` | `figuras_memoria.py` ← `synthetic_v2_meta.parquet` y `E5_reparto.csv` |
+| Figura 5.2 | E4 | separabilidad por señal | `FIG-5-02_separabilidad` | `figuras_memoria.py` ← `E4_separabilidad.csv` |
+| Figura 5.3 | E6 y E7 | matrices de confusión | `FIG-5-03_confusiones` | `figuras_memoria.py` ← `E6_baseline_confusion_synthetic_v2.csv` y `E7_temporal_confusion_synthetic_v2.csv` |
+| Figura 5.4 | E6 y E7 | comparación entre conjuntos | `FIG-5-04_confusor_volumen` | `figuras_memoria.py` ← `E6_baseline_synthetic_v{2,3}.json` y `E7_temporal_synthetic_v{2,3}.json` |
+| Figura 5.5 | E6 | límite de evidencia del termostato | `FIG-5-05_limite_evidencia_termostato` | copiada de `FIG-E6-02_limite_evidencia_f03.png`; **no se puede redibujar** |
+| Figura 5.6 | E6, fase G | expresión efectiva del fallo | `FIG-5-06_expresion_del_fallo` | notebook `06_expresion_del_fallo.ipynb` |
+| Figura 5.7 | E6, calibrado en E15 | calibración antes y después | `FIG-5-07_calibracion` | `figuras_memoria.py` ← `E15_suficiencia.json` |
+| Figura 5.8 | E9 | mapa de atribución | `FIG-5-08_mapa_atribucion` | notebook `04_explicabilidad.ipynb` ← `E9_atribuciones_synthetic_v2.csv` |
+| Figura 5.9 | E12 | recuperación por estrategia | `FIG-5-09_recuperacion` | `figuras_memoria.py` ← `E12_retrieval_por_estrategia.csv` |
+| Figura 5.10 | E15 | aplicables frente a cobertura | `FIG-5-10_aplicables_vs_cobertura` | notebook `05_suficiencia_y_abstencion.ipynb` ← `E15_suficiencia.csv` |
+| Figura 5.11 | E18 | efecto de cada ablación | `FIG-5-11_ablaciones` | `figuras_memoria.py` ← `E18_ablacion_A1.json` a `A4.json` |
+| Figura 5.12 | E19 | las tres cifras finales | `FIG-5-12_evaluacion_final` | notebook `03_analisis_e19.ipynb` ← `E19_evaluacion_final_v3.csv` |
+| Figura 5.13 | E19 | decisión por ejecución | `FIG-5-13_decisiones_e19` | notebook `03_analisis_e19.ipynb` |
+| Figura 6.1 | E1–E19 | recorrido experimental | `FIG-6-01_recorrido_experimental` | notebook `00_introduccion.ipynb` |
+| Figura 6.2 | E1–E19 | objetivos y evidencia | `FIG-6-02_objetivos_y_evidencia` | `figuras_memoria.py` |
+| Figura 6.3 | E15 | compromiso entre los dos errores | `FIG-6-03_compromiso_cobertura_abstencion` | `figuras_memoria.py` ← `E15_suficiencia.csv` |
+| Figura A.1 | E4 | señal testigo por condición | `FIG-A-01_series_normal_vs_fallo` | copiada de `FIG-E4-01_series_normal_vs_fallo.png`; **no se puede redibujar** |
+| Figura B.1 | E6 y E7 | F1 por condición | `FIG-B-01_f1_por_clase` | `figuras_memoria.py` ← tablas por clase de E6 y E7 |
+| Tabla 5.1 | E6 y E7 | rendimiento de los modelos | — | `E6_baseline_synthetic_v2.json`, `E7_temporal_synthetic_v2.json` |
+| Tabla 5.2 | E6 y E15 | calibración de la confianza | — | `E15_suficiencia.json`, bloque `calibration` |
+| Tabla 5.3 | E12 | recuperación por estrategia | — | `E12_retrieval.json` |
+| Tabla 5.4 | ingesta | recuperación translingüe | — | sin registro de ejecución; se declara como observación descriptiva |
+| Tabla 5.5 | E15 | decisiones por caso | — | `E15_suficiencia.json`, modo oracular |
+| Tabla 5.6 | E15 | los dos errores y las políticas triviales | — | `E15_suficiencia.json` |
+| Tabla 5.7 | E13 | salidas del modelo de lenguaje | — | `E13_agente_transformers*.json` |
+| Tabla 5.8 | E18 | efecto de cada componente | — | `E18_ablacion_A1.json` a `A4.json` |
+
+*Fuente: elaboración propia. La columna de la izquierda es la numeración del documento; la de la derecha, el procedimiento y el registro. Las dos figuras marcadas como no redibujables se explican en sus apartados: la primera necesita una predicción por ventana que el registro de E6 no guarda, y la segunda procede de un generador que ya no existe.*
+
+Dos cosas que esta tabla permite hacer y conviene decir. La primera, comprobar cualquier cifra del
+documento: se localiza la figura o la tabla, se abre su registro y se contrasta. La segunda,
+regenerar cualquier figura dibujada, con una sola orden —`uv run python scripts/figuras_memoria.py`
+seguido de su número— sin ejecutar ningún experimento: el guion lee registros congelados.
+
+Los documentos internos que las notas de corrección del capítulo 5 y del 6 citan por su
+identificador —de `F-1` a `F-8`— están en `docs/audits/` del repositorio, con la afirmación
+original, la evidencia, el motivo de invalidez, la redacción corregida y el impacto sobre las
+conclusiones de cada una.
