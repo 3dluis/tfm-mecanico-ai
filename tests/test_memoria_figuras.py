@@ -24,6 +24,8 @@ CAPITULOS = ("cap5_resultados.md", "cap6_conclusiones.md", "anexos.md")
 
 #: «**Figura 5.3. Título.**» en una línea propia.
 TITULO = re.compile(r"^\*\*Figura ([A-Z]|\d+)\.(\d+)\. (.+?)\*\*$", re.MULTILINE)
+#: El mismo rótulo para las tablas, que llevan la misma convención.
+TITULO_TABLA = re.compile(r"^\*\*Tabla ([A-Z]|\d+)\.(\d+)\. (.+?)\*\*$", re.MULTILINE)
 #: «![texto alternativo](ruta)»
 IMAGEN = re.compile(r"^!\[(.*?)\]\((.+?)\)$", re.MULTILINE)
 #: El pie de procedencia, en cursiva y empezando por «Fuente:».
@@ -138,4 +140,22 @@ def test_toda_figura_se_menciona_en_el_cuerpo_por_su_numero(nombre: str) -> None
             sin_mencion.append(etiqueta)
     assert not sin_mencion, (
         f"{nombre}: estas figuras no se mencionan en el texto: {', '.join(sin_mencion)}"
+    )
+
+
+@pytest.mark.parametrize("nombre", CAPITULOS)
+def test_la_numeracion_de_las_tablas_sigue_el_orden_de_lectura(nombre: str) -> None:
+    """Lo mismo que con las figuras: el índice de tablas se construye con esto."""
+    numeros = [(c, int(n)) for c, n, _ in TITULO_TABLA.findall(_texto(nombre))]
+    if not numeros:
+        pytest.skip(f"{nombre} no tiene tablas numeradas")
+    vistos: dict[str, int] = {}
+    descolocadas = []
+    for serie, numero in numeros:
+        esperado = vistos.get(serie, 0) + 1
+        if numero != esperado:
+            descolocadas.append(f"{serie}.{numero}, se esperaba {serie}.{esperado}")
+        vistos[serie] = numero
+    assert not descolocadas, (
+        f"la numeración de tablas de {nombre} no es correlativa: {descolocadas}"
     )

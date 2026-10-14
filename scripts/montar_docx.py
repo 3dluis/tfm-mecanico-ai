@@ -299,6 +299,7 @@ def adaptar_estilos(cuerpo: str) -> tuple[str, dict[str, int]]:
     salida: list[str] = []
     posicion = 0
     capitulo = 0
+    en_bibliografia = False
     for encontrado in re.finditer(r"<w:p(?: [^>]*)?>.*?</w:p>|<w:p(?: [^>]*)?/>", cuerpo, re.S):
         salida.append(cuerpo[posicion : encontrado.start()])
         parrafo = encontrado.group(0)
@@ -326,10 +327,15 @@ def adaptar_estilos(cuerpo: str) -> tuple[str, dict[str, int]]:
         texto = "" if en_tabla else _texto_de_parrafo(parrafo)
         if re.match(r"^\s*Figura [A-Z0-9]+\.\d+\.", texto):
             destino = "PieDeFigura"
-        elif re.match(r"^\s*Tabla \d+\.\d+\.", texto):
+        elif re.match(r"^\s*Tabla [A-Z0-9]+\.\d+\.", texto):
             destino = "PieDeTabla"
         if estilo == "Ttulo1":
             capitulo += 1
+            # Las referencias llevan sangría francesa, que es un estilo propio de
+            # la plantilla y no algo que la conversión pueda deducir del texto.
+            en_bibliografia = _texto_de_parrafo(parrafo).strip().lower().startswith("bibliograf")
+        elif en_bibliografia and destino == "Normal":
+            destino = "BibliografaAPA"
         if destino in {"TtuloApartado", "Ttulosubapartado"} and capitulo:
             parrafo = _numeracion_por_capitulo(
                 parrafo,

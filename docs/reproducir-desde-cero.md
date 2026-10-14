@@ -38,7 +38,7 @@ uv run jupyter lab notebooks/
 
 | Paso | Sin reconstruir | Tras reconstruir |
 |---|---|---|
-| pruebas **inmediatas** | **895 pasan** | 895 pasan |
+| pruebas **inmediatas** | **902 pasan** | 902 pasan |
 | pruebas **con preparación** | **17 se detienen** con la orden exacta | **17 pasan** |
 | pruebas **con recursos externos** | 15, declaradas y no ejecutables | ídem |
 | `ruff check` · `ruff format` | pasan | pasan |

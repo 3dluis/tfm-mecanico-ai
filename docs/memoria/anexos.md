@@ -28,6 +28,8 @@ El sistema no es un modelo sino un recorrido de ocho etapas, y la decisión de d
 trabajo evalúa es que estén separadas. La Figura 6.1 del capítulo 6 las dibuja; esta tabla dice qué
 hace cada una y qué experimento la mide.
 
+**Tabla A.1. Etapas del recorrido experimental y experimento que mide cada una.**
+
 | Etapa | Qué hace | Lo mide |
 |---|---|---|
 | Telemetría | doce señales OBD-II a 1 Hz, una sesión como unidad de reparto | E2 |
@@ -46,6 +48,8 @@ capítulo 5 mide qué aporta esa separación en las ablaciones de E18, y el cap�
 esa medición **no** cubre: la separación misma no se ablacionó.
 
 ## A.2 · Las doce señales OBD-II
+
+**Tabla A.2. Las doce señales OBD-II, con su unidad y su rango físico.**
 
 | Señal | Unidad | Rango físico | Qué mide |
 |---|---|---|---|
@@ -74,6 +78,8 @@ Cada condición declara qué señales altera, con qué patrón temporal y qué d
 declaración es anterior a cualquier medición y es con lo que se contrasta la atribución del modelo
 en el capítulo 5.
 
+**Tabla A.3. Las cinco condiciones de fallo, con sus señales declaradas y su patrón temporal.**
+
 | Condición | Señales declaradas | Patrón temporal | Observación esperada |
 |---|---|---|---|
 | **F01** fuga de vacío en el colector | `stft_bank1`, `ltft_bank1`, `map`, `rpm` | persistente, acentuado en ralentí; el ajuste a largo plazo sube en rampa de unos 4 min | ajustes de combustible positivos, mayores a baja velocidad; presión de colector elevada en ralentí; régimen inestable |
@@ -95,6 +101,8 @@ Hasta el 1 de septiembre de 2026 las constantes del generador eran invenciones r
 respaldo. Ese día se calibraron contra el manual del vehículo, y cada constante quedó con el fichero
 del que sale y la cita literal que la respalda.
 
+**Tabla A.4. Constantes del generador calibradas contra el manual de taller.**
+
 | Constante | Valor anterior | Valor documentado | Cita del manual |
 |---|---|---|---|
 | Ralentí | 820 rpm | 640 – 740 rpm (Z6 con transmisión manual) | «Idle speed ATX Z6: 700 - 800 rpm MTX ZJ:690 - 790 rpm Z6:640 - 740 rpm» |
@@ -109,6 +117,8 @@ sintéticos; lo que cambia es que sus parámetros dejan de ser arbitrarios y pas
 documentados. Esa distinción se mantiene en todo el trabajo.
 
 ## A.5 · Los tres conjuntos, y cuál se puede reconstruir
+
+**Tabla A.5. Los tres conjuntos sintéticos y su reconstructibilidad medida.**
 
 | Conjunto | Sesiones | Generado | Generador | ¿Reconstruible? | De él salen |
 |---|---|---|---|---|---|
@@ -167,6 +177,8 @@ E15b y el registro de aperturas del conjunto de prueba.
 El trabajo acumula resultados de seis clases distintas, y confundirlos sería el error más fácil de
 cometer al leerlo. Esta tabla fija cuál es cuál.
 
+**Tabla B.1. Estatuto de cada resultado del trabajo.**
+
 | Estatuto | Qué significa | Cuáles |
 |---|---|---|
 | **Canónico** | se mide sobre `synthetic_v2`, con registro vigente, y sostiene una cifra publicada | E5, E6, E7 y E9 sobre `synthetic_v2`; E12 tras la reejecución canónica; E15, E18 y **E19** |
@@ -200,6 +212,8 @@ reparte: se concentra en la condición que menos señal deja. Las limitaciones s
 una ejecución por celda, sin repeticiones ni intervalos, y una diferencia de 0,032 sobre catorce
 ventanas equivale a una ventana y media.
 
+**Tabla B.2. F1 por condición de los dos modelos de diagnóstico.**
+
 | Condición | F1 del bosque | F1 de la red | Diferencia | Ventanas |
 |---|---|---|---|---|
 | Sin fallo | 0,824 | 0,769 | −0,054 | 28 |
@@ -212,6 +226,8 @@ ventanas equivale a una ventana y media.
 *Fuente: elaboración propia a partir de los registros `E6_baseline_synthetic_v2.json` y `E7_temporal_synthetic_v2.json`.*
 
 ## B.3 · Dónde se apoya el modelo, condición a condición
+
+**Tabla B.3. Señales en que se apoya el modelo, por diagnóstico.**
 
 | Diagnóstico | Casos | Confianza media | Señales principales | ¿La primera está declarada? |
 |---|---|---|---|---|
@@ -250,6 +266,8 @@ El conjunto de prueba está cerrado en el código: pedirlo exige una autorizaci�
 por escrito, que queda registrada. Se abrió **cinco veces**, y el trabajo distingue cinco niveles de
 exposición, porque no todas consumen lo mismo.
 
+**Tabla B.4. Los cinco niveles de apertura del conjunto de prueba.**
+
 | Nivel | Qué es | Qué consume |
 |---|---|---|
 | 1 · apertura técnica | la partición se cargó, con razón por escrito | el registro, y nada más si no pasa de aquí |
@@ -275,7 +293,9 @@ validado desde un clon limpio el 13 de octubre de 2026.
 
 ## C.1 · Qué hace falta
 
-| | |
+**Tabla C.1. Lo que hace falta para reejecutar el trabajo.**
+
+| Elemento | Qué es |
 |---|---|
 | **Repositorio** | `mecanico-ia-exp`, entregado como copia del repositorio Git con su historia completa |
 | **Commit de referencia** | el que encabeza la rama de entrega; su identificador aparece impreso en la primera celda de cada notebook ejecutado y en cada registro de experimento |
@@ -288,7 +308,7 @@ validado desde un clon limpio el 13 de octubre de 2026.
 git clone <repositorio> && cd mecanico-ia-exp
 uv sync --extra nb --extra ml --extra rag --extra finetune --extra dev
 bash scripts/reconstruir_datos.sh      # genera synthetic_v2 y COMPRUEBA sus cuatro huellas
-uv run pytest                          # 895 sin reconstruir; 912 después
+uv run pytest                          # 902 sin reconstruir; 919 después
 uv run jupyter lab notebooks/
 ```
 
@@ -301,6 +321,8 @@ para nada, y es mejor saberlo ahí que al leer una cifra.
 
 Siete notebooks acompañan a la entrega. Seis se ejecutan con lo que trae un clon; el séptimo
 necesita el conjunto reconstruido.
+
+**Tabla C.2. Los siete notebooks entregados, con su modalidad.**
 
 | Notebook | Qué contiene | Modalidad |
 |---|---|---|
@@ -319,6 +341,8 @@ para quien quiera revisar sin reproducir.
 
 ## C.4 · Los guiones de verificación
 
+**Tabla C.3. Guiones de verificación del repositorio.**
+
 | Guion | Qué comprueba |
 |---|---|
 | `scripts/estado_pruebas.py` | las tres categorías de prueba y qué falta para ejecutar cada una |
@@ -329,6 +353,8 @@ para quien quiera revisar sin reproducir.
 | `scripts/reproduce_main_results.sh` | la cadena de resultados principales |
 
 ## C.5 · Lo que no se puede reproducir, y por qué
+
+**Tabla C.4. Lo que no se puede reproducir, y por qué.**
 
 | Qué | Por qué | Consecuencia |
 |---|---|---|
