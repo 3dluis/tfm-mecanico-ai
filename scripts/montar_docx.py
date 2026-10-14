@@ -202,6 +202,52 @@ def _portada(xml_plantilla: str) -> str:
     return _sin_comentarios(cuerpo[:fin])
 
 
+def _seccion_del_cuerpo(xml_plantilla: str) -> tuple[str, str]:
+    """Encabezados, pies y márgenes de la **segunda** sección de la plantilla.
+
+    La plantilla trae dos juegos y son distintos. El de la portada lleva el sello
+    redondo y márgenes de 2,5 cm arriba; el del cuerpo lleva el logotipo apaisado
+    y **3,5 cm arriba**, con la banda del encabezado más alta. Pandoc copia al
+    documento convertido el juego de la PRIMERA sección del documento de
+    referencia, de modo que sin esto el cuerpo saldría con el sello de la portada
+    y con 1 cm menos de margen superior, y el logotipo se imprimiría **encima de
+    la primera línea de texto de cada página**.
+
+    El defecto no lo detecta una comprobación estructural: el documento es
+    válido, los estilos están y los índices también. Se ve mirando el PDF.
+
+    Los valores no se escriben aquí: se leen de la plantilla, para que sigan
+    siendo los suyos si la titulación la cambia.
+    """
+    secciones = re.findall(r"<w:sectPr\b.*?</w:sectPr>", xml_plantilla, re.S)
+    if len(secciones) < 2:
+        msg = "la plantilla no tiene una segunda sección de la que tomar el cuerpo"
+        raise ValueError(msg)
+    cuerpo = secciones[-1]
+    referencias = "".join(re.findall(r"<w:(?:header|footer)Reference[^>]*/>", cuerpo))
+    margenes = re.search(r"<w:pgMar[^>]*/>", cuerpo)
+    if not referencias or margenes is None:
+        msg = "la segunda sección de la plantilla no declara encabezados o márgenes"
+        raise ValueError(msg)
+    return referencias, margenes.group(0)
+
+
+def _adoptar_seccion_del_cuerpo(xml: str, xml_plantilla: str) -> tuple[str, int]:
+    """Da a la sección final la configuración que la plantilla usa en el cuerpo.
+
+    Solo se toca el **último** ``sectPr``, que es el de la sección del cuerpo: el
+    primero es el de la portada y conserva su sello y sus márgenes.
+    """
+    referencias, margenes = _seccion_del_cuerpo(xml_plantilla)
+    corte = xml.rindex("<w:sectPr")
+    fin = xml.index("</w:sectPr>", corte)
+    seccion = xml[corte:fin]
+    limpia = re.sub(r"<w:(?:header|footer)Reference[^>]*/>\s*", "", seccion)
+    limpia = re.sub(r"<w:pgMar[^>]*/>\s*", "", limpia)
+    cabeza, _, resto = limpia.partition(">")
+    return xml[:corte] + f"{cabeza}>{referencias}{margenes}{resto}" + xml[fin:], 1
+
+
 def _campo(instruccion: str, texto_provisional: str) -> str:
     """Un campo nativo de Word, de los que se actualizan con F9."""
     return (
@@ -516,6 +562,8 @@ def montar(plantilla: Path, salida: Path, datos: dict[str, str] | None = None) -
             + documento[documento.rindex("</w:body>") :]
         )
         documento_final, sustituidos = rellenar_marcadores(documento_final, datos)
+        documento_final, seccion = _adoptar_seccion_del_cuerpo(documento_final, xml_plantilla)
+        cambios["sección del cuerpo tomada de la plantilla"] = seccion
         partes["word/document.xml"] = documento_final.encode("utf-8")
         partes["word/styles.xml"] = anadir_estilos(
             partes["word/styles.xml"].decode("utf-8")

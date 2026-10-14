@@ -46,6 +46,8 @@ EXIGIDO = (
     "pies de figura",
     "imágenes incrustadas",
     "resolución de impresión",
+    "encabezados y pies del cuerpo",
+    "márgenes del cuerpo frente a la plantilla",
 )
 
 
@@ -71,10 +73,32 @@ def _dpi_png(datos: bytes) -> int:
     return round(x * 0.0254) if unidad == 1 else 0
 
 
+def _mismos_margenes(uno: str, otro: str) -> bool:
+    """Compara atributo a atributo, sin que el orden ni el espaciado decidan."""
+    return dict(re.findall(r'(w:\w+)="([^"]*)"', uno)) == dict(
+        re.findall(r'(w:\w+)="([^"]*)"', otro)
+    )
+
+
+def seccion_del_cuerpo(ruta: Path) -> tuple[tuple[str, ...], str] | None:
+    """Encabezados, pies y márgenes de la última sección de un DOCX."""
+    with zipfile.ZipFile(ruta) as fichero:
+        documento = _xml(fichero, "word/document.xml")
+    secciones = re.findall(r"<w:sectPr\b.*?</w:sectPr>", documento, re.S)
+    if len(secciones) < 2:
+        return None
+    cuerpo = secciones[-1]
+    margenes = re.search(r"<w:pgMar[^>]*/>", cuerpo)
+    if margenes is None:
+        return None
+    return tuple(re.findall(r"<w:(?:header|footer)Reference[^>]*/>", cuerpo)), margenes.group(0)
+
+
 def inspeccionar(
     ruta: Path,
     estilos_exigidos: tuple[str, ...],
     imagenes_de_la_plantilla: frozenset[bytes] = frozenset(),
+    seccion_del_cuerpo_de_la_plantilla: tuple[tuple[str, ...], str] | None = None,
 ) -> list[Hallazgo]:
     hallazgos: list[Hallazgo] = []
     with zipfile.ZipFile(ruta) as fichero:
@@ -216,14 +240,47 @@ def inspeccionar(
         tablas = documento.count("<w:tbl>")
         hallazgos.append(Hallazgo("tablas", f"{tablas}", None))
 
-        margenes = re.search(r"<w:pgMar ([^/>]+)/>", documento)
+        # La sección que importa es la **última**, la del cuerpo: es la que rige
+        # todas las páginas salvo la portada. Informar de la primera ocultaba un
+        # defecto real —el cuerpo heredaba los márgenes y el encabezado de la
+        # portada, y el logotipo se imprimía encima de la primera línea de cada
+        # página—, porque el documento era estructuralmente válido.
+        secciones = re.findall(r"<w:sectPr\b.*?</w:sectPr>", documento, re.S)
+        del_cuerpo = secciones[-1] if secciones else ""
+        margenes = re.search(r"<w:pgMar ([^/>]+)/>", del_cuerpo)
         hallazgos.append(
             Hallazgo(
-                "márgenes de sección",
+                "márgenes de la sección del cuerpo",
                 margenes.group(1).strip() if margenes else "no declarados",
                 bool(margenes),
             )
         )
+        if seccion_del_cuerpo_de_la_plantilla:
+            esperadas, esperados_margenes = seccion_del_cuerpo_de_la_plantilla
+            referencias = set(re.findall(r"<w:(?:header|footer)Reference[^>]*/>", del_cuerpo))
+            iguales = referencias == set(esperadas)
+            hallazgos.append(
+                Hallazgo(
+                    "encabezados y pies del cuerpo",
+                    "los de la plantilla"
+                    if iguales
+                    else "NO son los de la sección del cuerpo de la plantilla",
+                    iguales,
+                )
+            )
+            margenes_actuales = re.search(r"<w:pgMar[^>]*/>", del_cuerpo)
+            coinciden = margenes_actuales is not None and _mismos_margenes(
+                margenes_actuales.group(0), esperados_margenes
+            )
+            hallazgos.append(
+                Hallazgo(
+                    "márgenes del cuerpo frente a la plantilla",
+                    "coinciden"
+                    if coinciden
+                    else f"NO coinciden: la plantilla usa {esperados_margenes}",
+                    coinciden,
+                )
+            )
         palabras = sum(len(t.split()) for t in textos)
         hallazgos.append(Hallazgo("palabras", f"{palabras}", None))
     return hallazgos
@@ -246,7 +303,9 @@ def main(argv: list[str] | None = None) -> int:
 
     exigidos = ESTILOS_DE_LA_PLANTILLA
     imagenes_de_la_plantilla: frozenset[bytes] = frozenset()
+    seccion_plantilla: tuple[tuple[str, ...], str] | None = None
     if args.plantilla is not None and args.plantilla.is_file():
+        seccion_plantilla = seccion_del_cuerpo(args.plantilla)
         with zipfile.ZipFile(args.plantilla) as plantilla:
             estilos = _xml(plantilla, "word/styles.xml")
             imagenes_de_la_plantilla = frozenset(
@@ -263,7 +322,7 @@ def main(argv: list[str] | None = None) -> int:
             exigidos = tuple(sorted(set(personalizados) - {"Normal"}))
         print(f"estilos tomados de la plantilla: {', '.join(exigidos)}\n")
 
-    hallazgos = inspeccionar(args.docx, exigidos, imagenes_de_la_plantilla)
+    hallazgos = inspeccionar(args.docx, exigidos, imagenes_de_la_plantilla, seccion_plantilla)
     ancho = max(len(h.concepto) for h in hallazgos)
     fallos = 0
     for hallazgo in hallazgos:
