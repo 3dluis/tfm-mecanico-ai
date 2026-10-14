@@ -113,3 +113,23 @@ def test_toda_figura_de_la_memoria_sale_del_guion_que_las_genera() -> None:
             assert f'"{tronco}"' in guion, (
                 f"{tronco} no está en el registro de scripts/figuras_memoria.py"
             )
+
+
+@pytest.mark.parametrize("nombre", CAPITULOS)
+def test_toda_figura_se_menciona_en_el_cuerpo_por_su_numero(nombre: str) -> None:
+    """La plantilla exige mencionarlas por número, nunca por su posición.
+
+    Una figura que el texto no nombra queda huérfana: el lector no sabe en qué
+    momento del argumento debe mirarla, y una reordenación posterior no se nota.
+    """
+    texto = _texto(nombre)
+    sin_mencion = []
+    for capitulo, numero, _ in TITULO.findall(texto):
+        etiqueta = f"Figura {capitulo}.{numero}"
+        # El título propio no cuenta: se busca una mención en prosa.
+        menciones = len(re.findall(rf"{etiqueta}\b", texto))
+        if menciones < 2:
+            sin_mencion.append(etiqueta)
+    assert not sin_mencion, (
+        f"{nombre}: estas figuras no se mencionan en el texto: {', '.join(sin_mencion)}"
+    )

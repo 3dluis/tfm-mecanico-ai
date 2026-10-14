@@ -39,7 +39,8 @@ El análisis exploratorio previo al modelado dejó dos hechos que condicionan la
 Ese contraste entre fallos admite una medida, y es la que la fase exploratoria produjo antes de
 entrenar nada: para cada señal y cada condición, cuánto se separa de la condición sin fallo, medido
 por separado sobre el nivel del bloque y sobre su dispersión. Importa porque determina qué puede
-aprender el modelo y, más adelante, qué puede afirmar legítimamente la explicación.
+aprender el modelo y, más adelante, qué puede afirmar legítimamente la explicación. La Figura 5.2
+recoge esa medida para las doce señales y las cinco condiciones.
 
 **Figura 5.2. Separabilidad de cada señal por condición, en nivel y en dispersión.**
 
@@ -160,7 +161,7 @@ lleve la etiqueta de una condición significa que la sesión tenía el fallo act
 significa que el fallo haya dejado alteración observable en ninguna de sus señales. Las dos cosas se
 pueden separar generando, con la misma semilla, la trayectoria con fallo y la trayectoria sin él, y
 contando qué fracción de las muestras de la ventana difiere por encima del suelo de ruido de cada
-señal.
+señal. La Figura 5.6 presenta esa fracción ventana a ventana.
 
 **Figura 5.6. Expresión efectiva del fallo en cada ventana de validación, y ventanas que el modelo de diagnóstico falla.**
 
@@ -219,7 +220,7 @@ pieza del diseño que de otro modo parecería un tecnicismo: la confianza que en
 suficiencia está calibrada, y no haberlo hecho habría producido abstenciones por un defecto del
 instrumento y no por falta de evidencia.
 
-La atribución por valores de Shapley, calculada sobre dieciocho casos de validación con un fondo de cien ventanas sin fallo de entrenamiento, produce la evidencia observacional que las etapas posteriores consumen. Contrastada con las señales que el generador declara para cada fallo, se comporta de forma desigual. En la fuga de vacío, el termostato y la sonda de oxígeno, todas las señales atribuidas entre las seis principales son señales declaradas. En la deriva del caudalímetro el caudal medido no aparece: el modelo detecta el fallo por las correcciones de combustible, lo que coincide con el análisis exploratorio. En el fallo de encendido, cuatro de las seis señales principales no están declaradas para esa condición, entre ellas la temperatura del refrigerante, cuya separación aparente el estudio de ventana había situado por debajo del suelo de ruido; las dos señales declaradas que aparecen concentran, con todo, varias veces más importancia acumulada que las cuatro no declaradas. La atribución es fiel al modelo y, en ese fallo, mezcla el mecanismo del vehículo con señales que no le pertenecen. El registro de esta fase, `E9_xai_synthetic_v2.json`, es anterior a la obligatoriedad del identificador de versión.
+La atribución por valores de Shapley, calculada sobre dieciocho casos de validación con un fondo de cien ventanas sin fallo de entrenamiento, produce la evidencia observacional que las etapas posteriores consumen. Contrastada con las señales que el generador declara para cada fallo, se comporta de forma desigual. En la fuga de vacío, el termostato y la sonda de oxígeno, todas las señales atribuidas entre las seis principales son señales declaradas. En la deriva del caudalímetro el caudal medido no aparece: el modelo detecta el fallo por las correcciones de combustible, lo que coincide con el análisis exploratorio. En el fallo de encendido, cuatro de las seis señales principales no están declaradas para esa condición, entre ellas la temperatura del refrigerante, cuya separación aparente el estudio de ventana había situado por debajo del suelo de ruido; las dos señales declaradas que aparecen concentran, con todo, varias veces más importancia acumulada que las cuatro no declaradas. La atribución es fiel al modelo y, en ese fallo, mezcla el mecanismo del vehículo con señales que no le pertenecen. El registro de esta fase, `E9_xai_synthetic_v2.json`, es anterior a la obligatoriedad del identificador de versión. La Figura 5.8 recoge el reparto completo del peso explicativo.
 
 **Figura 5.8. Peso explicativo de cada señal por condición, frente a las señales que el generador declara.**
 
@@ -519,7 +520,8 @@ suficiencia y con un conjunto anotado sellado antes de abrir la partición. Su i
 El estrato operativo consta de **22 ejecuciones** sobre once casos anotados y diez sesiones
 distintas. Catorce de ellas debían terminar en abstención y ocho debían terminar en explicación; a
 esas ocho se añaden dos ejecuciones con evidencia completa cuyo diagnóstico de partida era
-incorrecto, en las que abstenerse era lo que correspondía.
+incorrecto, en las que abstenerse era lo que correspondía. La Figura 5.12 da las tres cifras con sus
+denominadores.
 
 **Figura 5.12. Las tres cifras de la evaluación final, con su numerador y su denominador.**
 
@@ -536,7 +538,8 @@ ocurrir, y la diferencia entre las dos frases es la que separa un resultado de u
 otros dos intervalos son igual de anchos: la abstención innecesaria es compatible con cualquier tasa
 entre 0,071 y 0,591, y la cobertura, entre 0,313 y 0,832. La cobertura de 6 de 10 tampoco se lee
 como cuatro oportunidades perdidas: dos de esas diez ejecuciones llevaban un diagnóstico incorrecto
-y abstenerse era lo correcto en ellas. La parte evitable del coste es la otra cifra, 2 de 8.
+y abstenerse era lo correcto en ellas. La parte evitable del coste es la otra cifra, 2 de 8. Caso a caso, la Figura 5.13 muestra en qué
+ejecución se tomó cada decisión.
 
 **Figura 5.13. Decisión del sistema en cada una de las 22 ejecuciones del estrato operativo.**
 

@@ -80,6 +80,10 @@ siguiente, que son por donde la frase llegó al capítulo. `F-8` alcanza a
 | **A-9** | cap. 5, §PI.2, trazabilidad | «las 51 afirmaciones conservan la observación que las origina… la proporción de afirmaciones con cita cuya cita las sostiene es de 12 sobre 12, **pero esa igualdad es una propiedad del procedimiento y no una medición**» | el párrafo es correcto y prudente. Lo que hay que añadir: `L-26` muestra que la propiedad se refiere a **identificadores**; el texto redactado puede contener una cifra falsa sin que ninguna comprobación lo note | `L-26` |
 | **A-10** | cap. 6, limitaciones | «El criterio de suficiencia se revisó dos veces sobre los mismos casos…» | correcto. Falta la contaminación análoga del **redactor**, que es de otra clase: no es que el criterio se ajustara sobre los casos, es que el adaptador **se entrenó con las ventanas en que se le midió** | `L-23` |
 
+> **Estado al 13-10-2026, tarde.** De esta sección se ha aplicado **`A-3`**: el capítulo ya no
+> atribuye al volumen de datos la desventaja del modelo temporal, y la Figura 5.4 muestra por qué la
+> comparación no lo permite. Las demás entradas siguen abiertas.
+
 ## 4. Lo que hay que **añadir** porque no existe en el texto
 
 No es corrección: es contenido nuevo que los capítulos no contemplan.
@@ -92,6 +96,14 @@ No es corrección: es contenido nuevo que los capítulos no contemplan.
 | **N-4** | **La contribución metodológica complementaria**, si el autor la acepta | cap. 6, contribuciones | con el enunciado acotado de `contribucion-metodologica-congelacion.md` §10.2 y sus dos tablas de evidencia juntas |
 | **N-5** | **El conjunto de evaluación independiente del redactor**, congelado y sin ejecutar | cap. 6, prospectiva | está decidido cómo se medirá, y decirlo vale aunque no se haya medido |
 | **N-6** | **Las cinco aperturas y sus niveles** | cap. 5, nota metodológica; cap. 6, limitaciones | sustituye a F-1, F-2 y F-3, y es lo que el tribunal preguntará |
+
+> **Estado al 13-10-2026, tarde.** Aplicadas **`N-1`** y **`N-2`**. El capítulo 5 tiene un apartado
+> propio para la evaluación final, con sus tres cifras, sus denominadores, los intervalos de Wilson
+> que las acotan y la salvedad de `L-26`; el capítulo 6 recoge lo que esa evaluación cambia en OE3,
+> OE5 y el objetivo general. La distinción entre llevar la etiqueta de un fallo y contener señal
+> observable de él entra en PI.1 con su medición y con la advertencia de que las cinco ventanas sin
+> señal del termostato **no** están comprobadas como las cinco que el modelo falla. Siguen abiertas
+> `N-3`, `N-4`, `N-5` y `N-6`.
 
 ## 5. Qué NO hay que tocar
 
