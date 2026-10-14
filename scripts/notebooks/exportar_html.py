@@ -10,7 +10,7 @@ copia legible con sus figuras y sus tablas dentro.
 de quien lo generó, con su commit impreso en la primera celda. Quien quiera
 verificar, ejecuta.
 
-**Dónde escribe.** En `docs/notebooks/html/`. Ni en `experiments/`, ni en
+**Dónde escribe.** En `notebooks/html/`, junto a los notebooks. Ni en `experiments/`, ni en
 `tables/`, ni en `figures/`: los notebooks no pueden tocar los artefactos
 históricos, y su exportación tampoco.
 """
@@ -22,7 +22,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
 NOTEBOOKS = RAIZ / "notebooks"
-DESTINO = RAIZ / "docs" / "notebooks" / "html"
+DESTINO = RAIZ / "notebooks" / "html"
 
 ENTREGADOS = (
     "00_introduccion.ipynb",

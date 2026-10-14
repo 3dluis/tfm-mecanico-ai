@@ -19,10 +19,29 @@ depender de ningún otro repositorio ni de la máquina en que se construyó.
 | `experiments/` | el registro JSON de cada ejecución, con su commit, su semilla y sus métricas |
 | `data/` | la muestra redistribuible y los conjuntos sintéticos que sí pueden viajar |
 | `configs/` | la configuración, los manifiestos y el censo de artefactos históricos |
-| `docs/` | la documentación del laboratorio: metodología, decisiones, auditorías y limitaciones |
 | `scripts/` | instalación, ejecución y verificación del paquete |
 | `tests/` | las pruebas que sostienen lo anterior |
 | `.git/` | **el historial completo**, 424 commits desde el 1 de septiembre de 2026 |
+
+### La documentación del laboratorio no viaja en el paquete
+
+Metodología, decisiones, auditorías, pre-registros y el texto fuente de la memoria estaban en
+`docs/`, y ese directorio **no forma parte del paquete**. No se ha perdido: está entero en el
+historial Git que acompaña a esta entrega, y se recupera con una orden.
+
+```bash
+git log --oneline -- docs | head -5          # cuándo cambió
+git checkout HEAD~1 -- docs                  # recuperarlo completo
+git show HEAD~1:docs/limitations.md          # o leer un documento suelto
+```
+
+Lo que sigue citando rutas de `docs/` —este README más abajo, y los apartados de trazabilidad de
+los notebooks— remite a ese historial, no a ficheros presentes. **Dos consecuencias concretas**, y
+conviene decirlas: once de los treinta y nueve ficheros de prueba comprueban que esos documentos y
+los artefactos concuerdan, y no viajan porque sin los documentos no pueden pasar; y el manifiesto
+de congelación de la evaluación final ancla por huella un documento de metodología, de modo que esa
+verificación concreta tampoco se puede ejecutar aquí. Los 28 ficheros de prueba restantes, **521
+pruebas**, sí se ejecutan.
 
 ## Por dónde empezar, según lo que se quiera hacer
 
@@ -179,7 +198,7 @@ Tabla 4.1). Detalle de fases, políticas y pre-registros: `docs/methodology/`.
 | RERUN-A | Si un defecto metodológico descubierto el 4-09 (`MIXED-EMBEDDING-SPACE`) alteraba los resultados de recuperación | `docs/experiments/resultado-rerun-a.md` |
 
 Índice completo con estado de cada experimento (VALIDATED, NEGATIVE, INCONCLUSIVE,
-SUPERSEDED, NON-CANONICAL, PLANNED): [`docs/experiment-index.md`](docs/experiment-index.md).
+SUPERSEDED, NON-CANONICAL, PLANNED): `docs/experiment-index.md`.
 
 ## 6. Qué se encontró
 
@@ -226,7 +245,7 @@ indicado; la lectura prudente es la del capítulo 5 de la memoria.
   de procedencia indeterminada y no se ha reentrenado.
 - Ninguna ablación (E18), ninguna evaluación final sobre test (E19).
 
-Registro completo: [`docs/limitations.md`](docs/limitations.md) y
+Registro completo: `docs/limitations.md` y
 `research/limitations-register.md`. Hallazgos y correcciones documentadas:
 `docs/experiments/hallazgo-*.md`.
 
@@ -250,10 +269,10 @@ uv run jupyter lab notebooks/
 
 Cada notebook declara su **modalidad** —reproducción, reanálisis, visualización de evidencia
 histórica o demostración ilustrativa—, porque no todos hacen lo mismo con la evidencia y
-confundirlas sería grave. Índice y criterios: [`docs/notebooks/indice.md`](docs/notebooks/indice.md).
+confundirlas sería grave. Índice y criterios: `docs/notebooks/indice.md`.
 Qué notebook corresponde a cada resultado:
-[`docs/notebook-traceability.md`](docs/notebook-traceability.md). Qué puede ejecutar de verdad quien
-no tenga el equipo del autor: [`docs/notebooks/auditoria-portabilidad.md`](docs/notebooks/auditoria-portabilidad.md).
+`docs/notebook-traceability.md`. Qué puede ejecutar de verdad quien
+no tenga el equipo del autor: `docs/notebooks/auditoria-portabilidad.md`.
 
 Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
 `tests/test_notebooks.py` lo verifican, incluida la ejecución de los cuatro desde un kernel limpio.
@@ -278,7 +297,7 @@ final. `synthetic_v3`, del que sale solo la comparación de volumen de E7, **no*
 guion se niega: es anterior a la calibración del generador. Sin reconstruir, doce pruebas se detienen diciendo la orden exacta en lugar de fallar.
 
 Detalle completo, con lo que **no** se puede reproducir y por qué:
-[`docs/reproducir-desde-cero.md`](docs/reproducir-desde-cero.md).
+`docs/reproducir-desde-cero.md`.
 
 Entorno verificado: macOS sobre Apple Silicon, `uv`, PostgreSQL 14+ con `pgvector`. El bloque
 de telemetría (E2 → E9, E15b) se reproduce sin base de datos ni manual:
@@ -299,7 +318,7 @@ uv run python scripts/ingest_mazda.py multilingual
 bash scripts/reproduce_main_results.sh      # E12, E15 oracular y no oracular, E13 con LoRA v2
 ```
 
-Versiones exactas, semillas, comandos y riesgos: [`docs/reproducibility.md`](docs/reproducibility.md).
+Versiones exactas, semillas, comandos y riesgos: `docs/reproducibility.md`.
 Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de calidad:
 `uv run ruff check . && uv run mypy src && uv run pytest`.
 
@@ -327,7 +346,7 @@ Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de ca
 Pregunta (`cap1`) → subpreguntas e hipótesis (`research/traceability-matrix.md`) → objetivos
 (`cap2`) → política escrita antes de medir (`docs/methodology/`) → ejecución con commit y
 semilla (`experiments/*.json`) → tabla o figura (`artifacts/`) → sección del capítulo 5 →
-conclusión (`cap6`). Matriz que lo recorre: [`docs/tfm-traceability.md`](docs/tfm-traceability.md).
+conclusión (`cap6`). Matriz que lo recorre: `docs/tfm-traceability.md`.
 
 El historial Git (170 commits del 1 al 13 de septiembre de 2026, más los de preparación para el
 tribunal) es la cronología real del trabajo. El 13-09 se normalizaron 69 mensajes para retirar
