@@ -1,6 +1,6 @@
 # Procedimiento de entrega: del Markdown al DOCX y al PDF
 
-**Fecha:** 13 de octubre de 2026 · **Qué es:** cómo se produce el documento entregable a partir de
+**Fecha:** 14 de octubre de 2026 · **Qué es:** cómo se produce el documento entregable a partir de
 los capítulos en Markdown, qué hace cada herramienta y qué hay que hacer a mano · **Estado:**
 implementado y ejecutado. **El documento montado es preliminar**, no la entrega definitiva
 
@@ -8,8 +8,10 @@ implementado y ejecutado. **El documento montado es preliminar**, no la entrega 
 
 ```bash
 uv run python scripts/montar_docx.py                      # entregables/memoria.docx
-soffice --headless --convert-to pdf --outdir entregables \
-        entregables/memoria.docx                          # entregables/memoria.pdf
+uv run python scripts/indices_pdf.py entregables/memoria.docx
+                                                          # entregables/memoria.pdf,
+                                                          # con los tres índices rellenos
+                                                          # y verificados contra sus páginas
 uv run python scripts/verificar_docx.py entregables/memoria.docx \
         --plantilla "../24-25 Plantilla TFM MUIA.docx"    # comprobación estructural
 ```
@@ -17,20 +19,30 @@ uv run python scripts/verificar_docx.py entregables/memoria.docx \
 `entregables/` está fuera del control de versiones. Lo versionado es el procedimiento y el texto
 fuente; el binario se regenera.
 
-### Lo que el PDF no trae, y por qué
+### Los índices del PDF
 
-Los tres índices son **campos nativos de Word**, no texto fijo. El documento lleva la marca
-`w:updateFields`, de modo que Word ofrece actualizarlos al abrirlo y `F9` los rellena. La conversión
-a PDF de LibreOffice en modo desatendido **no evalúa esos campos**, así que el PDF de revisión
-muestra en su lugar la línea «Actualice el índice desde Word (F9)».
+Los tres índices son **campos nativos de Word**: están vacíos hasta que una
+aplicación los evalúa. Word los rellena al abrir el fichero; la conversión
+desatendida de LibreOffice **no**, de modo que el PDF salía con «Actualice el
+índice desde Word (F9)» donde debían ir sus entradas.
 
-No se sustituyen por texto estático: un índice escrito a mano se desincroniza con el documento en
-cuanto cambia una página, y el aviso impreso es preferible a una lista de páginas que miente. Para
-un PDF con los índices rellenos, el camino es abrir el DOCX en Word, actualizar los campos y
-exportar desde allí.
+`scripts/indices_pdf.py` lo resuelve sin texto estático. Un campo de Word guarda
+su **resultado en caché** entre las marcas `separate` y `end`: es lo que la
+aplicación muestra mientras no se actualice, y es exactamente lo que Word
+escribe al pulsar `F9`. El guion escribe ese resultado, de modo que el campo
+sigue siendo un campo y el DOCX sigue siendo actualizable.
 
-Se intentó actualizarlos mediante el puente UNO de LibreOffice; el proceso no se sostuvo en este
-equipo y la vía queda documentada como no resuelta, no como imposible.
+Las entradas no se inventan: salen de la **estructura real** del documento —los
+párrafos con estilo de encabezado y los pies de figura y de tabla— y las páginas
+se **miden sobre el PDF**. Como rellenar un índice lo hace crecer y al crecer
+desplaza lo que viene detrás, el guion itera hasta que dos pasadas seguidas dan
+las mismas páginas, y al final **verifica entrada por entrada** que cada texto
+está en la página que declara. Si alguna no lo está, se detiene y no entrega
+nada.
+
+Se intentó antes la vía de los campos nativos por el puente UNO de LibreOffice:
+el proceso no se sostiene en este equipo. Microsoft Word, que sería la primera
+opción, no está instalado.
 
 ## 2. Herramientas, con su versión
 
