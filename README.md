@@ -5,8 +5,6 @@ Díaz, 2026). Contiene el código, los registros de ejecución, las decisiones y
 con los que se construyó la evidencia de la memoria. No es un producto: es el laboratorio, con
 su historial completo, incluidos los resultados que no salieron como se esperaba.
 
-Guía de lectura para el tribunal en 10–15 minutos: [`JURY_GUIDE.md`](JURY_GUIDE.md).
-
 ## 1. Qué se investiga
 
 Cuando un sistema de diagnóstico de vehículos explica una avería a partir de telemetría OBD-II,
