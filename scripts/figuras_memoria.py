@@ -403,6 +403,38 @@ def producir(figura: Figura) -> Path | None:
     return destino
 
 
+#: El entregable del que se leen las páginas de la matriz de procedencia.
+PDF_ENTREGABLE = paths.ROOT / "entregables" / "memoria.pdf"
+
+
+def paginas_del_pdf(ruta: Path | None = None) -> dict[str, int]:
+    """En qué página del PDF entregado aparece el pie de cada figura.
+
+    Se busca el pie —«Figura 5.3.»— y no la imagen, porque el pie es texto y la
+    imagen no: una búsqueda sobre el texto extraído es verificable por quien
+    quiera repetirla. Si el PDF no está, se devuelve vacío y la matriz sale sin
+    esa columna en lugar de fallar: el registro tiene que poder emitirse en un
+    clon recién hecho, donde `entregables/` no existe.
+    """
+    destino = ruta or PDF_ENTREGABLE
+    if not destino.is_file():
+        return {}
+    try:
+        from pypdf import PdfReader
+    except ImportError:
+        return {}
+    lector = PdfReader(str(destino))
+    paginas: dict[str, int] = {}
+    for numero, pagina in enumerate(lector.pages, 1):
+        texto = pagina.extract_text() or ""
+        for figura in FIGURAS:
+            if figura.identificador in paginas:
+                continue
+            if f"Figura {figura.identificador}." in texto:
+                paginas[figura.identificador] = numero
+    return paginas
+
+
 def trazabilidad() -> str:
     """La matriz de procedencia, emitida desde el registro.
 
@@ -419,14 +451,16 @@ def trazabilidad() -> str:
             int(f.identificador.split(".")[1]),
         ),
     )
+    paginas = paginas_del_pdf()
     lineas = [
         "| Fig. | Experimento | Conjunto | Partición | Notebook | Función o copia | Fichero | "
-        "Huella (SHA-256, 16) | Ubicación |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "Huella (SHA-256, 16) | Ubicación | Pág. PDF |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     lineas += [
         f"| {f.identificador} | {f.experimento} | `{f.conjunto}` | {f.particion} | "
-        f"`{f.notebook}` | {f.produce} | `{f.nombre}.png` | `{f.huella()}` | {f.ubicacion} |"
+        f"`{f.notebook}` | {f.produce} | `{f.nombre}.png` | `{f.huella()}` | {f.ubicacion} | "
+        f"{paginas.get(f.identificador, '—')} |"
         for f in orden
     ]
     lineas += ["", "| Fig. | Limitaciones declaradas en su pie |", "|---|---|"]
