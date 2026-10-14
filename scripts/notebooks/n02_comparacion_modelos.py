@@ -753,6 +753,8 @@ etiqueta propia**: los ejecutores se niegan a sobrescribir los artefactos public
 
 ## 16. Referencias y trazabilidad
 
+**Dónde aparece esto en la memoria.** Las cifras agregadas son la **Tabla 5.1**; adónde van los errores de cada modelo, la **Figura 5.3**; la comparación entre los dos conjuntos, la **Figura 5.4**; y la calibración, la **Tabla 5.2** y la **Figura 5.7**. El detalle por condición está en el anexo B, **Figura B.1** y **Tabla B.2**.
+
 - `docs/experiments/E6_baseline.md` — informe de la línea base, con el criterio pre-registrado
 - `docs/experiments/E7_modelo_temporal.md` — informe del modelo temporal, con sus marcas `SUPERSEDED`
 - `experiments/E6_baseline_synthetic_v2.json`, `E6_baseline_synthetic_v3.json`

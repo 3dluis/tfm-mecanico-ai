@@ -104,6 +104,28 @@ def version_de_pandoc() -> str:
     return salida.splitlines()[0].strip()
 
 
+def comprobar_figuras() -> None:
+    """Se detiene si el documento referencia una figura que no existe.
+
+    Pandoc avisa de una imagen que falta y **sigue**, de modo que el documento
+    saldría con un hueco donde debía ir una figura. Un hueco en un entregable es
+    peor que un fallo de montaje: el fallo se ve.
+    """
+    memoria = paths.DOCS / "memoria"
+    faltan: list[str] = []
+    for nombre in CAPITULOS:
+        texto = (memoria / nombre).read_text("utf-8")
+        for ruta in re.findall(r"^!\[[^\]]*\]\(([^)]+)\)$", texto, re.MULTILINE):
+            if not (memoria / ruta).resolve().is_file():
+                faltan.append(f"{nombre} → {ruta}")
+    if faltan:
+        msg = (
+            "el documento referencia figuras que no existen; genérelas con "
+            "`uv run python scripts/figuras_memoria.py` antes de montar:\n  " + "\n  ".join(faltan)
+        )
+        raise FileNotFoundError(msg)
+
+
 def convertir(plantilla: Path, destino: Path) -> Path:
     """Concatena los capítulos y los convierte con Pandoc."""
     memoria = paths.DOCS / "memoria"
@@ -466,6 +488,7 @@ def anadir_numeracion(xml_numeracion: str, capitulos: int) -> str:
 
 def montar(plantilla: Path, salida: Path, datos: dict[str, str] | None = None) -> dict[str, object]:
     datos = datos or {}
+    comprobar_figuras()
     salida.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as temporal:
         intermedio = Path(temporal) / "cuerpo.docx"
