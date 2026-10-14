@@ -366,7 +366,7 @@ describe **el instrumento**: muestra que el generador produce las formas que sus
 cual comprueba el instrumento y no descubre nada sobre vehículos reales.
 
 **Relación con la pregunta de investigación.** Fija, para PI.1, el techo observacional por debajo
-del cual ningún modelo podría haber hecho mejor. En la memoria es la **Figura 5.3**."""),
+del cual ningún modelo podría haber hecho mejor. En la memoria es la **Figura 5.4**."""),
     md("""\
 Y la misma pareja, en unidades físicas y superpuesta señal a señal, es la comparación que la
 **Figura A.1** del anexo A hacía sobre `synthetic_v1` y ya no se puede regenerar."""),
@@ -523,7 +523,7 @@ lo son**: se midieron sobre el conjunto que hay, y su registro lo acredita. Lo q
     md("""\
 ## 13. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** La expresión efectiva del fallo es la **Figura 5.8** del capítulo 5, en el apartado de PI.1, junto al límite de evidencia del termostato de la **Figura 5.7**. La diferencia entre los tres conjuntos sintéticos está tabulada en el anexo A, apartado A.5.
+**Dónde aparece esto en la memoria.** La expresión efectiva del fallo es la **Figura 5.9** del capítulo 5, en el apartado de PI.1, junto al límite de evidencia del termostato de la **Figura 5.8**. La diferencia entre los tres conjuntos sintéticos está tabulada en el anexo A, apartado A.5.
 
 | Cifra de este notebook | De dónde sale |
 |---|---|

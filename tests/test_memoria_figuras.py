@@ -22,7 +22,7 @@ from mecanico_ia_exp.config import paths
 
 CAPITULOS = ("cap5_resultados.md", "cap6_conclusiones.md", "anexos.md")
 
-#: «**Figura 5.5. Título.**» en una línea propia.
+#: «**Figura 5.6. Título.**» en una línea propia.
 TITULO = re.compile(r"^\*\*Figura ([A-Z]|\d+)\.(\d+)\. (.+?)\*\*$", re.MULTILINE)
 #: El mismo rótulo para las tablas, que llevan la misma convención.
 TITULO_TABLA = re.compile(r"^\*\*Tabla ([A-Z]|\d+)\.(\d+)\. (.+?)\*\*$", re.MULTILINE)

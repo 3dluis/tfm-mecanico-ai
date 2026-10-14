@@ -31,22 +31,23 @@ REGISTRO_DEL_GUION = paths.ROOT / "scripts" / "figuras_memoria.py"
 #: congelados · D · artefacto histórico que no se puede regenerar · E · esquema.
 ORIGEN: dict[str, str] = {
     "FIG-5-01_particiones": "C",
-    "FIG-5-02_separabilidad": "C",
-    "FIG-5-03_forma_del_fallo": "C",
-    "FIG-5-04_mezcla_pobre": "C",
-    "FIG-5-05_confusiones": "C",
-    "FIG-5-06_confusor_volumen": "C",
-    "FIG-5-07_limite_evidencia_termostato": "D",
-    "FIG-5-08_expresion_del_fallo": "B",
-    "FIG-5-09_ventana_y_descriptor": "C",
-    "FIG-5-10_calibracion": "C",
-    "FIG-5-11_mapa_atribucion": "B",
-    "FIG-5-12_recuperacion": "C",
-    "FIG-5-13_aplicables_vs_cobertura": "B",
-    "FIG-5-14_ablaciones": "C",
-    "FIG-5-15_evaluacion_final": "B",
-    "FIG-5-16_decisiones_e19": "B",
-    "FIG-5-17_decisiones_y_umbral": "C",
+    "FIG-5-02_separabilidad_nivel": "C",
+    "FIG-5-03_separabilidad_dispersion": "C",
+    "FIG-5-04_forma_del_fallo": "C",
+    "FIG-5-05_mezcla_pobre": "C",
+    "FIG-5-06_confusiones": "C",
+    "FIG-5-07_confusor_volumen": "C",
+    "FIG-5-08_limite_evidencia_termostato": "D",
+    "FIG-5-09_expresion_del_fallo": "B",
+    "FIG-5-10_ventana_y_descriptor": "C",
+    "FIG-5-11_calibracion": "C",
+    "FIG-5-12_mapa_atribucion": "B",
+    "FIG-5-13_recuperacion": "C",
+    "FIG-5-14_aplicables_vs_cobertura": "B",
+    "FIG-5-15_ablaciones": "C",
+    "FIG-5-16_evaluacion_final": "B",
+    "FIG-5-17_decisiones_e19": "B",
+    "FIG-5-18_decisiones_y_umbral": "C",
     "FIG-6-01_recorrido_experimental": "E",
     "FIG-6-02_objetivos_y_evidencia": "E",
     "FIG-6-03_compromiso_cobertura_abstencion": "C",
@@ -57,7 +58,7 @@ ORIGEN: dict[str, str] = {
 
 #: Las dos que no se pueden regenerar, con el motivo que lo impide.
 NO_REGENERABLES = {
-    "FIG-5-07_limite_evidencia_termostato": "necesita la predicción por ventana, que E6 no guarda",
+    "FIG-5-08_limite_evidencia_termostato": "necesita la predicción por ventana, que E6 no guarda",
     "FIG-A-01_series_normal_vs_fallo": "su generador cambió el 1-09-2026",
 }
 
@@ -141,7 +142,7 @@ def test_las_cifras_de_las_figuras_coinciden_con_sus_registros() -> None:
     tablas = paths.ROOT / "artifacts" / "tables"
     registros = paths.ROOT / "experiments"
 
-    # Figura 5.5 y Tabla 5.1: los errores de cada modelo.
+    # Figura 5.6 y Tabla 5.1: los errores de cada modelo.
     bosque = pd.read_csv(tablas / "E6_baseline_confusion_synthetic_v2.csv", index_col=0)
     red = pd.read_csv(tablas / "E7_temporal_confusion_synthetic_v2.csv", index_col=0)
     traza_bosque = sum(bosque.iloc[i, i] for i in range(len(bosque)))
@@ -149,14 +150,14 @@ def test_las_cifras_de_las_figuras_coinciden_con_sus_registros() -> None:
     assert int(bosque.to_numpy().sum() - traza_bosque) == 12
     assert int(red.to_numpy().sum() - traza_red) == 17
 
-    # Figura 5.10: la calibración, y su signo.
+    # Figura 5.11: la calibración, y su signo.
     calibracion = json.loads((registros / "E15_suficiencia.json").read_text("utf-8"))["calibration"]
     assert round(calibracion["uncalibrated"]["bias"], 4) == -0.1395, (
         "el sesgo sin calibrar es NEGATIVO: el modelo promete menos de lo que cumple"
     )
     assert round(calibracion["uncalibrated"]["ece"], 3) == 0.144
 
-    # Figura 5.14: las cuatro ablaciones.
+    # Figura 5.15: las cuatro ablaciones.
     esperado = {"A1": (0, 9, 2, 5), "A2": (0, 9, 5, 5), "A3": (6, 9, 0, 5), "A4": (9, 9, 2, 5)}
     for ablacion, (fc_n, fc_d, ai_n, ai_d) in esperado.items():
         resumen = json.loads((registros / f"E18_ablacion_{ablacion}.json").read_text("utf-8"))[
@@ -167,7 +168,7 @@ def test_las_cifras_de_las_figuras_coinciden_con_sus_registros() -> None:
         assert resumen["unnecessary_abstention"]["numerator"] == ai_n
         assert resumen["unnecessary_abstention"]["denominator"] == ai_d
 
-    # Figura 5.12: la recuperación, de cero a cinco de cinco.
+    # Figura 5.13: la recuperación, de cero a cinco de cinco.
     e12 = pd.read_csv(tablas / "E12_retrieval_por_estrategia.csv").set_index("strategy")
     assert float(e12.loc["semantic", "hit_rate"]) == 0.0
     assert float(e12.loc["diagnosis-guided", "hit_rate"]) == 1.0

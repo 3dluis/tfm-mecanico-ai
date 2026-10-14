@@ -92,7 +92,7 @@ en el capítulo 5.
 
 Parámetros con que se generaron: severidad 0,6 en la fuga; deriva del 18 % con rampa de 300 s en el
 caudalímetro; techo de 71 °C en el termostato; suavizado de 0,82 en la sonda; y tasa del 2 % con
-caída de 260 rpm en el fallo de encendido. El techo de 71 °C es el parámetro que la Figura 5.7 del
+caída de 260 rpm en el fallo de encendido. El techo de 71 °C es el parámetro que la Figura 5.8 del
 capítulo 5 usa como línea de referencia, y es declarado, no ajustado a los datos.
 
 ## A.4 · La calibración contra el manual de taller
@@ -247,7 +247,7 @@ la única condición en que la red recurrente gana. La Figura B.1 da el detalle 
 
 *Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación. Protocolo: una ejecución por modelo, semilla 20260901; n es el número de ventanas de la clase en validación.*
 
-La Figura 5.5 del capítulo 5 muestra **adónde** van los errores de cada modelo; esta muestra
+La Figura 5.6 del capítulo 5 muestra **adónde** van los errores de cada modelo; esta muestra
 **cuánto** pesa cada condición en la diferencia agregada, que es lo que aquella no puede decir. La
 red gana en una sola condición, el termostato, por 0,032, y pierde en las otras cinco, con el máximo
 en el fallo de encendido, 0,167. La lectura es que la desventaja agregada de 0,056 en F1 macro no se
@@ -282,7 +282,7 @@ ventanas equivale a una ventana y media.
 
 La fila de la deriva del caudalímetro es la que más dice: entre sus señales principales **no aparece
 el caudal de aire**, que es la señal averiada. El modelo detecta la deriva por cómo la centralita la
-compensa. La Figura 5.11 del capítulo 5 lo muestra para las seis condiciones, y es la razón de que
+compensa. La Figura 5.12 del capítulo 5 lo muestra para las seis condiciones, y es la razón de que
 las plantillas de afirmación del verificador no admitan «el caudalímetro deriva porque el caudal es
 bajo».
 
@@ -329,7 +329,7 @@ y la medición**: umbrales, casos elegibles, reglas de selección, política y c
 
 ## B.6 · Qué separa las dos averías de mezcla pobre
 
-El capítulo 5 muestra en la Figura 5.4 que los descriptores que **avisan** de una mezcla pobre no son
+El capítulo 5 muestra en la Figura 5.5 que los descriptores que **avisan** de una mezcla pobre no son
 los que **distinguen** cuál de sus dos causas la produjo. La tabla siguiente da las cifras completas
 de los diez descriptores que esa figura resume, para que la afirmación se pueda comprobar sin
 recurrir a la lectura de un gráfico.
@@ -468,21 +468,21 @@ copiadas de artefactos históricos— también en SVG. Las tablas con extensión
 |---|---|---|---|---|
 | Figura 5.1 | E5 | ventanado y reparto | `FIG-5-01_particiones` | `figuras_memoria.py` ← `synthetic_v2_meta.parquet` y `E5_reparto.csv` |
 | Figura 5.2 | E4 | separabilidad por señal | `FIG-5-02_separabilidad` | `figuras_memoria.py` ← `E4_separabilidad.csv` |
-| Figura 5.3 | contrafactual T2 | forma temporal de cada fallo | `FIG-5-03_forma_del_fallo` | `figuras_memoria.py` ← `artifacts/contrafactual/T2_contrafactual_synthetic_v2.parquet`, que produce `scripts/contrafactual_t2.py` |
-| Figura 5.4 | E4 y E5 | qué separa las dos averías de mezcla pobre | `FIG-5-04_mezcla_pobre` | `figuras_memoria.py` ← `synthetic_v2_features.npy` y su `meta.parquet`, partición de entrenamiento |
-| Figura 5.5 | E6 y E7 | matrices de confusión | `FIG-5-05_confusiones` | `figuras_memoria.py` ← `E6_baseline_confusion_synthetic_v2.csv` y `E7_temporal_confusion_synthetic_v2.csv` |
-| Figura 5.6 | E6 y E7 | comparación entre conjuntos | `FIG-5-06_confusor_volumen` | `figuras_memoria.py` ← `E6_baseline_synthetic_v{2,3}.json` y `E7_temporal_synthetic_v{2,3}.json` |
-| Figura 5.7 | E6 | límite de evidencia del termostato | `FIG-5-07_limite_evidencia_termostato` | copiada de `FIG-E6-02_limite_evidencia_f03.png`; **no se puede redibujar** |
-| Figura 5.8 | E6, fase G | expresión efectiva del fallo | `FIG-5-08_expresion_del_fallo` | notebook `06_expresion_del_fallo.ipynb` |
-| Figura 5.9 | E5 y E6 | de la señal al descriptor | `FIG-5-09_ventana_y_descriptor` | `figuras_memoria.py` ← `T2_contrafactual_synthetic_v2.parquet` y `synthetic_v2_features.npy` |
-| Figura 5.10 | E6, calibrado en E15 | calibración antes y después | `FIG-5-10_calibracion` | `figuras_memoria.py` ← `E15_suficiencia.json` |
-| Figura 5.11 | E9 | mapa de atribución | `FIG-5-11_mapa_atribucion` | notebook `04_explicabilidad.ipynb` ← `E9_atribuciones_synthetic_v2.csv` |
-| Figura 5.12 | E12 | recuperación por estrategia | `FIG-5-12_recuperacion` | `figuras_memoria.py` ← `E12_retrieval_por_estrategia.csv` |
-| Figura 5.13 | E15 | aplicables frente a cobertura | `FIG-5-13_aplicables_vs_cobertura` | notebook `05_suficiencia_y_abstencion.ipynb` ← `E15_suficiencia.csv` |
-| Figura 5.14 | E18 | efecto de cada ablación | `FIG-5-14_ablaciones` | `figuras_memoria.py` ← `E18_ablacion_A1.json` a `A4.json` |
-| Figura 5.15 | E19 | las tres cifras finales | `FIG-5-15_evaluacion_final` | notebook `03_analisis_e19.ipynb` ← `E19_evaluacion_final_v3.csv` |
-| Figura 5.16 | E19 | decisión por ejecución | `FIG-5-16_decisiones_e19` | notebook `03_analisis_e19.ipynb` |
-| Figura 5.17 | E19 | las 35 ejecuciones frente al umbral | `FIG-5-17_decisiones_y_umbral` | `figuras_memoria.py` ← `E19_evaluacion_final_v3.csv` |
+| Figura 5.4 | contrafactual T2 | forma temporal de cada fallo | `FIG-5-04_forma_del_fallo` | `figuras_memoria.py` ← `artifacts/contrafactual/T2_contrafactual_synthetic_v2.parquet`, que produce `scripts/contrafactual_t2.py` |
+| Figura 5.5 | E4 y E5 | qué separa las dos averías de mezcla pobre | `FIG-5-05_mezcla_pobre` | `figuras_memoria.py` ← `synthetic_v2_features.npy` y su `meta.parquet`, partición de entrenamiento |
+| Figura 5.6 | E6 y E7 | matrices de confusión | `FIG-5-06_confusiones` | `figuras_memoria.py` ← `E6_baseline_confusion_synthetic_v2.csv` y `E7_temporal_confusion_synthetic_v2.csv` |
+| Figura 5.7 | E6 y E7 | comparación entre conjuntos | `FIG-5-07_confusor_volumen` | `figuras_memoria.py` ← `E6_baseline_synthetic_v{2,3}.json` y `E7_temporal_synthetic_v{2,3}.json` |
+| Figura 5.8 | E6 | límite de evidencia del termostato | `FIG-5-08_limite_evidencia_termostato` | copiada de `FIG-E6-02_limite_evidencia_f03.png`; **no se puede redibujar** |
+| Figura 5.9 | E6, fase G | expresión efectiva del fallo | `FIG-5-09_expresion_del_fallo` | notebook `06_expresion_del_fallo.ipynb` |
+| Figura 5.10 | E5 y E6 | de la señal al descriptor | `FIG-5-10_ventana_y_descriptor` | `figuras_memoria.py` ← `T2_contrafactual_synthetic_v2.parquet` y `synthetic_v2_features.npy` |
+| Figura 5.11 | E6, calibrado en E15 | calibración antes y después | `FIG-5-11_calibracion` | `figuras_memoria.py` ← `E15_suficiencia.json` |
+| Figura 5.12 | E9 | mapa de atribución | `FIG-5-12_mapa_atribucion` | notebook `04_explicabilidad.ipynb` ← `E9_atribuciones_synthetic_v2.csv` |
+| Figura 5.13 | E12 | recuperación por estrategia | `FIG-5-13_recuperacion` | `figuras_memoria.py` ← `E12_retrieval_por_estrategia.csv` |
+| Figura 5.14 | E15 | aplicables frente a cobertura | `FIG-5-14_aplicables_vs_cobertura` | notebook `05_suficiencia_y_abstencion.ipynb` ← `E15_suficiencia.csv` |
+| Figura 5.15 | E18 | efecto de cada ablación | `FIG-5-15_ablaciones` | `figuras_memoria.py` ← `E18_ablacion_A1.json` a `A4.json` |
+| Figura 5.16 | E19 | las tres cifras finales | `FIG-5-16_evaluacion_final` | notebook `03_analisis_e19.ipynb` ← `E19_evaluacion_final_v3.csv` |
+| Figura 5.17 | E19 | decisión por ejecución | `FIG-5-17_decisiones_e19` | notebook `03_analisis_e19.ipynb` |
+| Figura 5.18 | E19 | las 35 ejecuciones frente al umbral | `FIG-5-18_decisiones_y_umbral` | `figuras_memoria.py` ← `E19_evaluacion_final_v3.csv` |
 | Figura 6.1 | E1–E19 | recorrido experimental | `FIG-6-01_recorrido_experimental` | notebook `00_introduccion.ipynb` |
 | Figura 6.2 | E1–E19 | objetivos y evidencia | `FIG-6-02_objetivos_y_evidencia` | `figuras_memoria.py` |
 | Figura 6.3 | E15 | compromiso entre los dos errores | `FIG-6-03_compromiso_cobertura_abstencion` | `figuras_memoria.py` ← `E15_suficiencia.csv` |

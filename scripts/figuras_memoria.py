@@ -54,7 +54,8 @@ from mecanico_ia_exp.visualization.memoria import (
     fig_pareja_contrafactual,
     fig_particiones,
     fig_recuperacion,
-    fig_separabilidad,
+    fig_separabilidad_dispersion,
+    fig_separabilidad_nivel,
     fig_ventana_y_descriptor,
     guardar,
 )
@@ -139,8 +140,8 @@ FIGURAS: tuple[Figura, ...] = (
     ),
     Figura(
         "5.2",
-        "FIG-5-02_separabilidad",
-        fig_separabilidad,
+        "FIG-5-02_separabilidad_nivel",
+        fig_separabilidad_nivel,
         experimento="E4, análisis exploratorio",
         conjunto="synthetic_v1",
         particion="bloques de 60 s",
@@ -150,7 +151,18 @@ FIGURAS: tuple[Figura, ...] = (
     ),
     Figura(
         "5.3",
-        "FIG-5-03_forma_del_fallo",
+        "FIG-5-03_separabilidad_dispersion",
+        fig_separabilidad_dispersion,
+        experimento="E4, análisis exploratorio",
+        conjunto="synthetic_v1",
+        particion="bloques de 60 s",
+        notebook="01_exploracion_obd",
+        ubicacion="cap. 5 · Análisis descriptivo de la muestra",
+        limitaciones="ordena pero no explica; `synthetic_v1` no se reconstruye (L-25)",
+    ),
+    Figura(
+        "5.4",
+        "FIG-5-04_forma_del_fallo",
         fig_forma_del_fallo,
         experimento="análisis contrafactual T2, derivado de E2 y E5",
         conjunto="synthetic_v2",
@@ -160,8 +172,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="una sesión por condición; describe el instrumento, no un motor real",
     ),
     Figura(
-        "5.4",
-        "FIG-5-04_mezcla_pobre",
+        "5.5",
+        "FIG-5-05_mezcla_pobre",
         fig_mezcla_pobre,
         experimento="E4 y E5",
         conjunto="synthetic_v2",
@@ -182,8 +194,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="una sesión por condición; una desviación observable no implica detectabilidad",
     ),
     Figura(
-        "5.5",
-        "FIG-5-05_confusiones",
+        "5.6",
+        "FIG-5-06_confusiones",
         fig_confusiones,
         experimento="E6 y E7",
         conjunto="synthetic_v2",
@@ -204,8 +216,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="una ejecución por modelo, sin repeticiones",
     ),
     Figura(
-        "5.10",
-        "FIG-5-10_calibracion",
+        "5.11",
+        "FIG-5-11_calibracion",
         fig_calibracion,
         experimento="E6, calibrado en E15",
         conjunto="synthetic_v2",
@@ -215,8 +227,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="dos puntos, no una curva de fiabilidad: E6 no guarda la confianza por ventana",
     ),
     Figura(
-        "5.7",
-        "FIG-5-07_limite_evidencia_termostato",
+        "5.8",
+        "FIG-5-08_limite_evidencia_termostato",
         copia_de=HISTORICAS / "FIG-E6-02_limite_evidencia_f03.png",
         motivo_de_la_copia=(
             "necesita la predicción por ventana, que el registro de E6 no guarda y que solo "
@@ -231,8 +243,8 @@ FIGURAS: tuple[Figura, ...] = (
         estatuto="HISTORICA",
     ),
     Figura(
-        "5.8",
-        "FIG-5-08_expresion_del_fallo",
+        "5.9",
+        "FIG-5-09_expresion_del_fallo",
         copia_de=SALIDA_NOTEBOOKS / "06_expresion" / "FIG-N06-01_expresion_y_aciertos.png",
         motivo_de_la_copia="la produce el notebook 06; duplicar su código daría dos fuentes de verdad",
         extras=("svg",),
@@ -244,8 +256,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="no está comprobado que las cinco ventanas sin señal sean las cinco falladas",
     ),
     Figura(
-        "5.6",
-        "FIG-5-06_confusor_volumen",
+        "5.7",
+        "FIG-5-07_confusor_volumen",
         fig_confusor_de_volumen,
         experimento="E6 y E7 sobre los dos conjuntos",
         conjunto="synthetic_v2 y synthetic_v3",
@@ -255,8 +267,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="cambian dos cosas a la vez: volumen y generador; `synthetic_v3` no se reconstruye",
     ),
     Figura(
-        "5.9",
-        "FIG-5-09_ventana_y_descriptor",
+        "5.10",
+        "FIG-5-10_ventana_y_descriptor",
         fig_ventana_y_descriptor,
         experimento="E5 y E6",
         conjunto="synthetic_v2",
@@ -266,8 +278,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="una ventana como ilustración; en ralentí la caída queda truncada por el suelo físico",
     ),
     Figura(
-        "5.11",
-        "FIG-5-11_mapa_atribucion",
+        "5.12",
+        "FIG-5-12_mapa_atribucion",
         copia_de=SALIDA_NOTEBOOKS / "04_explicabilidad" / "FIG-NB04-01_mapa_atribucion.png",
         motivo_de_la_copia="la produce el notebook 04, que calcula el mapa de señales declaradas",
         extras=("svg",),
@@ -279,8 +291,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="atribución no es causalidad; solo las diez principales por caso",
     ),
     Figura(
-        "5.12",
-        "FIG-5-12_recuperacion",
+        "5.13",
+        "FIG-5-13_recuperacion",
         fig_recuperacion,
         experimento="E12, reejecución canónica",
         conjunto="corpus del vehículo",
@@ -290,8 +302,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="n = 5 casos puntuados: recuentos, no tasas",
     ),
     Figura(
-        "5.13",
-        "FIG-5-13_aplicables_vs_cobertura",
+        "5.14",
+        "FIG-5-14_aplicables_vs_cobertura",
         copia_de=SALIDA_NOTEBOOKS / "05_suficiencia" / "FIG-N05-01_aplicables_vs_cobertura.png",
         motivo_de_la_copia="la produce el notebook 05, corregido el 13-10-2026 para dibujar las cinco condiciones",
         extras=("svg",),
@@ -303,8 +315,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="17 casos de 5 ventanas: no son observaciones independientes",
     ),
     Figura(
-        "5.14",
-        "FIG-5-14_ablaciones",
+        "5.15",
+        "FIG-5-15_ablaciones",
         fig_ablaciones,
         experimento="E18, cuatro ablaciones",
         conjunto="synthetic_v2",
@@ -314,8 +326,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="A2 quedó INCONCLUSA; denominadores de 9 y de 5 ejecuciones",
     ),
     Figura(
-        "5.15",
-        "FIG-5-15_evaluacion_final",
+        "5.16",
+        "FIG-5-16_evaluacion_final",
         copia_de=SALIDA_NOTEBOOKS / "03_analisis_e19" / "FIG-NB03-01_primario.png",
         motivo_de_la_copia="la produce el notebook 03",
         extras=("svg",),
@@ -327,8 +339,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="recuentos con intervalo de Wilson; cero observado no es riesgo cero",
     ),
     Figura(
-        "5.16",
-        "FIG-5-16_decisiones_e19",
+        "5.17",
+        "FIG-5-17_decisiones_e19",
         copia_de=SALIDA_NOTEBOOKS / "03_analisis_e19" / "FIG-NB03-02_decisiones.png",
         motivo_de_la_copia="la produce el notebook 03",
         extras=("svg",),
@@ -340,8 +352,8 @@ FIGURAS: tuple[Figura, ...] = (
         limitaciones="22 ejecuciones del estrato operativo, que repiten casos",
     ),
     Figura(
-        "5.17",
-        "FIG-5-17_decisiones_y_umbral",
+        "5.18",
+        "FIG-5-18_decisiones_y_umbral",
         fig_decisiones_y_umbral,
         experimento="E19, tercer intento",
         conjunto="synthetic_v2",
@@ -418,7 +430,7 @@ PDF_ENTREGABLE = paths.ROOT / "entregables" / "memoria.pdf"
 def paginas_del_pdf(ruta: Path | None = None) -> dict[str, int]:
     """En qué página del PDF entregado aparece el pie de cada figura.
 
-    Se busca el pie —«Figura 5.3.»— y no la imagen, porque el pie es texto y la
+    Se busca el pie —«Figura 5.4.»— y no la imagen, porque el pie es texto y la
     imagen no: una búsqueda sobre el texto extraído es verificable por quien
     quiera repetirla. Si el PDF no está, se devuelve vacío y la matriz sale sin
     esa columna en lugar de fallar: el registro tiene que poder emitirse en un
