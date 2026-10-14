@@ -479,6 +479,8 @@ resultado → figura → sección está en `docs/notebook-traceability.md`."""),
     md("""\
 ## 12. Referencias y trazabilidad
 
+**Dónde aparece esto en la memoria.** El esquema de este notebook es la **Figura 6.1** del capítulo 6, y las ocho etapas que recorre se describen en el capítulo 4 y en el apartado A.1 del anexo A.
+
 **Documentación del trabajo**
 - `docs/experiment-index.md` — índice de los diecinueve experimentos con su estado
 - `docs/matriz_validacion_pi.md` — respuesta a cada subpregunta con su criterio

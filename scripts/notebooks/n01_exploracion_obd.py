@@ -715,6 +715,8 @@ tablas versionadas. Las figuras de E4 se muestran tal cual, sin recalcularlas.
 
 ## 18. Referencias y trazabilidad
 
+**Dónde aparece esto en la memoria.** El reparto de la muestra es la **Figura 5.1** y la separabilidad por señal, la **Figura 5.2**, las dos en el análisis descriptivo del capítulo 5. Las doce señales y las cinco condiciones están tabuladas en el anexo A, apartados A.2 y A.3, y la serie testigo de cada fallo es la **Figura A.1**.
+
 - `docs/experiments/E2_datos_sinteticos.md`, `E4_eda_temporal.md`, `E5_preprocesamiento.md`
 - `artifacts/tables/E4_descriptivos.csv`, `E4_separabilidad.csv`, `E5_estudio_ventana.csv`, `E5_reparto.csv`
 - `artifacts/figures/FIG-E4-01_series_normal_vs_fallo.png`, `FIG-E4-02_separabilidad.png`
