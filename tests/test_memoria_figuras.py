@@ -33,7 +33,13 @@ FUENTE = re.compile(r"^\*Fuente: (.+?)\*$", re.MULTILINE | re.DOTALL)
 
 #: Lo que el pie tiene que declarar. «Conjunto» admite la forma negativa para
 #: las figuras que no salen de ningún conjunto de datos, como el recorrido.
-CAMPOS_DEL_PIE = ("Experimento", "Protocolo", "Artefacto")
+#: Lo que el pie de una figura tiene que decir. «Artefacto» salió de la lista el
+#: 14 de octubre de 2026: remitía al fichero y al guion que producen la figura, y
+#: eso es procedencia **operativa**. La memoria se lee como una investigación, y
+#: la correspondencia con el repositorio vive en la documentación de
+#: reproducibilidad. Lo que queda es procedencia científica: de qué experimento
+#: sale, sobre qué conjunto y con qué protocolo.
+CAMPOS_DEL_PIE = ("Experimento", "Protocolo")
 
 
 def _texto(nombre: str) -> str:

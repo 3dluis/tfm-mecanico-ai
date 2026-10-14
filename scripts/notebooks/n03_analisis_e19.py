@@ -161,6 +161,16 @@ resultados puede producir cualquier tasa.
 y se trata en el apartado 11. Lo que estaba fijado es la **regla** que lo produce; el reparto que esa
 regla produjo depende de cuántos casos el modelo diagnostica bien, que es un hecho medido."""),
     md("""\
+## 5 bis. Qué datos entran en las figuras de este notebook
+
+**Datos y metodología.** Todas las figuras y cifras que siguen salen de un único registro: la
+evaluación final de E19 en su **tercer intento**, el que llegó al final; los dos anteriores se
+interrumpieron y están declarados. El sufijo del fichero es el número de intento y **no** una
+versión del conjunto de datos. Son 35 ejecuciones sobre la partición de **prueba** de
+`synthetic_v2`, repartidas en tres estratos y procedentes de ocho ventanas: repiten casos entre sí,
+de modo que no son 35 observaciones independientes. No se reejecuta nada y no se vuelve a abrir el
+conjunto: se leen las decisiones registradas.
+
 ## 6. Resultado primario
 
 **Qué queremos investigar.** Las dos tasas sobre el estrato operativo, con sus denominadores.
@@ -393,7 +403,11 @@ del tipo «confiado de menos».
 sola ejecución distinta cambiaría la fila entera. Y las dos sesiones de una fila no son
 independientes en sentido estadístico: salen del mismo generador y la misma parametrización."""),
     md("""\
-## 8. Las dos abstenciones innecesarias, en detalle
+**Qué datos utilizamos.** Las 22 ejecuciones del estrato operativo del mismo registro de E19, con
+su caso anotado, su condición de evidencia y la decisión que el sistema tomó. Los dos puntos de una
+misma fila son **sesiones distintas** del mismo caso, no repeticiones de la misma medición."""),
+    md("""\
+## 8. Las dos abstenciones innecesarias, en detalle## 8. Las dos abstenciones innecesarias, en detalle
 
 El cero de falsa confianza es el titular, pero lo que enseña está en los dos fallos."""),
     code("""\

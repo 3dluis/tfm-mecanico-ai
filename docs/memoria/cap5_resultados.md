@@ -20,7 +20,7 @@ por partición, con los recuentos que produjo la fase de ventanado y reparto.
 
 ![Ventanas por clase y partición: la clase sin fallo reúne 112 ventanas de entrenamiento, 28 de validación y 28 de prueba, y cada condición de fallo, 56, 14 y 14.](../../artifacts/figures/memoria/FIG-5-01_particiones.png)
 
-*Fuente: elaboración propia. Experimento: E5, ventanado y reparto. Conjunto: `synthetic_v2`, 72 sesiones de 600 s a 1 Hz. Protocolo: ventana de 120 s con paso de 60 s; el reparto es por sesión, nunca por ventana. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E5, ventanado y reparto. Conjunto: `synthetic_v2`, 72 sesiones de 600 s a 1 Hz. Protocolo: ventana de 120 s con paso de 60 s; el reparto es por sesión, nunca por ventana.*
 
 La figura muestra un reparto equilibrado entre las cinco condiciones de fallo y una clase sin fallo
 que dobla a cada una de ellas. El desequilibrio no es un artefacto del muestreo: las sesiones
@@ -46,7 +46,7 @@ recoge esa medida para las doce señales y las cinco condiciones.
 
 ![Mapa de calor de la delta de Cliff por señal y condición: la fuga de vacío y la deriva separan por el nivel de los ajustes de combustible, el termostato por el nivel de la temperatura del refrigerante, la sonda lenta solo por la dispersión de la propia sonda, y el fallo de encendido alcanza un único efecto grande.](../../artifacts/figures/memoria/FIG-5-02_separabilidad.png)
 
-*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, bloques de 60 s; es **pre-calibración** y no se reconstruye con el generador publicado. Protocolo: delta de Cliff frente a la condición sin fallo, calculada por separado sobre la media del bloque y sobre su desviación; se etiquetan las celdas con efecto grande, |delta| ≥ 0,474. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, bloques de 60 s; es **pre-calibración** y no se reconstruye con el generador publicado. Protocolo: delta de Cliff frente a la condición sin fallo, calculada por separado sobre la media del bloque y sobre su desviación; se etiquetan las celdas con efecto grande, |delta| ≥ 0,474.*
 
 Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos. Tres se separan por
 el nivel y con efecto máximo o casi: la fuga de vacío y la deriva del caudalímetro en el ajuste de
@@ -76,7 +76,7 @@ sean. La Figura 5.3 la presenta para las cinco condiciones.
 
 ![Dos paneles. Arriba, la desviación frente al contrafactual de las cinco condiciones a lo largo de 600 segundos: la deriva del caudalímetro sube en rampa durante cinco minutos hasta estabilizarse, la fuga de vacío sube más deprisa hasta una meseta más baja, el termostato salta a un valor constante en el instante de entrada, la sonda lenta oscila entre diez y cien, y el fallo de encendido permanece en cero exacto salvo siete picos breves. Abajo, el régimen de la sesión con fallo de encendido superpuesto al de la misma sesión sin él: las dos curvas coinciden salvo en dieciséis muestras.](../../artifacts/figures/memoria/FIG-5-03_forma_del_fallo.png)
 
-*Fuente: elaboración propia. Experimento: análisis contrafactual T2, derivado de E2 y E5. Conjunto: `synthetic_v2`, cinco sesiones de la partición de **entrenamiento**, una por condición, seleccionadas por regla declarada; el conjunto de prueba no interviene. Variables: la desviación máxima por muestra frente al contrafactual, en unidades del umbral de observabilidad —una décima del ruido propio del generador—, y el régimen en min⁻¹. Protocolo: el contrafactual no se simula aparte; el motor de señales avanza al margen del fallo, de modo que la trayectoria sana es el valor que el generador calcula en cada instante. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: análisis contrafactual T2, derivado de E2 y E5. Conjunto: `synthetic_v2`, cinco sesiones de la partición de **entrenamiento**, una por condición, seleccionadas por regla declarada; el conjunto de prueba no interviene. Variables: la desviación máxima por muestra frente al contrafactual, en unidades del umbral de observabilidad —una décima del ruido propio del generador—, y el régimen en min⁻¹. Protocolo: el contrafactual no se simula aparte; el motor de señales avanza al margen del fallo, de modo que la trayectoria sana es el valor que el generador calcula en cada instante.*
 
 La figura reparte las cinco condiciones en tres formas distintas. La deriva del caudalímetro y la
 fuga de vacío **se instalan progresivamente**: la primera en una rampa de cinco minutos, que es la
@@ -118,7 +118,7 @@ subestima. La Figura 5.4 presenta las dos medidas juntas.
 
 ![Dos paneles. Arriba, cada ventana situada por su ajuste de combustible a corto y a largo plazo: las ventanas sin fallo se agrupan en el origen y las de las dos averías se extienden sobre la misma recta, solapándose. Abajo, nueve descriptores con dos barras cada uno: los cuatro de nivel de los ajustes separan de la condición sin fallo con delta de Cliff de 0,99 a 1,00 pero distinguen las dos averías entre sí solo entre 0,40 y 0,52, mientras que el mínimo de presión de colector y tres descriptores de variación hacen lo contrario, y el cociente informado por la física no hace ninguna de las dos cosas.](../../artifacts/figures/memoria/FIG-5-04_mezcla_pobre.png)
 
-*Fuente: elaboración propia. Experimentos: E4 y E5. Conjunto: `synthetic_v2`, **solo la partición de entrenamiento**: 56 ventanas por condición de fallo y 112 sin fallo; una figura descriptiva no justifica abrir el conjunto reservado. Variables: los 139 descriptores por ventana de la fase de preprocesado. Protocolo: delta de Cliff en valor absoluto, calculada dos veces —de cada avería frente a la condición sin fallo, conservando la menor de las dos, y de una avería frente a la otra—; la selección mostrada son los cuatro mejores de cada orden más el cociente declarado. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimentos: E4 y E5. Conjunto: `synthetic_v2`, **solo la partición de entrenamiento**: 56 ventanas por condición de fallo y 112 sin fallo; una figura descriptiva no justifica abrir el conjunto reservado. Variables: los 139 descriptores por ventana de la fase de preprocesado. Protocolo: delta de Cliff en valor absoluto, calculada dos veces —de cada avería frente a la condición sin fallo, conservando la menor de las dos, y de una avería frente a la otra—; la selección mostrada son los cuatro mejores de cada orden más el cociente declarado.*
 
 El resultado separa dos papeles que es fácil confundir. Los descriptores que **avisan** son los
 niveles de las dos correcciones de combustible, con delta de Cliff entre 0,99 y 1,00 frente a la
@@ -178,7 +178,7 @@ construida sobre una avería que no existe. La Figura 5.5 pone las dos matrices 
 
 ![Matrices de confusión de los dos modelos: los doce errores del bosque van todos a la condición sin fallo, mientras la red produce además cuatro diagnósticos cruzados entre condiciones.](../../artifacts/figures/memoria/FIG-5-05_confusiones.png)
 
-*Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación, 98 ventanas de 12 sesiones. Protocolo: una ejecución por modelo, semilla 20260901, reparto por sesión. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación, 98 ventanas de 12 sesiones. Protocolo: una ejecución por modelo, semilla 20260901, reparto por sesión.*
 
 Los doce errores del bosque —cinco del termostato y siete del fallo de encendido— caen todos en la
 columna de la condición sin fallo, y ninguna celda fuera de la diagonal y de esa columna está
@@ -203,7 +203,7 @@ mueven a la vez nombradas en el propio eje.
 
 ![Cuatro barras: con el conjunto de 72 sesiones y generador calibrado el bosque supera a la red; con el de 216 sesiones y generador sin calibrar el orden se invierte.](../../artifacts/figures/memoria/FIG-5-06_confusor_volumen.png)
 
-*Fuente: elaboración propia. Experimentos: E6 y E7 sobre los dos conjuntos. Conjuntos: `synthetic_v2`, 72 sesiones con el generador calibrado contra el manual, y `synthetic_v3`, 216 sesiones con el generador anterior a esa calibración. Protocolo: una ejecución por celda, semilla 20260901. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimentos: E6 y E7 sobre los dos conjuntos. Conjuntos: `synthetic_v2`, 72 sesiones con el generador calibrado contra el manual, y `synthetic_v3`, 216 sesiones con el generador anterior a esa calibración. Protocolo: una ejecución por celda, semilla 20260901.*
 
 El orden se invierte entre las dos columnas, y la figura no permite decir por qué. Lo que la
 inversión sí permite afirmar es algo más modesto y más útil: que la conclusión publicada en su día
@@ -230,7 +230,7 @@ la ventana.
 
 ![Catorce puntos: las cinco ventanas no detectadas están todas por debajo del techo de 71 °C que el fallo impone, y las nueve detectadas se agrupan junto a él.](../../artifacts/figures/memoria/FIG-5-07_limite_evidencia_termostato.png)
 
-*Fuente: elaboración propia. Experimento: E6. Conjunto: `synthetic_v2`, las 14 ventanas de validación de la condición de termostato bloqueado. Protocolo: cada punto es una ventana; la línea marca el techo de temperatura que el fallo impone, 71 °C, que es un parámetro declarado del generador y no una línea ajustada a los datos. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E6. Conjunto: `synthetic_v2`, las 14 ventanas de validación de la condición de termostato bloqueado. Protocolo: cada punto es una ventana; la línea marca el techo de temperatura que el fallo impone, 71 °C, que es un parámetro declarado del generador y no una línea ajustada a los datos.*
 
 Las cinco ventanas no detectadas están todas por debajo del techo, entre 43 y 65 °C, y las nueve
 detectadas se agrupan contra él. La interpretación es que ese error no es una limitación del modelo
@@ -255,7 +255,7 @@ señal. La Figura 5.8 presenta esa fracción ventana a ventana.
 
 ![A la izquierda, la fracción de cada ventana con señal observable: completa en la fuga, la deriva y la sonda; nula en cinco ventanas del termostato y casi nula en todas las del fallo de encendido. A la derecha, el recuento de ventanas sin señal junto al de ventanas falladas.](../../artifacts/figures/memoria/FIG-5-08_expresion_del_fallo.png)
 
-*Fuente: elaboración propia. Experimento: E6, medición añadida el 12 de octubre de 2026. Conjunto: `synthetic_v2`, partición de validación, las 70 ventanas etiquetadas con alguna condición de fallo. Protocolo: para cada ventana se compara la trayectoria con fallo con la trayectoria sin fallo de la misma semilla, y una muestra cuenta como alterada si la diferencia supera el 10 % de la desviación típica de esa señal. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E6, medición añadida el 12 de octubre de 2026. Conjunto: `synthetic_v2`, partición de validación, las 70 ventanas etiquetadas con alguna condición de fallo. Protocolo: para cada ventana se compara la trayectoria con fallo con la trayectoria sin fallo de la misma semilla, y una muestra cuenta como alterada si la diferencia supera el 10 % de la desviación típica de esa señal.*
 
 La fuga de vacío, la deriva del caudalímetro y la sonda lenta expresan el fallo en la totalidad de
 sus ventanas. El termostato deja **cinco ventanas sin ninguna señal observable**, y el fallo de
@@ -283,7 +283,7 @@ régimen y no el fallo. La Figura 5.9 recorre los tres pasos.
 
 ![Tres paneles. Arriba, la sesión completa de régimen con la ventana de 120 segundos sombreada. En medio, esa ventana con su media y su banda de desviación típica, y las tres muestras que el fallo altera marcadas. Abajo, cinco descriptores de régimen de la ventana comparados con la mediana de las ventanas sin fallo del mismo régimen: la media se aparta menos de dos escalas robustas, mientras el mínimo se aparta casi diez.](../../artifacts/figures/memoria/FIG-5-09_ventana_y_descriptor.png)
 
-*Fuente: elaboración propia. Experimentos: E5 y E6. Conjunto: `synthetic_v2`, una ventana de la partición de **entrenamiento**; los paneles primero y segundo proceden del análisis contrafactual T2 y el tercero del conjunto procesado que el modelo consume. Variables: el régimen en min⁻¹ y cinco de sus descriptores por ventana —media, desviación típica, mínimo, salto descendente máximo y recuento de eventos—. Protocolo: el apartamiento se mide en escalas robustas, con la desviación absoluta mediana de las 42 ventanas sin fallo del mismo régimen como unidad. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimentos: E5 y E6. Conjunto: `synthetic_v2`, una ventana de la partición de **entrenamiento**; los paneles primero y segundo proceden del análisis contrafactual T2 y el tercero del conjunto procesado que el modelo consume. Variables: el régimen en min⁻¹ y cinco de sus descriptores por ventana —media, desviación típica, mínimo, salto descendente máximo y recuento de eventos—. Protocolo: el apartamiento se mide en escalas robustas, con la desviación absoluta mediana de las 42 ventanas sin fallo del mismo régimen como unidad.*
 
 Los tres paneles muestran la misma ventana a tres distancias. En la señal, el fallo son tres muestras
 de un episodio sobre ciento veinte. En el resumen, esa caída queda dentro de la banda de una
@@ -328,7 +328,7 @@ probabilidad cruda. La Figura 5.10 sitúa las dos configuraciones en el plano qu
 
 ![Plano de confianza declarada contra acierto: el punto sin calibrar queda por encima de la diagonal, con confianza 0,738 y acierto 0,878; el calibrado queda sobre ella, con 0,886 y 0,878.](../../artifacts/figures/memoria/FIG-5-10_calibracion.png)
 
-*Fuente: elaboración propia. Experimento: E6, con la calibración ajustada en E15. Conjunto: `synthetic_v2`, partición de validación, 98 ventanas. Protocolo: regresión isotónica con validación cruzada de cinco pliegues sobre entrenamiento; error de calibración esperado sobre diez tramos. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E6, con la calibración ajustada en E15. Conjunto: `synthetic_v2`, partición de validación, 98 ventanas. Protocolo: regresión isotónica con validación cruzada de cinco pliegues sobre entrenamiento; error de calibración esperado sobre diez tramos.*
 
 El punto sin calibrar queda **por encima** de la diagonal: el modelo acierta el 87,8 % de las
 ventanas declarando una confianza media de 0,738, es decir, promete menos de lo que cumple. Después
@@ -350,7 +350,7 @@ La atribución por valores de Shapley, calculada sobre dieciocho casos de valida
 
 ![Mapa de calor del peso de cada señal por condición, con un punto en las señales que la ficha del fallo declara: en la deriva del caudalímetro la columna del caudal está vacía y el peso recae en los dos ajustes de combustible.](../../artifacts/figures/memoria/FIG-5-11_mapa_atribucion.png)
 
-*Fuente: elaboración propia. Experimento: E9, atribución. Conjunto: `synthetic_v2`, 18 casos de validación. Protocolo: valores de Shapley por permutación, con un fondo de cien ventanas sin fallo de entrenamiento; el punto marca las señales que la ficha del fallo declara. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E9, atribución. Conjunto: `synthetic_v2`, 18 casos de validación. Protocolo: valores de Shapley por permutación, con un fondo de cien ventanas sin fallo de entrenamiento; el punto marca las señales que la ficha del fallo declara.*
 
 La figura hace visible de un vistazo la observación que más condiciona lo que el agente puede
 afirmar: en la deriva del caudalímetro **la columna del caudal de aire está vacía** y todo el peso
@@ -392,7 +392,7 @@ una recuperación: si encuentra el documento, y en qué posición lo deja.
 
 ![A la izquierda, casos en que el procedimiento aparece entre los diez primeros: cero con la recuperación semántica pura y cinco de cinco con la guiada por el diagnóstico. A la derecha, MRR, nDCG y precisión de cada estrategia.](../../artifacts/figures/memoria/FIG-5-12_recuperacion.png)
 
-*Fuente: elaboración propia. Experimento: E12, reejecución canónica del 13 de septiembre de 2026. Conjunto: corpus documental del vehículo de referencia; seis casos anotados, cinco puntuados. Protocolo: consulta en inglés, mapa de códigos de avería congelado para la comparación, diez primeros resultados; el sexto caso, con la evidencia retirada del índice, se evalúa pero no entra en las métricas porque no tiene fichero relevante. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E12, reejecución canónica del 13 de septiembre de 2026. Conjunto: corpus documental del vehículo de referencia; seis casos anotados, cinco puntuados. Protocolo: consulta en inglés, mapa de códigos de avería congelado para la comparación, diez primeros resultados; el sexto caso, con la evidencia retirada del índice, se evalúa pero no entra en las métricas porque no tiene fichero relevante.*
 
 El panel izquierdo muestra que la diferencia no es de grado sino de clase: la similitud semántica
 pura no encuentra el procedimiento en **ninguno** de los cinco casos, y guiada por el código de
@@ -465,7 +465,7 @@ condición de evidencia, que es donde la separación se vuelve visible.
 
 ![Dos paneles: a la izquierda, los documentos aplicables por condición, entre tres y ocho salvo en la de evidencia retirada; a la derecha, la cobertura de afirmaciones, que solo es distinta de cero en la condición de evidencia completa.](../../artifacts/figures/memoria/FIG-5-13_aplicables_vs_cobertura.png)
 
-*Fuente: elaboración propia. Experimento: E15, verificador en su tercera versión. Conjunto: `synthetic_v2`, los 17 casos anotados sobre 5 ventanas de validación. Protocolo: modo oracular; el color distingue la decisión tomada, y las cinco condiciones de evidencia aparecen completas. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E15, verificador en su tercera versión. Conjunto: `synthetic_v2`, los 17 casos anotados sobre 5 ventanas de validación. Protocolo: modo oracular; el color distingue la decisión tomada, y las cinco condiciones de evidencia aparecen completas.*
 
 Los dos paneles no se parecen, y en esa diferencia está el resultado. Con evidencia parcial y con
 distractor el sistema recibe entre cinco y siete fragmentos aplicables —del vehículo correcto y con
@@ -558,7 +558,7 @@ errores, que leídos en columnas de fracciones se confunden con facilidad.
 
 ![Dos paneles de barras: la falsa confianza pasa de 0 de 9 en la configuración canónica a 9 de 9 con una puerta de confianza sola, mientras retirar la atribución no cambia ninguna de las dos cifras.](../../artifacts/figures/memoria/FIG-5-14_ablaciones.png)
 
-*Fuente: elaboración propia. Experimento: E18, ablaciones pre-registradas y ejecutadas el 1 de octubre de 2026. Conjunto: `synthetic_v2`, los mismos 17 casos. Protocolo: cada ablación cambia una pieza y deja el resto idéntico; ninguna redacta. La falsa confianza se cuenta sobre nueve ejecuciones procedentes de tres ventanas y la abstención innecesaria sobre cinco ejecuciones de cinco ventanas. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E18, ablaciones pre-registradas y ejecutadas el 1 de octubre de 2026. Conjunto: `synthetic_v2`, los mismos 17 casos. Protocolo: cada ablación cambia una pieza y deja el resto idéntico; ninguna redacta. La falsa confianza se cuenta sobre nueve ejecuciones procedentes de tres ventanas y la abstención innecesaria sobre cinco ejecuciones de cinco ventanas.*
 
 Las dos barras extremas dicen lo mismo desde lados opuestos. Retirar la atribución y sustituirla por
 una desviación tipificada deja las dos cifras exactamente donde estaban, 0 de 9 y 2 de 5: en esta
@@ -701,7 +701,7 @@ denominadores.
 
 ![Tres paneles: falsa confianza 0 de 14, abstención innecesaria 2 de 8 y cobertura con evidencia completa 6 de 10, cada uno con el número de ventanas y de sesiones que lo sostiene.](../../artifacts/figures/memoria/FIG-5-15_evaluacion_final.png)
 
-*Fuente: elaboración propia. Experimento: E19, evaluación final. Conjunto: `synthetic_v2`, **partición de prueba**. Protocolo: política de suficiencia v2.2, conjunto anotado sellado antes de abrir la partición, estrato operativo. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E19, evaluación final. Conjunto: `synthetic_v2`, **partición de prueba**. Protocolo: política de suficiencia v2.2, conjunto anotado sellado antes de abrir la partición, estrato operativo.*
 
 Las tres cifras son **0 de 14** de falsa confianza, sobre siete ventanas de siete sesiones; **2 de
 8** de abstención innecesaria, sobre ocho ventanas de ocho sesiones; y una cobertura de **6 de 10**
@@ -724,7 +724,7 @@ ejecución se tomó cada decisión.
 
 ![Cada ejecución como un punto, por caso anotado y condición de evidencia: todas las de evidencia parcial y retirada terminan en abstención correcta, y las dos abstenciones innecesarias son las de la deriva del caudalímetro y el fallo de encendido con evidencia completa.](../../artifacts/figures/memoria/FIG-5-16_decisiones_e19.png)
 
-*Fuente: elaboración propia. Experimento: E19. Conjunto: `synthetic_v2`, partición de prueba. Protocolo: cada punto es una ejecución, y los dos puntos de una misma fila son sesiones distintas del mismo caso anotado. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E19. Conjunto: `synthetic_v2`, partición de prueba. Protocolo: cada punto es una ejecución, y los dos puntos de una misma fila son sesiones distintas del mismo caso anotado.*
 
 Caso a caso, el patrón de validación se repite. Las dos abstenciones innecesarias son las de la
 deriva del caudalímetro y el fallo de encendido con evidencia completa —los mismos dos casos que
@@ -748,7 +748,7 @@ documentos aplicables recibió. La Figura 5.17 lo presenta.
 
 ![Treinta y cinco ejecuciones ordenadas por estrato y confianza, con el umbral de 0,79 marcado: cuatro ejecuciones quedan por debajo y son las cuatro de las dos abstenciones innecesarias, la de la deriva del caudalímetro a 0,573 y la del fallo de encendido a 0,491; todas las demás quedan por encima, y las que el modelo diagnosticó mal son abstenciones correctas por evidencia insuficiente.](../../artifacts/figures/memoria/FIG-5-17_decisiones_y_umbral.png)
 
-*Fuente: elaboración propia. Experimento: E19, evaluación final, tercer intento; el sufijo del registro es el número de intento y no una versión del conjunto de datos. Conjunto: `synthetic_v2`, partición de prueba. Variables: confianza calibrada del diagnóstico, decisión esperada y tomada, acierto del diagnóstico del modelo, cobertura de afirmaciones y número de documentos aplicables. Protocolo: una marca por ejecución registrada, agrupadas por estrato; el umbral dibujado es el de la política de suficiencia vigente, 0,79. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E19, evaluación final, tercer intento; el sufijo del registro es el número de intento y no una versión del conjunto de datos. Conjunto: `synthetic_v2`, partición de prueba. Variables: confianza calibrada del diagnóstico, decisión esperada y tomada, acierto del diagnóstico del modelo, cobertura de afirmaciones y número de documentos aplicables. Protocolo: una marca por ejecución registrada, agrupadas por estrato; el umbral dibujado es el de la política de suficiencia vigente, 0,79.*
 
 La figura muestra una separación limpia que las tablas no dejaban ver. **Cuatro de las 35 ejecuciones
 quedan por debajo del umbral, y son exactamente las cuatro de las dos abstenciones innecesarias**:

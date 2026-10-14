@@ -692,6 +692,31 @@ evaluación de un examen con las respuestas."""),
 reparto_publicado = soporte.tabla("E5_reparto")
 reparto_publicado"""),
     md("""\
+**Por qué además una figura.** La tabla da los recuentos; lo que la figura añade es la **proporción
+entre clases**, que es lo que fija la referencia mínima contra la que se compara cualquier modelo.
+Se dibuja apilada por partición para que se vea a la vez el tamaño de cada clase y cómo se reparte."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_particiones
+
+fig = fig_particiones()
+soporte.exportar(fig, "FIG-NB01-04_particiones", subdirectorio="01_exploracion_obd")
+plt.show()"""),
+    md("""\
+**Qué muestra la figura.** La clase sin fallo reúne 112 ventanas de entrenamiento, 28 de validación
+y 28 de prueba; cada condición de fallo, 56, 14 y 14. La clase mayoritaria **dobla** a cada una de
+las cinco condiciones.
+
+**Qué podemos interpretar.** El desequilibrio no es un defecto del muestreo: las sesiones averiadas
+aportan sus ventanas **anteriores a la entrada del fallo**, y esas ventanas son ventanas sin fallo.
+De ahí que la clase mayoritaria alcance el 28,6 % de la validación, que es exactamente la exactitud
+de la referencia mínima con que se compara el modelo de diagnóstico.
+
+**Qué no podemos afirmar.** Nada sobre la dificultad de cada clase: dos condiciones con el mismo
+número de ventanas pueden ser muy desiguales en lo que de ellas se puede aprender.
+
+**Relación con la hipótesis.** Fija la unidad de observación —la ventana, con la sesión como unidad
+de reparto— sobre la que se cuentan después todas las decisiones del agente."""),
+    md("""\
 **Qué muestra.** Cuántas sesiones y ventanas van a cada partición, por condición, en el conjunto
 oficial.
 
@@ -731,6 +756,41 @@ necesariamente en la señal del componente que falla.
 
 **Qué no podemos afirmar.** Estas figuras salen de `synthetic_v1`, con 36 sesiones, y no de
 `synthetic_v2`. No deben leerse como si fueran del conjunto oficial."""),
+    md("""\
+**Objetivo de este análisis.** La segunda figura histórica es legible en pantalla y no en papel: se
+publicó a 9,6 pulgadas de ancho y el documento tiene 5,9, de modo que al entrar se escala al 61 % y
+una etiqueta de 7 puntos se imprime a 4,3. Se redibuja aquí **a la medida de la página**, con los
+mismos datos de E4 y sin recalcular ningún tamaño de efecto.
+
+**Datos y metodología.** La tabla de separabilidad de E4: para cada una de las doce señales y cada
+una de las cinco condiciones, el delta de Cliff frente a la condición sin fallo, calculado por
+separado sobre la media del bloque y sobre su dispersión. Se etiquetan solo las celdas con efecto
+grande, |delta| ≥ 0,474, que es la convención de lectura habitual."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_separabilidad
+
+fig = fig_separabilidad()
+soporte.exportar(fig, "FIG-NB01-05_separabilidad", subdirectorio="01_exploracion_obd")
+plt.show()"""),
+    md("""\
+**Qué muestra.** Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos.
+Tres se separan por el **nivel** y con efecto máximo o casi: la fuga de vacío y la deriva del
+caudalímetro en el ajuste de combustible a corto plazo, y el termostato en la temperatura del
+refrigerante. La sonda lenta alcanza el efecto máximo **solo por la dispersión**, con un nivel de
++0,29 que no distingue nada. El fallo de encendido tiene un único efecto grande, +0,58, el más débil
+de los cinco.
+
+**Qué podemos interpretar.** Que los descriptores por ventana no podían limitarse a medias sin dejar
+dos condiciones indetectables por construcción. Es la justificación empírica de la decisión de
+incluir dispersión, extremos y conteos de eventos en el vector de descriptores.
+
+**Qué no podemos afirmar.** El delta de Cliff ordena pero no explica: un efecto grande en una señal
+no implica que el modelo la use, y el análisis de atribución muestra un caso en que no la usa. La
+medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Y sale
+de `synthetic_v1`, que es **pre-calibración** y no se reconstruye con el generador publicado.
+
+**Relación con la hipótesis.** Delimita por anticipado qué afirmaciones sobre una señal pueden tener
+soporte observacional bajo PI.1 y cuáles no."""),
     md("""\
 ## 16. Resultados negativos y limitaciones
 

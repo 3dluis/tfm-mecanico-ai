@@ -167,6 +167,11 @@ motivos distintos, y el motivo queda registrado.
 sobre datos sintéticos de un generador paramétrico, y la validación externa con telemetría real
 sigue siendo trabajo posterior. El diagrama describe el diseño, no su validez externa."""),
     md("""\
+**Qué datos representa.** Ninguno. Es un **diagrama conceptual**: sus cajas son las etapas del
+recorrido experimental y sus etiquetas, los identificadores de los experimentos que las miden. No
+contiene ninguna medición, y por eso no lleva conjunto ni partición. Su fuente es la arquitectura
+implementada y la correspondencia entre etapa y experimento que el anexo A tabula.
+
 ## 5. Los datos: qué son y qué no son
 
 El conjunto es **sintético**. No es una limitación oculta: es una decisión de diseño con una razón y
@@ -299,6 +304,36 @@ es la media de esas diferencias, ponderada por cuántas predicciones hay en cada
 importa aquí más que en otros problemas:* todo el criterio de abstención compara la confianza contra
 un umbral. Si la confianza estuviera mal calibrada, el umbral no significaría nada. *Su límite:* con
 diez tramos y pocas ventanas, cada tramo tiene pocas predicciones y la cifra es inestable."""),
+    md("""\
+## 6 bis. Qué sostiene cada objetivo, visto de una vez
+
+**Objetivo de este análisis.** El apartado anterior recorre objetivo por objetivo qué se midió. Falta
+verlo junto: qué objetivos tienen evidencia experimental, cuáles la tienen parcial y cuáles cuentan
+con una capacidad implementada que **no** se ha evaluado. Es el mapa que evita el error más común al
+leer un trabajo de este tipo, que es tomar lo implementado por demostrado.
+
+**Qué es esta figura, y qué no.** Es un **diagrama documental**, no una medición: cada fila sale del
+registro de experimentos y del estado declarado de cada objetivo, no de un cálculo sobre datos. Se
+incluye porque forma parte de la explicación experimental, y se identifica como tal."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_objetivos
+
+fig = fig_objetivos()
+soporte.exportar(fig, "FIG-NB00-02_objetivos", subdirectorio="00_introduccion")
+plt.show()"""),
+    md("""\
+**Qué muestra.** Cada objetivo con el experimento que lo mide y el estatuto de su evidencia.
+
+**Qué podemos interpretar.** Que la cobertura es desigual a propósito y está declarada: hay
+objetivos con medición sobre el conjunto de prueba, otros con medición solo sobre validación, y
+capacidades que están implementadas y cuya evaluación exigiría un protocolo que no se ejecutó.
+
+**Qué no podemos afirmar.** Que una capacidad implementada funcione. La figura **no** es un resultado
+experimental y no debe leerse como tal: un componente marcado como implementado y no evaluado no
+tiene evidencia a su favor ni en su contra.
+
+**Relación con la hipótesis.** Acota el alcance de las conclusiones: lo que la pregunta de
+investigación puede dar por respondido es lo que tiene evidencia, no lo que tiene código."""),
     md("""\
 ## 7. El resultado de la evaluación final
 

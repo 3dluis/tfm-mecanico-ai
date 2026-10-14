@@ -89,15 +89,62 @@ def test_el_anexo_de_reproducibilidad_conserva_la_correspondencia() -> None:
     )
 
 
-def test_cada_pie_remite_a_la_correspondencia_en_lugar_de_a_una_ruta() -> None:
+def test_ningun_pie_interrumpe_la_narrativa_con_una_remision_tecnica() -> None:
+    """El pie declara la procedencia científica, no la operativa.
+
+    Hasta el 14 de octubre de 2026 cada pie terminaba remitiendo a la tabla de
+    correspondencia del anexo C. La regla cambió: la memoria se lee como una
+    investigación y la procedencia técnica —qué fichero, qué guion, qué
+    registro— vive en la documentación de reproducibilidad, no dentro del pie.
+
+    Lo que el pie **sí** conserva, y otra prueba comprueba, es el experimento,
+    el conjunto, la partición y el protocolo: eso es ciencia, no operación.
+    """
+    operativas = ("Artefacto:", "tabla C.5", "el guion que lo genera", "notebook")
     for nombre in ("cap5_resultados.md", "cap6_conclusiones.md", "anexos.md"):
-        texto = _texto(nombre)
-        pies = [linea for linea in texto.splitlines() if linea.startswith("*Fuente:")]
-        con_artefacto = [p for p in pies if "Artefacto" in p]
-        assert con_artefacto, f"{nombre}: ningún pie declara su artefacto"
-        for pie in con_artefacto:
-            assert "tabla C.5" in pie, (
-                f"{nombre}: un pie declara el artefacto sin remitir a la tabla C.5: {pie[:90]}"
+        for pie in [x for x in _texto(nombre).splitlines() if x.startswith("*Fuente:")]:
+            encontradas = [frase for frase in operativas if frase in pie]
+            assert not encontradas, (
+                f"{nombre}: un pie remite a {', '.join(encontradas)}, "
+                f"que es procedencia operativa y no científica: {pie[:90]}"
+            )
+
+
+def _pies_de_figura_o_tabla(texto: str) -> list[str]:
+    """Los `*Fuente:` que cierran una figura o una tabla, y no otros.
+
+    En el anexo de reproducibilidad hay notas de procedencia que cierran un
+    apartado y no ilustran nada: no tienen experimento porque no son evidencia.
+    Se reconocen los de figura y tabla por el encabezado que los precede.
+    """
+    pies: list[str] = []
+    pendiente = ""
+    for linea in texto.splitlines():
+        encabezado = re.match(r"\*\*(?:Figura|Tabla) ([A-Z0-9]+)\.", linea)
+        if encabezado:
+            pendiente = encabezado.group(1)
+        elif linea.startswith("*Fuente:"):
+            # El anexo C documenta la reproducción, no la evidencia: sus tablas
+            # enumeran órdenes, guiones y lo que no se puede reproducir, y no
+            # salen de ningún experimento.
+            if pendiente and pendiente != "C":
+                pies.append(linea)
+            pendiente = ""
+    return pies
+
+
+def test_cada_pie_declara_su_procedencia_cientifica() -> None:
+    """Quitar la remisión técnica no puede quitar de dónde sale la figura."""
+    for nombre in ("cap5_resultados.md", "cap6_conclusiones.md", "anexos.md"):
+        pies = _pies_de_figura_o_tabla(_texto(nombre))
+        assert pies, f"{nombre}: ningún pie de figura o tabla"
+        for pie in pies:
+            if "elaboración propia a partir de" in pie or pie == "*Fuente: elaboración propia.*":
+                # Un pie de tabla cuyos registros nombra la propia tabla en una
+                # de sus columnas no necesita repetirlos debajo.
+                continue
+            assert "Experimento" in pie or "Experimentos" in pie, (
+                f"{nombre}: un pie no dice de qué experimento sale: {pie[:90]}"
             )
 
 

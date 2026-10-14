@@ -126,7 +126,7 @@ documentados. Esa distinción se mantiene en todo el trabajo.
 | `synthetic_v2` | 72 | 13-09-2026 | calibrado | **sí**: 72 de 72 sesiones idénticas, y las cuatro huellas de los ficheros procesados coinciden bit a bit | E5, E6, E7, E9, E15, E18 y **la evaluación final E19** |
 | `synthetic_v3` | 216 | 1-09-2026 | **anterior** a la calibración | **no**: 0 de 216 sesiones idénticas, diferencia máxima 1 983 rpm | la comparación de volumen de E6 y E7, y el conjunto de evaluación independiente del redactor, sin ejecutar |
 
-*Fuente: elaboración propia. Medición del 13 de octubre de 2026 con `scripts/medir_reconstruccion_cruda.py`, que regenera cada sesión con el plan y la semilla declarados y la compara muestra a muestra con la almacenada. Registro en `configs/datos_no_reconstruibles.json`.*
+*Fuente: elaboración propia. Experimento: medición de reconstructibilidad del 13 de octubre de 2026. Protocolo: cada sesión se regenera con el plan y la semilla que su ficha declara y se compara **muestra a muestra** con la almacenada; una sesión cuenta como reconstruible si todas sus señales coinciden con tolerancia 1e-9. La comprobación se hizo sobre las 324 sesiones de los tres conjuntos.*
 
 Dos cosas conviene subrayar. La primera es que **las cifras publicadas del trabajo salen del
 conjunto reconstruible**: el modelo de diagnóstico, la calibración, la atribución, la suficiencia,
@@ -146,7 +146,7 @@ señal y condición a condición.
 
 ![Cinco paneles, uno por condición: antes de la marca de entrada del fallo las dos series coinciden exactamente, y la divergencia posterior es el efecto de la condición.](../../artifacts/figures/memoria/FIG-A-01_series_normal_vs_fallo.png)
 
-*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, sesiones pareadas; es **pre-calibración** y no se reconstruye con el generador publicado. Protocolo: misma semilla, mismo régimen urbano y mismo perfil de conducción con y sin el fallo; antes del instante de entrada las dos series coinciden exactamente, de modo que toda divergencia posterior es la condición. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
+*Fuente: elaboración propia. Experimento: E4, análisis exploratorio. Conjunto: `synthetic_v1`, sesiones pareadas; es **pre-calibración** y no se reconstruye con el generador publicado. Protocolo: misma semilla, mismo régimen urbano y mismo perfil de conducción con y sin el fallo; antes del instante de entrada las dos series coinciden exactamente, de modo que toda divergencia posterior es la condición.*
 
 La comparación es pareada a propósito: sin parear, la mayor parte de la diferencia visible sería la
 forma de conducir y no la condición. En el panel de la fuga de vacío el ajuste de combustible se
@@ -177,7 +177,7 @@ cinco condiciones, sobre sesiones de la partición de entrenamiento.
 
 ![Cinco paneles, uno por condición, cada uno con dos series superpuestas: la sesión con el fallo y la misma sesión sin él. Antes de la marca de entrada las dos coinciden exactamente. Después, el ajuste a largo plazo se separa en la fuga de vacío y en la deriva del caudalímetro, la temperatura del refrigerante se estanca en el termostato, la oscilación de la sonda se amortigua hasta una banda estrecha, y en el fallo de encendido las dos series siguen coincidiendo salvo en dieciséis muestras.](../../artifacts/figures/memoria/FIG-A-02_pareja_contrafactual.png)
 
-*Fuente: elaboración propia. Experimento: análisis contrafactual T2, **derivado** de E2 y E5; no es un experimento nuevo. Conjunto: `synthetic_v2`, cinco sesiones de la partición de **entrenamiento**, una por condición, seleccionadas por regla declarada —la primera en orden alfabético en que el fallo llega a expresarse—. Variables: en cada panel, la señal que más se aparta de su contrafactual en esa condición. Protocolo: la trayectoria contrafactual se obtiene con la misma especificación de sesión —misma semilla, mismo régimen, misma temperatura ambiente, misma duración, misma cadencia— y el fallo desactivado. Antes de generarla se verificó que cada sesión original se reproduce muestra a muestra frente al conjunto congelado, con tolerancia 1e-9, y que las dos trayectorias de cada pareja son idénticas antes del instante de entrada. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
+*Fuente: elaboración propia. Experimento: análisis contrafactual T2, **derivado** de E2 y E5; no es un experimento nuevo. Conjunto: `synthetic_v2`, cinco sesiones de la partición de **entrenamiento**, una por condición, seleccionadas por regla declarada —la primera en orden alfabético en que el fallo llega a expresarse—. Variables: en cada panel, la señal que más se aparta de su contrafactual en esa condición. Protocolo: la trayectoria contrafactual se obtiene con la misma especificación de sesión —misma semilla, mismo régimen, misma temperatura ambiente, misma duración, misma cadencia— y el fallo desactivado. Antes de generarla se verificó que cada sesión original se reproduce muestra a muestra frente al conjunto congelado, con tolerancia 1e-9, y que las dos trayectorias de cada pareja son idénticas antes del instante de entrada.*
 
 **Qué estatuto tiene este artefacto.** Es un **artefacto derivado para análisis visual**. No entra en
 entrenamiento, en validación ni en prueba; no modifica ninguna métrica histórica; no se usa para
@@ -245,7 +245,7 @@ la única condición en que la red recurrente gana. La Figura B.1 da el detalle 
 
 ![Dos paneles: a la izquierda el F1 de cada condición para el bosque y la red; a la derecha su diferencia, con la red ganando solo en el termostato por 0,032 y perdiendo en las otras cinco, hasta 0,167 en el fallo de encendido.](../../artifacts/figures/memoria/FIG-B-01_f1_por_clase.png)
 
-*Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación. Protocolo: una ejecución por modelo, semilla 20260901; n es el número de ventanas de la clase en validación. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5.*
+*Fuente: elaboración propia. Experimentos: E6 y E7. Conjunto: `synthetic_v2`, partición de validación. Protocolo: una ejecución por modelo, semilla 20260901; n es el número de ventanas de la clase en validación.*
 
 La Figura 5.5 del capítulo 5 muestra **adónde** van los errores de cada modelo; esta muestra
 **cuánto** pesa cada condición en la diferencia agregada, que es lo que aquella no puede decir. La
@@ -301,7 +301,7 @@ declara en el capítulo 5. Las diecisiete decisiones del conjunto anotado no cam
 umbral entre 0,60 y 0,90, de modo que el resultado publicado no depende de la elección entre 0,72 y
 0,79.
 
-*Fuente: elaboración propia a partir del barrido de umbral de E15b, 100 puntos. El criterio original y su enmienda están fechados por separado en el repositorio; su localización, en la tabla C.5.*
+*Fuente: elaboración propia a partir del barrido de umbral de E15b, 100 puntos. El criterio original y su enmienda están fechados por separado, y el segundo se escribió antes de reejecutar las fases que dependen del umbral.*
 
 ## B.5 · Las cinco aperturas del conjunto de prueba
 

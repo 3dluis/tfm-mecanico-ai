@@ -13,7 +13,7 @@ experimento mide cada una antes de decir hasta dónde llega cada objetivo. La Fi
 
 ![Ocho etapas encadenadas, del dato OBD-II al resultado experimental, con los experimentos que cubren cada una anotados a la derecha.](../../artifacts/figures/memoria/FIG-6-01_recorrido_experimental.png)
 
-*Fuente: elaboración propia. Experimento: ninguno en particular; las etiquetas de la derecha indican qué experimentos, de E1 a E19, cubren cada etapa. Sin conjunto de datos: es la arquitectura, dibujada desde su descripción, y por tanto una figura ilustrativa y no una medición. Protocolo: el esquema se dibuja desde el índice de experimentos y no desde ninguna ejecución. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: ninguno en particular; las etiquetas de la derecha indican qué experimentos, de E1 a E19, cubren cada etapa. Sin conjunto de datos: es la arquitectura, dibujada desde su descripción, y por tanto una figura ilustrativa y no una medición. Protocolo: el esquema se dibuja desde el índice de experimentos y no desde ninguna ejecución.*
 
 La figura separa lo que se observa, lo que el modelo infiere, lo que se recupera, lo que se verifica
 y lo que se decide, y asigna a cada etapa los experimentos que la miden. Esa separación es la
@@ -49,7 +49,7 @@ En cuanto al objetivo general, la evaluación experimental del agente está hech
 
 ![Los cinco objetivos específicos, con los experimentos que los miden y su estado: OE1 cumplido y los otros cuatro cumplidos parcialmente.](../../artifacts/figures/memoria/FIG-6-02_objetivos_y_evidencia.png)
 
-*Fuente: elaboración propia a partir de este capítulo y del índice de experimentos. Experimento: ninguno en particular; cada fila nombra los que miden su objetivo. Sin conjunto de datos: es el mapa de lo que el propio capítulo declara, no una medición. Protocolo: el estado de cada fila es el que este capítulo afirma en prosa, sin redondear hacia arriba. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia a partir de este capítulo y del índice de experimentos. Experimento: ninguno en particular; cada fila nombra los que miden su objetivo. Sin conjunto de datos: es el mapa de lo que el propio capítulo declara, no una medición. Protocolo: el estado de cada fila es el que este capítulo afirma en prosa, sin redondear hacia arriba.*
 
 Cuatro de los cinco objetivos quedan cumplidos parcialmente y uno, el de la revisión del estado del
 conocimiento, cumplido en el alcance declarado. La figura permite ver de una vez qué experimento
@@ -186,7 +186,7 @@ triviales que lo rodean, que es lo que hace la Figura 6.3.
 
 ![Plano de falsa confianza contra abstención innecesaria: el verificador queda en 0 de 9 y 2 de 5; abstenerse siempre, en 0 de 9 y 5 de 5; explicar siempre que el modelo confía, en 9 de 9 y 2 de 5.](../../artifacts/figures/memoria/FIG-6-03_compromiso_cobertura_abstencion.png)
 
-*Fuente: elaboración propia. Experimento: E15. Conjunto: `synthetic_v2`, validación, 17 ejecuciones sobre 5 ventanas. Protocolo: las dos políticas de referencia se definieron el 4 de septiembre de 2026, después de medir las tres versiones del criterio sobre estos mismos casos, y se calculan sobre ellos. Artefacto: su correspondencia con el fichero, el guion que lo genera y el registro del que sale está en la tabla C.5 del anexo C.*
+*Fuente: elaboración propia. Experimento: E15. Conjunto: `synthetic_v2`, validación, 17 ejecuciones sobre 5 ventanas. Protocolo: las dos políticas de referencia se definieron el 4 de septiembre de 2026, después de medir las tres versiones del criterio sobre estos mismos casos, y se calculan sobre ellos.*
 
 El plano hace explícito el compromiso que las tasas sueltas esconden. Abstenerse siempre consigue la
 falsa confianza nula y pierde las cinco oportunidades de explicar; explicar siempre que el modelo

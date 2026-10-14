@@ -299,52 +299,12 @@ por_clase = pd.DataFrame(
 por_clase["diferencia"] = por_clase["GRU"] - por_clase["bosque"]
 por_clase.round(4)"""),
     code("""\
-NOMBRES = {
-    "F00_normal": "sin fallo",
-    "F01_vacuum_leak": "fuga de vacío",
-    "F02_maf_drift": "deriva del caudalímetro",
-    "F03_thermostat_stuck": "termostato bloqueado",
-    "F04_o2_lag": "sonda lenta",
-    "F05_misfire": "fallo de encendido",
-}
+# La figura la dibuja la función científica del proyecto, que lee las mismas
+# tablas por clase que acaba de leerse arriba. No se redibuja aquí: una segunda
+# implementación de la misma figura es una segunda verdad.
+from mecanico_ia_exp.visualization.memoria import fig_f1_por_clase
 
-orden = por_clase.sort_values("diferencia")
-posiciones = np.arange(len(orden))
-etiquetas = [f"{NOMBRES[i]}\\n(n={int(orden.loc[i, 'ventanas'])})" for i in orden.index]
-
-fig, (izq, der) = plt.subplots(1, 2, figsize=(9.8, 4.0), width_ratios=[1.5, 1])
-
-alto = 0.38
-izq.barh(posiciones + alto / 2, orden["bosque"], alto,
-         color=CATEGORICAL[0], label="bosque aleatorio (E6)")
-izq.barh(posiciones - alto / 2, orden["GRU"], alto,
-         color=CATEGORICAL[1], label="GRU bidireccional (E7)")
-izq.set_yticks(posiciones, etiquetas, fontsize=7)
-izq.set_xlabel("F1 por clase (adimensional, 0–1)")
-izq.set_xlim(0, 1.05)
-izq.legend(fontsize=7, loc="lower right")
-izq.set_title("F1 de cada condición", fontsize=9)
-
-colores = [CATEGORICAL[1] if d > 0 else CATEGORICAL[0] for d in orden["diferencia"]]
-der.barh(posiciones, orden["diferencia"], 0.6, color=colores)
-der.axvline(0, color="#52514e", linewidth=0.9)
-der.set_yticks(posiciones, [""] * len(posiciones))
-der.set_xlabel("F1 de la GRU − F1 del bosque")
-der.set_title("Diferencia: a la derecha gana la GRU", fontsize=9)
-for pos, valor in zip(posiciones, orden["diferencia"], strict=False):
-    der.text(valor + (0.006 if valor > 0 else -0.006), pos, f"{valor:+.3f}",
-             va="center", ha="left" if valor > 0 else "right", fontsize=7)
-
-fig.suptitle(
-    "La desventaja de la red no es uniforme: pierde en cinco condiciones y gana en una",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "E6 y E7 · synthetic_v2, validación · fuente: experiments/E6_baseline_synthetic_v2.json "
-    "y E7_temporal_synthetic_v2.json · n = ventanas de la clase en validación",
-    fontsize=6.5, x=0.0, ha="left",
-)
-fig.tight_layout()
+fig = fig_f1_por_clase()
 soporte.exportar(fig, "FIG-NB02-02_por_clase", subdirectorio="02_comparacion_modelos")
 plt.show()"""),
     md("""\
@@ -378,6 +338,42 @@ el **fallo de encendido**, que es la otra condición con estructura temporal mar
 breves—. Si la ventaja de la red viniera de su capacidad de modelar el tiempo, cabría esperar que
 ganara también ahí. No lo hace."""),
     md("""\
+## 8 bis. El termostato: un límite físico, no un fallo de aprendizaje
+
+**Objetivo de este análisis.** El apartado anterior deja el termostato como la condición en que la
+red gana al bosque. Conviene mirar de cerca **por qué** el bosque falla ahí, porque la respuesta no
+es la que se espera de un modelo que falla.
+
+**Qué es esta figura, y de cuándo.** Es un **artefacto histórico**: se produjo durante la ejecución
+de E6 y conserva la predicción **ventana a ventana**, que el registro guardado de E6 no almacena. No
+se puede regenerar hoy, y eso hay que decirlo: reproducirla exigiría reejecutar el modelo
+conservando la predicción de cada ventana, lo que convertiría una figura en un experimento nuevo.
+Se muestra tal como se publicó."""),
+    code("""\
+from IPython.display import Image, display
+
+display(Image(filename=str(soporte.figura("FIG-E6-02_limite_evidencia_f03")), width=760))"""),
+    md("""\
+**Qué muestra.** Las catorce ventanas de termostato bloqueado de validación, situadas por la
+temperatura media del refrigerante y señalando cuáles acertó el modelo. Las **cinco no detectadas**
+están todas por debajo del techo de 71 °C que el fallo impone; las nueve detectadas se agrupan junto
+a él.
+
+**Qué podemos interpretar.** Que esas cinco ventanas **no contienen el fallo de forma observable**:
+mientras el motor no habría superado por sí mismo la temperatura a la que la avería lo limita, la
+señal averiada es idéntica a la sana. No es que el modelo no sepa verlas; es que no hay nada que
+ver. La respuesta correcta del sistema en esas ventanas es abstenerse, y el caso no hubo que
+fabricarlo.
+
+**Qué no podemos afirmar.** Que las cinco ventanas sin señal sean exactamente las cinco falladas.
+Los registros de E6 no guardan la predicción por ventana, de modo que la coincidencia de los dos
+recuentos es **aritmética y no una identidad medida**. Comprobarlo exigiría reejecutar el modelo
+conservando la predicción, que es un experimento nuevo.
+
+**Relación con la hipótesis.** Separa dos cosas que una tasa de acierto confunde: la etiqueta de un
+caso y la evidencia disponible en él. Es la misma distinción que el verificador de suficiencia
+aplica después sobre la evidencia documental, y por eso importa para PI.1 y para PI.3."""),
+    md("""\
 ## 9. Matrices de confusión: qué tipo de error comete cada uno
 
 **Qué queremos investigar.** No cuántos errores, sino **hacia dónde** van. En diagnóstico no es lo
@@ -387,43 +383,15 @@ mecánico a desmontar la pieza equivocada.
 **Por qué un mapa de calor y no una tabla.** Son dos matrices de 6 × 6; los bloques se ven de un
 vistazo y se comparan entre sí, que es lo que interesa."""),
     code("""\
-from mecanico_ia_exp.visualization.style import SEQUENTIAL
-
+# Las dos matrices, leídas de sus tablas versionadas: son los datos que la
+# figura dibuja y los que la celda siguiente vuelve a usar.
 confusion_e6 = soporte.tabla("E6_baseline_confusion_synthetic_v2").set_index("Unnamed: 0")
 confusion_e7 = soporte.tabla("E7_temporal_confusion_synthetic_v2").set_index("Unnamed: 0")
-corto = [c.split("_")[0] for c in confusion_e6.columns]
+print(confusion_e6.to_string())
 
-fig, ejes = plt.subplots(1, 2, figsize=(9.6, 4.2))
-for eje, matriz, titulo in [
-    (ejes[0], confusion_e6, "Bosque aleatorio (E6)"),
-    (ejes[1], confusion_e7, "GRU bidireccional (E7)"),
-]:
-    imagen = eje.imshow(matriz.to_numpy(), cmap=SEQUENTIAL)
-    eje.set_xticks(range(len(corto)), corto, rotation=45, ha="right", fontsize=7)
-    eje.set_yticks(range(len(corto)), corto, fontsize=7)
-    eje.set_xlabel("clase predicha")
-    eje.set_ylabel("clase verdadera" if titulo.startswith("Bosque") else "")
-    eje.set_title(titulo, fontsize=9)
-    eje.grid(False)
-    maximo = matriz.to_numpy().max()
-    for i in range(len(corto)):
-        for j in range(len(corto)):
-            valor = int(matriz.iloc[i, j])
-            if valor:
-                eje.text(j, i, valor, ha="center", va="center", fontsize=7.5,
-                         color="white" if valor > maximo * 0.55 else "#0b0b0b")
+from mecanico_ia_exp.visualization.memoria import fig_confusiones
 
-fig.suptitle(
-    "Matrices de confusión: filas = verdad, columnas = predicción",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "E6 y E7 · synthetic_v2, validación, 98 ventanas · "
-    "fuente: artifacts/tables/E6_baseline_confusion_synthetic_v2.csv y "
-    "E7_temporal_confusion_synthetic_v2.csv · recuento de ventanas",
-    fontsize=6.5, x=0.0, ha="left",
-)
-fig.tight_layout()
+fig = fig_confusiones()
 soporte.exportar(fig, "FIG-NB02-03_confusion", subdirectorio="02_comparacion_modelos")
 plt.show()"""),
     code("""\
@@ -492,38 +460,19 @@ calibracion = pd.DataFrame(
     }
 ).T
 calibracion.round(4)"""),
+    md("""\
+**Objetivo del análisis.** Comprobar si la confianza que el modelo declara coincide con el acierto
+que obtiene, y **en qué dirección** se desvía si no coincide. La dirección decide qué habría pasado
+de haber puesto el umbral del verificador sobre la probabilidad cruda.
+
+**Datos y metodología.** Las 98 ventanas de validación de `synthetic_v2`, con la confianza declarada
+por el bosque antes y después de calibrar por regresión isotónica ajustada con validación cruzada
+**sobre entrenamiento**, nunca sobre validación. No se reentrena nada: las dos configuraciones están
+registradas."""),
     code("""\
-fig, eje = plt.subplots(figsize=(5.4, 4.6))
-eje.plot([0, 1], [0, 1], color="#898781", linestyle=":", linewidth=1.0)
-eje.text(0.52, 0.46, "calibración perfecta", fontsize=6.8, color="#52514e", rotation=37)
+from mecanico_ia_exp.visualization.memoria import fig_calibracion
 
-for (nombre, fila), color, marca in zip(
-    calibracion.iterrows(), CATEGORICAL, ["o", "s"], strict=False
-):
-    eje.scatter(fila["mean_confidence"], fila["accuracy"], s=95, color=color,
-                marker=marca, label=nombre, zorder=3)
-    eje.annotate(
-        f"{nombre}\\nECE {fila['ece']:.4f}\\nsesgo {fila['overconfidence']:+.4f}",
-        (fila["mean_confidence"], fila["accuracy"]),
-        textcoords="offset points", xytext=(10, -22), fontsize=7, color=color,
-    )
-
-eje.set_xlabel("confianza media (probabilidad declarada, 0–1)")
-eje.set_ylabel("acierto observado (fracción, 0–1)")
-eje.set_xlim(0.6, 1.0)
-eje.set_ylim(0.6, 1.0)
-eje.legend(fontsize=7, loc="upper left")
-fig.suptitle(
-    "Ninguno de los dos calibra, y no fallan hacia el mismo lado",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "E6 y E7 · synthetic_v2, validación · por encima de la diagonal: infraconfianza; "
-    "por debajo: exceso de confianza · el sesgo es confianza media menos acierto; "
-    "el ECE no lleva signo: es el error por tramos · cifras de predict_proba en crudo",
-    fontsize=6.5, x=0.0, ha="left",
-)
-fig.tight_layout()
+fig = fig_calibracion()
 soporte.exportar(fig, "FIG-NB02-04_calibracion", subdirectorio="02_comparacion_modelos")
 plt.show()"""),
     md("""\
@@ -591,44 +540,18 @@ comparacion = pd.DataFrame(
     ]
 ).set_index("conjunto")
 comparacion.round(4)"""),
+    md("""\
+**Objetivo del análisis.** Situar una al lado de otra las cuatro cifras —dos modelos por dos
+conjuntos— para que se vea qué cambia entre columnas y por qué la comparación no decide nada.
+
+**Datos y metodología.** El F1 macro de validación de los cuatro registros, leídos tal como se
+guardaron. Entre `synthetic_v2` y `synthetic_v3` cambian **dos cosas a la vez**: el volumen, de 72 a
+216 sesiones, y el generador, que en `synthetic_v3` es anterior a la calibración contra el manual.
+Un diseño que mueve dos factores no permite atribuir el efecto a ninguno."""),
     code("""\
-fig, eje = plt.subplots(figsize=(7.6, 3.8))
-x = np.arange(2)
-ancho = 0.34
-eje.bar(x - ancho / 2, comparacion["bosque F1 macro"], ancho,
-        color=CATEGORICAL[0], label="bosque aleatorio")
-eje.bar(x + ancho / 2, comparacion["GRU F1 macro"], ancho,
-        color=CATEGORICAL[1], label="GRU bidireccional")
-for i, (_, fila) in enumerate(comparacion.iterrows()):
-    eje.text(i - ancho / 2, fila["bosque F1 macro"] + 0.008,
-             f"{fila['bosque F1 macro']:.4f}", ha="center", fontsize=7.5)
-    eje.text(i + ancho / 2, fila["GRU F1 macro"] + 0.008,
-             f"{fila['GRU F1 macro']:.4f}", ha="center", fontsize=7.5)
-eje.set_xticks(x, [
-    "synthetic_v2\\n72 sesiones · generador CALIBRADO",
-    "synthetic_v3\\n216 sesiones · generador SIN CALIBRAR",
-], fontsize=7.5)
-eje.set_ylabel("F1 macro sobre validación\\n(adimensional, 0–1)")
-eje.set_ylim(0, 1.08)
-eje.legend(fontsize=7.5, loc="lower right")
+from mecanico_ia_exp.visualization.memoria import fig_confusor_de_volumen
 
-eje.annotate(
-    "entre las dos columnas cambian DOS cosas:\\nel volumen y el fenómeno generado",
-    xy=(0.5, 1.0), xytext=(0.5, 0.42), ha="center", fontsize=7.5, color="#52514e",
-    arrowprops={"arrowstyle": "-[, widthB=5.2, lengthB=0.5", "color": "#898781", "lw": 1.0},
-)
-
-fig.suptitle(
-    "El orden se invierte, y la comparación no dice por qué",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "E6 y E7 · fuente: experiments/E6_baseline_synthetic_v{2,3}.json y "
-    "E7_temporal_synthetic_v{2,3}.json · "
-    "la conclusión «el límite era el volumen» quedó SUPERSEDED el 12-10-2026",
-    fontsize=6.5, x=0.0, ha="left",
-)
-fig.tight_layout()
+fig = fig_confusor_de_volumen()
 soporte.exportar(fig, "FIG-NB02-05_confusor_volumen", subdirectorio="02_comparacion_modelos")
 plt.show()"""),
     md("""\

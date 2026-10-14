@@ -85,6 +85,10 @@ class Figura:
     notebook: str = ""
     ubicacion: str = ""
     limitaciones: str = ""
+    #: COMPLETA · se genera y se explica en su notebook · HISTORICA · no se puede
+    #: regenerar, y su notebook declara por qué · CONCEPTUAL · diagrama que no
+    #: representa ninguna medición, con fuente versionada y explicación.
+    estatuto: str = "COMPLETA"
 
     @property
     def capitulo(self) -> str:
@@ -131,6 +135,7 @@ FIGURAS: tuple[Figura, ...] = (
         notebook="01_exploracion_obd",
         ubicacion="anexo A · §A.6",
         limitaciones="no regenerable: su generador cambió el 1-09-2026",
+        estatuto="HISTORICA",
     ),
     Figura(
         "5.2",
@@ -223,6 +228,7 @@ FIGURAS: tuple[Figura, ...] = (
         notebook="02_comparacion_modelos",
         ubicacion="cap. 5 · PI.1",
         limitaciones="no regenerable: necesita la predicción por ventana, que E6 no guarda",
+        estatuto="HISTORICA",
     ),
     Figura(
         "5.8",
@@ -279,7 +285,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E12, reejecución canónica",
         conjunto="corpus del vehículo",
         particion="6 casos, 5 puntuados",
-        notebook="no tiene notebook propio",
+        notebook="05_suficiencia",
         ubicacion="cap. 5 · PI.2 · Recuperación y trazabilidad",
         limitaciones="n = 5 casos puntuados: recuentos, no tasas",
     ),
@@ -292,7 +298,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E15, verificador v2.1",
         conjunto="synthetic_v2",
         particion="17 casos sobre 5 ventanas",
-        notebook="05_suficiencia_y_abstencion",
+        notebook="05_suficiencia",
         ubicacion="cap. 5 · PI.3 y PI.4",
         limitaciones="17 casos de 5 ventanas: no son observaciones independientes",
     ),
@@ -303,7 +309,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E18, cuatro ablaciones",
         conjunto="synthetic_v2",
         particion="los mismos 17 casos",
-        notebook="04_explicabilidad",
+        notebook="05_suficiencia",
         ubicacion="cap. 5 · Contribución de cada componente",
         limitaciones="A2 quedó INCONCLUSA; denominadores de 9 y de 5 ejecuciones",
     ),
@@ -351,9 +357,10 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E1–E19 (uno por fila)",
         conjunto="sin conjunto: es documental",
         particion="—",
-        notebook="no tiene notebook propio",
+        notebook="00_introduccion",
         ubicacion="cap. 6 · Conclusiones sobre los objetivos",
         limitaciones="documental: no es evidencia",
+        estatuto="CONCEPTUAL",
     ),
     Figura(
         "6.3",
@@ -362,7 +369,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E15",
         conjunto="synthetic_v2",
         particion="validación",
-        notebook="05_suficiencia_y_abstencion",
+        notebook="05_suficiencia",
         ubicacion="cap. 6 · Limitaciones",
         limitaciones="el compromiso se dibuja sobre 17 casos",
     ),
@@ -378,6 +385,7 @@ FIGURAS: tuple[Figura, ...] = (
         notebook="00_introduccion",
         ubicacion="cap. 6 · Conclusiones sobre los objetivos",
         limitaciones="ilustrativa: no es evidencia",
+        estatuto="CONCEPTUAL",
     ),
 )
 
