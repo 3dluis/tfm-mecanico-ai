@@ -27,6 +27,7 @@ la paginación y el documento revisado deja de corresponderse con el entregado.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import shutil
 import subprocess
@@ -70,9 +71,22 @@ EQUIVALENCIAS: dict[str, str] = {
 ESTILOS_NUEVOS: dict[str, str] = {
     "PieDeFigura": "Pie de figura",
     "PieDeTabla": "Pie de tabla",
+    "TextoDeTabla": "Texto de tabla",
 }
 
 PLANTILLA_POR_DEFECTO = Path("../24-25 Plantilla TFM MUIA.docx")
+
+#: Marcadores de la plantilla y de qué campo del fichero de portada sale cada
+#: uno. Un campo vacío deja el marcador a la vista: un documento que enseña
+#: «[Director/a]» avisa de que falta un dato; uno que lo borra, no.
+MARCADORES: dict[str, str] = {
+    "[Título del trabajo de fin de master]": "titulo",
+    "[Título del TFM]": "titulo",
+    "[NOMBRE Y APELLIDOS DEL ESTUDIANTE]": "autor",
+    "[Apellidos, Nombre autor]": "apellidos_nombre",
+    "[Director/a]": "director",
+    "[Fecha (mes y año)]": "fecha",
+}
 
 
 def _pandoc() -> str:
@@ -113,6 +127,46 @@ def convertir(plantilla: Path, destino: Path) -> Path:
     return destino
 
 
+def _declaraciones_de_espacio(xml: str) -> dict[str, str]:
+    """Los prefijos de espacio de nombres que declara la raíz del documento."""
+    raiz = xml[xml.index("<w:document") : xml.index(">", xml.index("<w:document")) + 1]
+    return dict(re.findall(r'xmlns:(\w+)="([^"]+)"', raiz))
+
+
+def _unir_espacios_de_nombres(destino: str, origen: str) -> str:
+    """Añade a la raíz del destino los prefijos que solo declara el origen.
+
+    La portada de la plantilla usa prefijos —`w14`, `wp14`, `mc`— que Pandoc no
+    declara. Pegarla sin traerlos produce un fichero que supera cualquier
+    comprobación estructural y que **ningún programa puede abrir**: el error es
+    «prefijo sin vincular», y aparece al cargarlo, no al escribirlo.
+    """
+    faltan = {
+        prefijo: uri
+        for prefijo, uri in _declaraciones_de_espacio(origen).items()
+        if prefijo not in _declaraciones_de_espacio(destino)
+    }
+    if not faltan:
+        return destino
+    corte = destino.index(">", destino.index("<w:document"))
+    anadido = "".join(f' xmlns:{prefijo}="{uri}"' for prefijo, uri in sorted(faltan.items()))
+    return destino[:corte] + anadido + destino[corte:]
+
+
+def _sin_comentarios(xml: str) -> str:
+    """Quita las marcas de comentario de la portada.
+
+    Los comentarios de la plantilla apuntan a identificadores que el documento
+    convertido no tiene, y una referencia a un comentario inexistente basta para
+    que Word se niegue a abrir el fichero.
+    """
+    xml = re.sub(r"<w:commentRange(?:Start|End)[^>]*/>", "", xml)
+    xml = re.sub(
+        r"<w:r\b[^>]*>(?:(?!</w:r>).)*?<w:commentReference[^>]*/>.*?</w:r>", "", xml, flags=re.S
+    )
+    return re.sub(r"<w:commentReference[^>]*/>", "", xml)
+
+
 def _portada(xml_plantilla: str) -> str:
     """La primera sección de la plantilla, con su portada y su salto.
 
@@ -123,7 +177,7 @@ def _portada(xml_plantilla: str) -> str:
     cuerpo = xml_plantilla[xml_plantilla.index("<w:body>") + len("<w:body>") :]
     corte = cuerpo.index("<w:sectPr")
     fin = cuerpo.index("</w:p>", corte) + len("</w:p>")
-    return cuerpo[:fin]
+    return _sin_comentarios(cuerpo[:fin])
 
 
 def _campo(instruccion: str, texto_provisional: str) -> str:
@@ -185,6 +239,55 @@ def _reescribir_estilo(parrafo: str, estilo: str) -> str:
     return parrafo.replace("<w:p>", f'<w:p><w:pPr><w:pStyle w:val="{estilo}"/></w:pPr>', 1)
 
 
+def _mantener_con_el_siguiente(parrafo: str) -> str:
+    """Pega un párrafo al que le sigue, para que no los separe un salto de página.
+
+    Es el defecto más visible de un documento montado sin cuidado: una figura al
+    final de una página y su pie al principio de la siguiente.
+    """
+    if "<w:keepNext/>" in parrafo:
+        return parrafo
+    if "<w:pPr>" in parrafo:
+        return parrafo.replace("<w:pPr>", "<w:pPr><w:keepNext/>", 1)
+    return parrafo.replace("<w:p>", "<w:p><w:pPr><w:keepNext/></w:pPr>", 1)
+
+
+#: Identificador de lista que la plantilla asigna a «Título Apartado». Las
+#: instancias nuevas, una por capítulo, se derivan de su misma lista abstracta.
+NUMERACION_DE_APARTADOS = 14
+PRIMER_NUMERO_NUEVO = 900
+
+
+def _numeracion_por_capitulo(parrafo: str, numero: int, nivel: int) -> str:
+    """Hace que los apartados vuelvan a empezar en 1 en cada capítulo.
+
+    La plantilla numera «Título Apartado» con una única lista continua, de modo
+    que el primer apartado del capítulo 5 sale como «17». Cada capítulo recibe
+    aquí su propia instancia de la misma lista abstracta, con el inicio forzado.
+    """
+    propiedades = f'<w:numPr><w:ilvl w:val="{nivel}"/><w:numId w:val="{numero}"/></w:numPr>'
+    if "<w:numPr>" in parrafo:
+        return re.sub(r"<w:numPr>.*?</w:numPr>", propiedades, parrafo, count=1, flags=re.S)
+    if "<w:pPr>" in parrafo:
+        encontrado = re.search(r'(<w:pPr>(?:<w:pStyle w:val="[^"]+"/>)?)', parrafo)
+        assert encontrado is not None
+        return parrafo.replace(encontrado.group(1), encontrado.group(1) + propiedades, 1)
+    return parrafo
+
+
+def instancias_de_numeracion(capitulos: int) -> str:
+    """Una instancia de lista por capítulo, cada una empezando en 1."""
+    niveles = "".join(
+        f'<w:lvlOverride w:ilvl="{nivel}"><w:startOverride w:val="1"/></w:lvlOverride>'
+        for nivel in range(3)
+    )
+    return "".join(
+        f'<w:num w:numId="{PRIMER_NUMERO_NUEVO + i}">'
+        f'<w:abstractNumId w:val="{{abstracto}}"/>{niveles}</w:num>'
+        for i in range(capitulos)
+    )
+
+
 def adaptar_estilos(cuerpo: str) -> tuple[str, dict[str, int]]:
     """Traduce los estilos de Pandoc a los de la plantilla, párrafo a párrafo.
 
@@ -195,34 +298,79 @@ def adaptar_estilos(cuerpo: str) -> tuple[str, dict[str, int]]:
     cuenta: dict[str, int] = {}
     salida: list[str] = []
     posicion = 0
+    capitulo = 0
     for encontrado in re.finditer(r"<w:p(?: [^>]*)?>.*?</w:p>|<w:p(?: [^>]*)?/>", cuerpo, re.S):
         salida.append(cuerpo[posicion : encontrado.start()])
         parrafo = encontrado.group(0)
         posicion = encontrado.end()
+        # Un párrafo dentro de una celda no es un párrafo del cuerpo: hereda su
+        # espaciado y lo que debería ser una fila ocupa media página.
+        anterior = cuerpo[: encontrado.start()]
+        en_tabla = anterior.count("<w:tbl>") > anterior.count("</w:tbl>")
         estilo = _estilo_de_parrafo(parrafo)
+        # El pie que Pandoc escribe bajo cada imagen repite su texto alternativo,
+        # que ya viaja dentro de la imagen para los lectores de pantalla. El
+        # documento tiene su propio título encima y su procedencia debajo.
+        if estilo == "ImageCaption":
+            cuenta["pies duplicados retirados"] = cuenta.get("pies duplicados retirados", 0) + 1
+            continue
         destino: str | None = None
-        if estilo == "Compact":
+        if en_tabla:
+            destino = "TextoDeTabla"
+        elif estilo == "Compact":
             destino = "VietaNumeradaTFM" if "<w:numPr>" in parrafo else "Normal"
         elif estilo in EQUIVALENCIAS:
             destino = EQUIVALENCIAS[estilo]
         elif estilo in {"ImageCaption", "CaptionedFigure"}:
             destino = None  # se resuelve abajo, según lo que diga el párrafo
-        texto = _texto_de_parrafo(parrafo)
+        texto = "" if en_tabla else _texto_de_parrafo(parrafo)
         if re.match(r"^\s*Figura [A-Z0-9]+\.\d+\.", texto):
             destino = "PieDeFigura"
         elif re.match(r"^\s*Tabla \d+\.\d+\.", texto):
             destino = "PieDeTabla"
+        if estilo == "Ttulo1":
+            capitulo += 1
+        if destino in {"TtuloApartado", "Ttulosubapartado"} and capitulo:
+            parrafo = _numeracion_por_capitulo(
+                parrafo,
+                PRIMER_NUMERO_NUEVO + capitulo - 1,
+                0 if destino == "TtuloApartado" else 1,
+            )
         if destino is not None and destino != estilo:
             parrafo = _reescribir_estilo(parrafo, destino)
             clave = f"{estilo or 'sin estilo'} → {destino}"
             cuenta[clave] = cuenta.get(clave, 0) + 1
+        # El título de una figura, y la imagen que le sigue, se pegan a lo que
+        # viene detrás: título, imagen y pie viajan juntos o no viajan.
+        if destino in {"PieDeFigura", "PieDeTabla"} or "<w:drawing>" in parrafo:
+            parrafo = _mantener_con_el_siguiente(parrafo)
+            cuenta["pegados al siguiente"] = cuenta.get("pegados al siguiente", 0) + 1
         salida.append(parrafo)
     salida.append(cuerpo[posicion:])
+    cuenta["capítulos con numeración propia"] = capitulo
     return "".join(salida), cuenta
 
 
 def anadir_estilos(xml_estilos: str) -> str:
     """Añade a la COPIA los dos estilos de pie, basados en el Normal de la plantilla."""
+    # Cada estilo nuevo con su propia definición: el pie va en negrita y pegado a
+    # lo que le sigue; el texto de tabla, sin espaciado, porque heredar el del
+    # cuerpo convierte una tabla de seis filas en dos páginas.
+    definiciones = {
+        "PieDeFigura": (
+            '<w:pPr><w:keepNext/><w:spacing w:before="240" w:after="60"/></w:pPr>'
+            '<w:rPr><w:b/><w:sz w:val="19"/></w:rPr>'
+        ),
+        "PieDeTabla": (
+            '<w:pPr><w:keepNext/><w:spacing w:before="240" w:after="60"/></w:pPr>'
+            '<w:rPr><w:b/><w:sz w:val="19"/></w:rPr>'
+        ),
+        "TextoDeTabla": (
+            '<w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>'
+            '<w:jc w:val="left"/><w:ind w:firstLine="0"/></w:pPr>'
+            '<w:rPr><w:sz w:val="18"/></w:rPr>'
+        ),
+    }
     nuevos = []
     for identificador, nombre in ESTILOS_NUEVOS.items():
         if f'w:styleId="{identificador}"' in xml_estilos:
@@ -230,13 +378,40 @@ def anadir_estilos(xml_estilos: str) -> str:
         nuevos.append(
             f'<w:style w:type="paragraph" w:customStyle="1" w:styleId="{identificador}">'
             f'<w:name w:val="{nombre}"/><w:basedOn w:val="Normal"/><w:qFormat/>'
-            '<w:pPr><w:keepNext w:val="0"/><w:spacing w:before="60" w:after="240"/></w:pPr>'
-            '<w:rPr><w:i/><w:sz w:val="18"/></w:rPr></w:style>'
+            + definiciones[identificador]
+            + "</w:style>"
         )
     return xml_estilos.replace("</w:styles>", "".join(nuevos) + "</w:styles>")
 
 
-def montar(plantilla: Path, salida: Path) -> dict[str, object]:
+def rellenar_marcadores(xml: str, datos: dict[str, str]) -> tuple[str, int]:
+    """Sustituye los marcadores de la plantilla por los datos de la portada."""
+    sustituidos = 0
+    for marcador, campo in MARCADORES.items():
+        valor = (datos.get(campo) or "").strip()
+        if not valor or marcador not in xml:
+            continue
+        sustituidos += xml.count(marcador)
+        xml = xml.replace(marcador, valor)
+    return xml, sustituidos
+
+
+def anadir_numeracion(xml_numeracion: str, capitulos: int) -> str:
+    """Añade una instancia de lista por capítulo, derivada de la de la plantilla."""
+    if not capitulos:
+        return xml_numeracion
+    encontrado = re.search(
+        rf'<w:num w:numId="{NUMERACION_DE_APARTADOS}"[^>]*>\s*<w:abstractNumId w:val="(\d+)"',
+        xml_numeracion,
+    )
+    if encontrado is None:
+        return xml_numeracion
+    instancias = instancias_de_numeracion(capitulos).format(abstracto=encontrado.group(1))
+    return xml_numeracion.replace("</w:numbering>", instancias + "</w:numbering>")
+
+
+def montar(plantilla: Path, salida: Path, datos: dict[str, str] | None = None) -> dict[str, object]:
+    datos = datos or {}
     salida.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as temporal:
         intermedio = Path(temporal) / "cuerpo.docx"
@@ -249,20 +424,39 @@ def montar(plantilla: Path, salida: Path) -> dict[str, object]:
         with zipfile.ZipFile(intermedio) as convertido:
             partes = {nombre: convertido.read(nombre) for nombre in convertido.namelist()}
 
-        documento = partes["word/document.xml"].decode("utf-8")
+        documento = _unir_espacios_de_nombres(
+            partes["word/document.xml"].decode("utf-8"), xml_plantilla
+        )
         inicio = documento.index("<w:body>") + len("<w:body>")
         cuerpo = documento[inicio : documento.rindex("</w:body>")]
         cuerpo, cambios = adaptar_estilos(cuerpo)
-        partes["word/document.xml"] = (
+        documento_final = (
             documento[:inicio]
             + portada
             + _indices()
             + cuerpo
             + documento[documento.rindex("</w:body>") :]
-        ).encode("utf-8")
+        )
+        documento_final, sustituidos = rellenar_marcadores(documento_final, datos)
+        partes["word/document.xml"] = documento_final.encode("utf-8")
         partes["word/styles.xml"] = anadir_estilos(
             partes["word/styles.xml"].decode("utf-8")
         ).encode("utf-8")
+        partes["word/numbering.xml"] = anadir_numeracion(
+            partes["word/numbering.xml"].decode("utf-8"),
+            int(cambios.get("capítulos con numeración propia", 0)),
+        ).encode("utf-8")
+        for cabecera in ("word/header1.xml", "word/header2.xml", "word/header3.xml"):
+            if cabecera in partes:
+                texto, mas = rellenar_marcadores(partes[cabecera].decode("utf-8"), datos)
+                partes[cabecera] = texto.encode("utf-8")
+                sustituidos += mas
+        for pie in ("word/footer1.xml", "word/footer2.xml", "word/footer3.xml", "word/footer4.xml"):
+            if pie in partes:
+                texto, mas = rellenar_marcadores(partes[pie].decode("utf-8"), datos)
+                partes[pie] = texto.encode("utf-8")
+                sustituidos += mas
+        cambios["marcadores sustituidos"] = sustituidos
 
         with zipfile.ZipFile(salida, "w", zipfile.ZIP_DEFLATED) as destino:
             for nombre, contenido in partes.items():
@@ -289,7 +483,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"no encuentro la plantilla: {plantilla}", file=sys.stderr)
         return 2
 
-    informe = montar(plantilla, args.salida)
+    portada = paths.CONFIGS / "portada-tfm.json"
+    datos = json.loads(portada.read_text("utf-8")) if portada.is_file() else {}
+    pendientes = [
+        campo for campo in set(MARCADORES.values()) if not (datos.get(campo) or "").strip()
+    ]
+    informe = montar(plantilla, args.salida, datos)
     print(f"convertido con {informe['pandoc']}")
     print(f"plantilla leída: {plantilla.name}")
     print("\nestilos traducidos a los de la plantilla:")
@@ -299,6 +498,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  {veces:5d}  {clave}")
     salida = informe["salida"]
     assert isinstance(salida, Path)
+    if pendientes:
+        print(
+            "\nmarcadores SIN rellenar, porque su dato no consta: " + ", ".join(sorted(pendientes))
+        )
+        print("  se dejan a la vista en el documento, para que no pasen inadvertidos")
     print(f"\n{salida.relative_to(paths.ROOT)}  ({salida.stat().st_size / 1024:.0f} KB)")
     return 0
 

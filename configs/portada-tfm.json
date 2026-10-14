@@ -1,0 +1,11 @@
+{
+  "que_es": "Los datos que rellenan la portada, el encabezado y el pie de la plantilla oficial. El guion de montaje sustituye cada marcador por el valor correspondiente; un valor vacío deja el marcador a la vista, para que no pase inadvertido.",
+  "titulo": "Sistema inteligente para el diagnóstico y mantenimiento predictivo de vehículos",
+  "titulo_nota": "Es el título registrado. La decisión abierta D-06 observa que ya no describe el alcance ejecutado, que es más estrecho. Cambiarlo es decisión del autor y del director.",
+  "autor": "Luis Daniel Díaz",
+  "apellidos_nombre": "Díaz, Luis Daniel",
+  "director": "",
+  "director_nota": "PENDIENTE: el nombre del director no consta en el repositorio y no se inventa.",
+  "fecha": "",
+  "fecha_nota": "PENDIENTE: depende de la convocatoria, que es una decisión del autor."
+}
