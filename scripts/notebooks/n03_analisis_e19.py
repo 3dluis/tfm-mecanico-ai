@@ -471,7 +471,67 @@ cifra en 0,125. Tampoco que estos dos casos sean intrínsecamente difíciles: so
 concretas, y las dos corresponden a casos que también fallaron en el ensayo sobre validación, lo que
 se discute en el apartado 11."""),
     md("""\
-## 9. Los diagnósticos incorrectos, que no se descartan
+## 9. Las 35 ejecuciones frente al umbral
+
+**Introducción al problema.** El apartado 7 muestra qué decidió el sistema caso a caso y el 8
+examina las dos abstenciones innecesarias. Falta situar **todas** las ejecuciones sobre el eje que
+las gobierna, que es la confianza calibrada frente al umbral: esa distancia distingue un acierto
+holgado de uno que estuvo cerca de no serlo.
+
+**Objetivo del análisis.** Situar las 35 ejecuciones registradas —no solo las 22 del estrato
+operativo— respecto del umbral de 0,79, marcando en cada una si la decisión fue correcta, si el
+diagnóstico del modelo lo era, cuánta cobertura alcanzó y cuántos documentos aplicables recibió.
+
+**Procedencia de los datos.** `artifacts/tables/E19_evaluacion_final_v3.csv`, el registro de la
+evaluación final. El sufijo es el **número de intento** —E19 se interrumpió dos veces— y no una
+versión del conjunto de datos."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import decisiones_de_e19
+
+# El nombre `registro` ya está tomado en este notebook por el JSON de E19: esta
+# tabla es otra cosa y lleva otro nombre.
+ejecuciones = decisiones_de_e19()
+bajo_umbral = ejecuciones[ejecuciones.confidence < 0.79]
+print(f"ejecuciones registradas: {len(ejecuciones)}")
+print(f"por debajo del umbral de 0,79: {len(bajo_umbral)}")
+print(f"de ellas, abstenciones innecesarias: {int(bajo_umbral.abstencion_innecesaria.sum())}")
+print()
+print(ejecuciones.groupby(["stratum", "expected_decision", "decision"]).size().to_string())"""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_decisiones_y_umbral
+
+fig_decisiones_y_umbral()"""),
+    md("""\
+**Descripción objetiva de lo que se ve.** Cuatro de las 35 ejecuciones quedan por debajo del umbral,
+y son exactamente las cuatro de las dos abstenciones innecesarias: la deriva del caudalímetro a
+0,573 y el fallo de encendido a 0,491, cada una repetida en dos ejecuciones. Ninguna decisión
+correcta queda por debajo del umbral y ninguna abstención indebida por encima. Cuatro ejecuciones
+con el diagnóstico del modelo incorrecto terminan en abstención correcta.
+
+**Interpretación.** La puerta de confianza no se equivocó por estar mal situada: el modelo de
+diagnóstico estaba genuinamente poco seguro en esas dos ventanas y el criterio hizo lo que estaba
+escrito que hiciera. El otro lado del mismo mecanismo también se ve: donde el diagnóstico era
+incorrecto pero la confianza alta, lo que evitó la explicación equivocada fue el criterio de
+suficiencia documental y no la confianza.
+
+**Un detalle, enunciado con cuidado.** El caso de la deriva aparece sobre dos sesiones: en autopista
+da 0,573 y se abstiene cuando debía explicar; en calentamiento da 0,851 y explica bien. Las dos
+abstenciones innecesarias están las dos en sesiones de autopista, donde están también las dos
+confianzas más bajas; en ralentí y calentamiento ninguna baja de 0,85.
+
+**Limitaciones.** Es una **observación descriptiva sobre dos errores**. Con `n = 2` no hay contraste
+posible y **no se afirma que la conducción en autopista cause una reducción de la confianza**: la
+coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son 35
+observaciones independientes: repiten casos entre estratos y proceden de ocho ventanas. Y el umbral
+**no se revisa** a la vista de esta figura: la política está congelada desde antes de abrir el
+conjunto de prueba, y moverla ahora sería ajustar el criterio a los datos reservados.
+
+**Relación con la pregunta de investigación.** Identifica dónde está el límite del sistema para PI.3:
+no en el criterio de suficiencia, que se comportó como estaba escrito, sino en la confianza del
+modelo de diagnóstico sobre las dos condiciones de señal más pobre. En la memoria es la
+**Figura 5.17**."""),
+    md("""\
+## 10. Los diagnósticos incorrectos, que no se descartan
 
 De las diez ejecuciones con evidencia documental completa, en **dos** el modelo diagnosticó mal. No
 se descartan ni se esconden: se informan, porque son parte del resultado."""),
@@ -512,7 +572,7 @@ modelo era baja, y el umbral los filtró. Un diagnóstico incorrecto **con confi
 documental aparente no sería filtrado por este mecanismo, y ese escenario es justamente el que el
 estrato adverso intentó provocar."""),
     md("""\
-## 10. Los dos análisis descriptivos, separados del primario
+## 11. Los dos análisis descriptivos, separados del primario
 
 El estrato comparativo y el adverso **no responden a la pregunta de investigación** y no deben
 mezclarse con el resultado primario: sus ventanas se eligieron **consultando al modelo**, de modo
@@ -550,7 +610,7 @@ eligieron mirando las predicciones del modelo, lo que es exactamente lo que el e
 evita. Mezclarlos con el primario produciría una cifra sin significado. Y el adverso tiene **dos**
 ejecuciones: describe dos casos, no una tendencia."""),
     md("""\
-## 11. Una coincidencia que hubo que auditar
+## 12. Una coincidencia que hubo que auditar
 
 Las seis tasas de los estratos operativo y comparativo salieron **idénticas** a las del ensayo
 previo sobre validación. Una coincidencia así obliga a comprobar que no hay un error de agregación
@@ -625,7 +685,7 @@ validación. Con `n = 2` en ambos recuentos, la repetición es compatible con qu
 sistemáticamente en esas dos condiciones y también con el azar; los artefactos no permiten
 distinguirlo y no se afirma lo primero."""),
     md("""\
-## 12. La comparación con políticas triviales
+## 13. La comparación con políticas triviales
 
 Una cifra de falsa confianza de 0/14 no dice nada por sí sola si una política trivial la obtiene
 igual. Abstenerse **siempre** da 0 de falsa confianza y 8 de 8 de abstención innecesaria."""),
@@ -664,7 +724,7 @@ denominadores, la comparación describe esta muestra. Y no se define aquí ning�
 «cuánta cobertura justifica cuánta protección»: eso exigiría un modelo de coste que este trabajo no
 tiene."""),
     md("""\
-## 13. Resultados negativos y limitaciones
+## 14. Resultados negativos y limitaciones
 
 1. **Dos abstenciones innecesarias de ocho.** El coste evitable de la protección, con un denominador
    que no permite estimarlo con precisión.
@@ -706,7 +766,7 @@ tiene."""),
 10. **Todo es sintético.** La validez externa no está establecida.
 11. **Una sola ejecución.** No hay repeticiones ni intervalos de confianza."""),
     md("""\
-## 14. Discusión
+## 15. Discusión
 
 Lo que E19 aporta a la pregunta de investigación es una respuesta acotada y verificable a PI.3: el
 criterio de suficiencia, sobre datos que el diseño no vio, no produjo ninguna explicación cuando
@@ -732,7 +792,7 @@ catorce ejecuciones no permite afirmar que no la produzca. Es la diferencia entr
 un suceso y haber establecido que es improbable, y con catorce observaciones solo se puede afirmar lo
 primero."""),
     md("""\
-## 15. Conclusiones del experimento
+## 16. Conclusiones del experimento
 
 **Qué aprendimos.** Que el recorrido completo funciona de extremo a extremo sobre datos que el
 diseño no vio, y que su criterio de suficiencia obtuvo la falsa confianza de la política más
@@ -751,7 +811,7 @@ capítulo de resultados. Su valor no está en la cifra sino en el procedimiento:
 congeladas y verificables, una apertura declarada y una conclusión que no va más allá de lo que
 catorce observaciones permiten."""),
     md("""\
-## 16. Reproducibilidad
+## 17. Reproducibilidad
 
 | | |
 |---|---|
@@ -773,7 +833,7 @@ redistribuye—, los pesos del adaptador LoRA, una base PostgreSQL con pgvector 
 del conjunto de prueba, que la regla congelada no autoriza por un resultado desfavorable ni por
 curiosidad.
 
-## 17. Referencias y trazabilidad
+## 18. Referencias y trazabilidad
 
 **Dónde aparece esto en la memoria.** Este notebook sostiene el apartado «La evaluación final sobre el conjunto de prueba» del capítulo 5, con la **Figura 5.15** —las tres cifras con sus denominadores— y la **Figura 5.16** —la decisión de cada una de las 22 ejecuciones—. Lo que la evaluación cambia en los objetivos está en el capítulo 6, en OE3, OE5 y el objetivo general.
 
