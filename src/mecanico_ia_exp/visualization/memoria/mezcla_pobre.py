@@ -29,8 +29,7 @@ from mecanico_ia_exp.visualization.memoria.base import (
     INK_SECONDARY,
     estilo_para_impresion,
     numero,
-    pie,
-    titulo,
+    panel,
 )
 
 #: Las dos condiciones que empobrecen la mezcla, y la referencia.
@@ -108,7 +107,7 @@ def fig_mezcla_pobre() -> Figure:
 
     estilo_para_impresion()
     fig, ejes = plt.subplots(
-        2, 1, figsize=(ANCHO_DE_PAGINA, 7.6), gridspec_kw={"height_ratios": [1.0, 1.25]}
+        2, 1, figsize=(ANCHO_DE_PAGINA, 6.4), gridspec_kw={"height_ratios": [1.0, 1.25]}
     )
 
     # Arriba: las dos correcciones de combustible, que es donde el taller
@@ -135,9 +134,7 @@ def fig_mezcla_pobre() -> Figure:
         edgecolor="none",
         ax=ejes[0],
     )
-    ejes[0].set_title(
-        "Donde el taller miraría, las dos averías se solapan sobre la misma recta", fontsize=9
-    )
+    panel(ejes[0], "a")
     ejes[0].legend(loc="upper left", fontsize=6.8, title=None, frameon=False)
     ejes[0].grid(visible=True)
     ejes[0].set_axisbelow(True)
@@ -184,22 +181,9 @@ def fig_mezcla_pobre() -> Figure:
     ejes[1].invert_yaxis()
     ejes[1].set_xlim(0.0, 1.16)
     ejes[1].set_xlabel("|delta de Cliff| (0 solape total, 1 separación completa)")
-    ejes[1].set_title(
-        "Lo que avisa de que algo va mal no es lo que dice cuál de las dos es", fontsize=9
-    )
+    panel(ejes[1], "b")
     ejes[1].legend(loc="lower center", bbox_to_anchor=(0.5, -0.40), ncol=1, fontsize=6.8)
     ejes[1].grid(visible=True, axis="x")
     ejes[1].set_axisbelow(True)
-
-    titulo(fig, "Dos averías que empobrecen la mezcla igual, y lo que acaba separándolas")
-    pie(
-        fig,
-        "E4 y E5 · synthetic_v2, solo la partición de ENTRENAMIENTO · el delta de Cliff es un "
-        "tamaño de efecto DESCRIPTIVO: las ventanas de una "
-        "misma sesión no son independientes, de modo que no se acompaña de contraste ni de "
-        "intervalo · separabilidad descriptiva NO es rendimiento de clasificación demostrado · "
-        "datos sintéticos: no se afirma que estas características distingan las dos averías en "
-        "un vehículo real",
-    )
     fig.tight_layout()
     return fig

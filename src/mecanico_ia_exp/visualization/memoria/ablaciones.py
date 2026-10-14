@@ -17,8 +17,7 @@ from mecanico_ia_exp.visualization.memoria.base import (
     REGISTROS,
     TABLAS,
     estilo_para_impresion,
-    pie,
-    titulo,
+    panel,
 )
 
 
@@ -77,14 +76,13 @@ def fig_ablaciones() -> Figure:
         )
 
     estilo_para_impresion()
-    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 7.2), sharex=True)
+    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 5.6), sharex=True)
     y = np.arange(len(filas))
-    for eje, (indice_num, indice_den, rotulo, color) in zip(
-        ejes,
-        [
-            (1, 2, "Falsa confianza: explica cuando debía callar", COLOR_MAL),
-            (3, 4, "Abstención innecesaria: calla cuando debía explicar", CATEGORICAL[3]),
-        ],
+    # (a) falsa confianza · (b) abstención innecesaria. Qué es cada una lo dice
+    # el pie de la figura, que es texto del documento.
+    for letra, (eje, (indice_num, indice_den, color)) in zip(
+        "ab",
+        zip(ejes, [(1, 2, COLOR_MAL), (3, 4, CATEGORICAL[3])], strict=True),
         strict=True,
     ):
         numeradores = np.array([f[indice_num] for f in filas], dtype=float)
@@ -93,7 +91,7 @@ def fig_ablaciones() -> Figure:
         eje.barh(y, numeradores, color=color, height=0.6, label="errores")
         for i, (n, d) in enumerate(zip(numeradores, denominadores, strict=True)):
             eje.text(d + 0.2, i, f"{int(n)}/{int(d)}", va="center", fontsize=7.5)
-        eje.set_title(rotulo, fontsize=9)
+        panel(eje, letra)
         eje.set_xlabel("ejecuciones (recuento)")
         eje.set_xlim(0, max(denominadores) + 2.2)
         eje.grid(visible=True, axis="x")
@@ -107,13 +105,11 @@ def fig_ablaciones() -> Figure:
         eje.set_yticklabels([f[0] for f in filas], fontsize=7)
         eje.invert_yaxis()
 
-    titulo(fig, "Lo que sostiene el resultado es el criterio de suficiencia, no la atribución")
-    pie(
-        fig,
-        "E18, ablaciones pre-registradas, ejecutadas el 1-10-2026 · synthetic_v2, los mismos 17 "
-        "casos · la falsa confianza se cuenta sobre 9 ejecuciones de 3 ventanas y la abstención "
-        "sobre 5 de 5 ventanas · A2 quedó INCONCLUSA: la ruta léxica no recupera nada con una "
-        "consulta en prosa, y la causa no es la ablación sino la consulta",
+    # Una sola leyenda y FUERA del área de trazado: dentro se imprimía encima de
+    # las barras de la última fila. Sin ella, el gris y el color no se
+    # distinguen como denominador y numerador del mismo recuento.
+    ejes[-1].legend(
+        loc="upper center", bbox_to_anchor=(0.5, -0.26), ncol=2, fontsize=7, frameon=False
     )
     fig.tight_layout()
     return fig

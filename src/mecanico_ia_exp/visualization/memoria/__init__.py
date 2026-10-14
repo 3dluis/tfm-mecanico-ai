@@ -27,8 +27,7 @@ from mecanico_ia_exp.visualization.memoria.base import (
     estilo_para_impresion,
     guardar,
     numero,
-    pie,
-    titulo,
+    panel,
 )
 from mecanico_ia_exp.visualization.memoria.calibracion import fig_calibracion
 from mecanico_ia_exp.visualization.memoria.datos import (
@@ -81,9 +80,8 @@ __all__ = [
     "fig_ventana_y_descriptor",
     "guardar",
     "numero",
-    "pie",
+    "panel",
     "recuento_de_expresion",
     "separabilidad_entre_mezclas_pobres",
     "tasas_e15",
-    "titulo",
 ]

@@ -241,12 +241,23 @@ def lienzo(
     columnas: int = 1,
     ancho: float = 9.0,
     alto: float = 3.2,
+    para_la_memoria: bool = False,
 ) -> tuple[Any, Any]:
     """Crea una figura con el estilo del laboratorio y su procedencia al pie.
 
     ``procedencia`` dice **de dónde salen los números**: el registro, la tabla o
     la celda que los calculó. Es el campo que permite al lector ir a
     comprobarlos, y por eso es obligatorio en lugar de opcional.
+
+    **``para_la_memoria``.** Una figura que va al documento no puede llevar
+    dentro su título ni su procedencia: los lleva el documento, como texto
+    editable que entra en el índice de figuras y se corrige sin regenerar el
+    PNG. Con esta bandera el lienzo sale limpio —solo el gráfico— y los dos
+    campos siguen siendo obligatorios aquí porque es el notebook quien tiene que
+    declararlos: se imprimen debajo de la celda en lugar de dentro de la imagen.
+
+    Para una figura que vive **solo** en el notebook la bandera sobra: ahí no hay
+    pie de figura que lleve el título, y dentro de la imagen es donde se lee.
     """
     import matplotlib.pyplot as plt
 
@@ -256,14 +267,14 @@ def lienzo(
     fig, ejes = plt.subplots(
         filas, columnas, figsize=(ancho, alto * filas), constrained_layout=True
     )
-    fig.suptitle(titulo, fontsize=10, fontweight="bold", x=0.0, ha="left")
-    fig.supxlabel(
-        PIE_DE_FIGURA.format(experimento=experimento, dataset=dataset, procedencia=procedencia),
-        fontsize=6.5,
-        color=INK_MUTED,
-        x=0.0,
-        ha="left",
+    procedencia_completa = PIE_DE_FIGURA.format(
+        experimento=experimento, dataset=dataset, procedencia=procedencia
     )
+    if para_la_memoria:
+        print(f"{titulo}\n{procedencia_completa}")
+        return fig, ejes
+    fig.suptitle(titulo, fontsize=10, fontweight="bold", x=0.0, ha="left")
+    fig.supxlabel(procedencia_completa, fontsize=6.5, color=INK_MUTED, x=0.0, ha="left")
     return fig, ejes
 
 

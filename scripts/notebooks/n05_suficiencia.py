@@ -260,6 +260,7 @@ fig, ejes = soporte.lienzo(
     filas=2,
     ancho=5.9,
     alto=3.2,
+    para_la_memoria=True,
 )
 
 # Las CINCO condiciones del conjunto. Hasta el 13-10-2026 esta lista tenía
@@ -269,13 +270,17 @@ orden = ["FULL", "PARTIAL", "ABSENT", "DISTRACTOR", "DISTRACTOR_NO_FILTER"]
 etiquetas_x = ["FULL", "PARTIAL", "ABSENT", "DISTRACTOR", "DISTRACTOR\\nSIN FILTRO"]
 colores = {"EXPLAIN": "#1b6b4a", "ABSTAIN": "#9c4221"}
 
-for eje, (columna, etiqueta, unidad) in zip(
+for letra, (eje, (columna, etiqueta, unidad)) in zip(
+    "ab",
+    zip(
     ejes,
     [
         ("n_documents_applicable", "Documentos aplicables", "nº de fragmentos"),
         ("claim_coverage", "Cobertura de afirmaciones", "fracción de 0 a 1"),
     ],
     strict=True,
+),
+    strict=False,
 ):
     for i, condicion in enumerate(orden):
         sub = e15[e15.corpus_variant == condicion]
@@ -293,7 +298,7 @@ for eje, (columna, etiqueta, unidad) in zip(
     eje.set_xticklabels(etiquetas_x, fontsize=7.5)
     eje.set_xlabel("Condición de evidencia")
     eje.set_ylabel(f"{etiqueta} ({unidad})")
-    eje.set_title(etiqueta, fontsize=9)
+    eje.set_title(f"({letra})", fontsize=9, fontweight="bold", loc="left", pad=6)
 
 dibujados = int(e15.corpus_variant.isin(orden).sum())
 assert dibujados == len(e15), f"la figura dibuja {dibujados} de {len(e15)} casos"

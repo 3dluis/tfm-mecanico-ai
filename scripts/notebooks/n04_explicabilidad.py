@@ -209,16 +209,6 @@ for i, condicion in enumerate(normalizada.index):
 
 barra = fig.colorbar(imagen, ax=eje, shrink=0.85)
 barra.set_label("fracción del peso explicativo total de la condición", fontsize=7)
-fig.suptitle(
-    "Dónde mira el modelo · el punto marca las señales que la ficha del fallo declara",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "E9 atribución · synthetic_v2, validación, 18 casos · "
-    "fuente: artifacts/tables/E9_atribuciones_synthetic_v2.csv · "
-    "valores de Shapley por permutación, fondo de 100 ventanas sin fallo",
-    fontsize=6.5, x=0.0, ha="left",
-)
 fig.tight_layout()
 soporte.exportar(fig, "FIG-NB04-01_mapa_atribucion", subdirectorio="04_explicabilidad")
 plt.show()
