@@ -2,6 +2,7 @@
 
 **Fecha:** 14 de octubre de 2026 · **Qué es:** qué referencias al repositorio contiene la memoria,
 qué función cumple cada una y cuáles obligan al lector a salir del documento para entender algo ·
+**Estado: aplicada.** Las correcciones de los apartados 4, 5 y 6 están en el documento ·
 **Criterio:** el tribunal debe poder leer la memoria entera, comprender la investigación y juzgar
 sus límites **sin abrir el repositorio**; el repositorio sirve para comprobar **cómo** se obtuvo lo
 que la memoria explica, no para explicar lo que la memoria dejó a medias
@@ -96,13 +97,17 @@ que se retira del cuerpo.
 
 | Concepto | Palabras |
 |---|---|
-| Lo que se añade al cuerpo (A4 y A5) | **+120** |
-| Tabla de correspondencia C.5 en el anexo | **+330** |
-| Lo que se retira de los pies al acortarlos | **−260** |
-| **Neto** | **≈ +190 palabras** |
+| Lo que se añade al cuerpo (A4 y A5) | **+281** |
+| Apartado C.6 y tabla de correspondencia C.5 | **+898** |
+| Lo que se retira de los pies al acortarlos | **−160** |
+| **Neto medido** | **cuerpo 36 455 → 36 736; anexos 4 237 → 5 135** |
 
-El efecto sobre la extensión es despreciable. El efecto sobre la lectura no: los pies de figura
-pasan de tres líneas de rutas a una línea de procedencia científica.
+Los anexos pasan del 11,6 % al **14,0 %** del cuerpo, dentro del 20 % que la plantilla toma como
+referencia.
+
+El efecto sobre la extensión del cuerpo es despreciable, y el crecimiento está en el anexo, que es
+donde debía estar. El efecto sobre la lectura no es despreciable: los pies de figura pasan de tres
+líneas de rutas a una línea de procedencia científica.
 
 ## 8. Lo que esta propuesta no hace
 
