@@ -39,8 +39,10 @@ El análisis exploratorio previo al modelado dejó dos hechos que condicionan la
 Ese contraste entre fallos admite una medida, y es la que la fase exploratoria produjo antes de
 entrenar nada: para cada señal y cada condición, cuánto se separa de la condición sin fallo, medido
 por separado sobre el nivel del bloque y sobre su dispersión. Importa porque determina qué puede
-aprender el modelo y, más adelante, qué puede afirmar legítimamente la explicación. La Figura 5.2
-recoge esa medida para las doce señales y las cinco condiciones.
+aprender el modelo y, más adelante, qué puede afirmar legítimamente la explicación. Las dos vías se
+presentan por separado, **una figura cada una**, porque comparten las doce señales y las cinco
+condiciones y se comparan mejor una tras otra que apiladas: la Figura 5.2 recoge el nivel y la
+Figura 5.3, la dispersión.
 
 **Figura 5.2. Separabilidad de cada señal por condición, medida sobre el nivel del bloque.**
 
