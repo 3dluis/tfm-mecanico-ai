@@ -30,8 +30,6 @@ depender de ningún otro repositorio ni de la máquina en que se construyó.
 `notebooks/html/`. No hacen falta Python ni Jupyter: se abren en cualquier navegador y traen
 dentro sus figuras y sus tablas.
 
-**Revisar en quince minutos.** [`JURY_GUIDE.md`](JURY_GUIDE.md).
-
 **Ejecutar los notebooks.**
 
 ```bash
