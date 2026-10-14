@@ -127,6 +127,49 @@ modalidad = soporte.declarar_modalidad(
     "Lo que aquí se ve son las cifras publicadas, no una reproducción de ellas.",
 )"""),
     md("""\
+## 4 bis. De dónde sale la evidencia: la recuperación de E12
+
+**Por qué está aquí.** La suficiencia se decide sobre los documentos que el agente **recibe**, y
+esos documentos los elige la fase de recuperación, que se midió en E12. Sin esa medición, la
+pregunta que este notebook responde estaría mal planteada: no se puede evaluar si el criterio
+rechaza evidencia insuficiente sin saber antes si la evidencia pertinente llega a estar disponible.
+Por eso el análisis de E12 se presenta aquí, inmediatamente antes de usar su salida.
+
+**Objetivo del análisis.** Medir si el procedimiento relevante del manual aparece entre los
+documentos recuperados, y comparar dos estrategias de consulta: la **semántica pura**, que busca con
+el texto de la pregunta, y la **guiada por el diagnóstico**, que acota la búsqueda con el código de
+avería y la señal observada.
+
+**Datos y metodología.** El registro de E12 sobre el corpus del vehículo de referencia: seis casos,
+cinco de ellos puntuados —uno no tiene procedimiento aplicable en el manual—. Para cada caso se mira
+si el procedimiento correcto está entre los diez primeros resultados, y se calculan MRR, nDCG y
+precisión. No se reejecuta la recuperación: se leen las cifras registradas."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_recuperacion
+
+fig = fig_recuperacion()
+soporte.exportar(fig, "FIG-N05-04_recuperacion", subdirectorio="05_suficiencia")
+fig"""),
+    md("""\
+**Qué muestra.** La recuperación semántica pura encuentra el procedimiento en **cero** de los cinco
+casos puntuados. La guiada por el diagnóstico lo encuentra en **cinco de cinco**. Las tres métricas
+de ordenación acompañan ese salto.
+
+**Qué podemos interpretar.** Que la consulta en prosa no basta sobre un manual de taller: sus
+procedimientos están indexados por código de avería y por componente, no por la descripción que un
+usuario haría del síntoma. El diagnóstico no sirve aquí solo para decidir qué decir, sino para
+**acotar dónde buscar**, y esa es la aportación concreta a PI.2.
+
+**Qué no podemos afirmar.** Que la ventaja se generalice. Son **cinco casos puntuados** sobre un
+único manual y un único vehículo: los recuentos se publican como recuentos y no como tasas, y no
+hay intervalo porque no hay muestra de la que estimarlo. Tampoco se afirma que la ruta semántica sea
+mala en general: es mala **con esta consulta y este corpus**, y la ablación `A2` de este mismo
+notebook quedó inconclusa justamente por confundir las dos cosas.
+
+**Relación con la hipótesis.** Es la medición de PI.2: la trazabilidad de una explicación depende de
+que el documento que la respalda llegue a estar entre los recuperados, y aquí se ve con qué
+estrategia llega y con cuál no."""),
+    md("""\
 ## 5. Carga y comprobación de la evidencia
 
 Primero se comprueba que los artefactos están y que dicen lo que se espera. Si faltara uno, el
@@ -182,6 +225,14 @@ explica sin evidencia. **La condición informativa es la parcial**, y es la de l
 siguiente."""),
     md("""\
 ## 7. La condición informativa: hay documentos y aun así se abstiene
+
+**Objetivo del análisis.** Separar dos situaciones que una tasa de abstención confunde: que no haya
+documentos, y que los haya y no cubran lo que se quiere afirmar. Solo la segunda demuestra que el
+criterio mide suficiencia y no disponibilidad.
+
+**Datos y metodología.** Los diecisiete casos de E15 bajo las cinco condiciones de evidencia, con
+dos magnitudes por caso: cuántos documentos **aplicables** se recuperaron y qué **cobertura de
+afirmaciones** alcanzó el verificador. Las dos están registradas; no se recalcula ninguna decisión.
 
 Con evidencia parcial el sistema tiene delante cinco, siete o seis fragmentos aplicables —del
 vehículo correcto, con el código correcto— y se abstiene igual. Esa es la medición que distingue
@@ -354,6 +405,42 @@ condicionado por que **las cuatro se miden sobre el conjunto con el que el crite
 `A2` quedó además **inconclusa**: la ruta léxica no recuperó nada en ningún caso, pero la causa no
 es la ablación sino la consulta —una búsqueda de texto completo con treinta palabras unidas por
 conjunción—. Se conserva como inconclusa en lugar de reformularse a posteriori."""),
+    md("""\
+**Objetivo del análisis.** Determinar **qué componente** del recorrido sostiene la ausencia de
+falsa confianza: si el criterio compuesto de suficiencia, la puerta de confianza sola, la atribución
+o la ruta de recuperación.
+
+**Datos y metodología.** Los diecisiete casos de E15 bajo la configuración canónica y bajo las
+cuatro ablaciones pre-registradas el 1 de octubre de 2026. Cada ablación cambia **una** pieza y deja
+el resto idéntico. Los dos errores se cuentan por separado sobre sus propios denominadores, en
+ejecuciones y no en tasas.
+
+**Por qué además una figura.** La tabla da ocho números; lo que la figura añade es el **contraste
+entre los dos errores** configuración a configuración, que es lo que permite ver de un vistazo qué
+componente sostiene el resultado y cuál es sustituible."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_ablaciones
+
+fig = fig_ablaciones()
+soporte.exportar(fig, "FIG-N05-02_ablaciones", subdirectorio="05_suficiencia")
+fig"""),
+    md("""\
+**Qué muestra.** La configuración canónica no produce ninguna falsa confianza —0 de 9 ejecuciones— y
+se abstiene de más en 2 de 5. Al sustituir el criterio compuesto por una puerta de confianza sola,
+la falsa confianza pasa a **9 de 9**. Retirar la atribución no cambia ninguna de las dos cifras.
+`A2` quedó **inconclusa**: la ruta léxica no recupera nada con una consulta en prosa, y la causa es
+la consulta y no la ablación.
+
+**Qué podemos interpretar.** Lo que evita la falsa confianza es la **comprobación de que la
+evidencia documental cubre lo que se va a afirmar**, no la confianza del modelo de diagnóstico ni la
+atribución. La atribución entra en el informe como explicación, no como barrera.
+
+**Qué no podemos afirmar.** Que la atribución sea prescindible: no cambia estas dos tasas sobre
+estos casos, lo que es distinto de no aportar nada. Y los denominadores son 9 y 5 **ejecuciones**
+procedentes de 3 y 5 ventanas: no son tasas estimadas.
+
+**Relación con la hipótesis.** Es la prueba de atribución de PI.3: el resultado se debe al criterio
+de suficiencia declarado, y no al conjunto del sistema indistintamente."""),
     md("""\
 ## 9. P1: evidencia que parece pertinente y no lo es
 
@@ -568,6 +655,37 @@ Un notebook que solo mostrara lo que salió bien sería una presentación, no un
    casos. Las cifras de redacción son históricas afectadas, no evidencia de generalización.
 8. **Un vehículo, un corpus, telemetría sintética.** Nada de esto dice qué pasaría con otro
    vehículo, otro fabricante o datos de operación real."""),
+    md("""\
+## 12 bis. El compromiso entre los dos errores
+
+**Objetivo de este análisis.** Las limitaciones anteriores se enuncian una a una. Falta verlas como
+lo que son: un **compromiso**. Callar menos aumenta la cobertura y acerca la falsa confianza; callar
+más la aleja y deja sin explicar casos que podían explicarse. El umbral elige un punto de esa curva,
+y conviene ver cuál.
+
+**Datos y metodología.** Las decisiones de los diecisiete casos de E15 bajo el criterio vigente,
+separando los que debían explicarse de los que debían callarse. No se recalcula ninguna política: se
+leen las decisiones registradas."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_compromiso
+
+fig = fig_compromiso()
+soporte.exportar(fig, "FIG-N05-03_compromiso", subdirectorio="05_suficiencia")
+fig"""),
+    md("""\
+**Qué muestra.** Dónde cae la configuración elegida respecto de los dos errores que no se pueden
+minimizar a la vez.
+
+**Qué podemos interpretar.** Que el punto elegido es **deliberadamente conservador**: prefiere
+callar de más antes que explicar sin evidencia, porque los dos errores no cuestan lo mismo en un
+taller. Una explicación equivocada orienta una reparación; una abstención devuelve el caso a la
+persona.
+
+**Qué no podemos afirmar.** Que este sea el punto óptimo. Con diecisiete casos de cinco ventanas no
+se estima ninguna curva: lo que se muestra es dónde quedó la configuración, no que otra fuera peor.
+
+**Relación con la hipótesis.** Explicita el precio de PI.3: la ausencia de falsa confianza observada
+se compra con abstenciones innecesarias, y ese precio se publica en lugar de esconderse."""),
     md("""\
 ## 13. Trazabilidad
 

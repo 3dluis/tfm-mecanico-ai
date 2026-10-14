@@ -370,6 +370,9 @@ del cual ningún modelo podría haber hecho mejor. En la memoria es la **Figura 
     md("""\
 Y la misma pareja, en unidades físicas y superpuesta señal a señal, es la comparación que la
 **Figura A.1** del anexo A hacía sobre `synthetic_v1` y ya no se puede regenerar."""),
+    md("""\
+**Objetivo del análisis.** Ver en **unidades físicas**, señal a señal, lo que el apartado anterior
+resume en unidades del umbral: qué hace cada avería a la señal que la delata, y desde cuándo."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import fig_pareja_contrafactual
 
