@@ -234,6 +234,7 @@ fig, ejes = soporte.lienzo(
     filas=2,
     ancho=5.9,
     alto=3.6,
+    para_la_memoria=True,
 )
 
 import numpy as np
@@ -257,7 +258,7 @@ ejes[0].set_xticks(range(len(clases)))
 ejes[0].set_xticklabels(etiquetas, fontsize=7.5, rotation=20, ha="right")
 ejes[0].set_ylabel("Muestras alteradas / 120 (fracción de 0 a 1)")
 ejes[0].set_xlabel("Condición de fallo")
-ejes[0].set_title("Cuánto de cada ventana es observable", fontsize=9)
+ejes[0].set_title("(a)", fontsize=9, fontweight="bold", loc="left", pad=6)
 ejes[0].axhline(0, color="#1b6b4a", linewidth=0.8, linestyle=":")
 
 # Derecha: ventanas sin señal frente a ventanas falladas por el bosque.
@@ -281,7 +282,7 @@ ejes[1].set_xticks(posicion)
 ejes[1].set_xticklabels(etiquetas, fontsize=7.5, rotation=20, ha="right")
 ejes[1].set_ylabel("Número de ventanas (de 14)")
 ejes[1].set_xlabel("Condición de fallo")
-ejes[1].set_title("Sin señal frente a falladas", fontsize=9)
+ejes[1].set_title("(b)", fontsize=9, fontweight="bold", loc="left", pad=6)
 ejes[1].legend(fontsize=7)
 
 destino = soporte.exportar(

@@ -26,8 +26,7 @@ from mecanico_ia_exp.visualization.memoria.base import (
     INK_SECONDARY,
     estilo_para_impresion,
     numero,
-    pie,
-    titulo,
+    panel,
 )
 
 #: Las cinco condiciones de fallo, en el orden del catálogo.
@@ -94,7 +93,7 @@ def fig_forma_del_fallo() -> Figure:
 
     estilo_para_impresion()
     fig, ejes = plt.subplots(
-        2, 1, figsize=(ANCHO_DE_PAGINA, 6.8), gridspec_kw={"height_ratios": [1.45, 1.0]}
+        2, 1, figsize=(ANCHO_DE_PAGINA, 5.6), gridspec_kw={"height_ratios": [1.45, 1.0]}
     )
 
     for i, fault_id in enumerate(FALLOS):
@@ -126,9 +125,7 @@ def fig_forma_del_fallo() -> Figure:
     ejes[0].set_ylim(0.0, float(con_fallo.fault_deviation_max.max()) * 2.0)
     ejes[0].set_xlim(0.0, 600.0)
     ejes[0].set_ylabel("desviación frente al\ncontrafactual (umbrales)")
-    ejes[0].set_title(
-        "Cuatro fallos se instalan y no se van; el quinto aparece y desaparece", fontsize=9
-    )
+    panel(ejes[0], "a")
     ejes[0].legend(loc="upper left", bbox_to_anchor=(0.0, -0.22), ncol=3, fontsize=6.8)
     ejes[0].grid(visible=True, axis="y")
     ejes[0].set_axisbelow(True)
@@ -165,23 +162,10 @@ def fig_forma_del_fallo() -> Figure:
     ejes[1].set_xlim(0.0, 600.0)
     ejes[1].set_xlabel("tiempo de la sesión (s)")
     ejes[1].set_ylabel("régimen (min⁻¹)")
-    ejes[1].set_title(
-        f"El fallo de encendido altera {len(episodios)} de 600 muestras, en episodios de 1 a 3 s",
-        fontsize=9,
-    )
+    panel(ejes[1], "b")
     ejes[1].legend(loc="lower center", bbox_to_anchor=(0.5, -0.52), ncol=2, fontsize=6.8)
     ejes[1].grid(visible=True, axis="y")
     ejes[1].set_axisbelow(True)
-
-    titulo(fig, "La forma en el tiempo de cada fallo, y por qué no todas se detectan igual")
-    pie(
-        fig,
-        "Análisis contrafactual T2 · synthetic_v2, cinco sesiones de ENTRENAMIENTO, una por "
-        "condición, elegidas por regla declarada · la desviación va en unidades del umbral de "
-        "observabilidad (una décima del ruido propio del generador) · artefacto DERIVADO para "
-        "análisis visual: no entra en entrenamiento, validación ni prueba, y no modifica ninguna "
-        "métrica · datos sintéticos",
-    )
     fig.tight_layout()
     return fig
 
@@ -195,9 +179,9 @@ def fig_pareja_contrafactual() -> Figure:
     """
     tabla = _contrafactual()
     estilo_para_impresion()
-    fig, ejes = plt.subplots(len(FALLOS), 1, figsize=(ANCHO_DE_PAGINA, 8.4), sharex=True)
+    fig, ejes = plt.subplots(len(FALLOS), 1, figsize=(ANCHO_DE_PAGINA, 7.2), sharex=True)
 
-    for eje, fault_id in zip(ejes, FALLOS, strict=True):
+    for letra, (eje, fault_id) in zip("abcde", zip(ejes, FALLOS, strict=True), strict=True):
         con = tabla[(tabla.traza == "con_fallo") & (tabla.fault_id == fault_id)]
         sesion = str(con.session_id.iloc[0])
         sin = tabla[(tabla.traza == "contrafactual") & (tabla.session_id == sesion)]
@@ -224,11 +208,15 @@ def fig_pareja_contrafactual() -> Figure:
         inicio = float(con.timestamp[con.fault_active].min())
         eje.axvline(inicio, color=INK_SECONDARY, lw=0.8, ls=":")
         eje.set_ylabel(señal, fontsize=7)
+        # La condición y el régimen son la categoría del panel, no un título:
+        # sin ellos no se sabe qué sesión se está mirando. El recuento de
+        # muestras alteradas va al pie de la figura, en el documento.
         eje.set_title(
-            f"{CONDICION[fault_id]} · {con.regime.iloc[0]!s} · "
-            f"{len(expresadas)} de {int((con.timestamp >= inicio).sum())} muestras del tramo "
-            "se apartan de forma observable",
+            f"({letra}) {CONDICION[fault_id]} · {con.regime.iloc[0]!s}",
             fontsize=8,
+            fontweight="bold",
+            loc="left",
+            pad=4,
         )
         eje.grid(visible=True, axis="y")
         eje.set_axisbelow(True)
@@ -236,17 +224,6 @@ def fig_pareja_contrafactual() -> Figure:
     ejes[0].legend(loc="upper left", fontsize=6.8, ncol=2)
     ejes[-1].set_xlabel("tiempo de la sesión (s)")
     ejes[-1].set_xlim(0.0, 600.0)
-    titulo(fig, "La misma sesión con el fallo y sin él: lo que cambia, y cuándo")
-    pie(
-        fig,
-        "Análisis contrafactual T2 · el contrafactual NO se simula aparte: el motor de señales "
-        "avanza al margen del fallo, de modo que la trayectoria sana es el valor que el generador "
-        "calcula en cada muestra · misma semilla, régimen, temperatura ambiente, duración y "
-        "cadencia; fallo desactivado · se dibuja la señal que más se aparta en cada condición · "
-        "artefacto DERIVADO para análisis visual · datos sintéticos, comparación contrafactual "
-        "controlada: una desviación observable NO implica que un clasificador la detecte, y su "
-        "ausencia NO demuestra que el diagnóstico sea imposible",
-    )
     fig.tight_layout()
     return fig
 
@@ -284,7 +261,7 @@ def fig_ventana_y_descriptor() -> Figure:
 
     estilo_para_impresion()
     fig, ejes = plt.subplots(
-        3, 1, figsize=(ANCHO_DE_PAGINA, 7.4), gridspec_kw={"height_ratios": [1.0, 1.0, 1.1]}
+        3, 1, figsize=(ANCHO_DE_PAGINA, 6.4), gridspec_kw={"height_ratios": [1.0, 1.0, 1.1]}
     )
 
     ejes[0].plot(
@@ -293,9 +270,7 @@ def fig_ventana_y_descriptor() -> Figure:
     ejes[0].axvspan(inicio, fin, color=CATEGORICAL[3], alpha=0.22)
     ejes[0].set_xlim(0.0, 600.0)
     ejes[0].set_ylabel("régimen (min⁻¹)")
-    ejes[0].set_title(
-        f"1 · la sesión completa, con la ventana de {len(ventana)} s señalada", fontsize=9
-    )
+    panel(ejes[0], "a")
     ejes[0].grid(visible=True, axis="y")
     ejes[0].set_axisbelow(True)
 
@@ -325,7 +300,7 @@ def fig_ventana_y_descriptor() -> Figure:
             label=f"{len(en_ventana)} muestras alteradas por el fallo",
         )
     ejes[1].set_ylabel("régimen (min⁻¹)")
-    ejes[1].set_title("2 · la misma ventana, y los dos números con que se resume", fontsize=9)
+    panel(ejes[1], "b")
     ejes[1].legend(loc="upper left", bbox_to_anchor=(0.0, -0.18), fontsize=6.5, ncol=2)
     ejes[1].grid(visible=True, axis="y")
     ejes[1].set_axisbelow(True)
@@ -369,19 +344,8 @@ def fig_ventana_y_descriptor() -> Figure:
         f"cuánto se aparta de las {int(referencia.sum())} ventanas sin fallo del mismo "
         "régimen (escalas robustas)"
     )
-    ejes[2].set_title(
-        "3 · la media es el descriptor que menos se mueve; el mínimo, el que más", fontsize=9
-    )
+    panel(ejes[2], "c")
     ejes[2].grid(visible=True, axis="x")
     ejes[2].set_axisbelow(True)
-
-    titulo(fig, "De la señal al descriptor: lo que el resumen conserva y lo que disuelve")
-    pie(
-        fig,
-        f"E5 y E6 · synthetic_v2, ventana {sesion}@{int(inicio)}s, partición de ENTRENAMIENTO · "
-        "los paneles 1 y 2 salen del análisis contrafactual T2 y el panel 3 del conjunto "
-        "procesado que el modelo consume · es UNA ventana elegida como ilustración, no una "
-        "muestra: el fenómeno es general y la figura es un caso",
-    )
     fig.tight_layout()
     return fig

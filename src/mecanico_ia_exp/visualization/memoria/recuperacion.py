@@ -14,8 +14,7 @@ from mecanico_ia_exp.visualization.memoria.base import (
     COLOR_MAL,
     TABLAS,
     estilo_para_impresion,
-    pie,
-    titulo,
+    panel,
 )
 
 
@@ -33,7 +32,7 @@ def fig_recuperacion() -> Figure:
 
     estilo_para_impresion()
     fig, ejes = plt.subplots(
-        2, 1, figsize=(ANCHO_DE_PAGINA, 6.2), gridspec_kw={"height_ratios": [1, 1.25]}
+        2, 1, figsize=(ANCHO_DE_PAGINA, 5.0), gridspec_kw={"height_ratios": [1, 1.25]}
     )
     y = np.arange(len(tabla))
     aciertos = tabla["hit_rate"].to_numpy() * 5
@@ -48,7 +47,7 @@ def fig_recuperacion() -> Figure:
     ejes[0].set_xlabel("casos en que el procedimiento aparece entre los 10 primeros")
     ejes[0].grid(visible=True, axis="x")
     ejes[0].set_axisbelow(True)
-    ejes[0].set_title("Lo encuentra o no lo encuentra", fontsize=9)
+    panel(ejes[0], "a")
 
     for i, (columna, color) in enumerate(
         (("mrr", CATEGORICAL[0]), ("ndcg_at_k", CATEGORICAL[2]), ("precision_at_k", CATEGORICAL[3]))
@@ -72,15 +71,6 @@ def fig_recuperacion() -> Figure:
     # Arriba a la derecha: la fila de la estrategia semántica vale cero en las
     # tres métricas, de modo que ahí no hay nada que tapar.
     ejes[1].legend(fontsize=7, loc="upper right")
-    ejes[1].set_title("Y dónde lo coloca", fontsize=9)
-
-    titulo(fig, "Sin el código de avería, la similitud semántica no encuentra el procedimiento")
-    pie(
-        fig,
-        "E12, reejecución canónica del 13-09-2026 · corpus del vehículo de referencia · "
-        "6 casos anotados, 5 puntuados; el sexto tiene la evidencia retirada del índice y no "
-        "entra en las métricas · la estrategia guiada usa los códigos de la condición ANOTADA, "
-        "que el sistema no tiene antes de diagnosticar: su ventaja es una cota asistida",
-    )
+    panel(ejes[1], "b")
     fig.tight_layout()
     return fig

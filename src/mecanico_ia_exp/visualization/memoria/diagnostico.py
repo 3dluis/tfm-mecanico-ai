@@ -17,18 +17,16 @@ from mecanico_ia_exp.visualization.memoria.base import (
     COLOR_RED,
     CONDICION,
     INK_MUTED,
-    INK_SECONDARY,
     REGISTROS,
     SEQUENTIAL,
     TABLAS,
     estilo_para_impresion,
     numero,
-    pie,
-    titulo,
+    panel,
 )
 
 
-def _confusion(eje: Axes, matriz: pd.DataFrame, rotulo: str) -> None:
+def _confusion(eje: Axes, matriz: pd.DataFrame, letra: str) -> None:
     valores = matriz.to_numpy(dtype=float)
     por_fila = valores / valores.sum(axis=1, keepdims=True)
     eje.imshow(por_fila, cmap=SEQUENTIAL, vmin=0.0, vmax=1.0, aspect="auto")
@@ -51,7 +49,7 @@ def _confusion(eje: Axes, matriz: pd.DataFrame, rotulo: str) -> None:
     eje.set_yticks(range(len(etiquetas)))
     eje.set_yticklabels(etiquetas, fontsize=7)
     eje.set_xlabel("predicción")
-    eje.set_title(rotulo, fontsize=9)
+    panel(eje, letra)
     eje.grid(visible=False)
 
 
@@ -61,18 +59,11 @@ def fig_confusiones() -> Figure:
     red = pd.read_csv(TABLAS / "E7_temporal_confusion_synthetic_v2.csv", index_col=0)
 
     estilo_para_impresion()
-    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 7.6))
-    _confusion(ejes[0], bosque, "Bosque aleatorio (E6) · 12 errores, los 12 a «sin fallo»")
-    _confusion(ejes[1], red, "GRU bidireccional (E7) · 17 errores, 4 de ellos cruzados")
+    fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 6.2))
+    # (a) bosque aleatorio · (b) GRU bidireccional. El pie los nombra.
+    _confusion(ejes[0], bosque, "a")
+    _confusion(ejes[1], red, "b")
     ejes[0].set_ylabel("condición anotada")
-    titulo(fig, "Adónde van los errores de cada modelo")
-    pie(
-        fig,
-        "E6 y E7 · synthetic_v2, validación, 98 ventanas de 12 sesiones · una ejecución por "
-        "modelo, semilla 20260901 · el color es la proporción de la fila · F00 sin fallo, "
-        "F01 fuga de vacío, F02 deriva del caudalímetro, F03 termostato bloqueado, "
-        "F04 sonda lenta, F05 fallo de encendido",
-    )
     fig.tight_layout()
     return fig
 
@@ -89,7 +80,7 @@ def fig_f1_por_clase() -> Figure:
 
     estilo_para_impresion()
     fig, ejes = plt.subplots(
-        2, 1, figsize=(ANCHO_DE_PAGINA, 6.4), gridspec_kw={"height_ratios": [1.5, 1]}
+        2, 1, figsize=(ANCHO_DE_PAGINA, 5.2), gridspec_kw={"height_ratios": [1.5, 1]}
     )
     y = np.arange(len(clases))
     ejes[0].barh(
@@ -105,7 +96,7 @@ def fig_f1_por_clase() -> Figure:
     ejes[0].grid(visible=True, axis="x")
     ejes[0].set_axisbelow(True)
     ejes[0].legend(loc="lower right", fontsize=7)
-    ejes[0].set_title("F1 de cada condición", fontsize=9)
+    panel(ejes[0], "a")
 
     colores = [COLOR_RED if d > 0 else COLOR_BOSQUE for d in diferencia]
     ejes[1].barh(y, diferencia, color=colores, height=0.55)
@@ -124,14 +115,7 @@ def fig_f1_por_clase() -> Figure:
     ejes[1].set_xlim(-0.22, 0.09)
     ejes[1].grid(visible=True, axis="x")
     ejes[1].set_axisbelow(True)
-    ejes[1].set_title("Diferencia: a la derecha gana la red", fontsize=9)
-
-    titulo(fig, "La desventaja de la red no es uniforme: gana en una condición y pierde en cinco")
-    pie(
-        fig,
-        "E6 y E7 · synthetic_v2, validación · una ejecución por modelo, sin repeticiones ni "
-        "intervalos · n es el número de ventanas de la clase en validación",
-    )
+    panel(ejes[1], "b")
     fig.tight_layout()
     return fig
 
@@ -148,7 +132,7 @@ def fig_confusor_de_volumen() -> Figure:
     }
 
     estilo_para_impresion()
-    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 4.0))
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 3.4))
     x = np.array([0.0, 1.0])
     for desplazamiento, color, etiqueta, indice in (
         (-0.15, COLOR_BOSQUE, "bosque aleatorio (E6)", 0),
@@ -172,24 +156,10 @@ def fig_confusor_de_volumen() -> Figure:
     eje.set_ylim(0, 1.08)
     eje.legend(loc="lower center", bbox_to_anchor=(0.5, -0.44), ncol=2, fontsize=7.5)
     eje.annotate(
-        "entre las dos columnas cambian DOS cosas:\nel volumen y el fenómeno generado",
-        xy=(0.5, 0.40),
-        ha="center",
-        fontsize=7.5,
-        color=INK_SECONDARY,
-    )
-    eje.annotate(
         "",
         xy=(0.19, 0.60),
         xytext=(0.81, 0.60),
         arrowprops={"arrowstyle": "<->", "color": INK_MUTED, "lw": 0.9},
-    )
-    titulo(fig, "El orden se invierte, y la comparación no dice por qué")
-    pie(
-        fig,
-        "E6 y E7 sobre los dos conjuntos · una ejecución por celda · la conclusión «el límite "
-        "era el volumen» quedó retirada el 12-10-2026 · synthetic_v3 es pre-calibración y no "
-        "se reconstruye (L-25)",
     )
     fig.tight_layout()
     return fig

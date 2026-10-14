@@ -103,6 +103,20 @@ class Figura:
         assert self.copia_de is not None
         return f"copiada de `{self.copia_de.name}`"
 
+    @property
+    def tiene_svg(self) -> bool:
+        """Si la figura viaja también en vectorial, que es lo que no se pixela."""
+        return (DESTINO / f"{self.nombre}.svg").is_file()
+
+    @property
+    def regeneracion(self) -> str:
+        """Si se puede volver a producir, y con qué."""
+        if self.estatuto == "HISTORICA":
+            return f"NO: {self.motivo_de_la_copia[:48]}"
+        if self.dibuja is not None:
+            return "sí, desde registros congelados"
+        return "sí, ejecutando su notebook"
+
     def huella(self) -> str:
         ruta = DESTINO / f"{self.nombre}.png"
         if not ruta.is_file():
@@ -473,14 +487,15 @@ def trazabilidad() -> str:
     )
     paginas = paginas_del_pdf()
     lineas = [
-        "| Fig. | Experimento | Conjunto | Partición | Notebook | Función o copia | Fichero | "
-        "Huella (SHA-256, 16) | Ubicación | Pág. PDF |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "| Fig. | Experimento | Conjunto | Partición | Notebook | Función o copia | PNG | SVG | "
+        "Huella (SHA-256, 16) | Regeneración | Ubicación | Pág. PDF |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     lineas += [
         f"| {f.identificador} | {f.experimento} | `{f.conjunto}` | {f.particion} | "
-        f"`{f.notebook}` | {f.produce} | `{f.nombre}.png` | `{f.huella()}` | {f.ubicacion} | "
-        f"{paginas.get(f.identificador, '—')} |"
+        f"`{f.notebook}` | {f.produce} | `{f.nombre}.png` | "
+        f"{'sí' if f.tiene_svg else 'no'} | `{f.huella()}` | {f.regeneracion} | "
+        f"{f.ubicacion} | {paginas.get(f.identificador, '—')} |"
         for f in orden
     ]
     lineas += ["", "| Fig. | Limitaciones declaradas en su pie |", "|---|---|"]

@@ -15,8 +15,6 @@ from mecanico_ia_exp.visualization.memoria.base import (
     INK_MUTED,
     INK_SECONDARY,
     estilo_para_impresion,
-    pie,
-    titulo,
 )
 
 
@@ -69,13 +67,6 @@ def fig_objetivos() -> Figure:
     eje.text(1.0, len(objetivos) - 0.55, "objetivo", fontsize=7, color=INK_MUTED)
     eje.text(5.0, len(objetivos) - 0.55, "experimentos que lo miden", fontsize=7, color=INK_MUTED)
     eje.text(9.85, len(objetivos) - 0.55, "estado", fontsize=7, color=INK_MUTED, ha="right")
-    titulo(fig, "Qué sostiene cada objetivo, y hasta dónde")
-    pie(
-        fig,
-        "elaboración propia a partir del capítulo 6 y de docs/experiment-index.md · sin conjunto "
-        "de datos: es el mapa de lo que el capítulo declara, no una medición · «parcial» es la "
-        "palabra que usa el texto, y no se redondea hacia arriba",
-    )
     fig.tight_layout()
     return fig
 
@@ -134,13 +125,6 @@ def fig_compromiso() -> Figure:
         fontsize=6.8,
         color=INK_SECONDARY,
         va="bottom",
-    )
-    titulo(fig, "Cada política trivial iguala al sistema en un error y lo empeora en el otro")
-    pie(
-        fig,
-        "E15 · synthetic_v2, validación, 17 ejecuciones sobre 5 ventanas · las políticas de "
-        "referencia se definieron el 4-09-2026, DESPUÉS de medir las tres versiones del criterio "
-        "sobre estos mismos casos · con 3 y 5 ventanas independientes no se publica intervalo",
     )
     fig.tight_layout()
     return fig

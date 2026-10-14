@@ -242,3 +242,70 @@ def test_el_guion_no_inventa_valores() -> None:
         "hay líneas con cuatro o más decimales literales, que podrían ser datos"
         " escritos a mano en lugar de leídos de un registro:\n  " + "\n  ".join(sospechosas)
     )
+
+
+#: Las dos figuras que **no pueden** cumplir la regla de imagen limpia, con el
+#: motivo. Son artefactos históricos: su rutina ya no existe o sus datos
+#: intermedios no se guardaron, de modo que regenerarlas sin título exigiría
+#: reejecutar un experimento. Se conservan como se publicaron, y el documento
+#: declara su condición.
+CON_TITULO_INCRUSTADO: dict[str, str] = {
+    "FIG-5-08_limite_evidencia_termostato": (
+        "necesita la predicción por ventana, que el registro de E6 no guarda"
+    ),
+    "FIG-A-01_series_normal_vs_fallo": "su generador cambió el 1-09-2026",
+}
+
+#: Lo que una figura del documento no puede llevar dentro. El título, la fuente
+#: y la interpretación son **texto del documento**: entran en el índice de
+#: figuras, se corrigen sin regenerar el PNG y no se duplican.
+PROHIBIDO_EN_LA_IMAGEN: tuple[str, ...] = (
+    "suptitle",
+    "supxlabel",
+    "fig.text(",
+)
+
+
+def test_ninguna_funcion_de_figura_incrusta_titulo_ni_procedencia() -> None:
+    """La regla de imagen limpia, comprobada sobre el código que la dibuja."""
+    paquete = paths.ROOT / "src" / "mecanico_ia_exp" / "visualization" / "memoria"
+    infractoras: list[str] = []
+    for fichero in sorted(paquete.glob("*.py")):
+        for numero, linea in enumerate(fichero.read_text("utf-8").splitlines(), 1):
+            if linea.lstrip().startswith("#"):
+                continue
+            for prohibido in PROHIBIDO_EN_LA_IMAGEN:
+                if prohibido in linea:
+                    infractoras.append(f"{fichero.name}:{numero}  {linea.strip()[:60]}")
+    assert not infractoras, (
+        "hay figuras que incrustan su título o su procedencia en la imagen; "
+        "los dos son texto del documento:\n  " + "\n  ".join(infractoras)
+    )
+
+
+def test_los_titulos_de_panel_son_identificadores_y_no_narraciones() -> None:
+    """Un título de panel largo es una narración, y esa va en el pie."""
+    paquete = paths.ROOT / "src" / "mecanico_ia_exp" / "visualization" / "memoria"
+    largos: list[str] = []
+    for fichero in sorted(paquete.glob("*.py")):
+        texto = fichero.read_text("utf-8")
+        for encontrado in re.finditer(r'set_title\(\s*\n?\s*f?"([^"]+)"', texto):
+            rotulo = encontrado.group(1)
+            # Las expresiones de una plantilla se sustituyen por un nombre de
+            # categoría al dibujar, de modo que lo que se mide es el literal sin
+            # ellas: «({letra}) {CONDICION[...]}» se imprime como «(a) fuga de
+            # vacío», que es un identificador con su categoría y no una frase.
+            literal = re.sub(r"\{[^}]*\}", "", rotulo).strip()
+            if len(literal) > 40 or not rotulo.startswith("("):
+                largos.append(f"{fichero.name}: {rotulo[:55]}")
+    assert not largos, (
+        "hay títulos de panel narrativos; el panel lleva «(a)» y la explicación "
+        "va al pie de la figura:\n  " + "\n  ".join(largos)
+    )
+
+
+@pytest.mark.parametrize("nombre", sorted(CON_TITULO_INCRUSTADO))
+def test_la_figura_historica_con_titulo_esta_declarada(nombre: str) -> None:
+    """Las dos excepciones son excepciones declaradas, no descuidos."""
+    assert ORIGEN.get(nombre) == "D", f"{nombre}: debería estar clasificada como histórica"
+    assert nombre in NO_REGENERABLES, f"{nombre}: sin motivo de no regeneración"

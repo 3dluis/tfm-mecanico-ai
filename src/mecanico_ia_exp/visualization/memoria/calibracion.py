@@ -15,8 +15,6 @@ from mecanico_ia_exp.visualization.memoria.base import (
     REGISTROS,
     estilo_para_impresion,
     numero,
-    pie,
-    titulo,
 )
 
 
@@ -55,12 +53,5 @@ def fig_calibracion() -> Figure:
     eje.set_ylim(0.60, 1.0)
     eje.set_xlabel("confianza media declarada (0–1)")
     eje.set_ylabel("acierto observado (fracción, 0–1)")
-    titulo(fig, "El modelo estaba infraconfiado, y la calibración lo centra")
-    pie(
-        fig,
-        f"E6, calibrado en E15 · synthetic_v2, validación, {calibracion['n_windows']} ventanas, "
-        f"{calibracion['n_bins']} tramos · {calibracion['method']} · "
-        "el sesgo es confianza media menos acierto; el ECE no lleva signo",
-    )
     fig.tight_layout()
     return fig

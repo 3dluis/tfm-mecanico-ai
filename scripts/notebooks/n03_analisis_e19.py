@@ -230,13 +230,15 @@ apply_style()
 fig, ejes = plt.subplots(1, 3, figsize=(5.9, 3.0))
 COLORES = [CATEGORICAL[2], CATEGORICAL[1], CATEGORICAL[0]]
 
-for eje, (nombre, fila), color in zip(ejes, primario.iterrows(), COLORES, strict=False):
+for letra, (eje, (nombre, fila), color) in zip(
+    "abc", zip(ejes, primario.iterrows(), COLORES, strict=False), strict=False
+):
     numerador, denominador = int(fila.numerador), int(fila.denominador)
     eje.bar(["casos"], [denominador], color="#e1e0d9", width=0.5, label="denominador")
     eje.bar(["casos"], [numerador], color=color, width=0.5, label="numerador")
     eje.text(0, denominador + 0.35, f"{numerador}/{denominador}",
              ha="center", fontsize=13, fontweight="bold", color=color)
-    eje.set_title(nombre, fontsize=8.5)
+    eje.set_title(f"({letra})", fontsize=8.5, fontweight="bold", loc="left", pad=6)
     eje.set_ylim(0, denominador * 1.42)
     eje.set_ylabel("ejecuciones (recuento)" if nombre.startswith("falsa") else "")
     eje.set_xticks([])
@@ -246,16 +248,6 @@ for eje, (nombre, fila), color in zip(ejes, primario.iterrows(), COLORES, strict
         ha="center", fontsize=6.8, color="#52514e",
     )
 
-fig.suptitle(
-    "E19, estrato operativo: las tres cifras con su numerador y su denominador",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "synthetic_v2, partición de PRUEBA · política de suficiencia v2.2 · "
-    "fuente: artifacts/tables/E19_evaluacion_final_v3.csv · "
-    "0/14 NO significa riesgo cero: ver la interpretación",
-    fontsize=6.5, x=0.0, ha="left",
-)
 fig.tight_layout()
 soporte.exportar(fig, "FIG-NB03-01_primario", subdirectorio="03_analisis_e19")
 plt.show()"""),
@@ -376,16 +368,6 @@ eje.legend(handles=[
            markersize=10, label="explicó, y debía abstenerse (falsa confianza) — no ocurre"),
 ], fontsize=7, loc="center left", bbox_to_anchor=(1.01, 0.5))
 
-fig.suptitle(
-    "Las 22 ejecuciones del estrato operativo: dos sesiones por caso anotado",
-    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
-)
-fig.supxlabel(
-    "E19 · synthetic_v2, partición de prueba · "
-    "fuente: artifacts/tables/E19_evaluacion_final_v3.csv · "
-    "cada punto es una ejecución; los dos puntos de una fila son sesiones distintas",
-    fontsize=6.5, x=0.0, ha="left",
-)
 fig.tight_layout()
 soporte.exportar(fig, "FIG-NB03-02_decisiones", subdirectorio="03_analisis_e19")
 plt.show()"""),

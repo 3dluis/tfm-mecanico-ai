@@ -125,13 +125,15 @@ for i, (titulo, detalle, fases) in enumerate(ETAPAS):
     color = CATEGORICAL[i % len(CATEGORICAL)]
     ax.add_patch(
         FancyBboxPatch(
-            (1.2, y), 6.4, 0.72,
+            (1.2, y), 6.4, 0.78,
             boxstyle="round,pad=0.04",
             facecolor=color, alpha=0.16, edgecolor=color, linewidth=1.1,
         )
     )
-    ax.text(1.45, y + 0.52, titulo, fontsize=9.5, fontweight="bold", color=INK_PRIMARY)
-    ax.text(1.45, y + 0.22, detalle, fontsize=7.0, color=INK_MUTED, linespacing=1.5, va="top")
+    # El detalle son DOS líneas a 7 puntos con interlineado 1,5: ocupan unas
+    # 0,25 unidades de datos. Anclado en y+0,22 la segunda caía fuera de la caja.
+    ax.text(1.45, y + 0.56, titulo, fontsize=9.5, fontweight="bold", color=INK_PRIMARY)
+    ax.text(1.45, y + 0.38, detalle, fontsize=7.0, color=INK_MUTED, linespacing=1.5, va="top")
     ax.text(7.75, y + 0.36, fases, fontsize=7.5, color=color, fontweight="bold", va="center")
     if i < len(ETAPAS) - 1:
         ax.add_patch(
@@ -141,17 +143,6 @@ for i, (titulo, detalle, fases) in enumerate(ETAPAS):
             )
         )
 
-ax.set_title(
-    "Recorrido experimental: del dato OBD-II a la decisión de explicar o abstenerse",
-    fontsize=10.5, fontweight="bold", loc="left", pad=14,
-)
-ax.text(
-    0.0, -0.45,
-    "E1-E19 · sin conjunto de datos: es la arquitectura, dibujada desde su descripción · "
-    "etiquetas de la derecha: experimentos que cubren la etapa · "
-    "fuente: docs/experiment-index.md",
-    fontsize=6.5, color=INK_MUTED,
-)
 soporte.exportar(fig, "FIG-NB00-01_recorrido", subdirectorio="00_introduccion")
 plt.show()"""),
     md("""\

@@ -26,8 +26,6 @@ from mecanico_ia_exp.visualization.memoria.base import (
     TABLAS,
     estilo_para_impresion,
     numero,
-    pie,
-    titulo,
 )
 
 #: El registro de la evaluación final. El sufijo `_v3` es el **tercer intento**
@@ -66,7 +64,7 @@ def fig_decisiones_y_umbral() -> Figure:
     datos = decisiones_de_e19()
 
     estilo_para_impresion()
-    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 8.6))
+    fig, eje = plt.subplots(figsize=(ANCHO_DE_PAGINA, 7.6))
 
     eje.axvspan(0.42, UMBRAL, color=COLOR_MAL, alpha=0.07)
     eje.axvline(UMBRAL, color=INK_SECONDARY, lw=1.0, ls="--")
@@ -173,19 +171,6 @@ def fig_decisiones_y_umbral() -> Figure:
     ]
     eje.legend(
         handles=leyenda, loc="lower center", bbox_to_anchor=(0.5, -0.17), ncol=2, fontsize=6.3
-    )
-
-    titulo(
-        fig, "Las cuatro ejecuciones bajo el umbral corresponden a las dos abstenciones indebidas"
-    )
-    pie(
-        fig,
-        "E19, evaluación final, tercer intento · synthetic_v2, conjunto de prueba · las 35 "
-        "ejecuciones registradas, repartidas en tres estratos; repiten casos entre sí, de modo "
-        "que NO son 35 observaciones independientes · el sufijo del registro es el número de "
-        "intento, no una versión del conjunto · OBSERVACIÓN DESCRIPTIVA sobre dos errores: no se "
-        "estima ningún efecto, no se afirma que el régimen de conducción cause la caída de "
-        "confianza, y el umbral NO se revisa a la vista de esta figura",
     )
     fig.tight_layout()
     return fig

@@ -1,12 +1,28 @@
-"""Lo que comparten todas las figuras de la memoria: medidas, estilo y rutas."""
+"""Lo que comparten todas las figuras de la memoria: medidas, estilo y rutas.
+
+**Qué NO hay aquí, desde el 14 de octubre de 2026.** No hay ayudante para poner
+un título dentro de la figura ni para escribirle un pie de procedencia. Los dos
+existieron y se retiraron: una imagen con su título y su fuente incrustados
+obliga a regenerar el PNG para corregir una errata, se queda fuera del índice de
+figuras del documento y duplica un texto que el documento ya lleva.
+
+El reparto es el siguiente, y solo lo incumplen los artefactos históricos, que
+no se pueden regenerar y lo declaran:
+
+* **dentro de la imagen**: ejes, unidades, categorías, valores, leyendas, barras
+  de color, umbrales, intervalos, las anotaciones técnicas sin las cuales el
+  gráfico se lee mal, y el identificador de panel «(a)», «(b)»;
+* **en el documento**, como texto editable: el número, el título, la fuente, el
+  experimento, el conjunto, el protocolo y la interpretación.
+"""
 
 from __future__ import annotations
 
-import textwrap
 from pathlib import Path
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
 from mecanico_ia_exp.config import paths
@@ -41,8 +57,7 @@ __all__ = [
     "estilo_para_impresion",
     "guardar",
     "numero",
-    "pie",
-    "titulo",
+    "panel",
 ]
 
 #: Dónde se escriben las figuras del documento, y de dónde se leen sus datos.
@@ -105,20 +120,16 @@ def numero(valor: float, decimales: int = 3, *, signo: bool = False) -> str:
     return texto.replace(".", ",").replace("-", "\N{MINUS SIGN}")
 
 
-def pie(fig: Figure, texto: str, *, y: float | None = None) -> None:
-    """La línea de procedencia que va impresa dentro de la propia figura.
+def panel(eje: Axes, letra: str) -> None:
+    """El identificador discreto de un panel: «(a)», «(b)», «(c)».
 
-    Se parte en varias líneas según el ancho de la figura. Sin partirla, el
-    recorte ajustado de matplotlib ensancha el lienzo hasta donde llegue el
-    texto, y la figura entra en la página como una tira desproporcionada.
+    **Por qué una letra y no un título.** Lo que cada panel muestra se explica en
+    el pie de la figura, que es texto del documento y entra en el índice de
+    figuras. Un título narrativo dentro de la imagen duplica esa explicación, se
+    queda fuera del índice y no se puede corregir sin regenerar el PNG. La letra
+    basta para que el pie pueda referirse a cada panel sin ambigüedad.
     """
-    ancho = max(60, int(fig.get_figwidth() * 19))
-    envuelto = "\n".join(textwrap.wrap(texto, width=ancho))
-    fig.supxlabel(envuelto, fontsize=6.2, x=0.0, ha="left", color=INK_MUTED, y=y)
-
-
-def titulo(fig: Figure, texto: str) -> None:
-    fig.suptitle(texto, fontsize=10.5, fontweight="bold", x=0.0, ha="left")
+    eje.set_title(f"({letra})", fontsize=9, fontweight="bold", loc="left", pad=6)
 
 
 def guardar(fig: Figure, nombre: str) -> Path:
