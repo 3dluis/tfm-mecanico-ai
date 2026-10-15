@@ -1,10 +1,42 @@
 # Capítulo 6: Conclusiones
 
-## Conclusiones provisionales sobre los objetivos y la pregunta de investigación
+Un sistema de diagnóstico que explica una avería puede equivocarse de dos maneras que no cuestan lo
+mismo. Puede fallar el diagnóstico, y eso se mide con las métricas de siempre. O puede acertar el
+diagnóstico y sostenerlo con una explicación que suena razonable y que no se apoya en nada: una
+referencia a un procedimiento del manual que no dice lo que la frase afirma, una observación que la
+telemetría no contiene. El segundo error es el que motiva este trabajo, porque en un taller orienta
+una reparación y porque, a diferencia del primero, no deja rastro en ninguna métrica de acierto.
 
-Esta es una entrega intermedia. Las conclusiones recorren los objetivos específicos en su orden y terminan en el general, y en cada uno separan lo que los resultados sobre validación permiten observar de lo que añade la evaluación final sobre el conjunto de prueba, **ejecutada el 12 de octubre de 2026 en el tercero de tres intentos**. El conjunto de prueba **no sigue cerrado**: se abrió cinco veces, y el anexo B recoge esas aperturas con su nivel de exposición. Las cifras de esa evaluación están incorporadas al capítulo 5 y se recogen aquí donde cambian lo que un objetivo puede afirmar.
+El trabajo estudia si un agente con recuperación aumentada puede explicar el diagnóstico de un
+vehículo a partir de telemetría OBD-II de modo que cada afirmación se pueda seguir hasta la
+evidencia que la sostiene, y abstenerse cuando esa evidencia no basta. Para examinarlo construye un
+banco de pruebas en el que la evidencia disponible se manipula a propósito —completa, parcial,
+retirada, o acompañada de documentación de otro motor— y en el que la decisión de explicar o
+callarse no la toma el modelo de lenguaje, sino un verificador determinista que examina lo que hay.
 
-> **Corrección del 13 de octubre de 2026.** Este párrafo decía antes: «de lo que requiere la evaluación final sobre el conjunto de prueba, que sigue cerrado». La evaluación final se ejecutó el 12 de octubre de 2026 y el conjunto se había abierto cinco veces. Corrección `F-2`.
+**Lo que los resultados muestran.** El criterio de suficiencia evita la falsa confianza en las dos
+particiones en que se ha medido: ninguna de las catorce ejecuciones del conjunto de prueba que
+debían terminar en abstención terminó en explicación. Las ablaciones localizan el mecanismo: con
+una puerta de confianza sola, ese mismo error aparece en las nueve ejecuciones. Y el precio está
+medido y es alto: dos de cada ocho explicaciones legítimas se perdieron.
+
+**La contribución central** no es el sistema, que combina componentes conocidos. Es el banco de
+pruebas con evidencia manipulada y las mediciones que produce, y en particular la demostración de
+que una confianza diagnóstica alta no basta: en la ablación que retira el criterio documental, el
+sistema explica con confianza todas las ejecuciones que debían terminar calladas.
+
+**Y lo que ninguna de esas cifras alcanza.** La telemetría es sintética y procede de un solo
+vehículo. Las muestras son pequeñas: ninguna cifra final descansa en más de diez ventanas. La
+correspondencia entre una afirmación y su evidencia se cumple por construcción del verificador y no
+se ha contrastado con un juicio independiente. Y el conjunto de prueba no permaneció cerrado: se
+abrió cinco veces bajo autorización registrada, y el anexo B recoge cada apertura con su nivel de
+exposición.
+
+Lo que sigue recorre los cinco objetivos específicos con la evidencia de cada uno, responde a la
+pregunta de investigación, delimita las contribuciones y las limitaciones, y termina con lo que
+quedaría por hacer.
+
+## El recorrido experimental y lo que mide cada etapa
 
 Las conclusiones recorren un sistema con partes, y conviene tener delante cuáles son y qué
 experimento mide cada una antes de decir hasta dónde llega cada objetivo. La Figura 6.1 las reúne.
@@ -23,27 +55,40 @@ aparezcan separadas en el esquema no implica que la separación produzca el resu
 último es justamente lo que las ablaciones **no** midieron, porque la separación entre decidir y
 redactar no se ablacionó.
 
-OE1, la revisión del estado del conocimiento, se cumplió en el alcance declarado. La revisión, inspirada en PRISMA pero sin su flujo formal, sin protocolo registrado y sin cribado por duplicado, delimitó el vacío en cuatro frentes y fundamentó las tres decisiones de diseño del capítulo 1; esos límites están declarados en el capítulo 3.
+## Cumplimiento de los objetivos específicos
 
-OE2, el entorno experimental reproducible, se cumplió parcialmente sobre telemetría sintética. El generador es determinista, los conjuntos se reparten por sesión, **el conjunto de prueba está cerrado en el código —pedirlo exige una autorización explícita y una razón por escrito, que queda registrada— y se abrió cinco veces bajo esa condición**, el corpus conserva su huella y el registro de la línea base de diagnóstico se reprodujo bit a bit. Las tres ejecuciones de las que salen las cifras publicadas —la línea base de diagnóstico, el modelo temporal y la evaluación final— se midieron sobre `synthetic_v2`, cuyas cuatro huellas se reconstruyeron bit a bit desde un clon limpio contra las que el manifiesto congeló antes de abrir el conjunto de prueba. Dos límites de la reproducibilidad que este objetivo declaraba de forma incompleta: **`synthetic_v3` no es reconstruible** con el generador publicado, porque es anterior a su calibración, y lo que lo hace peligroso es que su ventanado y su reparto sí reproducen, de modo que una reconstrucción ingenua pasaría las pruebas midiendo otras señales; de ese conjunto salen la comparación de volumen que el capítulo 5 discute y el conjunto de evaluación independiente del redactor, todavía sin ejecutar, y no las cifras publicadas. Y cuatro pruebas y seis comprobaciones de tipado dependían de dos paquetes que se importaban sin estar declarados, lo que solo se vio al validar el procedimiento desde un clon limpio.
+### OE1 · Delimitación del vacío en la literatura
+
+Se cumplió en el alcance declarado. La revisión, inspirada en PRISMA pero sin su flujo formal, sin protocolo registrado y sin cribado por duplicado, delimitó el vacío en cuatro frentes y fundamentó las tres decisiones de diseño del capítulo 1; esos límites están declarados en el capítulo 3.
+
+### OE2 · Un entorno experimental reproducible
+
+Se cumplió parcialmente, y solo sobre telemetría sintética. El generador es determinista, los conjuntos se reparten por sesión, **el conjunto de prueba está cerrado en el código —pedirlo exige una autorización explícita y una razón por escrito, que queda registrada— y se abrió cinco veces bajo esa condición**, el corpus conserva su huella y el registro de la línea base de diagnóstico se reprodujo bit a bit. Las tres ejecuciones de las que salen las cifras publicadas —la línea base de diagnóstico, el modelo temporal y la evaluación final— se midieron sobre `synthetic_v2`, cuyas cuatro huellas se reconstruyeron bit a bit desde un clon limpio contra las que el manifiesto congeló antes de abrir el conjunto de prueba. Dos límites de la reproducibilidad que este objetivo declaraba de forma incompleta: **`synthetic_v3` no es reconstruible** con el generador publicado, porque es anterior a su calibración, y lo que lo hace peligroso es que su ventanado y su reparto sí reproducen, de modo que una reconstrucción ingenua pasaría las pruebas midiendo otras señales; de ese conjunto salen la comparación de volumen que el capítulo 5 discute y el conjunto de evaluación independiente del redactor, que no llegó a ejecutarse, y no las cifras publicadas. Y cuatro pruebas y seis comprobaciones de tipado dependían de dos paquetes que se importaban sin estar declarados, lo que solo se vio al validar el procedimiento desde un clon limpio.
 
 > **Corrección del 13 de octubre de 2026.** Este párrafo decía antes: «el conjunto de prueba está cerrado por construcción». Confundía el cierre técnico, que sigue vigente, con el estado del conjunto, que no está cerrado. Corrección `F-3`. Este párrafo decía también: «`synthetic_v3`, **del que salen E6, E7 y la evaluación final**, no es reconstruible». Las tres ejecuciones declaran `synthetic_v2` en su registro, y `synthetic_v2` sí se reconstruye; el complemento «sobre `synthetic_v3`», que el registro de no reconstruibilidad sí lleva, se había perdido al resumirlo. Corrección `F-7`. No todas las ejecuciones son reproducibles con el mismo grado: los registros del modelo de diagnóstico y de la atribución son anteriores a la obligatoriedad del identificador de versión del código, y la medición translingüe no tiene registro de ejecución. La validación externa con telemetría de vehículos reales no forma parte de este objetivo y queda como limitación y prospectiva.
 
-OE3, el diagnóstico a partir de la telemetría con la caracterización de su confianza y de sus señales, se cumplió parcialmente. Sobre validación, el bosque aleatorio alcanza una exactitud de 0,878 frente a 0,286 de la clase mayoritaria, y su confianza, infraconfiada en origen, queda calibrada, con un error de calibración que baja de 0,144 a 0,085. Con este volumen de datos el modelo temporal no aportó ventaja sobre el tabular, y la formulación original de la subpregunta, que la pedía, no se cumplió. La atribución describe con señales coherentes con el mecanismo la fuga de vacío, el termostato y la sonda; en la deriva del caudalímetro señala las correcciones de combustible y no el caudal, y en el fallo de encendido incluye entre sus seis señales principales cuatro que el mecanismo no justifica, aunque con menos peso que las declaradas. Dos de los errores del diagnóstico admiten una lectura más precisa desde la expresión efectiva del fallo: cinco de las catorce ventanas del termostato no contienen ninguna señal observable de él, y ninguna de las del fallo de encendido lo expresa por completo, de modo que parte de lo que el modelo no detecta es evidencia que no está.
+### OE3 · Diagnóstico, confianza y señales que lo sostienen
 
-OE4, la recuperación y la verificación de la evidencia, se cumplió parcialmente sobre los diecisiete casos anotados. Toda afirmación que el verificador admite conserva la observación que la origina y los fragmentos aplicables que superaron sus comprobaciones de soporte; si esas comprobaciones coinciden con un juicio independiente sobre lo que cada fragmento sostiene no se ha medido, porque el conjunto anotado no incluye las afirmaciones admisibles. Sin guía por código de avería, ninguna estrategia de recuperación encuentra el procedimiento relevante en todos los casos puntuados; guiada por el código asociado al diagnóstico, lo encuentra en los cinco, y ese resultado no cambió al corregir el índice documental y reejecutar. El modelo de lenguaje no cita nada que no se le haya entregado, pero cita fragmentos aplicables que el verificador no aceptó, y su adaptador se ajustó con ventanas que incluyen las de tres casos evaluados. Que las comprobaciones del verificador coincidan con lo que un fragmento sostiene de verdad no se ha medido de forma independiente.
+Se cumplió parcialmente. Sobre validación, el bosque aleatorio alcanza una exactitud de 0,878 frente a 0,286 de la clase mayoritaria, y su confianza, infraconfiada en origen, queda calibrada, con un error de calibración que baja de 0,144 a 0,085. Con este volumen de datos el modelo temporal no aportó ventaja sobre el tabular, y la formulación original de la subpregunta, que la pedía, no se cumplió. La atribución describe con señales coherentes con el mecanismo la fuga de vacío, el termostato y la sonda; en la deriva del caudalímetro señala las correcciones de combustible y no el caudal, y en el fallo de encendido incluye entre sus seis señales principales cuatro que el mecanismo no justifica, aunque con menos peso que las declaradas. Dos de los errores del diagnóstico admiten una lectura más precisa desde la expresión efectiva del fallo: cinco de las catorce ventanas del termostato no contienen ninguna señal observable de él, y ninguna de las del fallo de encendido lo expresa por completo, de modo que parte de lo que el modelo no detecta es evidencia que no está.
 
-OE5, el comportamiento integrado bajo las cuatro condiciones de evidencia, se cumplió parcialmente. Sobre las ejecuciones que debían terminar en abstención, nueve de tres ventanas bien diagnosticadas sin contar la condición con distractor y filtro, el sistema no explicó ninguna; una política que se abstuviera siempre obtendría el mismo cero, y lo que distingue al sistema es que, sobre los cinco casos con evidencia completa, explica tres. Las dos abstenciones innecesarias no tienen la misma causa: una procede solo de la confianza del modelo y la otra también de la falta de soporte documental. La abstención con evidencia retirada está determinada por la construcción de la condición; el contraste que pone a prueba el criterio es el de la evidencia parcial. El criterio que produce estas cifras se revisó dos veces sobre los mismos casos. La condición con distractor, con el filtro de motor activo, no añadía en ninguno de los tres fallos un distractor que la condición parcial no tuviera —la causa medida es que dos de las tres tenían la misma configuración que la parcial, no el filtro de motor— y **se rediseñó y se ejecutó el 13 de octubre de 2026**. Sobre el conjunto de prueba, con la política de suficiencia ya corregida, el comportamiento se mantiene: de las catorce ejecuciones que debían terminar en abstención el sistema no explicó ninguna, y de las ocho que debían terminar en explicación se abstuvo en dos, las mismas dos condiciones que fallaban en validación y por las mismas causas.
+### OE4 · Recuperación y verificación de la evidencia
+
+Se cumplió parcialmente, sobre los diecisiete casos anotados. Toda afirmación que el verificador admite conserva la observación que la origina y los fragmentos aplicables que superaron sus comprobaciones de soporte; si esas comprobaciones coinciden con un juicio independiente sobre lo que cada fragmento sostiene no se ha medido, porque el conjunto anotado no incluye las afirmaciones admisibles. Sin guía por código de avería, ninguna estrategia de recuperación encuentra el procedimiento relevante en todos los casos puntuados; guiada por el código asociado al diagnóstico, lo encuentra en los cinco, y ese resultado no cambió al corregir el índice documental y reejecutar. El modelo de lenguaje no cita nada que no se le haya entregado, pero cita fragmentos aplicables que el verificador no aceptó, y su adaptador se ajustó con ventanas que incluyen las de tres casos evaluados. Que las comprobaciones del verificador coincidan con lo que un fragmento sostiene de verdad no se ha medido de forma independiente.
+
+### OE5 · Comportamiento integrado bajo cada condición de evidencia
+
+Se cumplió parcialmente. Sobre las ejecuciones que debían terminar en abstención, nueve de tres ventanas bien diagnosticadas sin contar la condición con distractor y filtro, el sistema no explicó ninguna; una política que se abstuviera siempre obtendría el mismo cero, y lo que distingue al sistema es que, sobre los cinco casos con evidencia completa, explica tres. Las dos abstenciones innecesarias no tienen la misma causa: una procede solo de la confianza del modelo y la otra también de la falta de soporte documental. La abstención con evidencia retirada está determinada por la construcción de la condición; el contraste que pone a prueba el criterio es el de la evidencia parcial. El criterio que produce estas cifras se revisó dos veces sobre los mismos casos. La condición con distractor, con el filtro de motor activo, no añadía en ninguno de los tres fallos un distractor que la condición parcial no tuviera —la causa medida es que dos de las tres tenían la misma configuración que la parcial, no el filtro de motor— y **se rediseñó y se ejecutó el 13 de octubre de 2026**. Sobre el conjunto de prueba, con la política de suficiencia ya corregida, el comportamiento se mantiene: de las catorce ejecuciones que debían terminar en abstención el sistema no explicó ninguna, y de las ocho que debían terminar en explicación se abstuvo en dos, las mismas dos condiciones que fallaban en validación y por las mismas causas.
 
 > **Corrección del 13 de octubre de 2026.** Este párrafo decía antes: «y necesita un rediseño antes de sostener sobre ella una inferencia». El rediseño se hizo y se ejecutó, y la causa del fallo anterior era otra. Corrección `F-5`.
 
+### Lo que cada componente aporta
+
 Las ablaciones, ejecutadas el 1 de octubre de 2026, sitúan la contribución de cada componente. El criterio compuesto de suficiencia es el que sostiene el resultado, y lo que muestra es que una confianza diagnóstica alta no basta cuando la evidencia documental no sostiene la explicación: con una puerta de confianza sola el sistema explica las doce ejecuciones que debían terminar en abstención, y exigiendo solo que exista algún fragmento aplicable, seis de nueve. La atribución, en cambio, resultó sustituible por un criterio estadístico simple sin que cambiara ninguna decisión ni ningún conjunto de evidencia: no interviene en la política de abstención, y su contribución está en la trazabilidad y en la explicación de la predicción, que es una dimensión que este trabajo no ha evaluado. La ablación de la recuperación semántica quedó inconclusa, porque la ruta léxica no recupera nada con una consulta en prosa; su variante queda declarada como medición nueva y sin ejecutar.
 
-La segunda versión de la política de suficiencia, medida en los tres modos, no cambia ninguna de las diecisiete decisiones y mejora el control de aplicabilidad ante un diagnóstico incorrecto: en el escenario adverso deja de aceptar como soporte afirmaciones construidas para un diagnóstico equivocado. Se adoptará como canónica en la evaluación final, de modo que los resultados anteriores quedan bajo la política previa y la evaluación final bajo la nueva, cada uno con su registro.
+La segunda versión de la política de suficiencia, medida en los tres modos, no cambia ninguna de las diecisiete decisiones y mejora el control de aplicabilidad ante un diagnóstico incorrecto: en el escenario adverso deja de aceptar como soporte afirmaciones construidas para un diagnóstico equivocado. Se adoptó como canónica en la evaluación final del 12 de octubre de 2026, de modo que los resultados anteriores quedan bajo la política previa y la evaluación final bajo la nueva, cada uno con su registro.
 
-En cuanto al objetivo general, la evaluación experimental del agente está hecha en parte. Sobre datos sintéticos de un vehículo, sobre ventanas bien diagnosticadas y sobre la partición de validación, los resultados indican que las afirmaciones que el verificador admite mantienen una correspondencia registrada con la observación y los fragmentos que las sostienen, y que el agente se abstiene cuando la evidencia documental falta o no sostiene lo que se afirma, sin haber explicado ninguno de los casos evaluados en los que debía abstenerse. Esa respuesta parcial no alcanza tres cosas que la pregunta de investigación también contiene. No alcanza a la explicación que redacta el modelo de lenguaje, cuya correspondencia con la evidencia verificada es más débil. No alcanza al rechazo de evidencia aparentemente pertinente pero no aplicable, que el diseño actual no permite interpretar. Y no alcanza al comportamiento ante un diagnóstico erróneo, examinado solo en un escenario de dos ventanas anterior a la corrección del índice. Con la regla fijada en el capítulo 4, esa situación corresponde a una pregunta parcialmente sostenida, calificación provisional que descansa en cifras de desarrollo sobre validación. Lo que la evaluación final añade, medida el 12 de octubre de 2026 sobre el conjunto de prueba y con la política de suficiencia ya corregida, es que el comportamiento se mantiene fuera de los casos con que el criterio se ajustó: ninguna de las catorce ejecuciones que debían terminar en abstención terminó en explicación, y la cobertura con evidencia completa fue de seis sobre diez. Con esos denominadores, el intervalo de Wilson al 95 % de la falsa confianza va de 0 a 0,215, un límite que depende del nivel de confianza elegido y del modelo estadístico empleado, y que supone una independencia entre ejecuciones que estas no tienen. Lo medido es que en esa muestra no ocurrió, no que no pueda ocurrir; la distancia entre las dos frases es la que separa una observación de una garantía operativa, y este trabajo solo tiene lo primero. La contribución de los componentes ya está medida con las ablaciones. El rediseño de la condición con distractor no formaba parte de esa evaluación final y **se ejecutó aparte, el 13 de octubre de 2026**, con los cuatro requisitos de alcanzabilidad comprobados antes de observar ningún veredicto. En los tres casos construidos el sistema se abstuvo, y el motivo registrado fue la insuficiencia de la evidencia y no la falta de confianza en el diagnóstico: las confianzas, entre 0,908 y 1,000, estaban por encima del umbral. El distractor llegó al verificador clasificado como plenamente aplicable —del motor correcto y con el código del fallo—, de modo que ni el filtro de motor ni el validador de aplicabilidad intervinieron: lo que rechazó la evidencia fue la comprobación de que el fragmento hablara de la señal observada. Con tres situaciones construidas, el resultado describe esas tres y **no estima ninguna tasa**; PI.4 pasa de no tener respuesta interpretable a tener una medición acotada a sus casos. La calificación de parcialmente sostenida no se mueve por ello: P1 la refuerza en PI.4 y el hallazgo sobre la fidelidad numérica de las explicaciones la debilita en PI.2. La Figura 6.2 reúne los cinco objetivos específicos con la evidencia que los sostiene y el estado en que quedan.
-
-> **Corrección del 13 de octubre de 2026.** Este párrafo decía antes: «queda como trabajo posterior: mientras no se haga, PI.4 seguirá sin poder interpretarse». El rediseño se ejecutó el 13 de octubre de 2026 con resultado publicado. Corrección `F-5`.
+Los cinco objetivos, con la evidencia que sostiene cada uno y el estado en que quedan, se reúnen en
+la Figura 6.2.
 
 **Figura 6.2. Objetivos específicos, experimentos que los sostienen y estado de cumplimiento.**
 
@@ -59,6 +104,58 @@ palabra «parcial» recoge situaciones distintas —un objetivo al que le falta 
 al que le falta una medición independiente y otro cuya reproducibilidad tiene dos límites
 declarados—, y la figura las iguala en una sola etiqueta. El detalle de cada una está en los
 párrafos anteriores, y la figura no los sustituye.
+
+## Respuesta a la pregunta de investigación
+
+La pregunta del capítulo 1 tiene seis partes, y conviene responderlas por separado antes de
+calificar el conjunto. Todo lo que sigue se refiere a telemetría sintética de un vehículo y a
+ventanas que el modelo diagnostica correctamente.
+
+**El diagnóstico a partir de la telemetría.** El bosque aleatorio alcanza 0,878 de exactitud sobre
+validación, frente al 0,286 de la clase mayoritaria, con la confianza calibrada. Es suficiente para
+que el resto del recorrido tenga sobre qué operar, y no alcanza a un modelo temporal: con este
+volumen no aportó ventaja.
+
+**La trazabilidad de las afirmaciones.** Toda afirmación que el verificador admite conserva la
+observación que la origina y los fragmentos que la sostienen, y cada comprobación queda registrada
+por separado. La respuesta es afirmativa, con una precisión que importa: se cumple **por
+construcción** del recorrido.
+
+**La verificación del soporte documental.** No está medida de forma independiente. Que los
+fragmentos citados sostengan lo afirmado lo establecen las comprobaciones deterministas del propio
+verificador; si coinciden con el juicio de un lector experto no se ha comprobado, porque el
+conjunto anotado no incluye qué afirmaciones serían admisibles en cada caso. Es el vacío que el
+capítulo 3 identificaba, y queda abordado y no medido.
+
+**La suficiencia de la evidencia.** El criterio distingue las tres situaciones que debía distinguir:
+que no haya documentación, que la haya y no cubra lo afirmado, y que la cubra. La prueba más
+informativa no es la de la evidencia retirada, que produce la abstención por construcción, sino la
+de la evidencia parcial, donde hay entre cinco y siete fragmentos aplicables y el sistema se
+abstiene igual.
+
+**La abstención.** Sobre el conjunto de prueba, ninguna de las catorce ejecuciones que debían
+terminar en abstención terminó en explicación, y la cobertura con evidencia completa fue de seis
+sobre diez. El sistema no se abstiene siempre, que es el desenlace trivial que habría refutado el
+resultado. El intervalo de Wilson al 95 % de esa falsa confianza nula llega hasta 0,215, y las
+catorce ejecuciones proceden de siete ventanas, de modo que el intervalo real es más ancho: lo
+medido es que en esa muestra no ocurrió, no que no pueda ocurrir.
+
+**Las limitaciones de la explicación generada.** Aquí la respuesta se debilita. El modelo de
+lenguaje respeta el veredicto y no cita nada que no haya recibido, pero cita fragmentos que el
+verificador no aceptó, y siete de sus treinta y cinco salidas contienen al menos una cifra que el
+verificador no produjo. Ninguna de las tasas cambia por ello, porque las produce el verificador
+determinista; lo que no está garantizado es que el texto que el usuario lee diga los números que el
+sistema calculó.
+
+Con la regla que el capítulo 4 fijó, la respuesta a la pregunta de investigación es **parcialmente
+sostenida**. La calificación descansa en que tres de las seis partes tienen medición sobre el
+conjunto de prueba, una se cumple por construcción, una está medida sobre tres casos construidos y
+la última señala un defecto no resuelto. El rediseño de la condición con distractor la refuerza en
+su parte de evidencia impertinente —en los tres casos el sistema se abstuvo, y el motivo registrado
+fue la insuficiencia de la evidencia y no la baja confianza, con confianzas entre 0,908 y 1,000— y
+el hallazgo sobre la fidelidad numérica la debilita en su parte de trazabilidad. Las dos cosas se
+compensan en la calificación y no se anulan: son defectos y méritos distintos, y conviene no
+sumarlos.
 
 ## Contribuciones del trabajo
 
