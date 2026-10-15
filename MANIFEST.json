@@ -1,11 +1,11 @@
 {
   "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo, artefactos experimentales e historial Git completo.",
   "estado": "BORRADOR PARA REVISION DEL TUTOR",
-  "generado_el": "2026-10-14T23:18:08+00:00",
+  "generado_el": "2026-10-15T03:27:39+00:00",
   "git": {
-    "commit": "e8d14d77175f438b826181cbc29ac96f88e2950c",
+    "commit": "2d56a25f40f46302fabb9c4382ddb8438d8ec80f",
     "rama": "main",
-    "commits": "435",
+    "commits": "438",
     "primer_commit": "3a2ce39c4e9344f8bb648f28863a8c8b83ad17f3",
     "primera_fecha": "2026-09-01",
     "ultima_fecha": "2026-10-14",
@@ -79,8 +79,8 @@
     "modelos entrenados: se regeneran desde los registros y las semillas"
   ],
   "huellas_sha256": {
-    "memoria/memoria.docx": "f1c63a54e6e835d625b1d43d18b57c03f405ef40e45692186401da3399c8b2bc",
-    "memoria/memoria.pdf": "a2d1ce3e8a6c1dc4342bb5243d8431628a3998bb5ccb19b1af698a7076fdf420",
+    "memoria/memoria.docx": "74f0f074163ae46609ec34e9549e92b564b31fd90b4e139341f0f91147363c1c",
+    "memoria/memoria.pdf": "b02f94f6c2f5945fb8a9ab074a0771ac450f1afbfd21addab978076825405aa2",
     "notebooks/00_environment_check.ipynb": "29b762b3622ce6d6c1f3db5fccc35a2953218db20fb0aacd618f62d8beb03ad9",
     "notebooks/00_introduccion.ipynb": "20daacd439492c5679f8e21490c7794484a814075bb851a9eca32e8e09146043",
     "notebooks/01_exploracion_obd.ipynb": "6a9551195dcf0c562e9ecbc69aa1bd8e46ddaef5108a99659f280c481eb53ee1",
