@@ -834,25 +834,155 @@ protocolo nuevo sobre un conjunto que el ajuste no haya visto: aplicarla a los c
 mediría el ajuste del mecanismo a ellos, no su eficacia.
 
 ## Discusión y análisis de los resultados
-La discusión separa lo que los resultados sostienen de lo que no sostienen, y termina con el patrón que atraviesa el trabajo.
+Los apartados anteriores presentan las mediciones. Este las interpreta: para cada subpregunta,
+qué se observó, qué permite concluir y hasta dónde llega esa conclusión. El orden es deliberado:
+primero la evidencia y después su alcance, porque el alcance de una conclusión depende de cómo se
+obtuvo y no al revés.
 
-### Lo que los resultados sostienen
-Sobre datos sintéticos parametrizados con el manual del vehículo y sobre la partición de validación, las cuatro subpreguntas alcanzan estados distintos, y conviene no unificarlos.
+Una advertencia de lectura vale para todo lo que sigue. Las cifras de desarrollo proceden de la
+partición de validación y de un criterio que se revisó dos veces sobre los mismos casos; las de la
+evaluación final proceden de la partición de prueba, con la política congelada antes de abrirla.
+Las dos se citan, y se dice cuál es cuál.
 
-**PI.1 queda sostenida en su forma actual y no en la original.** El bosque aleatorio diagnostica por encima de la referencia mínima, con una exactitud de 0,878 frente a 0,286, y su confianza, infraconfiada en origen, queda calibrada, con un error de calibración que baja de 0,144 a 0,085. La formulación original de esta subpregunta, escrita antes de entrenar, pedía además que un modelo temporal superase a la línea base con un margen no atribuible al azar, y eso no ocurrió. La atribución describe bien tres de los cinco fallos y, en el fallo de encendido, arrastra señales que el mecanismo no justifica.
+### PI.1 · Qué sostiene el diagnóstico, y con qué margen
+**Lo observado.** El bosque aleatorio alcanza una exactitud de 0,878 sobre validación, frente al
+0,286 de la referencia mínima, y su confianza, infraconfiada en origen, queda centrada tras la
+calibración: el error de calibración baja de 0,144 a 0,085. El modelo temporal, con 0,827, queda
+por debajo del bosque. La atribución apunta, en las cinco condiciones, a una señal que la ficha del
+fallo declara, y en tres de ellas **todo** el peso atribuido cae dentro de ese conjunto; en la
+deriva del caudalímetro queda el 86,4 % y en el fallo de encendido, el 87,2 %.
 
-**PI.2 queda sostenida como trazabilidad, no como soporte medido.** Toda afirmación que el verificador admite conserva la observación que la origina y los fragmentos citados, y cada comprobación queda registrada por separado. Que esos fragmentos sostengan lo afirmado lo establecen las comprobaciones deterministas del propio verificador, no una medición independiente: si coinciden con un juicio externo no se ha medido, porque el conjunto anotado no incluye las afirmaciones admisibles. El vacío que motiva el trabajo, medir si cada afirmación se sostiene en su fragmento, queda así abordado por construcción y no por medición. En la explicación que redacta el modelo de lenguaje la correspondencia es más débil: no cita nada que no haya recibido, pero cita fragmentos que el verificador no aceptó.
+**Qué permite concluir.** Que las señales OBD-II contienen estructura diagnóstica aprovechable por
+un modelo convencional, y que la confianza de ese modelo puede hacerse utilizable como puerta de
+decisión. Es la condición previa de todo lo demás: sin un diagnóstico con confianza interpretable,
+el criterio de suficiencia no tendría sobre qué operar.
 
-**PI.3 queda sostenida en la muestra de validación, con dos salvedades.** La decisión cambia con la evidencia en la dirección correcta: sin evidencia documental aplicable, o con documentación que no sostiene las afirmaciones, el sistema se abstiene, y no explicó ninguno de los casos que debían terminar en abstención. La primera salvedad es que la condición de evidencia retirada produce la abstención por construcción, y el contraste que pone a prueba el criterio es el de la evidencia parcial. La segunda es que el criterio se revisó dos veces sobre los mismos casos, y su primera versión explicaba la mitad de los que debían abstenerse. El precio está en el otro error, dos abstenciones innecesarias de cinco, una por la confianza del modelo y otra por la confianza y por falta de soporte documental. Todo ello sobre cinco ventanas bien diagnosticadas; la evaluación final dirá si se mantiene.
+**Qué no permite concluir.** La formulación original de esta subpregunta, escrita antes de
+entrenar, pedía además que un modelo temporal superase a la línea base con un margen no atribuible
+al azar. No ocurrió, y la comparación entre los dos conjuntos sintéticos no lo aclara porque cambia
+a la vez el volumen y el generador. En el fallo de encendido la atribución arrastra señales que el
+mecanismo no justifica —el 12,8 % de su peso atribuido cae fuera de las señales declaradas, en la
+temperatura del refrigerante, el avance de encendido o la velocidad—, de modo que la explicación
+interna no es uniformemente fiable entre condiciones. Y en la deriva del caudalímetro la señal del
+componente que falla, el caudal de aire, **no recibe peso alguno**: la atribución se apoya en los
+ajustes de combustible con que la centralita compensa la deriva, que es mecánicamente correcto y
+obliga a que el verificador no admita la afirmación «el caudalímetro deriva porque el caudal es
+bajo».
 
-**PI.4 no queda sostenida con el diseño actual.** Ningún fragmento de otro motor sostuvo una afirmación, con o sin filtro de motor. Pero la condición que debía medirlo, con el filtro activo, no añade en ninguno de los tres fallos un distractor que la condición parcial no tuviera, de modo que no manipula la variable que decía manipular. Sin filtro el distractor sí entra, y se rechaza por aplicabilidad en dos fallos y por vocabulario de la señal en el tercero. La novedad que el capítulo 3 atribuía a esta subpregunta es, en consecuencia, más estrecha, y la condición requiere un rediseño antes de sostener sobre ella una inferencia.
+**Alcance.** La subpregunta queda sostenida en su forma acotada —diagnóstico y calibración— y no en
+la original, que incluía la ventaja del modelo temporal.
 
-Aplicada la regla que el capítulo 4 fijó para la respuesta global, con PI.1, PI.2 y PI.3 en su forma actual y PI.4 sin sostener, la respuesta a la pregunta de investigación es **parcialmente sostenida**, con carácter provisional y sobre validación. La calificación descansa en criterios reescritos tras los primeros resultados, en una PI.2 que se cumple por construcción y en cifras de desarrollo; la evaluación final puede cambiarla. De los cinco desenlaces que la refutarían, el de la abstención trivial no se produjo: el sistema se abstiene en catorce de diecisiete casos, pero doce debían terminar en abstención y en los cinco con evidencia completa explica tres.
+### PI.2 · Qué significa que la trazabilidad se cumpla por construcción
+**Lo observado.** Toda afirmación que el verificador admite conserva la observación que la origina
+y los fragmentos citados, y cada comprobación queda registrada por separado. En la explicación que
+redacta el modelo de lenguaje la correspondencia es más débil: no cita nada que no haya recibido,
+pero cita fragmentos que el verificador no aceptó.
 
-### Lo que no sostienen
-No sostienen nada sobre el comportamiento en un vehículo real: caracterizan el mecanismo ante los fallos representados en el generador. Es la primera limitación del capítulo 6. No sostienen el comportamiento del agente cuando el diagnóstico de partida es erróneo, salvo en el escenario adverso descrito, anterior a la corrección del índice y construido sobre dos ventanas; con la política v2.2 ese escenario deja de aceptar soporte falso, y sigue siendo de dos ventanas. Tampoco sostienen que la abstención sea barata: dos de cinco casos con evidencia completa terminan en abstención, y esa cobertura, 3 de 5, es el precio de una falsa confianza nula en esta muestra. Un criterio más laxo en la confianza habría explicado cuatro de los cinco casos, entre ellos C01, cuyo diagnóstico el modelo acierta pero con una confianza calibrada de 0,60; la elección del umbral es una elección de política y se declara como tal. Ni sostienen que el adaptador del modelo de lenguaje generalice: se entrenó sobre ejemplos generados con la recuperación anterior a la corrección del índice y con ventanas que incluyen las de tres casos evaluados, dos en entrenamiento y una en validación, y no se ha reentrenado. Tampoco sostienen que el comportamiento observado se deba a separar la decisión de la redacción: sin ablaciones y sin una comparación con una abstención decidida por el propio modelo de lenguaje, lo medido es el comportamiento de un sistema que implementa esa separación.
+**Qué permite concluir.** Que la trazabilidad es una propiedad **verificable** del recorrido, no una
+promesa: cada paso deja registro de qué recibió y qué decidió.
+
+**Qué no permite concluir.** Que los fragmentos citados sostengan de hecho lo afirmado. Eso lo
+establecen las comprobaciones deterministas del propio verificador, no una medición independiente:
+si coinciden con el juicio de un lector experto **no se ha medido**, porque el conjunto anotado no
+incluye las afirmaciones admisibles de cada caso. El vacío que motiva el trabajo —medir si cada
+afirmación se sostiene en su fragmento— queda abordado por construcción y no por medición.
+
+**Alcance.** Trazabilidad demostrada; soporte medido, no. La distinción es la que separa este
+resultado de la contribución que el capítulo 3 esperaba.
+
+### PI.3 · Qué precio tiene la abstención
+**Lo observado en validación.** La decisión cambia con la evidencia en la dirección correcta: sin
+documentación aplicable, o con documentación que no cubre las afirmaciones, el sistema se abstiene,
+y no explicó ninguno de los casos que debían terminar en abstención. El precio aparece en el otro
+error: dos abstenciones innecesarias de cinco.
+
+**Lo observado sobre el conjunto de prueba.** El estrato operativo de la evaluación final da **0 de
+14** de falsa confianza, **2 de 8** de abstención innecesaria y una cobertura de **6 de 10** con
+evidencia completa. El patrón de validación se mantiene: el error que el diseño perseguía no se
+observa, y el que se paga a cambio sigue ahí, en la misma proporción.
+
+**Qué permite concluir.** Que un criterio de suficiencia determinista, separado del modelo que
+redacta, evita la falsa confianza en las dos muestras en que se ha medido. Las ablaciones localizan
+el mecanismo: sustituir el criterio compuesto por una puerta de confianza sola lleva la falsa
+confianza de 0 de 9 a 9 de 9, mientras retirar la atribución no cambia ninguna de las dos tasas.
+
+**Qué no permite concluir.** Que la falsa confianza sea imposible. Con numerador cero y denominador
+catorce, el intervalo de Wilson al 95 % llega hasta 0,215, y las catorce ejecuciones proceden de
+siete ventanas, de modo que el intervalo real es más ancho. Lo medido es que **en esta muestra no
+ocurrió**, no que no pueda ocurrir. Tampoco permite concluir que el precio sea bajo: dos de cada
+ocho explicaciones legítimas se perdieron, y un umbral más laxo habría recuperado una de ellas.
+
+**Alcance.** Sostenida sobre las dos particiones, con el precio declarado y sin extrapolar a tasas
+poblacionales.
+
+### PI.4 · Por qué la condición con distractor no medía lo que decía
+**Lo observado.** Ningún fragmento de otro motor sostuvo una afirmación, con filtro o sin él. Pero
+la condición que debía medirlo, con el filtro activo, no añadía en ninguno de los tres fallos un
+distractor que la condición parcial no tuviera: no manipulaba la variable que declaraba manipular.
+El rediseño sin filtro sí introduce el distractor, y en las seis ejecuciones el sistema se abstuvo
+y en las seis el motivo registrado fue la insuficiencia de la evidencia, no la baja confianza.
+
+**Qué permite concluir.** Que el rechazo de evidencia impertinente ocurre por la vía prevista —la
+comprobación de que el fragmento hable de la señal observada— y no por un efecto colateral de la
+puerta de confianza.
+
+**Qué no permite concluir.** Nada sobre su frecuencia. Son **tres casos construidos** y seis
+ejecuciones procedentes de tres ventanas: el recuento se publica como recuento y no como tasa.
+
+**Alcance.** La novedad que el capítulo 3 atribuía a esta subpregunta es más estrecha de lo
+enunciado, y el resultado del rediseño la sostiene solo sobre un número de casos que no permite
+estimar nada.
+
+### La respuesta a la pregunta de investigación
+Aplicada la regla que el capítulo 4 fijó para la respuesta global, con PI.1 sostenida en su forma
+acotada, PI.2 como trazabilidad y no como soporte medido, PI.3 sostenida sobre las dos particiones
+y PI.4 reducida a un rediseño con tres casos, la respuesta es **parcialmente sostenida**.
+
+Dos cosas la separan de una respuesta firme. La primera es que la calificación descansa en criterios
+reescritos tras ver los primeros resultados y en una PI.2 que se cumple por construcción. La
+segunda es el tamaño de las muestras: ninguna de las cifras finales procede de más de diez
+ventanas, y la aritmética de un intervalo de confianza sobre ese material deja márgenes anchos.
+
+De los cinco desenlaces que el capítulo 4 declaró como refutatorios, ninguno se produjo. El de la
+abstención trivial merece comprobarse explícitamente, porque es el más fácil de confundir con un
+buen resultado: el sistema no se abstiene siempre. Sobre el conjunto de prueba explica seis de las
+diez ejecuciones con evidencia completa y se abstiene en las catorce que debían terminar así.
+
+### Lo que los resultados no sostienen
+**Nada sobre un vehículo real.** Caracterizan el comportamiento del sistema ante los fallos que el
+generador representa, parametrizado con el manual del vehículo de referencia. Es la primera
+limitación del capítulo 6.
+
+**Nada sobre un diagnóstico de partida erróneo**, salvo en el escenario adverso descrito, construido
+sobre dos ventanas y anterior a la corrección del índice. Con la política vigente ese escenario deja
+de aceptar soporte falso, y sigue siendo de dos ventanas.
+
+**Nada sobre la generalización del adaptador** del modelo de lenguaje: se ajustó con ejemplos
+generados por la recuperación anterior a la corrección del índice y con ventanas que incluyen las de
+tres casos evaluados. No se ha reentrenado, y esa contaminación está declarada.
+
+**Nada sobre el efecto de separar la decisión de la redacción.** Lo medido es el comportamiento de un
+sistema que implementa esa separación, no una comparación con uno que deje la abstención en manos
+del modelo de lenguaje. Esa comparación exigiría una ablación que no se ejecutó.
+
+**Nada sobre la fidelidad numérica del texto entregado.** Siete de las treinta y cinco salidas del
+redactor contienen al menos una cifra que el verificador no produjo. Ninguna de las tasas cambia por
+ello, porque las produce el verificador determinista; lo que queda sin garantizar es que el texto
+que el usuario lee diga los números que el sistema calculó.
 
 ### El patrón que atraviesa el trabajo
-Varios de los errores relevantes del trabajo se detectaron mirando cifras que no cuadraban, no ejecutando pruebas automáticas: una exactitud de cero por un tipo de dato, una puntuación de fusión en otra escala, una condición ABSENT que seguía explicando, un código genérico que hacía parecer que la evidencia no existía, un efecto aparente del idioma que el filtro tapaba, un esquema que rechazaba respuestas correctas, un índice que mezclaba dos espacios vectoriales. Cada uno quedó registrado con su consecuencia si no se hubiera detectado, y varios habrían producido resultados falsos que parecían correctos. Es la misma observación que motiva la pregunta de investigación, aplicada al propio proceso de investigarla: la evidencia aparente no sobrevive siempre al escrutinio, y un sistema, o un investigador, que no distinga entre tener una referencia y tener soporte producirá afirmaciones con referencia y sin soporte.
+Varios de los errores relevantes se detectaron mirando cifras que no cuadraban, no ejecutando
+pruebas automáticas: una exactitud de cero por un tipo de dato, una puntuación de fusión en otra
+escala, una condición sin evidencia que seguía explicando, un código genérico que hacía parecer que
+la evidencia no existía, un efecto aparente del idioma que el filtro tapaba, un esquema que
+rechazaba respuestas correctas, un índice que mezclaba dos espacios vectoriales.
 
-Quedan para la evaluación final dos cosas que este capítulo no puede ofrecer todavía: la medición sobre el conjunto de prueba, que dirá si las cifras de validación se mantienen sobre datos no usados para fijar ningún umbral ni revisar el criterio, y la comparación con los trabajos del capítulo 3, que solo tiene sentido sobre resultados finales. De las ablaciones queda pendiente la variante de la recuperación léxica que la enmienda declara.
+Cada uno quedó registrado con la consecuencia que habría tenido de no detectarse, y varios habrían
+producido resultados falsos de apariencia correcta. Es la misma observación que motiva la pregunta
+de investigación, aplicada al propio proceso de investigarla: la evidencia aparente no sobrevive
+siempre al escrutinio, y quien no distinga entre **tener una referencia** y **tener soporte**
+—un sistema o un investigador— producirá afirmaciones con referencia y sin soporte.
+
+Queda pendiente la comparación con los trabajos del capítulo 3, que el capítulo 6 aborda sobre los
+resultados finales, y la variante de recuperación léxica que la enmienda de las ablaciones declara y
+que quedó inconclusa.
