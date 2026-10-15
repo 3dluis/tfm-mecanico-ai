@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import itertools
 import json
 import re
 import subprocess
@@ -107,16 +108,13 @@ def comprobar_dependencias() -> list[Resultado]:
     # Un extra **es** una declaración. Lo que esta comprobación persigue es lo
     # contrario: importar algo que solo llega arrastrado por otra dependencia y
     # que desaparece el día que esa otra cambie de versión.
-    declaradas = " ".join(
-        [*proyecto.get("dependencies", []), *sum(proyecto.get("optional-dependencies", {}).values(), [])]
-    )
+    extras = itertools.chain.from_iterable(proyecto.get("optional-dependencies", {}).values())
+    declaradas = " ".join([*proyecto.get("dependencies", []), *extras])
     resultados = [
         Resultado("dependencias", f"{modulo} declarado", modulo in declaradas)
         for modulo in IMPORTADOS
     ]
-    resultados.append(
-        Resultado("dependencias", "uv.lock presente", (RAIZ / "uv.lock").is_file())
-    )
+    resultados.append(Resultado("dependencias", "uv.lock presente", (RAIZ / "uv.lock").is_file()))
     return resultados
 
 
@@ -225,7 +223,7 @@ def comprobar_git() -> list[Resultado]:
     _, ramas = _git("branch", "--format=%(refname:short)")
     resultados.append(Resultado("git", f"{len(ramas.splitlines())} ramas", bool(ramas)))
     codigo, salida = _git("fsck", "--connectivity-only")
-    errores = [l for l in salida.splitlines() if l and not l.startswith("dangling")]
+    errores = [x for x in salida.splitlines() if x and not x.startswith("dangling")]
     resultados.append(
         Resultado("git", "objetos íntegros" if not errores else f"fsck: {errores[0]}", not errores)
     )
@@ -247,7 +245,8 @@ def comprobar_documentacion() -> list[Resultado]:
             resultados.append(Resultado("documentación", f"{nombre} falta", False))
             continue
         texto = fichero.read_text("utf-8")
-        resultados.append(Resultado("documentación", f"{nombre} ({len(texto.split())} palabras)", True))
+        palabras = len(texto.split())
+        resultados.append(Resultado("documentación", f"{nombre} ({palabras} palabras)", True))
         for patron in ("/Users/", "/home/", "C:\\"):
             if patron in texto:
                 resultados.append(
