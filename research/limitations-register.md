@@ -272,6 +272,20 @@ Fecha: 1 de septiembre de 2026, 15:00 (actualizado tras el cierre de E4, E5 y E6
 
 ---
 
+## L-27 — Tres de los cuatro criterios de aceptación se reformularon después de ver resultados
+
+| Campo | Contenido |
+|---|---|
+| **Qué limita** | La fuerza confirmatoria del dictamen sobre la pregunta de investigación |
+| **Por qué** | Los criterios de las cuatro subpreguntas se congelaron el 1-09-2026 a las 13:21 (`eaee16c`), antes de entrenar. A las 15:06 entraron E6 y E7 (`27b9f8d`): bosque aleatorio 0,879 de F1 macro frente a 0,823 del GRU bidireccional, de modo que el modelo temporal no superó a la línea base y el criterio original de PI.1 no se cumplió. El 2-09-2026 a las 14:28 (`3f8eac3`) la Tabla 4.6 se escribió sin esa exigencia. Los de PI.2 y PI.3 remitían a umbrales que la primera versión dejó en blanco a propósito y que nunca se escribieron |
+| **Evidencia** | `docs/methodology/criterio-pi1-enmienda-01.md`; `docs/matriz_validacion_pi.md` en `eaee16c`; `experiments/E6_baseline_synthetic_v2.json` y `experiments/E7_temporal_synthetic_v2.json` |
+| **Afecta a** | El dictamen global y los criterios de PI.1, PI.2 y PI.3. PI.4 se conserva en sustancia |
+| **Consecuencia** | Los tres criterios pasaron de una exigencia cuantitativa y comparada a una cualitativa y existencial, de modo que el trabajo responde a una pregunta más estrecha que la del pre-registro. El dictamen «sostenida» describe cumplimiento de criterios operativos y no es una confirmación independiente del protocolo original. Con los criterios originales no existe valor aplicable de la regla de respuesta global, porque la calificación parcial exige que PI.1 se cumpla |
+| **Cómo comprobarlo** | Un pre-registro con umbrales escritos y réplicas suficientes para evaluar un margen, fijado antes de cualquier medición y no modificado después. Fuera del alcance de este trabajo, cuyos registros ya existen |
+| **Severidad** | **alta** — no invalida ninguna cifra y acota lo que el dictamen puede afirmar |
+
+---
+
 ## Resumen
 
 | Severidad | Entradas |
