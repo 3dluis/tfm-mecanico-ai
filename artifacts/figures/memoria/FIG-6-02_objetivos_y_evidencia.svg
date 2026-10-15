@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-14T19:12:22.961184</dc:date>
+    <dc:date>2026-10-15T07:36:50.426913</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -35,7 +35,7 @@ L 413.64 55.192311
 L 413.64 17.973784 
 L 7.2 17.973784 
 z
-" clip-path="url(#p72e6460038)" style="fill: #008300; opacity: 0.14"/>
+" clip-path="url(#p978f63ebf3)" style="fill: #008300; opacity: 0.14"/>
    </g>
    <g id="patch_3">
     <path d="M 7.2 104.164056 
@@ -43,7 +43,7 @@ L 413.64 104.164056
 L 413.64 66.94553 
 L 7.2 66.94553 
 z
-" clip-path="url(#p72e6460038)" style="fill: #eda100; opacity: 0.14"/>
+" clip-path="url(#p978f63ebf3)" style="fill: #eda100; opacity: 0.14"/>
    </g>
    <g id="patch_4">
     <path d="M 7.2 153.135802 
@@ -51,7 +51,7 @@ L 413.64 153.135802
 L 413.64 115.917275 
 L 7.2 115.917275 
 z
-" clip-path="url(#p72e6460038)" style="fill: #eda100; opacity: 0.14"/>
+" clip-path="url(#p978f63ebf3)" style="fill: #eda100; opacity: 0.14"/>
    </g>
    <g id="patch_5">
     <path d="M 7.2 202.107547 
@@ -59,7 +59,7 @@ L 413.64 202.107547
 L 413.64 164.889021 
 L 7.2 164.889021 
 z
-" clip-path="url(#p72e6460038)" style="fill: #eda100; opacity: 0.14"/>
+" clip-path="url(#p978f63ebf3)" style="fill: #eda100; opacity: 0.14"/>
    </g>
    <g id="patch_6">
     <path d="M 7.2 251.079293 
@@ -67,7 +67,7 @@ L 413.64 251.079293
 L 413.64 213.860766 
 L 7.2 213.860766 
 z
-" clip-path="url(#p72e6460038)" style="fill: #eda100; opacity: 0.14"/>
+" clip-path="url(#p978f63ebf3)" style="fill: #eda100; opacity: 0.14"/>
    </g>
    <g id="text_1">
     <!-- OE1 -->
@@ -2440,7 +2440,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p72e6460038">
+  <clipPath id="p978f63ebf3">
    <rect x="7.2" y="7.2" width="406.44" height="254.653077"/>
   </clipPath>
  </defs>
