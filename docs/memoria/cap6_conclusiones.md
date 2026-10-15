@@ -157,6 +157,81 @@ el hallazgo sobre la fidelidad numérica la debilita en su parte de trazabilidad
 compensan en la calificación y no se anulan: son defectos y méritos distintos, y conviene no
 sumarlos.
 
+## Comparación con los trabajos revisados
+
+El capítulo 3 ordenó la revisión en seis frentes y señaló, para cada uno, qué establece y qué deja
+sin medir. Conviene volver sobre esa tabla con los resultados delante, porque es lo que separa una
+aportación de una repetición.
+
+**Diagnóstico sobre telemetría de vehículo.** Michailidis et al. (2025), Rimpas et al. (2020),
+Jun et al. (2025), Prytz et al. (2015), Hossain et al. (2024) y Abboush et al. (2026) establecen que
+la telemetría embarcada sostiene la detección y la clasificación de averías. El resultado de este
+trabajo —0,878 de exactitud frente a 0,286 de la clase mayoritaria— **no mejora nada de lo que esos
+estudios ya muestran**, y además se obtiene sobre telemetría sintética de un solo vehículo. No es
+una aportación: es la condición previa que el resto del recorrido necesitaba, y se declara como tal.
+Lo que esos trabajos no miden es la **explicación** del diagnóstico; su salida es una clase o una
+puntuación, y qué la sostiene documentalmente queda fuera de su objeto.
+
+**Explicabilidad.** Lundberg y Lee (2017) establecen un método de atribución consistente, y
+Brusa et al. (2023), Haque et al. (2025), Li y van Leeuwen (2023) y Lu et al. (2025) lo aplican al
+diagnóstico. Ninguno mide si lo atribuido **basta** para justificar la hipótesis. Este trabajo añade
+una medición sobre ese hueco, y su resultado es negativo: la ablación `A1` sustituye la atribución
+por un criterio estadístico simple y **no cambia ninguna de las dos tasas de error** ni ninguna
+decisión. La atribución, en este recorrido, explica la predicción y no interviene en la decisión de
+explicar o callarse. Es un resultado que conviene no suavizar, porque contradice la expectativa con
+que se incorporó.
+
+**Recuperación aumentada sobre documentación técnica.** Lewis et al. (2020) y Gao et al. (2023)
+establecen el patrón, y Nam et al. (2025), Mahale et al. (2025), Lin y Miao (2025), Khan et al.
+(2024) y Das et al. (2025) lo llevan a documentación técnica y a diagnóstico. Lo que no miden es la
+correspondencia **afirmación a afirmación** con la evidencia concreta, ni el comportamiento cuando
+la documentación recuperada está incompleta o ausente. El banco de pruebas con evidencia manipulada
+—completa, parcial, retirada y con distractor— se dirige a ese segundo hueco, y mide algo que los
+trabajos revisados no plantean: que con cinco a siete fragmentos aplicables delante el sistema se
+abstenga igual, porque ninguno cubre lo que se quería afirmar. La aportación está en el
+procedimiento de medición, no en el mecanismo de recuperación, que es el conocido.
+
+**Alucinación y su mitigación.** Shuster et al. (2021) establecen que la recuperación reduce la
+alucinación y Béchard y Marquez Ayala (2024) que el formato estructurado la reduce más. Ji et al.
+(2023) delimitan el fenómeno. Ninguno mide si esa reducción **basta**. Aquí hay una medición directa
+sobre ese punto, y es la más incómoda del trabajo: **siete de las treinta y cinco salidas** del
+redactor contienen al menos una cifra que el verificador no produjo, y lo hacen **teniendo**
+recuperación y **teniendo** salida estructurada. Las dos mitigaciones que esos trabajos acreditan
+estaban activas y no impidieron el defecto. Ninguna tasa del sistema cambia por ello, porque las
+produce el verificador determinista; lo que queda sin garantizar es que el texto que el usuario lee
+diga los números que el sistema calculó.
+
+**Abstención.** Chow (1970) y Geifman y El-Yaniv (2017) establecen que no responder es una salida
+legítima cuya calidad se mide por la relación entre riesgo y cobertura. Los dos operan sobre el
+propio clasificador: la decisión de abstenerse se toma con la confianza del modelo. Este trabajo la
+desplaza fuera del modelo, a un verificador determinista que examina evidencia documental, y mide
+qué pasa: sobre el conjunto de prueba, ninguna de las catorce ejecuciones que debían callarse
+terminó en explicación, al precio de dos abstenciones innecesarias de ocho. La ablación `A4` indica
+dónde está el mecanismo: con una puerta de confianza sola —que es el esquema de los trabajos
+revisados— la falsa confianza aparece en las nueve ejecuciones. El desplazamiento de la decisión
+fuera del modelo es la diferencia, y está medida en una sola configuración.
+
+**Calibración de la confianza.** Guo et al. (2017), Niculescu-Mizil y Caruana (2005),
+Zadrozny y Elkan (2002) y Naeini et al. (2015) establecen que la probabilidad declarada por un
+clasificador no coincide con su acierto y cómo corregirlo. Ninguno examina esa confianza como
+**puerta de decisión junto a evidencia documental**. Aquí la calibración —de 0,144 a 0,085 de error—
+alimenta esa puerta, y la medición añade algo que esos trabajos no plantean: una confianza bien
+calibrada y alta **no basta**, porque en la ablación que retira el criterio documental el sistema
+explica con confianza las nueve ejecuciones que debían terminar calladas.
+
+**Dónde este trabajo queda por debajo de lo revisado.** En un punto, y conviene decirlo. Varios de
+los trabajos sobre recuperación evalúan sus salidas contra un juicio humano o contra conjuntos
+anotados con respuestas de referencia. Aquí la correspondencia entre una afirmación y su evidencia
+la establecen las comprobaciones del propio verificador, y no se ha contrastado con un lector
+externo. La trazabilidad se cumple por construcción; medirla exigiría la anotación que la
+prospectiva propone como primera línea.
+
+**Lo que no es nuevo, dicho sin rodeos.** Ni la recuperación aumentada, ni la atribución por valores
+de Shapley, ni la calibración isotónica, ni la abstención como salida legítima: los cuatro están
+descritos en los trabajos revisados y aquí se integran. Lo que no se encontró en ellos es la
+medición conjunta —qué ocurre cuando un sistema que diagnostica bien recibe evidencia documental
+manipulada y tiene que decidir si explica—, y es ahí donde este trabajo aporta.
+
 ## Contribuciones del trabajo
 
 Las contribuciones se separan en tres planos, porque no tienen el mismo estatuto: lo construido, lo
@@ -302,6 +377,16 @@ El índice documental mezcló hasta el 4 de septiembre de 2026 dos espacios vect
 
 La condición con distractor, con el filtro de motor activo, no manipulaba la variable que pretendía manipular. Su rediseño se ejecutó el 13 de octubre de 2026 y da a la subpregunta sobre el rechazo de evidencia no aplicable una respuesta acotada a tres casos construidos, que no estima ninguna tasa. Y la fidelidad numérica del texto que redacta el modelo de lenguaje no está garantizada: en la evaluación final, siete de sus treinta y cinco salidas contienen al menos una cifra que el verificador no produjo, sin que ninguna de las dos tasas cambie por ello, porque las produce el verificador determinista.
 
+Una de las cuatro ablaciones **quedó inconclusa y no se repitió**. La variante `A2` debía medir qué
+aporta la ruta semántica de recuperación sustituyéndola por una ruta léxica, y la ruta léxica no
+recuperó nada: la consulta que recibe está redactada en prosa, y una búsqueda por términos sobre un
+manual de taller indexado por códigos y componentes no encuentra con ella. Lo que no pudo medirse,
+por tanto, es **cuánto de la ventaja de la recuperación se debe a la vía semántica y cuánto a que la
+consulta vaya guiada por el código de avería**. La conclusión que queda acotada es la de E12: el
+salto de cero a cinco casos de cinco se observa entre la consulta en prosa y la consulta guiada,
+pero no está repartido entre esos dos factores. Repetirla exigiría formular una consulta léxica
+equivalente, que es una medición nueva y no una reejecución, y por eso no se hizo.
+
 Hay una última condición que afecta a todas las cifras de decisión y que conviene no dejar
 implícita: **las ejecuciones no son independientes entre sí**. Las treinta y cinco de la evaluación
 final proceden de ocho ventanas y repiten casos entre los tres estratos; las diecisiete de
@@ -333,6 +418,12 @@ capítulo 5 describe está diseñado y sin implementar: comprobaría, antes de d
 válida, el nombre de la métrica, su valor, el umbral, el operador de comparación, la procedencia
 del número y la coherencia entre lo que el texto dice y lo que los datos estructurados contienen.
 Su evaluación exigiría un conjunto que el ajuste del redactor no haya visto.
+
+A esas tres se añade una cuarta, menor en alcance y bien delimitada: **completar la ablación `A2`**
+con una consulta léxica formulada en los términos que un índice por palabras necesita —códigos,
+componentes y nombres de señal en lugar de prosa—, para separar la contribución de la vía semántica
+de la de la guía por código de avería. Es una medición nueva, no una reejecución, y de ella depende
+que la ventaja de recuperación observada pueda atribuirse.
 
 La tercera es **reajustar el adaptador sin contaminación**, con ejemplos generados por la
 recuperación ya corregida y con ventanas disjuntas de las evaluadas, y volver a medir. Hasta que

@@ -297,7 +297,7 @@ errores de aprendizaje sino ventanas sin contenido que aprender, y que las tasas
 leerse con esa salvedad. El panel derecho pone una junto a otra dos cuentas de la misma condición
 —cinco ventanas sin señal y cinco ventanas falladas— y aquí hace falta una advertencia explícita:
 **no está comprobado que sean las mismas cinco**. Los registros de E6 no guardan la predicción de
-cada ventana, de modo que la coincidencia de los dos recuentos es, por ahora, una coincidencia
+cada ventana, de modo que la coincidencia de los dos recuentos es una coincidencia
 aritmética y no una identidad medida; comprobarla exigiría reejecutar el modelo conservando la
 predicción por ventana. La contribución a la pregunta de investigación es que la etiqueta de un caso
 y la evidencia disponible en él son cosas distintas, que es la misma distinción que el verificador
@@ -970,19 +970,66 @@ redactor contienen al menos una cifra que el verificador no produjo. Ninguna de 
 ello, porque las produce el verificador determinista; lo que queda sin garantizar es que el texto
 que el usuario lee diga los números que el sistema calculó.
 
-### El patrón que atraviesa el trabajo
-Varios de los errores relevantes se detectaron mirando cifras que no cuadraban, no ejecutando
-pruebas automáticas: una exactitud de cero por un tipo de dato, una puntuación de fusión en otra
-escala, una condición sin evidencia que seguía explicando, un código genérico que hacía parecer que
-la evidencia no existía, un efecto aparente del idioma que el filtro tapaba, un esquema que
-rechazaba respuestas correctas, un índice que mezclaba dos espacios vectoriales.
+### El patrón que aparece en los resultados
 
-Cada uno quedó registrado con la consecuencia que habría tenido de no detectarse, y varios habrían
-producido resultados falsos de apariencia correcta. Es la misma observación que motiva la pregunta
-de investigación, aplicada al propio proceso de investigarla: la evidencia aparente no sobrevive
-siempre al escrutinio, y quien no distinga entre **tener una referencia** y **tener soporte**
-—un sistema o un investigador— producirá afirmaciones con referencia y sin soporte.
+Hay una observación que no pertenece a ninguna subpregunta y que atraviesa todas. Varios de los
+defectos que este trabajo tuvo que corregir **no los detectó ninguna prueba automática**: los
+detectó una cifra que no cuadraba. Y lo que los hace relevantes para la discusión, y no para un
+registro de incidencias, es que todos tienen la misma forma: produjeron una salida de apariencia
+válida.
 
-Queda pendiente la comparación con los trabajos del capítulo 3, que el capítulo 6 aborda sobre los
-resultados finales, y la variante de recuperación léxica que la enmienda de las ablaciones declara y
-que quedó inconclusa.
+**Una salida válida y una interpretación respaldada no son lo mismo.** Un número con el formato
+correcto, un documento recuperado con el código correcto, una respuesta que pasa la validación de
+esquema: las tres cosas parecen evidencia y ninguna lo es por sí sola. Los siete casos que siguen
+son instancias de ese mismo patrón, y conviene leerlos por su consecuencia metodológica y no por su
+cronología.
+
+**Incompatibilidad de tipos de datos.** Una exactitud de cero que no era un modelo malo, sino una
+comparación entre valores que nunca podían coincidir. *Consecuencia experimental:* la métrica era
+interpretable y falsa. *Corrección:* se igualaron los tipos en el punto de comparación.
+*Limitación residual:* ninguna comprobación garantiza hoy que dos magnitudes comparadas sean
+comparables; lo que hay es la costumbre de desconfiar de un cero exacto.
+
+**Escalas de puntuación incompatibles.** Una puntuación de fusión calculada sobre dos escalas
+distintas producía un orden plausible y equivocado. *Consecuencia:* el orden de los documentos
+recuperados no era el que las métricas declaraban. *Corrección:* se normalizó antes de fundir.
+*Limitación residual:* el valor absoluto de las puntuaciones anteriores a la corrección no es
+comparable con el posterior, y por eso los registros conservan las dos versiones.
+
+**Evidencia aparentemente insuficiente.** Una condición que debía quedarse sin documentación seguía
+explicando, porque la evidencia que debía haberse retirado seguía alcanzable por otra vía.
+*Consecuencia:* la condición no manipulaba lo que decía manipular. *Corrección:* se retiró del
+índice y se comprobó la alcanzabilidad antes de ejecutar. *Limitación residual:* esa comprobación
+previa es hoy obligatoria en el protocolo, y es la que el rediseño del distractor aplicó.
+
+**Códigos de avería genéricos.** Un código demasiado general hacía parecer que no existía
+documentación aplicable cuando sí existía. *Consecuencia:* una abstención correcta por el motivo
+equivocado, que es indistinguible de la correcta si solo se mira el veredicto. *Corrección:* se
+acotó el código al que el fallo declara. *Limitación residual:* el motivo registrado de cada
+abstención es, desde entonces, parte del resultado y no un detalle de implementación.
+
+**Validación de esquemas.** Un esquema demasiado estricto rechazaba respuestas correctas.
+*Consecuencia:* una tasa de fallo que medía el esquema y no el sistema. *Corrección:* se relajó a lo
+que el contrato exige. *Limitación residual:* una validación de forma no dice nada sobre el
+contenido, y el hallazgo sobre la fidelidad numérica lo confirma: siete salidas pasaron el esquema
+llevando dentro una cifra que el verificador nunca produjo.
+
+**Filtrado documental.** Un filtro por motor ocultaba un efecto aparente del idioma y, al mismo
+tiempo, impedía que la condición con distractor introdujera el distractor. *Consecuencia:* dos
+mediciones distintas quedaron sin interpretar. *Corrección:* se midió sin filtro y se rediseñó la
+condición. *Limitación residual:* el rediseño descansa en tres casos construidos.
+
+**Espacios vectoriales incompatibles.** Un índice que mezclaba dos espacios producía recuperaciones
+razonables y mal ordenadas. *Consecuencia:* las cifras de recuperación anteriores a la corrección no
+son comparables con las posteriores, y el ajuste del redactor se hizo con ejemplos generados por la
+recuperación anterior. *Corrección:* se reconstruyó el índice y se reejecutó la recuperación.
+*Limitación residual:* la contaminación del adaptador **no se ha corregido**, porque exigiría
+reajustarlo, y queda declarada entre las limitaciones.
+
+**Lo que esto significa para la pregunta de investigación.** El trabajo pregunta si un sistema puede
+distinguir entre tener una referencia y tener soporte. Los siete casos anteriores muestran que esa
+distinción no es solo el objeto de estudio: es también la condición de que el estudio mida algo. Un
+procedimiento experimental que no la aplique sobre sí mismo producirá cifras con referencia y sin
+soporte, igual que el sistema que examina. De ahí que cada corrección quede fechada, con su
+consecuencia si no se hubiera detectado, y que los registros conserven las versiones anteriores en
+lugar de sustituirlas.
