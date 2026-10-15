@@ -113,7 +113,7 @@ identificó ninguno que recorriera la cadena completa ni que midiera el punto en
 bien formada se queda sin respaldo documental.
 
 Hay que decir también qué **no** autoriza esa asimetría a concluir. No autoriza a afirmar que el
-problema esté sin resolver en la literatura, sino que no se identificó resuelto **en el corpus
+problema esté sin resolver en el estado del conocimiento, sino que no se identificó resuelto **en el corpus
 revisado**, que tiene los límites que este capítulo declara: una revisión inspirada en PRISMA sin su
 flujo formal, sin protocolo registrado y sin cribado por duplicado. Y no autoriza a presentar la
 articulación de los cuatro frentes como una aportación por sí misma: combinar componentes conocidos
