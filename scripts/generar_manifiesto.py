@@ -23,9 +23,10 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 
 #: Qué se censa. Patrones y no una lista, para que no se quede corto.
+#: En esta copia **no hay** `memoria/`: el documento académico se entrega por su
+#: propio cauce y sus versiones viven en el historial. Los dos patrones que lo
+#: censaban se retiran para que el inventario no busque lo que no está.
 PATRONES: tuple[str, ...] = (
-    "memoria/*.docx",
-    "memoria/*.pdf",
     "notebooks/*.ipynb",
     "artifacts/tables/*.csv",
     "artifacts/metrics/*.json",

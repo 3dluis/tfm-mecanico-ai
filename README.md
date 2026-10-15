@@ -44,6 +44,10 @@ pruebas**, sí se ejecutan.
 
 ## Por dónde empezar, según lo que se quiera hacer
 
+**Entender qué se midió y qué permite afirmar.** [`INFORME.md`](INFORME.md): la pregunta, los
+resultados con sus denominadores, el dictamen con su alcance y lo que el trabajo **no**
+sostiene.
+
 **Leer sin instalar nada.** Los HTML de `notebooks/html/`. No hacen falta Python ni Jupyter: se
 abren en cualquier navegador y traen dentro sus figuras y sus tablas.
 
