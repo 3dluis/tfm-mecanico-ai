@@ -29,7 +29,13 @@ from mecanico_ia_exp.visualization.memoria.base import (
     numero,
     panel,
 )
-from mecanico_ia_exp.visualization.memoria.calibracion import fig_calibracion
+from mecanico_ia_exp.visualization.memoria.calibracion import (
+    agrupar,
+    comprobacion_de_la_reconstruccion,
+    fig_calibracion,
+    fig_fiabilidad,
+    intervalos_de_fiabilidad,
+)
 from mecanico_ia_exp.visualization.memoria.datos import (
     fig_particiones,
     fig_separabilidad_dispersion,
@@ -49,6 +55,10 @@ from mecanico_ia_exp.visualization.memoria.mezcla_pobre import (
     separabilidad_entre_mezclas_pobres,
 )
 from mecanico_ia_exp.visualization.memoria.recuperacion import fig_recuperacion
+from mecanico_ia_exp.visualization.memoria.riesgo_cobertura import (
+    compromiso_del_umbral,
+    fig_riesgo_cobertura,
+)
 from mecanico_ia_exp.visualization.memoria.sintesis import fig_compromiso, fig_objetivos
 from mecanico_ia_exp.visualization.memoria.temporal import (
     fig_forma_del_fallo,
@@ -60,6 +70,9 @@ from mecanico_ia_exp.visualization.memoria.temporal import (
 __all__ = [
     "ANCHO_DE_PAGINA",
     "CONDICION",
+    "agrupar",
+    "comprobacion_de_la_reconstruccion",
+    "compromiso_del_umbral",
     "decisiones_de_e19",
     "estilo_para_impresion",
     "fig_ablaciones",
@@ -69,16 +82,19 @@ __all__ = [
     "fig_confusor_de_volumen",
     "fig_decisiones_y_umbral",
     "fig_f1_por_clase",
+    "fig_fiabilidad",
     "fig_forma_del_fallo",
     "fig_mezcla_pobre",
     "fig_objetivos",
     "fig_pareja_contrafactual",
     "fig_particiones",
     "fig_recuperacion",
+    "fig_riesgo_cobertura",
     "fig_separabilidad_dispersion",
     "fig_separabilidad_nivel",
     "fig_ventana_y_descriptor",
     "guardar",
+    "intervalos_de_fiabilidad",
     "numero",
     "panel",
     "recuento_de_expresion",

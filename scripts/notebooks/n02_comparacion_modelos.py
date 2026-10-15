@@ -504,8 +504,79 @@ sea negativo: un ECE de 0,1439 dice que los tramos fallan, y el signo solo dice 
 en promedio. Tampoco que el ECE sea estable: con diez tramos y 98 ventanas, cada tramo contiene muy
 pocas predicciones y la cifra es frágil. Y un solo punto por modelo —confianza media contra
 acierto— es un resumen: no muestra en qué tramos se concentra el error, que es lo que más
-importaría. La curva de fiabilidad completa exigiría las predicciones por ventana, que los registros
-de E6 y E7 **no guardan**."""),
+importaría. Los registros de E6 y E7 **no guardan la confianza por ventana**, de modo que un
+diagrama de fiabilidad no puede construirse a partir de ellos. El apartado siguiente lo construye
+por otra vía."""),
+    md("""\
+## 10 bis. La forma de la calibración, recuperada de la curva del barrido
+
+**Objetivo del análisis.** Saber **en qué tramos de confianza** se concentra el desajuste del
+modelo calibrado, que es lo que un punto agregado no puede decir y lo que decide si el umbral del
+verificador opera en una zona fiable.
+
+**Procedencia de los datos.** No hay probabilidades individuales en ningún registro. Lo que sí hay
+es la curva acumulada del barrido del umbral, `E15b_barrido_umbral.json`: 101 umbrales con, en cada
+uno, cuántas de las 98 ventanas de validación quedan por encima y con qué precisión se decide entre
+ellas. Restando dos umbrales consecutivos salen el número de ventanas y el número de aciertos del
+tramo que hay entre ellos.
+
+La reconstrucción solo vale si reproduce lo que el registro del modelo publica. Se comprueba antes
+de dibujar nada."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import (
+    agrupar,
+    comprobacion_de_la_reconstruccion,
+    intervalos_de_fiabilidad,
+)
+
+comprobacion = comprobacion_de_la_reconstruccion()
+pd.Series(comprobacion)"""),
+    md("""\
+**Qué muestran estas cifras.** La suma de los tramos recuperados devuelve **98 ventanas y 86
+aciertos**, repartidos en 32 tramos de una centésima más la cola de las ventanas cuya confianza
+calibrada es exactamente 1,0. La exactitud que producen, **0,877551**, coincide dígito a dígito con
+la del registro del modelo. La reconstrucción no es una estimación: es aritmética exacta sobre una
+curva acumulada.
+
+Los tramos de una centésima son exactos y **no se pueden dibujar**: con 98 ventanas repartidas en
+33, casi todos contienen una sola y su proporción solo puede valer 0 o 1. Agrupar de cinco en cinco
+centésimas es suma de enteros y no pierde exactitud."""),
+    code("""\
+pd.DataFrame(
+    [
+        {
+            "desde": round(i.desde, 2),
+            "hasta": round(i.hasta, 2),
+            "ventanas": i.ventanas,
+            "aciertos": i.aciertos,
+            "exactitud": round(i.exactitud, 3),
+        }
+        for i in agrupar()
+    ]
+)"""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_fiabilidad
+
+fig = fig_fiabilidad()
+soporte.exportar(fig, "FIG-NB02-05_fiabilidad", subdirectorio="02_comparacion_modelos")
+plt.show()"""),
+    md("""\
+**Qué muestra.** Los cuatro tramos por encima de 0,80 reúnen **81 de las 98 ventanas** y quedan
+sobre la diagonal o por encima de ella: donde el modelo opera, el calibrado sigue prometiendo algo
+menos de lo que cumple. Por debajo de 0,80 hay siete tramos con cuatro ventanas o menos, cuya
+proporción salta entre 0 y 1 porque está calculada sobre una o dos observaciones.
+
+**Qué podemos interpretar.** Que el umbral de suficiencia, 0,79, cae justo en la frontera entre la
+zona poblada y la zona vacía de la distribución de confianza. Eso es lo que hace defendible una
+abstención por confianza baja: por encima del umbral el instrumento está calibrado, y por debajo no
+hay observaciones suficientes para afirmar nada sobre él.
+
+**Qué no podemos afirmar.** Tres cosas. La reconstrucción **no conserva la confianza media dentro
+de cada tramo**: solo sus bordes, de modo que cada barra ocupa su tramo y no se sitúa en un punto.
+Solo existe para la confianza **calibrada**; la anterior a calibrar no se guardó por ventana y su
+diagrama no puede dibujarse. Y **de aquí no sale un error de calibración esperado**: agrupar de otro
+modo da otro número, y el que vale sigue siendo el del registro, calculado sobre diez tramos. Poner
+los dos juntos invitaría a leer una corrección donde solo hay otro agrupamiento."""),
     md("""\
 ## 11. Las cifras de `synthetic_v3`, y por qué no cierran la cuestión
 
@@ -676,7 +747,7 @@ etiqueta propia**: los ejecutores se niegan a sobrescribir los artefactos public
 
 ## 16. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** Las cifras agregadas son la **Tabla 5.1**; adónde van los errores de cada modelo, la **Figura 5.6**; la comparación entre los dos conjuntos, la **Figura 5.7**; y la calibración, la **Tabla 5.2** y la **Figura 5.11**. El detalle por condición está en el anexo B, **Figura B.1** y **Tabla B.2**.
+**Dónde aparece esto en la memoria.** Las cifras agregadas son la **Tabla 5.1**; adónde van los errores de cada modelo, la **Figura 5.6**; la comparación entre los dos conjuntos, la **Figura 5.8**; la calibración, la **Tabla 5.2** y la **Figura 5.12**, y su forma por tramos, la **Figura 5.13**. El detalle por condición es la **Figura 5.7** del capítulo 5, con su **Tabla B.2** en el anexo B.
 
 - `docs/experiments/E6_baseline.md` — informe de la línea base, con el criterio pre-registrado
 - `docs/experiments/E7_modelo_temporal.md` — informe del modelo temporal, con sus marcas `SUPERSEDED`

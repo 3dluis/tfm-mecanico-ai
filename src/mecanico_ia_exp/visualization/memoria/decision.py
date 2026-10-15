@@ -1,6 +1,6 @@
 """Dónde cae cada decisión de la evaluación final respecto del umbral.
 
-La Tabla 5.7 publica los recuentos de la evaluación final y la Figura 5.13 el
+La Tabla 5.7 publica los recuentos de la evaluación final y la Figura 5.16 el
 reparto de las decisiones. Ninguna de las dos dice **dónde** quedó cada caso
 respecto de la puerta de confianza, que es la pregunta que queda abierta cuando
 se lee que hubo dos abstenciones innecesarias.

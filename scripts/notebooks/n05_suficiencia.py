@@ -694,7 +694,7 @@ se compra con abstenciones innecesarias, y ese precio se publica en lugar de esc
     md("""\
 ## 13. Trazabilidad
 
-**Dónde aparece esto en la memoria.** Las decisiones caso a caso son la **Tabla 5.5**; los dos errores y las políticas triviales, la **Tabla 5.6** y la **Figura 6.3**; los documentos aplicables frente a la cobertura, la **Figura 5.14**; y las ablaciones, la **Tabla 5.8** y la **Figura 5.15**. El barrido del umbral está en el anexo B, apartado B.4.
+**Dónde aparece esto en la memoria.** Las decisiones caso a caso son la **Tabla 5.5**; los dos errores y las políticas triviales, la **Tabla 5.6** y la **Figura 6.3**; los documentos aplicables frente a la cobertura, la **Figura 5.17**; y las ablaciones, la **Tabla 5.8** y la **Figura 5.18**. El barrido del umbral está en el anexo B, apartado B.4.
 
 | Cifra de este notebook | Artefacto | Registro | Informe |
 |---|---|---|---|
@@ -703,9 +703,74 @@ se compra con abstenciones innecesarias, y ese precio se publica en lugar de esc
 | los 6 casos de P1 | `artifacts/tables/E15_suficiencia_distractor_v2.csv` | `experiments/E15_suficiencia_distractor_v2.json` | `docs/experiments/P1_distractor_v2.md` |
 | las cifras alteradas | — | `experiments/E13_agente_*.json` | `L-26`, `scripts/auditar_cifras_redactadas.py` |
 
-El umbral 0,79 viene de `experiments/E15b_barrido_umbral.json` y su criterio enmendado está en
+El umbral 0,79 viene de `experiments/E15b_barrido_umbral.json` —cuyo barrido completo dibuja la
+**Figura 5.14** de la memoria— y su criterio enmendado está en
 `docs/methodology/criterio-umbral-enmienda-01.md`, fechado antes de reejecutar las fases que
 dependen del umbral."""),
+    md("""\
+## 13 bis. Lo que cuesta subir la puerta de confianza
+
+**Objetivo del análisis.** El criterio de suficiencia es compuesto: exige confianza **y** soporte
+documental. Esta sección mira solo la mitad de confianza, y pregunta qué se gana y qué se pierde al
+mover su umbral.
+
+**Procedencia de los datos.** `experiments/E15b_barrido_umbral.json`, el barrido ejecutado el 4 de
+septiembre de 2026 sobre las 98 ventanas de validación de `synthetic_v2`, procedentes de doce
+sesiones. El registro guarda 101 umbrales con la cobertura y la precisión de la decisión
+diagnóstica en cada uno, **por ventana y por sesión**, y un remuestreo de 1 000 réplicas en los dos
+umbrales de la política. El campo `test_used` vale `false`: el conjunto de prueba no interviene."""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import compromiso_del_umbral
+
+compromiso = compromiso_del_umbral()
+pd.DataFrame(
+    [
+        {
+            "umbral": u,
+            "cobertura (ventanas)": round(cv, 4),
+            "precisión (ventanas)": round(pv, 4),
+            "cobertura (sesiones)": round(cs, 4),
+        }
+        for u, cv, pv, cs in zip(
+            compromiso["umbrales"],
+            compromiso["cobertura_ventanas"],
+            compromiso["precision_ventanas"],
+            compromiso["cobertura_sesiones"],
+            strict=True,
+        )
+        if abs(u - compromiso["umbral_original"]) < 1e-9
+        or abs(u - compromiso["umbral_vigente"]) < 1e-9
+        or round(u * 100) % 10 == 0
+    ]
+)"""),
+    code("""\
+from mecanico_ia_exp.visualization.memoria import fig_riesgo_cobertura
+
+fig = fig_riesgo_cobertura()
+soporte.exportar(fig, "FIG-NB05-04_riesgo_cobertura", subdirectorio="05_suficiencia")
+fig"""),
+    md("""\
+**Qué muestra.** Con el umbral vigente, 0,79, la decisión diagnóstica cubre el 82,7 % de las
+ventanas con una precisión de 0,938; con el anterior, 0,72, cubre el 87,8 % con 0,930. La enmienda
+del umbral costó cinco puntos de cobertura y ganó menos de uno de precisión.
+
+**Qué podemos interpretar.** Dos cosas que la tabla de dos filas no deja ver. La primera: la curva
+**no es monótona**. En veintiuno de los cien pasos, subir el umbral **empeora** la precisión; el
+caso más marcado está entre 0,91 y 0,92, donde la cobertura cae del 58,2 % al 52,0 % y la precisión
+baja de 0,912 a 0,902, porque entre las seis ventanas descartadas hay más aciertos que errores. Un
+umbral de confianza no es un dial en el que más siempre sea mejor. La segunda: las barras de
+remuestreo de los dos umbrales **se solapan por completo** y llegan las dos hasta 1,0, de modo que
+con esta muestra los dos puntos de operación son indistinguibles.
+
+**Qué no podemos afirmar.** Cinco cosas, y conviene enunciarlas juntas. Que esto describa **la
+política de abstención del agente**: mueve solo la mitad de confianza del criterio compuesto, y la
+mitad documental permanece fija. Que sea una exploración de la política completa: barrer la
+cobertura documental exigiría una medición que no existe. Que la elección del umbral fuera un
+**pre-registro ciego**: el criterio se escribió antes del barrido y después de ver una tabla
+anterior de cuatro puntos, y el documento que lo fija lo declara. Que las observaciones sean
+independientes: 98 ventanas proceden de doce sesiones. Y que de aquí salga un umbral mejor: es
+análisis descriptivo posterior, no una validación independiente, y el umbral **no se revisa a su
+vista**."""),
     md("""\
 ## 14. Reproducibilidad
 
