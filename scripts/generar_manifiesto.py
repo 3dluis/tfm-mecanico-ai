@@ -67,6 +67,7 @@ def manifiesto() -> dict[str, object]:
             if fichero.is_file():
                 huellas[str(fichero.relative_to(RAIZ))] = _huella(fichero)
 
+    fechas = _git("log", "--reverse", "--format=%ad", "--date=short").splitlines()
     return {
         "que_es": (
             "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo, "
@@ -79,10 +80,7 @@ def manifiesto() -> dict[str, object]:
             "rama": _git("rev-parse", "--abbrev-ref", "HEAD"),
             "commits": _git("rev-list", "--count", "HEAD"),
             "primer_commit": _git("rev-list", "--max-parents=0", "HEAD"),
-            "primera_fecha": _git("log", "--reverse", "--format=%ad", "--date=short")
-            .splitlines()[0]
-            if _git("log", "--format=%ad")
-            else "",
+            "primera_fecha": fechas[0] if fechas else "",
             "ultima_fecha": _git("log", "-1", "--format=%ad", "--date=short"),
             "ramas": len(_git("branch", "--format=%(refname:short)").splitlines()),
             "sha_identicos_al_repositorio_de_trabajo": (
