@@ -33,13 +33,14 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 
 #: Lo que el paquete tiene que traer, con lo que cada cosa permite hacer.
+#: **La memoria no está en esta copia.** Este repositorio publica el trabajo
+#: práctico; el documento académico se entrega por su propio cauce. El
+#: historial sí la contiene, y el README dice cómo recuperarla.
 OBLIGATORIOS: tuple[tuple[str, str], ...] = (
     ("README.md", "qué es el paquete y por dónde empezar"),
     ("MANIFEST.json", "el inventario con huellas"),
     ("pyproject.toml", "las dependencias declaradas"),
     ("uv.lock", "las versiones exactas"),
-    ("memoria/memoria.docx", "la memoria editable"),
-    ("memoria/memoria.pdf", "la memoria para leer"),
     ("src/mecanico_ia_exp", "el código"),
     ("notebooks", "los notebooks"),
     ("notebooks/html", "su versión legible sin ejecutar"),
