@@ -1,16 +1,11 @@
 {
-  "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo, artefactos experimentales e historial Git completo.",
+  "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo y artefactos experimentales.",
   "estado": "BORRADOR PARA REVISION DEL TUTOR",
-  "generado_el": "2026-10-15T11:44:50+00:00",
+  "generado_el": "2026-10-28T03:39:25+00:00",
   "git": {
-    "commit": "cbf43063bd92f1df8a6404a75a319f60dc06078b",
+    "commit": "f8b6dd8ecdd1fe385e664036e3bb3dafdd0faeca",
     "rama": "main",
-    "commits": "446",
-    "primer_commit": "3a2ce39c4e9344f8bb648f28863a8c8b83ad17f3",
-    "primera_fecha": "2026-09-01",
-    "ultima_fecha": "2026-10-15",
-    "ramas": 16,
-    "sha_identicos_al_repositorio_de_trabajo": "si: el repositorio se construyo por clonacion, sin reescritura de historial"
+    "fecha": "2026-10-15"
   },
   "modalidades": {
     "DEMO": {

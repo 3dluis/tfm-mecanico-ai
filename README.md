@@ -21,22 +21,14 @@ depender de ningún otro repositorio ni de la máquina en que se construyó.
 | `configs/` | la configuración, los manifiestos y el censo de artefactos históricos |
 | `scripts/` | instalación, ejecución y verificación del paquete |
 | `tests/` | las pruebas que sostienen lo anterior |
-| `.git/` | **el historial completo**, 424 commits desde el 1 de septiembre de 2026 |
 
 ### La documentación del laboratorio no viaja en el paquete
 
 Metodología, decisiones, auditorías, pre-registros y el texto fuente de la memoria estaban en
-`docs/`, y ese directorio **no forma parte del paquete**. No se ha perdido: está entero en el
-historial Git que acompaña a esta entrega, y se recupera con una orden.
-
-```bash
-git log --oneline -- docs | head -5          # cuándo cambió
-git checkout HEAD~1 -- docs                  # recuperarlo completo
-git show HEAD~1:docs/limitations.md          # o leer un documento suelto
-```
+`docs/`, y ese directorio **no forma parte del paquete**.
 
 Lo que sigue citando rutas de `docs/` —este README más abajo, y los apartados de trazabilidad de
-los notebooks— remite a ese historial, no a ficheros presentes. **Dos consecuencias concretas**, y
+los notebooks— nombra documentos que no están presentes aquí. **Dos consecuencias concretas**, y
 conviene decirlas: once de los treinta y nueve ficheros de prueba comprueban que esos documentos y
 los artefactos concuerdan, y no viajan porque sin los documentos no pueden pasar; y el manifiesto
 de congelación de la evaluación final ancla por huella un documento de metodología, de modo que esa
@@ -96,25 +88,6 @@ el manual, el índice vectorial y, para el ajuste del redactor, una GPU. Donde u
 notebook necesita algo que no está, **se detiene diciendo qué falta y cómo obtenerlo**, en lugar
 de saltarse el paso en silencio.
 
-## El historial
-
-El repositorio conserva el historial real del trabajo: **424 commits** entre el 1 de septiembre
-y el 14 de octubre de 2026, en dieciséis ramas, con sus fechas y su autoría originales. Se
-construyó **por clonación**, sin reescribir nada, de modo que los identificadores de commit son
-los mismos que los del repositorio de trabajo y cualquier referencia de la documentación a un
-commit sigue resolviendo.
-
-```bash
-git log --oneline --graph --all | head -40      # la evolución
-git log --format='%h %ad %s' --date=short       # con fechas
-git show <commit>                               # un cambio concreto
-git fsck --full                                 # integridad de los objetos
-```
-
-Incluye lo que salió mal: la interrupción de la evaluación final y sus tres intentos, la
-contaminación del adaptador, la retirada de una conclusión sobre el volumen de datos y las
-correcciones de la memoria, cada una con su commit.
-
 ## Verificar una huella
 
 ```bash
@@ -129,7 +102,7 @@ uv run python -c "import json;print(json.load(open('MANIFEST.json'))['huellas_sh
 Artefacto experimental del Trabajo Fin de Máster en Inteligencia Artificial (UAX, Luis Daniel
 Díaz, 2026). Contiene el código, los registros de ejecución, las decisiones y las auditorías
 con los que se construyó la evidencia de la memoria. No es un producto: es el laboratorio, con
-su historial completo, incluidos los resultados que no salieron como se esperaba.
+su recorrido completo, incluidos los resultados que no salieron como se esperaba.
 
 ## 1. Qué se investiga
 
@@ -347,9 +320,6 @@ Pregunta (`cap1`) → subpreguntas e hipótesis (`research/traceability-matrix.m
 (`cap2`) → política escrita antes de medir (`docs/methodology/`) → ejecución con commit y
 semilla (`experiments/*.json`) → tabla o figura (`artifacts/`) → sección del capítulo 5 →
 conclusión (`cap6`). Matriz que lo recorre: `docs/tfm-traceability.md`.
-
-El historial Git (170 commits del 1 al 13 de septiembre de 2026, más los de preparación para el
-tribunal) es la cronología real del trabajo.
 
 ## Relación con la memoria del TFM
 
