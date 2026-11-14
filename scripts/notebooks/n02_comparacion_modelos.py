@@ -342,7 +342,8 @@ plt.show()"""),
     md("""\
 **Qué muestra.** La red pierde en cinco de las seis condiciones y gana en una: el **termostato
 bloqueado**, 0,8148 frente a 0,7826, una diferencia de +0,032. Las pérdidas mayores están en el
-fallo de encendido (−0,167) y en la clase sin fallo (−0,054).
+fallo de encendido (−0,167) y en la deriva del caudalímetro (−0,077); la clase sin fallo pierde
+−0,054.
 
 **Qué podemos interpretar.** Que la métrica agregada esconde comportamientos distintos y que la
 condición donde la red gana es aquella cuya firma es temporal en un sentido fuerte:
@@ -444,8 +445,10 @@ sonda lenta y pierde en las otras cuatro. Las pérdidas mayores están en el **f
 (0,526 frente a 0,834, −0,308) y en la clase **sin fallo** (0,577 frente a 0,778, −0,201). Todas las
 áreas quedan muy por encima de la proporción de su clase, 0,143 para cada fallo y 0,286 sin fallo.
 
-**Qué podemos interpretar.** El reparto coincide con el del F1 del apartado 8.1: la única condición
-en que gana la red es la misma y sus dos pérdidas mayores también. Como el área no depende de ningún
+**Qué podemos interpretar.** El reparto se parece al del F1 del apartado 8.1 en dos cosas: la única
+condición en que gana la red es la misma y su mayor pérdida también (el fallo de encendido). La
+segunda pérdida no coincide: en el área es la clase sin fallo y en el F1 la deriva del caudalímetro.
+Como el área no depende de ningún
 umbral de decisión, la desventaja de la red en el fallo de encendido y en la clase sin fallo no es
 solo efecto de quedarse con la clase más probable: también **ordena peor** las ventanas de esas
 condiciones. Un área de 1,000 en el bosque significa que en esa partición todas las ventanas de la
