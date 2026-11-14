@@ -71,7 +71,7 @@ def _normalizar(texto: str) -> str:
     alrededor del guion--. Se limpia lo evidente y se deja el resto: alterar más
     el texto haría que las citas no coincidieran con el original.
     """
-    texto = texto.replace("­", "")
+    texto = texto.replace("\u00ad", "")
     texto = re.sub(r"[ \t]+", " ", texto)
     texto = re.sub(r"\n{3,}", "\n\n", texto)
     return texto.strip()

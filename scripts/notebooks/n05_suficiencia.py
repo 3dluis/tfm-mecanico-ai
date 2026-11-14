@@ -59,7 +59,7 @@ el papel se parecen tanto que la diferencia no se ve leyendo.
 
 Esa es la razón por la que la decisión de explicar o abstenerse **no la toma el modelo de lenguaje**.
 Si la tomara él, la respuesta a la pregunta de investigación dependería de su disposición a admitir
-que no sabe algo. Y eso no cabe darlo por supuesto.
+que no sabe algo. Eso no cabe darlo por supuesto.
 
 Lo que no sabemos antes de mirar los registros:
 
@@ -241,7 +241,7 @@ cambiara el vehículo ni la certeza del modelo. Es la hipótesis de PI.3 reducid
 expresión y se cumple.
 
 **Qué no podemos afirmar.** Que esto demuestre un comportamiento general. Son dos ejecuciones sobre
-una ventana. Y hay algo más débil de lo que parece. La abstención de la segunda fila está
+una ventana. Hay algo más débil de lo que parece. La abstención de la segunda fila está
 **determinada por la construcción de la condición**: se retiraron del índice todos los fragmentos
 con los códigos del fallo, así que no quedaba nada que juzgar. No pone a prueba el criterio de
 soporte; solo comprueba que el sistema no explica sin evidencia. **La condición informativa es la
@@ -437,7 +437,7 @@ una explicación si la evidencia documental no la sostiene**. La confianza del m
 seguro está de su diagnóstico y no sabe nada de si el manual lo documenta.
 
 **Qué no podemos afirmar.** Nada sobre la separación entre decidir y redactar, que no se ablaciona.
-Y nada que no esté condicionado por que **las cuatro se miden sobre el conjunto con el que el
+Nada que no esté condicionado por que **las cuatro se miden sobre el conjunto con el que el
 criterio se ajustó**. `A2` quedó además **inconclusa**. La ruta léxica no recuperó nada en ningún
 caso por la consulta y no por la ablación: una búsqueda de texto completo con treinta palabras unidas
 por conjunción. Se conserva como inconclusa en lugar de reformularse a posteriori.
@@ -483,7 +483,7 @@ evidencia documental cubre lo que se va a afirmar**, no la confianza del modelo 
 atribución. La atribución entra en el informe como explicación, no como barrera.
 
 **Qué no podemos afirmar.** Que la atribución sea prescindible: no interviene en la abstención,
-pero sí en la trazabilidad (qué señal y qué ventana sostienen cada afirmación), que aquí no se evalúa. Y los denominadores
+pero sí en la trazabilidad (qué señal y qué ventana sostienen cada afirmación), que aquí no se evalúa. Los denominadores
 son 9 y 5 **ejecuciones** procedentes de 3 y 5 ventanas: no son tasas estimadas.
 
 **Relación con la pregunta de investigación.** Es la prueba de atribución de PI.3: el resultado se debe al criterio
@@ -522,13 +522,13 @@ print(f"decisiones correctas: {int(p1.correct.sum())} de {len(p1)}")
 print(f"motivos registrados:  {sorted(set(p1.reasons.dropna()))}")
 print(f"confianzas:           {sorted(set(p1.confidence.round(3)))}  (umbral 0,79)")"""),
     md("""\
-**Qué muestra.** Seis abstenciones de seis. Y el dato que decide la lectura: el motivo registrado en
+**Qué muestra.** Seis abstenciones de seis. El dato que decide la lectura: el motivo registrado en
 las seis es `LOW_CLAIM_COVERAGE` (la evidencia no sostiene ninguna afirmación) y **ninguna** es
 `LOW_MODEL_CONFIDENCE`. Las confianzas son 0,908 y 1,000, **por encima** del umbral de 0,79.
 
 **Qué podemos interpretar.** Que la puerta de confianza **no intervino**: el rechazo lo hizo la
 verificación de soporte. Era la condición que el protocolo fijó de antemano para que el resultado
-apoyara PI.4. Se cumple en las tres situaciones construidas, sin que eso estime ninguna tasa. Y con una
+apoyara PI.4. Se cumple en las tres situaciones construidas, sin que eso estime ninguna tasa. Con una
 salvedad: la parcial y la del distractor dan el mismo resultado observable, abstención con cobertura
 0,0. Lo que las distingue no se ve en la decisión, sino en que el distractor estaba entre los
 fragmentos aplicables y aun así no sostuvo ninguna afirmación.
@@ -554,7 +554,7 @@ redactor:     "cobertura 0.908 < 0.80"
 ```
 
 La frase del redactor es **internamente falsa**: 0,908 no es menor que 0,80. El número que escribió
-es la confianza calibrada, no la cobertura. Y las tres barreras del trabajo la dejaron pasar: esquema
+es la confianza calibrada, no la cobertura. Las tres barreras del trabajo la dejaron pasar: esquema
 válido, veredicto respetado, cero citas inventadas.
 
 Al auditar los registros ya publicados, no es un caso aislado **ni es nuevo**."""),
@@ -782,7 +782,7 @@ mitad documental permanece fija. Que sea una exploración de la política comple
 cobertura de afirmaciones exigida pediría una medición que no existe. Que la elección del umbral fuera un
 **pre-registro ciego**: el criterio se escribió antes del barrido y después de ver una tabla
 anterior de cuatro puntos; el documento que lo fija lo declara. Que las observaciones sean
-independientes: 98 ventanas proceden de doce sesiones. Y que de aquí salga un umbral mejor: es
+independientes: 98 ventanas proceden de doce sesiones. Que de aquí salga un umbral mejor: es
 análisis descriptivo posterior, no una validación independiente; el umbral **no se revisa a su
 vista**."""),
     md("""\
@@ -832,7 +832,7 @@ era esperable y no añade evidencia.
 
 P1 añade la pieza que faltaba, acotada a tres situaciones construidas: frente a evidencia del vehículo correcto, con el código correcto y
 clasificada como plenamente aplicable, el sistema se abstiene **por insuficiencia de la evidencia**
-y no por desconfianza en su diagnóstico. Y lo que la rechaza no es ninguna de las dos barreras que
+y no por desconfianza en su diagnóstico. Lo que la rechaza no es ninguna de las dos barreras que
 se habían supuesto (el filtro de motor ni el validador de aplicabilidad), sino la comprobación de
 que el fragmento habla de lo que se afirma.
 

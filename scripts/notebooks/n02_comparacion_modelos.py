@@ -292,7 +292,7 @@ exactitud la distancia es menor y sigue siendo amplia: 0,286 frente a 0,878 del 
 1. **Que la red sea peor arquitectura.** Lo medido es un recorrido completo contra otro (apartado 3).
 2. **Que la diferencia de ECE favorezca a la red por calibrar mejor.** Ninguno de los dos calibra
    (apartado 6): la red tiene algo menos de error por tramos, no una probabilidad mejor ajustada
-   tras calibrar. Y el ECE no lleva signo: los dos
+   tras calibrar. El ECE no lleva signo: los dos
    modelos fallan hacia lados distintos, como se ve en el apartado 11.
 3. **Que la diferencia sea significativa.** Es **una sola ejecución** sobre 98 ventanas de
    validación, sin repeticiones ni intervalo de confianza (apartado 14.2)."""),
@@ -365,7 +365,7 @@ aporta. Leerla así sería un error, por cuatro razones acumulativas:
 El cruce que distinguiría las dos explicaciones (predicción por ventana contra expresión por
 ventana) está diseñado y **no ejecutado**: `docs/diseno-pi1/08-analisis-por-fallo.md`.
 
-Y una observación de signo contrario: la red pierde por 0,167 en el **fallo de encendido**, la
+Una observación de signo contrario: la red pierde por 0,167 en el **fallo de encendido**, la
 otra condición con estructura temporal marcada (episodios breves). Si la ventaja de la red viniera
 de su capacidad de modelar el tiempo, cabría esperar que ganara también ahí."""),
     md("""\
@@ -647,14 +647,14 @@ y ECE 0,1317.
 Que la red tenga un sesgo casi nulo y a la vez un ECE de 0,1317 significa que sus tramos fallan en
 direcciones opuestas y se cancelan al promediar. Ninguno de los dos modelos en crudo puede usarse,
 por tanto, como criterio de abstención, que es la razón por la que el recorrido de diagnóstico
-**calibra antes de decidir**. Y en el caso del bosque la dirección importa además por sí misma: un
+**calibra antes de decidir**. En el caso del bosque la dirección importa además por sí misma: un
 umbral sobre la confianza cruda habría hecho que el sistema se abstuviera de más de la cuenta. Eso
 habría parecido prudencia cuando era mala medición.
 
 **Qué no podemos afirmar.** Que la red esté mejor calibrada **que el bosque calibrado**: la red no
 se calibró. Tampoco que el bosque sin calibrar esté bien calibrado porque su sesgo sea negativo: un ECE de 0,1439 dice que los tramos fallan; el signo solo dice hacia dónde fallan
 en promedio. Tampoco que el ECE sea estable: con diez tramos y 98 ventanas, cada tramo contiene muy
-pocas predicciones y la cifra es frágil. Y un solo punto por modelo no muestra en qué
+pocas predicciones y la cifra es frágil. Un solo punto por modelo no muestra en qué
 tramos se concentra el error, que es lo que más importaría. Los registros de E6 y E7 **no guardan la confianza por ventana**, de modo que un
 diagrama de fiabilidad no puede construirse a partir de ellos. El apartado siguiente lo construye
 por otra vía."""),
@@ -744,7 +744,7 @@ evidencia completa tenían confianza 0,908 y 0,966 y los paró la cobertura de a
 **Qué no podemos afirmar.** La reconstrucción **no conserva la confianza media dentro
 de cada tramo**: solo sus bordes, de modo que cada barra ocupa su tramo y no se sitúa en un punto.
 Solo existe para la confianza **calibrada**; la anterior a calibrar no se guardó por ventana y su
-diagrama no puede dibujarse. Y **de aquí no sale un error de calibración esperado**: agrupar de otro
+diagrama no puede dibujarse. **De aquí no sale un error de calibración esperado**: agrupar de otro
 modo da otro número. El que vale sigue siendo el del registro, calculado sobre diez tramos. Poner
 los dos juntos invitaría a leer una corrección donde solo hay otro agrupamiento."""),
     md("""\
@@ -876,7 +876,7 @@ negativo es frágil, porque nadie examina lo que resulta cómodo.
 formuló (en qué tipos de fallo el contexto temporal aporta señal diagnóstica adicional y en cuáles
 no) no se responde con estos dos recorridos, por mucho que la victoria de la red en el termostato
 parezca sugerirla. Ese encaje aparente pide una segunda mirada porque coincide con lo que se
-esperaba encontrar. Y lo que limita al termostato es el generador, no
+esperaba encontrar. Lo que limita al termostato es el generador, no
 la física de un motor real (apartado 9).
 
 **Cómo encaja con el resto del trabajo.** El bosque quedó como modelo de diagnóstico del recorrido

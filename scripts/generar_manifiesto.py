@@ -24,8 +24,6 @@ RAIZ = Path(__file__).resolve().parents[1]
 
 #: Qué se censa. Patrones y no una lista, para que no se quede corto.
 PATRONES: tuple[str, ...] = (
-    "memoria/*.docx",
-    "memoria/*.pdf",
     "notebooks/*.ipynb",
     "artifacts/tables/*.csv",
     "artifacts/metrics/*.json",

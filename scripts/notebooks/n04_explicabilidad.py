@@ -295,7 +295,7 @@ corto y largo plazo, mientras el caudal sigue siendo plausible para el régimen 
 de un fallo no está necesariamente en la señal del componente que falla.
 
 **Qué no podemos afirmar.** Que sea causal (apartado 3), ni que un caudalímetro real se comporte
-así: es la regla del generador. Y con `ltft_bank1` y
+así: es la regla del generador. Con `ltft_bank1` y
 `stft_bank1` fuertemente correlacionados, el reparto entre esos dos es inestable: otra semilla
 podría asignar más peso a uno u otro sin que cambie nada del fenómeno."""),
     md("""\
@@ -590,7 +590,7 @@ mismas. Si el objetivo fuera solo decidir bien, podría retirarse.
 nada que anclar en el manual; PI.2 dejaría de tener objeto. La atribución no mejora la decisión; hace posible la
 explicación.
 
-Y deja una lectura que sobrevive a todo lo anterior, la del apartado 7: en este generador, un
+Deja una lectura que sobrevive a todo lo anterior, la del apartado 7: en este generador, un
 sistema que vigilara cada sensor para detectar su propio fallo no habría encontrado la deriva del
 caudalímetro."""),
     md("""\
@@ -608,7 +608,7 @@ las cinco condiciones de fallo.
 ninguna decisión.
 
 **Qué permanece sin demostrar.** Que estas atribuciones se parezcan a las que daría telemetría real.
-Que sean estables frente a otra semilla. Y que el reparto entre señales correlacionadas tenga algún
+Que sean estables frente a otra semilla. Que el reparto entre señales correlacionadas tenga algún
 significado.
 
 **Cómo contribuye al TFM.** Sostiene el capítulo de explicabilidad y es la pieza que une el

@@ -20,7 +20,7 @@ trabajo que uno reescrito para que encaje.
 | `SUPERSEDED` | Sustituido por un elemento del marco canónico |
 | `PARTIALLY_APPLICABLE` | Parte vigente, parte no; se indica cuál |
 | `OUT_OF_SCOPE` | Fuera del alcance actual; diseño conservado, no evaluado |
-| `REQUIRES_DECISION` | El autor debe decidir; la revisión no lo resuelve |
+| `REQUIRES_DECISION` | El autor debe decidir; la clasificación no lo resuelve |
 
 ---
 

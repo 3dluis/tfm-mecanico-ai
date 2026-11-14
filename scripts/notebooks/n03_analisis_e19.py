@@ -346,7 +346,7 @@ pd.DataFrame(intervalos).set_index("tasa")'''),
 
 **Qué podemos interpretar.** Que el experimento acota poco. Decir “el intervalo de la falsa
 confianza llega al 21,5 %” es una afirmación más fuerte que no decir nada, porque
-delimita lo que no se ha demostrado. Y la amplitud del intervalo de la abstención
+delimita lo que no se ha demostrado. La amplitud del intervalo de la abstención
 innecesaria (0,519, casi 52 puntos porcentuales) explica por qué el informe de la fase se niega a
 llamarla estimación.
 
@@ -567,7 +567,7 @@ confianzas más bajas; en ralentí y calentamiento ninguna baja de 0,85.
 **Qué no podemos afirmar.** Que la conducción en autopista cause una reducción de la
 confianza. Es una **observación descriptiva sobre dos errores**; con `n = 2` no hay contraste
 posible y la coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son
-independientes (apartado 5). Y el umbral
+independientes (apartado 5). El umbral
 **no se revisa** a la vista de esta figura: la política está congelada desde antes de abrir el
 conjunto de prueba; moverla ahora sería ajustar el criterio a los datos reservados.
 
@@ -611,7 +611,7 @@ el criterio existe para impedir. Que en las dos ejecuciones con evidencia
 completa en que el modelo se equivocó el sistema callara es evidencia directa a favor de PI.3.
 
 **Qué no podemos afirmar.** Que el sistema detecte los diagnósticos incorrectos. No los detecta: no
-tiene forma de saber que son incorrectos. Y no fue la puerta de confianza la que los paró: la
+tiene forma de saber que son incorrectos. No fue la puerta de confianza la que los paró: la
 confianza **calibrada**, que es la que compara el verificador, era de 0,908 y 0,966, por encima del
 umbral de 0,79 (la columna `model_confidence` de la tabla es la probabilidad sin calibrar). El motivo
 registrado en los dos es `LOW_CLAIM_COVERAGE` (cobertura de afirmaciones insuficiente): los fragmentos recuperados para el diagnóstico
@@ -654,7 +654,7 @@ que el modelo clasifica mal **con más confianza**.
 
 **Qué no podemos afirmar.** Nada sobre tasas poblacionales a partir de ellos: elegir ventanas
 mirando las predicciones es lo que el estrato operativo evita. Mezclarlos con el
-primario produciría una cifra sin significado. Y el adverso tiene **dos**
+primario produciría una cifra sin significado. El adverso tiene **dos**
 ejecuciones: describe dos casos, no una tendencia."""),
     md("""\
 ## 12. Una coincidencia que hubo que auditar
@@ -721,7 +721,7 @@ un mismo hecho medido, que de las diez ejecuciones con evidencia completa el mod
 dos. El reparto 8/14 **no estaba pre-registrado** (así consta en las limitaciones) y
 habría sido 9/13 o 7/15 con un error menos o uno más.
 
-Y lo que de verdad coincide: en **las dos** particiones el modelo falla dos de las diez
+Lo que de verdad coincide: en **las dos** particiones el modelo falla dos de las diez
 ventanas; en las dos falla **en las mismas dos condiciones** (termostato en calentamiento y
 encendido en autopista), aunque en sesiones distintas. Las dos abstenciones innecesarias son también
 los mismos dos casos anotados (`C01` y `C04`) **por las mismas causas** en las dos particiones:
@@ -784,7 +784,7 @@ ocho de diez, pero explica en las catorce ejecuciones en que debía callar. El c
 evidencia y no la confianza.
 
 **Qué no podemos afirmar.** Que el criterio domine a las triviales en cualquier conjunto. Con estos
-denominadores, la comparación describe esta muestra. Y no se define aquí ningún criterio numérico de
+denominadores, la comparación describe esta muestra. No se define aquí ningún criterio numérico de
 “cuántas respuestas justifican cuánta protección”: eso exigiría un modelo de coste que este trabajo no
 tiene."""),
     md("""\

@@ -1,6 +1,6 @@
 """Comprueba que este paquete está completo y es coherente consigo mismo.
 
-**Por qué existe.** Un paquete de entrega puede estar mal de maneras que no se
+**Por qué existe.** Una entrega puede estar mal de maneras que no se
 ven al abrirlo: una figura que el documento referencia y que no viajó, una
 huella que ya no coincide con su artefacto, un notebook sin su HTML, un
 repositorio Git incompleto. Nada de eso rompe nada al abrir el ZIP: se descubre
@@ -33,13 +33,13 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 
 #: Lo que el paquete tiene que traer, con lo que cada cosa permite hacer.
+#: La memoria académica no está en esta copia: el documento se entrega por su
+#: propio cauce y este repositorio publica el trabajo práctico.
 OBLIGATORIOS: tuple[tuple[str, str], ...] = (
     ("README.md", "qué es el paquete y por dónde empezar"),
     ("MANIFEST.json", "el inventario con huellas"),
     ("pyproject.toml", "las dependencias declaradas"),
     ("uv.lock", "las versiones exactas"),
-    ("memoria/memoria.docx", "la memoria editable"),
-    ("memoria/memoria.pdf", "la memoria para leer"),
     ("src/mecanico_ia_exp", "el código"),
     ("notebooks", "los notebooks"),
     ("notebooks/html", "su versión legible sin ejecutar"),

@@ -8172,7 +8172,7 @@ capacidad de generalizar.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       ccb7706
+commit       6cd3f6a
 arbol        limpio
 </pre>
 </div>
@@ -8593,7 +8593,7 @@ autopista y ralentí. <strong>No hay sesiones de calentamiento.</strong></p>
 cuatro regímenes en ciclo y con tres sesiones por condición solo alcanza a los tres primeros. El
 conjunto oficial, con doce por condición, sí los cubre los cuatro.</p>
 <p><strong>Qué no podemos afirmar.</strong> Nada sobre el comportamiento en calentamiento a partir de esta muestra.
-Y el calentamiento es el régimen donde una de las condiciones se comporta de forma distinta;
+El calentamiento es el régimen donde una de las condiciones se comporta de forma distinta;
 el apartado 8 lo ilustra con sesiones <strong>generadas</strong> en el notebook.</p>
 </div>
 </div>
@@ -8807,7 +8807,7 @@ casi ciego al fallo de encendido, cuyos episodios se diluyen en la media de la v
 representación que se elija no es neutral respecto a qué fallos se pueden detectar.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que estas cinco sesiones sean representativas de su condición: es una
 sesión por fallo. Tampoco que la firma sea igual en otros regímenes. El termostato, en particular,
-no lo es, como se ve a continuación. Y los episodios del fallo de encendido caen donde los pone
+no lo es, como se ve a continuación. Los episodios del fallo de encendido caen donde los pone
 esta semilla; otra los pondría en otros. La versión publicada de esta comparación, sobre <code>synthetic_v1</code>, se muestra en el
 apartado 10.</p>
 </div>
@@ -9037,7 +9037,7 @@ condiciones con un solo umbral <strong>muestra a muestra</strong>: el problema n
 Agregadas por bloque es otra cosa: en E4, la media de <code>stft_bank1</code> por bloque separa por completo la
 fuga de vacío y la deriva del caudalímetro del motor sano (delta de Cliff 1,00 en las dos,
 <code>E4_separabilidad.csv</code>). Las relaciones entre señales están
-presentes con el signo esperado. Y el ralentí sin fallo cae dentro del rango que el manual documenta
+presentes con el signo esperado. El ralentí sin fallo cae dentro del rango que el manual documenta
 para este motor, 640–740 rpm. Esa comprobación habría detectado el problema de <code>synthetic_v3</code> el
 día que se generó.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que no exista una <strong>combinación</strong> de señales que separe trivialmente.
@@ -9256,7 +9256,7 @@ dos condiciones indetectables por construcción. Es la justificación empírica 
 incluir dispersión, extremos y conteos de eventos en el vector de descriptores.</p>
 <p><strong>Qué no podemos afirmar.</strong> El delta de Cliff ordena pero no explica: un efecto grande en una señal
 no implica que el modelo la use. El análisis de atribución muestra un caso en que no la usa. La
-medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Y sale
+medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Sale
 de <code>synthetic_v1</code>, que es <strong>pre-calibración</strong> y no se reconstruye con el generador publicado.</p>
 <p><strong>Relación con la pregunta de investigación.</strong> Delimitan por anticipado qué afirmaciones sobre una señal pueden
 tener soporte observacional bajo PI.1 y cuáles no. En la memoria son las <strong>Figuras 5.2 y 5.3</strong>.</p>
@@ -9382,13 +9382,13 @@ presión de colector delata 0,01 y distingue 0,80; el salto descendente del ajus
 <p><strong>Qué podemos interpretar.</strong> Lo que avisa y lo que distingue son conjuntos de descriptores distintos y casi
 disjuntos. La lectura mecánica es coherente con el generador: la fuga de vacío entra por el colector
 y eleva su presión, mientras la deriva del caudalímetro no toca esa señal; por eso la presión de
-colector no sirve de aviso y sí de discriminante. Y hay un resultado negativo: el cociente
+colector no sirve de aviso y sí de discriminante. Hay un resultado negativo: el cociente
 informado por la física no cumple en este conjunto lo que su diseño esperaba. Su comentario lo
 declaraba pendiente de comprobación sobre datos reales; sobre estos datos sintéticos no funciona.</p>
 <p><strong>Qué no podemos afirmar.</strong> Nada inferencial: el delta de Cliff es un tamaño de efecto <strong>descriptivo</strong> y las ventanas de una
 misma sesión no son independientes (cada condición aporta 56 ventanas de 8 sesiones), de modo que no
 se acompaña de contraste ni de intervalo. <strong>Separabilidad descriptiva no es rendimiento de
-clasificación demostrado</strong> (apartado 10). Y nada de esto se afirma de un vehículo real.</p>
+clasificación demostrado</strong> (apartado 10). Nada de esto se afirma de un vehículo real.</p>
 <p><strong>Relación con la pregunta de investigación.</strong> Sostiene PI.1 por su lado restrictivo: una explicación
 que justificara la deriva del caudalímetro “porque los ajustes de combustible están altos” sería
 indistinguible de la que justificaría una fuga de vacío. Por eso las plantillas de afirmación del
@@ -9921,7 +9921,7 @@ la primera en que las cinco superan el suelo.</p>
 episódico, una ventana larga <strong>diluye</strong> la firma: los pocos segundos alterados se promedian con los
 que no lo están. La elección es un compromiso global y perjudica a esa condición en concreto.
 Tampoco que el suelo de ruido sea un umbral de detectabilidad: es el percentil 90 del efecto medido
-entre pares de sesiones <strong>sanas</strong>, es decir cuánto separa el azar. Y la figura dibuja un solo
+entre pares de sesiones <strong>sanas</strong>, es decir cuánto separa el azar. La figura dibuja un solo
 suelo, el de 10 s (0,33), para todas las duraciones, cuando la tabla da uno por duración que sube
 hasta 0,51 a 120 s: las comparaciones con el suelo deben hacerse con la tabla, no con la línea.</p>
 </div>
@@ -10328,7 +10328,7 @@ advertencia.</p>
 diagnóstico tiene algo que aprender. Eso es la precondición de PI.1.</p>
 <p><strong>La advertencia.</strong> La relación entre <strong>etiqueta</strong> y <strong>señal</strong> no es uno a uno.
 Hay ventanas etiquetadas con un fallo que no contienen información del fallo. Un modelo que falle en
-ellas responde correctamente a lo que ve. Y una métrica agregada que
+ellas responde correctamente a lo que ve. Una métrica agregada que
 las cuente como errores está midiendo, en parte, el límite de lo que el dato contiene y no la
 calidad del modelo. Es una propiedad del generador, no una afirmación sobre vehículos reales.</p>
 <p>La capacidad de <strong>abstenerse</strong> (PI.3) tiene
@@ -10451,7 +10451,7 @@ de E4 sobre <code>synthetic_v1</code>, la primera figura del apartado 10.</p>
 </div>
 </div>
 </main>
-<footer class="mi-pie">Copia ejecutada de <code>notebooks/01_exploracion_obd.ipynb</code> · commit <code>ccb7706</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/01_exploracion_obd.ipynb</code> · commit <code>6cd3f6a</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
 (function () {
   var cuerpo = document.body;
   cuerpo.classList.add('mi-doc');

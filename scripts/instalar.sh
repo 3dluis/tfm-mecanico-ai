@@ -37,8 +37,8 @@ fi
 echo "     $(uv --version)"
 
 echo "3 · dependencias (necesita internet la primera vez)"
-echo "     extras: ml (modelos y SHAP), nb (Jupyter y gráficas), docx"
-uv sync --extra ml --extra nb --extra docx 2>&1 | tail -3 \
+echo "     extras: ml (modelos y SHAP), nb (Jupyter y gráficas)"
+uv sync --extra ml --extra nb 2>&1 | tail -3 \
     || fallo "la instalación falló. Revisa la conexión y vuelve a ejecutar."
 
 echo "4 · comprobación de imports"

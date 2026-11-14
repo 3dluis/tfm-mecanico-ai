@@ -1,4 +1,4 @@
-# Trabajo práctico del TFM · paquete de entrega
+# Trabajo práctico del TFM
 
 **Explicación verificable y abstención en el diagnóstico vehicular mediante inteligencia artificial y
 recuperación aumentada**
@@ -13,7 +13,6 @@ depender de ningún otro repositorio ni de la máquina en que se construyó.
 
 | Dónde | Qué es |
 |---|---|
-| `memoria/` | la memoria académica, en `.docx` editable y en `.pdf` |
 | `notebooks/` | los siete notebooks científicos, uno por bloque experimental |
 | `notebooks/html/` | **los mismos notebooks ya ejecutados**, con sus figuras dentro: se abren en un navegador sin instalar nada |
 | `src/mecanico_ia_exp/` | el código: generador de señales, modelos, recuperación, verificador de suficiencia y las funciones de visualización |
@@ -39,9 +38,11 @@ necesitan PostgreSQL con pgvector.
 
 ## Por dónde empezar, según lo que se quiera hacer
 
-**Leer sin instalar nada.** `memoria/memoria.pdf` y, para ver la evidencia, los HTML de
-`notebooks/html/`. No hacen falta Python ni Jupyter: se abren en cualquier navegador y traen
-dentro sus figuras y sus tablas.
+**Leer sin instalar nada.** Los HTML de `notebooks/html/`. No hacen falta Python ni Jupyter: se
+abren en cualquier navegador y traen dentro sus figuras y sus tablas.
+
+> **La memoria académica no viaja en esta copia.** Este repositorio publica el **trabajo
+> práctico**; el documento se entrega por su propio cauce.
 
 **Ejecutar los notebooks.**
 
@@ -93,8 +94,8 @@ de saltarse el paso en silencio.
 ## Verificar una huella
 
 ```bash
-shasum -a 256 memoria/memoria.pdf
-uv run python -c "import json;print(json.load(open('MANIFEST.json'))['huellas_sha256']['memoria/memoria.pdf'])"
+shasum -a 256 artifacts/figures/memoria/FIG-5-13_fiabilidad.png
+uv run python -c "import json;print(json.load(open('MANIFEST.json'))['huellas_sha256']['artifacts/figures/memoria/FIG-5-13_fiabilidad.png'])"
 ```
 
 ---

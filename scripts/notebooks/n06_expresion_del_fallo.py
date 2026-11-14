@@ -55,7 +55,7 @@ El generador asigna una condición a una sesión y marca cada muestra posterior 
 con `fault_active = True`. Eso es una decisión del plan de generación: a esta sesión le toca el
 termostato bloqueado a partir del segundo 120.
 
-Lo que `fault_active` **no** dice es si la función de fallo cambió algo. Y hay dos mecanismos, en este
+Lo que `fault_active` **no** dice es si la función de fallo cambió algo. Hay dos mecanismos, en este
 mismo catálogo de cinco fallos, en los que no cambia nada:
 
 1. **El termostato bloqueado abierto** limita la temperatura del refrigerante a 71 °C. Si el motor
@@ -500,7 +500,7 @@ calibración del generador contra el manual de taller es el commit de las 15:46 
 `synthetic_v2` se regeneró después. `GENERATOR_VERSION` no distingue a los dos porque es una constante
 escrita a mano.
 
-Y la consecuencia medida: con el generador publicado, **cero de las 216 sesiones de `synthetic_v3` se
+La consecuencia medida: con el generador publicado, **cero de las 216 sesiones de `synthetic_v3` se
 reproducen**. Lo que sí reproduce bit a bit es su `meta.parquet` y su reparto, porque dependen de
 identificadores e instantes y no de valores.
 
@@ -508,7 +508,7 @@ identificadores e instantes y no de valores.
 vez**: el volumen y la calibración del fenómeno. Lo que eso supone para E7 se trata en el notebook 02,
 apartado 13.
 
-Y que la no reproducibilidad de `v3` es **peligrosa, no solo incómoda**: como su ventanado y su
+Que la no reproducibilidad de `v3` es **peligrosa, no solo incómoda**: como su ventanado y su
 reparto sí reproducen, una reconstrucción ingenua pasaría las pruebas midiendo otras señales. El guion de
 reconstrucción **se niega** a regenerarlo por eso.
 
@@ -557,7 +557,7 @@ están todos sus errores.
 
 Eso no mejora ninguna cifra: las deja donde estaban y cambia qué significan. Un “falso negativo” sobre
 una ventana cuya señal es idéntica a la de un motor sano no mide un fallo del modelo. Mide el límite
-de lo que el dato contiene. Y distinguir las dos cosas es el tipo de cuidado que el resto
+de lo que el dato contiene. Distinguir las dos cosas es el tipo de cuidado que el resto
 del trabajo exige al sistema: no dar por evidencia lo que solo lo parece.
 
 Lo que queda sin saber es si los errores concretos coinciden con las ventanas vacías. El número

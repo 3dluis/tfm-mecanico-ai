@@ -185,7 +185,7 @@ cuatro regímenes en ciclo y con tres sesiones por condición solo alcanza a los
 conjunto oficial, con doce por condición, sí los cubre los cuatro.
 
 **Qué no podemos afirmar.** Nada sobre el comportamiento en calentamiento a partir de esta muestra.
-Y el calentamiento es el régimen donde una de las condiciones se comporta de forma distinta;
+El calentamiento es el régimen donde una de las condiciones se comporta de forma distinta;
 el apartado 8 lo ilustra con sesiones **generadas** en el notebook."""),
     md("""\
 ## 6. Exploración: las señales en el tiempo
@@ -312,7 +312,7 @@ representación que se elija no es neutral respecto a qué fallos se pueden dete
 
 **Qué no podemos afirmar.** Que estas cinco sesiones sean representativas de su condición: es una
 sesión por fallo. Tampoco que la firma sea igual en otros regímenes. El termostato, en particular,
-no lo es, como se ve a continuación. Y los episodios del fallo de encendido caen donde los pone
+no lo es, como se ve a continuación. Los episodios del fallo de encendido caen donde los pone
 esta semilla; otra los pondría en otros. La versión publicada de esta comparación, sobre `synthetic_v1`, se muestra en el
 apartado 10."""),
     md("""\
@@ -442,7 +442,7 @@ condiciones con un solo umbral **muestra a muestra**: el problema no es trivial 
 Agregadas por bloque es otra cosa: en E4, la media de `stft_bank1` por bloque separa por completo la
 fuga de vacío y la deriva del caudalímetro del motor sano (delta de Cliff 1,00 en las dos,
 `E4_separabilidad.csv`). Las relaciones entre señales están
-presentes con el signo esperado. Y el ralentí sin fallo cae dentro del rango que el manual documenta
+presentes con el signo esperado. El ralentí sin fallo cae dentro del rango que el manual documenta
 para este motor, 640–740 rpm. Esa comprobación habría detectado el problema de `synthetic_v3` el
 día que se generó.
 
@@ -554,7 +554,7 @@ incluir dispersión, extremos y conteos de eventos en el vector de descriptores.
 
 **Qué no podemos afirmar.** El delta de Cliff ordena pero no explica: un efecto grande en una señal
 no implica que el modelo la use. El análisis de atribución muestra un caso en que no la usa. La
-medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Y sale
+medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Sale
 de `synthetic_v1`, que es **pre-calibración** y no se reconstruye con el generador publicado.
 
 **Relación con la pregunta de investigación.** Delimitan por anticipado qué afirmaciones sobre una señal pueden
@@ -602,14 +602,14 @@ presión de colector delata 0,01 y distingue 0,80; el salto descendente del ajus
 **Qué podemos interpretar.** Lo que avisa y lo que distingue son conjuntos de descriptores distintos y casi
 disjuntos. La lectura mecánica es coherente con el generador: la fuga de vacío entra por el colector
 y eleva su presión, mientras la deriva del caudalímetro no toca esa señal; por eso la presión de
-colector no sirve de aviso y sí de discriminante. Y hay un resultado negativo: el cociente
+colector no sirve de aviso y sí de discriminante. Hay un resultado negativo: el cociente
 informado por la física no cumple en este conjunto lo que su diseño esperaba. Su comentario lo
 declaraba pendiente de comprobación sobre datos reales; sobre estos datos sintéticos no funciona.
 
 **Qué no podemos afirmar.** Nada inferencial: el delta de Cliff es un tamaño de efecto **descriptivo** y las ventanas de una
 misma sesión no son independientes (cada condición aporta 56 ventanas de 8 sesiones), de modo que no
 se acompaña de contraste ni de intervalo. **Separabilidad descriptiva no es rendimiento de
-clasificación demostrado** (apartado 10). Y nada de esto se afirma de un vehículo real.
+clasificación demostrado** (apartado 10). Nada de esto se afirma de un vehículo real.
 
 **Relación con la pregunta de investigación.** Sostiene PI.1 por su lado restrictivo: una explicación
 que justificara la deriva del caudalímetro “porque los ajustes de combustible están altos” sería
@@ -747,7 +747,7 @@ la primera en que las cinco superan el suelo.
 episódico, una ventana larga **diluye** la firma: los pocos segundos alterados se promedian con los
 que no lo están. La elección es un compromiso global y perjudica a esa condición en concreto.
 Tampoco que el suelo de ruido sea un umbral de detectabilidad: es el percentil 90 del efecto medido
-entre pares de sesiones **sanas**, es decir cuánto separa el azar. Y la figura dibuja un solo
+entre pares de sesiones **sanas**, es decir cuánto separa el azar. La figura dibuja un solo
 suelo, el de 10 s (0,33), para todas las duraciones, cuando la tabla da uno por duración que sube
 hasta 0,51 a 120 s: las comparaciones con el suelo deben hacerse con la tabla, no con la línea."""),
     md("""\
@@ -875,7 +875,7 @@ diagnóstico tiene algo que aprender. Eso es la precondición de PI.1.
 
 **La advertencia.** La relación entre **etiqueta** y **señal** no es uno a uno.
 Hay ventanas etiquetadas con un fallo que no contienen información del fallo. Un modelo que falle en
-ellas responde correctamente a lo que ve. Y una métrica agregada que
+ellas responde correctamente a lo que ve. Una métrica agregada que
 las cuente como errores está midiendo, en parte, el límite de lo que el dato contiene y no la
 calidad del modelo. Es una propiedad del generador, no una afirmación sobre vehículos reales.
 

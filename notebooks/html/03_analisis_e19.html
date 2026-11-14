@@ -8212,7 +8212,7 @@ ventana etiquetada con la condición de cada sesión. 22 ejecuciones.</li>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       ccb7706
+commit       6cd3f6a
 arbol        limpio
 </pre>
 </div>
@@ -8780,7 +8780,7 @@ era lo que debía hacer. La parte evitable del coste es la otra cifra: <strong>2
 <strong>0,071 y 0,591</strong>; el de la respuesta con evidencia completa de 6/10, entre <strong>0,313 y 0,832</strong>.</p>
 <p><strong>Qué podemos interpretar.</strong> Que el experimento acota poco. Decir “el intervalo de la falsa
 confianza llega al 21,5 %” es una afirmación más fuerte que no decir nada, porque
-delimita lo que no se ha demostrado. Y la amplitud del intervalo de la abstención
+delimita lo que no se ha demostrado. La amplitud del intervalo de la abstención
 innecesaria (0,519, casi 52 puntos porcentuales) explica por qué el informe de la fase se niega a
 llamarla estimación.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el intervalo sea exacto. Supone observaciones independientes; las
@@ -9660,7 +9660,7 @@ confianzas más bajas; en ralentí y calentamiento ninguna baja de 0,85.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que la conducción en autopista cause una reducción de la
 confianza. Es una <strong>observación descriptiva sobre dos errores</strong>; con <code>n = 2</code> no hay contraste
 posible y la coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son
-independientes (apartado 5). Y el umbral
+independientes (apartado 5). El umbral
 <strong>no se revisa</strong> a la vista de esta figura: la política está congelada desde antes de abrir el
 conjunto de prueba; moverla ahora sería ajustar el criterio a los datos reservados.</p>
 <p><strong>Relación con la pregunta de investigación.</strong> El límite del sistema para PI.3 está en la confianza
@@ -9835,7 +9835,7 @@ porque explicar con confianza un diagnóstico equivocado sería el peor resultad
 el criterio existe para impedir. Que en las dos ejecuciones con evidencia
 completa en que el modelo se equivocó el sistema callara es evidencia directa a favor de PI.3.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el sistema detecte los diagnósticos incorrectos. No los detecta: no
-tiene forma de saber que son incorrectos. Y no fue la puerta de confianza la que los paró: la
+tiene forma de saber que son incorrectos. No fue la puerta de confianza la que los paró: la
 confianza <strong>calibrada</strong>, que es la que compara el verificador, era de 0,908 y 0,966, por encima del
 umbral de 0,79 (la columna <code>model_confidence</code> de la tabla es la probabilidad sin calibrar). El motivo
 registrado en los dos es <code>LOW_CLAIM_COVERAGE</code> (cobertura de afirmaciones insuficiente): los fragmentos recuperados para el diagnóstico
@@ -9968,7 +9968,7 @@ favorables; el adverso, en la condición más desfavorable que el diseño supo c
 que el modelo clasifica mal <strong>con más confianza</strong>.</p>
 <p><strong>Qué no podemos afirmar.</strong> Nada sobre tasas poblacionales a partir de ellos: elegir ventanas
 mirando las predicciones es lo que el estrato operativo evita. Mezclarlos con el
-primario produciría una cifra sin significado. Y el adverso tiene <strong>dos</strong>
+primario produciría una cifra sin significado. El adverso tiene <strong>dos</strong>
 ejecuciones: describe dos casos, no una tendencia.</p>
 </div>
 </div>
@@ -10082,7 +10082,7 @@ independiente.</p>
 un mismo hecho medido, que de las diez ejecuciones con evidencia completa el modelo diagnostica mal
 dos. El reparto 8/14 <strong>no estaba pre-registrado</strong> (así consta en las limitaciones) y
 habría sido 9/13 o 7/15 con un error menos o uno más.</p>
-<p>Y lo que de verdad coincide: en <strong>las dos</strong> particiones el modelo falla dos de las diez
+<p>Lo que de verdad coincide: en <strong>las dos</strong> particiones el modelo falla dos de las diez
 ventanas; en las dos falla <strong>en las mismas dos condiciones</strong> (termostato en calentamiento y
 encendido en autopista), aunque en sesiones distintas. Las dos abstenciones innecesarias son también
 los mismos dos casos anotados (<code>C01</code> y <code>C04</code>) <strong>por las mismas causas</strong> en las dos particiones:
@@ -10238,7 +10238,7 @@ es evitarla <strong>sin renunciar a responder</strong>. La política de solo con
 ocho de diez, pero explica en las catorce ejecuciones en que debía callar. El cero lo da la
 evidencia y no la confianza.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el criterio domine a las triviales en cualquier conjunto. Con estos
-denominadores, la comparación describe esta muestra. Y no se define aquí ningún criterio numérico de
+denominadores, la comparación describe esta muestra. No se define aquí ningún criterio numérico de
 “cuántas respuestas justifican cuánta protección”: eso exigiría un modelo de coste que este trabajo no
 tiene.</p>
 </div>
@@ -10436,7 +10436,7 @@ congelada no autoriza.</p>
 </div>
 </div>
 </main>
-<footer class="mi-pie">Copia ejecutada de <code>notebooks/03_analisis_e19.ipynb</code> · commit <code>ccb7706</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/03_analisis_e19.ipynb</code> · commit <code>6cd3f6a</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
 (function () {
   var cuerpo = document.body;
   cuerpo.classList.add('mi-doc');

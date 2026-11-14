@@ -477,13 +477,13 @@ cifras del texto: nueve de las treinta y cinco salidas de E19 contienen un núme
 no produjo (`L-26`). Que el sistema cambia de explicar a abstenerse al retirarle la evidencia, con
 los datos, el modelo y la confianza idénticos (PI.3).
 
-**Qué no recibió apoyo.** Que el modelo temporal supere a la línea base. Y la explicación que se dio
+**Qué no recibió apoyo.** Que el modelo temporal supere a la línea base. La explicación que se dio
 de esa desventaja quedó retirada, no confirmada.
 
 **Qué permanece sin demostrar.** Si el contexto temporal aporta señal diagnóstica y en qué fallos
 (apartado 12). Si el sistema rechaza evidencia no pertinente en general: PI.4 se responde con el
 rediseño de la condición con distractor (P1, 13-10-2026), acotado a tres situaciones construidas y
-seis ejecuciones, sin estimar ninguna tasa. Y la validez externa de todo lo anterior, que exigiría telemetría real.
+seis ejecuciones, sin estimar ninguna tasa. La validez externa de todo lo anterior, que exigiría telemetría real.
 
 **Cómo contribuye al TFM.** Este notebook es el mapa: dice dónde está cada pieza de evidencia y con
 cuánta firmeza se sostiene. Dentro de la entrega, la correspondencia entre notebooks y resultados

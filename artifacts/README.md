@@ -6,9 +6,9 @@ ella**. Los runners siguen escribiendo en `figures/`, `tables/` y `experiments/`
 qué versión de cada artefacto se entregó y de dónde salió. No hay figuras decorativas: cada
 fichero se traza a experimento → configuración → script → registro de métricas → commit.
 
-El commit indicado es el que introdujo el registro JSON o el informe de la fase en el
-historial; la fecha es la de generación del fichero
-en disco.
+El commit indicado es el que introdujo el registro JSON o el informe de la fase; su equivalente
+en este repositorio está en [`correspondencia_commits.md`](correspondencia_commits.md). La fecha
+es la de generación del fichero en disco.
 
 ## Figuras (`artifacts/figures/`)
 
@@ -21,8 +21,7 @@ en disco.
 
 Las figuras de E6 y E7 se escriben sin sufijo de dataset; las copiadas corresponden a la
 ejecución sobre `synthetic_v2` (la posterior a la de `synthetic_v3`, por hora de generación).
-La memoria no incluye figuras (`docs/audits/full_memory_review/14_TABLES_FIGURES_INVENTORY.md`);
-estas son las que documentan los informes de fase y las que un revisor puede regenerar con
+Estas son las figuras que documentan los informes de fase y las que un revisor puede regenerar con
 `scripts/reproduce_baseline.sh`.
 
 ## Tablas (`artifacts/tables/`)
@@ -52,5 +51,5 @@ Los registros de métricas propiamente dichos viven en `experiments/*.json` y no
 
 ## Informes (`artifacts/reports/`)
 
-Los informes de fase están en `docs/experiments/` y las auditorías en `docs/tfm/revision/` y
+Los informes de fase están en `docs/experiments/` y las auditorías en
 `docs/audits/`; este directorio queda como punto de entrada y contiene solo este índice.

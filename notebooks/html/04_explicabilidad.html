@@ -8168,7 +8168,7 @@ del fallo (apartado 12).</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       ccb7706
+commit       6cd3f6a
 arbol        limpio
 </pre>
 </div>
@@ -8607,7 +8607,7 @@ entra, la centralita compensa inyectando más combustible y el desajuste aparece
 corto y largo plazo, mientras el caudal sigue siendo plausible para el régimen y la carga. La firma
 de un fallo no está necesariamente en la señal del componente que falla.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que sea causal (apartado 3), ni que un caudalímetro real se comporte
-así: es la regla del generador. Y con <code>ltft_bank1</code> y
+así: es la regla del generador. Con <code>ltft_bank1</code> y
 <code>stft_bank1</code> fuertemente correlacionados, el reparto entre esos dos es inestable: otra semilla
 podría asignar más peso a uno u otro sin que cambie nada del fenómeno.</p>
 </div>
@@ -8697,13 +8697,7 @@ uno: una barra de media escondería la dispersión.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/04_explicabilidad/FIG-NB04-02_dispersion.png y FIG-NB04-02_dispersion.svg</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>
+<pre>exportada: notebooks/salida/04_explicabilidad/FIG-NB04-02_dispersion.png y FIG-NB04-02_dispersion.svg
 </pre>
 </div>
 </div>
@@ -9371,7 +9365,7 @@ mismas. Si el objetivo fuera solo decidir bien, podría retirarse.</p>
 <p><strong>Más</strong>, porque es lo que convierte una predicción en algo <strong>contrastable</strong>. Sin observaciones no hay
 nada que anclar en el manual; PI.2 dejaría de tener objeto. La atribución no mejora la decisión; hace posible la
 explicación.</p>
-<p>Y deja una lectura que sobrevive a todo lo anterior, la del apartado 7: en este generador, un
+<p>Deja una lectura que sobrevive a todo lo anterior, la del apartado 7: en este generador, un
 sistema que vigilara cada sensor para detectar su propio fallo no habría encontrado la deriva del
 caudalímetro.</p>
 </div>
@@ -9393,7 +9387,7 @@ las cinco condiciones de fallo.</p>
 <p><strong>Qué no recibió apoyo.</strong> Nada se refuta, pero <code>A1</code> acota el valor de la atribución: no cambia
 ninguna decisión.</p>
 <p><strong>Qué permanece sin demostrar.</strong> Que estas atribuciones se parezcan a las que daría telemetría real.
-Que sean estables frente a otra semilla. Y que el reparto entre señales correlacionadas tenga algún
+Que sean estables frente a otra semilla. Que el reparto entre señales correlacionadas tenga algún
 significado.</p>
 <p><strong>Cómo contribuye al TFM.</strong> Sostiene el capítulo de explicabilidad y es la pieza que une el
 diagnóstico con la evidencia documental: sin observaciones no hay nada que verificar.</p>
@@ -9464,7 +9458,7 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 </div>
 </div>
 </main>
-<footer class="mi-pie">Copia ejecutada de <code>notebooks/04_explicabilidad.ipynb</code> · commit <code>ccb7706</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/04_explicabilidad.ipynb</code> · commit <code>6cd3f6a</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
 (function () {
   var cuerpo = document.body;
   cuerpo.classList.add('mi-doc');

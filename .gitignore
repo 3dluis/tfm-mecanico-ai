@@ -1,4 +1,4 @@
-# .gitignore del **paquete de entrega**.
+# .gitignore del trabajo práctico.
 #
 # No es el del repositorio de trabajo, y la diferencia es deliberada. Allí los
 # artefactos pesados se excluyen porque se regeneran; aquí **son el entregable**:
