@@ -21,15 +21,37 @@ CELDAS = [
 
 ---
 
-## Qué es este documento, y qué no es
+## En un minuto
 
-Es el punto de entrada. Explica qué se investigó, en qué orden, con qué datos y qué quedó
-demostrado y qué no. No contiene ningún resultado propio: todo lo que muestra sale de los registros
-de los experimentos, y cada cifra lleva al lado el fichero del que procede.
+- **La pregunta.** ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos
+  OBD-II, rastrear cada explicación hasta su evidencia y reconocer cuándo esa evidencia no basta?
+- **Qué se hizo.** Diecinueve experimentos sobre datos **sintéticos**, del diagnóstico a la decisión
+  de explicar o abstenerse.
+- **Qué quedó sostenido.** PI.1, PI.2 y PI.3. En la evaluación final sobre el conjunto de prueba
+  (E19): **falsa confianza 0 de 14**, abstención innecesaria 2 de 8, cobertura 6 de 10.
+- **Qué no.** El modelo temporal no superó a la línea base; si el contexto temporal aporta señal
+  sigue sin saberse; PI.4 permanece sin demostrar mientras la condición con distractor no se
+  rediseñe.
+- **Límite principal.** El denominador de 14, de siete sesiones: un cero así es compatible con una
+  tasa real de varios puntos. Y la validez externa exigiría telemetría real.
 
-Quien quiera comprobar un número concreto no necesita ejecutar nada: el registro está en el
-repositorio. Quien quiera ejecutar, puede; el apartado de reproducibilidad dice qué se puede
-reproducir en una máquina cualquiera y qué no."""),
+## Cómo leer este notebook
+
+Es el punto de entrada. Modalidad: **visualización de evidencia histórica** con
+una demostración ilustrativa (el diagrama); las cifras de sus celdas se leen de los registros, que
+están en el repositorio. **Ejecución:** CPU, sin red, menos de un minuto.
+
+- **1–3.** La pregunta y sus subpreguntas; qué se desconocía al empezar; preparación del entorno.
+- **4–5.** El recorrido en un diagrama; los datos, qué son y qué no son.
+- **6–8.** Qué se midió y qué significan las métricas; qué sostiene cada objetivo; la evaluación
+  final, E19.
+- **9–10.** Resultados negativos y limitaciones; discusión de la formulación amplia de la pregunta.
+- **11–14.** Conclusiones; qué queda abierto (el contexto temporal); reproducibilidad; referencias.
+
+**El resto del paquete:** `01_exploracion_obd` (datos y ventanas: E2, E4, E5) ·
+`02_comparacion_modelos` (E6, E7) · `03_analisis_e19` (evaluación final) · `04_explicabilidad` (E9)
+· `05_suficiencia_y_abstencion` (E15, E18, P1) · `06_expresion_del_fallo` (si el fallo etiquetado
+se ve en la señal)."""),
     md("""\
 ## 1. La pregunta de investigación
 
@@ -38,9 +60,8 @@ reproducir en una máquina cualquiera y qué no."""),
 > disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin
 > fundamento?
 
-Es la formulación **acotada**, fijada por `ADR-004` el 12 de septiembre de 2026. La elección importa
-y se explica en el apartado 9: el trabajo circuló un tiempo con una formulación más amplia, y una
-auditoría encontró que dos de sus términos no tenían experimento que los sostuviera.
+Es la formulación **acotada**, fijada por `ADR-004` el 12 de septiembre de 2026; por qué no la más
+amplia que circuló antes se explica en el apartado 10.
 
 La pregunta tiene tres verbos y ninguno es decorativo: **explicar**, **rastrear** y **reconocer**.
 Cada uno se evalúa por separado, porque un sistema puede acertar el diagnóstico y sostenerlo con
@@ -66,8 +87,8 @@ Tres cosas, y las tres se han movido durante el trabajo:
    el conjunto de prueba.
 2. **Si el criterio de suficiencia de evidencia evita la falsa confianza.** Respuesta: en la
    medición final no hubo ninguna falsa confianza, con un denominador pequeño que se declara.
-3. **Si el contexto temporal aporta señal diagnóstica.** Respuesta: **no se sabe**, y el trabajo
-   dedica un apartado entero a explicar por qué la comparación que parecía responderlo no lo hacía.
+3. **Si el contexto temporal aporta señal diagnóstica.** Respuesta: **no se sabe**; el apartado 12
+   explica por qué la comparación que parecía responderlo no lo hacía.
 
 La tercera merece atención porque es el ejemplo más claro de algo que este trabajo encontró más de
 una vez: un resultado que parecía concluyente y dejó de parecerlo al mirar de dónde venían los
@@ -82,11 +103,12 @@ distintos no son comparables, y la única forma de saberlo es que el commit qued
     md("""\
 ## 4. El recorrido, en un diagrama
 
-Antes de los números, el camino. Lo que sigue es la cadena de procesamiento completa: cada etapa
-recibe algo, hace una cosa y entrega algo a la siguiente.
+Antes de los números, el camino: la cadena completa, en la que cada etapa recibe algo, hace una cosa
+y entrega algo a la siguiente.
 
 **Qué queremos investigar con este diagrama:** que el recorrido se entienda sin leer el código.
-**Qué datos utiliza:** ninguno; es la arquitectura, dibujada desde su descripción.
+**Qué datos utiliza:** ninguno. Es un **diagrama conceptual** de la arquitectura implementada, sin
+ninguna medición: sus etiquetas son los experimentos que miden cada etapa (Tabla A.1 del anexo A).
 **Por qué esta visualización:** porque la alternativa —una lista de fases— no muestra que la decisión
 de abstenerse ocurre **después** de recuperar la evidencia y no antes, que es el punto del diseño."""),
     code("""\
@@ -154,15 +176,9 @@ del modelo: ocurre al final, después de recuperar la evidencia, y por eso puede
 seguro» de «estoy seguro pero el manual no lo respalda». Las dos cosas terminan en abstención y por
 motivos distintos, y el motivo queda registrado.
 
-**Qué no podemos afirmar.** Que el recorrido funcione así en un vehículo real. Todo lo medido es
-sobre datos sintéticos de un generador paramétrico, y la validación externa con telemetría real
-sigue siendo trabajo posterior. El diagrama describe el diseño, no su validez externa."""),
+**Qué no podemos afirmar.** Que el recorrido funcione así en un vehículo real: todo lo medido es
+sintético (apartado 5). El diagrama describe el diseño, no su validez externa."""),
     md("""\
-**Qué datos representa.** Ninguno. Es un **diagrama conceptual**: sus cajas son las etapas del
-recorrido experimental y sus etiquetas, los identificadores de los experimentos que las miden. No
-contiene ninguna medición, y por eso no lleva conjunto ni partición. Su fuente es la arquitectura
-implementada y la correspondencia entre etapa y experimento que el anexo A tabula.
-
 ## 5. Los datos: qué son y qué no son
 
 El conjunto es **sintético**. No es una limitación oculta: es una decisión de diseño con una razón y
@@ -173,7 +189,8 @@ exactamente cuándo empieza un fallo, con qué intensidad y en qué señales, pa
 explicación del sistema se corresponde con lo que de verdad ocurrió. Con telemetría real sin
 etiquetar eso no se puede hacer.
 
-**El coste:** la validez externa queda sin establecer, y así está declarado desde el primer día.
+**El coste:** la validez externa queda sin establecer —la validación con telemetría real sigue
+siendo trabajo posterior—, y así está declarado desde el primer día.
 
 El generador produce doce señales a 1 Hz y cinco condiciones de fallo más la normal. Sus constantes
 están **calibradas contra el manual de taller** de un Mazda 3 BK con motor Z6, y cada una lleva su
@@ -203,7 +220,7 @@ comporta de forma distinta. Donde haga falta, los notebooks **generan** esas ses
 —el generador es determinista— y lo declaran como demostración ilustrativa."""),
     md("""\
 **Lo observado.** Dieciocho sesiones de 600 s, tres por cada una de las seis condiciones,
-repartidas entre cuatro regímenes de conducción. Reparto equilibrado a propósito: un desbalance en
+repartidas entre tres regímenes de conducción (sin calentamiento, por lo dicho arriba). Reparto equilibrado a propósito: un desbalance en
 datos sintéticos sería un artefacto elegido por quien genera, no una propiedad del problema.
 
 Las doce señales y por qué están, en una tabla; la columna de rango físico es la que el validador
@@ -271,9 +288,7 @@ resumen = pd.DataFrame(
 )
 resumen"""),
     md("""\
-### Qué significan esas métricas
-
-No se presentan sin explicar, porque un número sin su definición no es evidencia de nada.
+### 6.1 Qué significan esas métricas
 
 **F1 macro.** Media no ponderada del F1 de cada clase, siendo el F1 la media armónica de precisión y
 exhaustividad. *Por qué esta y no la exactitud:* la media **no ponderada** da el mismo peso a una
@@ -283,7 +298,7 @@ por eso el trabajo publica siempre las métricas por clase al lado.
 
 **Exactitud.** Fracción de ventanas clasificadas correctamente. *Su límite:* con seis clases
 equilibradas el azar da 0,17, así que 0,88 dice poco por sí solo; la referencia útil es la clase
-mayoritaria, que está en la tabla justo debajo.
+mayoritaria, que está en la tabla anterior.
 
 **Clase mayoritaria.** Predecir siempre la clase más frecuente del entrenamiento. Es el suelo: un
 modelo que no lo supere no ha aprendido nada. Su F1 macro de 0,0741 es bajo precisamente porque la
@@ -296,16 +311,14 @@ importa aquí más que en otros problemas:* todo el criterio de abstención comp
 un umbral. Si la confianza estuviera mal calibrada, el umbral no significaría nada. *Su límite:* con
 diez tramos y pocas ventanas, cada tramo tiene pocas predicciones y la cifra es inestable."""),
     md("""\
-## 6 bis. Qué sostiene cada objetivo, visto de una vez
+## 7. Qué sostiene cada objetivo, visto de una vez
 
-**Objetivo de este análisis.** El apartado anterior recorre objetivo por objetivo qué se midió. Falta
-verlo junto: qué objetivos tienen evidencia experimental, cuáles la tienen parcial y cuáles cuentan
-con una capacidad implementada que **no** se ha evaluado. Es el mapa que evita el error más común al
+**Objetivo de este análisis.** Ver juntos qué objetivos tienen evidencia experimental, cuáles la
+tienen parcial y cuáles cuentan con una capacidad implementada que **no** se ha evaluado. Es el mapa que evita el error más común al
 leer un trabajo de este tipo, que es tomar lo implementado por demostrado.
 
-**Qué es esta figura, y qué no.** Es un **diagrama documental**, no una medición: cada fila sale del
-registro de experimentos y del estado declarado de cada objetivo, no de un cálculo sobre datos. Se
-incluye porque forma parte de la explicación experimental, y se identifica como tal."""),
+**Qué es esta figura.** Un **diagrama documental**, no una medición: cada fila sale del registro de
+experimentos y del estado declarado de cada objetivo, no de un cálculo sobre datos."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import fig_objetivos
 
@@ -319,21 +332,20 @@ plt.show()"""),
 objetivos con medición sobre el conjunto de prueba, otros con medición solo sobre validación, y
 capacidades que están implementadas y cuya evaluación exigiría un protocolo que no se ejecutó.
 
-**Qué no podemos afirmar.** Que una capacidad implementada funcione. La figura **no** es un resultado
-experimental y no debe leerse como tal: un componente marcado como implementado y no evaluado no
+**Qué no podemos afirmar.** Que una capacidad implementada funcione: un componente marcado como implementado y no evaluado no
 tiene evidencia a su favor ni en su contra.
 
 **Relación con la hipótesis.** Acota el alcance de las conclusiones: lo que la pregunta de
 investigación puede dar por respondido es lo que tiene evidencia, no lo que tiene código."""),
     md("""\
-## 7. El resultado de la evaluación final
+## 8. El resultado de la evaluación final
 
 E19 es la única medición sobre el **conjunto de prueba**, que permaneció cerrado por excepción hasta
-el 12 de octubre de 2026. Se ejecutó una vez, con las reglas congeladas y ancladas a un commit antes
-de abrirlo.
+el 12 de octubre de 2026. Llegó al final en el **tercer intento** —los dos anteriores se
+interrumpieron y están declarados en el apartado 9—, con las reglas congeladas y ancladas a un commit
+antes de abrirlo.
 
-Las tres cifras primarias, leídas de su registro con numerador y denominador, que es la única forma
-honesta de presentarlas."""),
+Las tres cifras primarias, leídas de su registro con numerador y denominador."""),
     code("""\
 print("Registro:", "experiments/E19_evaluacion_final_v3.json")
 print("Estado:  COMPLETED — WITH DOCUMENTED LIMITATIONS")
@@ -359,8 +371,8 @@ print(f"cobertura con evidencia: {len(explicadas)}/{len(con_evidencia)}")"""),
     md("""\
 **Lo observado.** Falsa confianza 0 de 14. Abstención innecesaria 2 de 8. Cobertura 6 de 10.
 
-**Qué podemos interpretar.** En las catorce ejecuciones en que el sistema debía abstenerse, se
-abstuvo en todas. Es el resultado que la subpregunta PI.3 pedía.
+**Qué podemos interpretar.** En las catorce ejecuciones en que debía abstenerse, el sistema se
+abstuvo en todas: el resultado que PI.3 pedía.
 
 **Qué no podemos afirmar, y conviene decirlo aquí y no en una nota al pie.** Que el riesgo de falsa
 confianza sea cero. El denominador es **14**, procedentes de **siete sesiones**: con catorce
@@ -372,7 +384,7 @@ sinónimo de hipótesis demostrada.
 El análisis completo, con los diagnósticos incorrectos y los dos análisis descriptivos, está en
 `03_analisis_e19.ipynb`."""),
     md("""\
-## 8. Resultados negativos y confusores: lo que no salió
+## 9. Resultados negativos y limitaciones: lo que no salió
 
 Un recorrido que solo enseñara lo que funcionó no serviría como evidencia. Esto es lo que no
 funcionó, y en varios casos es más informativo que lo que sí.
@@ -389,44 +401,13 @@ funcionó, y en varios casos es más informativo que lo que sí.
 | **El conjunto de prueba se abrió cinco veces** | tres intentos de E19 —dos interrumpidos—, una para repetir las ablaciones y **una accidental**, al leer identificadores de sesión que ya estaban en otro sitio | `docs/methodology/registro-aperturas-test.md`, con qué se expuso en cada una |
 | **Dos artefactos dañados por el propio trabajo** | una tabla de E5 sobrescrita y otra de E15 borrada por un patrón demasiado amplio; las detectó el censo | `incidencia-artefactos-e5.md` e `incidencia-artefactos-e15.md`; la segunda **no se declara restaurada** |
 
-Sobre el cuarto punto conviene ser explícito, porque afecta a lo que PI.4 puede afirmar: mientras el
-rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**.
+Sobre el cuarto punto, que afecta a lo que PI.4 puede afirmar: mientras el rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**.
 
-Y sobre el conjunto de prueba, con la misma franqueza: **cinco aperturas no son tres**. Las tres
-primeras son la misma medición intentada tres veces; la cuarta repite unas ablaciones definidas antes
-de la primera; la quinta **no debió ocurrir** y está registrada como lo que fue, un descuido corregido
-en el acto. Lo que se expuso en cada una está en la tabla, y ninguna cambió una decisión de diseño."""),
+Y sobre el conjunto de prueba, con la misma franqueza: **cinco aperturas no son tres**. La cuarta
+repite unas ablaciones definidas antes de la primera; la quinta **no debió ocurrir** y está
+registrada como lo que fue, un descuido corregido en el acto. Ninguna cambió una decisión de diseño."""),
     md("""\
-## 9. La pregunta que sigue abierta, y por qué
-
-**¿En qué tipos de fallo el contexto temporal aporta señal diagnóstica adicional y en cuáles no?**
-
-Parecía respondida. No lo está, por dos confusores que se identificaron auditando lo publicado:
-
-1. **Volumen y calibración del generador cambian juntos.** La comparación `synthetic_v2` frente a
-   `synthetic_v3` tenía el triple de sesiones *y* un fenómeno distinto: `v3` se generó el 1 de
-   septiembre, **antes** de que las constantes del motor se calibraran contra el manual. Su ralentí
-   está en 820 rpm, un valor sin ningún respaldo documental. La constante `GENERATOR_VERSION` valió
-   `"1.0.0"` en los dos casos y no los distingue, que es por lo que la diferencia pasó
-   desapercibida durante semanas.
-
-2. **Representación y estimador cambian juntos.** El bosque recibe 139 descriptores de ventana; la
-   red, la secuencia de 120 × 12 en crudo. Ninguna diferencia entre los dos puede atribuirse al
-   contexto temporal: podría venir de la representación, del estimador o de su interacción. Lo que
-   esa comparación mide es la diferencia entre **dos recorridos completos**.
-
-Hay una tentación concreta que conviene nombrar para no caer en ella: la red gana en el termostato
-bloqueado —0,8148 frente a 0,7826— y es justo la condición cuya firma es temporal, «algo que debería
-subir y no sube». Encaja tan bien que parece confirmación. **No lo es.** Es una diferencia de 0,03
-en una clase de 14 ventanas, medida una sola vez, entre dos recorridos que difieren en todo. Y hay
-una explicación alternativa, medida en octubre: el fallo del termostato **no altera la trayectoria**
-mientras el refrigerante no supera su tope, de modo que en una sesión de calentamiento **32 de 45**
-ventanas etiquetadas con el fallo no contienen ninguna señal observable de él.
-
-El diseño para responder la pregunta —sin abrir una línea nueva— está en `docs/diseno-pi1/` y
-**no se ha ejecutado**.
-
-## 9.1 La formulación amplia, y por qué no es la pregunta de este trabajo
+## 10. Discusión: la formulación amplia, y por qué no es la pregunta de este trabajo
 
 Conviene decirlo aquí porque el lector puede encontrarla en material anterior. El trabajo circuló
 hasta septiembre de 2026 con una formulación más ambiciosa:
@@ -456,7 +437,56 @@ Los dos últimos son trabajo posterior, y proponerlos formalmente exigiría resu
 hoy no existen. Presentarlos como logrados sería exactamente el tipo de afirmación sin evidencia que
 este trabajo se propone detectar."""),
     md("""\
-## 10. Reproducibilidad
+## 11. Conclusiones de este recorrido
+
+**Qué quedó sostenido.** Que el diagnóstico a partir de ventanas de OBD-II supera a la clase
+mayoritaria con margen amplio y que su confianza se puede calibrar (PI.1, en validación y en
+prueba). Que toda afirmación admitida se ancla en observación y documento verificados (PI.2). Que el
+sistema cambia de explicar a abstenerse al retirarle la evidencia, con los datos, el modelo y la
+confianza idénticos (PI.3).
+
+**Qué no recibió apoyo.** Que el modelo temporal supere a la línea base. Y la explicación que se dio
+de esa desventaja quedó retirada, no confirmada.
+
+**Qué permanece sin demostrar.** Si el contexto temporal aporta señal diagnóstica, y en qué fallos
+(apartado 12). Si el sistema rechaza evidencia no pertinente en general —PI.4—: el rediseño de la
+condición con distractor (P1, 13-10-2026) da una respuesta acotada a tres casos construidos, sin
+estimar ninguna tasa. Y la validez externa de todo lo anterior, que exigiría telemetría real.
+
+**Cómo contribuye al TFM.** Este notebook es el mapa: dice dónde está cada pieza de evidencia y con
+cuánta firmeza se sostiene. La matriz completa que une pregunta → objetivo → experimento → notebook →
+resultado → figura → sección está en `docs/notebook-traceability.md`."""),
+    md("""\
+## 12. Qué queda abierto: el contexto temporal, y por qué
+
+**¿En qué tipos de fallo el contexto temporal aporta señal diagnóstica adicional y en cuáles no?**
+
+Parecía respondida. No lo está, por dos confusores que se identificaron auditando lo publicado:
+
+1. **Volumen y calibración del generador cambian juntos.** La comparación `synthetic_v2` frente a
+   `synthetic_v3` tenía el triple de sesiones *y* un fenómeno distinto: `v3` se generó el 1 de
+   septiembre, **antes** de que las constantes del motor se calibraran contra el manual. Su ralentí
+   está en 820 rpm, un valor sin ningún respaldo documental. La constante `GENERATOR_VERSION` valió
+   `"1.0.0"` en los dos casos y no los distingue, que es por lo que la diferencia pasó
+   desapercibida durante semanas.
+
+2. **Representación y estimador cambian juntos.** El bosque recibe 139 descriptores de ventana; la
+   red, la secuencia de 120 × 12 en crudo. Ninguna diferencia entre los dos puede atribuirse al
+   contexto temporal: podría venir de la representación, del estimador o de su interacción. Lo que
+   esa comparación mide es la diferencia entre **dos recorridos completos**.
+
+Hay una tentación concreta que conviene nombrar: la red gana en el termostato
+bloqueado —0,8148 frente a 0,7826— y es justo la condición cuya firma es temporal, «algo que debería
+subir y no sube». Encaja tan bien que parece confirmación. **No lo es.** Es una diferencia de 0,03
+en una clase de 14 ventanas, medida una sola vez, entre dos recorridos que difieren en todo. Y hay
+una explicación alternativa, medida en octubre: el fallo del termostato **no altera la trayectoria**
+mientras el refrigerante no supera su tope, de modo que en una sesión de calentamiento **32 de 45**
+ventanas etiquetadas con el fallo no contienen ninguna señal observable de él.
+
+El diseño para responder la pregunta —sin abrir una línea nueva— está en `docs/diseno-pi1/` y
+**no se ha ejecutado**."""),
+    md("""\
+## 13. Reproducibilidad
 
 | | |
 |---|---|
@@ -469,10 +499,9 @@ este trabajo se propone detectar."""),
 | **Memoria** | por debajo de 1 GB |
 | **Artefactos que produce** | `notebooks/salida/00_introduccion/FIG-NB00-01_recorrido.{png,svg}` |
 
-**Modalidad:** este notebook es **visualización de evidencia histórica** con una **demostración
-ilustrativa** (el diagrama). No reproduce ningún cálculo: lee los registros y los muestra. Si un
-registro estuviera mal, este notebook lo mostraría igual de mal, y por eso la verificación de que las
-cifras del notebook coinciden con sus artefactos está automatizada en `tests/test_notebooks.py`.
+**Modalidad** (véase «Cómo leer»): no reproduce ningún cálculo. Si un registro estuviera mal, este
+notebook lo mostraría igual de mal, y por eso la verificación de que las cifras del notebook
+coinciden con sus artefactos está automatizada en `tests/test_notebooks.py`.
 
 **Qué no se puede reproducir en una máquina cualquiera:** nada de lo que depende del corpus
 documental del manual —no se redistribuye, es propiedad del fabricante— ni de los pesos del
@@ -484,28 +513,9 @@ soporte.declarar_modalidad(
     "el diagrama del apartado 4 es una demostración ilustrativa y no mide nada",
 )"""),
     md("""\
-## 11. Conclusiones de este recorrido
+## 14. Referencias y trazabilidad
 
-**Qué quedó sostenido.** Que el diagnóstico a partir de ventanas de OBD-II supera a la clase
-mayoritaria con margen amplio y que su confianza se puede calibrar (PI.1, en validación y en
-prueba). Que toda afirmación admitida se ancla en observación y documento verificados (PI.2). Que el
-sistema cambia de explicar a abstenerse al retirarle la evidencia, con los datos, el modelo y la
-confianza idénticos (PI.3).
-
-**Qué no recibió apoyo.** Que el modelo temporal supere a la línea base. Y la explicación que se dio
-de esa desventaja quedó retirada, no confirmada.
-
-**Qué permanece sin demostrar.** Si el contexto temporal aporta señal diagnóstica, y en qué fallos.
-Si el sistema rechaza evidencia no pertinente —PI.4—, mientras la condición con distractor no se
-rediseñe. Y la validez externa de todo lo anterior, que exigiría telemetría real.
-
-**Cómo contribuye al TFM.** Este notebook es el mapa: dice dónde está cada pieza de evidencia y con
-cuánta firmeza se sostiene. La matriz completa que une pregunta → objetivo → experimento → notebook →
-resultado → figura → sección está en `docs/notebook-traceability.md`."""),
-    md("""\
-## 12. Referencias y trazabilidad
-
-**Dónde aparece esto en la memoria.** El esquema de este notebook es la **Figura 6.1** del capítulo 6, y las ocho etapas que recorre se describen en el capítulo 4 y en el apartado A.1 del anexo A.
+**Dónde aparece esto en la memoria.** El esquema de este notebook es la **Figura A.1** del anexo A, y las ocho etapas que recorre se describen en el capítulo 4 y en la **Tabla A.1**.
 
 **Documentación del trabajo**
 - `docs/experiment-index.md` — índice de los diecinueve experimentos con su estado
@@ -525,11 +535,7 @@ resultado → figura → sección está en `docs/notebook-traceability.md`."""),
 - `configs/manifest_e19.json` — el estado congelado de la evaluación final
 - `docs/methodology/congelacion-anotacion-e19.md` — las reglas, fijadas antes de abrir el test
 - `docs/methodology/registro-aperturas-test.md` — cada acceso al conjunto de prueba
-- `docs/methodology/expresion-efectiva-del-fallo.md` — cuándo un fallo altera de verdad la señal
-
-**Sobre el estilo de las afirmaciones.** Ninguna cifra de este notebook está escrita a mano: todas
-se leen de su registro en tiempo de ejecución. Es deliberado. Un número copiado en una celda de
-texto se desactualiza en silencio, y este trabajo ya tuvo ese problema una vez."""),
+- `docs/methodology/expresion-efectiva-del-fallo.md` — cuándo un fallo altera de verdad la señal"""),
 ]
 
 if __name__ == "__main__":

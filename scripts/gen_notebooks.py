@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOKS = ROOT / "notebooks"
+NOTEBOOKS = ROOT / "notebooks" / "historico"
 
 # (fichero, título, fase, objetivo, relación con la PI)
 SPEC: list[tuple[str, str, str, str, str]] = [

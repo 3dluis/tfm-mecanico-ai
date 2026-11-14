@@ -21,19 +21,37 @@ CELDAS = [
 
 ---
 
-## Qué investiga este notebook
+## En un minuto
 
-Si un sistema de diagnóstico puede **reconocer que no sabe**. No por humildad retórica, sino de una
-manera que se pueda comprobar: retirar la evidencia documental, dejar el resto idéntico, y ver si la
-decisión cambia.
+- **La pregunta.** Si el sistema puede **reconocer que no sabe** de una manera comprobable (PI.3), y
+  qué hace ante evidencia que **parece** pertinente y no sostiene lo que se afirma (PI.4).
+- **Qué se hace.** Se leen los registros de E15, de las cuatro ablaciones de E18 y de P1. Ninguna
+  cifra se recalcula.
+- **El resultado.** La decisión **depende de la evidencia**: sin el criterio compuesto, la falsa
+  confianza pasa de 0 de 9 a **9 de 9**. En P1, seis abstenciones de seis, todas por
+  `LOW_CLAIM_COVERAGE` y ninguna por baja confianza.
+- **Dos hallazgos laterales.** El texto redactado puede contener cifras que el verificador no
+  produjo (`L-26`), y el adaptador se ajustó sobre las ventanas en que se le mide (`L-23`).
+- **El límite.** Tres y cinco ventanas independientes, un vehículo, telemetría sintética y un
+  criterio ajustado sobre los mismos casos que lo miden.
 
-Y la pregunta más incómoda, que es la de P1: ¿qué hace el sistema cuando le llega evidencia que
-**parece** pertinente —del vehículo correcto, con el código de avería correcto, bien puntuada— y no
-sostiene lo que se afirma?
+## Cómo leer este notebook
 
-Una advertencia antes de empezar, porque condiciona todo lo que sigue. Este notebook **no mide** al
-sistema: lee lo que su medición dejó escrito. Las cifras no se recalculan aquí, y por eso la
-modalidad está declarada abajo."""),
+**Modalidad: visualización de evidencia histórica.** El notebook **no mide** al sistema: lee lo que
+su medición dejó escrito. Se ejecuta en CPU, sin red y en segundos.
+
+| Sección | Qué contiene |
+|---|---|
+| 1–3 | problema, hipótesis y criterio de suficiencia |
+| 4 | entorno, modalidad y carga de los registros |
+| 5 | la recuperación de E12 |
+| 6–7 | PI.3: el par mínimo y la condición parcial |
+| 8 | las cuatro ablaciones |
+| 9 | P1 y PI.4 |
+| 10–11 | cifras alteradas y contaminación del redactor |
+| 12–13 | el compromiso entre errores y el barrido del umbral |
+| 14 | resultados negativos y limitaciones |
+| 15–18 | conclusiones, cuestiones abiertas, reproducibilidad y trazabilidad |"""),
     md("""\
 ## 1. Introducción: dos textos indistinguibles
 
@@ -104,7 +122,7 @@ y porta un código de avería de la condición diagnosticada.
 hecho que el sistema se abstuviera de más, y **habría parecido prudencia cuando era mala
 medición**."""),
     md("""\
-## 4. Procedencia de los datos
+## 4. Preparación del entorno y procedencia de la evidencia
 
 Todo lo que se muestra sale de artefactos **versionados**, y ninguno se recalcula:
 
@@ -127,13 +145,30 @@ modalidad = soporte.declarar_modalidad(
     "Lo que aquí se ve son las cifras publicadas, no una reproducción de ellas.",
 )"""),
     md("""\
-## 4 bis. De dónde sale la evidencia: la recuperación de E12
+Se comprueba que los artefactos están y que dicen lo que se espera. Si faltara uno,
+el notebook falla con un mensaje que explica qué falta y por qué, en lugar de seguir con una tabla
+vacía."""),
+    code("""\
+import pandas as pd
+
+e15 = soporte.tabla("E15_suficiencia")
+p1 = soporte.tabla("E15_suficiencia_distractor_v2")
+ablaciones = {
+    nombre: soporte.tabla(f"E18_ablacion_{nombre}") for nombre in ("A1", "A2", "A3", "A4")
+}
+
+print(f"E15: {len(e15)} casos · P1: {len(p1)} casos")
+print(f"ablaciones: {', '.join(f'{k} ({len(v)} casos)' for k, v in ablaciones.items())}")
+print()
+print("condiciones de corpus en E15:")
+print(e15.corpus_variant.value_counts().to_string())"""),
+    md("""\
+## 5. De dónde sale la evidencia: la recuperación de E12
 
 **Por qué está aquí.** La suficiencia se decide sobre los documentos que el agente **recibe**, y
-esos documentos los elige la fase de recuperación, que se midió en E12. Sin esa medición, la
-pregunta que este notebook responde estaría mal planteada: no se puede evaluar si el criterio
-rechaza evidencia insuficiente sin saber antes si la evidencia pertinente llega a estar disponible.
-Por eso el análisis de E12 se presenta aquí, inmediatamente antes de usar su salida.
+esos documentos los elige la fase de recuperación, que se midió en E12. No se puede evaluar si el
+criterio rechaza evidencia insuficiente sin saber antes si la evidencia pertinente llega a estar
+disponible; por eso E12 se presenta inmediatamente antes de usar su salida.
 
 **Objetivo del análisis.** Medir si el procedimiento relevante del manual aparece entre los
 documentos recuperados, y comparar dos estrategias de consulta: la **semántica pura**, que busca con
@@ -170,26 +205,6 @@ notebook quedó inconclusa justamente por confundir las dos cosas.
 que el documento que la respalda llegue a estar entre los recuperados, y aquí se ve con qué
 estrategia llega y con cuál no."""),
     md("""\
-## 5. Carga y comprobación de la evidencia
-
-Primero se comprueba que los artefactos están y que dicen lo que se espera. Si faltara uno, el
-notebook falla con un mensaje que explica qué falta y por qué, en lugar de seguir con una tabla
-vacía."""),
-    code("""\
-import pandas as pd
-
-e15 = soporte.tabla("E15_suficiencia")
-p1 = soporte.tabla("E15_suficiencia_distractor_v2")
-ablaciones = {
-    nombre: soporte.tabla(f"E18_ablacion_{nombre}") for nombre in ("A1", "A2", "A3", "A4")
-}
-
-print(f"E15: {len(e15)} casos · P1: {len(p1)} casos")
-print(f"ablaciones: {', '.join(f'{k} ({len(v)} casos)' for k, v in ablaciones.items())}")
-print()
-print("condiciones de corpus en E15:")
-print(e15.corpus_variant.value_counts().to_string())"""),
-    md("""\
 ## 6. El experimento central, reducido a dos filas
 
 La demostración de PI.3 no necesita diecisiete casos: necesita dos. Mismos datos, mismo modelo,
@@ -208,21 +223,20 @@ columnas = [
 nucleo = e15[e15.case_id_gold.isin(["C05_vacuum_leak", "C06_vacuum_leak_evidencia_retirada"])]
 print(nucleo[columnas].to_string(index=False))"""),
     md("""\
-**Qué muestra.** Dos ejecuciones sobre **la misma ventana de telemetría**, con la misma confianza calibrada —0,908— y
-decisiones opuestas. En la primera hay documentos aplicables y la cobertura es 1,00; en la segunda,
-con la evidencia retirada del índice, no queda ninguno y la cobertura es 0,00.
+**Qué muestra.** Dos ejecuciones sobre **la misma ventana de telemetría**, con la misma confianza
+calibrada —0,908— y decisiones opuestas. En la primera hay documentos aplicables y la cobertura es
+1,00; en la segunda, con la evidencia retirada del índice, no queda ninguno y la cobertura es 0,00.
 
+**Qué podemos interpretar.** Que la decisión **cambió porque cambió la evidencia**, no porque
+cambiara el vehículo ni la certeza del modelo. Es la hipótesis de PI.3 reducida a su mínima
+expresión, y se cumple.
 
-**Qué podemos interpretar.** Que la decisión **cambió porque cambió la evidencia**, no porque cambiara el vehículo ni la certeza
-del modelo. Es la hipótesis de PI.3 reducida a su mínima expresión, y se cumple.
-
-
-**Qué no podemos afirmar.** Que esto demuestre un comportamiento general. Son dos ejecuciones sobre una ventana. Y hay algo más
-débil de lo que parece: la abstención de la segunda fila está **determinada por la construcción de
-la condición** —se retiraron del índice todos los fragmentos con los códigos del fallo, así que no
-quedaba nada que juzgar—. No pone a prueba el criterio de soporte; solo comprueba que el sistema no
-explica sin evidencia. **La condición informativa es la parcial**, y es la de la sección
-siguiente."""),
+**Qué no podemos afirmar.** Que esto demuestre un comportamiento general. Son dos ejecuciones sobre
+una ventana. Y hay algo más débil de lo que parece: la abstención de la segunda fila está
+**determinada por la construcción de la condición** —se retiraron del índice todos los fragmentos
+con los códigos del fallo, así que no quedaba nada que juzgar—. No pone a prueba el criterio de
+soporte; solo comprueba que el sistema no explica sin evidencia. **La condición informativa es la
+parcial**, y es la de la sección siguiente."""),
     md("""\
 ## 7. La condición informativa: hay documentos y aun así se abstiene
 
@@ -232,11 +246,7 @@ criterio mide suficiencia y no disponibilidad.
 
 **Datos y metodología.** Los diecisiete casos de E15 bajo las cinco condiciones de evidencia, con
 dos magnitudes por caso: cuántos documentos **aplicables** se recuperaron y qué **cobertura de
-afirmaciones** alcanzó el verificador. Las dos están registradas; no se recalcula ninguna decisión.
-
-Con evidencia parcial el sistema tiene delante cinco, siete o seis fragmentos aplicables —del
-vehículo correcto, con el código correcto— y se abstiene igual. Esa es la medición que distingue
-«no hay nada» de «hay algo que no sirve»."""),
+afirmaciones** alcanzó el verificador. Las dos están registradas; no se recalcula ninguna decisión."""),
     code("""\
 informativas = e15[e15.corpus_variant.isin(["PARTIAL", "ABSENT", "FULL"])]
 resumen = (
@@ -323,9 +333,9 @@ destino = soporte.exportar(
 # y el HTML que se entrega la llevaría dentro.
 print(f"figura exportada en PNG y SVG: {destino.relative_to(soporte.raiz())}")"""),
     md("""\
-**Qué muestra.** A la izquierda, cuántos fragmentos **aplicables** —vehículo correcto, código correcto— llegan al
-verificador en cada condición. A la derecha, qué fracción de las afirmaciones construidas queda
-**sostenida** por ellos. El color es la decisión.
+**Qué muestra.** A la izquierda, cuántos fragmentos **aplicables** —vehículo correcto, código
+correcto— llegan al verificador en cada condición. A la derecha, qué fracción de las afirmaciones
+construidas queda **sostenida** por ellos. El color es la decisión.
 
 Lo que salta a la vista es que las dos columnas no se parecen. En la condición parcial hay
 fragmentos aplicables —cinco, seis y siete— y la cobertura es **cero** en los tres casos. Con el
@@ -335,33 +345,33 @@ validador de aplicabilidad los degrada a coincidencia parcial y dejan de contar 
 cobertura sigue siendo cero. Solo la condición completa alcanza cobertura 1,00, y en tres de sus
 cinco casos.
 
+**Qué podemos interpretar.** Que **tener documentación aplicable delante no equivale a tener
+soporte**. Las dos magnitudes se separan exactamente en la condición que el diseño construyó para
+separarlas, y la decisión sigue a la cobertura y no al recuento de documentos.
 
-**Qué podemos interpretar.** Que **tener documentación aplicable delante no equivale a tener soporte**. Las dos magnitudes se
-separan exactamente en la condición que el diseño construyó para separarlas, y la decisión sigue a
-la cobertura y no al recuento de documentos.
-
+**Qué no podemos afirmar.** Que la cobertura sea un buen estimador de nada fuera de estos casos. Y
+hay un límite más serio: que las comprobaciones deterministas de soporte coincidan con lo que un
+fragmento sostiene **de verdad** no se ha medido. Haría falta anotar, caso a caso, qué afirmaciones
+son admisibles y qué evidencia es mínima exigible, y el conjunto anotado no tiene esa anotación. Lo
+que está comprobado es que ninguna cita se asigna fuera de esas comprobaciones, que es menos.
 
 > **Corrección del 13 de octubre de 2026.** Esta figura dibujaba cuatro de las cinco condiciones
 > —dejaba fuera `DISTRACTOR_NO_FILTER`— y su pie declaraba los diecisiete casos: mostraba catorce.
 > Ninguna conclusión cambiaba, porque los tres omitidos se abstienen con cobertura cero, pero la
 > condición que faltaba es justamente la única en la que entran fragmentos de otro motor. La celda
-> comprueba ahora, antes de exportar, que no falte ningún caso.
-
-**Qué no podemos afirmar.** Que la cobertura sea un buen estimador de nada fuera de estos casos. Y hay un límite más serio: que
-las comprobaciones deterministas de soporte coincidan con lo que un fragmento sostiene **de verdad**
-no se ha medido. Haría falta anotar, caso a caso, qué afirmaciones son admisibles y qué evidencia es
-mínima exigible, y el conjunto anotado no tiene esa anotación. Lo que está comprobado es que ninguna
-cita se asigna fuera de esas comprobaciones, que es menos."""),
+> comprueba ahora, antes de exportar, que no falte ningún caso."""),
     md("""\
 ## 8. Qué componente hace el trabajo: las cuatro ablaciones
 
-Cuatro configuraciones, pre-registradas el 1 de octubre de 2026 antes de ejecutarse. Cada una cambia
-**una** pieza y deja el resto idéntico. Ninguna redacta: miden la decisión y la evidencia, no el
-texto.
+**Objetivo del análisis.** Determinar **qué componente** del recorrido sostiene la ausencia de
+falsa confianza: si el criterio compuesto de suficiencia, la puerta de confianza sola, la atribución
+o la ruta de recuperación.
 
-Y las unidades importan, porque los diecisiete casos **no son diecisiete observaciones
-independientes**: salen de cinco ventanas de telemetría. Los recuentos se dan sobre ejecuciones y
-sobre ventanas, nunca como una tasa única."""),
+**Datos y metodología.** Los diecisiete casos de E15 bajo la configuración canónica y bajo las
+cuatro ablaciones pre-registradas el 1 de octubre de 2026, antes de ejecutarse. Cada ablación cambia
+**una** pieza y deja el resto idéntico. Ninguna redacta: miden la decisión y la evidencia, no el
+texto. Los dos errores se cuentan por separado sobre sus propios denominadores, en ejecuciones y
+ventanas y nunca como una tasa única (los casos no son independientes; véase 14.2)."""),
     code("""\
 def tasas(tabla: pd.DataFrame) -> dict[str, object]:
     \"\"\"Los dos errores, contados por separado porque no son intercambiables.\"\"\"
@@ -388,37 +398,27 @@ for clave, tabla in ablaciones.items():
     filas.append({"ablación": clave, "qué cambia": nombres[clave], **tasas(tabla)})
 print(pd.DataFrame(filas).to_string(index=False))"""),
     md("""\
-**Qué muestra.** `A4`, que deja solo la puerta de confianza, explica **las nueve ejecuciones que debían terminar en
-abstención**, incluidas las tres en que la recuperación no devuelve ningún fragmento. `A3`, que
-exige que exista algún fragmento aplicable pero no que lo sostenga, baja a seis de nueve. `A1`, que
-sustituye la atribución por un criterio estadístico simple, no cambia ninguna decisión.
+**Qué muestra.** `A4`, que deja solo la puerta de confianza, explica **las nueve ejecuciones que
+debían terminar en abstención**, incluidas las tres en que la recuperación no devuelve ningún
+fragmento. `A3`, que exige que exista algún fragmento aplicable pero no que lo sostenga, baja a seis
+de nueve. `A1`, que sustituye la atribución por un criterio estadístico simple, no cambia ninguna
+decisión.
 
-
-**Qué podemos interpretar.** Lo que estas dos ablaciones muestran se enuncia mejor al revés de como suele pensarse un sistema de
-diagnóstico: **una confianza diagnóstica alta no basta para sostener una explicación si la evidencia
-documental no la sostiene**. La confianza del modelo mide cuán seguro está de su diagnóstico y no
-sabe nada de si el manual lo documenta.
+**Qué podemos interpretar.** Lo que estas dos ablaciones muestran se enuncia mejor al revés de como
+suele pensarse un sistema de diagnóstico: **una confianza diagnóstica alta no basta para sostener
+una explicación si la evidencia documental no la sostiene**. La confianza del modelo mide cuán
+seguro está de su diagnóstico y no sabe nada de si el manual lo documenta.
 
 Y el cero de `A1` admite una lectura mala que conviene cerrar. **No** significa que la atribución
 sea prescindible: significa que **no interviene en la política de abstención**. Su contribución está
 en otro plano —la trazabilidad, nombrar qué señal y en qué ventana sostiene cada afirmación—, y esa
 dimensión no se ha evaluado aquí.
 
-
-**Qué no podemos afirmar.** Nada sobre la separación entre decidir y redactar, que no se ablaciona. Y nada que no esté
-condicionado por que **las cuatro se miden sobre el conjunto con el que el criterio se ajustó**.
-`A2` quedó además **inconclusa**: la ruta léxica no recuperó nada en ningún caso, pero la causa no
-es la ablación sino la consulta —una búsqueda de texto completo con treinta palabras unidas por
-conjunción—. Se conserva como inconclusa en lugar de reformularse a posteriori."""),
-    md("""\
-**Objetivo del análisis.** Determinar **qué componente** del recorrido sostiene la ausencia de
-falsa confianza: si el criterio compuesto de suficiencia, la puerta de confianza sola, la atribución
-o la ruta de recuperación.
-
-**Datos y metodología.** Los diecisiete casos de E15 bajo la configuración canónica y bajo las
-cuatro ablaciones pre-registradas el 1 de octubre de 2026. Cada ablación cambia **una** pieza y deja
-el resto idéntico. Los dos errores se cuentan por separado sobre sus propios denominadores, en
-ejecuciones y no en tasas.
+**Qué no podemos afirmar.** Nada sobre la separación entre decidir y redactar, que no se ablaciona.
+Y nada que no esté condicionado por que **las cuatro se miden sobre el conjunto con el que el
+criterio se ajustó**. `A2` quedó además **inconclusa**: la ruta léxica no recuperó nada en ningún
+caso, pero la causa no es la ablación sino la consulta —una búsqueda de texto completo con treinta
+palabras unidas por conjunción—. Se conserva como inconclusa en lugar de reformularse a posteriori.
 
 **Por qué además una figura.** La tabla da ocho números; lo que la figura añade es el **contraste
 entre los dos errores** configuración a configuración, que es lo que permite ver de un vistazo qué
@@ -433,16 +433,14 @@ fig"""),
 **Qué muestra.** La configuración canónica no produce ninguna falsa confianza —0 de 9 ejecuciones— y
 se abstiene de más en 2 de 5. Al sustituir el criterio compuesto por una puerta de confianza sola,
 la falsa confianza pasa a **9 de 9**. Retirar la atribución no cambia ninguna de las dos cifras.
-`A2` quedó **inconclusa**: la ruta léxica no recupera nada con una consulta en prosa, y la causa es
-la consulta y no la ablación.
+`A2` quedó inconclusa (véase arriba).
 
 **Qué podemos interpretar.** Lo que evita la falsa confianza es la **comprobación de que la
 evidencia documental cubre lo que se va a afirmar**, no la confianza del modelo de diagnóstico ni la
 atribución. La atribución entra en el informe como explicación, no como barrera.
 
-**Qué no podemos afirmar.** Que la atribución sea prescindible: no cambia estas dos tasas sobre
-estos casos, lo que es distinto de no aportar nada. Y los denominadores son 9 y 5 **ejecuciones**
-procedentes de 3 y 5 ventanas: no son tasas estimadas.
+**Qué no podemos afirmar.** Que la atribución sea prescindible (véase arriba). Y los denominadores
+son 9 y 5 **ejecuciones** procedentes de 3 y 5 ventanas: no son tasas estimadas.
 
 **Relación con la hipótesis.** Es la prueba de atribución de PI.3: el resultado se debe al criterio
 de suficiencia declarado, y no al conjunto del sistema indistintamente."""),
@@ -480,14 +478,13 @@ print(f"decisiones correctas: {int(p1.correct.sum())} de {len(p1)}")
 print(f"motivos registrados:  {sorted(set(p1.reasons.dropna()))}")
 print(f"confianzas:           {sorted(set(p1.confidence.round(3)))}  (umbral 0,79)")"""),
     md("""\
-**Qué muestra.** Seis abstenciones de seis. Y el dato que decide la lectura: el motivo registrado en las seis es
-`LOW_CLAIM_COVERAGE` —la evidencia no sostiene ninguna afirmación— y **ninguna** es
+**Qué muestra.** Seis abstenciones de seis. Y el dato que decide la lectura: el motivo registrado en
+las seis es `LOW_CLAIM_COVERAGE` —la evidencia no sostiene ninguna afirmación— y **ninguna** es
 `LOW_MODEL_CONFIDENCE`. Las confianzas son 0,908 y 1,000, **por encima** del umbral de 0,79.
 
-
-**Qué podemos interpretar.** Que la puerta de confianza **no intervino**: el rechazo lo hizo la verificación de soporte. Era la
-condición que el protocolo fijó de antemano para que el resultado apoyara PI.4, y se cumple en su
-forma fuerte.
+**Qué podemos interpretar.** Que la puerta de confianza **no intervino**: el rechazo lo hizo la
+verificación de soporte. Era la condición que el protocolo fijó de antemano para que el resultado
+apoyara PI.4, y se cumple en su forma fuerte.
 
 Más aún: el distractor no solo llega al verificador, llega clasificado **`EXACT_MATCH`**. El filtro
 de motor no lo bloquea —es del motor correcto— y el validador de aplicabilidad no lo degrada —lleva
@@ -495,11 +492,10 @@ el código del fallo—. De los documentos aplicables, uno de cinco, tres de sie
 distractores. **Las dos primeras líneas de defensa no actúan**, y lo que rechaza es que el fragmento
 no habla de la señal observada con el vocabulario del manual.
 
-
-**Qué no podemos afirmar.** Que exista una tasa de rechazo. Son **tres** situaciones construidas por el autor, con `n = 3`, en
-un vehículo, sobre un corpus. Describen tres situaciones y no estiman ninguna probabilidad. Tampoco
-que el espacio de distractores alcanzables esté cubierto: para la sonda lambda solo se encontró
-**uno**, y así se declaró."""),
+**Qué no podemos afirmar.** Que exista una tasa de rechazo. Son **tres** situaciones construidas por
+el autor, con `n = 3`, en un vehículo, sobre un corpus: no estiman ninguna probabilidad. Tampoco que
+el espacio de distractores alcanzables esté cubierto: para la sonda lambda solo se encontró **uno**,
+y así se declaró."""),
     md("""\
 ## 10. Un hallazgo que no se buscaba: una cifra falsa que todas las barreras dejan pasar
 
@@ -550,24 +546,29 @@ for suf_nombre, ag_nombre, etiqueta in pares:
     for caso in alteradas:
         print(f"    {caso}")"""),
     md("""\
-**Qué muestra.** Tres de las diecisiete salidas de la configuración canónica —la que sostiene el «17/17 válidas ·
-17/17 respeta el veredicto · 0 citas inventadas» publicado— contienen un número que el verificador
-no produjo. El modelo base, sin adaptador, no presenta ninguna.
+**Qué muestra.** Tres de las diecisiete salidas de la configuración canónica —la que sostiene el
+«17/17 válidas · 17/17 respeta el veredicto · 0 citas inventadas» publicado— contienen un número que
+el verificador no produjo. El modelo base, sin adaptador, no presenta ninguna.
 
+Esta celda compara, caso a caso, el conjunto de números escritos con el conjunto de números
+recibidos. El guion `scripts/auditar_cifras_redactadas.py`, que alinea cada número con la afirmación
+o el motivo al que pertenece, encuentra **cuatro** de diecisiete —añade la explicación de
+`C03_o2_slow_response`— y una más entre los seis casos de P1: de ahí las **cinco de veintitrés** del
+apartado de limitaciones. Es la misma diferencia de agrupación que separa el siete y el nueve de E19
+(notebook `03_analisis_e19`).
 
-**Qué podemos interpretar.** Que una salida puede ser **trazable en sus citas y falsa en sus cifras**. Las barreras comprueban
-que el identificador citado se entregara; **ninguna comprueba que el número dicho sea cierto**. Es
-un hueco en la trazabilidad —PI.2— que no estaba declarado, y afecta justamente a la parte del texto
-que un lector usaría para juzgar la decisión.
+**Qué podemos interpretar.** Que una salida puede ser **trazable en sus citas y falsa en sus
+cifras**. Las barreras comprueban que el identificador citado se entregara; **ninguna comprueba que
+el número dicho sea cierto**. Es un hueco en la trazabilidad —PI.2— que no estaba declarado, y
+afecta justamente a la parte del texto que un lector usaría para juzgar la decisión.
 
-
-**Qué no podemos afirmar.** Que el ajuste empeore la fidelidad numérica. Cero de diecisiete frente a tres de diecisiete es
-sugerente y con diecisiete casos es compatible con el azar del muestreo. Tampoco se corrige el
-recorrido: añadir una barrera ahora sería cambiar el sistema a la vista del resultado. Queda
-declarado como limitación `L-26`, con un guion —`scripts/auditar_cifras_redactadas.py`— para que
-cualquiera repita la auditoría."""),
+**Qué no podemos afirmar.** Que el ajuste empeore la fidelidad numérica. Cero de diecisiete frente
+a tres de diecisiete es sugerente y con diecisiete casos es compatible con el azar del muestreo.
+Tampoco se corrige el recorrido: añadir una barrera ahora sería cambiar el sistema a la vista del
+resultado. Queda declarado como limitación `L-26`, con un guion —`scripts/auditar_cifras_redactadas.py`—
+para que cualquiera repita la auditoría."""),
     md("""\
-## 10 bis. La contaminación del adaptador, que afecta a estas mismas cifras
+## 11. La contaminación del adaptador, que afecta a estas mismas cifras
 
 Las cifras de redacción de este notebook —y las de E13 y E15 que el capítulo 5 publica— están
 **afectadas por contaminación**, y conviene saberlo antes de leerlas como evidencia de nada.
@@ -626,44 +627,9 @@ adaptador, y ese reentrenamiento está preparado, congelado y detenido por memor
 —quince ventanas de validación de `synthetic_v3` que ninguno de los dos ha visto— está congelado desde
 el 13 de octubre de 2026 y **sin ejecutar**."""),
     md("""\
-## 11. Resultados negativos e inconclusos
+## 12. El compromiso entre los dos errores
 
-Un notebook que solo mostrara lo que salió bien sería una presentación, no un informe.
-
-| Qué | Qué pasó | Qué se hizo |
-|---|---|---|
-| **Primera versión del criterio** | explicó 6 de los 12 casos que debían terminar en abstención: aceptaba como soporte cualquier fragmento que compartiera vocabulario | se corrigió, y las tres versiones se conservan con sus registros |
-| **Segunda versión** | corrigió ese defecto y **regresionó** la fuga de vacío con evidencia completa | la tercera lo recuperó cambiando solo la granularidad con que se clasifica el papel de un fragmento |
-| **Ablación `A2`** | la ruta léxica no recuperó nada en ningún caso, por la consulta y no por la ablación | **inconclusa**, sin reformular a posteriori; la variante queda declarada como medición nueva |
-| **Dos abstenciones innecesarias** | `C01` por confianza 0,600 y `C04` por confianza 0,462 **y** cobertura 0,00 | se dejan registradas en lugar de resolverse bajando el umbral |
-| **Condición con distractor v1** | no medía lo que decía, y el diagnóstico de su causa también era equivocado | invalidada, conservada con su etiqueta, y rediseñada en P1 |
-| **Modo adverso** | el sistema se abstuvo en las seis ejecuciones, y en dos aceptó fragmentos como soporte de afirmaciones de un diagnóstico **erróneo** | queda como limitación: se abstuvo por cobertura 0,67, no por rechazar el soporte |"""),
-    md("""\
-## 12. Limitaciones
-
-1. **El criterio se revisó dos veces sobre los mismos casos con los que se evalúa.** Las cifras son
-   de desarrollo, no de evaluación. La evaluación final sobre la partición de prueba es otra
-   medición, con su registro.
-2. **Los diecisiete casos salen de cinco ventanas.** No son diecisiete observaciones
-   independientes, y por eso no se publica ninguna tasa única ni ningún intervalo.
-3. **Las ventanas se eligieron entre las que el modelo clasifica bien.** Las tasas describen el
-   comportamiento cuando el diagnóstico de partida es acertado: son **cota superior**.
-4. **El modo oracular abre dos canales**: los códigos que acotan la búsqueda y los que exige el
-   verificador salen de la etiqueta anotada. El modo no oracular da el mismo vector de decisiones, y
-   esa identidad era forzosa porque las ventanas están bien clasificadas: confirma que la
-   implementación no introduce diferencias, no que el sistema resista un diagnóstico erróneo.
-5. **`n = 3` en P1.** Tres situaciones construidas.
-6. **La fidelidad numérica del texto redactado no está verificada** (`L-26`): cinco de las
-   veintitrés salidas del adaptador canónico contienen una cifra que no procede de los datos que
-   recibió, y las tres barreras no lo detectan.
-7. **El adaptador se ajustó sobre las ventanas en que se le midió** (`L-23`): once de los diecisiete
-   casos. Las cifras de redacción son históricas afectadas, no evidencia de generalización.
-8. **Un vehículo, un corpus, telemetría sintética.** Nada de esto dice qué pasaría con otro
-   vehículo, otro fabricante o datos de operación real."""),
-    md("""\
-## 12 bis. El compromiso entre los dos errores
-
-**Objetivo de este análisis.** Las limitaciones anteriores se enuncian una a una. Falta verlas como
+**Objetivo del análisis.** Los dos errores se han contado hasta aquí por separado. Falta verlos como
 lo que son: un **compromiso**. Callar menos aumenta la cobertura y acerca la falsa confianza; callar
 más la aleja y deja sin explicar casos que podían explicarse. El umbral elige un punto de esa curva,
 y conviene ver cuál.
@@ -686,29 +652,13 @@ callar de más antes que explicar sin evidencia, porque los dos errores no cuest
 taller. Una explicación equivocada orienta una reparación; una abstención devuelve el caso a la
 persona.
 
-**Qué no podemos afirmar.** Que este sea el punto óptimo. Con diecisiete casos de cinco ventanas no
-se estima ninguna curva: lo que se muestra es dónde quedó la configuración, no que otra fuera peor.
+**Qué no podemos afirmar.** Que este sea el punto óptimo. Con estos casos (véase 14.2) no se estima
+ninguna curva: lo que se muestra es dónde quedó la configuración, no que otra fuera peor.
 
 **Relación con la hipótesis.** Explicita el precio de PI.3: la ausencia de falsa confianza observada
 se compra con abstenciones innecesarias, y ese precio se publica en lugar de esconderse."""),
     md("""\
-## 13. Trazabilidad
-
-**Dónde aparece esto en la memoria.** Las decisiones caso a caso son la **Tabla 5.5**; los dos errores y las políticas triviales, la **Tabla 5.6** y la **Figura 6.3**; los documentos aplicables frente a la cobertura, la **Figura 5.17**; y las ablaciones, la **Tabla 5.8** y la **Figura 5.18**. El barrido del umbral está en el anexo B, apartado B.4.
-
-| Cifra de este notebook | Artefacto | Registro | Informe |
-|---|---|---|---|
-| las 17 decisiones | `artifacts/tables/E15_suficiencia.csv` | `experiments/E15_suficiencia.json` | `docs/experiments/E15_suficiencia.md` |
-| las cuatro ablaciones | `artifacts/tables/E18_ablacion_A*.csv` | `experiments/E18_ablacion_A*.json` | `docs/methodology/preregistro-e18-ablaciones.md` |
-| los 6 casos de P1 | `artifacts/tables/E15_suficiencia_distractor_v2.csv` | `experiments/E15_suficiencia_distractor_v2.json` | `docs/experiments/P1_distractor_v2.md` |
-| las cifras alteradas | — | `experiments/E13_agente_*.json` | `L-26`, `scripts/auditar_cifras_redactadas.py` |
-
-El umbral 0,79 viene de `experiments/E15b_barrido_umbral.json` —cuyo barrido completo dibuja la
-**Figura 5.14** de la memoria— y su criterio enmendado está en
-`docs/methodology/criterio-umbral-enmienda-01.md`, fechado antes de reejecutar las fases que
-dependen del umbral."""),
-    md("""\
-## 13 bis. Lo que cuesta subir la puerta de confianza
+## 13. Lo que cuesta subir la puerta de confianza
 
 **Objetivo del análisis.** El criterio de suficiencia es compuesto: exige confianza **y** soporte
 documental. Esta sección mira solo la mitad de confianza, y pregunta qué se gana y qué se pierde al
@@ -762,7 +712,7 @@ umbral de confianza no es un dial en el que más siempre sea mejor. La segunda: 
 remuestreo de los dos umbrales **se solapan por completo** y llegan las dos hasta 1,0, de modo que
 con esta muestra los dos puntos de operación son indistinguibles.
 
-**Qué no podemos afirmar.** Cinco cosas, y conviene enunciarlas juntas. Que esto describa **la
+**Qué no podemos afirmar.** Que esto describa **la
 política de abstención del agente**: mueve solo la mitad de confianza del criterio compuesto, y la
 mitad documental permanece fija. Que sea una exploración de la política completa: barrer la
 cobertura documental exigiría una medición que no existe. Que la elección del umbral fuera un
@@ -772,26 +722,42 @@ independientes: 98 ventanas proceden de doce sesiones. Y que de aquí salga un u
 análisis descriptivo posterior, no una validación independiente, y el umbral **no se revisa a su
 vista**."""),
     md("""\
-## 14. Reproducibilidad
+## 14. Resultados negativos y limitaciones
 
-Este notebook **lee** artefactos versionados; no recalcula nada, y por eso se ejecuta en un clon
-limpio sin más que `uv sync --extra nb`.
+### 14.1 Resultados negativos e inconclusos
 
-Reproducir las mediciones que lo sostienen es otra cosa y exige el índice documental, que no se
-distribuye:
+Un notebook que solo mostrara lo que salió bien sería una presentación, no un informe.
 
-```bash
-uv run mecanico-exp sufficiency --mode oracle
-uv run mecanico-exp ablations
-uv run python scripts/comprobar_distractor_v2.py
-uv run mecanico-exp sufficiency --goldset goldset_mazda3_bk_distractor_v2.yaml \\
-  --etiqueta distractor_v2 --mode oracle
-```"""),
-    code("""\
-print(modalidad)
-print()
-for clave, valor in soporte.entorno().items():
-    print(f"  {clave}: {valor}")"""),
+| Qué | Qué pasó | Qué se hizo |
+|---|---|---|
+| **Primera versión del criterio** | explicó 6 de los 12 casos que debían terminar en abstención: aceptaba como soporte cualquier fragmento que compartiera vocabulario | se corrigió, y las tres versiones se conservan con sus registros |
+| **Segunda versión** | corrigió ese defecto y **regresionó** la fuga de vacío con evidencia completa | la tercera lo recuperó cambiando solo la granularidad con que se clasifica el papel de un fragmento |
+| **Ablación `A2`** | la ruta léxica no recuperó nada en ningún caso, por la consulta y no por la ablación | **inconclusa**, sin reformular a posteriori; la variante queda declarada como medición nueva |
+| **Dos abstenciones innecesarias** | `C01` por confianza 0,600 y `C04` por confianza 0,462 **y** cobertura 0,00 | se dejan registradas en lugar de resolverse bajando el umbral |
+| **Condición con distractor v1** | no medía lo que decía, y el diagnóstico de su causa también era equivocado | invalidada, conservada con su etiqueta, y rediseñada en P1 |
+| **Modo adverso** | el sistema se abstuvo en las seis ejecuciones, y en dos aceptó fragmentos como soporte de afirmaciones de un diagnóstico **erróneo** | queda como limitación: se abstuvo por cobertura 0,67, no por rechazar el soporte |
+
+### 14.2 Limitaciones
+
+1. **El criterio se revisó dos veces sobre los mismos casos con los que se evalúa.** Las cifras son
+   de desarrollo, no de evaluación. La evaluación final sobre la partición de prueba es otra
+   medición, con su registro.
+2. **Los diecisiete casos salen de cinco ventanas.** No son diecisiete observaciones
+   independientes, y por eso no se publica ninguna tasa única ni ningún intervalo.
+3. **Las ventanas se eligieron entre las que el modelo clasifica bien.** Las tasas describen el
+   comportamiento cuando el diagnóstico de partida es acertado: son **cota superior**.
+4. **El modo oracular abre dos canales**: los códigos que acotan la búsqueda y los que exige el
+   verificador salen de la etiqueta anotada. El modo no oracular da el mismo vector de decisiones, y
+   esa identidad era forzosa porque las ventanas están bien clasificadas: confirma que la
+   implementación no introduce diferencias, no que el sistema resista un diagnóstico erróneo.
+5. **`n = 3` en P1.** Tres situaciones construidas.
+6. **La fidelidad numérica del texto redactado no está verificada** (`L-26`): cinco de las
+   veintitrés salidas del adaptador canónico contienen una cifra que no procede de los datos que
+   recibió (sección 10).
+7. **El adaptador se ajustó sobre las ventanas en que se le midió** (`L-23`): once de los diecisiete
+   casos (sección 11).
+8. **Un vehículo, un corpus, telemetría sintética.** Nada de esto dice qué pasaría con otro
+   vehículo, otro fabricante o datos de operación real."""),
     md("""\
 ## 15. Conclusiones
 
@@ -824,6 +790,45 @@ pregunta distinta, y este notebook no la responde."""),
 5. **Una comparación con una abstención decidida por el propio modelo de lenguaje**, que diría si la
    separación entre decidir y redactar aporta algo medible. No se ha hecho, y es la ablación que
    falta."""),
+    md("""\
+## 17. Reproducibilidad
+
+Este notebook **lee** artefactos versionados; no recalcula nada, y por eso se ejecuta en un clon
+limpio sin más que `uv sync --extra nb`.
+
+Reproducir las mediciones que lo sostienen es otra cosa y exige el índice documental, que no se
+distribuye:
+
+```bash
+uv run mecanico-exp sufficiency --mode oracle
+uv run mecanico-exp ablations
+uv run python scripts/comprobar_distractor_v2.py
+uv run mecanico-exp sufficiency --goldset goldset_mazda3_bk_distractor_v2.yaml \\
+  --etiqueta distractor_v2 --mode oracle
+```"""),
+    code("""\
+print(modalidad)
+print()
+for clave, valor in soporte.entorno().items():
+    print(f"  {clave}: {valor}")"""),
+    md("""\
+## 18. Referencias y trazabilidad
+
+**Dónde aparece esto en la memoria.** Las decisiones caso a caso son la **Tabla 5.5**; los dos
+errores y las políticas triviales, la **Tabla 5.6**; los documentos aplicables frente a la
+cobertura, la **Figura 5.17**; y las ablaciones, la **Tabla 5.8** y la **Figura 5.18**.
+
+| Cifra de este notebook | Artefacto | Registro | Informe |
+|---|---|---|---|
+| las 17 decisiones | `artifacts/tables/E15_suficiencia.csv` | `experiments/E15_suficiencia.json` | `docs/experiments/E15_suficiencia.md` |
+| las cuatro ablaciones | `artifacts/tables/E18_ablacion_A*.csv` | `experiments/E18_ablacion_A*.json` | `docs/methodology/preregistro-e18-ablaciones.md` |
+| los 6 casos de P1 | `artifacts/tables/E15_suficiencia_distractor_v2.csv` | `experiments/E15_suficiencia_distractor_v2.json` | `docs/experiments/P1_distractor_v2.md` |
+| las cifras alteradas | — | `experiments/E13_agente_*.json` | `L-26`, `scripts/auditar_cifras_redactadas.py` |
+
+El umbral 0,79 viene de `experiments/E15b_barrido_umbral.json` —cuyo barrido completo dibuja la
+**Figura 5.14** de la memoria— y su criterio enmendado está en
+`docs/methodology/criterio-umbral-enmienda-01.md`, fechado antes de reejecutar las fases que
+dependen del umbral."""),
 ]
 
 if __name__ == "__main__":

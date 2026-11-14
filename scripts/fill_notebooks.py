@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOKS = ROOT / "notebooks"
+NOTEBOOKS = ROOT / "notebooks" / "historico"
 
 PREAMBULO = """import sys
 from pathlib import Path

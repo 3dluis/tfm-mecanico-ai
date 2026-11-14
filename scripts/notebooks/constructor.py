@@ -30,28 +30,16 @@ DESTINO = RAIZ / "notebooks"
 #: dónde se abrió Jupyter, que es la única forma de que el notebook funcione en
 #: la máquina del tribunal igual que en la del autor.
 PREAMBULO = """\
-# Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:
-# se busca hacia arriba el directorio que contiene `pyproject.toml` y
-# `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya
-# abierto Jupyter y a qué profundidad esté el notebook.
+# Se busca hacia arriba la carpeta del paquete (la que contiene `src/mecanico_ia_exp`),
+# así el notebook funciona se abra Jupyter desde donde se abra, sin rutas absolutas.
 import sys
 from pathlib import Path
 
-
-def _raiz_del_repositorio() -> Path:
-    for candidato in (Path.cwd(), *Path.cwd().parents):
-        if (candidato / "pyproject.toml").is_file() and (
-            candidato / "src" / "mecanico_ia_exp"
-        ).is_dir():
-            return candidato
-    # Si no se encuentra, el paquete puede estar instalado en el entorno; se
-    # devuelve el directorio actual y el import de abajo dirá si funciona o no.
-    # Fallar aquí con un mensaje claro es mejor que fallar después sin él.
-    return Path.cwd()
-
-
-RAIZ = _raiz_del_repositorio()
-if (RAIZ / "src").is_dir() and str(RAIZ / "src") not in sys.path:
+RAIZ = next(
+    (p for p in (Path.cwd(), *Path.cwd().parents) if (p / "src" / "mecanico_ia_exp").is_dir()),
+    Path.cwd(),
+)
+if str(RAIZ / "src") not in sys.path:
     sys.path.insert(0, str(RAIZ / "src"))
 
 try:

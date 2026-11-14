@@ -45,7 +45,7 @@ no se confunda con una corrección silenciosa de la anterior.
 
 | Fase | Reproducible | Artefactos | Semilla |
 |---|---|---|---|
-| E1 entorno | sí | `docs/experiments/E1_entorno.md`, `notebooks/00_environment_check.ipynb` | — |
+| E1 entorno | sí | `docs/experiments/E1_entorno.md`, `notebooks/historico/00_environment_check.ipynb` | — |
 | E2 datos sintéticos | sí | `data/raw/synthetic/synthetic_v1.parquet` + `.meta.json`; `uv run mecanico-exp generate-synthetic` | **20260901** |
 | E3 datos reales | pendiente — validación externa (ADR-003), sin fuente | — | — |
 | E4 análisis exploratorio | sí | `tables/E4_*.csv`, `figures/FIG-E4-*.png` | — |

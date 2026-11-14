@@ -43,7 +43,7 @@ uv sync --extra ml --extra nb --extra docx 2>&1 | tail -3 \
 
 echo "4 · comprobación de imports"
 uv run python - <<'PY'
-import importlib, sys
+import importlib.util, sys
 
 ESENCIALES = ["numpy", "pandas", "matplotlib", "seaborn", "sklearn", "mecanico_ia_exp"]
 OPCIONALES = ["shap", "torch", "plotly"]

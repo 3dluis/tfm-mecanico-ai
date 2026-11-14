@@ -21,13 +21,46 @@ CELDAS = [
 
 ---
 
-## Advertencia que gobierna todo el notebook
+## En un minuto
 
-Este documento compara **dos recorridos completos**, no dos arquitecturas. Entre el bosque y la red
-cambian a la vez la **representación** de los datos y el **estimador**, de modo que ninguna
-diferencia entre ellos puede atribuirse al contexto temporal. Esa limitación no es una nota al pie:
-es la razón por la que la pregunta sobre el valor del contexto temporal sigue abierta, y el notebook
-la repite donde haga falta."""),
+- **Pregunta.** ¿Supera la GRU bidireccional sobre la secuencia cruda al bosque aleatorio sobre 139
+  descriptores de ventana? El criterio quedó escrito en E6 antes de medir.
+- **Resultado.** No: 0,8788 de F1 macro el bosque y 0,8230 la red, −0,0558; los dos superan
+  ampliamente a la clase mayoritaria, 0,0741. **La complejidad añadida del modelo temporal no queda
+  justificada en las condiciones evaluadas.**
+- **Por condición.** La red solo gana en el termostato, +0,032 sobre 14 ventanas: no es evidencia de
+  que el contexto temporal aporte.
+- **Límite principal.** Dos recorridos completos, **una sola ejecución**, 98 ventanas. La inversión
+  del orden en `synthetic_v3` no se atribuye al volumen: ese conjunto sale de otro generador.
+
+## Cómo leer este notebook
+
+**Modalidad: visualización de evidencia histórica.** Se leen registros y tablas versionados; no se
+reentrena nada. CPU, sin red, menos de un minuto.
+
+**La advertencia que gobierna todo el notebook.** Se comparan **dos recorridos completos, no dos
+arquitecturas**: cambian a la vez la **representación** y el **estimador**, y ninguna diferencia
+puede atribuirse al contexto temporal (apartado 3). Es la razón por la que esa pregunta sigue
+abierta.
+
+1. **Introducción.**
+2. **Objetivo e hipótesis.**
+3. **Fundamento** — representaciones y estimadores.
+4. **Preparación del entorno.**
+5. **El conjunto y su partición.**
+6. **Metodología** — asimetrías.
+7. **Resultados agregados.**
+8. **Resultados por condición.**
+9. **El termostato** — un límite físico.
+10. **Matrices de confusión** — hacia dónde van los errores.
+11. **Calibración.**
+12. **La forma de la calibración.**
+13. **Las cifras de `synthetic_v3`** — un confusor.
+14. **Resultados negativos y limitaciones.**
+15. **Discusión.**
+16. **Conclusiones.**
+17. **Reproducibilidad.**
+18. **Referencias y trazabilidad.**"""),
     md("""\
 ## 1. Introducción: qué motiva esta comparación
 
@@ -57,17 +90,16 @@ F1 macro sobre validación.
 **Variables observadas.** F1 macro, exactitud, F1 por clase, matriz de confusión y error de
 calibración, todo sobre la misma partición de validación.
 
-**Criterio de evaluación.** El declarado en E6: si no la supera, la complejidad no está justificada.
-No hay umbral de margen mínimo, y no se inventa uno ahora.
+**Criterio de evaluación.** El de E6, citado arriba. No hay umbral de margen mínimo, y no se inventa uno ahora.
 
 **Qué cuestionaría la hipótesis.** Un F1 macro de la red igual o inferior al del bosque. Eso es lo
 que ocurrió."""),
     md("""\
 ## 3. Fundamento: las dos representaciones y los dos estimadores
 
-Esta sección es la que permite leer el resto. Son cuatro cosas, no dos.
+Esta sección permite leer el resto. Son cuatro cosas, no dos.
 
-### La representación tabular: 139 descriptores de ventana
+### 3.1 La representación tabular: 139 descriptores de ventana
 
 Cada ventana de 120 segundos y 12 señales —1 440 valores— se resume en **139 números**:
 
@@ -84,25 +116,25 @@ los 139 descriptores son dinámica dentro de la ventana —pendiente, autocorrel
 número de eventos—. Decir que el bosque «no ve el tiempo» sería inexacto: ve una descripción resumida
 de él. Lo que no ve es el **orden** de las muestras más allá de lo que esos resúmenes capturan.
 
-### La representación secuencial: 120 × 12 en crudo
+### 3.2 La representación secuencial: 120 × 12 en crudo
 
 La red recibe la matriz completa, normalizada señal a señal. No hay pérdida de información por
 resumen; el coste es que tiene que aprender qué mirar.
 
-### Bosque aleatorio
+### 3.3 Bosque aleatorio
 
 Cuatrocientos árboles, `class_weight="balanced"`, semilla 20260901. *Por qué este estimador como
 línea base:* tolera bien descriptores correlacionados —y aquí lo están mucho—, no necesita escalado,
 y con pocos cientos de ventanas es más estable que casi cualquier alternativa.
 
-### GRU bidireccional
+### 3.4 GRU bidireccional
 
 19 014 parámetros. *Por qué bidireccional:* la ventana está completa cuando se clasifica, no llega en
 tiempo real, así que leerla en los dos sentidos es legítimo y permite que el estado final recoja
 información de todo el tramo. *Por qué GRU y no LSTM:* menos parámetros con desempeño comparable, y
 con ventanas de este tamaño la diferencia entre las dos arquitecturas no es lo que limita.
 
-### Por qué la comparación no aísla el contexto temporal
+### 3.5 Por qué la comparación no aísla el contexto temporal
 
 | | Representación | Estimador |
 |---|---|---|
@@ -131,14 +163,8 @@ soporte.declarar_modalidad(
 `synthetic_v2`: 72 sesiones, 43 200 muestras, seis condiciones equilibradas. Ventanas de 120 s con
 paso de 60 s. El reparto es **por sesión**, nunca por ventana.
 
-**Y una distinción que hay que mantener sin excepciones.** Hay un segundo conjunto, `synthetic_v3`,
-con 216 sesiones, cuyas cifras aparecen en el informe de E7. **No sale del mismo generador**: se
-generó el 1 de septiembre, antes de que las constantes del motor se calibraran contra el manual. Su
-ralentí está en 820 rpm, un valor sin ningún respaldo documental; el de `v2` está en 690, dentro del
-rango 640–740 que el manual documenta para este motor.
-
-Comparar `v2` con `v3` cambia el **volumen** y el **fenómeno**. Las cifras de `v3` se muestran en
-este notebook, porque forman parte del historial, y se muestran **marcadas**."""),
+Un segundo conjunto, `synthetic_v3`, con 216 sesiones, aparece en el informe de E7. **No sale del
+mismo generador**: sus cifras van **marcadas** en el apartado 13."""),
     code("""\
 import pandas as pd
 
@@ -269,17 +295,15 @@ un resultado negativo y se reporta como tal.
 Que los dos superen a la clase mayoritaria por un orden de magnitud sí responde a lo que PI.1 pide:
 el diagnóstico a partir de ventanas de OBD-II es posible con margen amplio.
 
-**Qué no podemos afirmar.** Tres cosas, y conviene nombrarlas:
+**Qué no podemos afirmar.**
 
-1. **Que la red sea peor arquitectura.** Lo medido es un recorrido completo contra otro.
-2. **Que la diferencia de ECE favorezca a la red por calibrar mejor.** Ninguno de los dos calibra:
-   las dos cifras son de `predict_proba` en crudo. Lo que muestran es que el error por tramos de la
-   red es algo menor, no que su probabilidad esté mejor ajustada tras calibrar. Y el ECE no lleva
-   signo: los dos modelos fallan hacia lados distintos, como se ve en el apartado 10.
+1. **Que la red sea peor arquitectura.** Lo medido es un recorrido completo contra otro (apartado 3).
+2. **Que la diferencia de ECE favorezca a la red por calibrar mejor.** Ninguno de los dos calibra
+   (apartado 6): la red tiene algo menos de error por tramos, no una probabilidad mejor ajustada
+   tras calibrar. Y el ECE no lleva signo: los dos
+   modelos fallan hacia lados distintos, como se ve en el apartado 11.
 3. **Que la diferencia sea significativa.** Es **una sola ejecución** sobre 98 ventanas de
-   validación. No hay repeticiones con semillas distintas ni intervalo de confianza, y por tanto no
-   se afirma significación. El diseño con cinco semillas está en `docs/diseno-pi1/06-plan-replicas.md`
-   y no se ha ejecutado."""),
+   validación, sin repeticiones ni intervalo de confianza (apartado 14.2)."""),
     md("""\
 ## 8. Resultados por condición: donde la media esconde lo interesante
 
@@ -333,22 +357,21 @@ aporta. No lo es, por cuatro razones acumulativas:
 El cruce que distinguiría las dos explicaciones —predicción por ventana contra expresión por
 ventana— está diseñado y **no ejecutado**: `docs/diseno-pi1/08-analisis-por-fallo.md`.
 
-Y hay una observación de signo contrario que conviene no olvidar: la red pierde estrepitosamente en
+Y una observación de signo contrario: la red pierde estrepitosamente en
 el **fallo de encendido**, que es la otra condición con estructura temporal marcada —episodios
 breves—. Si la ventaja de la red viniera de su capacidad de modelar el tiempo, cabría esperar que
 ganara también ahí. No lo hace."""),
     md("""\
-## 8 bis. El termostato: un límite físico, no un fallo de aprendizaje
+## 9. El termostato: un límite físico, no un fallo de aprendizaje
 
-**Objetivo de este análisis.** El apartado anterior deja el termostato como la condición en que la
-red gana al bosque. Conviene mirar de cerca **por qué** el bosque falla ahí, porque la respuesta no
-es la que se espera de un modelo que falla.
+**Objetivo de este análisis.** Mirar de cerca **por qué** el bosque falla en el termostato, porque
+la respuesta no es la que se espera de un modelo que falla. La expresión del fallo en la
+señal, ventana a ventana, se mide en el notebook 06.
 
 **Qué es esta figura, y de cuándo.** Es un **artefacto histórico**: se produjo durante la ejecución
 de E6 y conserva la predicción **ventana a ventana**, que el registro guardado de E6 no almacena. No
-se puede regenerar hoy, y eso hay que decirlo: reproducirla exigiría reejecutar el modelo
-conservando la predicción de cada ventana, lo que convertiría una figura en un experimento nuevo.
-Se muestra tal como se publicó."""),
+se puede regenerar hoy: reproducirla exigiría reejecutar el modelo conservando la predicción de cada
+ventana, lo que convertiría una figura en un experimento nuevo. Se muestra tal como se publicó."""),
     code("""\
 from IPython.display import Image, display
 
@@ -366,15 +389,14 @@ ver. La respuesta correcta del sistema en esas ventanas es abstenerse, y el caso
 fabricarlo.
 
 **Qué no podemos afirmar.** Que las cinco ventanas sin señal sean exactamente las cinco falladas.
-Los registros de E6 no guardan la predicción por ventana, de modo que la coincidencia de los dos
-recuentos es **aritmética y no una identidad medida**. Comprobarlo exigiría reejecutar el modelo
-conservando la predicción, que es un experimento nuevo.
+Como los registros de E6 no guardan la predicción por ventana, la coincidencia de los dos recuentos
+es **aritmética y no una identidad medida**.
 
 **Relación con la hipótesis.** Separa dos cosas que una tasa de acierto confunde: la etiqueta de un
 caso y la evidencia disponible en él. Es la misma distinción que el verificador de suficiencia
 aplica después sobre la evidencia documental, y por eso importa para PI.1 y para PI.3."""),
     md("""\
-## 9. Matrices de confusión: qué tipo de error comete cada uno
+## 10. Matrices de confusión: qué tipo de error comete cada uno
 
 **Qué queremos investigar.** No cuántos errores, sino **hacia dónde** van. En diagnóstico no es lo
 mismo decir «no hay fallo» cuando lo hay que confundir un fallo con otro: lo segundo manda al
@@ -422,8 +444,8 @@ pd.DataFrame([
     estructura_del_error(confusion_e7, "GRU (E7)"),
 ]).set_index("modelo")"""),
     md("""\
-**Qué muestra.** El bosque concentra sus errores en la diagonal de omisión: casi todos van a «sin
-fallo». La red reparte más, y genera algún diagnóstico cruzado que el bosque no genera.
+**Qué muestra.** El bosque concentra sus errores en la omisión: casi todos van a «sin fallo». La red
+reparte más, y genera algún diagnóstico cruzado que el bosque no genera.
 
 **Qué podemos interpretar.** Para el uso que este trabajo persigue, **la estructura del error del
 bosque es preferible a la de la red**, con independencia del F1. Un error por omisión deja el
@@ -432,13 +454,13 @@ que es el modo de fallo que todo el criterio de suficiencia existe para evitar. 
 «hacia abajo» no es una virtud suya: es consecuencia de que las clases difíciles carecen de señal en
 parte de sus ventanas, y la clase sin fallo es la respuesta por defecto cuando no se ve nada.
 
-**Qué no podemos afirmar.** Que la estructura del error del bosque sea benigna **en general**. Lo
-observado vale para este conjunto y esta partición, con 98 ventanas. Con otro reparto de clases, o
+**Qué no podemos afirmar.** Que la estructura del error del bosque sea benigna **en general**: vale
+para este conjunto y esta partición, con 98 ventanas. Con otro reparto de clases, o
 con fallos que compartieran firma, la estructura podría ser otra. Tampoco se puede afirmar nada
 sobre el coste relativo de los dos tipos de error sin un criterio de coste, que este trabajo no
 define."""),
     md("""\
-## 10. Calibración: por qué importa aquí más que en otros problemas
+## 11. Calibración: por qué importa aquí más que en otros problemas
 
 Todo el criterio de abstención compara la confianza del modelo contra un umbral. Si la confianza
 estuviera mal calibrada, el umbral no significaría nada.
@@ -488,35 +510,29 @@ que es la confianza media menos el acierto, vale −0,1395. La red queda justo p
 sesgo de +0,0070: en agregado está prácticamente centrada. El error de calibración esperado, en
 cambio, es alto y parecido en los dos, 0,1439 y 0,1317.
 
-**Qué podemos interpretar.** Que las dos cifras miden cosas distintas y conviene no confundirlas. El
-ECE **no lleva signo**: promedia, tramo a tramo y ponderando por su tamaño, cuánto se aparta la
-confianza del acierto. El sesgo sí lo lleva, y es global. Que la red tenga un sesgo casi nulo y a la
-vez un ECE de 0,1317 significa que sus tramos fallan en direcciones opuestas y se cancelan al
-promediar. Ninguno de los dos, por tanto, puede usarse en crudo como criterio de abstención, que es
-la razón por la que el recorrido de diagnóstico **calibra antes de decidir**. Y en el caso del
-bosque la dirección importa además por sí misma: un umbral sobre la confianza cruda habría hecho que
-el sistema se abstuviera de más de la cuenta, y eso habría parecido prudencia cuando era mala
-medición.
+**Qué podemos interpretar.** Que las dos cifras miden cosas distintas, como se definió arriba. Que
+la red tenga un sesgo casi nulo y a la vez un ECE de
+0,1317 significa que sus tramos fallan en direcciones opuestas y se cancelan al promediar. Ninguno
+de los dos, por tanto, puede usarse en crudo como criterio de abstención, que es la razón por la que
+el recorrido de diagnóstico **calibra antes de decidir**. Y en el caso del bosque la dirección
+importa además por sí misma: un umbral sobre la confianza cruda habría hecho que el sistema se
+abstuviera de más de la cuenta, y eso habría parecido prudencia cuando era mala medición.
 
-**Qué no podemos afirmar.** Que la red esté mejor calibrada **que el bosque calibrado**. Lo
-comparado son dos modelos sin calibrar. Tampoco que el bosque esté bien calibrado porque su sesgo
+**Qué no podemos afirmar.** Que la red esté mejor calibrada **que el bosque calibrado**. Tampoco que el bosque esté bien calibrado porque su sesgo
 sea negativo: un ECE de 0,1439 dice que los tramos fallan, y el signo solo dice hacia dónde fallan
 en promedio. Tampoco que el ECE sea estable: con diez tramos y 98 ventanas, cada tramo contiene muy
-pocas predicciones y la cifra es frágil. Y un solo punto por modelo —confianza media contra
-acierto— es un resumen: no muestra en qué tramos se concentra el error, que es lo que más
-importaría. Los registros de E6 y E7 **no guardan la confianza por ventana**, de modo que un
+pocas predicciones y la cifra es frágil. Y un solo punto por modelo no muestra en qué
+tramos se concentra el error, que es lo que más importaría. Los registros de E6 y E7 **no guardan la confianza por ventana**, de modo que un
 diagrama de fiabilidad no puede construirse a partir de ellos. El apartado siguiente lo construye
 por otra vía."""),
     md("""\
-## 10 bis. La forma de la calibración, recuperada de la curva del barrido
+## 12. La forma de la calibración, recuperada de la curva del barrido
 
 **Objetivo del análisis.** Saber **en qué tramos de confianza** se concentra el desajuste del
-modelo calibrado, que es lo que un punto agregado no puede decir y lo que decide si el umbral del
-verificador opera en una zona fiable.
+modelo calibrado, que es lo que decide si el umbral del verificador opera en una zona fiable.
 
-**Procedencia de los datos.** No hay probabilidades individuales en ningún registro. Lo que sí hay
-es la curva acumulada del barrido del umbral, `E15b_barrido_umbral.json`: 101 umbrales con, en cada
-uno, cuántas de las 98 ventanas de validación quedan por encima y con qué precisión se decide entre
+**Procedencia de los datos.** La curva acumulada del barrido del umbral,
+`E15b_barrido_umbral.json`: 101 umbrales con, en cada uno, cuántas de las 98 ventanas de validación quedan por encima y con qué precisión se decide entre
 ellas. Restando dos umbrales consecutivos salen el número de ventanas y el número de aciertos del
 tramo que hay entre ellos.
 
@@ -578,7 +594,7 @@ diagrama no puede dibujarse. Y **de aquí no sale un error de calibración esper
 modo da otro número, y el que vale sigue siendo el del registro, calculado sobre diez tramos. Poner
 los dos juntos invitaría a leer una corrección donde solo hay otro agrupamiento."""),
     md("""\
-## 11. Las cifras de `synthetic_v3`, y por qué no cierran la cuestión
+## 13. Las cifras de `synthetic_v3`, y por qué no cierran la cuestión
 
 El informe de E7 publicó también resultados sobre `synthetic_v3`, con el triple de sesiones, y
 concluyó que el límite era el volumen de datos. **Esa conclusión quedó retirada el 12 de octubre de
@@ -612,13 +628,9 @@ comparacion = pd.DataFrame(
 ).set_index("conjunto")
 comparacion.round(4)"""),
     md("""\
-**Objetivo del análisis.** Situar una al lado de otra las cuatro cifras —dos modelos por dos
-conjuntos— para que se vea qué cambia entre columnas y por qué la comparación no decide nada.
-
-**Datos y metodología.** El F1 macro de validación de los cuatro registros, leídos tal como se
-guardaron. Entre `synthetic_v2` y `synthetic_v3` cambian **dos cosas a la vez**: el volumen, de 72 a
-216 sesiones, y el generador, que en `synthetic_v3` es anterior a la calibración contra el manual.
-Un diseño que mueve dos factores no permite atribuir el efecto a ninguno."""),
+**Objetivo del análisis.** Situar juntas las cuatro cifras de F1 macro de validación —dos modelos
+por dos conjuntos, leídas tal como se guardaron— para que se vea por qué la comparación no decide
+nada."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import fig_confusor_de_volumen
 
@@ -634,10 +646,11 @@ por 0,012.
 **Qué no podemos afirmar, y es el punto entero de esta sección.** Que ese algo sea el volumen.
 `synthetic_v3` se generó el 1 de septiembre, **antes** de que las constantes del motor se calibraran
 contra el manual, y `synthetic_v2` el 14, después. Entre las dos columnas cambian el número de
-sesiones **y el fenómeno simulado**: el ralentí pasa de 820 rpm —un valor que la calibración retiró
-por carecer de respaldo documental— a 690, y el avance de encendido cambia en la misma proporción.
-La constante `GENERATOR_VERSION` valió `"1.0.0"` en los dos casos y no los distingue, que es por lo
-que la diferencia pasó desapercibida durante semanas.
+sesiones **y el fenómeno simulado**: el ralentí pasa de 820 rpm —un valor sin respaldo documental,
+que la calibración retiró— a 690, dentro del rango 640–740 que el manual documenta para este motor,
+y el avance de encendido cambia en la misma proporción. La constante `GENERATOR_VERSION` valió
+`"1.0.0"` en los dos casos y no los distingue, que es por lo que la diferencia pasó desapercibida
+durante semanas.
 
 Esto es un **confusor**, no un matiz. Con dos variables moviéndose a la vez y dos puntos de medida,
 el experimento no tiene grados de libertad para separarlas. La conclusión «el límite era el volumen
@@ -649,9 +662,13 @@ con subconjuntos anidados de entrenamiento y validación fija. Está diseñada e
 `docs/diseno-pi1/04-subconjuntos-anidados.md`, con cuatro puntos y cinco semillas, y **no se ha
 ejecutado**. Una advertencia que ese diseño ya incorpora: su punto más alto son 132 sesiones de
 entrenamiento, que son **exactamente** las de `synthetic_v3`. La curva **no amplía** el volumen ya
-explorado; lo reproduce con el generador calibrado."""),
+explorado; lo reproduce con el generador calibrado.
+
+La reproducibilidad de `synthetic_v3` se mide en el notebook 06."""),
     md("""\
-## 12. Resultados negativos, reunidos
+## 14. Resultados negativos y limitaciones
+
+### 14.1 Resultados negativos
 
 1. **La hipótesis pre-registrada de E7 no recibió apoyo.** El modelo temporal no superó a la línea
    base: −0,0558 en F1 macro.
@@ -663,15 +680,22 @@ explorado; lo reproduce con el generador calibrado."""),
    registro.** Se calcularon durante el análisis y no se persistieron; están marcadas como no
    utilizables desde el 12 de octubre de 2026.
 5. **Ninguno de los dos modelos está bien calibrado** sin calibrar: el error por tramos ronda
-   0,13–0,14 en los dos. El sentido del fallo no es el mismo: el bosque **promete menos de lo que
-   cumple** —sesgo −0,1395— y la red está casi centrada en agregado, con +0,0070 y tramos que se
-   cancelan.
+   0,13–0,14 en los dos, en sentidos distintos: el bosque **promete menos de lo que cumple** —sesgo
+   −0,1395— y la red está casi centrada, +0,0070, con tramos que se cancelan.
 6. **La red genera diagnósticos cruzados que el bosque no genera**, lo que para este trabajo es el
    modo de fallo más costoso.
-7. **Todo lo anterior es una sola ejecución por celda.** No hay repeticiones, ni intervalos, ni
-   contraste estadístico, y no se afirma significación en ningún punto."""),
+
+### 14.2 Limitaciones
+
+Además de comparar dos recorridos y no dos arquitecturas (apartado 3):
+
+1. **Una sola ejecución por celda.** No hay repeticiones con semillas distintas, ni intervalos, ni
+   contraste estadístico, y no se afirma significación en ningún punto. El diseño con cinco semillas
+   está en `docs/diseno-pi1/06-plan-replicas.md` y no se ha ejecutado.
+2. **Procedimiento asimétrico**: época elegida sobre validación y ningún modelo calibrado
+   (apartado 6)."""),
     md("""\
-## 13. Discusión
+## 15. Discusión
 
 El resultado de E7 se suele resumir como «la red no funcionó». Es un resumen pobre y conviene
 desarmarlo, porque lo que el experimento enseña está en otro sitio.
@@ -694,12 +718,12 @@ parezca sugerirla. Ese encaje aparente es justamente la clase de evidencia que c
 veces: coincide con lo que se esperaba encontrar.
 
 **Cómo encaja con el resto del trabajo.** El bosque quedó como modelo de diagnóstico del recorrido
-completo, y sus 0,8788 de F1 macro sobre validación se sostuvieron después sobre el conjunto de
-prueba en E19. Que su error sea mayoritariamente por omisión, y no cruzado, es lo que hace viable el
+completo. Sobre el conjunto de prueba, en E19, dio 0,836 de F1 macro (0,8469 de exactitud),
+frente a los 0,8788 de validación. Que su error sea mayoritariamente por omisión, y no cruzado, es lo que hace viable el
 criterio de suficiencia: el sistema se enfrenta sobre todo a «no veo nada» y no a «veo otra cosa con
 confianza»."""),
     md("""\
-## 14. Conclusiones de este notebook
+## 16. Conclusiones
 
 **Qué aprendimos.** Que un bosque aleatorio sobre 139 descriptores de ventana diagnostica mejor que
 una GRU bidireccional sobre la secuencia cruda, en este conjunto, con esta partición y en una sola
@@ -719,7 +743,7 @@ casual. Las tres exigen experimentos que están **diseñados y no ejecutados**.
 como modelo del recorrido y aporta un resultado negativo bien medido, que es evidencia tanto como
 uno positivo."""),
     md("""\
-## 15. Reproducibilidad
+## 17. Reproducibilidad
 
 | | |
 |---|---|
@@ -732,22 +756,25 @@ uno positivo."""),
 | **Tiempo** | menos de un minuto |
 | **Memoria** | por debajo de 500 MB |
 | **Recursos** | CPU |
-| **Artefactos que produce** | cinco figuras en `notebooks/salida/02_comparacion_modelos/`, PNG y SVG |
+| **Artefactos que produce** | seis figuras en `notebooks/salida/02_comparacion_modelos/`, PNG y SVG |
 
 **Qué se reproduce y qué no.** Este notebook **no reproduce** E6 ni E7: los lee. Reentrenar el
-bosque daría las mismas cifras —es determinista con su semilla— pero reentrenar la red **no**: se
-entrenó sobre MPS, y algunas reducciones en ese dispositivo no son bit a bit deterministas. La
-semilla acota la variación y no la elimina. Un notebook que reentrenase la red mostraría un número
-distinto del publicado y parecería una contradicción donde solo hay no-determinismo del dispositivo.
+bosque daría las mismas cifras —es determinista con su semilla—; reentrenar la red **no**, por el
+no-determinismo de MPS que declara la celda de modalidad: la semilla acota la variación y no la
+elimina.
 
 **Reproducción completa, modo FULL.** Exige regenerar `synthetic_v2` —`mecanico-exp generar
 --dataset-id synthetic_v2 --sessions-per-fault 12`—, preprocesarlo y ejecutar los dos entrenamientos.
 Del orden de diez minutos en una máquina con acelerador. **Las ejecuciones nuevas escriben con
 etiqueta propia**: los ejecutores se niegan a sobrescribir los artefactos publicados.
 
-## 16. Referencias y trazabilidad
+## 18. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** Las cifras agregadas son la **Tabla 5.1**; adónde van los errores de cada modelo, la **Figura 5.6**; la comparación entre los dos conjuntos, la **Figura 5.8**; la calibración, la **Tabla 5.2** y la **Figura 5.12**, y su forma por tramos, la **Figura 5.13**. El detalle por condición es la **Figura 5.7** del capítulo 5, con su **Tabla B.2** en el anexo B.
+**Dónde aparece esto en la memoria.** Las cifras agregadas son la **Tabla 5.1**; el detalle por
+condición, la **Figura 5.7**, con su **Tabla B.2** en el anexo B; adónde van los errores de cada
+modelo, la **Figura 5.6**; la comparación entre los dos conjuntos, la **Figura 5.8**; el termostato
+ventana a ventana, la **Figura 5.9**; la calibración, la **Tabla 5.2** y la **Figura 5.12**, y su
+forma por tramos, la **Figura 5.13**.
 
 - `docs/experiments/E6_baseline.md` — informe de la línea base, con el criterio pre-registrado
 - `docs/experiments/E7_modelo_temporal.md` — informe del modelo temporal, con sus marcas `SUPERSEDED`
