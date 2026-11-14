@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Notebook</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Expresión del fallo · Mecánico IA</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7793,8 +7793,180 @@ a.anchor-link {
     white-space: normal;
   }
 </style>
-<!-- End of mermaid configuration --></head>
-<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<!-- End of mermaid configuration --><style>
+:root {
+  --mi-tinta: #1f2328;
+  --mi-suave: #59636e;
+  --mi-fondo: #fbfaf7;
+  --mi-papel: #ffffff;
+  --mi-linea: #e3e0d8;
+  --mi-acento: #1f5f8b;
+  --mi-acento-claro: #e8f1f7;
+  --mi-aviso: #8a5a00;
+  --mi-aviso-claro: #fdf4e3;
+  --mi-ancho: 920px;
+  --mi-lateral: 270px;
+  --mi-cabecera: 56px;
+}
+html { scroll-padding-top: calc(var(--mi-cabecera) + 16px); }
+body.mi-doc {
+  background: var(--mi-fondo) !important;
+  color: var(--mi-tinta);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  margin: 0;
+}
+/* ---------------------------------------------------------------- cabecera */
+.mi-cabecera {
+  position: sticky; top: 0; z-index: 50;
+  height: var(--mi-cabecera);
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 24px;
+  background: #16324a; color: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .18);
+}
+.mi-marca { font-weight: 650; letter-spacing: .2px; white-space: nowrap; font-size: 15px; }
+.mi-nav { display: flex; gap: 4px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+.mi-nav a {
+  color: #cfe0ee; text-decoration: none; font-size: 13px; white-space: nowrap;
+  padding: 6px 10px; border-radius: 6px;
+}
+.mi-nav a:hover { background: rgba(255, 255, 255, .12); color: #fff; }
+.mi-nav a.mi-actual { background: #fff; color: #16324a; font-weight: 600; }
+.mi-boton {
+  border: 1px solid rgba(255, 255, 255, .45); background: transparent; color: #fff;
+  border-radius: 6px; padding: 6px 12px; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.mi-boton:hover { background: rgba(255, 255, 255, .12); }
+/* ------------------------------------------------------------------ índice */
+.mi-indice {
+  position: fixed; top: calc(var(--mi-cabecera) + 20px); left: 20px;
+  width: var(--mi-lateral); max-height: calc(100vh - var(--mi-cabecera) - 40px);
+  overflow-y: auto; font-size: 13px; line-height: 1.35;
+  padding: 14px 14px 14px 16px; background: var(--mi-papel);
+  border: 1px solid var(--mi-linea); border-radius: 10px;
+}
+.mi-indice h2 {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
+  color: var(--mi-suave); margin: 0 0 8px; border: 0; padding: 0;
+}
+.mi-indice a {
+  display: block; color: var(--mi-tinta); text-decoration: none;
+  padding: 4px 6px; border-radius: 5px; border-left: 2px solid transparent;
+}
+.mi-indice a.mi-n3 { padding-left: 18px; color: var(--mi-suave); font-size: 12px; }
+.mi-indice a:hover { background: var(--mi-acento-claro); }
+.mi-indice a.mi-activo {
+  border-left-color: var(--mi-acento); color: var(--mi-acento); font-weight: 600;
+  background: var(--mi-acento-claro);
+}
+/* ---------------------------------------------------------------- documento */
+body.mi-doc main, body.mi-doc .jp-Notebook {
+  max-width: var(--mi-ancho); margin: 28px auto 60px !important;
+  padding: 36px 48px !important; background: var(--mi-papel);
+  border: 1px solid var(--mi-linea); border-radius: 12px;
+  box-shadow: 0 2px 14px rgba(30, 30, 20, .05);
+}
+@media (min-width: 1300px) {
+  body.mi-doc main, body.mi-doc .jp-Notebook {
+    margin-left: calc(var(--mi-lateral) + 60px + max(0px, (100vw - var(--mi-lateral) - 60px
+      - var(--mi-ancho) - 40px) / 2)) !important;
+  }
+}
+@media (max-width: 1299px) { .mi-indice { display: none; } }
+.jp-Cell { padding: 2px 0 !important; }
+.jp-InputPrompt, .jp-OutputPrompt { display: none !important; }
+.jp-RenderedMarkdown {
+  font-size: 15.5px !important; line-height: 1.62 !important; color: var(--mi-tinta);
+}
+.jp-RenderedMarkdown h1 {
+  font-size: 30px !important; line-height: 1.2; margin: 6px 0 14px !important;
+  color: #16324a; letter-spacing: -.3px;
+}
+.jp-RenderedMarkdown h2 {
+  font-size: 21px !important; margin: 34px 0 10px !important; padding-bottom: 6px;
+  border-bottom: 2px solid var(--mi-linea); color: #16324a;
+}
+.jp-RenderedMarkdown h3 { font-size: 17px !important; margin: 22px 0 6px !important; }
+.jp-RenderedMarkdown a.anchor-link { display: none; }
+.jp-RenderedMarkdown p { margin: 0 0 12px !important; }
+.jp-RenderedMarkdown strong { color: #10202e; }
+.jp-RenderedMarkdown code {
+  background: #f1efe9; border-radius: 4px; padding: 1px 5px; font-size: .9em;
+}
+.jp-RenderedMarkdown blockquote {
+  margin: 14px 0; padding: 10px 16px; border-left: 4px solid var(--mi-aviso);
+  background: var(--mi-aviso-claro); border-radius: 0 8px 8px 0; color: var(--mi-tinta);
+}
+.jp-RenderedMarkdown hr { border: 0; border-top: 1px solid var(--mi-linea); margin: 26px 0; }
+/* tablas del texto y de las salidas */
+.jp-RenderedMarkdown table, .jp-RenderedHTMLCommon table {
+  border-collapse: collapse !important; width: auto; max-width: 100%;
+  font-size: 13.5px !important; margin: 10px 0 18px !important; display: block; overflow-x: auto;
+}
+.jp-RenderedMarkdown th, .jp-RenderedHTMLCommon th {
+  background: #eef2f5 !important; color: #16324a; font-weight: 600 !important;
+  text-align: left !important; padding: 7px 10px !important;
+  border-bottom: 2px solid #c9d3dc !important;
+}
+.jp-RenderedMarkdown td, .jp-RenderedHTMLCommon td {
+  padding: 6px 10px !important; border-bottom: 1px solid var(--mi-linea) !important;
+  text-align: left !important; vertical-align: top;
+}
+.jp-RenderedMarkdown tr:nth-child(even) td, .jp-RenderedHTMLCommon tr:nth-child(even) td {
+  background: #faf9f6 !important;
+}
+/* ficha del notebook: la primera tabla */
+.mi-ficha table td:first-child { white-space: nowrap; color: var(--mi-suave); width: 1%; }
+/* «En un minuto» y «Cómo leer este notebook» */
+.mi-caja { border-radius: 10px; padding: 2px 22px 8px; margin: 18px 0; }
+.mi-caja > h2, .mi-caja > h3 {
+  font-size: 13px !important; text-transform: uppercase; letter-spacing: .8px;
+  border: 0 !important; margin: 14px 0 6px !important; padding: 0 !important;
+}
+.mi-caja-minuto { background: var(--mi-acento-claro); border: 1px solid #c4dbea; }
+.mi-caja-minuto > h2, .mi-caja-minuto > h3 { color: var(--mi-acento) !important; }
+.mi-caja-minuto li { margin-bottom: 6px; }
+.mi-caja-leer { background: #f6f5f1; border: 1px solid var(--mi-linea); font-size: 14.5px; }
+.mi-caja-leer > h2, .mi-caja-leer > h3 { color: var(--mi-suave) !important; }
+/* código */
+.jp-CodeCell .jp-InputArea {
+  border: 1px solid var(--mi-linea); border-radius: 8px; overflow: hidden; margin: 6px 0;
+}
+.jp-CodeCell .jp-InputArea-editor, .jp-CodeCell .highlight {
+  background: #f6f5f1 !important; font-size: 12.5px !important;
+}
+.jp-OutputArea-output pre {
+  font-size: 12.5px !important; line-height: 1.45; background: #fcfcfb;
+  border-left: 3px solid #d5dde4; padding: 8px 12px !important; border-radius: 0 6px 6px 0;
+}
+.jp-OutputArea-output img {
+  display: block; margin: 10px auto; max-width: 100%; height: auto;
+  border: 1px solid var(--mi-linea); border-radius: 8px; background: #fff;
+}
+body.mi-sin-codigo .jp-CodeCell .jp-Cell-inputWrapper { display: none !important; }
+/* pie */
+.mi-pie {
+  max-width: var(--mi-ancho); margin: 0 auto 40px; color: var(--mi-suave); font-size: 12px;
+  text-align: center;
+}
+@media (min-width: 1300px) {
+  .mi-pie { margin-left: calc(var(--mi-lateral) + 60px + max(0px, (100vw - var(--mi-lateral)
+    - 60px - var(--mi-ancho) - 40px) / 2)); }
+}
+/* impresión */
+@media print {
+  .mi-cabecera, .mi-indice, .mi-boton { display: none !important; }
+  body.mi-doc { background: #fff !important; }
+  body.mi-doc main, body.mi-doc .jp-Notebook {
+    margin: 0 !important; padding: 0 !important; border: 0; box-shadow: none; max-width: none;
+  }
+  .jp-Cell { break-inside: avoid; }
+  .jp-RenderedMarkdown h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light"><header class="mi-cabecera"><span class="mi-marca">Mecánico IA · trabajo práctico del TFM</span><nav class="mi-nav" aria-label="Notebooks"><a href="00_introduccion.html">Introducción</a><a href="01_exploracion_obd.html">Datos OBD-II</a><a href="02_comparacion_modelos.html">Modelos</a><a href="03_analisis_e19.html">Evaluación final</a><a href="04_explicabilidad.html">Explicabilidad</a><a href="05_suficiencia_y_abstencion.html">Suficiencia</a><a href="06_expresion_del_fallo.html" class="mi-actual">Expresión del fallo</a></nav><button class="mi-boton" id="mi-boton-codigo" type="button">Ocultar código</button></header><aside class="mi-indice" aria-label="Índice"><h2>En este notebook</h2><div id="mi-indice-lista"></div></aside>
 <main>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c000">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7802,7 +7974,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="La-etiqueta-dice-que-hay-un-fallo.-%C2%BFLo-hay-en-la-se%C3%B1al?">La etiqueta dice que hay un fallo. ¿Lo hay en la señal?<a class="anchor-link" href="#La-etiqueta-dice-que-hay-un-fallo.-%C2%BFLo-hay-en-la-se%C3%B1al?">¶</a></h1><p><strong>Notebook</strong> <code>06_expresion_del_fallo</code> · <strong>versión</strong> 1.0 · <strong>fecha</strong> 13 de octubre de 2026</p>
+<h1 id="La-etiqueta-dice-que-hay-un-fallo.-%C2%BFLo-hay-en-la-se%C3%B1al?">La etiqueta dice que hay un fallo. ¿Lo hay en la señal?<a class="anchor-link" href="#La-etiqueta-dice-que-hay-un-fallo.-%C2%BFLo-hay-en-la-se%C3%B1al?">¶</a></h1><p><strong>Notebook</strong> <code>06_expresion_del_fallo</code> · <strong>versión</strong> 1.1 · <strong>fecha</strong> 14 de noviembre de 2026</p>
 <table>
 <thead>
 <tr>
@@ -7811,6 +7983,10 @@ a.anchor-link {
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><strong>Modalidad</strong></td>
+<td>REANÁLISIS</td>
+</tr>
 <tr>
 <td><strong>Experimentos</strong></td>
 <td>E6 (línea base de diagnóstico), E7 (modelo temporal), fase G del diseño de PI.1</td>
@@ -7829,7 +8005,7 @@ a.anchor-link {
 </tr>
 <tr>
 <td><strong>Pregunta de investigación</strong></td>
-<td>PI.1 —qué puede diagnosticarse y qué no— y el alcance de lo que una matriz de confusión significa</td>
+<td>PI.1 (qué puede diagnosticarse y qué no) y el alcance de lo que una matriz de confusión significa</td>
 </tr>
 <tr>
 <td><strong>Evidencia original</strong></td>
@@ -7838,15 +8014,42 @@ a.anchor-link {
 </tbody>
 </table>
 <hr/>
-<h2 id="Qu%C3%A9-investiga-este-notebook">Qué investiga este notebook<a class="anchor-link" href="#Qu%C3%A9-investiga-este-notebook">¶</a></h2><p>Una pregunta que parece trivial y no lo es: <strong>cuando el conjunto de datos dice que una ventana tiene
-un fallo, ¿hay algo observable en la señal?</strong></p>
-<p>La respuesta, en la cuarta parte de las ventanas de dos condiciones, es <strong>no</strong>. Y eso cambia lo que
-una matriz de confusión significa: un «falso negativo» sobre una ventana donde el fallo no alteró
-nada no es un error del modelo. Es una etiqueta que el dato no sostiene.</p>
-<p><strong>Lo que este notebook no hace:</strong> no modifica ninguna etiqueta histórica. Las etiquetas de
-<code>synthetic_v2</code> son las que son y las cifras publicadas se midieron con ellas. Lo que se añade es un
-segundo indicador, derivado del generador, que dice <strong>cuánto</strong> de cada ventana etiquetada es
-observable.</p>
+<h2 id="En-un-minuto">En un minuto<a class="anchor-link" href="#En-un-minuto">¶</a></h2><ul>
+<li><strong>Pregunta.</strong> Cuando el conjunto de datos dice que una ventana tiene un fallo, ¿hay algo
+observable en la señal?</li>
+<li><strong>Qué se hace.</strong> Se compara cada una de las 70 ventanas de validación etiquetadas con un fallo con
+la trayectoria que el motor habría seguido sin él y se cruza con el rendimiento por clase de E6.</li>
+<li><strong>Resultado.</strong> Las tres condiciones que el bosque acierta por completo son las tres mejor
+expresadas: todas sus ventanas plenas salvo una parcial del caudalímetro (13 de 14). Las dos que falla son las únicas con un problema de expresión: el termostato tiene
+<strong>cinco ventanas sin ninguna señal</strong> y el encendido <strong>ninguna plenamente expresada</strong>.</li>
+<li><strong>Lectura.</strong> Un “falso negativo” sobre una ventana cuya señal es idéntica a la de un motor sano no
+mide un fallo del modelo; mide el límite de lo que el dato contiene.</li>
+<li><strong>Límite principal.</strong> No se sabe si las cinco ventanas que el bosque falla son las cinco vacías:
+los registros de E6 no guardan las predicciones por ventana.</li>
+</ul>
+<h2 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h2><p><strong>Modalidad: reanálisis</strong>, detallada en la celda del apartado 4. Necesita <code>synthetic_v2</code>
+reconstruido (apartado 14); después corre en CPU, sin red y en segundos.</p>
+<p><strong>Qué investiga.</strong> En dos condiciones la respuesta a la pregunta es, a menudo, <strong>no</strong>: cinco de las
+catorce ventanas del termostato no contienen ninguna señal del fallo. En las del fallo de
+encendido el fallo altera solo una fracción pequeña de las muestras (apartado 6). No se modifica ninguna etiqueta (apartado 9): se añade un segundo indicador,
+derivado del generador.</p>
+<ol>
+<li><strong>Introducción.</strong></li>
+<li><strong>Objetivo e hipótesis.</strong></li>
+<li><strong>Fundamento</strong>: el contrafactual.</li>
+<li><strong>Preparación del entorno y procedencia de los datos.</strong></li>
+<li><strong>El rendimiento por clase.</strong></li>
+<li><strong>La medición nueva.</strong></li>
+<li><strong>La forma en el tiempo de cada fallo.</strong></li>
+<li><strong>El termostato, ventana a ventana.</strong></li>
+<li><strong>Por qué no se corrigen las etiquetas.</strong></li>
+<li><strong><code>synthetic_v2</code> y <code>synthetic_v3</code>.</strong></li>
+<li><strong>Resultados negativos y limitaciones.</strong></li>
+<li><strong>Conclusiones.</strong></li>
+<li><strong>Qué queda abierto.</strong></li>
+<li><strong>Reproducibilidad.</strong></li>
+<li><strong>Referencias y trazabilidad.</strong></li>
+</ol>
 </div>
 </div>
 </div>
@@ -7864,7 +8067,7 @@ termostato bloqueado a partir del segundo 120.</p>
 mismo catálogo de cinco fallos, en los que no cambia nada:</p>
 <ol>
 <li><strong>El termostato bloqueado abierto</strong> limita la temperatura del refrigerante a 71 °C. Si el motor
-todavía no había llegado ahí por sí mismo —arranque en frío—, la señal averiada es <strong>idéntica</strong> a
+todavía no había llegado ahí por sí mismo (arranque en frío), la señal averiada es <strong>idéntica</strong> a
 la sana. No parecida: la misma.</li>
 <li><strong>El fallo de encendido</strong> es <strong>episódico</strong>: episodios de 1 a 3 segundos con una tasa de aparición
 del 2 % por segundo. Entre episodios, el motor se comporta como uno sano.</li>
@@ -7886,10 +8089,10 @@ del 2 % por segundo. Entre episodios, el motor se comporta como uno sano.</li>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="2.-Objetivo-e-hip%C3%B3tesis">2. Objetivo e hipótesis<a class="anchor-link" href="#2.-Objetivo-e-hip%C3%B3tesis">¶</a></h2><p><strong>Objetivo.</strong> Medir, ventana a ventana, qué fracción de las muestras etiquetadas con un fallo <strong>altera
-de verdad la trayectoria</strong> respecto de la que el motor habría seguido sin el fallo, y contrastar esa
+de verdad la trayectoria</strong> respecto de la que el motor habría seguido sin el fallo y contrastar esa
 medida con el rendimiento por clase de los dos modelos.</p>
 <p><strong>Hipótesis.</strong> Las condiciones que el modelo de diagnóstico acierta por completo son las que están
-plenamente expresadas, y las que falla son las que tienen un problema de expresión.</p>
+plenamente expresadas y las que falla son las que tienen un problema de expresión.</p>
 <p><strong>Variables observadas.</strong> Por ventana: número de muestras con desviación por encima del umbral,
 magnitud máxima de la desviación y señal en la que se observa.</p>
 <p><strong>Criterio.</strong> No hay umbral que aprobar: la medición es descriptiva y su valor está en que es
@@ -7906,7 +8109,7 @@ tienen ventanas sin señal se acertaran por completo. Ninguna de las dos ocurre.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-Fundamento:-el-contrafactual,-y-por-qu%C3%A9-se-puede-calcular-exactamente">3. Fundamento: el contrafactual, y por qué se puede calcular exactamente<a class="anchor-link" href="#3.-Fundamento:-el-contrafactual,-y-por-qu%C3%A9-se-puede-calcular-exactamente">¶</a></h2><p>Comparar «con fallo» frente a «sin fallo» suele exigir simular dos veces, y entonces la comparación
+<h2 id="3.-Fundamento:-el-contrafactual-y-por-qu%C3%A9-se-puede-calcular-exactamente">3. Fundamento: el contrafactual y por qué se puede calcular exactamente<a class="anchor-link" href="#3.-Fundamento:-el-contrafactual-y-por-qu%C3%A9-se-puede-calcular-exactamente">¶</a></h2><p>Comparar <em>con fallo</em> frente a <em>sin fallo</em> suele exigir simular dos veces y entonces la comparación
 arrastra la diferencia de los dos recorridos de números aleatorios. Aquí no hace falta, por cómo está
 construido el motor:</p>
 <ul>
@@ -7916,7 +8119,7 @@ construido el motor:</p>
 <p>De modo que <strong>el valor que la función de fallo recibe es exactamente la trayectoria sana de ese
 instante</strong>. El contrafactual no se simula: se tiene.</p>
 <p><strong>El umbral.</strong> Una desviación cuenta como observable si supera el 10 % de la desviación típica que el
-motor declara para esa señal —<code>RATIO_DECLARADO</code>, en <code>obd/expresion.py</code>—. La comparación se hace
+motor declara para esa señal (<code>RATIO_DECLARADO</code>, en <code>obd/expresion.py</code>). La comparación se hace
 <strong>después</strong> del recorte a rango físico, porque es el valor que llega al modelo.</p>
 <p><strong>Y hay un caso en el que el umbral no importa.</strong> Para el termostato por debajo de su tope y para el
 encendido fuera de un episodio, la desviación es <strong>exactamente cero</strong>, no pequeña. Esa clasificación
@@ -7933,7 +8136,7 @@ cambió, no si un modelo podía notarlo.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-Procedencia-de-los-datos">4. Procedencia de los datos<a class="anchor-link" href="#4.-Procedencia-de-los-datos">¶</a></h2><table>
+<h2 id="4.-Preparaci%C3%B3n-del-entorno-y-procedencia-de-los-datos">4. Preparación del entorno y procedencia de los datos<a class="anchor-link" href="#4.-Preparaci%C3%B3n-del-entorno-y-procedencia-de-los-datos">¶</a></h2><table>
 <thead>
 <tr>
 <th>Artefacto</th>
@@ -7964,9 +8167,9 @@ cambió, no si un modelo podía notarlo.</p>
 </tr>
 </tbody>
 </table>
-<p><code>synthetic_v2</code> <strong>no viaja</strong> con el repositorio y <strong>se reconstruye bit a bit</strong>: sus cuatro huellas
-están congeladas en el manifiesto de E19 y se comprueban al reconstruirlo. Las celdas que lo necesitan
-lo dicen y fallan con un mensaje claro si falta.</p>
+<p><code>synthetic_v2</code> <strong>no viaja</strong> con el repositorio y <strong>se reconstruye bit a bit</strong> (apartado 14), contra
+cuatro huellas congeladas en el manifiesto de E19. Las celdas que lo necesitan fallan con un mensaje
+claro si falta.</p>
 </div>
 </div>
 </div>
@@ -7978,28 +8181,16 @@ lo dicen y fallan con un mensaje claro si falta.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:</span>
-<span class="c1"># se busca hacia arriba el directorio que contiene `pyproject.toml` y</span>
-<span class="c1"># `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya</span>
-<span class="c1"># abierto Jupyter y a qué profundidad esté el notebook.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Se busca hacia arriba la carpeta del paquete (la que contiene `src/mecanico_ia_exp`),</span>
+<span class="c1"># así el notebook funciona se abra Jupyter desde donde se abra, sin rutas absolutas.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_raiz_del_repositorio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">candidato</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">candidato</span> <span class="o">/</span> <span class="s2">"pyproject.toml"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="n">candidato</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">candidato</span>
-    <span class="c1"># Si no se encuentra, el paquete puede estar instalado en el entorno; se</span>
-    <span class="c1"># devuelve el directorio actual y el import de abajo dirá si funciona o no.</span>
-    <span class="c1"># Fallar aquí con un mensaje claro es mejor que fallar después sin él.</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
-
-
-<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">_raiz_del_repositorio</span><span class="p">()</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()),</span>
+    <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">))</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -8007,7 +8198,7 @@ lo dicen y fallan con un mensaje claro si falta.</p>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># pragma: no cover - solo fuera del repositorio</span>
     <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">"No se encuentra el paquete del laboratorio desde </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con «uv sync --extra nb»."</span>
+        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con uv sync --extra nb."</span>
     <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
 <span class="n">soporte</span><span class="o">.</span><span class="n">imprimir_entorno</span><span class="p">()</span>
@@ -8025,8 +8216,8 @@ lo dicen y fallan con un mensaje claro si falta.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       778bd2f
-arbol        sucio
+commit       71589c3
+arbol        limpio
 </pre>
 </div>
 </div>
@@ -8043,8 +8234,8 @@ arbol        sucio
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">modalidad</span> <span class="o">=</span> <span class="n">soporte</span><span class="o">.</span><span class="n">declarar_modalidad</span><span class="p">(</span>
     <span class="s2">"REANÁLISIS"</span><span class="p">,</span>
     <span class="s2">"Se calcula algo NUEVO sobre datos existentes: el indicador de expresión del fallo sobre las "</span>
-    <span class="s2">"ventanas de validación de synthetic_v2. Estas cifras NO están publicadas en la memoria y no "</span>
-    <span class="s2">"pueden citarse como si lo estuvieran. El rendimiento por clase de E6 y E7, en cambio, se LEE "</span>
+    <span class="s2">"ventanas de validación de synthetic_v2. Su figura se publica en la memoria como Figura 5.10; "</span>
+    <span class="s2">"las cifras por ventana no aparecen en ninguna otra parte. El rendimiento por clase de E6 y E7, en cambio, se LEE "</span>
     <span class="s2">"de sus registros."</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -8061,7 +8252,7 @@ arbol        sucio
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>MODALIDAD: REANÁLISIS
   se calcula algo nuevo sobre datos existentes; la cifra NO está publicada y no puede citarse como si lo estuviera
-  Se calcula algo NUEVO sobre datos existentes: el indicador de expresión del fallo sobre las ventanas de validación de synthetic_v2. Estas cifras NO están publicadas en la memoria y no pueden citarse como si lo estuvieran. El rendimiento por clase de E6 y E7, en cambio, se LEE de sus registros.
+  Se calcula algo NUEVO sobre datos existentes: el indicador de expresión del fallo sobre las ventanas de validación de synthetic_v2. Su figura se publica en la memoria como Figura 5.10; las cifras por ventana no aparecen en ninguna otra parte. El rendimiento por clase de E6 y E7, en cambio, se LEE de sus registros.
 </pre>
 </div>
 </div>
@@ -8076,7 +8267,7 @@ arbol        sucio
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="5.-El-rendimiento-por-clase,-le%C3%ADdo-de-los-registros">5. El rendimiento por clase, leído de los registros<a class="anchor-link" href="#5.-El-rendimiento-por-clase,-le%C3%ADdo-de-los-registros">¶</a></h2><p>Primero lo que ya está medido y publicado. Los aciertos por clase no figuran como tal en los
 registros: se derivan de la exhaustividad por el soporte, que es la misma operación que el capítulo 5
-hace para citar «11 de 14 frente a 9 de 14».</p>
+hace para citar “11 de 14 frente a 9 de 14”.</p>
 </div>
 </div>
 </div>
@@ -8155,17 +8346,14 @@ F1 macro · bosque 0.8788 · temporal 0.8230
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> El modelo temporal gana <strong>dos</strong> ventanas en el termostato y pierde <strong>seis</strong>
+<p><strong>Qué muestra.</strong> El modelo temporal gana <strong>dos</strong> ventanas en el termostato y pierde <strong>siete</strong>
 repartidas en tres clases: tres en la condición sin fallo, dos en el caudalímetro y dos en el
 encendido. En agregado es peor: 0,8230 de F1 macro frente a 0,8788.</p>
-<p><strong>Qué podemos interpretar.</strong> Que la frase «el modelo temporal acierta dos ventanas más en el
-termostato» es cierta y, por sí sola, <strong>engañosa</strong>: omite que pierde seis en otras clases. El capítulo
-5 la cita junto a la conclusión correcta —que el modelo temporal no supera al tabular— y conviene que
-el saldo completo esté a la vista.</p>
-<p><strong>Qué no podemos afirmar.</strong> Nada sobre arquitecturas. Son dos ejecuciones únicas, con una semilla cada
-una, sobre 98 ventanas de 12 sesiones, y el procedimiento de las dos <strong>no es simétrico</strong>: el modelo
-temporal selecciona su época mirando validación y el bosque no selecciona nada. Esa asimetría es una
-de las tres cosas que la auditoría de PI.1 identificó como invalidantes de la comparación.</p>
+<p><strong>Qué podemos interpretar.</strong> Que la frase “el modelo temporal acierta dos ventanas más en el
+termostato” es cierta y, por sí sola, <strong>engañosa</strong>: omite que pierde siete en otras clases. El capítulo
+5 la cita junto a la conclusión correcta: que el modelo temporal no supera al tabular.</p>
+<p><strong>Qué no podemos afirmar.</strong> Nada sobre arquitecturas: son dos ejecuciones únicas con un
+procedimiento que no es simétrico (apartado 11.2).</p>
 </div>
 </div>
 </div>
@@ -8176,8 +8364,8 @@ de las tres cosas que la auditoría de PI.1 identificó como invalidantes de la 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-La-medici%C3%B3n-nueva:-cu%C3%A1nto-de-cada-ventana-etiquetada-es-observable">6. La medición nueva: cuánto de cada ventana etiquetada es observable<a class="anchor-link" href="#6.-La-medici%C3%B3n-nueva:-cu%C3%A1nto-de-cada-ventana-etiquetada-es-observable">¶</a></h2><p>Se reconstruyen las sesiones de validación desde su <code>SessionSpec</code> —el mismo plan, la misma semilla— con
-las tres columnas de expresión activadas, y se cuenta, ventana a ventana, cuántas de sus 120 muestras
+<h2 id="6.-La-medici%C3%B3n-nueva:-cu%C3%A1nto-de-cada-ventana-etiquetada-es-observable">6. La medición nueva: cuánto de cada ventana etiquetada es observable<a class="anchor-link" href="#6.-La-medici%C3%B3n-nueva:-cu%C3%A1nto-de-cada-ventana-etiquetada-es-observable">¶</a></h2><p>Se reconstruyen las sesiones de validación desde su <code>SessionSpec</code> (el mismo plan, la misma semilla) con
+las tres columnas de expresión activadas y se cuenta, ventana a ventana, cuántas de sus 120 muestras
 superan el umbral.</p>
 </div>
 </div>
@@ -8274,7 +8462,7 @@ F05_misfire                 14          0         14       0          0.054167  
     <span class="n">experimento</span><span class="o">=</span><span class="s2">"E6 · fase G del diseño de PI.1"</span><span class="p">,</span>
     <span class="n">dataset</span><span class="o">=</span><span class="s2">"synthetic_v2, validación · 70 ventanas etiquetadas con un fallo"</span><span class="p">,</span>
     <span class="n">procedencia</span><span class="o">=</span><span class="s2">"generador reconstruido desde SessionSpec; aciertos de E6_baseline_synthetic_v2.json"</span><span class="p">,</span>
-    <span class="n">titulo</span><span class="o">=</span><span class="s2">"Expresión efectiva del fallo por ventana, y aciertos del modelo de diagnóstico"</span><span class="p">,</span>
+    <span class="n">titulo</span><span class="o">=</span><span class="s2">"Expresión efectiva del fallo por ventana y aciertos del modelo de diagnóstico"</span><span class="p">,</span>
     <span class="n">filas</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">ancho</span><span class="o">=</span><span class="mf">5.9</span><span class="p">,</span>
     <span class="n">alto</span><span class="o">=</span><span class="mf">3.6</span><span class="p">,</span>
@@ -8330,7 +8518,7 @@ F05_misfire                 14          0         14       0          0.054167  
 <span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 
 <span class="n">destino</span> <span class="o">=</span> <span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-N06-01_expresion_y_aciertos"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"06_expresion"</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB06-01_expresion_y_aciertos"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"06_expresion_del_fallo"</span>
 <span class="p">)</span>
 <span class="c1"># Ruta RELATIVA: la absoluta es la de esta máquina y acabaría en el HTML entregado.</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"figura exportada en PNG y SVG: </span><span class="si">{</span><span class="n">destino</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">soporte</span><span class="o">.</span><span class="n">raiz</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
@@ -8346,7 +8534,7 @@ F05_misfire                 14          0         14       0          0.054167  
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Expresión efectiva del fallo por ventana, y aciertos del modelo de diagnóstico
+<pre>Expresión efectiva del fallo por ventana y aciertos del modelo de diagnóstico
 E6 · fase G del diseño de PI.1 · synthetic_v2, validación · 70 ventanas etiquetadas con un fallo · generador reconstruido desde SessionSpec; aciertos de E6_baseline_synthetic_v2.json
 </pre>
 </div>
@@ -8354,8 +8542,8 @@ E6 · fase G del diseño de PI.1 · synthetic_v2, validación · 70 ventanas eti
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/06_expresion/FIG-N06-01_expresion_y_aciertos.png y FIG-N06-01_expresion_y_aciertos.svg
-figura exportada en PNG y SVG: notebooks/salida/06_expresion/FIG-N06-01_expresion_y_aciertos.png
+<pre>exportada: notebooks/salida/06_expresion_del_fallo/FIG-NB06-01_expresion_y_aciertos.png y FIG-NB06-01_expresion_y_aciertos.svg
+figura exportada en PNG y SVG: notebooks/salida/06_expresion_del_fallo/FIG-NB06-01_expresion_y_aciertos.png
 </pre>
 </div>
 </div>
@@ -8376,21 +8564,21 @@ figura exportada en PNG y SVG: notebooks/salida/06_expresion/FIG-N06-01_expresio
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra la figura.</strong> A la izquierda, cada punto es una de las 70 ventanas etiquetadas, situada
 en la fracción de sus 120 muestras que altera la trayectoria. Tres condiciones tienen todos sus puntos
-en 1,0; el termostato los tiene repartidos entre 0,0 y 1,0; el fallo de encendido los tiene <strong>todos
+en 1,0 salvo una ventana parcial del caudalímetro; el termostato los tiene repartidos entre 0,0 y 1,0; el fallo de encendido los tiene <strong>todos
 pegados al cero</strong>, entre 0,017 y 0,13. A la derecha, las ventanas sin ninguna señal frente a las que
 el bosque falla.</p>
-<p><strong>Qué podemos interpretar.</strong> Las tres condiciones que el bosque acierta <strong>por completo</strong> —fuga de
-vacío, caudalímetro y sonda lenta— son las tres que están plenamente expresadas. Las dos que falla son
-las dos únicas con un problema de expresión, y de clases distintas: el termostato tiene <strong>cinco
+<p><strong>Qué podemos interpretar.</strong> Las tres condiciones que el bosque acierta <strong>por completo</strong> (fuga de
+vacío, caudalímetro y sonda lenta) son las tres expresadas en todas sus ventanas, plenamente salvo
+una del caudalímetro. Las dos que falla son
+las dos únicas con un problema de expresión. Los problemas son de clases distintas: el termostato tiene <strong>cinco
 ventanas sin ninguna señal</strong>, las cinco de la misma sesión de calentamiento y consecutivas; el
 encendido <strong>no tiene ninguna ventana plenamente expresada</strong>. El rendimiento por clase se ordena igual
 que la expresión.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que las cinco ventanas que el bosque falla sean <strong>las mismas cinco</strong> que
-no tienen señal. El número coincide —falla cinco, cinco están vacías— y los registros de E6 <strong>no
-guardan las predicciones por ventana</strong>, de modo que no se sabe cuáles falló. Comprobarlo cuesta una
-reejecución con destino propio y no está hecho. Tampoco podemos afirmar que el modelo temporal gane
-sus dos ventanas del termostato donde no hay nada que ver: es la hipótesis que esto sugiere y exige la
-misma comprobación.</p>
+no tienen señal. El número coincide (falla cinco, cinco están vacías) y los registros de E6 <strong>no
+guardan las predicciones por ventana</strong>, de modo que no se sabe cuáles falló (apartado 13). Tampoco
+podemos afirmar que el modelo temporal gane sus dos ventanas del termostato donde no hay nada que
+ver: es la hipótesis que esto sugiere y exige la misma comprobación.</p>
 </div>
 </div>
 </div>
@@ -8401,25 +8589,23 @@ misma comprobación.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-La-forma-en-el-tiempo-de-cada-fallo,-y-la-trayectoria-contrafactual">7. La forma en el tiempo de cada fallo, y la trayectoria contrafactual<a class="anchor-link" href="#7.-La-forma-en-el-tiempo-de-cada-fallo,-y-la-trayectoria-contrafactual">¶</a></h2><p><strong>Introducción al problema.</strong> El apartado anterior cuenta, ventana a ventana, qué fracción lleva
-señal observable. Queda sin responder una pregunta anterior: <strong>qué forma</strong> tiene esa señal a lo
-largo de la sesión. Un fallo que altera la trayectoria en todo momento deja firma en cualquier
+<h2 id="7.-La-forma-en-el-tiempo-de-cada-fallo-y-la-trayectoria-contrafactual">7. La forma en el tiempo de cada fallo y la trayectoria contrafactual<a class="anchor-link" href="#7.-La-forma-en-el-tiempo-de-cada-fallo-y-la-trayectoria-contrafactual">¶</a></h2><h3 id="7.1-Tres-formas-temporales">7.1 Tres formas temporales<a class="anchor-link" href="#7.1-Tres-formas-temporales">¶</a></h3><p><strong>Introducción al problema.</strong> Falta saber <strong>qué forma</strong> tiene la señal observable a lo largo de la
+sesión. Un fallo que altera la trayectoria en todo momento deja firma en cualquier
 ventana; uno que la altera durante tres segundos de cada ciento veinte deja la mayoría de sus
 ventanas sin nada que aprender.</p>
-<p><strong>Objetivo del análisis.</strong> Medir esa diferencia sin comparar sesiones distintas, que confundiría el
-efecto del fallo con el del perfil de conducción, y dejar el resultado en un artefacto con
+<p><strong>Objetivo del análisis.</strong> Medir esa diferencia sin comparar sesiones distintas (que confundiría el
+efecto del fallo con el del perfil de conducción) y dejar el resultado en un artefacto con
 procedencia y huella.</p>
 <p><strong>Procedencia de los datos.</strong> El análisis contrafactual T2, que produce
 <code>scripts/contrafactual_t2.py</code> y vive en <code>artifacts/contrafactual/</code>. Cinco sesiones de la partición
 de <strong>entrenamiento</strong>, una por condición, elegidas por regla declarada: la primera en orden
 alfabético en que el fallo llega a expresarse. El guion verifica <strong>antes de escribir nada</strong> que cada
-sesión original se reproduce muestra a muestra frente al conjunto congelado, con tolerancia 1e-9, y
+sesión original se reproduce muestra a muestra frente al conjunto congelado (con tolerancia 1e-9) y
 que las dos trayectorias de cada pareja coinciden antes del instante de entrada; si alguna
 comprobación falla, se detiene sin escribir.</p>
-<p><strong>Qué estatuto tiene el artefacto.</strong> Derivado, y solo para análisis visual: no entra en
-entrenamiento, validación ni prueba, no modifica ninguna métrica histórica, no se usa para ajustar
-ningún modelo, no es una evaluación nueva y no es un conjunto de datos, porque no tiene ventanado ni
-particiones.</p>
+<p><strong>Qué estatuto tiene el artefacto.</strong> Derivado, solo para análisis visual: no entra en ninguna
+partición, no modifica ninguna métrica histórica ni ajusta ningún modelo, no es una evaluación nueva
+y no es un conjunto de datos (no tiene ventanado ni particiones).</p>
 </div>
 </div>
 </div>
@@ -8433,7 +8619,7 @@ particiones.</p>
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.visualization.memoria</span><span class="w"> </span><span class="kn">import</span> <span class="n">recuento_de_expresion</span>
 
-<span class="c1"># Cuántas muestras del tramo con fallo se expresan, y si el recuento depende del</span>
+<span class="c1"># Cuántas muestras del tramo con fallo se expresan y si el recuento depende del</span>
 <span class="c1"># umbral: el dato guardado está en unidades del umbral, de modo que releerlo con</span>
 <span class="c1"># una exigencia diez veces mayor no regenera nada.</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">recuento_de_expresion</span><span class="p">()</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
@@ -8507,16 +8693,13 @@ episodios de uno a tres segundos. La deriva del caudalímetro sube en rampa dura
 hasta una meseta; la fuga de vacío sube más deprisa hasta otra más baja; el termostato salta a un
 valor constante en el instante de entrada; la sonda lenta oscila en una banda ancha; y la desviación
 del fallo de encendido vuelve a <strong>cero exacto</strong> entre episodio y episodio.</p>
-<p><strong>Interpretación.</strong> Las cinco condiciones tienen tres formas temporales distintas —rampa, tope y
-episodio— y eso explica por qué no se detectan igual: en buena parte de las ventanas del fallo de
+<p><strong>Interpretación.</strong> Las cinco condiciones tienen tres formas temporales distintas: progresiva
+(fuga y deriva), sostenida desde la entrada (termostato y sonda) y episódica (encendido). Eso explica por qué no se detectan igual: en buena parte de las ventanas del fallo de
 encendido no hay nada que detectar. El recuento no depende del umbral declarado: exigiendo diez
 veces más, una desviación típica completa del ruido del generador en lugar de una décima, los
 recuentos pasan de 480, 479, 480, 480 y 16 a 480, 471, 480, 463 y 16.</p>
-<p><strong>Limitaciones.</strong> Es <strong>una sesión por condición</strong>, elegida por regla declarada y no una muestra; la
-proporción del fallo de encendido depende de su tasa de aparición, que es aleatoria. El umbral de
-observabilidad es un parámetro declarado de este protocolo y no una magnitud del vehículo. Y esto
-describe <strong>el instrumento</strong>: muestra que el generador produce las formas que sus fichas declaran, lo
-cual comprueba el instrumento y no descubre nada sobre vehículos reales.</p>
+<p><strong>Limitaciones.</strong> Es <strong>una sesión por condición</strong>, no una muestra; la
+proporción del fallo de encendido depende de su tasa de aparición, que es aleatoria.</p>
 <p><strong>Relación con la pregunta de investigación.</strong> Fija, para PI.1, el techo observacional por debajo
 del cual ningún modelo podría haber hecho mejor. En la memoria es la <strong>Figura 5.4</strong>.</p>
 </div>
@@ -8529,24 +8712,14 @@ del cual ningún modelo podría haber hecho mejor. En la memoria es la <strong>F
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Y la misma pareja, en unidades físicas y superpuesta señal a señal, es la comparación que la
-<strong>Figura A.1</strong> del anexo A hacía sobre <code>synthetic_v1</code> y ya no se puede regenerar.</p>
+<h3 id="7.2-La-misma-pareja,-en-unidades-f%C3%ADsicas">7.2 La misma pareja, en unidades físicas<a class="anchor-link" href="#7.2-La-misma-pareja,-en-unidades-f%C3%ADsicas">¶</a></h3><p><strong>Objetivo del análisis.</strong> Ver en <strong>unidades físicas</strong>, señal a señal, lo que el apartado anterior
+resume en unidades del umbral: qué hace cada avería a la señal que la delata y desde cuándo. Es la
+comparación que la <strong>Figura A.2</strong> del anexo A hace sobre <code>synthetic_v1</code>: la memoria publica esa
+versión histórica, que ya no se puede regenerar.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c019">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Objetivo del análisis.</strong> Ver en <strong>unidades físicas</strong>, señal a señal, lo que el apartado anterior
-resume en unidades del umbral: qué hace cada avería a la señal que la delata, y desde cuándo.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c020">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c019">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8581,7 +8754,7 @@ resume en unidades del umbral: qué hace cada avería a la señal que la delata,
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c021">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c020">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8596,27 +8769,27 @@ fallo de encendido las dos series siguen coincidiendo salvo en dieciséis muestr
 señales afectadas y en la sesión dibujada <strong>solo tres se alteran</strong>: el régimen no cambia, porque el
 generador solo lo perturba por debajo de 5 km/h y la sesión es de autopista. La firma declarada de
 una condición no se expresa entera en todos los regímenes.</p>
-<p><strong>Limitaciones.</strong> Datos sintéticos y comparación contrafactual controlada. <strong>Una desviación
-observable no implica que un clasificador pueda detectar el fallo</strong>, y la ausencia de desviación
-detectable en un tramo <strong>no demuestra que el diagnóstico sea imposible</strong>: dice que en ese tramo,
+<p><strong>Limitaciones.</strong> Además de lo dicho en el apartado 3 (observable no es detectable), la ausencia de
+desviación en un tramo <strong>no demuestra que el diagnóstico sea imposible</strong>: dice que en ese tramo,
 bajo el criterio declarado, no hay señal.</p>
-<p><strong>Relación con la pregunta de investigación.</strong> En la memoria es la <strong>Figura A.2</strong> del anexo A.</p>
+<p><strong>Relación con la pregunta de investigación.</strong> En la memoria es la <strong>Figura A.3</strong> del anexo A.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c022">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c021">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="8.-El-termostato,-ventana-a-ventana">8. El termostato, ventana a ventana<a class="anchor-link" href="#8.-El-termostato,-ventana-a-ventana">¶</a></h2><p>La condición merece verse de cerca, porque sus dos sesiones de validación se comportan de forma
-opuesta y eso dice de dónde viene el problema.</p>
+opuesta y eso dice de dónde viene el problema. El acierto del modelo en ellas está en el notebook 02,
+apartado 9.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c023">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c022">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8666,14 +8839,14 @@ F03_thermostat_stuck__warmup__03  warmup      480          69       120     0.57
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c024">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c023">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra.</strong> <code>__urban__08</code> tiene sus siete ventanas plenamente expresadas. <code>__warmup__03</code> tiene
-<strong>cinco de siete sin ninguna señal</strong> —de los 120 a los 479 segundos— y las dos últimas apenas: 9 y 69
+<strong>cinco de siete sin ninguna señal</strong> (de los 120 a los 479 segundos) y las dos últimas apenas: 9 y 69
 muestras de 120.</p>
 <p><strong>Qué podemos interpretar.</strong> La causa es física y estaba descrita antes de medirla: en régimen urbano
 el motor arranca a 78 °C, por encima del tope de 71 que el fallo impone, de modo que el fallo recorta
@@ -8681,9 +8854,31 @@ desde la primera muestra. En calentamiento arranca a temperatura ambiente y tard
 al tope; hasta entonces no hay nada que distinguir. <strong>El problema del termostato no es el termostato:
 es el régimen.</strong></p>
 <p><strong>Qué no podemos afirmar.</strong> Que esto sea una propiedad de los termostatos reales. Es una propiedad del
-mecanismo tal como la ficha del fallo lo declara y el generador lo implementa, y las fichas del
-generador <strong>no tienen respaldo documental verificado</strong> (<code>L-03</code>). Lo que se mide es el conjunto de
-datos, no el vehículo.</p>
+mecanismo tal como la ficha del fallo lo declara y el generador lo implementa (limitaciones 2 y 3).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c024">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="9.-Por-qu%C3%A9-no-se-corrigen-las-etiquetas">9. Por qué no se corrigen las etiquetas<a class="anchor-link" href="#9.-Por-qu%C3%A9-no-se-corrigen-las-etiquetas">¶</a></h2><p>La tentación es evidente: reetiquetar como <em>sin fallo</em> las ventanas sin señal y volver a medir. <strong>No se
+hace</strong>, por tres razones y en este orden:</p>
+<ol>
+<li><strong>Cambiaría todas las cifras publicadas.</strong> E6, E7, E9, el ventanado de E5, el reparto, el conjunto
+de ajuste del redactor y la cadena completa de suficiencia se midieron con las etiquetas que hay.</li>
+<li><strong>Sería decidir la verdad de referencia a la vista del resultado.</strong> El indicador de expresión se
+construyó <strong>después</strong> de conocer los errores por clase. Usarlo para reescribir las etiquetas
+convertiría un instrumento descriptivo en una justificación.</li>
+<li><strong>La etiqueta no es falsa.</strong> La sesión <strong>tiene</strong> el termostato bloqueado: eso es cierto durante los
+600 segundos. Lo que no es cierto es que la ventana contenga una manifestación observable. Para
+eso está el segundo indicador. Dos indicadores dicen más que uno corregido.</li>
+</ol>
+<p><strong>Lo que sí se hace:</strong> declararlo. La distinción entra en la discusión metodológica, en las
+limitaciones y en la lectura de las matrices de confusión.</p>
 </div>
 </div>
 </div>
@@ -8694,36 +8889,12 @@ datos, no el vehículo.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-Por-qu%C3%A9-no-se-corrigen-las-etiquetas">9. Por qué no se corrigen las etiquetas<a class="anchor-link" href="#9.-Por-qu%C3%A9-no-se-corrigen-las-etiquetas">¶</a></h2><p>La tentación es evidente: reetiquetar como «sin fallo» las ventanas sin señal y volver a medir. <strong>No se
-hace</strong>, por tres razones y en este orden:</p>
-<ol>
-<li><strong>Cambiaría todas las cifras publicadas.</strong> E6, E7, E9, el ventanado de E5, el reparto, el conjunto
-de ajuste del redactor y la cadena completa de suficiencia se midieron con las etiquetas que hay.</li>
-<li><strong>Sería decidir la verdad de referencia a la vista del resultado.</strong> El indicador de expresión se
-construyó <strong>después</strong> de conocer los errores por clase. Usarlo para reescribir las etiquetas
-convertiría un instrumento descriptivo en una justificación.</li>
-<li><strong>La etiqueta no es falsa.</strong> La sesión <strong>tiene</strong> el termostato bloqueado: eso es cierto durante los
-600 segundos. Lo que no es cierto es que la ventana contenga una manifestación observable, y para
-eso está el segundo indicador. Dos indicadores dicen más que uno corregido.</li>
-</ol>
-<p><strong>Lo que sí se hace:</strong> declararlo. La distinción entra en la discusión metodológica, en las
-limitaciones y en la lectura de las matrices de confusión.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c026">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="10.-synthetic_v2-y-synthetic_v3-no-son-el-mismo-instrumento">10. <code>synthetic_v2</code> y <code>synthetic_v3</code> no son el mismo instrumento<a class="anchor-link" href="#10.-synthetic_v2-y-synthetic_v3-no-son-el-mismo-instrumento">¶</a></h2><p>Hay un segundo asunto de procedencia que conviene no mezclar con el anterior, porque afecta a qué
 comparaciones son legítimas. El trabajo usa dos conjuntos y <strong>no salen del mismo generador</strong>.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c027">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c026">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8766,7 +8937,7 @@ comparaciones son legítimas. El trabajo usa dos conjuntos y <strong>no salen de
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>synthetic_v2: generado 2026-09-14T00:37:47.391071Z · semilla 20260901 · 72 sesiones · versión declarada 1.0.0
-synthetic_v3: generado 2026-09-01T18:58:10.403021Z · semilla 20260901 · 216 sesiones · versión declarada 1.0.0
+synthetic_v3: no está en este clon (data/raw no se versiona)
 
 estado de synthetic_v3: NO_RECONSTRUIBLE
 causa: es PRE-CALIBRACION. Se genero el 1-09-2026 a las 14:58 locales; la calibracion del generador contra el manual de taller es el commit 770ce70, de las 15:46 del mismo dia. El generador publicado ya esta calibrado y produce otras senales
@@ -8784,14 +8955,14 @@ medición del 13-10-2026:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c028">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c027">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> Los dos declaran la misma semilla —20260901— y la misma versión de generador —1.0.0—,
-y <strong>no son comparables</strong>: <code>synthetic_v3</code> se generó el 1 de septiembre a las 14:58 locales y la
+<p><strong>Qué muestra.</strong> Los dos declaran la misma semilla (20260901) y la misma versión de generador (1.0.0).
+<strong>No son comparables</strong>: <code>synthetic_v3</code> se generó el 1 de septiembre a las 14:58 locales y la
 calibración del generador contra el manual de taller es el commit de las 15:46 del <strong>mismo día</strong>.
 <code>synthetic_v2</code> se regeneró después. <code>GENERATOR_VERSION</code> no distingue a los dos porque es una constante
 escrita a mano.</p>
@@ -8799,27 +8970,26 @@ escrita a mano.</p>
 reproducen</strong>. Lo que sí reproduce bit a bit es su <code>meta.parquet</code> y su reparto, porque dependen de
 identificadores e instantes y no de valores.</p>
 <p><strong>Qué podemos interpretar.</strong> Que cualquier comparación entre los dos conjuntos <strong>cambia dos cosas a la
-vez</strong>: el volumen y la calibración del fenómeno. El informe de E7 concluía que «el límite era el
-volumen de datos, no la arquitectura» comparando <code>v2</code> con <code>v3</code>, y ese hallazgo está marcado
-<code>SUPERSEDED</code>: la comparación no lo establece.</p>
-<p>Y que la no reproducibilidad de <code>v3</code> es <strong>peligrosa, no solo incómoda</strong>: su ventanado y su reparto
-reproducen, así que una reconstrucción ingenua pasaría las pruebas midiendo otras señales. El guion de
+vez</strong>: el volumen y la calibración del fenómeno. Lo que eso supone para E7 se trata en el notebook 02,
+apartado 13.</p>
+<p>Y que la no reproducibilidad de <code>v3</code> es <strong>peligrosa, no solo incómoda</strong>: como su ventanado y su
+reparto sí reproducen, una reconstrucción ingenua pasaría las pruebas midiendo otras señales. El guion de
 reconstrucción <strong>se niega</strong> a regenerarlo por eso.</p>
-<p><strong>Qué no podemos afirmar.</strong> Que las cifras de E6, E7 y E19 sobre <code>synthetic_v3</code> sean incorrectas. <strong>No
-lo son</strong>: se midieron sobre el conjunto que hay, y su registro lo acredita. Lo que no son es
+<p><strong>Qué no podemos afirmar.</strong> Que las cifras de E6 y E7 sobre <code>synthetic_v3</code> sean incorrectas. <strong>No
+lo son</strong>: se midieron sobre el conjunto que hay y su registro lo acredita. Lo que no son es
 <strong>reproducibles por un tercero</strong> sin los ficheros procesados, que no se distribuyen por tamaño
 (<code>L-25</code>).</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c029">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c028">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="11.-Resultados-negativos-e-inconclusos">11. Resultados negativos e inconclusos<a class="anchor-link" href="#11.-Resultados-negativos-e-inconclusos">¶</a></h2><table>
+<h2 id="11.-Resultados-negativos-y-limitaciones">11. Resultados negativos y limitaciones<a class="anchor-link" href="#11.-Resultados-negativos-y-limitaciones">¶</a></h2><h3 id="11.1-Resultados-negativos-e-inconclusos">11.1 Resultados negativos e inconclusos<a class="anchor-link" href="#11.1-Resultados-negativos-e-inconclusos">¶</a></h3><table>
 <thead>
 <tr>
 <th>Qué</th>
@@ -8828,11 +8998,11 @@ lo son</strong>: se midieron sobre el conjunto que hay, y su registro lo acredit
 </thead>
 <tbody>
 <tr>
-<td><strong>El fallo de encendido no se puede detectar bien, y ahora se sabe por qué</strong></td>
+<td><strong>El fallo de encendido no se puede detectar bien y ahora se sabe por qué</strong></td>
 <td>0 de 45 ventanas plenamente expresadas en la medición de calentamiento, 0 de 14 en validación. El bosque acierta 7 de 14 y el modelo temporal, 5</td>
 </tr>
 <tr>
-<td><strong>El hallazgo «el límite era el volumen de datos»</strong></td>
+<td><strong>El hallazgo “el límite era el volumen de datos”</strong></td>
 <td><code>SUPERSEDED</code>: comparaba dos generadores distintos</td>
 </tr>
 <tr>
@@ -8844,15 +9014,51 @@ lo son</strong>: se midieron sobre el conjunto que hay, y su registro lo acredit
 <td>citadas en la matriz de validación y <strong>sin registro</strong>. Marcadas como no utilizables: dependen de las predicciones por ventana, que no existen</td>
 </tr>
 <tr>
-<td><strong>La coincidencia de los cinco</strong></td>
-<td>cinco ventanas sin señal y cinco falladas. <strong>No se afirma que sean las mismas</strong></td>
-</tr>
-<tr>
 <td><strong><code>synthetic_v4</code></strong></td>
 <td>diseñado, pre-registrado y <strong>no generado</strong>. La curva de volumen queda sin medir</td>
 </tr>
 </tbody>
 </table>
+<h3 id="11.2-Limitaciones">11.2 Limitaciones<a class="anchor-link" href="#11.2-Limitaciones">¶</a></h3><ol>
+<li><strong>El indicador depende de un umbral declarado</strong>, el 10 % de la desviación típica de cada señal,
+en los casos intermedios; donde la desviación es exactamente cero, no (apartado 3).</li>
+<li><strong>La medición es sobre un conjunto sintético.</strong> Dice cómo se comporta el generador (comprueba
+el instrumento), no un vehículo.</li>
+<li><strong>Las fichas de fallo del generador no tienen respaldo documental verificado</strong> (<code>L-03</code>): el
+mecanismo que se mide es el que la ficha declara.</li>
+<li><strong>Dos sesiones por condición en validación.</strong> Que el termostato tenga una sesión de calentamiento y
+otra urbana es el reparto que salió, no un diseño: con dos sesiones, el régimen y la condición
+quedan confundidos.</li>
+<li><strong>No hay predicciones por ventana</strong> en los registros de E6 y E7, de modo que la relación entre
+expresión y error queda en el nivel de los recuentos por clase.</li>
+<li><strong>Ejecución única y procedimiento asimétrico.</strong> Las cifras de E6 y E7 son de una semilla cada
+una, sobre 98 ventanas de 12 sesiones. El capítulo 5 las publica sin incertidumbre. El temporal
+selecciona época en validación y el bosque no selecciona nada: es una de las tres cosas que la
+auditoría de PI.1 identificó como invalidantes de la comparación.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c029">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="12.-Conclusiones">12. Conclusiones<a class="anchor-link" href="#12.-Conclusiones">¶</a></h2><p><strong>Una etiqueta de fallo y una manifestación observable del fallo no son la misma cosa</strong>. En este
+conjunto de datos se separan lo bastante para cambiar la lectura de dos de las cinco condiciones. En
+las tres condiciones donde no se separan, el modelo de diagnóstico acierta todas las ventanas. En las
+dos donde sí (el termostato por el régimen de calentamiento, el encendido por ser episódico) es donde
+están todos sus errores.</p>
+<p>Eso no mejora ninguna cifra: las deja donde estaban y cambia qué significan. Un “falso negativo” sobre
+una ventana cuya señal es idéntica a la de un motor sano no mide un fallo del modelo; mide el límite
+de lo que el dato contiene. Y distinguir las dos cosas es exactamente el tipo de cuidado que el resto
+del trabajo exige al sistema: no dar por evidencia lo que solo lo parece.</p>
+<p>Lo que queda sin saber es si los errores concretos coinciden con las ventanas vacías. El número
+coincide, la hipótesis es plausible y la comprobación es barata. Mientras no se haga, lo que hay es
+una ordenación consistente entre expresión y rendimiento, que es menos de lo que parece y más de lo
+que había.</p>
 </div>
 </div>
 </div>
@@ -8863,22 +9069,14 @@ lo son</strong>: se midieron sobre el conjunto que hay, y su registro lo acredit
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="12.-Limitaciones">12. Limitaciones<a class="anchor-link" href="#12.-Limitaciones">¶</a></h2><ol>
-<li><strong>El indicador depende de un umbral declarado</strong>, el 10 % de la desviación típica de cada señal.
-Para el termostato por debajo de su tope y para el encendido fuera de un episodio la desviación es
-<strong>exactamente cero</strong> y la clasificación no depende de él; en los casos intermedios, sí.</li>
-<li><strong>La medición es sobre un conjunto sintético.</strong> Dice cómo se comporta el generador, no un vehículo.</li>
-<li><strong>Las fichas de fallo del generador no tienen respaldo documental verificado</strong> (<code>L-03</code>): el
-mecanismo que se mide es el que la ficha declara.</li>
-<li><strong>Dos sesiones por condición en validación.</strong> Que el termostato tenga una sesión de calentamiento y
-otra urbana es el reparto que salió, no un diseño: con dos sesiones, el régimen y la condición
-quedan confundidos.</li>
-<li><strong>No hay predicciones por ventana</strong> en los registros de E6 y E7, de modo que la relación entre
-expresión y error queda en el nivel de los recuentos por clase.</li>
-<li><strong>Ejecución única.</strong> Las cifras de E6 y E7 son de una semilla cada una, y el capítulo 5 las publica
-sin incertidumbre.</li>
-<li><strong>El procedimiento de los dos modelos no es simétrico</strong>: el temporal selecciona época en
-validación.</li>
+<h2 id="13.-Qu%C3%A9-queda-abierto">13. Qué queda abierto<a class="anchor-link" href="#13.-Qu%C3%A9-queda-abierto">¶</a></h2><ol>
+<li><strong>Las predicciones por ventana de E6</strong>, que convertirían la coincidencia de los cinco en una
+comprobación. Una reejecución con destino propio, sin tocar el registro histórico.</li>
+<li><strong>Si el modelo temporal gana donde no hay señal.</strong> La misma reejecución, aplicada a E7.</li>
+<li><strong>El indicador en el conjunto de ajuste del redactor</strong>: si algunos de sus ejemplos vienen de
+ventanas sin expresión, el redactor habría aprendido a explicar lo que no se ve.</li>
+<li><strong><code>synthetic_v4</code></strong> y la curva de volumen, aplazados, que separarían el volumen de la calibración.</li>
+<li><strong>Un reparto con más sesiones por condición</strong>, que desharía la confusión de la limitación 4.</li>
 </ol>
 </div>
 </div>
@@ -8890,7 +9088,64 @@ validación.</li>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="13.-Referencias-y-trazabilidad">13. Referencias y trazabilidad<a class="anchor-link" href="#13.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> La expresión efectiva del fallo es la <strong>Figura 5.9</strong> del capítulo 5, en el apartado de PI.1, junto al límite de evidencia del termostato de la <strong>Figura 5.8</strong>. La diferencia entre los tres conjuntos sintéticos está tabulada en el anexo A, apartado A.5.</p>
+<h2 id="14.-Reproducibilidad">14. Reproducibilidad<a class="anchor-link" href="#14.-Reproducibilidad">¶</a></h2><p>Este notebook <strong>recalcula</strong> el indicador de expresión, de modo que necesita <code>synthetic_v2</code>
+preprocesado. En un clon limpio:</p>
+<div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>nb<span class="w"> </span>--extra<span class="w"> </span>ml<span class="w"> </span>--extra<span class="w"> </span>embeddings<span class="w"> </span>--extra<span class="w"> </span>finetune<span class="w"> </span>--extra<span class="w"> </span>llm
+bash<span class="w"> </span>scripts/reconstruir_datos.sh<span class="w">      </span><span class="c1"># reconstruye y COMPRUEBA las cuatro huellas</span>
+uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </span>lab<span class="w"> </span>notebooks/06_expresion_del_fallo.ipynb
+</pre></div>
+<p>Exporta una figura, <code>FIG-NB06-01_expresion_y_aciertos</code>, en PNG y SVG, en
+<code>notebooks/salida/06_expresion_del_fallo/</code>.</p>
+<p><code>synthetic_v3</code> <strong>no se reconstruye</strong> y el guion se niega: la celda que lo nombra lee su registro de no
+reconstructibilidad, no el conjunto.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c032">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">modalidad</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">clave</span><span class="p">,</span> <span class="n">valor</span> <span class="ow">in</span> <span class="n">soporte</span><span class="o">.</span><span class="n">entorno</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">clave</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">valor</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>MODALIDAD: REANÁLISIS
+  se calcula algo nuevo sobre datos existentes; la cifra NO está publicada y no puede citarse como si lo estuviera
+  Se calcula algo NUEVO sobre datos existentes: el indicador de expresión del fallo sobre las ventanas de validación de synthetic_v2. Su figura se publica en la memoria como Figura 5.10; las cifras por ventana no aparecen en ninguna otra parte. El rendimiento por clase de E6 y E7, en cambio, se LEE de sus registros.
+
+  python: 3.11.14
+  plataforma: Darwin arm64
+  commit: 71589c3
+  arbol: limpio
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c033">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="15.-Referencias-y-trazabilidad">15. Referencias y trazabilidad<a class="anchor-link" href="#15.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> La expresión efectiva del fallo es la <strong>Figura 5.10</strong> del capítulo 5, en el apartado de PI.1, junto al límite de evidencia del termostato de la <strong>Figura 5.9</strong>. La diferencia entre los tres conjuntos sintéticos es la <strong>Tabla A.5</strong> del anexo A.</p>
 <table>
 <thead>
 <tr>
@@ -8929,105 +9184,74 @@ validación.</li>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c032">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="14.-Reproducibilidad">14. Reproducibilidad<a class="anchor-link" href="#14.-Reproducibilidad">¶</a></h2><p>Este notebook <strong>recalcula</strong> el indicador de expresión, de modo que necesita <code>synthetic_v2</code>
-preprocesado. En un clon limpio:</p>
-<div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>nb<span class="w"> </span>--extra<span class="w"> </span>ml<span class="w"> </span>--extra<span class="w"> </span>embeddings<span class="w"> </span>--extra<span class="w"> </span>finetune<span class="w"> </span>--extra<span class="w"> </span>llm
-bash<span class="w"> </span>scripts/reconstruir_datos.sh<span class="w">      </span><span class="c1"># reconstruye y COMPRUEBA las cuatro huellas</span>
-uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </span>lab<span class="w"> </span>notebooks/06_expresion_del_fallo.ipynb
-</pre></div>
-<p><code>synthetic_v3</code> <strong>no se reconstruye</strong> y el guion se niega: la celda que lo nombra lee su registro de no
-reconstructibilidad, no el conjunto.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c033">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">modalidad</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">clave</span><span class="p">,</span> <span class="n">valor</span> <span class="ow">in</span> <span class="n">soporte</span><span class="o">.</span><span class="n">entorno</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">clave</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">valor</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>MODALIDAD: REANÁLISIS
-  se calcula algo nuevo sobre datos existentes; la cifra NO está publicada y no puede citarse como si lo estuviera
-  Se calcula algo NUEVO sobre datos existentes: el indicador de expresión del fallo sobre las ventanas de validación de synthetic_v2. Estas cifras NO están publicadas en la memoria y no pueden citarse como si lo estuvieran. El rendimiento por clase de E6 y E7, en cambio, se LEE de sus registros.
-
-  python: 3.11.14
-  plataforma: Darwin arm64
-  commit: 778bd2f
-  arbol: sucio
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c034">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="15.-Conclusiones">15. Conclusiones<a class="anchor-link" href="#15.-Conclusiones">¶</a></h2><p><strong>Una etiqueta de fallo y una manifestación observable del fallo no son la misma cosa</strong>, y en este
-conjunto de datos se separan lo bastante para cambiar la lectura de dos de las cinco condiciones. En
-las tres condiciones donde no se separan, el modelo de diagnóstico acierta todas las ventanas. En las
-dos donde sí —el termostato por el régimen de calentamiento, el encendido por ser episódico— es donde
-están todos sus errores.</p>
-<p>Eso no mejora ninguna cifra: las deja donde estaban y cambia qué significan. Un «falso negativo» sobre
-una ventana cuya señal es idéntica a la de un motor sano no mide un fallo del modelo; mide el límite
-de lo que el dato contiene. Y distinguir las dos cosas es exactamente el tipo de cuidado que el resto
-del trabajo exige al sistema: no dar por evidencia lo que solo lo parece.</p>
-<p>Lo que queda sin saber es si los errores concretos coinciden con las ventanas vacías. El número
-coincide, la hipótesis es plausible y la comprobación es barata. Mientras no se haga, lo que hay es
-una ordenación consistente entre expresión y rendimiento, que es menos de lo que parece y más de lo
-que había.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c035">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="16.-Qu%C3%A9-queda-abierto">16. Qué queda abierto<a class="anchor-link" href="#16.-Qu%C3%A9-queda-abierto">¶</a></h2><ol>
-<li><strong>Las predicciones por ventana de E6</strong>, que convertirían la coincidencia de los cinco en una
-comprobación. Una reejecución con destino propio, sin tocar el registro histórico.</li>
-<li><strong>Si el modelo temporal gana donde no hay señal.</strong> La misma reejecución, aplicada a E7.</li>
-<li><strong>El indicador en el conjunto de ajuste del redactor</strong>: si algunos de sus ejemplos vienen de
-ventanas sin expresión, el redactor habría aprendido a explicar lo que no se ve.</li>
-<li><strong><code>synthetic_v4</code></strong> y la curva de volumen, diseñados y aplazados, que es lo que permitiría separar
-el volumen de la calibración.</li>
-<li><strong>Un reparto con más sesiones por condición</strong>, que desharía la confusión entre régimen y condición
-que dos sesiones imponen.</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
 </main>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/06_expresion_del_fallo.ipynb</code> · commit <code>71589c3</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+(function () {
+  var cuerpo = document.body;
+  cuerpo.classList.add('mi-doc');
+  // La ficha es la primera celda de texto.
+  var celdas = document.querySelectorAll('.jp-MarkdownCell');
+  if (celdas.length) { celdas[0].classList.add('mi-ficha'); }
+  // «En un minuto» y «Cómo leer»: el título y lo que le sigue hasta el próximo título
+  // del mismo nivel o superior se envuelven en un recuadro, estén en la celda que estén.
+  function enCaja(patron, clase) {
+    document.querySelectorAll('.jp-RenderedMarkdown h2, .jp-RenderedMarkdown h3').forEach(
+      function (h) {
+        if (!patron.test(h.textContent)) { return; }
+        var caja = document.createElement('div');
+        caja.className = 'mi-caja ' + clase;
+        h.parentNode.insertBefore(caja, h);
+        var nodo = h;
+        while (nodo) {
+          var siguiente = nodo.nextSibling;
+          caja.appendChild(nodo);
+          if (siguiente && /^(H1|H2|H3|HR)$/.test(siguiente.nodeName)) { break; }
+          nodo = siguiente;
+        }
+      });
+  }
+  enCaja(/^\s*En un minuto/i, 'mi-caja-minuto');
+  enCaja(/^\s*Cómo leer este notebook/i, 'mi-caja-leer');
+  // Índice lateral a partir de los títulos de nivel 2 y 3.
+  var indice = document.getElementById('mi-indice-lista');
+  var titulos = document.querySelectorAll('.jp-RenderedMarkdown h2, .jp-RenderedMarkdown h3');
+  var enlaces = [];
+  titulos.forEach(function (h, i) {
+    if (!h.id) { h.id = 'mi-seccion-' + i; }
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent.replace(/\u00b6\s*$/, '').trim();
+    var entrada = h.parentNode.classList.contains('mi-caja');
+    a.className = h.tagName === 'H3' && !entrada ? 'mi-n3' : 'mi-n2';
+    indice.appendChild(a);
+    enlaces.push([h, a]);
+  });
+  // Resalta en el índice la sección que se está leyendo.
+  function marcar() {
+    var actual = null;
+    for (var i = 0; i < enlaces.length; i++) {
+      if (enlaces[i][0].getBoundingClientRect().top < 120) { actual = enlaces[i][1]; }
+    }
+    enlaces.forEach(function (p) { p[1].classList.toggle('mi-activo', p[1] === actual); });
+  }
+  document.addEventListener('scroll', marcar, { passive: true });
+  marcar();
+  // Modo lectura: oculta el código, conserva salidas y figuras.
+  var boton = document.getElementById('mi-boton-codigo');
+  var clave = 'mecanico-ia-sin-codigo';
+  function aplicar(oculto) {
+    cuerpo.classList.toggle('mi-sin-codigo', oculto);
+    boton.textContent = oculto ? 'Mostrar código' : 'Ocultar código';
+  }
+  var guardado = false;
+  try { guardado = window.localStorage.getItem(clave) === '1'; } catch (e) {}
+  aplicar(guardado);
+  boton.addEventListener('click', function () {
+    var oculto = !cuerpo.classList.contains('mi-sin-codigo');
+    aplicar(oculto);
+    try { window.localStorage.setItem(clave, oculto ? '1' : '0'); } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>

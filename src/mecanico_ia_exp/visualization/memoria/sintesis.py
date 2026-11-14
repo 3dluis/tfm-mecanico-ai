@@ -32,13 +32,13 @@ def fig_objetivos() -> Figure:
             "cumplido",
         ),
         ("OE2", "Entorno experimental\nreproducible", "E1–E5 · clon limpio", "parcial"),
-        ("OE3", "Diagnóstico, confianza\ny atribución", "E6, E7, E9", "parcial"),
+        ("OE3", "Diagnóstico, confianza\ny atribución", "E6, E7, E9", "cumplido"),
         ("OE4", "Recuperación y verificación\nde la evidencia", "E10–E13, E15", "parcial"),
         (
             "OE5",
             "Comportamiento integrado\nbajo cuatro condiciones",
             "E15, E18, E19, P1",
-            "parcial",
+            "cumplido",
         ),
     ]
     colores = {"cumplido": COLOR_BIEN, "parcial": CATEGORICAL[3], "pendiente": COLOR_MAL}

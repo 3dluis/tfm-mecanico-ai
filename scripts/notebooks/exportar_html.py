@@ -17,8 +17,12 @@ históricos, y su exportación tampoco.
 
 from __future__ import annotations
 
+import subprocess
 import sys
+from datetime import date
 from pathlib import Path
+
+from estilo_html import decorar
 
 RAIZ = Path(__file__).resolve().parents[2]
 NOTEBOOKS = RAIZ / "notebooks"
@@ -35,8 +39,19 @@ ENTREGADOS = (
 )
 
 
-def exportar(nombre: str) -> Path:
-    """Ejecuta un notebook con kernel propio y escribe su HTML."""
+def _commit() -> str:
+    """Commit corto del paquete, o «desconocido» fuera de Git."""
+    salida = subprocess.run(
+        ["git", "-C", str(RAIZ), "rev-parse", "--short", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return salida.stdout.strip() or "desconocido"
+
+
+def exportar(nombre: str) -> str:
+    """Ejecuta un notebook con kernel propio y devuelve su HTML, sin escribirlo."""
     import nbformat
     from nbclient import NotebookClient
     from nbconvert import HTMLExporter
@@ -54,20 +69,29 @@ def exportar(nombre: str) -> Path:
     # red y sin ficheros al lado, porque va a viajar suelto.
     exportador.template_name = "lab"
     cuerpo, _ = exportador.from_notebook_node(cuaderno)
-
-    DESTINO.mkdir(parents=True, exist_ok=True)
-    salida = DESTINO / f"{Path(nombre).stem}.html"
-    salida.write_text(cuerpo, "utf-8")
-    print(f"{nombre:34s} → {salida.relative_to(RAIZ)}  ({len(cuerpo) / 1024:.0f} KB)")
-    return salida
+    cuerpo = decorar(
+        cuerpo, Path(nombre).stem, commit=_commit(), fecha=date.today().strftime("%d-%m-%Y")
+    )
+    return cuerpo
 
 
 def main(nombres: tuple[str, ...] = ENTREGADOS) -> int:
-    for nombre in nombres:
-        if not (NOTEBOOKS / nombre).is_file():
-            print(f"falta {nombre}", file=sys.stderr)
-            return 1
-        exportar(nombre)
+    """Ejecuta todos y escribe los HTML al final.
+
+    Si cada HTML se escribiera al generarse, el árbol quedaría modificado para los
+    notebooks siguientes y su celda de entorno imprimiría árbol sucio aunque el
+    commit de partida estuviera limpio.
+    """
+    faltan = [n for n in nombres if not (NOTEBOOKS / n).is_file()]
+    if faltan:
+        print(f"faltan: {', '.join(faltan)}", file=sys.stderr)
+        return 1
+    cuerpos = {nombre: exportar(nombre) for nombre in nombres}
+    DESTINO.mkdir(parents=True, exist_ok=True)
+    for nombre, cuerpo in cuerpos.items():
+        salida = DESTINO / f"{Path(nombre).stem}.html"
+        salida.write_text(cuerpo, "utf-8")
+        print(f"{nombre:34s} → {salida.relative_to(RAIZ)}  ({len(cuerpo) / 1024:.0f} KB)")
     return 0
 
 

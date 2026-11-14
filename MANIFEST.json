@@ -1,11 +1,11 @@
 {
   "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo y artefactos experimentales.",
   "estado": "BORRADOR PARA REVISION DEL TUTOR",
-  "generado_el": "2026-10-28T03:39:25+00:00",
+  "generado_el": "2026-11-14T12:30:21+00:00",
   "git": {
-    "commit": "f8b6dd8ecdd1fe385e664036e3bb3dafdd0faeca",
-    "rama": "main",
-    "fecha": "2026-10-15"
+    "commit": "71589c34369fb6abad29e78cb406def41730d297",
+    "rama": "bloque/notebooks-entrega",
+    "fecha": "2026-11-14"
   },
   "modalidades": {
     "DEMO": {
@@ -74,32 +74,15 @@
     "modelos entrenados: se regeneran desde los registros y las semillas"
   ],
   "huellas_sha256": {
-    "memoria/memoria.docx": "9f93e9dd240bddabbcce27d038e994b77dbb23d68a3b56ab02c66deec41a72c6",
-    "memoria/memoria.pdf": "a303117794029ab32d708e05a147901384e88f0e7ba745c44fb258fdd88a68f9",
-    "notebooks/00_environment_check.ipynb": "29b762b3622ce6d6c1f3db5fccc35a2953218db20fb0aacd618f62d8beb03ad9",
-    "notebooks/00_introduccion.ipynb": "20daacd439492c5679f8e21490c7794484a814075bb851a9eca32e8e09146043",
-    "notebooks/01_exploracion_obd.ipynb": "6a9551195dcf0c562e9ecbc69aa1bd8e46ddaef5108a99659f280c481eb53ee1",
-    "notebooks/01_synthetic_obd_generation.ipynb": "6c7ea2874cb50f5be6db9200b5831528453f8a4ad2b1a9bee8b4e1c810ba44d4",
-    "notebooks/02_comparacion_modelos.ipynb": "91e0cb472132c8b1028afad3c452db4f06ceab5d9e0ce3b2f83fa10de86677d8",
-    "notebooks/02_real_obd_ingestion.ipynb": "6a669db04f776636ae79c623386a8343e7a622a5c3e99dc50fdcf1ba5eb01c58",
-    "notebooks/03_analisis_e19.ipynb": "1f842f64075b64b96905e6f39b70121086c95dbd375c449ff2692f13f8966863",
-    "notebooks/03_timeseries_eda.ipynb": "a14d2aebbbc30e9e840a60c4e1e1eeb2367662e82cf84cb895c8b167b1acbca3",
-    "notebooks/04_explicabilidad.ipynb": "38c6458bd4460d262e62d06e5038d3bf04b94fd54eb4ae89471920373bfbd7c9",
-    "notebooks/04_preprocessing_features.ipynb": "f884da1d0e1c02b728d34ad97cb052a20d57f5a1ce43b4ee60a742582974e94d",
-    "notebooks/05_model_training.ipynb": "d015b46ae239506c39d748c495d029607b7594e90f932d97b5a5e434cef13e30",
-    "notebooks/05_suficiencia_y_abstencion.ipynb": "ef3c0afe8c12d8edc9ca309ecc1fb0234cbd0a0ac38e0f08f0fa0594e3051868",
-    "notebooks/06_expresion_del_fallo.ipynb": "f3509646ec554ddd90fcd5d84593c066d1c22beb92c2dfd24c9c6e88b904c847",
-    "notebooks/06_model_evaluation.ipynb": "05cdf02feb0b716cbe88e29aa46b1cf8ccd2cc31aba5335e80fefd65242300cc",
-    "notebooks/07_xai.ipynb": "6e911a1c8cdc2ff94ed4c14bb5d5a8eea43606926e9befb7b65bbbde40563fe6",
-    "notebooks/08_rag_corpus.ipynb": "0972f25e716a33ea59d3f914240cc6ced803f8a83c95e8325bcbc555c849bb48",
-    "notebooks/09_retrieval_evaluation.ipynb": "d92c4624b2b9f8ef9a5242eef5b2ff900c46040512594211ba962ce4314efde4",
-    "notebooks/10_llm_agent.ipynb": "78a3125864a24e5701f7101e0dda818dc12485d0fa3cea293e719e51910c5770",
-    "notebooks/11_evidence_sufficiency.ipynb": "d37461556eac62f5dd5faeb87a5b185996d494a8b05dd4409aa6dfbed5d5d748",
-    "notebooks/12_abstention.ipynb": "6e2c24117d37e397188dd3c7e6c934109ab0365d1d0fb6dd378aa8a9f78b1124",
-    "notebooks/13_integrated_experiment.ipynb": "9983606b668de82119e6b8581ffac273b56d8745ffc234f0a3b6de1f90c1f5a5",
-    "notebooks/14_final_evaluation.ipynb": "d20e023ba7a46f430483e42aee5f12bfdcf107bd88982243bc391669df48330e",
-    "notebooks/15_tfm_demo.ipynb": "55dfa08c97a15e4f3c3e2b869755bc1842b99533c7059b30a2e214ecf6b961e6",
-    "notebooks/TFM_EXPERIMENTO_COMPLETO.ipynb": "0f9ac19ca0af533c12dd10ef2cc6ab7dbc110f6ad14b248a6472efb2c71d4699",
+    "memoria/memoria.docx": "70f705d6ca6c41d30ce14b78558154e90890d1e076c3d4096b7707c46aae42d3",
+    "memoria/memoria.pdf": "f3369bcaf106a99b829579ed8bbd5c3ff8d75a501682b5f3ff7a25656e0f8d09",
+    "notebooks/00_introduccion.ipynb": "f6f8804406fa7e9ec73c4b9c5e98dd426969b21929e3e60dcb95d8b7420d7914",
+    "notebooks/01_exploracion_obd.ipynb": "7ad7b6bfcb069cc9822da23e2d1562e85b912adb657526644ad6a542aecee3d8",
+    "notebooks/02_comparacion_modelos.ipynb": "f27f1fd314e8e9e2237c48681247bc26ca8ec3c91dd8a612d8c6770b200634fb",
+    "notebooks/03_analisis_e19.ipynb": "603f36a5878183a7a304658beebbe4182b9a2f8ff2da8fb6e268c960d148f506",
+    "notebooks/04_explicabilidad.ipynb": "0341bf2715597bc0a5a938097c2f73c74fff8538aa1013ed92b71a9d66887480",
+    "notebooks/05_suficiencia_y_abstencion.ipynb": "8d4975559f96fd4b24af4b16d55c4f9a822a9fdadccff398d96f856bdb7731fd",
+    "notebooks/06_expresion_del_fallo.ipynb": "d846435f97baa803ff8a25e480fe78a431dd5433c5bd4ea87fead796b2ea45ce",
     "artifacts/tables/E12_retrieval_por_caso.csv": "bdabb344639339b27fdaf78d8ce8fd2b8078a802e344c6f031dc18bab4fdb1c7",
     "artifacts/tables/E12_retrieval_por_estrategia.csv": "cde58fd2a37d420880bf451628bb23f1944b201ba90f1f7546656c6924282912",
     "artifacts/tables/E15_suficiencia.csv": "d038a2dd54de971d5d9c9437122c8123a1121c22cfa566b5ed34f50c10035f72",
@@ -233,5 +216,5 @@
     "pyproject.toml": "40d97da0696f29294b2b16668e3207a8f07be3b2c127bfbe1db00a9a993dc6e7",
     "uv.lock": "91197797fdcaaa8584cab1036a94125d7d9225302d3b7730b6b86d5cd938d11c"
   },
-  "ficheros_censados": 159
+  "ficheros_censados": 142
 }
