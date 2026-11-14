@@ -72,7 +72,7 @@ def manifiesto() -> dict[str, object]:
             "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo "
             "y artefactos experimentales."
         ),
-        "estado": "BORRADOR PARA REVISION DEL TUTOR",
+        "estado": "ENTREGA FINAL",
         "generado_el": datetime.now(UTC).isoformat(timespec="seconds"),
         "git": {
             "commit": _git("rev-parse", "HEAD"),
