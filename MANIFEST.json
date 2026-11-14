@@ -1,9 +1,9 @@
 {
   "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo y artefactos experimentales.",
   "estado": "BORRADOR PARA REVISION DEL TUTOR",
-  "generado_el": "2026-11-14T12:24:16+00:00",
+  "generado_el": "2026-11-14T12:30:21+00:00",
   "git": {
-    "commit": "6c5324d4e7708c179739d1a2ddb15890acf14ff8",
+    "commit": "71589c34369fb6abad29e78cb406def41730d297",
     "rama": "bloque/notebooks-entrega",
     "fecha": "2026-11-14"
   },
@@ -74,12 +74,12 @@
     "modelos entrenados: se regeneran desde los registros y las semillas"
   ],
   "huellas_sha256": {
-    "memoria/memoria.docx": "9f93e9dd240bddabbcce27d038e994b77dbb23d68a3b56ab02c66deec41a72c6",
-    "memoria/memoria.pdf": "a303117794029ab32d708e05a147901384e88f0e7ba745c44fb258fdd88a68f9",
+    "memoria/memoria.docx": "70f705d6ca6c41d30ce14b78558154e90890d1e076c3d4096b7707c46aae42d3",
+    "memoria/memoria.pdf": "f3369bcaf106a99b829579ed8bbd5c3ff8d75a501682b5f3ff7a25656e0f8d09",
     "notebooks/00_introduccion.ipynb": "f6f8804406fa7e9ec73c4b9c5e98dd426969b21929e3e60dcb95d8b7420d7914",
     "notebooks/01_exploracion_obd.ipynb": "7ad7b6bfcb069cc9822da23e2d1562e85b912adb657526644ad6a542aecee3d8",
     "notebooks/02_comparacion_modelos.ipynb": "f27f1fd314e8e9e2237c48681247bc26ca8ec3c91dd8a612d8c6770b200634fb",
-    "notebooks/03_analisis_e19.ipynb": "6e7724f801562640059c617f7bf40c918d1614ff4aea30a68e620ac66cf306c7",
+    "notebooks/03_analisis_e19.ipynb": "603f36a5878183a7a304658beebbe4182b9a2f8ff2da8fb6e268c960d148f506",
     "notebooks/04_explicabilidad.ipynb": "0341bf2715597bc0a5a938097c2f73c74fff8538aa1013ed92b71a9d66887480",
     "notebooks/05_suficiencia_y_abstencion.ipynb": "8d4975559f96fd4b24af4b16d55c4f9a822a9fdadccff398d96f856bdb7731fd",
     "notebooks/06_expresion_del_fallo.ipynb": "d846435f97baa803ff8a25e480fe78a431dd5433c5bd4ea87fead796b2ea45ce",
