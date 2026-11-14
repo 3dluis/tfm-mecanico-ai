@@ -8231,7 +8231,7 @@ ejecutada</strong>.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       53267be
+commit       ccb7706
 arbol        limpio
 </pre>
 </div>
@@ -8780,7 +8780,8 @@ signo de la diferencia clase a clase además de su tamaño.
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra.</strong> La red pierde en cinco de las seis condiciones y gana en una: el <strong>termostato
 bloqueado</strong>, 0,8148 frente a 0,7826, una diferencia de +0,032. Las pérdidas mayores están en el
-fallo de encendido (−0,167) y en la clase sin fallo (−0,054).</p>
+fallo de encendido (−0,167) y en la deriva del caudalímetro (−0,077); la clase sin fallo pierde
+−0,054.</p>
 <p><strong>Qué podemos interpretar.</strong> Que la métrica agregada esconde comportamientos distintos y que la
 condición donde la red gana es aquella cuya firma es temporal en un sentido fuerte:
 “algo que debería subir y no sube”.</p>
@@ -9021,8 +9022,10 @@ bosque en una condición, el <strong>termostato bloqueado</strong> (0,922 frente
 sonda lenta y pierde en las otras cuatro. Las pérdidas mayores están en el <strong>fallo de encendido</strong>
 (0,526 frente a 0,834, −0,308) y en la clase <strong>sin fallo</strong> (0,577 frente a 0,778, −0,201). Todas las
 áreas quedan muy por encima de la proporción de su clase, 0,143 para cada fallo y 0,286 sin fallo.</p>
-<p><strong>Qué podemos interpretar.</strong> El reparto coincide con el del F1 del apartado 8.1: la única condición
-en que gana la red es la misma y sus dos pérdidas mayores también. Como el área no depende de ningún
+<p><strong>Qué podemos interpretar.</strong> El reparto se parece al del F1 del apartado 8.1 en dos cosas: la única
+condición en que gana la red es la misma y su mayor pérdida también (el fallo de encendido). La
+segunda pérdida no coincide: en el área es la clase sin fallo y en el F1 la deriva del caudalímetro.
+Como el área no depende de ningún
 umbral de decisión, la desventaja de la red en el fallo de encendido y en la clase sin fallo no es
 solo efecto de quedarse con la clase más probable: también <strong>ordena peor</strong> las ventanas de esas
 condiciones. Un área de 1,000 en el bosque significa que en esa partición todas las ventanas de la
@@ -10224,7 +10227,7 @@ declarada en <code>research/reproducibility.md</code>.</p>
 </div>
 </div>
 </main>
-<footer class="mi-pie">Copia ejecutada de <code>notebooks/02_comparacion_modelos.ipynb</code> · commit <code>53267be</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/02_comparacion_modelos.ipynb</code> · commit <code>ccb7706</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
 (function () {
   var cuerpo = document.body;
   cuerpo.classList.add('mi-doc');
