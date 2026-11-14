@@ -7838,11 +7838,43 @@ a.anchor-link {
 </tbody>
 </table>
 <hr/>
-<h2 id="Advertencia-que-gobierna-todo-el-notebook">Advertencia que gobierna todo el notebook<a class="anchor-link" href="#Advertencia-que-gobierna-todo-el-notebook">¶</a></h2><p>Este documento compara <strong>dos recorridos completos</strong>, no dos arquitecturas. Entre el bosque y la red
-cambian a la vez la <strong>representación</strong> de los datos y el <strong>estimador</strong>, de modo que ninguna
-diferencia entre ellos puede atribuirse al contexto temporal. Esa limitación no es una nota al pie:
-es la razón por la que la pregunta sobre el valor del contexto temporal sigue abierta, y el notebook
-la repite donde haga falta.</p>
+<h2 id="En-un-minuto">En un minuto<a class="anchor-link" href="#En-un-minuto">¶</a></h2><ul>
+<li><strong>Pregunta.</strong> ¿Supera la GRU bidireccional sobre la secuencia cruda al bosque aleatorio sobre 139
+descriptores de ventana? El criterio quedó escrito en E6 antes de medir.</li>
+<li><strong>Resultado.</strong> No: 0,8788 de F1 macro el bosque y 0,8230 la red, −0,0558; los dos superan
+ampliamente a la clase mayoritaria, 0,0741. <strong>La complejidad añadida del modelo temporal no queda
+justificada en las condiciones evaluadas.</strong></li>
+<li><strong>Por condición.</strong> La red solo gana en el termostato, +0,032 sobre 14 ventanas: no es evidencia de
+que el contexto temporal aporte.</li>
+<li><strong>Límite principal.</strong> Dos recorridos completos, <strong>una sola ejecución</strong>, 98 ventanas. La inversión
+del orden en <code>synthetic_v3</code> no se atribuye al volumen: ese conjunto sale de otro generador.</li>
+</ul>
+<h2 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h2><p><strong>Modalidad: visualización de evidencia histórica.</strong> Se leen registros y tablas versionados; no se
+reentrena nada. CPU, sin red, menos de un minuto.</p>
+<p><strong>La advertencia que gobierna todo el notebook.</strong> Se comparan <strong>dos recorridos completos, no dos
+arquitecturas</strong>: cambian a la vez la <strong>representación</strong> y el <strong>estimador</strong>, y ninguna diferencia
+puede atribuirse al contexto temporal (apartado 3). Es la razón por la que esa pregunta sigue
+abierta.</p>
+<ol>
+<li><strong>Introducción.</strong></li>
+<li><strong>Objetivo e hipótesis.</strong></li>
+<li><strong>Fundamento</strong> — representaciones y estimadores.</li>
+<li><strong>Preparación del entorno.</strong></li>
+<li><strong>El conjunto y su partición.</strong></li>
+<li><strong>Metodología</strong> — asimetrías.</li>
+<li><strong>Resultados agregados.</strong></li>
+<li><strong>Resultados por condición.</strong></li>
+<li><strong>El termostato</strong> — un límite físico.</li>
+<li><strong>Matrices de confusión</strong> — hacia dónde van los errores.</li>
+<li><strong>Calibración.</strong></li>
+<li><strong>La forma de la calibración.</strong></li>
+<li><strong>Las cifras de <code>synthetic_v3</code></strong> — un confusor.</li>
+<li><strong>Resultados negativos y limitaciones.</strong></li>
+<li><strong>Discusión.</strong></li>
+<li><strong>Conclusiones.</strong></li>
+<li><strong>Reproducibilidad.</strong></li>
+<li><strong>Referencias y trazabilidad.</strong></li>
+</ol>
 </div>
 </div>
 </div>
@@ -7883,8 +7915,7 @@ OBD-II, y caracterizar <strong>dónde</strong> difieren.</p>
 F1 macro sobre validación.</p>
 <p><strong>Variables observadas.</strong> F1 macro, exactitud, F1 por clase, matriz de confusión y error de
 calibración, todo sobre la misma partición de validación.</p>
-<p><strong>Criterio de evaluación.</strong> El declarado en E6: si no la supera, la complejidad no está justificada.
-No hay umbral de margen mínimo, y no se inventa uno ahora.</p>
+<p><strong>Criterio de evaluación.</strong> El de E6, citado arriba. No hay umbral de margen mínimo, y no se inventa uno ahora.</p>
 <p><strong>Qué cuestionaría la hipótesis.</strong> Un F1 macro de la red igual o inferior al del bosque. Eso es lo
 que ocurrió.</p>
 </div>
@@ -7897,8 +7928,8 @@ que ocurrió.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-Fundamento:-las-dos-representaciones-y-los-dos-estimadores">3. Fundamento: las dos representaciones y los dos estimadores<a class="anchor-link" href="#3.-Fundamento:-las-dos-representaciones-y-los-dos-estimadores">¶</a></h2><p>Esta sección es la que permite leer el resto. Son cuatro cosas, no dos.</p>
-<h3 id="La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">La representación tabular: 139 descriptores de ventana<a class="anchor-link" href="#La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">¶</a></h3><p>Cada ventana de 120 segundos y 12 señales —1 440 valores— se resume en <strong>139 números</strong>:</p>
+<h2 id="3.-Fundamento:-las-dos-representaciones-y-los-dos-estimadores">3. Fundamento: las dos representaciones y los dos estimadores<a class="anchor-link" href="#3.-Fundamento:-las-dos-representaciones-y-los-dos-estimadores">¶</a></h2><p>Esta sección permite leer el resto. Son cuatro cosas, no dos.</p>
+<h3 id="3.1-La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">3.1 La representación tabular: 139 descriptores de ventana<a class="anchor-link" href="#3.1-La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">¶</a></h3><p>Cada ventana de 120 segundos y 12 señales —1 440 valores— se resume en <strong>139 números</strong>:</p>
 <table>
 <thead>
 <tr>
@@ -7939,16 +7970,16 @@ que ocurrió.</p>
 los 139 descriptores son dinámica dentro de la ventana —pendiente, autocorrelación, número de cruces,
 número de eventos—. Decir que el bosque «no ve el tiempo» sería inexacto: ve una descripción resumida
 de él. Lo que no ve es el <strong>orden</strong> de las muestras más allá de lo que esos resúmenes capturan.</p>
-<h3 id="La-representaci%C3%B3n-secuencial:-120-%C3%97-12-en-crudo">La representación secuencial: 120 × 12 en crudo<a class="anchor-link" href="#La-representaci%C3%B3n-secuencial:-120-%C3%97-12-en-crudo">¶</a></h3><p>La red recibe la matriz completa, normalizada señal a señal. No hay pérdida de información por
+<h3 id="3.2-La-representaci%C3%B3n-secuencial:-120-%C3%97-12-en-crudo">3.2 La representación secuencial: 120 × 12 en crudo<a class="anchor-link" href="#3.2-La-representaci%C3%B3n-secuencial:-120-%C3%97-12-en-crudo">¶</a></h3><p>La red recibe la matriz completa, normalizada señal a señal. No hay pérdida de información por
 resumen; el coste es que tiene que aprender qué mirar.</p>
-<h3 id="Bosque-aleatorio">Bosque aleatorio<a class="anchor-link" href="#Bosque-aleatorio">¶</a></h3><p>Cuatrocientos árboles, <code>class_weight="balanced"</code>, semilla 20260901. <em>Por qué este estimador como
+<h3 id="3.3-Bosque-aleatorio">3.3 Bosque aleatorio<a class="anchor-link" href="#3.3-Bosque-aleatorio">¶</a></h3><p>Cuatrocientos árboles, <code>class_weight="balanced"</code>, semilla 20260901. <em>Por qué este estimador como
 línea base:</em> tolera bien descriptores correlacionados —y aquí lo están mucho—, no necesita escalado,
 y con pocos cientos de ventanas es más estable que casi cualquier alternativa.</p>
-<h3 id="GRU-bidireccional">GRU bidireccional<a class="anchor-link" href="#GRU-bidireccional">¶</a></h3><p>19 014 parámetros. <em>Por qué bidireccional:</em> la ventana está completa cuando se clasifica, no llega en
+<h3 id="3.4-GRU-bidireccional">3.4 GRU bidireccional<a class="anchor-link" href="#3.4-GRU-bidireccional">¶</a></h3><p>19 014 parámetros. <em>Por qué bidireccional:</em> la ventana está completa cuando se clasifica, no llega en
 tiempo real, así que leerla en los dos sentidos es legítimo y permite que el estado final recoja
 información de todo el tramo. <em>Por qué GRU y no LSTM:</em> menos parámetros con desempeño comparable, y
 con ventanas de este tamaño la diferencia entre las dos arquitecturas no es lo que limita.</p>
-<h3 id="Por-qu%C3%A9-la-comparaci%C3%B3n-no-a%C3%ADsla-el-contexto-temporal">Por qué la comparación no aísla el contexto temporal<a class="anchor-link" href="#Por-qu%C3%A9-la-comparaci%C3%B3n-no-a%C3%ADsla-el-contexto-temporal">¶</a></h3><table>
+<h3 id="3.5-Por-qu%C3%A9-la-comparaci%C3%B3n-no-a%C3%ADsla-el-contexto-temporal">3.5 Por qué la comparación no aísla el contexto temporal<a class="anchor-link" href="#3.5-Por-qu%C3%A9-la-comparaci%C3%B3n-no-a%C3%ADsla-el-contexto-temporal">¶</a></h3><table>
 <thead>
 <tr>
 <th></th>
@@ -7996,28 +8027,16 @@ ejecutada</strong>.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:</span>
-<span class="c1"># se busca hacia arriba el directorio que contiene `pyproject.toml` y</span>
-<span class="c1"># `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya</span>
-<span class="c1"># abierto Jupyter y a qué profundidad esté el notebook.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Se busca hacia arriba la carpeta del paquete (la que contiene `src/mecanico_ia_exp`),</span>
+<span class="c1"># así el notebook funciona se abra Jupyter desde donde se abra, sin rutas absolutas.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_raiz_del_repositorio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">candidato</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">candidato</span> <span class="o">/</span> <span class="s2">"pyproject.toml"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="n">candidato</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">candidato</span>
-    <span class="c1"># Si no se encuentra, el paquete puede estar instalado en el entorno; se</span>
-    <span class="c1"># devuelve el directorio actual y el import de abajo dirá si funciona o no.</span>
-    <span class="c1"># Fallar aquí con un mensaje claro es mejor que fallar después sin él.</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
-
-
-<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">_raiz_del_repositorio</span><span class="p">()</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()),</span>
+    <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">))</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -8043,7 +8062,7 @@ ejecutada</strong>.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       778bd2f
+commit       1cdb8f6
 arbol        sucio
 </pre>
 </div>
@@ -8100,13 +8119,8 @@ arbol        sucio
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="5.-El-conjunto-y-su-partici%C3%B3n">5. El conjunto y su partición<a class="anchor-link" href="#5.-El-conjunto-y-su-partici%C3%B3n">¶</a></h2><p><code>synthetic_v2</code>: 72 sesiones, 43 200 muestras, seis condiciones equilibradas. Ventanas de 120 s con
 paso de 60 s. El reparto es <strong>por sesión</strong>, nunca por ventana.</p>
-<p><strong>Y una distinción que hay que mantener sin excepciones.</strong> Hay un segundo conjunto, <code>synthetic_v3</code>,
-con 216 sesiones, cuyas cifras aparecen en el informe de E7. <strong>No sale del mismo generador</strong>: se
-generó el 1 de septiembre, antes de que las constantes del motor se calibraran contra el manual. Su
-ralentí está en 820 rpm, un valor sin ningún respaldo documental; el de <code>v2</code> está en 690, dentro del
-rango 640–740 que el manual documenta para este motor.</p>
-<p>Comparar <code>v2</code> con <code>v3</code> cambia el <strong>volumen</strong> y el <strong>fenómeno</strong>. Las cifras de <code>v3</code> se muestran en
-este notebook, porque forman parte del historial, y se muestran <strong>marcadas</strong>.</p>
+<p>Un segundo conjunto, <code>synthetic_v3</code>, con 216 sesiones, aparece en el informe de E7. <strong>No sale del
+mismo generador</strong>: sus cifras van <strong>marcadas</strong> en el apartado 13.</p>
 </div>
 </div>
 </div>
@@ -8404,17 +8418,15 @@ calibración la red sale algo mejor, 0,1317 frente a 0,1439.</p>
 un resultado negativo y se reporta como tal.</p>
 <p>Que los dos superen a la clase mayoritaria por un orden de magnitud sí responde a lo que PI.1 pide:
 el diagnóstico a partir de ventanas de OBD-II es posible con margen amplio.</p>
-<p><strong>Qué no podemos afirmar.</strong> Tres cosas, y conviene nombrarlas:</p>
+<p><strong>Qué no podemos afirmar.</strong></p>
 <ol>
-<li><strong>Que la red sea peor arquitectura.</strong> Lo medido es un recorrido completo contra otro.</li>
-<li><strong>Que la diferencia de ECE favorezca a la red por calibrar mejor.</strong> Ninguno de los dos calibra:
-las dos cifras son de <code>predict_proba</code> en crudo. Lo que muestran es que el error por tramos de la
-red es algo menor, no que su probabilidad esté mejor ajustada tras calibrar. Y el ECE no lleva
-signo: los dos modelos fallan hacia lados distintos, como se ve en el apartado 10.</li>
+<li><strong>Que la red sea peor arquitectura.</strong> Lo medido es un recorrido completo contra otro (apartado 3).</li>
+<li><strong>Que la diferencia de ECE favorezca a la red por calibrar mejor.</strong> Ninguno de los dos calibra
+(apartado 6): la red tiene algo menos de error por tramos, no una probabilidad mejor ajustada
+tras calibrar. Y el ECE no lleva signo: los dos
+modelos fallan hacia lados distintos, como se ve en el apartado 11.</li>
 <li><strong>Que la diferencia sea significativa.</strong> Es <strong>una sola ejecución</strong> sobre 98 ventanas de
-validación. No hay repeticiones con semillas distintas ni intervalo de confianza, y por tanto no
-se afirma significación. El diseño con cinco semillas está en <code>docs/diseno-pi1/06-plan-replicas.md</code>
-y no se ha ejecutado.</li>
+validación, sin repeticiones ni intervalo de confianza (apartado 14.2).</li>
 </ol>
 </div>
 </div>
@@ -8606,7 +8618,7 @@ información</strong>, que no es lo mismo que medir sensibilidad temporal.</li>
 </ol>
 <p>El cruce que distinguiría las dos explicaciones —predicción por ventana contra expresión por
 ventana— está diseñado y <strong>no ejecutado</strong>: <code>docs/diseno-pi1/08-analisis-por-fallo.md</code>.</p>
-<p>Y hay una observación de signo contrario que conviene no olvidar: la red pierde estrepitosamente en
+<p>Y una observación de signo contrario: la red pierde estrepitosamente en
 el <strong>fallo de encendido</strong>, que es la otra condición con estructura temporal marcada —episodios
 breves—. Si la ventaja de la red viniera de su capacidad de modelar el tiempo, cabría esperar que
 ganara también ahí. No lo hace.</p>
@@ -8620,14 +8632,13 @@ ganara también ahí. No lo hace.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8-bis.-El-termostato:-un-l%C3%ADmite-f%C3%ADsico,-no-un-fallo-de-aprendizaje">8 bis. El termostato: un límite físico, no un fallo de aprendizaje<a class="anchor-link" href="#8-bis.-El-termostato:-un-l%C3%ADmite-f%C3%ADsico,-no-un-fallo-de-aprendizaje">¶</a></h2><p><strong>Objetivo de este análisis.</strong> El apartado anterior deja el termostato como la condición en que la
-red gana al bosque. Conviene mirar de cerca <strong>por qué</strong> el bosque falla ahí, porque la respuesta no
-es la que se espera de un modelo que falla.</p>
+<h2 id="9.-El-termostato:-un-l%C3%ADmite-f%C3%ADsico,-no-un-fallo-de-aprendizaje">9. El termostato: un límite físico, no un fallo de aprendizaje<a class="anchor-link" href="#9.-El-termostato:-un-l%C3%ADmite-f%C3%ADsico,-no-un-fallo-de-aprendizaje">¶</a></h2><p><strong>Objetivo de este análisis.</strong> Mirar de cerca <strong>por qué</strong> el bosque falla en el termostato, porque
+la respuesta no es la que se espera de un modelo que falla. La expresión del fallo en la
+señal, ventana a ventana, se mide en el notebook 06.</p>
 <p><strong>Qué es esta figura, y de cuándo.</strong> Es un <strong>artefacto histórico</strong>: se produjo durante la ejecución
 de E6 y conserva la predicción <strong>ventana a ventana</strong>, que el registro guardado de E6 no almacena. No
-se puede regenerar hoy, y eso hay que decirlo: reproducirla exigiría reejecutar el modelo
-conservando la predicción de cada ventana, lo que convertiría una figura en un experimento nuevo.
-Se muestra tal como se publicó.</p>
+se puede regenerar hoy: reproducirla exigiría reejecutar el modelo conservando la predicción de cada
+ventana, lo que convertiría una figura en un experimento nuevo. Se muestra tal como se publicó.</p>
 </div>
 </div>
 </div>
@@ -8676,9 +8687,8 @@ señal averiada es idéntica a la sana. No es que el modelo no sepa verlas; es q
 ver. La respuesta correcta del sistema en esas ventanas es abstenerse, y el caso no hubo que
 fabricarlo.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que las cinco ventanas sin señal sean exactamente las cinco falladas.
-Los registros de E6 no guardan la predicción por ventana, de modo que la coincidencia de los dos
-recuentos es <strong>aritmética y no una identidad medida</strong>. Comprobarlo exigiría reejecutar el modelo
-conservando la predicción, que es un experimento nuevo.</p>
+Como los registros de E6 no guardan la predicción por ventana, la coincidencia de los dos recuentos
+es <strong>aritmética y no una identidad medida</strong>.</p>
 <p><strong>Relación con la hipótesis.</strong> Separa dos cosas que una tasa de acierto confunde: la etiqueta de un
 caso y la evidencia disponible en él. Es la misma distinción que el verificador de suficiencia
 aplica después sobre la evidencia documental, y por eso importa para PI.1 y para PI.3.</p>
@@ -8692,7 +8702,7 @@ aplica después sobre la evidencia documental, y por eso importa para PI.1 y par
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-Matrices-de-confusi%C3%B3n:-qu%C3%A9-tipo-de-error-comete-cada-uno">9. Matrices de confusión: qué tipo de error comete cada uno<a class="anchor-link" href="#9.-Matrices-de-confusi%C3%B3n:-qu%C3%A9-tipo-de-error-comete-cada-uno">¶</a></h2><p><strong>Qué queremos investigar.</strong> No cuántos errores, sino <strong>hacia dónde</strong> van. En diagnóstico no es lo
+<h2 id="10.-Matrices-de-confusi%C3%B3n:-qu%C3%A9-tipo-de-error-comete-cada-uno">10. Matrices de confusión: qué tipo de error comete cada uno<a class="anchor-link" href="#10.-Matrices-de-confusi%C3%B3n:-qu%C3%A9-tipo-de-error-comete-cada-uno">¶</a></h2><p><strong>Qué queremos investigar.</strong> No cuántos errores, sino <strong>hacia dónde</strong> van. En diagnóstico no es lo
 mismo decir «no hay fallo» cuando lo hay que confundir un fallo con otro: lo segundo manda al
 mecánico a desmontar la pieza equivocada.</p>
 <p><strong>Por qué un mapa de calor y no una tabla.</strong> Son dos matrices de 6 × 6; los bloques se ven de un
@@ -8867,16 +8877,16 @@ F05_misfire                    7                0              0                
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> El bosque concentra sus errores en la diagonal de omisión: casi todos van a «sin
-fallo». La red reparte más, y genera algún diagnóstico cruzado que el bosque no genera.</p>
+<p><strong>Qué muestra.</strong> El bosque concentra sus errores en la omisión: casi todos van a «sin fallo». La red
+reparte más, y genera algún diagnóstico cruzado que el bosque no genera.</p>
 <p><strong>Qué podemos interpretar.</strong> Para el uso que este trabajo persigue, <strong>la estructura del error del
 bosque es preferible a la de la red</strong>, con independencia del F1. Un error por omisión deja el
 problema sin diagnosticar; un diagnóstico cruzado produce una hipótesis <strong>confiada y equivocada</strong>,
 que es el modo de fallo que todo el criterio de suficiencia existe para evitar. Que el bosque falle
 «hacia abajo» no es una virtud suya: es consecuencia de que las clases difíciles carecen de señal en
 parte de sus ventanas, y la clase sin fallo es la respuesta por defecto cuando no se ve nada.</p>
-<p><strong>Qué no podemos afirmar.</strong> Que la estructura del error del bosque sea benigna <strong>en general</strong>. Lo
-observado vale para este conjunto y esta partición, con 98 ventanas. Con otro reparto de clases, o
+<p><strong>Qué no podemos afirmar.</strong> Que la estructura del error del bosque sea benigna <strong>en general</strong>: vale
+para este conjunto y esta partición, con 98 ventanas. Con otro reparto de clases, o
 con fallos que compartieran firma, la estructura podría ser otra. Tampoco se puede afirmar nada
 sobre el coste relativo de los dos tipos de error sin un criterio de coste, que este trabajo no
 define.</p>
@@ -8890,7 +8900,7 @@ define.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="10.-Calibraci%C3%B3n:-por-qu%C3%A9-importa-aqu%C3%AD-m%C3%A1s-que-en-otros-problemas">10. Calibración: por qué importa aquí más que en otros problemas<a class="anchor-link" href="#10.-Calibraci%C3%B3n:-por-qu%C3%A9-importa-aqu%C3%AD-m%C3%A1s-que-en-otros-problemas">¶</a></h2><p>Todo el criterio de abstención compara la confianza del modelo contra un umbral. Si la confianza
+<h2 id="11.-Calibraci%C3%B3n:-por-qu%C3%A9-importa-aqu%C3%AD-m%C3%A1s-que-en-otros-problemas">11. Calibración: por qué importa aquí más que en otros problemas<a class="anchor-link" href="#11.-Calibraci%C3%B3n:-por-qu%C3%A9-importa-aqu%C3%AD-m%C3%A1s-que-en-otros-problemas">¶</a></h2><p>Todo el criterio de abstención compara la confianza del modelo contra un umbral. Si la confianza
 estuviera mal calibrada, el umbral no significaría nada.</p>
 <p><strong>ECE (<em>expected calibration error</em>).</strong> Se agrupan las predicciones en diez tramos según su
 confianza. En cada tramo se compara la confianza media con el acierto real. El ECE es la media de
@@ -9049,23 +9059,20 @@ declarando una confianza media de 0,738, de modo que <strong>promete menos de lo
 que es la confianza media menos el acierto, vale −0,1395. La red queda justo por debajo, con un
 sesgo de +0,0070: en agregado está prácticamente centrada. El error de calibración esperado, en
 cambio, es alto y parecido en los dos, 0,1439 y 0,1317.</p>
-<p><strong>Qué podemos interpretar.</strong> Que las dos cifras miden cosas distintas y conviene no confundirlas. El
-ECE <strong>no lleva signo</strong>: promedia, tramo a tramo y ponderando por su tamaño, cuánto se aparta la
-confianza del acierto. El sesgo sí lo lleva, y es global. Que la red tenga un sesgo casi nulo y a la
-vez un ECE de 0,1317 significa que sus tramos fallan en direcciones opuestas y se cancelan al
-promediar. Ninguno de los dos, por tanto, puede usarse en crudo como criterio de abstención, que es
-la razón por la que el recorrido de diagnóstico <strong>calibra antes de decidir</strong>. Y en el caso del
-bosque la dirección importa además por sí misma: un umbral sobre la confianza cruda habría hecho que
-el sistema se abstuviera de más de la cuenta, y eso habría parecido prudencia cuando era mala
-medición.</p>
-<p><strong>Qué no podemos afirmar.</strong> Que la red esté mejor calibrada <strong>que el bosque calibrado</strong>. Lo
-comparado son dos modelos sin calibrar. Tampoco que el bosque esté bien calibrado porque su sesgo
+<p><strong>Qué podemos interpretar.</strong> Que las dos cifras miden cosas distintas, como se definió arriba. Que
+la red tenga un sesgo casi nulo y a la vez un ECE de
+0,1317 significa que sus tramos fallan en direcciones opuestas y se cancelan al promediar. Ninguno
+de los dos, por tanto, puede usarse en crudo como criterio de abstención, que es la razón por la que
+el recorrido de diagnóstico <strong>calibra antes de decidir</strong>. Y en el caso del bosque la dirección
+importa además por sí misma: un umbral sobre la confianza cruda habría hecho que el sistema se
+abstuviera de más de la cuenta, y eso habría parecido prudencia cuando era mala medición.</p>
+<p><strong>Qué no podemos afirmar.</strong> Que la red esté mejor calibrada <strong>que el bosque calibrado</strong>. Tampoco que el bosque esté bien calibrado porque su sesgo
 sea negativo: un ECE de 0,1439 dice que los tramos fallan, y el signo solo dice hacia dónde fallan
 en promedio. Tampoco que el ECE sea estable: con diez tramos y 98 ventanas, cada tramo contiene muy
-pocas predicciones y la cifra es frágil. Y un solo punto por modelo —confianza media contra
-acierto— es un resumen: no muestra en qué tramos se concentra el error, que es lo que más
-importaría. La curva de fiabilidad completa exigiría las predicciones por ventana, que los registros
-de E6 y E7 <strong>no guardan</strong>.</p>
+pocas predicciones y la cifra es frágil. Y un solo punto por modelo no muestra en qué
+tramos se concentra el error, que es lo que más importaría. Los registros de E6 y E7 <strong>no guardan la confianza por ventana</strong>, de modo que un
+diagrama de fiabilidad no puede construirse a partir de ellos. El apartado siguiente lo construye
+por otra vía.</p>
 </div>
 </div>
 </div>
@@ -9076,10 +9083,14 @@ de E6 y E7 <strong>no guardan</strong>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="11.-Las-cifras-de-synthetic_v3,-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">11. Las cifras de <code>synthetic_v3</code>, y por qué no cierran la cuestión<a class="anchor-link" href="#11.-Las-cifras-de-synthetic_v3,-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">¶</a></h2><p>El informe de E7 publicó también resultados sobre <code>synthetic_v3</code>, con el triple de sesiones, y
-concluyó que el límite era el volumen de datos. <strong>Esa conclusión quedó retirada el 12 de octubre de
-2026.</strong> Las cifras se muestran porque forman parte del historial; la lectura que se hacía de ellas,
-no.</p>
+<h2 id="12.-La-forma-de-la-calibraci%C3%B3n,-recuperada-de-la-curva-del-barrido">12. La forma de la calibración, recuperada de la curva del barrido<a class="anchor-link" href="#12.-La-forma-de-la-calibraci%C3%B3n,-recuperada-de-la-curva-del-barrido">¶</a></h2><p><strong>Objetivo del análisis.</strong> Saber <strong>en qué tramos de confianza</strong> se concentra el desajuste del
+modelo calibrado, que es lo que decide si el umbral del verificador opera en una zona fiable.</p>
+<p><strong>Procedencia de los datos.</strong> La curva acumulada del barrido del umbral,
+<code>E15b_barrido_umbral.json</code>: 101 umbrales con, en cada uno, cuántas de las 98 ventanas de validación quedan por encima y con qué precisión se decide entre
+ellas. Restando dos umbrales consecutivos salen el número de ventanas y el número de aciertos del
+tramo que hay entre ellos.</p>
+<p>La reconstrucción solo vale si reproduce lo que el registro del modelo publica. Se comprueba antes
+de dibujar nada.</p>
 </div>
 </div>
 </div>
@@ -9089,6 +9100,291 @@ no.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.visualization.memoria</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">agrupar</span><span class="p">,</span>
+    <span class="n">comprobacion_de_la_reconstruccion</span><span class="p">,</span>
+    <span class="n">intervalos_de_fiabilidad</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">comprobacion</span> <span class="o">=</span> <span class="n">comprobacion_de_la_reconstruccion</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">comprobacion</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>intervalos_no_vacios      33.000000
+ventanas                  98.000000
+aciertos                  86.000000
+exactitud_reconstruida     0.877551
+exactitud_del_registro     0.877600
+intervalos_escasos        21.000000
+dtype: float64</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c032">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Qué muestran estas cifras.</strong> La suma de los tramos recuperados devuelve <strong>98 ventanas y 86
+aciertos</strong>, repartidos en 32 tramos de una centésima más la cola de las ventanas cuya confianza
+calibrada es exactamente 1,0. La exactitud que producen, <strong>0,877551</strong>, coincide dígito a dígito con
+la del registro del modelo. La reconstrucción no es una estimación: es aritmética exacta sobre una
+curva acumulada.</p>
+<p>Los tramos de una centésima son exactos y <strong>no se pueden dibujar</strong>: con 98 ventanas repartidas en
+33, casi todos contienen una sola y su proporción solo puede valer 0 o 1. Agrupar de cinco en cinco
+centésimas es suma de enteros y no pierde exactitud.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c033">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"desde"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">desde</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">"hasta"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">hasta</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">"ventanas"</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">ventanas</span><span class="p">,</span>
+            <span class="s2">"aciertos"</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">aciertos</span><span class="p">,</span>
+            <span class="s2">"exactitud"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">exactitud</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">agrupar</span><span class="p">()</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>desde</th>
+<th>hasta</th>
+<th>ventanas</th>
+<th>aciertos</th>
+<th>exactitud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>0.45</td>
+<td>0.50</td>
+<td>2</td>
+<td>0</td>
+<td>0.000</td>
+</tr>
+<tr>
+<th>1</th>
+<td>0.50</td>
+<td>0.55</td>
+<td>3</td>
+<td>2</td>
+<td>0.667</td>
+</tr>
+<tr>
+<th>2</th>
+<td>0.55</td>
+<td>0.60</td>
+<td>4</td>
+<td>3</td>
+<td>0.750</td>
+</tr>
+<tr>
+<th>3</th>
+<td>0.60</td>
+<td>0.65</td>
+<td>1</td>
+<td>1</td>
+<td>1.000</td>
+</tr>
+<tr>
+<th>4</th>
+<td>0.65</td>
+<td>0.70</td>
+<td>1</td>
+<td>0</td>
+<td>0.000</td>
+</tr>
+<tr>
+<th>5</th>
+<td>0.70</td>
+<td>0.75</td>
+<td>2</td>
+<td>1</td>
+<td>0.500</td>
+</tr>
+<tr>
+<th>6</th>
+<td>0.75</td>
+<td>0.80</td>
+<td>4</td>
+<td>3</td>
+<td>0.750</td>
+</tr>
+<tr>
+<th>7</th>
+<td>0.80</td>
+<td>0.85</td>
+<td>6</td>
+<td>6</td>
+<td>1.000</td>
+</tr>
+<tr>
+<th>8</th>
+<td>0.85</td>
+<td>0.90</td>
+<td>15</td>
+<td>15</td>
+<td>1.000</td>
+</tr>
+<tr>
+<th>9</th>
+<td>0.90</td>
+<td>0.95</td>
+<td>22</td>
+<td>19</td>
+<td>0.864</td>
+</tr>
+<tr>
+<th>10</th>
+<td>0.95</td>
+<td>1.00</td>
+<td>38</td>
+<td>36</td>
+<td>0.947</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c034">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.visualization.memoria</span><span class="w"> </span><span class="kn">import</span> <span class="n">fig_fiabilidad</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">fig_fiabilidad</span><span class="p">()</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB02-05_fiabilidad"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"02_comparacion_modelos"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>exportada: notebooks/salida/02_comparacion_modelos/FIG-NB02-05_fiabilidad.png y FIG-NB02-05_fiabilidad.svg
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
+<img alt="No description has been provided for this image" class="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAr0AAAIhCAYAAABDgALgAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAASdAAAEnQB3mYfeAAAmgxJREFUeJzt3QV4G1fWBuDPtmRmx4xxYkjikMPM2AaatEmZudtud7fcbbf0b7vl7rbdLTNj0nDShpkZHLDjmJlB4P+517FiJ05Msi1dfW8ePbGkkeZoZjRzdOfOuXZVVRU1ICIiIiJSmH1nB0BERERE1N6Y9BIRERGR8pj0EhEREZHymPQSERERkfKY9BIRERGR8pj0EhEREZHymPQSERERkfKY9BIRERGR8pj0EhEREZHymPQSERERkfKY9BIRERGR8pj0EhEREZHymPQSERERkfKY9BIRERGR8pj01vPaa69j8uSpOHLk6CUXWlFREaZOnY7HHnu8vdcPEREREZkBk96zzpxJw6uvvoaKigrEx8ddcqF5eXnBz88XH3zwIfbv32+O9UBERERE7YhJ71nffPMNqqqqcNVVc5u14K64YjZqamrwySeftuf6ISIiIiIzsKuqqqgxxxtZu1GjxuDgwYNYv34tevXqhYKCAnz11dfYvn0HysrKEBoagrlz52D06NFy+vz8fMTExMlW36Sko3BwcOjsj0BEREREF8GkF0BJSQmioqKh1Wpx5sxplJeXY9KkKUhKSkLfvn3g6+uH9evXw2Aw4MMPP5CtvEKfPv1w5swZrFu3BgkJCRdbxkRERETUydi9AcDBg4dkV4XIyAhoNBps2rQJQA2mTZuK1av/wE8//YDrr79OTiOS3zrdunWT/+/ff6Dz1iARERERNUnT9CTqy83Nlf97enrJ/6dOnSpvoqX3t98Wyf+XLl0qn9Pr9abXia4NQl5eXqfETURERETNw6QXQEVFee3C0NQujvT0DFx77bXYt28/fHx80KtXT4SFhSMrK7vBwnNycrwgESYiIiIiy8PuDQC8vb3lwigtLZX/v/vuuzLhnTPnChw7dgQLFy7A4MGDLlh4ddN7e9e2+BIRERGRZWJLL4CIiEi5MDIyMuT/4kK2OqKMWVpaGhYsWCjv19SrdVE3fVRU1w5daURERETUMmzpBRAbGyP754oyZKJ/r7hozcXFBT///AvCwiIwdOhwdOniJxdYbm6O/N9oNOLo0WPy7z59erdwsRMRERFRR2JLr6jbZmeHKVMm4/vvf8DGjZswa9ZM7Ny5HRs3boRGo5Vly0QXiKSk43BxcZYLbufOXXL0toEDB8LX17dDVxoRERERtQyT3rOuueYamfQuWbJEJr1BQUGYO7fh6GyDBg00/b1s2TL5/7x5V7VwkRMRERFRR+PgFPVMmTIN+/btw759e+Dv73/RhSb6+YqBKRwdHbF9+1Y4O9e2/hIRERGRZWLSW09mZibOnElDt27RslTZxYhhiQ8fPgJ//y6IjKy9CI6IiIiILBeTXiIiIiJSHqs3EBEREZHymPQSERERkfKY9BIRERGR8pj0EhEREZHybD7prampgU5XLf8nIiIiIjXZ/OAUer0Ou3dtwsBBo+Xoa0RERETUuQwGvdnf0+ZbeomIiIhIfUx6iYiIiEh5THqJiIiISHlMeomIiIhIeUx6iYiIiEh5THqJiIiISHlMeomIiIhIeUx6iYiIiEh5THqJiIiISHk2PyIbkS2zt3dochqj0dAhsRDZGhW/f835TKp8VrI+bOklIiIiIuUx6VXQyZOnsHTp0ja9x/r165GSktKq1y5ZsgTFxcVtmj91DqPRCL3e/OOdE1HTDAaDkp+p/ucS+5jKykrTTafTdWp8ZFvYvaEFZryZ3C4r4bcHo8z2XiJhWblyBa6++uo2vc8333yDyy67DJGRkS163YYNG3Dddddj586d8PT0RHs4cuQISktLMXDgwHZ5f1u2efMmpKWdwbx5bdt+iKj5ROL3xuuvYteunfDy8sJf/vow4uPjlViEX335BXolJGDAgNr99a6dO/Dqqy9Do6lNP2bNvgJXXTW/k6MkW8GWXiuxa9du2Xq6YsUKrFq1Sv5a3r9/P7799lucPn3aNN3evfvg5uaGnTt3yWmEqqoqLF68GN999x3S09MvOo+kpCT5focOHWq09fj777/Hvn37Lvp6Ed/bb7+NAQMGXPBcZmYmFixYYLqfn1/Q4H5j7y8+c1FREX79dQF+++03eWA4fvw4Xn31Nfzzny9i9eo1cjrxWb/88kv88cdq02du7LV1Gpu+uctIVbXLNgnffvN1Z4dCZHO+/+5beHv74Kuvv8Odd92Dn378HtZOtOLu2LEdK1cub/B4ekY67r7nPnz51bfyxoSXOhJbeq3EE088If8PCgqSragREeHQ6w3w8/PFY489jv379+HDDz/CokWLMH78OHz00cdyuocffghz586FnZ09unTpgscffwKrV/9xQQuuaNl9+ul/YPTo0Xj99TdkS6po6RVE0vjXv/4NI0eOxJNP/h3vvPM2Jk+efEGMTz31NJ555hk89NBDFzwnWn0ffPAvGD9+PDw8POR7Hj16BLNmzbro+4vPLJLRiIgInDx5Uk53xx13yJbIkpJSpKaexhtvvNnoZ27ste+///5Fp2/OMlK9hff99/6r5OlVImv4/r340suws7OTLaJ1raLW7Ltvv5ZnHc/vvpCelob4+B6ywcHenu1u1LGY9FqRW2+9BfPmzZN9Zl944QVs3LhR7iTHjh0nE7uamhp89923MnGLi4vHL7/8LF938OAhrFixHDExMfjhhx+QnZ19QUL3zDPP4qeffkSfPn3kL/QhQ4aanhMJ5KeffoIRI0bIVuDbbrv9gqRXtKgmJCRc9JScq6srJk6ciJUrV2HOnCuwZMliPPLII02+/y233Iwbb7xRttoOHDhIJq5XXTVPtm6Lx0WC3thnbuy1QluWkcpGjx4jb2IZFBYWdHY4RDZD7JOqqirx0Yfvy5ZRd3d33HPvn9C3bz9Ys5tuvlXe/vvfdy5o6RVdHkSjR0RkJB588K8ICQnttDjJtjDptSIiqaxrNY2KipIJryD6gBmNNRg5coRspayurkZJSQmcnZ3k87/++gveeOMNFBYWykTv/IS1rKxMtuyKhFdwdnbGsGG1SW9FRQXS0zNw5MhRHD16TD6WlpaGnJwc+Pv7y/vifV988UXceeed+PjjT5CRkYkff/wBt99+O3x9fU3zueqqK/HNN99iypTJSEk5LbtBXOr9hcTERNNnFC2357vYZ77Ya1u7jIiI2oM4u1JQUIDuMTG4/4EHsXfvHvz33bfxv/c+VHKBR3fthhEjRyI6uht+/fVnfPLxR3jy7093dlhkI3huwYrUJbnn/12345w3bz7+8Y+n8dlnn+Luu++Sj4tW22PHjuHdd9/F119/LVtcn3vu+QavFX2AHRwcZLJZpy4BdXFxgY+Pj+w/LG579uyRiWr90+AigRw+fDgOHDggpxFJtHi9mK4+0bVBdCcQlSXquk409f4irou52Geuc/5r27KMiIjag7igSzRkjBkzTu6zEhMHyH1qYz/yrZ34XLGxsYiJiZWfdeLEyThzJrWzwyIbwpZehU6RiaRu2bLlcHd3w//+956s5FBeXo5XXnkV27ZtQ7du3bBy5UpMmjTxgtffd9+9mDv3Sln1QSSmhw8fNj131113Yv/+Axg6dAg2bdqMCRPGy77FdQICAvDGG6+b7iclHcOTTz6J0NDQC3buoouD6PcrLlpr7vufz8nJEdu2bZUXsjX2mfPz89tlGRERtYcBAwdh0aKFmD79MuzYsQPe3t5wcjp31koVjo6O+Pbbb2Rf3h49e2LRot9kAkzUUdjSayWmT58ud4RCcHAwxo+fYHpu6tQpCAoKlP1TT548gczMLNlHVjwuTuEvWPCr7IqQnJyMm266EX/7298ueP9HH31U9rHNzc3F5MmT8PHHH5n65z788MO48sq5SEtLx4gRw/HRRx9dMtZp06bB09Pjov2SRXLds2dP02MXe//6n1m4/vrrTO8vLvRIT0+76Gdu7LUi6W7LMrIFDvb2plJCRNQxbrnlNpw6eRJ/efDPWLt2NR78izr7H61G2+CCtb/+7WEs/G0BHvrbX5CVmYlbb7ujU+Mj22JXVVVRAxum01Vj965NGDhoNLRax84Oh6hDqTgMKpG1UPH7x2GIyVwMBvMPlMQmHSIiIiKC6j9a2L2BiIiIiJTHpJeIiIiIlMfuDUQ2zBpORxGpSsXvn4qfyVZVVlaiID8fgUFBDS5GlI8XFCAwMNDqRtWz6KS3sKAA3j4+TU4n6sKKK85VLPFCRERE1JG2bd0iR9NzcXGVJT6ffe7/ZF39QwcP4rXXXpb1/QE7PPvcC7LWvrWwuKRXlI8qLi7CkcMHcTzpGO665/6LTpubk4PFixbIwQxEvdWwsHBMu2wGk18iIiKiVvr888/w8iuvy1Keb77xGjZsWI9Jkybj62++xF1334vBg4fgs08/xooVyzB//jVWs5wtLunduWMbUlJOySS2KcuXLUZkZBTGjp8oS4/9/NMP2LJ5A8aMPVfDtr7y8jJUlFe0e0kMIiIiImuk0+lw1VXzZMIrhEdEyDPvQnFREaKiouTfoqHx5KmTZp+/GEjKZpLeseNqE9aMjHQs/PWni05XVFSEnJxszJ5zpbwvauz2TxyADevXXjTp3btnN7Zu2dTgMdEtYvCQRGSkp1xyyFuizrL9tBFFDX+rSYaaGpRUAsYawM0RcNI0HJr6YjuTsmqg2gA4OtS+7vwhrRtTpa99nb0d4OEMODTjNc2Nz8sFGBRhXf3CyHY8tdiArFIoq6gc8HKFkgLdgecv43G9JYJDoiB27yNGjkRpabEcnXXD+nV44M9/gV6vw5AhQ/HtN19jzJixWL58Ka67/kb5uJCRnmzW9RcUHAHlk97mKikuglarhZubu+kxL08vlJaUXPQ1ffv1R2xs7Shj9Vt6k5OPIDgk0moGpxAJv7u7O5N0G7EjuxiRvg2Twmp9DU7lVMPBuQYRPlr4uDWjyH1NDc7k62GEAX4uDgjz1cC+GclrQZkBaQU6uLrboau/IxybkVy3JL6iciNCwzybfE+izpBfmQJ7B3XHcKrQ6+DjoIWK8ivtEBoW2dlhWG2d3uzs0/jm66+h0+lRXl4OjUaLLl38sWLFcpw6dQoVFeWwg518XAgNi27y/Q0GA6qrq2X/YOGXn39AVmaG7MoqGmCSk0/JM/ajRo9rl89ntUmvOICf30Ll4KCB0WiUrVmNtV65urrJW32iW0RyM3+crDlS+3M/PTUZf7vlcuRlZ+CR/3sXE2fMb/K1ep0O/3zsTqxb/itGT5mNJ156Hxpt7YYyNv5c4t6UzMxMDBs2HL///juio7uiPYg+0mLDFIk1WZ66hFJnqEFoCxPeogoDvFqR8GodWp7wtiQ+IiKyDKmpqVi48Ffcd9/9eP2Nt7B//z58/tmneOLJv+OHH77Du/99TzY4Hj+ehLfefAP/efvdRt9H5GIlJcXyYjjRSFleVob333sbvRL6YNLkaXKa4OBgODs7yy6tYpqoqK7y1l7dT632nKLoliAWkkhy61RXV8nHm3O6trXMnfC21OOPP9HolZJVVVUoKCg03RfLJS8vr8E0paWljfaVEUmu+OVVV4rkvffex7PPPitblOuI9xaJ8KVeW19j04vpxIWKTRG/KJvT56h+v+/G3rc5n7ep+TY35o6iZMLbjv23iIioZYKCgnDk8GEsX74Mhw8fwrp1axEcEiKTV3Fc37hxI44cOYyNGzcgICDA9DpddTWysjJN9/fv34sP3nsHqadT5H0XV1fExMYhMDDINM3QYSMxbfoMmfB2BKtNen19fGVCk5uTbXosMzMDPr6+yia8H3zwIaZPn4aQkOALnsvNzcWQIUNMPwJWrlyJv/71b/LvkydPyf433bvHoH//RJw5c0Y+Pnv2FXj88ccRGxuH8PAIfPTRx1iyZClee+01fPXV1/jHP57B+vXr0bt3H1x22XT06NETy5Ytu+hrhYtN//LLL6Nr12jExcVjxoyZsszc+U6cOIFx48bLOKOju+G77767YBox36eeelq+j7iI8T//+Q8SEwcgJiZWvq9IhFvyeS813+bE3JFUTHhFfMWV5364EhFR59JqtXjy70/JxPabr7+SZ33vuONOODo64vEnnsK+fXvx5Refy8IA99z7J9Prflv4C7756jNTg1doSCj69u0Pt7NnjUWD5GWXz0afvv077bNZVdIrWtxEU7ng7OKC7jGx+P33lchIT8epkydkXbmEhL7tNv/OTHiPHz+OAwcO4Kqrrmr0+dDQUMTEdMeWLVvk/cWLl2Du3Dny7/vv/xNmzZolLw7885//jAcf/IupVbe8vEL2oRF9dN566y3MmXOFbOW988478eabb+B//3sPn332GTZt2oSXXnoJ33773UVfK1xs+rfe+je2bduK1NTT8lfkunXrLvgM9933J1x22WVISzuDRYt+wxNPPImUlNpfiHXEfEWLflLSMTzzzDPyfcW0p06dRHJyMpKSklr0eS813+bE3FFUTXhFfNUGtvQSEVmSoKBg/PnPf8Fzz/8fbrrpFtk1VJxh7d69Ox566BE8/8I/MX/+1XB2Pjc+Qq+E3hg+YrQp6fXr4o+Jk6c1aNntbBab9IpuCl7eDU/jb928EZs2rjfdnzhpqkz21qz5HTt2bMOQocPRp2+/doupsxJe0Xr55JNPymQuOzsb1dU65OXlXlDW7corr8KiRYtkC7g4/TB58mR5en779h246qorkZOTI1uK9+7dK0/9CzfffLO8IK5v374oLDzXPaLOBx+8j5MnT+Dpp/+Bd955RyacdRp77cWmf/TRR2Vy+frrr+Puu+/CtGm1/XnqiDj37NmDBx/8s/w12LNnT0ydOlUmz+e7/vrr5Xzj4+MwcOAAhMjTLi7o2rUrSkpKW/R5LzXfpmLuKAajugmviM/Rof26IxERUcsZDAbZbbKOSHhLS4rl/4I4XoruCvUHBYuL74nBQ4bJFmFLZbEXsvn7B+Dqa65v8NjEyVMb3BcLe/SY8R0WU2ckvEJKymns3r0H06dfJu+L4f/EL6zFixehR48epulE6+bEiRPl/4MHD5Kdw8WGKzbOCRMmNugKIW5C/V9pjZk0aRJuvfU23HrrLRg/fjzef/8903ONvbax6UWXi+uvvw733Xcv9u7dh1deeRmjR4/GPffcY3qdGMpQJOsiCRU/eOr62Do6XjiPuufF56pfZk7cF+/Tks97sfmKq1GbirmjFFcYlE14RXyezhb725uISHlGo1EOBiaOh7FxtTlFZWUFqquq4KjVws7eHlqtRrb2iv/riBzD2vBo0wKdkfAK3bpF49ixo6bbkCGDsWrVqgYJr+Dr64PY2Bi8+OJLmDt3rnxMJIVTpkzBCy88j5UrV+Af/3hatojWFZdujNjwRZKYlZWFpKTjsrXU19cXX331lWxlvhjRfaCx6UWL9KBBg7F+/Qb4+3eR8z569FiD14qEUyTMDz30kOxj+9NPP8vuBGPHjmnRsmrp573YfEeOHNFkzB1FnP1XNeEV8cmikERE1CGKi4uxfdsWZGdnyfuioWjliqXYtnUTjEaDvBUWFsgzytW6anlfNA5pHWtzmbppzr9ZAya9ZtQeCW9jvL194ODQ+Kq7+upr5IVbY8eONT0m+uaKEmezZs3GN998g88++1Q+7uPjbWrdFOpGXxFdBsTpfZE8P/zww5g6dZrsOjFixAikpaXJVufGXit+9TU2/cGDh/D22//B008/jenTp8v+sg8//NAFsYuL0sSXT4wE88knH+Prr7+Cn59fg2nqz1ecQvHy8qq3XMRzDi3+vI3NV5RRaU7MHcHDyV7ZhLc58RERUeuJ61j++H2F6UJ3cW3UurV/4OSJ4/UuMJuFKdMuN70mODgE0d26d1hVhY5iV1VVYdNXkYg6vbt3bcLAQaOtZnAKsi0LdhXDy9Ve2YRXDE4xK5GDU5Blmv1WihxdUFXpBTqE+KiV2NQRI0f++mfbGpxCtMhu2bxRnvUU/WuFdWtXY/u2zbjx5ttl11Fx9jU9/Yy8WK2xLoSWoj3q9Fpsn14iah5rTniJiKj1CgrysXXLJsTGxSM6urtstT1y5CBqjDWmpLd/4gA5Iq2nZ+2ZUXHGMyLi4l0cVcakl8iKMeElIrIdhw8fxL69uzFr9pWyS6FIcg8e2AcPDw+Z9Apz5sw31cYVPDx4Jq0Ok14iK8WEl4hIbcuXLZbdEUSfW0EM5ZuVmSkvNHt2uREZhToYNddg/U57vLKzfl37cyOqWquf/hRq9vdk0ktkhZjwEhF1PHv7ZgytfhGNVTgQfXAF0WIruiosWbwQPXr2QmLiIPl4cVGRrKAgphPTiNHM+icOlFWWMgpFf3P5YqX7nZsTk14iK8OEl4jIOona+XX15UU3hQ3r1+Ca626Cj4+vrIMrkty6ASCEuVddLRPcOqpVU+hoTHqJrAgTXiIi61HXQiv8/NN3KCoqxC233iXviz65Xl7eqKqsNA24dfe9D5imF+onvNR2THqJrISqCW+VrrZ2JBGRtRAjd37zzVdIPX0avXol4Io5c+Fgb4+Kygp8883XOJ2Sgm7du2P27Dnw9Ky9kMzXx0/Wlxf1cutGP6sbAa1O/YSXzI8/IYisgKoJr4ivpIpJLxFZl7feegMaBwfMmXMldu/ehV9+/kleXPbWm69Dq9Fi7tyrcPDAASxfvtT0mrHjJ+LyGVew9VaFlt6ysjLs378Px44eQ1FRkfwl4+Xthe7duyMhobccLYuIWkEmlAYlE14Rn7sTf3sTkWV3USgpLobBaICfn7/sc3vieBLuvuse+Pj6Qq/XYdXvq2Dv4ICTJ0/iscf/LltsxeN//PF7Z4dP5kx6c3Nz8cvPP2Pjxg3o0qULwsLC4O7uDjs7exQVFmHBr7/i/ffew8CBA+Uwr8EhIW2dJZFNKa40Kpvwivg8XVp/NTQRkbnpqquRmZmBLv4BcHFxQWVlBT54/x307JmAy2ZcIQd3ePmV1+Hs4iIT4hMnTiAuNk4O/vDmW7XD2gvi8ZiYWK4gVZLerVu34qcff8D4CRPw76vfNvVbOV9xcTE2b9qE115/DVdffTUGDqwtxUFETas21Cib8Ir4KqpZaoeIOk9+fh7ycnMRExsn7x89eljWx50x8wrZ59bFxRVDhg5HUHBto51Ian19feUZ7YULfkVq6mnc/8CD8nE3N3f5+G8LF5geJ0WS3oiICPzzxZfkr55LEcnwlKlTMWHiRNkyTETN5+hgh1BFE14RH5NeIurIkmEpKadk2bDIyK7ysfXrVsvuCvc/8DdoHR3lEL2jx4yHf0Cg6XUjR41t8D6iG+e77/wHQ4YOw1//9nCTj5MCSW9wcHCD+3v27MG2rVvkVY31DRs+AkOGDJHJcVBQUFtmSWRzPJ3tlU14iYjaU0lJMY4nHUNU12hZC1f4bcHPCA0NNyW9YrCHHj0SYHe2PJinlxcGDR56yff991tv4Kabb0FERGSzHifFLmQ7ceI4Xn/tVQwfMQKB5yW27u5u5poNke1hwktE1Cx6nQ46nV72xYUdkJuTgz9+X4HxEybLpFe08E6bPgPe3rUJsCBadlsiPT0NR44cxjtv/8f0WP/+iRg9Zkyjj199zbVce6olvXv37sWYMWNx2+23m+stiagZ2MJLRDapBqisrJR9aZ2cneRD1dXVqKqqkgM9ONg7ICQ0DFfMnYeQkFDTy86vjdtS3t4+eO75/2vwmLu7Bzw8PBp9nBRMel1dXFGiLTHX2xFRMzDhJSJbYTQYZJLr6OgEjVYjW3KrqhomvWKUM3GrG8lMJL/R0d3NGoerqyu6dWv8PS/2OFkGsxXIHDpsGA4ePIisrCxzvSURXQITXiJSWXVVNUpLSmSLriDKg4lWXFH/to67hwc86lWOErVyxU0kxETt1tIrSnPoqnX421//gsDAQHkFZJ3Jkydj/PgJ5poVkc1jwktESqkRQ/uWyT9d3WqvAzIaDXIgCDEohOiL6+CggZeXd4MRzcTjRB2e9Ab4B2DmzJmNPtc1OtpcsyGyeUx4iUiF0mHlZWWy+4Gjk5NsmdXr9aaBHQQnJ9FVofaCNMlOtOR27giOIhEn62W2pFdUbBA3Ua7sdEqKfCwyKqr2CkoiMgsVE16DkYNTEClJfLXP7gKqKitlf1xRt1+UBhP7E5H4Gut9/+UAV/X2M3b27KNAFpr0Cps2bcTHH31kqtPr5uaGO+68E4MHDzHnbIhskooJr4ivuIItJ0RWry53Pfu1F31xRR9cU39bOzvZiiuSXNFYKxJfUQWhQd/bZuxniDol6T1y5Ai6d+9uGo0tKzMT77/3Hq6/4QaMHDlKPrZ2zRr899130S26G/y6dGlToES2TNWEV8SnceCBjsja1Bhrarsi2NVWVSguLq6tnHD27K54Tvyra+0V3RjErQF+9amDtbpzzMGDB/Cff78l++AIO3fuxMCBAzFx4iRTyRAx9HBCQgJ27d5tzpiJbEqVzqhswivi83Dq3D56RNSEGpHYGk13KysqUVhYILsnCPb24iIzB9jZnfsuu7m7w83DnYktqdHSO2vWbPz0449YtXIlpk6bJvvq+PieG+Gkjq+fn+zLQ0StU1JlVDbhFfE1Zz5E1HFqjEbZQFtXJUEM5Ws0GuHl7S3vazQOcKxXoUm02NYvG2YpMgp1mP1W7TVGKsoo0iHA06y9VJXX6iYW0a1h/tVXY+KkSfJ+eEQEdmzfLpPfOqJv784dOxAeEW6eaIlskDj7r2rC25z4iKh9yTO2NbWdckWLbmFhISorKkzPa7WOtUnu2X67Gq1WtuQ6aCz7+6s31sBQo+5Nb+BFwC3V5p8IdX16RdeG5cuW4eGHHsKgQYNQgxps37YN4eHh6Nu3X1tnQ2SzPF0cmPASkVmIpFaU3RKJqyAuNispLpFD6IrHROuu6HurPfu84OzizKVPSjBbu7jotP7oY49h2bKlOHzosLwIc9r06ZgyZaq5ZkFkkxyaUbaHLbxEdIEa0Yqrk8dnh7MNVGVlpTAY9PD29j3b39ZOlhY1Dfhgd25wCCLVmLUziPhlOGPGTHkjoo7BhJeIBNHvVq/TmVpsxRnXkpIS2TVBdEcQxEXmonW3jmigqqu4QKS6NiW9v/22EFqNVl7I9tyzzyIrK6vR6WbMmCGnISLzYsJLZLtEgqvXG0zdD/Q6PcrKymSNfDHKmWjhFX/XH6pXW/8CNCIb06akNzExEfZnS5TMmTMHlVWNV2kIDQlty2yIqBFMeIlsSA1QVVUpy4I5OtUmrlVVVaiurpZ9cMXoZVqtBu7u7tBozvXHlUP8ElHbk97Q0DDT3wm9e7flrYgskqg/aYljsTPhJVtgqd+/jiAGfBBJreiaUNcft6KiQrba1iW9zs4usruCHCRCDttrz5Zcoo7q01tQUIAFC35FdHQ0qiqrcObMGcyZOxdeXl7mnA2RTWPCS6Se6qpq6HTVcHOrHdBB9M8VJUBFy65MekUtXA+PBj8ELL1kGJGlMdtQSKIm75NPPI7U1FQEBAQiqmsUcnJy8NTfn5S/Vomo7ZRMeOtdVENkE2qA8rIyVJSfq4UrKiqIrgoi2RVEFwXRYCRacuuI5Fd0YyCiTk56t27ZgqiornjqqacRHx+PmJhYPPLoo/D398fOnTvMNRuiTidaX+qG3+xIKia8Ir7iynPDmxI1p4HF2hj0BpSWlEBXrat9wA7QyYvQzt4/21XB28cH9g7nSofZiwvQmOMSWV7SK7o2hISEXPB4RESkHN2FSAWiT91f//IAkpNPdeh8VU14RXzVHFWImik7Owt33nFrg5E/LVFVZSWKiwpNpcHszia59fsfe3p6wcPj3NC9ogW3rm8uEVl40hsaGoo9e3Y36MogTtXs378PIcEXJsOXIuoKJh07ilOnTqK6+tJdI8pKS+W0KSnJsj8UUXv66ssv4OTUsaMTGYzqJrwiPkcxzjJRE0QC+fnnn8nqBBahrldODWQrrriZnqo5ezvbVUH0w/Xx8YVTva4KspsCN30i67yQbdDgwVi6dCkee/QRDBgwUP5i3bFju6wR2Kdv32a/z/GkY1i+bDHCIyJlq1pxURGumneNPO1zPpHsrlyxFBERUaiorEBRYSGunHc1vL0vnJaorcSPOh9fH3n2oiMVVxiUTXhFfJ7OZvvtTQpbunQxRowYiczMjI6fuWyxrU1SZVeF0hLZ11YmsWe/Jnb1MljxXIOhe5ncElkEsx1txOgvTzz5JMZPmICMjHScOZOKUaNG4+9PPX1ueMNm/JJf/cdKjB4zDjNnzcH8q6+TCcbGjesanX7jhrUYOWoMLp85WybGAYGB2LNr50Xfv7y8DHm5uQ1uBfn5rf7MZDtEwfffV63E7NlzOnze4uy/qgmviE+e+yW6hIyMDHmR9LBhw9t9OYnjUP1+wxUV5bL7Xt0FZuJ4Jrsh1Ntu3T084OZRrwWamzSR+iXLRD3BtgxDnJ+fJ5OLuPiepsdi4+KxcsWyRqcXFxO5uLg2+HUtDqoXs3fPbmzdsqnBYxqNBoOHJCIjPaXBqDVEQnBIlPz/888+wbTp01FcXCS73BQXF8tC8WKbyUhPbteFZagwwGhvj7xzF3pf9GCdUQyUVAEeToCrE1CQ1/TRt7iyBpnFgMYe6OIDlBQ2/RqR6KYWAHojEOQJGCvsWh1faVUN0s7kNjlPss3vn0g2xffvuutvQEFBPgx6vfy/S5cuMvlsr+9fwdn2EI1WI0uFif64dX1yXV1dTSOiWTtxyFThc9jaZ7OFz6d8nV5RwkUkzuJWR4wXLlpoGzNi5BhsWL8WRUWF8sKGNDm/eRd9/779+iM2Nr7BY6JMTHLyEQSHREKr5fCM1FBdTczdu3dj+/ZttdtpeTkOHjyAfzzzHLp1647QsOh2XWyB2cXwcrVvVgsqnAwI825ZC29ZpQ6+Pi1v4XVxb3kLb2PxacqNCA07d0EPUf3vX25uDo4ePYKnn3pSPlZaWoonHn8U77z7nkw+W/L9Ewm0OMPn6+cnf7Dm5ebg008+wJChwzFy1Fg5zYb1a+RwvmPGTZBJtVaTAoPCZfXs7HTQaM+N4KYSlT+bLXw+i0566+r0BoeEYOjQYXBwsJeJgqjT+8qrr8lhEluj7mpW0Up0/pWtItkVV8RmZWbKVjdR/iUnJxte3t6Nvperq5u81Scufktu34Y6UsD7H3xk+vuN11/DzFmzZMJrCayxS0Nz4iMSunTxx8effG5aGA899Be88MKLDerXXupC56LiIoSEhMr727ZuwsYN63DtdTchOCQUPr5+6NEzAYGBQabX1CW/RKQejbnr9IravHXE388/96ys0zt8+Igm30OMEV5bu1Avux0I4mI28fj5CW9uTg62bN6IG2++TV4VK+zftwerVi5D95hYc30sogu4uDhbTFcYJrxka9zOa7io390tKzNDDsPr7x8gH/v1lx9k0nvPvX+Wx5CoqGh5jHF2cTH1z51+Weu64xGRDSe95qjT6+crTjlpcPp0MqKja1vRkk+dlCO8nU90SxA7rPrlazw8veTpq8ZahYnM5e577rOIhcmEl2zRs8+9IP8X+3pxdk8ksS4uLrKB5JuvP0dC776YMvUyOU3igMHybF7dMSEoOETeiMg2WVSdXtE3JXHAQPy+cjl27tgmT0Pt3bMLgwYNkc+LAQFOnTwh//YPCERgUDB++P4b7Nq5XV6gtmLZYvTvP4AJLymPCS/ZGpHg1j++iGRWdF9IO5Mq74sGkLHjJqJ373MlMnv07IU+ffs3u4IQEanN4ur0Dh8xSrbspqefkWOPz5t/rUxu66o7iGLfXaO7yZ2YuGjt2LEjyMnOkhc8TJl2OSIja6+2J1IVE15SnWi9PXL4IHr26m26wLiyohI6vU5e6CwvMNM6ws3dTlZXqDNg4OBOjJqIbCbpravTu3z5Mhw5fFieehJ1eqdfdlmLf2WLPrmN9ctNTBzY4L7o99uzZwIgbkTtoP6woZaACS+pKC8vF4cPHUCvhD7yGg2R1P6+arkcrOiKsxV5CosKZKOHKB9Wd0wRxwCNxkJGaCMii9fudXpFKTHxq13LshpEbaJqwlulqy36T7ZDtOKmpZ3BhIlT5H1Rd1d0UfPw8JRJr0hm58ydD1+/LqbX1FVgICKyiKQ3Pz8fSUlJ8iKzOtu2bkXPXr0weXLtzo2IWk7VhFfEV1LFpFdlohqPqH0rEtq67gcpKck4sH8vhg4bATc3d3nB8/U33mqquiBEsKsaEVlq0puVlYXHH3tUlnISNXv9/f1l1Qaxo7tizlxzzYbI9siE0qBkwivic3fiRUYqEWXDRDnJxIGDEB4eKY8JouuCaLWtS3qHjxiN0WPGy6oLgqOjU4NauURE7cFsRxtRi3fc+PF4/4MP5QAVzzz7HP7z9jvw8fGGn5+fuWZDZHOKK43KJrwiPk8Xy6h5TK0jqud89eWnsk5u3TZx4kSSHPlMEP1zb7jpNsybf53pNaJfbl3CS0RklSOyhYWGyR1ct+huOJOaioTevdE/MREHDxzAkKFDzTUrogbWHytDTrEexRUGGGoADyd7OGmb8XuupkYmlNWGGjiK5MvZXhyhm9UHVZySd7CDTNgc7Jt+jcFY0+r4DqRWoFe4i5IJr4ivolrdIV5VUVfnVvz/y0/fy+Hh62rhbkvR40imOxy2ZMPFxQ2V1S7wGHA79pQ64OSOonrfj5J2+X609/e3vNoIJy3rvhOpwGxJr7e3N06fPi3/DgsPw8lTJ2XSq9VokZtX+4uf1CNKxXV2BQSR8OaU6FuRsJ3rMhDagoQtu0QvE7bwFiWUulbHV6mvUTbhFfEx6bUsovJOXXWEjPQ0LF3ym+x7K8qHicS3orKiQZmwoMh4xPUQz9Wu35xSA7QO9gjx0XbI96O9v78GkYkz6SVSgtmSXlGb9/vvvkNU167o06cPnn/uORQVFWHL5s248667zDUboguIFqLOStg6IqH0drG36Pjac/lR+9NVV8uhe4XNmzZg29ZNuPPuP8HFxVVeZCZad8U6r3PtdTc1GADIzs7BlPCqtv2J+Az1PjsRWTez9en18fGR/XjDwkLlABFXX3MNUk+nYsLEiejTp/mDUxC1lGiIsdQDpjkO6GhGnWsVEw4yP1E+sv6oZp998gF+/PHbBn1tQ0PDZalJwdPLC7fdcQ8SEvqYpmlsiHcVt7+6+IhIHWZr6T1x4jhqjDXoHhMj70+cOEneyHb8vmoltu/YLoeknjv3Kri6unbIfEUfQEs9YFr6Ad1S46O2Ey20ov5t3WAPmZkZ+OarzzBi5BgMHjJMThMaFt5g8KCE3n3lrSVEH9m6LgOqbH/142vOPIjIxlp6k08lY8XKFeZ6O7IyGzasx5o1qzFxwkTk5uTii88/7bB5N+eiFyaU1pNwUOuI1tmcnGzT/Y0b1uKTj96Tw7cLfr5+6BrdXZ6VqzNx0lSMnzC5TYtcXBSmasIr4mPOS6QOsyW9w0eMQHpaOg4dPGiutyQrcvjQQdx4080YOGgwbrzpJhw6dAiWggmv9SQc1PyLzbKzs1BYUGB67OuvPsXCX39qMLhD4oBBsk6uIPrtzr7iSsTExpt1MYsqCKomvM2Jj4hssHvDqZMn4eLijBdeeF6OquPt7QU7u9qcevyE8Rg9eoy5ZkUW6I477zb9ffLkSfj6+sISWPoBk/FRc5SXl8lhe6Miu8rktbCwAF989hEGDBiMseMnymkSEwfJSil15cUiIqLkrb2Jsl+2+v0gIhtNer28vZGYOEDezscx023Hv176J/bt24unnn6ms0Ox+AMm46OLycxIR1FxEeLiesj7Bw/sx7q1f+Cq+dfKRFb00x06bCQio84ltf36X7jv7QjNqVOt4veDiGws6V2yZLG8GnjWrNk4npQED08PjBw5ynzRkdVYv34thg8fiVmz56BP3354/bVX8Mab/5YljzqDpR8wGV/DgQlsvWTY8eNJcPdwl8P2CmvW/I6c7CzExMTJC826dY+Bk5MT/Hy7yOdFS+6IkaNhDVT8fhCRDSa9GgcNNm3chODgYOzesxsaBwc4OztfMF1oSKgcmpjUtXr1H3B390D//ono1q0bFv22AMXFJZ2S9Fr6AZPxNVx+os6yLcnLy0XSsaPoldBHlggzGA1YsngB4nv0NCW9w4aPBOr9FvD19ZM3a6Pi94OIbDTpHTlqFA4c2I8vPv8cZWVl8rHDh49cMN2MGTOY9Cru+utvxMv/ehHePj6yeoMYflr8GOpoln7AZHwXLj+NuBJKYUePHEJubo4sFSZkZWbKygqiS1iPHr3g7OyCmbPnIsA/0PSayMiusHYqfj+IyIaTXlGH9a9/e0j+LUZj0zpqccUVc8wVG1mR6OhueOvf7yA1NVVexNili3+Hx2CJB8yCnHTY2dvD2y+o1fFVVqudkPu4qpNsVFdXyxHNvL19TPVujx07gmNHj2DQ4KFwdHRCVNdoXH3tjQgIOJfkim4MKrGm7Y8JL5HtaFPSe+rUKdmaJ7o0XHb55Y2O1FNfeXm5rCMpRmwj9Yg+h927d++UeVvaAVNXVYlVP72HksI8lBXnY/zcu2DnG9+q+Ior1a6Das3F/zMy0rFr5zYMHDQUgYFB0Gg02LlzO8LCwk1J76hR4zBu/GSZ8NY1FnTUwC2dwdq2P7bwEtmONtXpLSgowOOPPYpffvlZJrQX25GLUjvfffctnvr7kyguLm7LLIkuZAEHTINBj32bV6CyogwVZSXYvvpX+AVFYN69z2HA2FlY+9uXKCyrblV84uJ4VRNea0s4du3cjp9+/FaWBROqq6pw5PAhZGdlyvviorMbb7oNV8yZZ3qN6PLj7t45F3R2NG5/RKRsS29iYiIiIyJk0vvwQ3+TFy2FhATDzc1N5CEoLS2Rp7vF4WHixIl49rnnbWbnTx1HtIR2dsImalLv37oK237/GSMvux5VleWI7jUQKUn7kXT4AJx9QpB/bB0SJkxtcXzi9D8T3o6n1+ux6LdfZXmwMWPHy8dEfVxRTqy8rAxu7u5yGN/77v+L7JdbR0xvi1RMeEV8RmOTkxGRrdTp9evSBbffcSeuve56HDl8WA5MUFRUBHsHe3Tt2hVz5s5FbGwctFqteSImiyKK4Xe2akNNpx8w05OPwNnVA0aDAd0TBiO2zzCknjyE3VvXo/v4O1GVeRD7Vn4Md40OA8fObFF86YX6NsdnjQlHR6gbyEE4cyYVf6xajuEjR6N791jZVSEvNwcODudOiI0aLboqTDK9RkwjbrZOxe2vLr6a+mU0iMiqmW1vLbo2JA4YIG9EHcnRwQ6hnXDALCnKw571S1BalI9eg8dh7p1PYe3CT7Fnw1Ikjp2Jvds3wSMsAe5aA1IOr8WYWbfA1d2rw+Kz5oSjvRgMBtOwvBs3rMPevbtwx533yR/lok96RUW57LJQ55bb7pJdFurwx3sjy9Qo1q9Oqe2vfnx2sN4+50Rkxj69RJbA09m+ww+YVRVl+Ol/z0KjdURc/5GySoMweMJcHNyxGkkp2fCOHozj677Ehq+eRo8BoxHTewhCu8Z3SHzWnHCYM8EVg+fUteh+9skHWPDrj6bnRZIruiJUlJfL+6LiyF33PICevXqbpqmf8FLjRJ1llba/8+PjJkCkDp6XI+vXCQfMlGN7ERjeHcOmzDc9JhIrRxc3RPWfgq0L3panva//6ytwdnaFg+bS3XuY8LZdSUmJHOxBOHPmNH764VuMHTcRffslyu4IoiuWq6ubafqBg4bIW52mqs9Q4ww1UDbhFfERkTr4jSblteaAmZF2Gsnp+fAIjpcHTGNJOtatXg13T1/0HjIRGq0TjIaGfW1X/vg/hPabDp+4MTIRj4uLhVsT3RlaG5+tt/CKFtyy0lJZGUFYs3oVdu7Yhjvvvl8mvr4+fvIis/pJ7uUzrjBrDFTLw8leie2vtfERkQ0nvaJ02emUFPl3ZFQUXFzOXdVMnWP9sTLklzZxwVlNjayCIC4KE31kRZeB5rSgVumMKKkyQgyq5eniAAdRX6sZfQDFKVHRQiQOmE7aZpxCvkR8xzKrMCjaxWwHzJKSUvz2yYvoPvIaxPtogfIs/PbZK0gYMgElhbn49ZOXMO3aP2P9os+ReuIgwrv1QkFeFlKPH4Zfv7nwd9UiYfwUJQ7olpDwihb0goJ8aLWOppbcjz/6n0xob7jxVnk/LCwCuupq1Jy91N7VzQ1XXnVNm+ZLzdOc76+lb39MeIlsg1mT3k2bNuLjjz6Sia8gSpfdceedGDz43ClE6ngi4fVytW9ih28wHZBaclFYdoleHpDCW3RAas1FLxePr7TKaNYDZmohYK9xhF1ZBvJO7kBuZqrskztw7CwY9Dos/uJ1bFj8JSZedQ9WfPcO3Dx9UFSQi67D5sHf10eZA3qHJbxna97WqayslGXBwiMi5UVnWZkZ+OrLTzFs+EgMHzFaTtOv34AG/W27x8TKG1keS9/+mPAS2Q6zJb1iPPn333sP199wA0aOHCUfW7tmDf777rvoFt1N9qcjy6PqAakt8RXnZciW65SDm5A4bBzys9Og01Xh5KEd2LTsW3QJjkTG6SRMufpPuPqBF3HkeArgHgo/Lzcuv1as3/TcQpw6lYuuXbvJx3bu2Iotmzfi+htvlaOc+QcEYsDAwYiIODeS45Chw5t8b+p8qu5fiMg6me3S5J07d2LgwIGYOHGSHJZY3KZMnYqEhATs2r3bXLMhM1L1gNSW+I5t+hm67IOYOPcOuLp5yiGEY/oMw8Ftf2D76gUYd8Vt6DNskjzVLtoncyqcoPHtxoS3mevXoNMjPS1NjuZYt34PHDyMFcsWm6bpHhMna+GKwW4E0dorLkgLC49ocj2S5VB1/0JE1stsLb3ilKSP74UjEfn6+aGqstJcsyEzUfWA1Nr4DhxLQcre36ErSsfUGY9A6+gEewcNNiz+Clfd8yxGz7gJh3aswY41C2V5MtG1oaPiMxiMFr/8LhZfaUkJMjMzZCuto5MjqnQ6bNu6CZFR0fCL7CPj6x7dFRMTupkGihCtu+JG1stStj9zx0dE1s1sLb3hERHYsX27TH7riL69O3fsQHhEuLlmQ2ag6gGppfHVXSB1MrsKWo9AVBemoUtgsEx4BVFT18svEId3rUN8/5GYdu0DGDrpSlz74MswenbrsOVXUG49dVArCjNwPOmY6fns7Cwc2L8X+QV58r64sLV/4mC4+p9bftHhQejWPYYlwxSh6v6FiKyf2Vp6RdeG5cuW4eGHHsKgQYPk0I3bt21DeHg4+vbtZ67ZUBupekBqaXylxflY/OWbKMzNgqOrJ8bO/RPGXn4dln37Ngx6PRzODi0r6vD++tGLiOk9FC5unnBy9ejw5We00DqoZRXV2Lw/GY6OrugdEyzjO7T7JPLzchHdrbu80Cw4JFRWXPDx8ZOvEfsFO48QVNeLr6SCw7yqQtX9CxGpwWxJrzgt+ehjj2HZsqU4fOiwrCY1bfp0TJky1VyzoDZS9YBUWd3y+DYu+w6eob3Ra+YTcCw9hfU/vYXZtz2OsOge2L91FfqNqN1uPX38MfOWR6B1cu605SfKs1lCwluQn4fkU6cQExcPR2c3pOQZkJKSiuhgd/i4hclpEnr3hUbjADs7e1PLbl3ZwovHx6RXBaruX84rLkJEtpr0FhcXo7S0tMFjAwYMlLc62dnZ8PHxYb3eTqbqAUnEJ+r3tjS+rLRUxIwdD38XHY7v34PK8hLsXLsQQyddhR/fexaxfYfD1d1TTu/tF9Spyy+nxNAp6/fE8STZ/aNu1LKK8gqkpJyCt28Aqp21MMIOk0YmIjTg3AAcXl6ND8bBFja1qbx/Ea8lIjW0KeldtnQpfvnl5yane/Avf8WQIazV22nOq3Or0gFJxCfGw7hUfKLU2NZVP8HBQYPeIy6DfWB/uHWJQPa+JTi64hSieiRiwtw7cXjXellzd9zsWxvUgFX5gF4XX7i3Hfbu2govL2/ExsXL5wsLC5GRni5HP9NqtfLisvGTLkdGqX29+JzbLT6yEorvX4hIHW1KeufMnYuZs2bJv/V6PV7+10sYPmIERo0aLS8SWr36D2zcsAF9+/Y1V7zUCqIlVNUDkojPx9Wh0fiKC3Jw5sRB7Fq3SFZfMNTYYc2CTxA9zA6Dx8/Cis+ex7DJ8+Dk4o6tK3/AgLEz5esiYvqYNT5LXH4nUrOwfX8KukVHIrZ7gIxTXHRWX58+fZGYOBB2Z0fZM9g5IKO0Yy6qI+uh+v7FgdsrkTLaVL1Bo9GYavLu2bMbXbp0wdSp0+RIbO7u7pgxYyb8/f1lBQfqPGLoXlUPSCI+B4fGN+OSglysXfgpBo2/AkFdE1DtEYOYMTcibddChIcG44rb/4705KM4umcDhk+7BnH9RrRLfJ21/OqflT108ABWLl+KGmPN2ZH07FBdVYYuzlUyPvGyqVMvx6DBQ02v0To6mhJeXjREtrp/AX+jESnDfCOyZWU1Ouqar68f8gvyzTUbagVHB7sWDS1sTQekS8UXGt0DXXsMQGlJsSm++Lg47FuUhhqjEb4BIZh45V2dFp85l1+oj6Y2y7Wzg9FoxNrVv8PD09PUH1eELrooZBVUILfCHj7eXph/+Vg4ac/F56BpfL5MeOlSbHX/QkQ2XKc3KDAIe/fsQXV1temxiooK2QIcHBzSovc6efI41q9djc2bNiAnJ/uS04pTshvWr8Wa1b8j6dhR2a2CGhJX/6t8QBLrXLTYZp05ecFrBk2cjz0bl6Mw+wyCveyRvHs5AkK7wq5en932jq89ll9yVqUpPmddHpYuWoD0tDPyedEf2dHRUd7q9OiZgL5DxsmEV8QXHeDYIOE1d3zs0mA7VN+/EJE6zNbSO2ToUCxduhSPPvKwqXrD1q1bEBQcjMTExGa/z9Ytm7B3zy70SxyIyopyfPfNl5g1ey7CIyIvmFZcXb5q5XL07ddfVodYv24NCgoLMLjeKVo628ynyAGpproUXSP8GsSXtvEjZJSmQVddicET5qDnwLGm+HL1XgiIGYI9v76EQ05O8AkIxdSr72+3+Npl+dUYUFlRAWcXFxnfmq0HcDI1G+NHD5fxVZS5y6oJ4kK9OiNGjem4+OphwmuDOvv7UQ8TXiLqkKRX9O/9+1NPyYoOR48eka1NU6ZOlXV6618JfyniYrgd27fisstnIapr9Nn31WLbti2NJr0bN6zD5KnT0fXstF2ju6GwsOCi719eXibLLtVnMOhh66zlgFSUuh9d3GrgqKntRpObeRrb//gFRl0lrnvgRZSXFeGn955DVFw/aFy8TPENGT8Ty5N3YMZND8O7S5BFJ7ziRIU4QyL6KTs5Ocn7hw8dhDa3CsNHjZHx2Tl5ISJIj0CPGhmfm7s7Ro0Z1yHxXUprl1+VztjkNGS9LH37Ywsvke0wW9IriAvaZl9xRYPH6oYlFv0JmyJGchKJb/0ENzw8Qrb8XjhtHsrKSuHr44vNG9fL10VEdUV0dPeLvv/ePbtlS/L5yfrgIYnISE+Bg0PTO1ZrVFhghL688Z1/cWUNMosBjT3QxQcoKWz6ICEORKkFgN4IBHkCxgo75DX8LXEB0QUhoxgoqQI8nABXJ6Agr+l51Y/P28UAv+BIHDuwHU4ubrK8WGFeFrS+PVFQkCun79Z7GFb/9gUCEq8yxedgsEOPQeOxesEnGD3r1naLz9zLr7Sk9v+oqCjER9rh4MksGV8XT0cEhwXL2sLi1lnxmWv5FVbUIO0M+/1bK1X2LxeLz2AwQq9rula2tRI/rPU6NUuzqfzZbOHzWXzSm5+fj6SkpAatp9u2bkXPXr0wefKUJl9fVVUlrxivn3yKU7ricbFTE6O+1SkpLYG9vQN+/fVHxMf3hMbODksWLcCQYSNkmaXGiG4QsbG1NUjriFiTk48gOCQSWu25PpAq8c4uhperfaMtHGWVOvj6tLwFxsW95S0wcDIgzLv5LTBn0rOwb9MKxI+aL+OrKtVi0eevym2hqqIU3ROGYOzMm7H4+4/g43MN7B0cMGDcHHz39pPwrShEfGyMKT7fUdOhqyiFl5cPNOet59bG15rll19QjNTcSri4e8rll3p8H/aeOI5Jk6fJFltRE/fggX0IC4tAF39/+RqXrBKU2zt3SHwduX7r4vPxtkdomG+T05Nlstb9S3Pjc3DIhkZrtstfLI6dnQ6aZjRKWSOVP5stfD6Lr97w+GOPyoS1vLxclioTxe09PDxxxZy5zX4fcVV9g/tnL0yrn/DWJasVFeWYftkMU8twly7+WLVy2UWTXldXN3mrT6erRnIybI41nHIsMHggqPsAU3yrFn+BmD5DMXDsLOiqq/DbZ68gICwazj5hOLD9D8QPnIjT+UZ0H3kdurg1HLpXbD/Dpsw3a3xNLT+DTo/c/Fy4urjKSgpi+S1dvxc19va4bNxQGZ8xNAzOzq6m/rjijEi//gMaxFdYoXYdVE8XNc+w2DJr2v540RqR7TDbz9edO3dg3PjxeP+DDxEcEoJnnn0O/3n7Hfj4eMPPz69Z7yESUtHSJVp265SWlMDV1fWCad3OJq/+/gGmx0TLmHht/QoSZL0HJEeNA3r36IaNiz6WP4bys86ge+/aElxaRycMHDsTx/ZuQkC/2di1bjGOpebL+HolJCAmNrbd4zt/+YkhuU+dOAGDvvZUaFl5mex6c/p0smn5hYZHYWB8pGn5+XXxR2xcHJxdnC8aX5Ve7TqoDmdrAZMarG37Y5UGItthtqRXtO6GhYbJFrVu0d1wJjUVHh4e6J+YiIMHDjTrPXx8fWWCe+TIIdNjhw8fRGho+AXTBgQGyUEwTp48YXrs5Inj8PXza1CqiazvgHQmvxqVBWkIcC6Dq4szqirKcWjnWviHROF00n7TtAa9XibD9s7eiB1zI/RG+w49YLoa8pFx5txpAlEybO/eXaaLKcVZjj59+yMoJNK0/PrGhiC+e1iL4nPS2Cmb8DLhaBvRxaupW0dScvtjFUwiZZite4O3tzdOnz4t/w4LD8PJUyeR0Ls3tBotcvNqLzJqiqjyMGbsBNlFIfV0irwITlzcduW8a+Tzu3btkEnOgIGDZXI9dtxELFu6GEnHjsidYFZmJmbMnG2uj6QcazggnTidgUPL/wuNnREHKssw6ap7MHzq1fj1o39i8rz7sPTrN2HQVcsL2bav/hVDp1yLfeUGBIX2bNf4qquqcTApBeXwQBc/H7n8Nq8/jNKyEkREdpVVm0JCw+Dp6QVPLy/5GjGaWVhktzYvP28X1kEly2cN+5fWxGdg7XciZZgt6RW1eb//7jtEde2KPn364PnnnkNRURG2bN6MO+9qfNSrxsTF95DdIzIzM2RlhZAQ0efR2TS6W/0+vzGxcbIOcHpamkwwpk67DC4uF3aFIOs5ICVv/RnR8X0wcup86HXVpovO4vqNxPEDWzHzlsewd9My2ad31MzboPOMhfF0hdnjy8/PQ+rp04iLi5cXUxaUG7DzcAoC/f0xKD5QLr8+ffvCQXPuIgIx9La4mXv5nci2V2b9soVXTSpuf3XxEZE6zJb0+vj4yH684uKyyMgoXH3NNdi2dRsmTJyIPn36tui9ZGuZZ21rWX1RUV0veEycQo6L92xT7KoTdVCzS/QWeUASie2pU6dQrg2Es7ML9KXZiO9X21ovEl6R3KadPITE0Zfj2/88gZ4Dx2H8Fbc3iE+MCNXW+E6cSEJpSams8CGUFJfg1Mnjss+4i3cQcsrs0Ld3H/SK9DYtPx9fP6s/oFtqfNT6bmaNXQNhq/sXc3w/mjMPIrKxpPfgwQOylbVbt9o6uRMnTpI36nwlVUaLPCClnTqM33/+GPZOHnKAiXn3PouM8GikHN2LLkERcprcjBTs27wCUfH9MWnePXB2db8gvpwSQ4vic9MYkHNqPwxFvnJAEzmf7Bw5pHVC775yYIiQkBD4+09HFZxNB8zY7v4WtfwEJrwk5GRn4+WXX5JnyMTZhr/+7WHExDR9MafK+xdzfT+Y8xKpw6wlyz795BMEBwdj3LjxGDFypLyQjTqfgx0QbkEHJKPRiBqjAat+/AA9pz8IT99A7Pj+Hzi68w8kjp6Bn99/XnYbcHX3lP12B4yZKV8XFN69VfFlZ2Ziy4FTCAiPRUgXT4R4a3Fwa6qs7F2X9Pbtl3i2RnRtVwLxd6nOQbkWVEuPj1rns88+waTJU2Q99BUrluPzzz7F8y/80yb3Lx39/SAiG0x6x4+fgKFDh2Hnjh3YvHkzvvvuW/Tt1w/jxo1D7959mj0UMZmfqINqKQekw7vWISv1OHqMvAoOrt5w9/JD2tavEd9vBPZsXIrYvsNx+U0PYeeahbIW88jp1yEytm+L4jt08ABysrMweuwE1KAG6cU1yC2qRFhYBcJ8fWV8U6ddLhPbOueXDFMxobT0+Kj1xP5VNDYIiYmJ8gJfW9y/1GHCS0TtPiKb6Es2avRoeRM1S9etXYs3Xn9dDk08e3bD4Ymp4zSnDmp7H5Cqqyrw+08fQK+rwoCptyKnQosBsx9C8vpP0GvAaETE9JZ9d0V1hmGT52PK1X+6ZHzerrXxiSEYTyQdhV+1uLCstj+urrpaDkst6jVnldrBwdkbE8eMQJif1hRf/YTXFhJKS4+P2kZ0Z6izdOkSjBo91qb2L/Ux4SWiDkl6BZFs7NmzB5s2bsCuXbvQtWtX9OzR09yzITMy5wGpMC8T3n5BF0zv6OQCRydnlBQXIV/nJhOiMC87bE05islX3YW0k4fh4u6FkKg4+PiHNHhtRaUepwsMMj5HXQE2r9mOxMRBsnKH6AZRUyMqepyLuU+/RNnCa4rPTWNxB0xLP6B3ZHwGIwuhmoNoaPj44w8RGBiIK66YA0th6dsfuzQQ2Q6zJb2pqaexbOkybN26RQ6lOmrUaLz44kuy/BhZLnMdkIpyM2Xt3AUfv4Sr7nkOBoMOaxd8isLcDETG9cPQSVchfsQcLP7waRgri9A1KkAekIIjY/Hpvx6Ab0Aopsy/Dy7u3rKlts7OnbuwP7kAiYOGI9zPEfY6F6TXG0paHAe7x/ZAnx7nHmuQ8FrgAdPSD+gdHV9xRdMXItKlZaSn4733/4sbb7wF0dHRFrO4rGH7Yx9eItthtqR365atciSqu++5B/37J8LBgRcAWDpzHJD8nMpRXanBtj9+xoip1yBh8ARs+/1HZJ4+gbh+wzF00pXYvX4Jlv/4IaJG34bIfpORs38x+nS/Vb7f2CvuQFVFGTy9feUFbksWL4Cfnz+GDhtemxDBG57e9ghwrzkbnzfGjptgtQdMxnfh8tOIK6GoTd5777+YN/9qeHl5IS8vDxqNA7y8vDt1qar4/SAi62a2pLdvv77o168fusfEmOstyQoOSLvXrUNpcb5spS0pykPCkIn44b9Pw8s3EP1HXSZflzj1Vvz6v8cRWHAGfQaNwB9fv4Kc9GQY7J2wZdMG9E8cKJNecTGOGIxEDC9dF59/YAj6xUcqccBsbXyV1ZYdX1uXn8/Z/tnUOlVVVcjMzMRbb75ueiwsLBxPPf1Mpy1Sa9r+mPAS2Q6zJb2nU07j6LGjTHqtgDkPSH2HT8G3bz+J3MzTOLB1Fbz8guSFaDvXLpSF8nOLqlBscIFXQCRyk7YgLckJo2bcLLtCODp7IDwiCm5u50Yx6584QMkDZlviK65Uuw4qi/+3jZOTE/733gewFNa2/bGFl8h2mK2O2PARI5Celo5DBw+a6y3JCg5IYtS0YZPmYcPir9C931js3bQcwZExcHR2xY9f/A+bdh9DeW4yitKPoXuPPoiP74XAsG7w9PGXZcIGDByELv7+bYoPRqNFHzDbekAXF8dbcnxMOIjbHxHZVEvvqZMn4eLijBdeeF4O3ert7QU7u9qcevyE8Rg9eoy5ZkWtZK6ESF9dia2//4LM1BMYOmEOuiUMwq4NS7H+90UI6d4fW1b+iD7jrsayT56BJvckjhxyxNhZN6Nbjz7tEl9hhdFiEzZzJJTi9L8lx8cWNlJ1+xPxGUVxGCJSgtmSXi9vbyQmDpC384WEhJprNtRJByRjRSHsa3QweATg149ehHuXcOg1nlj54/9w/YMvY8yMG7H4qzfR//LHsOyrN+ASNRKR/aagb+IghEV1b9f4qvQ1FnvANMcBPb1Qb9Hx8ZRy5zEaLaPyhYrbX118ohoMEanBbElvaGiovJHlEXVQT+Xomr3Dr66qwpnUMyiz9wQcPeQB6dihvcgyGlBTFQEv3wAMnTIPJw5sx/68U9ixdiGGT5mPrvH9cHTfNkQMnou8E9sxefZ1HZJQOmnsLPaAaekHdEuNj9Tdv1jD9lc/PjuwugiRKsw6NnBBQQE++fhjPHD/n/DbbwuxevVq7Ny505yzoFYQdVAvtcMvyM/Dgf37oNPp5P0qXTU27DmK5DM50OoKcWrTNyg9sxdhgT7wDYxAfOIopB7diZK8M5j/pxdweOdaZKYeR9zQWUg5tg+BXXt3WMIrDpjeLvYWe8C09AO6JcZHau1frG37Oz8+e7MeJYmoM5nt61xWVoYXnn8OJSXFiIyMlCOzBQUF4t133kZebq65ZkOtYKhBgx3+qRMncPjQuQsO8/PycTzpKAry8+UOv6DSGV3j+qN7RBds/v7/5EhqfYaOh66yBG4envIitBMHt2PMzJvl6908fbDkq38jLa8MA694GNEBzh2asDXnqMSE0joSDrL+/Ys1b3+N7l+ISBlm+0Zv2bwZvn5+eODPD+L7776Tj/Xo0RODBg/Gnr17MWHCxQcUoPZTVlaKtFOH4RTsAx+3CPlYWvoZFBYUID6+J+zs7RAaHo6AwEC4unvU7vArDYgM6YKylC0IiYzDsMnzTO9XU1MjL1AsyEnHvs0rcHTPRgyYchOqXCJsvoXSGg/olhQfWScPJ3sltr/WxkdENpj0lpaVNjr8pYuzC8rLy8w1G2pC8qmT2LVrO8aPnwxvHx9oNFpkpJ6Cu6YaYRG1SW9i4kA4OjrKhFdwdnaGo5PTBTv8UxnOMBoaXiiz4vt3MWTiXDn6mujSMHDqrSjTBlrsAcnSD5iMT33L9hUjs0gPTxcHOJz9zjXVR1Z0GRAtqCKhdNI244RcTY2s51xtqIGjgx08ne1rx+huQpXOiJIqI8SgeK2NLyVPhwAvjU1+P4jIRpPeiIhI/PDD95g//1x9FzGs7IED+3HtddebazZ0nvXr1iA3JxtXzK1tja2srMDplGTk5+fJpFcUrh87fhICfNxMr3F1O/f3pXb4EbF9sH7xF7KlOLRrDxTmZSIj+SicXdwR02counQbZNEHJEs/YDK+s2rUvjpeJLwhPtoWbH+tuSjMYNr+Qluw/WWX6OX3I7xF34+G8R1Mr7LJ7wcR2XDSK4YgXrZ0CZ544nE4arWyhXHvnj3w9vaWz1Hr1XYpsJMjnP228GeEh0dg+IjR8rni4kLk5eXKPtQajQbdY+Lwp5g4+XcdZ2eXizb6XGqHr3V0wsSr7saK796Bm6cvSgpzMeqyG+Ds6m7xByTGZz3LT7RQqky0oPL7YbnbHxNeItthtqRXJGUPP/IoVixfjoOHDsodW69eCZg4aZJ8jppHtI7bn70wKynpKNb8sQrTLpuBsLAIuLi4yL64AQGBpumnTpsBB4dzO/f6ya45dvhh0T1xzQMvIT87Df7BkdA6OVv8AYnxWdfyE69RWXO6DPD7YT3fXyKyXma9NFUkXNMvu0zeCgsLkZSUhMrKSri7u5tzNkq14Op1OmgdHeX9FcuX4MTxJNx97wPyh4Loa6t11JpKiYnH7rz7Tw1+RNRPeFuiJTt80bIbEhVnFQckFeMzGIxKLz9vF9u+yM3Stz/GR0SqMFvSazAY8N57/0NYWBgmTZqMxx97VJYx8/f3xz9ffEn2LbV1VVVVshVXq9VCV12NDz54F12jojHtspnyeQ8PTwQFBcvpRMIbHh6Jm2+5s8F7mKPVnAdM6zqgF5QbEOSt7vKTF13ZKGvY/hgfEanCbEeb3bt3I+nYMQwbOgw7tm9HYGAQPvn0M5nI7d27B7bYTaGgIN90/9jRI3j736/h1Mnj8r5o3Q0LDZdl3uoMGz5SXpAmEt52i4sHTKs7oBtVr4Nqo6eUrWX7Y3xEpAqzJb1nUlMxZMhQ+AcE4MiRIxg+Yrg89R4bG4vsrGyorrysTFZMqLNk8UJ88tF7skVXEMslNq4HXFxdTdPMnD0XQ4aO6LAYVT1gVlZbdnxtXX6iJdSS42Mfypazpu3P1uNTvLgIkU2xN2d/XtH3VPRTPXDgAGJiYk31e1Xr2iAqJWSkp6G0tNTUqvvB++/gj1UrTNN07x6DgYOGQG/Qy/s+Pr6YMfMK2WWhM6h6QBLxiav/LTm+ti4/Z0fLjo8XDbWMtW1/th6feC0RqcFsSW+vhASsWbMa/3rpJfHbGFFRUTh69Ai2btmC2Ljai6CslRhaWXRPEAm9kHo6BV9/9RmSjh2R90U/XdFi26NnL9Nr4nv0wugx4+Hicq5lt9MofEAS8YmL4y05PktffpYan4pUXL8wGi06vrYuPyJSh9mS3q5du+LW226Hq5sr7r+/tvpAamoq5s2bj8jIzmndbA2R2Iqk9tTJE6bHtm7ZJOvjlhQXy/vBISEYPmIUQsPCTdMMHTYCvRL6wBKJllBVD0giPh9X1kFVbf2qSMWEV8RXWKH2/sXBRrdXIhWZtWTZiBEj4OXpKS9q27lrJ+Li4q1mYIrc3BwEB4fKZH3JkoVy+OSu0d3kcz179ZbPOTk7mQZ7GDZ8FKyFGJpU1QOSiC+9UG/R8Vn68rO0+FSk8vqt0qu9f4FtbrJESjJr0vv+++9hw/r1iI2Nk/1cf1u4ECNGjMQ9994LS3fi+DGZ2ArjJ0xu0C0hJCRU3qyVo4Ndi4YmtaYDEuNTa/mpyGBs7dDC1vH9cNLYWXR87b38iMgGk15Rlmznjh145dXXEBhYO2JYVlYWnn76KRw8eECOzmbJEnqfa5GOibHuPsjnE1f/2+oBifFZz/JTVXGFQenvh7eL7e5fiMhG+/SeOHECw4YPNyW8gvh70KBBOHXyFCydm5sblGWjByTGZz3LT2VilGWVvx84O2y6pcbHhJeIzJ70uru5yyF1z1dZUQEPT09zzYbagYoHJMZnPcuvSmeEyjycbLvOsorxEZGNJ71Dhg7FoUOHcOzYMdNjB/bvx8mTJ2VrL1kmFQ9IjM+6ll9JldpJr5O26d0svx/W8/0lIhvt07tk8WKsXHluQIby8nL84+mnEBAQIC9ky83NhYeHh0yEraWKgy2xhoSI8alfB9XdyWy/va0Svx/Ws38hIhtOehN694aPj0+T04WHn6tnS5bBWhIixqd+HVRPl2YMgKAofj+sZ/9CRDae9EZERMhbfaK193RKivw7MioKLi4ubYuQzM6aEiLGp34d1Ipq2xzmld8P69m/EJEazFqnd9Omjfj4o49k4ltXEeGOO+/E4MFDzDkbagNrS4iaE5/BYLTo+FgH9dLLzxaTXmva/mw9Ptje5kmkLLMlvVmZmXj/vfdw/Q03YOTI2tHK1q5Zg/+++y66RXeDX5cu5poVtZKKByQRX0G5AUHelhsf66C2fvmpyNq2P1uPz1DDrJdIFWZLenfu3ImBAwdi4sRJpsemTJ2KAwf2Y9fu3Zg06dzjl6LTVWPrls04cyYVWo0GsXHx6N2n6YvgDuzfh7S0VEyZelmbPoeqVD0gifiMitdBPZHNOqiqsMbtz9bjIyJ1mC3prayshI+v7wWP+/r5oaqystnvs2rlchQVFmLU6LGoqKjAH7+vFKMroHefvhd9TV5eLjZuWAs/P7YmX6wOanaJXskDkohPjDhnyfFZ+vKzxPhUpOr6ray27PjauvxsfXAVIpWYrVZQeEQEdmzfLpPfOqJvrxiaODyiedUbxGuPHT2C8RMnIzQsHN1jYjFo8FDs37fnoq/R6/UyURbTNaW8vAx5ubkNbgX5+VCdqIOq6gFJxOfsaNnxWfrys7T4VKTy+i2uVHv/wpyXSB1ma+kVXRuWL1uGhx96SA5GUYMabN+2TZYr69u3eTV68/PzYG9vj4CAekMZBwVh44Z1F33N+nVrkNC7D5ydnJt8/717dmPrlk0NHtNoNBg8JBEZ6SlwcFCzdFJpsQGBHnYoKWx6hy929KkFgN4IBHkCxgo75FVc+jU1NTXIKBbJtRh9CnB1Agrymp5XcWUNMosBjT3QxQetjq+izIi83FKLja+ty+9in89S4ruY5sZXWlWDtDO5UFVBvgGnq+ysdvtrKr6qyhp42VdabHxtXX7iQlm9zgBViS7LjY2mqgKVP5stfD6LTnrt7Ozw6GOPYdmypTh86LD8dTxt+nRMmTK12e8hWm0dNA1DctQ6Qq/XyR2fmEd9J08cR1lpKXqNn4gTx5OafP++/fojNja+wWMGgx7JyUcQHBIJrdYRKgrPLIKvu0OzWzhc3FveAgMnA8K8W9YCU1apg69Py1tgzo/PJacMfl3cLDa+S2lOfI19PkuKrzEtiU9TbkRomLpDlTukFIg9jdVuf03FF2KsRlCgh8XG19bl5+CQDU0zRtWzVnZ2Omi0WqhI5c9mC5/P4kuWabVazJgxU95aQ+zMDPqGv6gNRoNMds9PeEtLS7Bp43rMverqZr+/q6ubvJ1/4VxyMpTmYK/eKUfGp9byU1m1Qe06y+mFeouOr72WHxHZeNLbVh6enrLlVSS07u61LQcFBflw97iwFeHokcMoKSnB9999Je/rqqtRWVmFzz79ENffcIuyXRXag4oHJMZnPcvPIMpvKMzRwQ6h/H5Y7PbHhJfIdlhU0uvl5S0rMGzfugXjJkySfVV27dyO6OjuF0zbq1dvdI3uZrqfejoFhw4dxJSp02W/YGoeS0+IGJ/6y6+4Qt3+koKoLsLvh+Vuf2zhJbIdFpX0CiJpXbxoId5/7x2Z9AYEBmHY8JHyuVUrlsnuDqIWr7OLi7zVEVUYRF1fX1+/TozeulhDQsT41F9+GgfFuz/w+2HR2x+7NBDZDrMnvaJM2emUFPl3ZFQUXOolps0hktxbbrtTXqAmLmpzdj5XlWHIsBEXHRMyPCISAYHnqj6QGgkR41O/DqqPq213ReL3wzr2L0Rk/cya9G7atBEff/SRTHwFNzc33HHnnRg8eEiL38vN3f2Cxzwa6dtbx9HRUd4ISiVEjE/9Oqi2XPyf3w/r2L8QkRrMlvRmZWbi/ffew/U33ICRI0fJx9auWYP/vvsuukV3g18XjpZmCZQ8IBmNFh1fW5efKL5hyfG1dfkVlRthi6xl+7P1+IhIHWa74mvnzp1ygIqJEyfJLgniNmXqVCQkJGDX7t3mmg21gYoHJBFfYYXRouNr6/ITp/8tOT4mHC1nTdufrcdntM3fZERKMlvSK4YQ9vH1veBxXz8/VNUbmpg6h6oHJBFflV7tOqgODvY2uX5VZW3bn63HJ0YXJSI1mC3pDY+IwI7t22XyW0f07d25YwfCI8LNNRtqBVEHVdUDkojPSWNn0fFZ+vKzxPhUpeL6FcP0WnJ8bV1+drDdPudEqjFbn17RtWH5smV4+KGHMGjQIPnrePu2bQgPD0ffvv3MNRtqBVEHVdUDkojP24V1UFVav6pSMeEV8RWUGxDkbbnxtXX5sew7kTrMlvSKYYIffewxLFu2FIcPHZalKadNn44pU6aaaxbUSoYaKHtAEvGdyLa32YRDtfhUpfL6FQPqWXJ8bV1+RKQOs32jRaUGB40DZsyYKW911qxZDY1GY6roQB3Pw8le2QMS41Nn+amqSmdEdole2e+HGHHOkuNr7+VHRDaS9GZkZCA7O0v+vW/fPpn01q+lW1MDbN68WVZwoM7jpLW32QMS47OO5aeykiq16yznlBisfvtjwktkG9qU9G7dugVLFi+Wf1dVVckuDnvOK0/m6emJ/v0T2xYltStVD0iMzzqWn/x1rDAxynI4vx8Wu/0x4SWyHW1KemfPvkLehO+/+w5aRy2uuGKOuWKjDmDpCRHjU3/5iRHnVObpYrt1llWNj4hsvE9vXHwcWM7Quqh6QGJ81rX8xGtU5iCG1GsCvx/W8/0lIutltjq9uTm52Lhpo7nejtqZtSREjE/9OqiO4vy/DeP3w3r2L0Rk3cyW9A4fMQLpaek4dPCgud6S2ok1JUSMr7YOqsrLT1z9b6v4/bCe/QsRWT+zdW84dfIkXFyc8cILz8PfPwDe3l6ws6s9mI2fMB6jR48x16yoDawtIWJ86tdBLalQu3vDxfD7YT37FyJSg9mSXi9vbyQmDpC384WEhJprNtQG1pgQNSe+ymrLjo91UJtafraX9FrT9mfr8SleXITIppgt6Q0NDZU3skyqHpBEfOLqf0uOj3VQ2cJmzdufrccnXktEajDrGIsFBQX49ZdfsHv3LkyaPBnu7h6yTu+AARe2/lIHkjt8g5IHJBGfuDjekuOz9OVnqfGpSMX1C6PRouNr6/IjInWY7QqSsrIyvPD8cygpKUZkZCT0ej2CggLx7jtvIy8311yzoVYQLaGqHpBEfD6urIOq2vpVkYoJr4ivsELt/YuDjW6vRCoyW9K7ZfNm+Pr54YE/P4jw8Aj5WI8ePTFo8GDs2bvXXLOhVqg21Ch7QBLxOTjY22zCoWJ8KlJ5/Vbp1d6/wDY3WSIlma17Q2lZKaKjoy943MXZBeXlZeaaDbWCqIMaqugBifGptfxUZDCK5adT9vvhpLGz6Pjae/kRkQ229EZERGL//v0wGs8NKSr+PnBgP8LCws01G2oFUQfVVg9IjM96lp+qiivUrrPs7WK7+xcistGW3n79+mHZ0iV44onH4ajVQqPRYu+ePfD29pbPUSey0QMS47Oe5acyMcqyyt+PE9n2Vr/9MeElsg1mS3rt7Ozw8COPYsXy5Th46KDc0fTqlYCJkybJ58hyqXhAYnzWs/yqdOfODqnIw8me3w8L3v6Y8BLZDrOWLNNoNJh+2WXyRtbB0hMixqf+8iupUjvpddLa2/T6VS0+IrLRpPe33xZCq9Fi6rRpeO7ZZ5GVldXodDNmzJDTkGVR8YCkYnyq10F1dzLbpQVWydK3P8ZHRKpoU9KbmJgIe7vaA9acOXNQWVXZ6HShHIbY4vCAaT0HdNXroHq6NCPxV5Q1bH+Mj4hU0aakNzQ0zPR3Qu/e5oiHOgAPmNZ1QFe9DmpFtW0O82ot2x/jIyJVmH0Y4gULfpX1eqsqq3DmzBnMmTsXXl5e5pwNtYGKB0yDwWjR8bEO6qWXny0mvda0/dl6fLC9zZNIWWbrTFdeXo4nn3gcqampCAgIRFTXKOTk5OCpvz+Jqqoqc82G2kDFA5KIr6CcdVBVXb8qYkJpXfEZapj1EqnCbEnv1i1bEBXVFU899TTi4+MRExOLRx59FP7+/ti5c4e5ZkOtpGJCVBefUfE6qLBnHVRVWOP2Z+vxEZE6NObs2hASEtLoSG2FhYXmmg21gqiDml2iV/KAJOITI85ZcnyWvvwsMT4Vqbp+K6stO762Lj9bH1yFSCVma+kNDQ3Fnj27G3RlqK6uxv79+xASfGEyTB1H1EFV9YAk4nN2tOz4LH35WVp8KlJ5/RZXqr1/Yc5LpA6ztfQOGjwYS5cuxWOPPoIBAwbKUdh27NgONzc39Onb11yzoVZwsAPCFT0gMT61lp+S5PIzKPv9sLeDbdfRJiLbS3rt7e3xxJNPYvnyZThy+DCMRiNGjRotR2cTz1HnEXVQbfWAxPisZ/mpSrSEqvz98HG13f0LEdlwyTJHR0fMmDFT3upUVlZCp9NBq9Wac1bUAg6iKcYGD0iMz3qWn8qqDWrXWU4v1Ft0fEx4iahdkt78/HwkJSXBYDi3E9y2dSt69uqFyZOnmHNWZEYqHpAYn/UsP4Mov6EwRwc7hPL7YbHbH1t4iWyH2ZLerKwsPP7Yo3BwcJA1e0WpMlG1wcPDE1fMmWuu2ZCZWXpCxPjUX37FFQaoTFQX4ffDcrc/dmkgsh1m62wravGOGz8e73/wIYJDQvDMs8/hP2+/Ax8fb/j5+bX4/USf4JpmFgU3GNQ+aLYXa0iIGJ/6y8+gdkMvYOPrV6X4iMi6ma2lV7TuhoWGyaoN3aK74UxqKhJ690b/xEQcPHAAQ4YObdb7FBUVYsXypcjMyIC9vR1iYuMxfsIkaDQXhpqfn4dVK5cjOytTzrdHzwSMGTtetjaT7R2QVI1P9Tqo4kIoW2bp2x/jIyJVmK2l19vbG6dPn5Z/h4WH4eSpk/JvrUaL3LzcZr/P8qWL4eHugXvuvR833XK7TGi3bd3caEvwot9+RXBwCO6+9wFcf8MtSD2djB3bt5rrIymLB0zrOqCrXgfVSWu71V2sYftjfESkCrMdbURt3o0bN2Dt2rXo06cPFi5YgC+++BxLly5BWFhYs96jtKQE6elpGD5yNDRaLdzdPTBg4GAcO3rkgmkLCwtQVFiEYcNHylZgL29vxMX3RFZmxkXfv7y8DHm5uQ1uBfn5sCUqHjBhNFp0fKyD2rblpypr2f5sPT4iUofZujf4+PjIfrwVFeWIjIzC1ddcg21bt2HCxIno06dvs7s2aDRaeHp6nntfX18UFxddMK2bmztmz7myQbcH0SUiIDDwou+/d89ubN2yqcFj4vWDhyQiIz1F2W4RhQVG6Mvt5I4+tQDQG4EgT8BYYYe8iku/VvSrzigWo7oBHk6AqxNQkNf0waW4sgaZxYDGHujiA5QUNv2a1saXVVADJ7syi42vrcvPCTUoKayy2PjauvxKq2qQdqb5Z4Os9ftnrdtfU/FVlBmRl1tqsfHVaW18en0N9PbqXjciLp3R63RQkcqfzRY+n8WXLAsJOTfc8MSJk+StJQxGo+zHW59IROsuahP9dus4OTkhPDzCNNzx2tW/o6y8FAMGzrjo+/ft1x+xsfEN52nQIzn5CIJDIqHVOkJF3tnFcHG0ky0cLu4tb4GBkwFh3i1rgSmr1MHXp+UtMK2KT1OGsEA3y42vjcuvNKkcfl3cLDa+ti4/TbkRoWHnfuiq+P3zcrW32u2vqfhccsrg4e1qsfG1dfnZ2edDo1WzQUSws9PJM6sqUvmz2cLns/ikt600Dg6yEkP9BFev08vEt37CW9+J40lYu/YPxMTEYd786y45CIarq5u81afTVSM5GUoTdVBP5eiUOuVYPz4njZ1Fx2fpy88S41OViuvXYDBadHxtXX52sO3BVYhUYlFJr7ePj0x6RVUGP78u8rHs7Cx4e/s0Ov3OHdtw5MghzL7iSvj6trwsmq0QdVBVPSCJ+LxdWAdVpfWrKhUTXhFfQbkBQd6WG19bl5+97V5nSaQci/o6i1bYyKiusqtCUVGRrNywfdtmxPfoZWqVFbe6C9lE/9zLL58t+/dWVVXJmxjymBoSdVBVPSCJ+JpzVFI14VAtPlWpvH7FgHpK71+ISBkW942ePGU61q39Az9+/428yEzU3h0wcJB8bvmyJbIleNbsuUg7c0Z2efj6q88avL5791hMmjKtk6K3TB5O9soekBifOstPVVU6I7JL9Mp+P8SIc5YcX3svPyKyHhaX9Lq5uWHa9MYvRrt8xmzT370SessbNa05dVBVPSAxPutYfiorqVK7znJOicHqtz8mvES2weKSXup4qh6QGJ91LD9Zd0dhDnZAOL8fFrv9MeElsh0W1aeXOp6lJ0SMT/3lJ0acU5mniwO/Hxa8/bFLA5HtYEuvDbOGhIjxqb/8xGtU5nBe7XFbW7+qxUdE1ostvTZK1QOSivGpXgfVUZz/t2GWvv0xPiJSBZNeG8QDpvXVQVV5+Ymr/22VNWx/jI+IVGG7RxsbxQOm9R3Qla+DaqOnlK1l+2N8RKQKJr02RNUDZmW1ZcfHOqhtW34qsqbtz9bjU7y4CJFNYdJrI1Q9IIn4xNX/lhxfW5efs6Nlx8eLhlrG2rY/W49PvJaI1MDqDbZA7vANSh6QRHzi4nhLjs/Sl5+lxqciFdcvjEaLjq+ty4+I1MGWXhsgWkJVPSCJ+HxcWQdVtfWrIhUTXhFfYYXa+xcHG91eiVTEpNcGVBtqlD0gifgcHOxtNuFQMT4Vqbx+q/Rq719gm5sskZLYvcEGiDqooYoekBifWstPRQajWH46Zb8fTho7i46vvZcfEVkPtvTaAFEH1VYPSIzPepafqoor1K6z7O1iu/sXIrIuTHptgY0ekBif9Sw/lYlRllX+fsDe3uq3Pya8RLaBSS8peUBifNaz/Kp0RqjMw8me3w8L3v6Y8BLZDia9Ns7SEyLGp/7yK6lSO+l10trb9PpVLT4isl5Mem2YigckFeNTvQ6qg43nGZa+/TE+IlIFk14bxQOm9RzQVa+D6unSjMRfUdaw/TE+IlIFk14bxAOmdR3QVa+D6iCG1LNB1rL9MT4iUgWTXhuj4gHTYDBadHysg9q25acia9r+bD0+1DQ9CRFZBya9NkTFA5KIr6CcdVBVXb8qYkJpXfEZapj1EqmCI7J1AHv7S+/IjUZDu8egYkJUF59R8TqoJ7JZB7W9vnsd9f2z5u3P1uMjInUw6bUBog5qdoleyQOSiE+MOGfJ8Vn68rPE+FSk6vqtrLbs+Nq6/Gx9cBUilbB7gw0QdVBVPSCJ+JwdLTs+S19+lhafilRev8WVau9fmPMSqYNJbwfLz89HVVVVh85T1EFV9YDE+NRafu2tsrISJSXFHTtTxb8foviGTdfRJiKrwe4NHaSsrBQvvvh/yM7Kkgfem266BRMmTuqQeYs6qLZ6QGJ81rP8OsLvv6+CwaDHzJmzO2yeoiVU5e+Hj6vt7l+IyLqwpbeD/LZwIeJi4/D+Bx/juef/ic8++wRGY8cMv9qcOqgqHpAYn/Usv/ZWXFyM9evX4ofvv+vweVcbFK+z7GBv9dsfE14i28CW3g6i1WoxavQY+XdUVJS8bzAYYG/f+b87VDwgMT7rWX4GUX6jne3buwe//PwTNJqO3+U5OtghlN8Pi93+mPAS2Q4mvR1k7pVXmf5esWI5Bg4aLBPfzmbpCRHjU3/5FVe0f8mwkaNGy9vChb+io4nqIvx+WO72xy4NRLaDSW8HEn15v/ryc/n3HXfchc5mDQkR41N/+WnElZYq4/fDorc/9uElsh1MejuwT+Gbb7yGK6+ch569eqGzWUtCxPjUr4MqLoSyZfx+WMf+hYisH5PeDvLdt19j4KBB8PDwQOrp0/Kx8IgIdAZrSogYn/p1UG25+D+/H9axfyEiNTDp7SA5ubk4fPgQVq1cYXrs9Tf+jY6m5AHJaLTo+FgH9dLLr6i8Y6qYCB7uHrAU1rL92Xp8RKQOJr0d5Ikn/o7OpuIBScRXWME6qKquX3MbN34CLAETSuuJr4MqSxJRB+j8elnUIVRMiOriq9KzDqqK61dVTHitK74atH9JPSLqGGzptQGiDuqpHJ1SCVH9+Jw0dhYdn6UvP0uMT1Uqrl+DwWjR8bV1+dnBdvucE6mGSW8HMBrbvw7ppYg6qKoekER83i6sg6rS+lXpu6d6wiviKyg3IMjbcuNr6/KzgPGDiMhM+HW2AYYaKHtAEvE156ikasKhWnyqUnn9igH1lN6/EJEyLPIbXVVVhbzcHGi0Wvj5dYGDg4NZprVVHk72yh6QGJ86y09VVTojskv0yn4/xIhzlhxfey8/IrIeFpf0nj6dgiWLFsDL2wdVlZWwd7DHnLnz4N5IqaGWTGvLnLT2NntAYnzWsfxUVlKldp3lnBKD1W9/THiJbINFJb01NTVYtWIZBg4aIm/i/m8Lf8Gmjesxecr0Vk9bp7y8DBXlFQ0e0+t18n+drhqqsqvRAUb7S+7wMwr1KKswwtfFHsHe9rCv0aOpi5YLyw3IKtTD2QGI9HOE1l4PNFHeR6evwem8atQYgDBvDbxdjLLO7qU0FZ/WTsxXZ7HxXUxz46v/+SwxvvpaE5+d0aD098/RTocIP63Vbn9NxXex75+lxNfW5eeqNcBVo24FB3f5+dTs6ajyZ7OFz6fTVUOj0cLOjGdc7KqqKizm21xQkI/PPvkQd9/7AJydneVjJ04k4Y9VK3HHXfe2eto6mzdtwNYtmxo8Jl6bOKBPu30mIiIiImq5+B794OnpDSVbektLS+Ho6GhKYutGUBIttG2Ztk7ffv0RGxvf4DGj0QgHjb3sEmHOXxOWoiA/H99/9zXmzb8WPr6+nR0OtRDXn3Xj+rNuXH/Wi+tOjfUXHd3LrO9rUUkvai5sdLazt5ddF8StQVLakmnPcnV1kzdb4uCggV6vl/9rtY6dHQ61ENefdeP6s25cf9aL606N9Wdn5sZIi+oMonV0hE6ng8Fw7sKIyspK2aJ7/gdvybREREREZNssKun19fWDvb090tPOmB47k3oafl382zQtEREREdk2i+reIFppExL64PdVyzFk6AjZcrtzxzZMmXqZfD4zI0N2XQgOCWlyWiIiIiIii0x6hTHjJmD//r1ITj4JjUaDy2bMRteu0fK5U6dOyAvPRNLb1LRUy8XVBUOGDpf/k/Xh+rNuXH/WjevPenHdWTeXdspdLKpkGRERERGR8n16iYiIiIjaA5NeIiIiIlIek14iIiIiUh6TXiIiIiJSHpNeIiIiIlIek14iIiIiUh6TXiIiIiJSHpNeIiIiIlIek14iIiIiUh6TXiIiIiJSHpNeIiIiIlIek14iIiIiUh6TXiIiIiJSHpNeIiIiIlIek14iIiIiUh6TXiIiIiJSHpNeIiIiIlIek14iIiIiUh6TXiIiIiJSHpNeIiIiIlKeprMDsCQrV67E5s1bMGTIYGzdug2hoaG47bZbL5iuqKgIb731b/Ts2QNXXnllp8RKRERERM1nV1VVUdOC6ZVVWlqKAQMGwd7eDs8++yzuvvseDBw4ECtWLGt0+vHjJ+Do0WPYtWsHAgMDOzxeIiIiImo+dm8464cffkBOTg7mzZsHjabpBvBrrrkGFRUV+PjjT1qwuImIiIioMzDpPevXXxfI/ydPntRgAZWUlODTTz/Dm2++hT179pgenzhxgvz/hx9+7Li1RUREREStwu4NAHQ6HcLDI+X/qakpWLZsOW6//Q706NEDRqMRR48elQvL3t4ezz77DO677155v3v3WOTn52P37p2IjIxs3RogIiIionbHll4Ahw8fRnV1NcLDw+Hq6trgcRcXZ/z1r3/BgAEDZAL87LPPIS0tXT4fGxsr/9+1a3f7rykiIiIiajUmvQAyMjLkwvDz822wcIKDg7B06RL8/e9PYsmSRTIp1uv1WLt2rXy+Sxc/+X92dnbr1wARERERtTsmvQCKi4vlwnBycm6wcGJj4+Dk5CT/1mq1SEjoJf8uKCiQ/9e1CovKD0RERERkuZj0AnBzc5MLo6KivMHCEd0bystrH6uqqsLevfvk3/7+XeT/dc95eXl17FojIiIiohbh4BQAgoKC5MLIzc1rsHBEt4UJEyZh1KiRctCK9PR02fI7duxY+XxeXu30wcHBLVvqRERERNShmPQCSEhIkMmsSGrLyspklQZnZ2cMHz4cx44dw4cffmTq4vCvf72EgIAAeV8MTiH06dO7Y9caEREREbUIk14Ajo6OGDZsGNasWYOdO3di9uxZ8lY35PDSpctk14dRo0ahe/fu8vETJ07IcmVRUVHyAjciIiIislxMes+6+up5MuldvnwFRo8ebVpAor/u1VfPv2DBiemEuXPndNS6IiIiIqJW4uAUZ4k6vQMHDkZlZSX27dsjuzdcyogRo3D69Gns2LENgYGBrV3+RERERNQB2NJbr4vDf//7Dnbs2CkvYIuIiLjoQissLMS8eVchNjaGCS8RERGRFWBLLxEREREpj3V6iYiIiEh5THqJiIiISHlMeomIiIhIeUx6iYiIiEh5Np/01tTUQKerlv8TERERkZpsvmSZXq/D7l2bMHDQaGg02s5eH0REREQ2z2DQm30Z2HxLLxERERGpj0kvERERESnPqpJeMURwdlZmg8d0Oh2ysjKRn5cHo9HYabERERERkeWyqj69y5Yugl6nw5XzrpH3086kYtFvC+Dm5oaqqio4Oztj9pyr5H0iIiIiIqtLenfv2oGKigpoNedCXrliKfr1T8SQocNlK+/CBT9j08Z1mDR5WqPvUV5ehoryinbvKE1ERERElsUqkt6cnGycOHEcAwcOxt49u+RjBQX5KCwsRN9+ifK+vb09Enr3xZo/Vl30ffbu2Y2tWzY1eEyj0WDwkERkpKfAwcGhnT8JERERETUlKDgCNpf0ij67q1Ysw/TLZiI3N8f0eGlpKRwdHWWXhjqeHh4oKyu96Hv17dcfsbHxF7T0JicfQXBIJLRax3b6FERERETUXO1xJt7ik961q39Hn7794eXt3SDpbWwwCTt7e/m4uNnZ2V3wvKurm7zVJwamSE5up+CJiIiIyCJYdPWGUydPID0jDR4eHjh9OkV2c6isqpJ/a7Va2QpsMBhM04uL2cTjjSW8RERERGS7LDrp1el1cHdzx47tW7Fj2xYcTzqGkuJi+be3t4/sx5uZkW6aXlRz8Ovi36kxExEREZHlsejuDaL/bf0+uCeOJ8kqDnOunC/v9+iZgFWrlmP48FGorKyQyfGESVM6MWIiIiIiskQWnfSez8XVFQGBQab748ZPlNUcjh45LKswTJl6GbrHxHZqjERERETt7dVX/oWcnFxlF/Q/X3zRtpPekJBQeasjSowlDhgkb0RERES2QiS8vIZJoT69RERERETmwKSXiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHpJeIiIiIlMekl4iIiIiU16FJb1lZWUfOjoiIiIhI0qAdrV69Gs5OThgydCj+74XncejQIQwdOgz3P/AA7O3ZyExEREREHaPdMs+kpGP44vPP4OXtjb179yI3Nw//eOZZJCefwpHDh9trtkREREREHZf0Hj1yFGPGjEXPnj1x8MABjB03FvHx8ejfPxHJKcntNVsiIiIioo5LevV6PZxdnOXfR44cQWxsrPy7pqYGdrBrr9kSEREREXVc0hsVFYUtmzdjwYJfkZ6ehpiYWOTn52PXrl0Ij4hor9kSEREREXVc0tunb1/0SkjAsqVLccMNN8LR0RGrVq6UybDo8kBEREREZPXVG0R1httvv0Pe6syZOxcaTbsWjCAiIiIiukC7Z6AlJSUwGAym++vWrkVAYIAsXUZEREREZNVJrxiI4oXnn0NycsNKDXZ2dnjo4Ufaa7ZERERERB3Xp3fb1q3w9fXFS/96Gb6+fnj1tdfw2OOPIz6+B/r27dtesyUiIiIi6rikNy8/DwMHDUZkZCRiYmNQVlqGvn37oVu3bti/f397zZaIiIiIqOOSXlcXV+Tl5sq/Q0NDkZaWJv/26+KH9LN/ExERERFZddKb0Ls3fv/jdxw6eBBxsXFYvGQxdu7ciU0bN8qhiYmIiIiIrD7pjYiIwA033CCrN4gEODIiEm+9+QacnJwwaNCg9potEREREVHHliwbPnyE6e/7H3igdghiOw5BTEREREQKJb2FhYXyorWK8vIGj3fr3l1e0EZEREREZNVJr7iI7dFHH4G7uzs8PT0bPCe6ODDpJSIiIiKrT3o3b96MuPh4PPTQw+zSQERERERqXshmMBoQFhrGhJeIiIiI1E16+/Xrj/0H9kOv17fXLIiIiIiIOrd7g6jS4GBvj0cfeRg9e/aCVqs1Pdevf3/06dOnvWZNRERERNQxSW9lRQWCgoJr/66slLc61dVV7TVbIiIiIqKOS3pj4+LkjYiIiIhI6Tq9ghiRzWAwmO6vW7sWAYEBGDp0WHvPmoiIiIiofZPesrIyvPD8c0hOTr6gr+9DDz/SXrMlIiIiIuq46g3btm6Fr68vXvrXy/D19cOrr72Gxx5/HPHxPdC3b9/2mi0RERERUQeOyJafh4GDBiMyMhIxsTEoKy1D3779cGD/ATk0cb9+/dpr1kRERGTjXn3lX8jJyYWqsrIyTQUDqJNbel1dXOVQxEJoaCjS0tLk335d/JB+9m8iIiKi9iASXtGlUtUbx0GwoKQ3oXdv/P7H7zh08CDiYuOweMli7Ny5E5s2boSXt3eL36+iohw6ne4iz1VAp6s2Q9REREREpKJ2694QERGBG264QVZvGDR4MCIjIvHWm28gLi4OgwYNalHz/bKli1BeVg69Xofobt0xZcp0aLRa2ZK8ZPFClJbWVoiIiIjE1OmXw9HRqb0+FhERERFZoXZLeg8dOiQvYIuPj5f373/gAdTU1ODw4cM4efKk6fFLEYnskkULkdC7DwYOGoLKygr89OP32LZtC4aPGIVlyxYhNCwc48ZPlC29P//0A7Zs3ojRY8a318ciIiIiIlvv3iCSVNEFQdz27t2DA/v3m+7X3TZt3ICjR4806/2KCgtl6bMBAwfL/isuLq6IiYlFbk42iouLkJOdjSFDh8nnROtuYuJAnDh+/KLvV15eJluH698K8vPNuASIiIiISPmW3p9+/BG//PJzw8d++rHBfZGgPvbY4816Pw9PD8y/5jrY29fm5qKl+PTpFNmNobi4GFqtFm5u7qbpvby8UFJSfNH327tnN7Zu2dTgMY1Gg8FDEpGRngIHB4dmxUVERESW7YEH7unsEEjlpHfK1KkYNny4/Hv5sqWy3+2ECRMbTOPh4QHvZl7IptU6wt8/wNRKu2rlcvn3gAGDkJ6RLhPo+uwdHGA0GmVyfP5zQt9+/REb27BbhcGgR3LyEQSHRMr5ERERkfV79JGHG80FVHHmTCrCwsKhqv/75z8tO+kVLa3iJowdOw529vYID2/7Cjl4YB+2bN4kk9bEAYNky69ooRXlOuonuKL7hHj8Yhu5q6ubvNUn+gKfN2gcERERESmm3S5k6x4Tg8LCQqxfvx4V5eUNnuvWvTu6devWrPfZuGEd0tPOYP7V18Hdw8P0uI+Pr0x4c3KyERAQKB/LzMyQjxMRERERdcyIbLm5ePTRR+Du7g5PT88Gzzk5OTUr6c3Ly8We3Ttx1fxroTfoUVhYIB8X3RDc3NzQrVsMVv++EmPHTUBlZSW2b92MIUNHtNdHIiIiIiIr1W5J7+bNmxEXH4+HHmp9n5qc7CyZ3C5ZtKDB41Fdu8lEd9KUadi8aQN+X7VCdmsYNHio7AJBRERERNQhSa/BaEBYaFibOpHH9+glbxcjWoxF8ktERERE1CnDEPfr1x/7D+zn2NBEREREpG5Lr2jhdbC3lyVDevbsJWvq1unXvz/69OnTXrMmIiIiIuqYpLeyogJBQcG1f1dWylud6uqq9potEREREVHHJb2xcXHyRkRERESkbNIrGAwG7Ni+Hbt375JVFTw9PdCliz8CA2vr6hIRERERWfWFbGI44H+/9Sa+/vorJKekyIEjcnPz8Owz/0BFRUV7zZaIiIiIqOOS3m3btiItLQ0vv/IqEvsnysfGjBmD6Ohu2LVrV3vNloiIiIio47o3ZGRkYMCAgbKWbn1BQUHIz89rr9kSERFRM736yr+Qk5Or5PLKyso0XVBP1K4tvQH+AbKl93wpKcnw9vbh0iciIupkIuEVJUZVvOn1+s5evGQrSe+AgQORmpqKTz75WPbnzcrMxDfffI3s7GwMGjSovWZLRERERNRxSa+zszP+/ve/Iy83D3v27MGOHTuQkZ6Ox594Uj5HRERERGT1fXpzsrPh7eODhx5+uL1mQURERETUuUnvmrVrsGL5cowcOQpjx41FZGRUe82KiIiIiKhzkt65c69EXFw8Nm/ahOefew4BgYEYO3YsRowYCTc3t/aaLRERERFRxyW99vb26NOnj7zddvvt2Ld3LzZt3oQfvv8eN950M0aNGtVesyYiIiIi6pgL2eorLy9HXn4+8vLyZAkRkRATEREREVl9S29lZSV27tiBjRs3Yt++vYiK6opx48fjkUcehYuLS3vNloiIiIio45LehQsWYOWqlRg1chSuufYahIdHtNesiIiIiIg6J+kdN24c5sydC42m3WZBRERERNQs7ZaR+gcEtNdbExERERG1CK8oIyIiIiLlMeklIiIiIuUx6SUiIiIi5THpJSIiIiLlMeklIiIiIuUx6SUiIiIi5THpJSIiIiLlMeklIiIiIuUx6SUiIiIi5THpJSIiIiLlMeklIiIiIuUx6SUiIiIi5THpJSIiIiLlMeklIiIiIuVpOjsAIiIiS/XqK/9CTk4uVJWVlYmgoODODoOoQzDpJSIiugiR8NrZ2Sm7fPR6fWeHQNRh2L2BiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHC9nI6u3evQvFRUVQlaeXF/r3T+zsMIhs8vtXXlEON1e3zg6DiMyASS9ZPXHAdXN3h6pUTijI+qn+/TMaDJ0dAhGZCbs3EBEREZHy2NJrA1Q//ZiSkoKevXp1dhhERERkwZj02gDVTz9WVJR3dghERERk4di9gYiIiIiUx5beszZt3ABAzaEmefqfqPOwexERkWVg0nuWq5sb7OzUbPjm6X+izsPuRURElkGJLK+mpqazQyAiIiIiC2bVLb3FxcX4feVypKWdgUbjgNi4eIweMx4ajVV/LKIGUlKSsXbNamWXSnZODgL8/aEqdi8iIrIMVp0dLl+2GK6urrjjrntRWVmBhb/+jB3bt2LosBGdHRqR2VRUVChdfSP/yGF07doVqmL3IiIiy2C1SW9ZaSnSzqTiltvugpOTk7wNGDQY27duuWjSW15ehoryigaP6fU6+X9NjRGqcnBw4OezYlx/1o3rz7o5OTnC0VELVTk7Oyv7+VT+bLbw+XS6amg0WtjZma/IgF1VVYVVdogVCe8vP/+IPz3wF9NjmRkZ+OH7r3H/n//W6Gs2b9qArVs2XbDRJA7o0+7xEhEREVHzxffoB09Pb8DWW3oNRiPsHRpehyf68hoMBnlhW2O/DPr264/Y2PgGjxmNRjho7OHu7mHWXxOWoiA/H99/9zXmzb8WPr6+nR0OtRDXn3Xj+rNuXH/Wi+tOjfUXHW3e0VY11nzK0KDXN0hwdXqdfPxiyaurq5u82RIHBw30er38X6t17OxwqIW4/qwb15914/qzXlx3aqw/OzM3RlptyTJvb2/ZqltQkG96LCcnG15e5msGJyIiIiI1WG3S6+bmjvCISKxbsxplZaXIy8uVF7HF9+jZ2aERERERkYWx2u4NwpSp07Hmj9/x1RefwkGjQfeYWAwYOLizwyIiIiIiC2PVSa+4+OzymbM7OwyL5uLqgiFDh8v/yfpw/Vk3rj/rxvVnvbjurJtLO+UuVluyjIiIiIhI+T69RERERETNxaSXiIiIiJTHpJeIiIiIlMekl4iIiIiUx6SXiIiIiJTHpJeIiIiIlGfVdXqp5WpqauStPnt7/vYh6ozvniDGljf3+PJERNakpqamQ/aDTHoVcPx4EjZuWIvioiJ4eXljxMjR6NY9ptFpF/76E5KTTzXYuO665344OTl1YMRU36FDB7B18yaUlpbAx9cPo8eMQ0REZKMLKT09DWtX/46cnGw4u7igf/+BGDR4CBdoJ9qzeyd27tyO8rJydPH3x9hxExAcHHLBdIt/W4CTJ483eMxoNGLc+Ino2y+xAyOm+rZu2YT9+/agsrISgYFBGDdhErp08W90IW3btgV7d+9CdXUVAoOCMW7cRPh16cIF2omJ0ob1a3H48EHoqqsRHBKK8RMmwdvb54Jpxfpdv241Tp44Lr93oWHhmDBxCtzc3DoldoJcf1VVVThzJhUrli3G1dfeAF9fv0YXjV6vx7q1fyDp2DEYDHqEhUfIdS0GKWsJDk5h5QoLCvDF5x9j0uRpMtEVX+gVy5fihhtvgbfPhV/8jz74L+ZcOR8+Pr6dEi81lJWZge+/+xqXz5gtv8QiAd64fi1uuuWOC3bG5eXl+PzTj2RSFRsXj9zcHPzy0/eYOXtuo0kWtb+U5FNY9Nuvch0EBQVh966dMgm+5bY7odU6Nrnu//h9Ja6YOw/Ozs5cXZ3gyOFDWLvmd8yafSV8/XyxZfMmHD9+DDffcscFZ8COHj0sf3CK9SX2n5s2rkfyqZO48ebbuO46ifi+7dq5HbOumAsPD0+sW/OHbBC49vqbLph2yeKFqKyowJRpl8n7K1csk8nvnLnzOiFyqlt/4oeIINaF+C5dLOndvHE9kpKOYebsOXB2csaqlctRratu8frjeW0rl5R0FEFBwYjv0RNarRZx8T0QHBwsN47GfumKW2O/gqlzHD16BF27dkPX6G5y/fXt21/uvE+dPHHBtEcOH0RkZJRc1+KAHBAQKFvpmfB2niNHDiMuvifCwyNkkjto8FDY2dnjdErKJV9XVlaKRYsWYPLU6Ux4O9HRI4eQ0LsvgoKD4ejoJM+SVZSXIzMj/YJps7OyEBIaBn//AGg0GvTo2Qv5+XkwGAydEjvVrr/+iQNky7w4WzlqzDiZ9Ir1Up9IqE4cP46hw0fCzc1d3sQZtdMpySgrK+Oi7CRi3T3w4EPy1lQ3S7GvFftXkb+Is5wjR4+R66+iorxF82T3BitXWFgAv/NOxfn6+aGoqPCCaXPFKXFnZ/z4/TfIzMyAp6cXho0YidjY+A6MmM5ff+Ig2pz1J7o2iO4rP/34HdLOpMLdwwODBg1F7z59uVA7SVFhgWx1ryO6Dfn4+ja6/upbv3YNunePgZ8fT413psLCQsT16Gm67+DgIL9jRUVFMsGtr2vXaNlamJmRIc+i7du7B5FRXeVrqPPWX/3jnzi+ubq6yvVXv8Wwtjtfw/70df3rxT6YXRwsm/jRUlxc1KArkUh+xXdPrGsXF9dmvxeTXisnWhnOP40qWiEqKioumLasvEwmumPGTYCPj488tbdsySJ5qu78xIs6bv2d/wtXrD/RZ+l8ogVKnE6fOu1yzJo1B6lnUrH4t1/h7e2N8Iv0AabOWX/6S7T+ZaSn48SJJNx6+91cPRaw/hzsGyatDmL96S/8/gUFhyAgMAjffvNF7XQODrhsxqwOi5UuJPaTF37/tDCct/5E0ivOpm1YtwZTpl4GO3t7rF+3Rq5DttRbR9IrfqScv67l+mvku3opTHqtnFjper2uwWM6nR4ODheu2ri4HvJWp3effjielIRTp04y6e3U9dfwS6sX68/9wvUnDsZRXaNNFymKlifZj/vkcSa9FrX+dNBcovVv37496B4TCxcXlw6IkJpaf7rz9p9y/Wku/P79LvoQVlfjllvvhJu7O44eOSwvTpx/zfWyqxF1PHGcE+urPrE+xb7yfOKiNdF/+7tvv4S9vQOGDR8hz5ixP73lE8mu+OEijo11RBIsf7Q2sq4v+V7tEB91IG9vX+Tl5jZ4TFzgJFr/GrvyWOyo66sR/4zGdo+TGufj7YO83JwGj+XmZje6/vz8/C5S5oVf484iTnPn1vv+iRaJvLw8eDWy/gSdTofjSUdlP2CyjPVXf/8pEihxurux9ZeRkYY+ffrJ50RS3CuhtzzFKvr6Uieuv7xz66+8vAzlZWWN7j9Fn1/Rynvn3X/C7XfeIys9GI018OVF3VaR9Hp5eSEv79yxsiA/Xya94vEWvVc7xEcdKCYmFtnZWTh4YL9shTh4cD+yszLRvXtsg9MCgpurK9atXS37hooyIWLa9LQziImJ4zrrJKI/qCghJ8rOifW3c8c2eWGFOBV3/vrr0aOXrM5x7OgReUHi8aRjOHE8CfHx51rvqWOJMyfiYprU0ymyjNXmTRvk43Ul58T6O/8HqUh8Q0JYbcNS1p8oVyb66Yp94rp1q2Urrrg4WHzv6q+/kNBwOa24SEqs64MH9sm+2yGhoZ36GWx9/YnqDeJ7JfaJa1f/IVvdRZe989efqLKyasUyFBcXy5uYVuw7NVptp34Gatz560+s621bt6CgIF9WMhK5TERkVIv68wosWaYAkfiI8jklJcXyyv/hI0bJ094ieRIlyiZOnoqePRPktDu2b5WnV8UOootfFwwbMUpeeU6d5/Chg9i2dbO8ol+0HI0cPVYmTaIF6qsvP8WMmVeYkmDRD1vUFZXr2tMTo0aNRXS37lx9nWjvnl3YvWuH3BH7+nXBmLHjZUUNUXvy5x+/w1XzrzVV2BA/NLdt2SxLmpFlEN+9Awf2yX2iuLZB1E0W1QDEj0px4ZoooyS+lyLR3bB+HU6dPC6nFRdKDR02wvTdpM5JjDZuWCfPYIr1ExQUgnETJsr1JX6grP5jlakOfWlJCf74YyXSzpyRrxX7zXHjJ8iqHdT5/vPWa7juhptNFyCK76U41t3/57/J+6Ib2fq1q+X1EOJvcaEp6/QSERERETWC3RuIiIiISHlMeomIiIhIeUx6iYiIiEh5THqJiIiISHlMeomIiIhIeUx6iYiIiEh5THqJiIiISHlMeomIiIhIeUx6iYiIiEh5THqJiIiISHlMeomIiIhIeUx6iRRXU1Mj/zcajaa/VVL/c13s7/aev7hZopYsAzFdZ36Ojtw+LW2d1cVT/9ac15g7hvZ8fyJLwKSXSFGlpaV45h9P46Ybb8DBgwfw+muv4Zeff4Zq7v/Tn7Bz5w75958feAA7d+6Uf999153Yt29vu8///ff+h88++xSWqP7yaMpPP/2I1159BZawHi15nYnv1Ttvv4077rgdt916C1555WXk5ea2evp9+/bh+uuuxY03XG+6PffsM5eMYfu2bfI9WxNPY/R6vfy+pKammh77179ewvGkpBa9D5Gl03R2AETUPjZv3ozSsjK8/8GHcHZ2Rq9eCcov6v+cTQSIy6O9fPjhB8jNycH//d8/4eTkJBPof//7LTz73POtmj45+RRGjRqNe+69t1nzr66uxqeffoqn//GPVsVzfrKbmZmJH77/HiUlJQ2eu+rKq+QPg+df+L9mxUVkDdjSS6QgcWqyrLQU3l7ecHR0NOvp47rT4OffLKHrxI4dO5Cfn9/ZYViM5i6PuvVnbEMXh8ZOy3d2lwlzq6iowI7t2zFv/tUICAiAl5cXbrzpZhw7dgzp6emtmj45ORndunVrdgwbNqxHWHgYAgMDWxzP+d5//z089ugj2LFj+wXPdY+JQVVVFY4cOdLs2IgsHVt6iTqJaFkRLSnioGVvb4/evXvjpptvga+vr+m05ddff4WtW7bIg09UVBRuuPFGxMXFy+cfeuhvmD17Nn5buBBnzpyRr7vl1tuQmJgouzLs2lV7WlucLn35lVfx1ZdfoGt0NK688iocOnQI337zNXJycmRi4ufnh7vuvgcRERFNvvf+ffvw8sv/uiCxuf2OOzFhwoQm37uly6El7/fJxx/jllvPvfbUqVP47ttvkZKSAk8vL8yYMQPTpk2X7/O3v/4F9953H7799lsZw8svv9LkvAoLC+U8du/eBY1Gg+EjRkCn08PJuXb+Lf3s5ysrK8NXX32JLZs3y1a4fv36yde7ubk1uV4aU395XOq1L/7z/3Dw4MEG24tIoC4Wi1jf5y+/4cOHY93atXj9jTdN81++fBlW//EH/tWMZVtfU9v+8mXLsHjxIuTl5cHT0xOjx4zB/PlXy+3nfE2ts6aWeX0ikTQYDA2SVJF8imlF14CQkJAWT5+SnAy9Tie7l4j5JySI7f9m0zZ8vg3rN2DosKGtiud89957n7zpdDq53s83YMBArFu7BvHxtcudyNqxpZeok7zy8ssoLyvHK6+8irffeReAHf791rmE4bXXXkVWZib++c8X8cGHH2Hw4CF4/rnnkJZ2Rj6fnZWFRYsW4d77/oTPPv8C48aPx//++65MKB56+GFcffU16JWQgC+/+rrBwU8kLP/591uYNHkK/vu/9+QtPDwcP//0o2maS713n7595XvW3cZPmCCTkdGjRzfrvVuyHFrzfvWtXLES199wIz759DPcd+99WLBgAVauWCGfE6d1v/j8c8y4fAaef/6FJuclPvsrL/8LeoMeb7z5Fv79n7cR4B+ALVs2myVW4c0330BlRQXefOvfclmIVvpXX3m5WeulKZd67ZN/fwpz5s5F//79TdtLU7Gcv/zGjBmLrKwsnDx50jTN5k2bMG7c+BYvm0tt+yKZ+/TTT3D3Pffiiy+/wmOPP4G1a9Zgz+7dF7xPU+usOcu8vvLyMvn/+QmxuF9eVtbi6UVXBZF0d+8eg/+8/Q5e+L9/ori4CG+9+Uaj61QkxcePJ6Fr166tiqeloqOjZZ9jIlUw6SXqBKdOnZQHrzvvugv+AQFwdXXFdddfj+PHj8uWMPH8kcOHcd+f7kdgUBBcXFwwc9YsxMXHY8XZpE2YNXMWIiMjZQuW6BcoWtzO75t3PtEaJpKOUaNGoby8HCeOH5ctZqJFrL7mvPeiRb/hwP4D+NtDD0Gr1Tb7vZu7HFr6fucTLZs9e/aUiUxC796YOXOmbH2sM3LkKPTr31/2hWxqXidPnpAtx3fccadspXR3d5frJCYmpkXL9WJSUpJx+NAh3Hrb7fK9xU38feLECflcS9bLxTT3tc2Npf7y8/HxkX9v3LhBPpebmyuX14iRI1u0bJra9sW6dHBwkBdznT59WibP/3vvfSQOGHDBezW1zpr7Odta6eBi04vPImIXMYm/g4ODZSuz6J4gYj9fQX6+bJX18fFt1vs31g2pJZUrfP185XoSyTmRCti9gagTiIROJHje3t6mx0SfvM+/+BJ2dnZIPnVKHuzPP8UZFhaGnOwc032fes+LREBozgFtyZLFWLVyJewdHBASHAyNVisPpvU19d7btm2Vp8qfefY5eHh4tOi9m7scWvp+5xNJRH2hIaHIzs423RenzZu7XMTB//xYhfqt6G2JNTs7R56qFlfRny89PQORkVFtWucteW1TsYSHRzS6/ESr7scffYjrrrtedhcQp8frto3mLpvcnNxLbvvi9P2LL70kE+C33/4P8vPy5NmHG264USa29TW1zpq7zOu4urqZul+IbhWCaJEV910b6Q7R0umFoKAg+aMkP78A53f1La+okP/X9dNv6v3/+pcH5Y+Pxjz3/AuyJfdSnJ1dTO9/se4WRNaESS9RJ/D19ZMtXkVFRbLvpFBcXCwPvq+99jq6+HeRF6mI0kN+XbqYXpd6OhXhEeGm+2fzwhYRrUhffvEF/vniS6akZeHCBdh1XmmrS723aIl9/7338NBDDzdILJv73s1dDiWlpS16v/OJvquihdd0P+1Mg8TIydmp2bF36eIvYy0oKJCtmvXnIfpKN+ez1yWYjfU9FcmcaC3/+JNPZdJT/zV1PwBau85b+tqmYqk79V5/+Qmie4R47vDhQ9i0eRPmz5/f4u2iqW1fvH9oaBhuu+12+bi4UO+/776Dzz/7FH/5698avlcT66y5y7x+six+LCQlJWHA2ZbltLQ0VFZWyhbnutfWreOmphcXiX3z9Vfyh2Pd/DIyMmQ3hqCgwAvmL1qiharKSsDTs8n3F1022kK8j9BY/2Yia8TuDUSdQLSwiNPMorxQTna26WIbcQo3OCQEXbtGo0ePnnj7nbflQUycgv7ll59x7NhRTJ48pc0HMnGgrGsZEu+/+o/V0OsNzXq9iFf0ebzhxpsQGxfX4JRpS9+7qeXQ1lgXLPgVe/bskf0m9+/fh99++w0TJ01q1XIRscbGxsmaqOICIpGo//zTT/JUeHOXq6iD++CfH2h0/uKCLnHa/cMP3pct4OL91q9bh1tvuVn+EGhvInaRIIqEq7WxiPcQF5X9/PPPKC4qQu/efeTjLVmPTW37ovbynXfcLhNpcdpdJIui6oRGo73gvZpaZy39nKIFevCQIfKCPNF/WWyvn336iezTXtd6XH8dNzW9aL3OzMqSF3KK+Yl+zCKWPn36mFrT6xMt1qL8oGjBbm48bVFQkC/nKbqvEKmALb1EnUC0Aj3y6GPyqvFnnvmHTDR69eqFP//5QdM04mK0b77+WhaqF1ewi+TwH888g9DQUNN7nK/ulLVkB9g3aCG0h72dPRISEjB23Dg88fhjsgVHnE698qqr8OUXn8ur4qdMnXrJ916+fLk83fnB++/JW52xY8fK/pBNvXdLlkPzY639nPX/DgkJlf1JReJ78sQJeZr98ssvx2WXXS5bCxssq2bOS6wT0aL49FN/l68RlQ+mTp0m37s5r4/q2lUmVxcjWiq/+vJLPPfssygrK0VERCQefewxUyt4k+v8PBcum4u/tndCb3mR38033SirN1wqFvED52LzHTt2HBYvWoRZs2eb5tnS9XipbV/cZs6cJVt3RSuvSPxE94Ybb7yp0Xgutc6as8zPJ1qYxfYqYtMbDOjRowduuulm0/Pnr+NLTS9abh9//An5vOiKIJbp0KHDcM211zY6b/G86KMuLhaM79GjWfE0V2Pr8+SJk+jRs2eL34vIUtlVVVV0fnFNIiIbIFrzPvrwgwtOw5M62nsdiwv4li5dahqcoj09+sjDmH/1NRctiUdkbdi9gYiogyxZvBhz5l7J5a2w9l7HAwYORHFJsez60Z5Ev32D0SjrFhOpgi29REREVkTUzhWDfvz5wXPdocztpRdfxJw5c2S/fSJVMOklIiIiIuWxewMRERERKY9JLxEREREpj0kvERERESmPSS8RERERKY9JLxEREREpj0kvERERESmPSS8RERERKY9JLxEREREpj0kvERERESmPSS8RERERKY9JLxERERFBdf8PKPTESjblH+IAAAAASUVORK5CYII="/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c035">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Qué muestra.</strong> Los cuatro tramos por encima de 0,80 reúnen <strong>81 de las 98 ventanas</strong> y quedan
+sobre la diagonal o por encima de ella: donde el modelo opera, el calibrado sigue prometiendo algo
+menos de lo que cumple. Por debajo de 0,80 hay siete tramos con cuatro ventanas o menos, cuya
+proporción salta entre 0 y 1 porque está calculada sobre una o dos observaciones.</p>
+<p><strong>Qué podemos interpretar.</strong> Que el umbral de suficiencia, 0,79, cae justo en la frontera entre la
+zona poblada y la zona vacía de la distribución de confianza. Eso es lo que hace defendible una
+abstención por confianza baja: por encima del umbral el instrumento está calibrado, y por debajo no
+hay observaciones suficientes para afirmar nada sobre él.</p>
+<p><strong>Qué no podemos afirmar.</strong> Tres cosas. La reconstrucción <strong>no conserva la confianza media dentro
+de cada tramo</strong>: solo sus bordes, de modo que cada barra ocupa su tramo y no se sitúa en un punto.
+Solo existe para la confianza <strong>calibrada</strong>; la anterior a calibrar no se guardó por ventana y su
+diagrama no puede dibujarse. Y <strong>de aquí no sale un error de calibración esperado</strong>: agrupar de otro
+modo da otro número, y el que vale sigue siendo el del registro, calculado sobre diez tramos. Poner
+los dos juntos invitaría a leer una corrección donde solo hay otro agrupamiento.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c036">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="13.-Las-cifras-de-synthetic_v3,-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">13. Las cifras de <code>synthetic_v3</code>, y por qué no cierran la cuestión<a class="anchor-link" href="#13.-Las-cifras-de-synthetic_v3,-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">¶</a></h2><p>El informe de E7 publicó también resultados sobre <code>synthetic_v3</code>, con el triple de sesiones, y
+concluyó que el límite era el volumen de datos. <strong>Esa conclusión quedó retirada el 12 de octubre de
+2026.</strong> Las cifras se muestran porque forman parte del historial; la lectura que se hacía de ellas,
+no.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c037">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">e6_v3</span> <span class="o">=</span> <span class="n">soporte</span><span class="o">.</span><span class="n">registro</span><span class="p">(</span><span class="s2">"E6_baseline_synthetic_v3"</span><span class="p">)</span>
@@ -9127,7 +9423,7 @@ no.</p>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9191,27 +9487,24 @@ no.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c032">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c038">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Objetivo del análisis.</strong> Situar una al lado de otra las cuatro cifras —dos modelos por dos
-conjuntos— para que se vea qué cambia entre columnas y por qué la comparación no decide nada.</p>
-<p><strong>Datos y metodología.</strong> El F1 macro de validación de los cuatro registros, leídos tal como se
-guardaron. Entre <code>synthetic_v2</code> y <code>synthetic_v3</code> cambian <strong>dos cosas a la vez</strong>: el volumen, de 72 a
-216 sesiones, y el generador, que en <code>synthetic_v3</code> es anterior a la calibración contra el manual.
-Un diseño que mueve dos factores no permite atribuir el efecto a ninguno.</p>
+<p><strong>Objetivo del análisis.</strong> Situar juntas las cuatro cifras de F1 macro de validación —dos modelos
+por dos conjuntos, leídas tal como se guardaron— para que se vea por qué la comparación no decide
+nada.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c033">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c039">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.visualization.memoria</span><span class="w"> </span><span class="kn">import</span> <span class="n">fig_confusor_de_volumen</span>
@@ -9244,7 +9537,7 @@ Un diseño que mueve dos factores no permite atribuir el efecto a ninguno.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c034">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c040">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9256,10 +9549,11 @@ por 0,012.</p>
 <p><strong>Qué no podemos afirmar, y es el punto entero de esta sección.</strong> Que ese algo sea el volumen.
 <code>synthetic_v3</code> se generó el 1 de septiembre, <strong>antes</strong> de que las constantes del motor se calibraran
 contra el manual, y <code>synthetic_v2</code> el 14, después. Entre las dos columnas cambian el número de
-sesiones <strong>y el fenómeno simulado</strong>: el ralentí pasa de 820 rpm —un valor que la calibración retiró
-por carecer de respaldo documental— a 690, y el avance de encendido cambia en la misma proporción.
-La constante <code>GENERATOR_VERSION</code> valió <code>"1.0.0"</code> en los dos casos y no los distingue, que es por lo
-que la diferencia pasó desapercibida durante semanas.</p>
+sesiones <strong>y el fenómeno simulado</strong>: el ralentí pasa de 820 rpm —un valor sin respaldo documental,
+que la calibración retiró— a 690, dentro del rango 640–740 que el manual documenta para este motor,
+y el avance de encendido cambia en la misma proporción. La constante <code>GENERATOR_VERSION</code> valió
+<code>"1.0.0"</code> en los dos casos y no los distingue, que es por lo que la diferencia pasó desapercibida
+durante semanas.</p>
 <p>Esto es un <strong>confusor</strong>, no un matiz. Con dos variables moviéndose a la vez y dos puntos de medida,
 el experimento no tiene grados de libertad para separarlas. La conclusión «el límite era el volumen
 de datos» quedó marcada <code>SUPERSEDED</code> en el informe de E7, con su texto conservado, y la pregunta
@@ -9270,17 +9564,18 @@ con subconjuntos anidados de entrenamiento y validación fija. Está diseñada e
 ejecutado</strong>. Una advertencia que ese diseño ya incorpora: su punto más alto son 132 sesiones de
 entrenamiento, que son <strong>exactamente</strong> las de <code>synthetic_v3</code>. La curva <strong>no amplía</strong> el volumen ya
 explorado; lo reproduce con el generador calibrado.</p>
+<p>La reproducibilidad de <code>synthetic_v3</code> se mide en el notebook 06.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c035">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c041">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="12.-Resultados-negativos,-reunidos">12. Resultados negativos, reunidos<a class="anchor-link" href="#12.-Resultados-negativos,-reunidos">¶</a></h2><ol>
+<h2 id="14.-Resultados-negativos-y-limitaciones">14. Resultados negativos y limitaciones<a class="anchor-link" href="#14.-Resultados-negativos-y-limitaciones">¶</a></h2><h3 id="14.1-Resultados-negativos">14.1 Resultados negativos<a class="anchor-link" href="#14.1-Resultados-negativos">¶</a></h3><ol>
 <li><strong>La hipótesis pre-registrada de E7 no recibió apoyo.</strong> El modelo temporal no superó a la línea
 base: −0,0558 en F1 macro.</li>
 <li><strong>La explicación que se dio de esa desventaja quedó retirada.</strong> Confundía volumen con calibración
@@ -9291,25 +9586,30 @@ apoyaba en la misma comparación.</li>
 registro.</strong> Se calcularon durante el análisis y no se persistieron; están marcadas como no
 utilizables desde el 12 de octubre de 2026.</li>
 <li><strong>Ninguno de los dos modelos está bien calibrado</strong> sin calibrar: el error por tramos ronda
-0,13–0,14 en los dos. El sentido del fallo no es el mismo: el bosque <strong>promete menos de lo que
-cumple</strong> —sesgo −0,1395— y la red está casi centrada en agregado, con +0,0070 y tramos que se
-cancelan.</li>
+0,13–0,14 en los dos, en sentidos distintos: el bosque <strong>promete menos de lo que cumple</strong> —sesgo
+−0,1395— y la red está casi centrada, +0,0070, con tramos que se cancelan.</li>
 <li><strong>La red genera diagnósticos cruzados que el bosque no genera</strong>, lo que para este trabajo es el
 modo de fallo más costoso.</li>
-<li><strong>Todo lo anterior es una sola ejecución por celda.</strong> No hay repeticiones, ni intervalos, ni
-contraste estadístico, y no se afirma significación en ningún punto.</li>
+</ol>
+<h3 id="14.2-Limitaciones">14.2 Limitaciones<a class="anchor-link" href="#14.2-Limitaciones">¶</a></h3><p>Además de comparar dos recorridos y no dos arquitecturas (apartado 3):</p>
+<ol>
+<li><strong>Una sola ejecución por celda.</strong> No hay repeticiones con semillas distintas, ni intervalos, ni
+contraste estadístico, y no se afirma significación en ningún punto. El diseño con cinco semillas
+está en <code>docs/diseno-pi1/06-plan-replicas.md</code> y no se ha ejecutado.</li>
+<li><strong>Procedimiento asimétrico</strong>: época elegida sobre validación y ningún modelo calibrado
+(apartado 6).</li>
 </ol>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c036">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c042">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="13.-Discusi%C3%B3n">13. Discusión<a class="anchor-link" href="#13.-Discusi%C3%B3n">¶</a></h2><p>El resultado de E7 se suele resumir como «la red no funcionó». Es un resumen pobre y conviene
+<h2 id="15.-Discusi%C3%B3n">15. Discusión<a class="anchor-link" href="#15.-Discusi%C3%B3n">¶</a></h2><p>El resultado de E7 se suele resumir como «la red no funcionó». Es un resumen pobre y conviene
 desarmarlo, porque lo que el experimento enseña está en otro sitio.</p>
 <p><strong>Primero, el criterio funcionó.</strong> E6 dejó escrito, antes de medir, qué resultado haría injustificada
 la complejidad del modelo temporal. Cuando el resultado llegó, el criterio ya estaba fijado y no
@@ -9326,21 +9626,21 @@ no— no se responde con estos dos recorridos, por mucho que la victoria de la r
 parezca sugerirla. Ese encaje aparente es justamente la clase de evidencia que conviene mirar dos
 veces: coincide con lo que se esperaba encontrar.</p>
 <p><strong>Cómo encaja con el resto del trabajo.</strong> El bosque quedó como modelo de diagnóstico del recorrido
-completo, y sus 0,8788 de F1 macro sobre validación se sostuvieron después sobre el conjunto de
-prueba en E19. Que su error sea mayoritariamente por omisión, y no cruzado, es lo que hace viable el
+completo. Sobre el conjunto de prueba, en E19, dio 0,836 de F1 macro (0,8469 de exactitud),
+frente a los 0,8788 de validación. Que su error sea mayoritariamente por omisión, y no cruzado, es lo que hace viable el
 criterio de suficiencia: el sistema se enfrenta sobre todo a «no veo nada» y no a «veo otra cosa con
 confianza».</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c037">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c043">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="14.-Conclusiones-de-este-notebook">14. Conclusiones de este notebook<a class="anchor-link" href="#14.-Conclusiones-de-este-notebook">¶</a></h2><p><strong>Qué aprendimos.</strong> Que un bosque aleatorio sobre 139 descriptores de ventana diagnostica mejor que
+<h2 id="16.-Conclusiones">16. Conclusiones<a class="anchor-link" href="#16.-Conclusiones">¶</a></h2><p><strong>Qué aprendimos.</strong> Que un bosque aleatorio sobre 139 descriptores de ventana diagnostica mejor que
 una GRU bidireccional sobre la secuencia cruda, en este conjunto, con esta partición y en una sola
 ejecución; que la diferencia no es uniforme entre condiciones; y que la estructura de sus errores es
 distinta de un modo que importa para el uso previsto.</p>
@@ -9357,13 +9657,13 @@ uno positivo.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c038">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c044">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="15.-Reproducibilidad">15. Reproducibilidad<a class="anchor-link" href="#15.-Reproducibilidad">¶</a></h2><table>
+<h2 id="17.-Reproducibilidad">17. Reproducibilidad<a class="anchor-link" href="#17.-Reproducibilidad">¶</a></h2><table>
 <thead>
 <tr>
 <th></th>
@@ -9409,19 +9709,22 @@ uno positivo.</p>
 </tr>
 <tr>
 <td><strong>Artefactos que produce</strong></td>
-<td>cinco figuras en <code>notebooks/salida/02_comparacion_modelos/</code>, PNG y SVG</td>
+<td>seis figuras en <code>notebooks/salida/02_comparacion_modelos/</code>, PNG y SVG</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Qué se reproduce y qué no.</strong> Este notebook <strong>no reproduce</strong> E6 ni E7: los lee. Reentrenar el
-bosque daría las mismas cifras —es determinista con su semilla— pero reentrenar la red <strong>no</strong>: se
-entrenó sobre MPS, y algunas reducciones en ese dispositivo no son bit a bit deterministas. La
-semilla acota la variación y no la elimina. Un notebook que reentrenase la red mostraría un número
-distinto del publicado y parecería una contradicción donde solo hay no-determinismo del dispositivo.</p>
+bosque daría las mismas cifras —es determinista con su semilla—; reentrenar la red <strong>no</strong>, por el
+no-determinismo de MPS que declara la celda de modalidad: la semilla acota la variación y no la
+elimina.</p>
 <p><strong>Reproducción completa, modo FULL.</strong> Exige regenerar <code>synthetic_v2</code> —<code>mecanico-exp generar --dataset-id synthetic_v2 --sessions-per-fault 12</code>—, preprocesarlo y ejecutar los dos entrenamientos.
 Del orden de diez minutos en una máquina con acelerador. <strong>Las ejecuciones nuevas escriben con
 etiqueta propia</strong>: los ejecutores se niegan a sobrescribir los artefactos publicados.</p>
-<h2 id="16.-Referencias-y-trazabilidad">16. Referencias y trazabilidad<a class="anchor-link" href="#16.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> Las cifras agregadas son la <strong>Tabla 5.1</strong>; adónde van los errores de cada modelo, la <strong>Figura 5.5</strong>; la comparación entre los dos conjuntos, la <strong>Figura 5.6</strong>; y la calibración, la <strong>Tabla 5.2</strong> y la <strong>Figura 5.10</strong>. El detalle por condición está en el anexo B, <strong>Figura B.1</strong> y <strong>Tabla B.2</strong>.</p>
+<h2 id="18.-Referencias-y-trazabilidad">18. Referencias y trazabilidad<a class="anchor-link" href="#18.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> Las cifras agregadas son la <strong>Tabla 5.1</strong>; el detalle por
+condición, la <strong>Figura 5.7</strong>, con su <strong>Tabla B.2</strong> en el anexo B; adónde van los errores de cada
+modelo, la <strong>Figura 5.6</strong>; la comparación entre los dos conjuntos, la <strong>Figura 5.8</strong>; el termostato
+ventana a ventana, la <strong>Figura 5.9</strong>; la calibración, la <strong>Tabla 5.2</strong> y la <strong>Figura 5.12</strong>, y su
+forma por tramos, la <strong>Figura 5.13</strong>.</p>
 <ul>
 <li><code>docs/experiments/E6_baseline.md</code> — informe de la línea base, con el criterio pre-registrado</li>
 <li><code>docs/experiments/E7_modelo_temporal.md</code> — informe del modelo temporal, con sus marcas <code>SUPERSEDED</code></li>

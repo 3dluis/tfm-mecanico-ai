@@ -7838,14 +7838,31 @@ a.anchor-link {
 </tbody>
 </table>
 <hr/>
-<blockquote>
-<p><strong>Este notebook no reejecuta E19 y no puede hacerlo.</strong> Lee los artefactos congelados. El conjunto
-de prueba se abrió una sola vez, con las reglas fijadas y ancladas a un commit <strong>antes</strong> de
-abrirlo, y la regla congelada dice que un resultado desfavorable no es motivo para repetir. Todo
-lo que sigue es <strong>reanálisis sobre artefactos congelados</strong>: ninguna celda escribe en
-<code>experiments/</code>, ninguna toca la anotación sellada y ninguna recalcula una métrica histórica con
-otra configuración.</p>
-</blockquote>
+<h3 id="En-un-minuto">En un minuto<a class="anchor-link" href="#En-un-minuto">¶</a></h3><ul>
+<li><strong>La pregunta (PI.3):</strong> si el criterio de suficiencia evita la falsa confianza sobre datos que el
+diseño no vio, y cuánto cuesta esa protección en capacidad de dar respuesta.</li>
+<li><strong>Qué se hace:</strong> se recalculan las tasas de E19 desde la tabla congelada y se comprueban contra
+el registro.</li>
+<li><strong>Resultado:</strong> falsa confianza <strong>0 de 14</strong>, abstención innecesaria <strong>2 de 8</strong>, cobertura con
+evidencia completa <strong>6 de 10</strong>: la falsa confianza de la política más conservadora sin renunciar
+a responder en seis de diez casos.</li>
+<li><strong>Límite principal:</strong> con 0 de 14, la tasa real es compatible con <strong>hasta el 21,5 %</strong>. Lo medido es
+que <strong>en esta muestra no ocurrió</strong>, no que no pueda ocurrir.</li>
+</ul>
+<h3 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h3><p><strong>Modalidad: REANÁLISIS.</strong> <strong>Este notebook no reejecuta E19 y no puede hacerlo:</strong> la regla
+congelada dice que un resultado desfavorable no es motivo para repetir. Ninguna celda escribe en
+<code>experiments/</code>, toca la anotación sellada ni recalcula una métrica histórica con otra configuración.
+Se ejecuta en CPU, sin red, en menos de un minuto.</p>
+<ul>
+<li><strong>1–4</strong> Introducción, objetivo e hipótesis, fundamento (criterio y estratos) y entorno.</li>
+<li><strong>5</strong> Artefactos congelados y qué datos entran. <strong>6</strong> Resultado primario, con intervalos.</li>
+<li><strong>7–9</strong> Decisiones caso a caso, las dos abstenciones innecesarias y las 35 ejecuciones frente al
+umbral.</li>
+<li><strong>10–13</strong> Diagnósticos incorrectos, estratos descriptivos, la coincidencia con validación y las
+políticas triviales.</li>
+<li><strong>14–18</strong> Resultados negativos y limitaciones, discusión, conclusiones, reproducibilidad y
+referencias.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7867,9 +7884,9 @@ PI.3 y la que vertebra el trabajo.</li>
 <li><strong>Si el recorrido completo funciona de extremo a extremo</strong> sobre datos nuevos: diagnóstico,
 atribución, recuperación, verificación y redacción.</li>
 </ol>
-<p>El procedimiento fue deliberadamente rígido, y conviene saber por qué: con un conjunto de prueba se
-puede medir una vez. Si se mide, se ajusta y se vuelve a medir, deja de ser un conjunto de prueba y
-pasa a ser un segundo conjunto de validación, sin que nada en los números lo delate.</p>
+<p>El procedimiento fue deliberadamente rígido porque con un conjunto de prueba se puede medir una
+vez. Si se mide, se ajusta y se vuelve a medir, deja de ser un conjunto de prueba y pasa a ser un
+segundo conjunto de validación, sin que nada en los números lo delate.</p>
 </div>
 </div>
 </div>
@@ -7982,28 +7999,16 @@ ventana etiquetada con la condición de cada sesión. 22 ejecuciones.</li>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:</span>
-<span class="c1"># se busca hacia arriba el directorio que contiene `pyproject.toml` y</span>
-<span class="c1"># `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya</span>
-<span class="c1"># abierto Jupyter y a qué profundidad esté el notebook.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Se busca hacia arriba la carpeta del paquete (la que contiene `src/mecanico_ia_exp`),</span>
+<span class="c1"># así el notebook funciona se abra Jupyter desde donde se abra, sin rutas absolutas.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_raiz_del_repositorio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">candidato</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">candidato</span> <span class="o">/</span> <span class="s2">"pyproject.toml"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="n">candidato</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">candidato</span>
-    <span class="c1"># Si no se encuentra, el paquete puede estar instalado en el entorno; se</span>
-    <span class="c1"># devuelve el directorio actual y el import de abajo dirá si funciona o no.</span>
-    <span class="c1"># Fallar aquí con un mensaje claro es mejor que fallar después sin él.</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
-
-
-<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">_raiz_del_repositorio</span><span class="p">()</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()),</span>
+    <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">))</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -8029,7 +8034,7 @@ ventana etiquetada con la condición de cada sesión. 22 ejecuciones.</li>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       778bd2f
+commit       1cdb8f6
 arbol        sucio
 </pre>
 </div>
@@ -8083,8 +8088,15 @@ arbol        sucio
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-Los-artefactos-congelados">5. Los artefactos congelados<a class="anchor-link" href="#5.-Los-artefactos-congelados">¶</a></h2><p>Antes de leer una cifra, comprobar que se está leyendo lo que se cree. La anotación se selló <strong>antes
-de cualquier medición</strong> y lleva su propia huella.</p>
+<h2 id="5.-Los-artefactos-congelados">5. Los artefactos congelados<a class="anchor-link" href="#5.-Los-artefactos-congelados">¶</a></h2><p><strong>Qué datos entran.</strong> Todas las figuras y cifras salen de un único registro: la evaluación final de
+E19 en su <strong>tercer intento</strong>, el que llegó al final; los dos anteriores se interrumpieron y están
+declarados. El sufijo <code>_v3</code> del fichero es el número de intento y <strong>no</strong> una versión del conjunto de
+datos. Son 35 ejecuciones sobre la partición de <strong>prueba</strong> de <code>synthetic_v2</code>, repartidas en tres
+estratos y procedentes de diez ventanas. <strong>No son 35 observaciones independientes:</strong> repiten casos
+entre estratos, y las sesiones de un mismo caso salen del mismo generador y la misma
+parametrización.</p>
+<p>Antes de leer una cifra, conviene comprobar que se está leyendo lo que se cree. La anotación se
+selló <strong>antes de cualquier medición</strong> y lleva su propia huella.</p>
 </div>
 </div>
 </div>
@@ -8218,7 +8230,7 @@ huella de la anotación (sha256:16): 7964f97fcdc21160
 solo caso. Eso es lo que da sentido a las cifras: un denominador elegido después de ver los
 resultados puede producir cualquier tasa.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el reparto concreto 8/14 estuviera <strong>pre-registrado</strong>. No lo estaba,
-y se trata en el apartado 11. Lo que estaba fijado es la <strong>regla</strong> que lo produce; el reparto que esa
+y se trata en el apartado 12. Lo que estaba fijado es la <strong>regla</strong> que lo produce; el reparto que esa
 regla produjo depende de cuántos casos el modelo diagnostica bien, que es un hecho medido.</p>
 </div>
 </div>
@@ -8230,13 +8242,6 @@ regla produjo depende de cuántos casos el modelo diagnostica bien, que es un he
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5-bis.-Qu%C3%A9-datos-entran-en-las-figuras-de-este-notebook">5 bis. Qué datos entran en las figuras de este notebook<a class="anchor-link" href="#5-bis.-Qu%C3%A9-datos-entran-en-las-figuras-de-este-notebook">¶</a></h2><p><strong>Datos y metodología.</strong> Todas las figuras y cifras que siguen salen de un único registro: la
-evaluación final de E19 en su <strong>tercer intento</strong>, el que llegó al final; los dos anteriores se
-interrumpieron y están declarados. El sufijo del fichero es el número de intento y <strong>no</strong> una
-versión del conjunto de datos. Son 35 ejecuciones sobre la partición de <strong>prueba</strong> de
-<code>synthetic_v2</code>, repartidas en tres estratos y procedentes de ocho ventanas: repiten casos entre sí,
-de modo que no son 35 observaciones independientes. No se reejecuta nada y no se vuelve a abrir el
-conjunto: se leen las decisiones registradas.</p>
 <h2 id="6.-Resultado-primario">6. Resultado primario<a class="anchor-link" href="#6.-Resultado-primario">¶</a></h2><p><strong>Qué queremos investigar.</strong> Las dos tasas sobre el estrato operativo, con sus denominadores.
 <strong>Qué datos utilizamos.</strong> La tabla congelada, filtrada al estrato primario.
 <strong>Por qué se calculan aquí en lugar de leerse del registro.</strong> Porque recalcularlos desde la tabla de
@@ -8448,8 +8453,7 @@ en todas. Es lo que PI.3 pedía, sobre datos que el diseño no vio.</p>
 <p><strong>Qué no podemos afirmar, y es lo más importante de este notebook.</strong> Que el riesgo de falsa
 confianza sea cero. La celda siguiente calcula el intervalo en lugar de describirlo: con 0 de 14, la
 evidencia disponible es compatible con una tasa real de <strong>hasta el 21,5 %</strong>. Lo medido es que <strong>en
-esta muestra no ocurrió</strong>, no que no pueda ocurrir. El experimento está
-marcado <code>COMPLETED — WITH DOCUMENTED LIMITATIONS</code> por esto, y <code>VALIDATED</code> no se usa como sinónimo
+esta muestra no ocurrió</strong>, no que no pueda ocurrir. El experimento está marcado <code>COMPLETED — WITH DOCUMENTED LIMITATIONS</code> por esto, y <code>VALIDATED</code> no se usa como sinónimo
 de hipótesis demostrada.</p>
 <p>Tampoco se puede leer la cobertura 6/10 como «cuatro oportunidades perdidas». De esas diez
 ejecuciones con evidencia completa, <strong>dos llevaban diagnóstico incorrecto</strong>, y en ellas abstenerse
@@ -8578,8 +8582,8 @@ delimita exactamente lo que no se ha demostrado. Y la amplitud del intervalo de 
 innecesaria —más de medio punto— explica por qué el informe de la fase se niega a llamarla
 «estimación».</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el intervalo sea exacto. Supone observaciones independientes, y las
-catorce proceden de siete sesiones del mismo generador: dos ejecuciones de la misma sesión no son
-independientes, de modo que el intervalo real es <strong>más ancho</strong> que el que sale aquí. Tampoco cubre
+catorce proceden de siete sesiones (apartado 5), de modo que el intervalo real es <strong>más ancho</strong> que
+el que sale aquí. Tampoco cubre
 la incertidumbre de que el conjunto sea sintético, que no es estadística.</p>
 </div>
 </div>
@@ -8592,8 +8596,12 @@ la incertidumbre de que el conjunto sea sintético, que no es estadística.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="7.-Qu%C3%A9-decidi%C3%B3-el-sistema,-caso-a-caso">7. Qué decidió el sistema, caso a caso<a class="anchor-link" href="#7.-Qu%C3%A9-decidi%C3%B3-el-sistema,-caso-a-caso">¶</a></h2><p><strong>Qué queremos investigar.</strong> No las tasas, sino el detalle: qué decidió en cada ejecución y por qué.
+<strong>Qué datos utilizamos.</strong> Las 22 ejecuciones del estrato operativo, con su caso anotado, su
+condición de evidencia y la decisión que el sistema tomó.
 <strong>Por qué un mapa de decisiones.</strong> Veintidós ejecuciones caben en una cuadrícula, y así se ve de un
-vistazo dónde están los aciertos, los errores y la estructura por condición de evidencia.</p>
+vistazo dónde están los aciertos, los errores y la estructura por condición de evidencia. Los dos
+puntos de una misma fila son <strong>sesiones distintas</strong> del mismo caso, no repeticiones de la misma
+medición.</p>
 </div>
 </div>
 </div>
@@ -9110,8 +9118,8 @@ abstiene en las columnas de evidencia parcial y retirada sin excepción, y en la
 completa explica en la mayoría de los casos. Los dos fallos son del tipo «conservador de más», no
 del tipo «confiado de menos».</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el comportamiento sea estable. Cada fila tiene <strong>dos</strong> puntos; una
-sola ejecución distinta cambiaría la fila entera. Y las dos sesiones de una fila no son
-independientes en sentido estadístico: salen del mismo generador y la misma parametrización.</p>
+sola ejecución distinta cambiaría la fila entera, y las dos sesiones de una fila no son
+independientes (apartado 5).</p>
 </div>
 </div>
 </div>
@@ -9122,24 +9130,11 @@ independientes en sentido estadístico: salen del mismo generador y la misma par
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué datos utilizamos.</strong> Las 22 ejecuciones del estrato operativo del mismo registro de E19, con
-su caso anotado, su condición de evidencia y la decisión que el sistema tomó. Los dos puntos de una
-misma fila son <strong>sesiones distintas</strong> del mismo caso, no repeticiones de la misma medición.</p>
+<h2 id="8.-Las-dos-abstenciones-innecesarias,-en-detalle">8. Las dos abstenciones innecesarias, en detalle<a class="anchor-link" href="#8.-Las-dos-abstenciones-innecesarias,-en-detalle">¶</a></h2><p>El cero de falsa confianza es el titular, pero lo que enseña está en los dos fallos.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c022">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-Las-dos-abstenciones-innecesarias,-en-detalle%23%23-8.-Las-dos-abstenciones-innecesarias,-en-detalle">8. Las dos abstenciones innecesarias, en detalle## 8. Las dos abstenciones innecesarias, en detalle<a class="anchor-link" href="#8.-Las-dos-abstenciones-innecesarias,-en-detalle%23%23-8.-Las-dos-abstenciones-innecesarias,-en-detalle">¶</a></h2><p>El cero de falsa confianza es el titular, pero lo que enseña está en los dos fallos.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c023">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c022">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9226,7 +9221,7 @@ misma fila son <strong>sesiones distintas</strong> del mismo caso, no repeticion
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c024">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c023">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9309,7 +9304,7 @@ misma fila son <strong>sesiones distintas</strong> del mismo caso, no repeticion
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c025">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c024">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9324,34 +9319,31 @@ suficiencia: el criterio hizo exactamente lo que dice hacer. Son consecuencia de
 diagnóstico no estaba suficientemente seguro</strong> en esas dos ventanas. Mejorar esta cifra pasa por el
 diagnóstico, no por relajar el umbral —y relajarlo subiría la falsa confianza, que es el error que
 se quiere evitar—.</p>
-<p><strong>Qué no podemos afirmar.</strong> Que 2 de 8 sea una estimación de la tasa real. Un solo caso mueve la
-cifra en 0,125. Tampoco que estos dos casos sean intrínsecamente difíciles: son dos ventanas
-concretas, y las dos corresponden a casos que también fallaron en el ensayo sobre validación, lo que
-se discute en el apartado 11.</p>
+<p><strong>Qué no podemos afirmar.</strong> Que 2 de 8 sea una estimación de la tasa real (apartado 14, punto 4).
+Tampoco que estos dos casos sean intrínsecamente difíciles: son dos ventanas concretas, y las dos
+corresponden a casos que también fallaron en el ensayo sobre validación, lo que se discute en el
+apartado 12.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c026">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c025">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-Las-35-ejecuciones-frente-al-umbral">9. Las 35 ejecuciones frente al umbral<a class="anchor-link" href="#9.-Las-35-ejecuciones-frente-al-umbral">¶</a></h2><p><strong>Introducción al problema.</strong> El apartado 7 muestra qué decidió el sistema caso a caso y el 8
-examina las dos abstenciones innecesarias. Falta situar <strong>todas</strong> las ejecuciones sobre el eje que
-las gobierna, que es la confianza calibrada frente al umbral: esa distancia distingue un acierto
-holgado de uno que estuvo cerca de no serlo.</p>
+<h2 id="9.-Las-35-ejecuciones-frente-al-umbral">9. Las 35 ejecuciones frente al umbral<a class="anchor-link" href="#9.-Las-35-ejecuciones-frente-al-umbral">¶</a></h2><p><strong>Introducción al problema.</strong> Falta situar <strong>todas</strong> las ejecuciones sobre el eje que las gobierna,
+la confianza calibrada frente al umbral: esa distancia distingue un acierto holgado de uno que
+estuvo cerca de no serlo.</p>
 <p><strong>Objetivo del análisis.</strong> Situar las 35 ejecuciones registradas —no solo las 22 del estrato
 operativo— respecto del umbral de 0,79, marcando en cada una si la decisión fue correcta, si el
-diagnóstico del modelo lo era, cuánta cobertura alcanzó y cuántos documentos aplicables recibió.</p>
-<p><strong>Procedencia de los datos.</strong> <code>artifacts/tables/E19_evaluacion_final_v3.csv</code>, el registro de la
-evaluación final. El sufijo es el <strong>número de intento</strong> —E19 se interrumpió dos veces— y no una
-versión del conjunto de datos.</p>
+diagnóstico del modelo lo era, cuánta cobertura alcanzó y cuántos documentos aplicables recibió.
+Los datos son los del apartado 5 (<code>artifacts/tables/E19_evaluacion_final_v3.csv</code>).</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c027">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c026">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9399,7 +9391,7 @@ operativo    ABSTAIN            ABSTAIN     14
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c028">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c027">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9434,7 +9426,7 @@ operativo    ABSTAIN            ABSTAIN     14
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c029">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c028">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9445,9 +9437,8 @@ y son exactamente las cuatro de las dos abstenciones innecesarias: la deriva del
 0,573 y el fallo de encendido a 0,491, cada una repetida en dos ejecuciones. Ninguna decisión
 correcta queda por debajo del umbral y ninguna abstención indebida por encima. Cuatro ejecuciones
 con el diagnóstico del modelo incorrecto terminan en abstención correcta.</p>
-<p><strong>Interpretación.</strong> La puerta de confianza no se equivocó por estar mal situada: el modelo de
-diagnóstico estaba genuinamente poco seguro en esas dos ventanas y el criterio hizo lo que estaba
-escrito que hiciera. El otro lado del mismo mecanismo también se ve: donde el diagnóstico era
+<p><strong>Interpretación.</strong> Confirma lo visto en el apartado 8: la puerta de confianza no está mal situada;
+el modelo estaba genuinamente poco seguro en esas dos ventanas. El otro lado del mismo mecanismo también se ve: donde el diagnóstico era
 incorrecto pero la confianza alta, lo que evitó la explicación equivocada fue el criterio de
 suficiencia documental y no la confianza.</p>
 <p><strong>Un detalle, enunciado con cuidado.</strong> El caso de la deriva aparece sobre dos sesiones: en autopista
@@ -9456,19 +9447,18 @@ abstenciones innecesarias están las dos en sesiones de autopista, donde están 
 confianzas más bajas; en ralentí y calentamiento ninguna baja de 0,85.</p>
 <p><strong>Limitaciones.</strong> Es una <strong>observación descriptiva sobre dos errores</strong>. Con <code>n = 2</code> no hay contraste
 posible y <strong>no se afirma que la conducción en autopista cause una reducción de la confianza</strong>: la
-coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son 35
-observaciones independientes: repiten casos entre estratos y proceden de ocho ventanas. Y el umbral
+coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son
+independientes (apartado 5). Y el umbral
 <strong>no se revisa</strong> a la vista de esta figura: la política está congelada desde antes de abrir el
 conjunto de prueba, y moverla ahora sería ajustar el criterio a los datos reservados.</p>
-<p><strong>Relación con la pregunta de investigación.</strong> Identifica dónde está el límite del sistema para PI.3:
-no en el criterio de suficiencia, que se comportó como estaba escrito, sino en la confianza del
-modelo de diagnóstico sobre las dos condiciones de señal más pobre. En la memoria es la
-<strong>Figura 5.18</strong>.</p>
+<p><strong>Relación con la pregunta de investigación.</strong> El límite del sistema para PI.3 está en la confianza
+del modelo de diagnóstico sobre las dos condiciones de señal más pobre, no en el criterio. En la memoria es la
+<strong>Figura 5.21</strong>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c030">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c029">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9479,7 +9469,7 @@ se descartan ni se esconden: se informan, porque son parte del resultado.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c031">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c030">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9617,7 +9607,7 @@ en todas ellas el sistema se abstuvo: True
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c032">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c031">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9630,30 +9620,33 @@ ocho— y dos más en casos de evidencia parcial o retirada, donde el sistema de
 modos.</p>
 <p><strong>Qué podemos interpretar.</strong> El sistema <strong>se abstuvo en todas ellas</strong>. Es el caso que más importa:
 un diagnóstico equivocado del que además se explicara con confianza sería el peor resultado posible,
-y es exactamente lo que el criterio existe para impedir. Que en las dos ocasiones en que el modelo
-se equivocó el sistema callara es evidencia directa a favor de PI.3.</p>
+y es exactamente lo que el criterio existe para impedir. Que en las dos ejecuciones con evidencia
+completa en que el modelo se equivocó el sistema callara es evidencia directa a favor de PI.3.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el sistema detecte los diagnósticos incorrectos. No los detecta: no
-tiene forma de saber que son incorrectos. Lo que ocurre es que en esos dos casos la <strong>confianza</strong> del
-modelo era baja, y el umbral los filtró. Un diagnóstico incorrecto <strong>con confianza alta</strong> y evidencia
-documental aparente no sería filtrado por este mecanismo, y ese escenario es justamente el que el
-estrato adverso intentó provocar.</p>
+tiene forma de saber que son incorrectos. Y no fue la puerta de confianza la que los paró: la
+confianza <strong>calibrada</strong>, que es la que compara el verificador, era de 0,908 y 0,966, por encima del
+umbral de 0,79 (la columna <code>model_confidence</code> de la tabla es la probabilidad sin calibrar). El motivo
+registrado en los dos es <code>LOW_CLAIM_COVERAGE</code>: los fragmentos recuperados para el diagnóstico
+equivocado no sostenían ninguna afirmación. Un diagnóstico incorrecto con confianza alta <strong>y</strong>
+evidencia documental que sí cubriera lo afirmado no sería filtrado por este mecanismo, y ese escenario
+es justamente el que el estrato adverso intentó provocar.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c033">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c032">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="11.-Los-dos-an%C3%A1lisis-descriptivos,-separados-del-primario">11. Los dos análisis descriptivos, separados del primario<a class="anchor-link" href="#11.-Los-dos-an%C3%A1lisis-descriptivos,-separados-del-primario">¶</a></h2><p>El estrato comparativo y el adverso <strong>no responden a la pregunta de investigación</strong> y no deben
-mezclarse con el resultado primario: sus ventanas se eligieron <strong>consultando al modelo</strong>, de modo
-que están sesgadas por construcción. Se informan porque forman parte de lo medido.</p>
+<h2 id="11.-Los-dos-an%C3%A1lisis-descriptivos,-separados-del-primario">11. Los dos análisis descriptivos, separados del primario<a class="anchor-link" href="#11.-Los-dos-an%C3%A1lisis-descriptivos,-separados-del-primario">¶</a></h2><p>Como se fijó en el apartado 3, el estrato comparativo y el adverso <strong>no responden a la pregunta de
+investigación</strong>: sus ventanas se eligieron <strong>consultando al modelo</strong>, de modo que están sesgadas por
+construcción. Se informan porque forman parte de lo medido.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c034">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c033">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9750,7 +9743,7 @@ que están sesgadas por construcción. Se informan porque forman parte de lo med
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c035">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c034">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9761,15 +9754,15 @@ ventanas.</p>
 <p><strong>Qué podemos interpretar.</strong> El estrato comparativo describe el comportamiento en condiciones
 favorables; el adverso, en la condición más desfavorable que el diseño supo construir: la ventana
 que el modelo clasifica mal <strong>con más confianza</strong>.</p>
-<p><strong>Qué no podemos afirmar.</strong> Nada sobre tasas poblacionales a partir de ellos. Sus ventanas se
-eligieron mirando las predicciones del modelo, lo que es exactamente lo que el estrato operativo
-evita. Mezclarlos con el primario produciría una cifra sin significado. Y el adverso tiene <strong>dos</strong>
+<p><strong>Qué no podemos afirmar.</strong> Nada sobre tasas poblacionales a partir de ellos: elegir ventanas
+mirando las predicciones es exactamente lo que el estrato operativo evita, y mezclarlos con el
+primario produciría una cifra sin significado. Y el adverso tiene <strong>dos</strong>
 ejecuciones: describe dos casos, no una tendencia.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c036">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c035">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9784,7 +9777,7 @@ tiempo separadas por diez días— y <strong>ninguna ventana se repite entre los
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c037">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c036">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9859,13 +9852,13 @@ fecha de la medición: 2026-10-12
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c038">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c037">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Lo que la auditoría concluyó, y conviene no simplificar.</strong> Hay que separar tres cosas:</p>
+<p><strong>Lo que la auditoría concluyó, y conviene no simplificar.</strong> Hay que separar:</p>
 <p><strong>Fijado por el diseño, en cualquier partición.</strong> Las <strong>22 ejecuciones</strong> —once condiciones de
 evidencia elegibles por dos sesiones— y, dentro de ellas, las <strong>diez con evidencia completa</strong>. Estas
 dos cifras no podían ser otras y no aportan coincidencia alguna.</p>
@@ -9890,7 +9883,7 @@ distinguirlo y no se afirma lo primero.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c039">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c038">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9901,7 +9894,7 @@ igual. Abstenerse <strong>siempre</strong> da 0 de falsa confianza y 8 de 8 de a
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c040">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c039">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9998,7 +9991,7 @@ igual. Abstenerse <strong>siempre</strong> da 0 de falsa confianza y 8 de 8 de a
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c041">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c040">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10017,16 +10010,29 @@ tiene.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c042">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c041">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="14.-Resultados-negativos-y-limitaciones">14. Resultados negativos y limitaciones<a class="anchor-link" href="#14.-Resultados-negativos-y-limitaciones">¶</a></h2><ol>
+<h2 id="14.-Resultados-negativos-y-limitaciones">14. Resultados negativos y limitaciones<a class="anchor-link" href="#14.-Resultados-negativos-y-limitaciones">¶</a></h2><h3 id="14.1-Resultados-negativos">14.1 Resultados negativos<a class="anchor-link" href="#14.1-Resultados-negativos">¶</a></h3><ol>
 <li><strong>Dos abstenciones innecesarias de ocho.</strong> El coste evitable de la protección, con un denominador
 que no permite estimarlo con precisión.</li>
 <li><strong>Dos diagnósticos incorrectos de diez</strong> entre las ejecuciones con evidencia completa.</li>
+<li><strong>Nueve de las treinta y cinco salidas del redactor contienen una cifra que el verificador no
+produjo</strong> (<code>L-26</code>): cinco de las 26 abstenciones y cuatro de las 9 explicaciones, con 8 de sus 27
+afirmaciones afectadas —seis distintas sobre tres ventanas—. Una primera auditoría dio siete
+porque agrupaba los números de cada caso, y esa agrupación esconde dos abstenciones en las que el
+umbral mal citado coincide con el de otro motivo del mismo caso
+(<code>docs/audits/fidelidad-numerica-e19-01-11-2026.md</code>). El peor caso está en
+<code>operativo/C07_partial</code>, donde el redactor escribió «cobertura 0.852 &lt; 0.90» y el verificador había
+escrito «cobertura 0.00 &lt; 0.80»: inventó el valor <strong>y</strong> el umbral, y la comparación resultante es
+aritméticamente cierta, así que nada en la frase delata el error. <strong>Ninguna de las dos tasas cambia
+por ello</strong>, porque las produce el verificador determinista; lo que cambia es que el texto de la
+evaluación final no es numéricamente fiel. Las tres barreras lo dejan pasar.</li>
+</ol>
+<h3 id="14.2-Limitaciones">14.2 Limitaciones<a class="anchor-link" href="#14.2-Limitaciones">¶</a></h3><ol start="4">
 <li><strong>Los denominadores son pequeños</strong>: 14, 8 y 10. Un solo caso mueve <code>T_AI</code> en 0,125.</li>
 <li><strong>El reparto 8/14 no estaba pre-registrado.</strong> La regla sí; el reparto que produjo, no.</li>
 <li><strong>La condición con distractor quedó fuera</strong> de los casos elegibles, porque no medía lo que decía
@@ -10041,13 +10047,6 @@ accidental</strong> que solo leyó identificadores de sesión. Las cinco están 
 lectura de identificadores, exposición de etiquetas, exposición de predicciones y utilización de
 resultados. En cuatro de las cinco hubo exposición de etiquetas y de predicciones. <strong>No se afirma
 que el conjunto permanezca intacto.</strong></li>
-<li><strong>Siete de las treinta y cinco salidas del redactor contienen una cifra que el verificador no
-produjo</strong> (<code>L-26</code>): 3 de 26 abstenciones y 8 de 27 afirmaciones. El peor caso está en
-<code>operativo/C07_partial</code>, donde el redactor escribió «cobertura 0.852 &lt; 0.90» y el verificador había
-escrito «cobertura 0.00 &lt; 0.80»: inventó el valor <strong>y</strong> el umbral, y la comparación resultante es
-aritméticamente cierta, así que nada en la frase delata el error. <strong>Ninguna de las dos tasas cambia
-por ello</strong>, porque las produce el verificador determinista; lo que cambia es que el texto de la
-evaluación final no es numéricamente fiel. Las tres barreras lo dejan pasar.</li>
 <li><strong>El adaptador del redactor se ajustó sobre ventanas de validación</strong> (<code>L-23</code>). E19 mide sobre
 prueba y su solape con los ejemplos de ajuste es <strong>cero ventanas y cero sesiones</strong>, de modo que sus
 cifras de redacción no están contaminadas por esa vía. Lo que sigue siendo cierto es que el
@@ -10062,13 +10061,14 @@ reconstruible (<code>L-25</code>) y del que no sale ninguna cifra de esta evalua
 comparación de volumen de E7 y el conjunto de evaluación independiente del redactor, sin ejecutar.
 Corregido el 13-10-2026: este punto decía que <code>synthetic_v3</code> era «el conjunto de esta evaluación».</li>
 <li><strong>Todo es sintético.</strong> La validez externa no está establecida.</li>
-<li><strong>Una sola ejecución.</strong> No hay repeticiones ni intervalos de confianza.</li>
+<li><strong>Una sola ejecución.</strong> No hay repeticiones: los intervalos de Wilson del apartado 6 describen la
+incertidumbre de esa única medición, no la variabilidad entre ejecuciones.</li>
 </ol>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c043">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c042">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10076,28 +10076,23 @@ Corregido el 13-10-2026: este punto decía que <code>synthetic_v3</code> era «e
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="15.-Discusi%C3%B3n">15. Discusión<a class="anchor-link" href="#15.-Discusi%C3%B3n">¶</a></h2><p>Lo que E19 aporta a la pregunta de investigación es una respuesta acotada y verificable a PI.3: el
 criterio de suficiencia, sobre datos que el diseño no vio, no produjo ninguna explicación cuando
-debía callar, y lo hizo reteniendo seis de las diez respuestas que una política conservadora habría
-perdido.</p>
+debía callar (apartados 6 y 13).</p>
 <p>Dos cosas conviene subrayar sobre <strong>cómo</strong> se obtuvo, porque importan tanto como la cifra.</p>
-<p><strong>La primera es que las reglas se congelaron antes.</strong> Las reglas de anotación, los umbrales, el
-conjunto de casos, la regla de selección de ventanas y las condiciones de invalidez se escribieron,
-se les tomó huella y se anclaron a un commit <strong>antes</strong> de abrir el conjunto. Y dentro de ellas, la
-decisión esperada de cada caso se fijó con tres entradas que <strong>no incluyen la salida del
-verificador</strong>. Sin esa precaución el experimento habría medido su propia consistencia.</p>
+<p><strong>La primera es que las reglas se congelaron antes</strong> de abrir el conjunto (apartado 2), y la decisión
+esperada de cada caso se fijó con tres entradas que <strong>no incluyen la salida del verificador</strong>.</p>
 <p><strong>La segunda es que la medición se interrumpió dos veces.</strong> Los dos primeros intentos murieron tras
 sellar la anotación, por una causa ambiental que no llegó a demostrarse. La regla congelada obligaba
 a conservar el registro de cada intento inválido con su motivo, y a que la repetición llevara
 identificador propio en lugar de sustituir al anterior. Tres reinicios automáticos fueron rechazados
 por el ejecutor con una excepción escrita para eso. El incidente está documentado.</p>
-<p><strong>Y una cosa que este experimento no resuelve.</strong> Que el sistema no produjera falsa confianza en
-catorce ejecuciones no permite afirmar que no la produzca. Es la diferencia entre no haber observado
-un suceso y haber establecido que es improbable, y con catorce observaciones solo se puede afirmar lo
-primero.</p>
+<p><strong>Y una cosa que este experimento no resuelve.</strong> No haber observado falsa confianza en catorce
+ejecuciones no es haber establecido que sea improbable, y con catorce observaciones solo se puede
+afirmar lo primero.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c044">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c043">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10109,7 +10104,9 @@ conservadora sin renunciar a responder en seis de diez casos.</p>
 <p><strong>Qué hipótesis recibió apoyo.</strong> La de PI.3, en los términos medidos y con el denominador declarado.</p>
 <p><strong>Qué no recibió apoyo.</strong> Nada se refuta aquí; lo que queda acotado es el alcance de lo afirmable.</p>
 <p><strong>Qué permanece sin demostrar.</strong> Que la tasa de falsa confianza sea baja en población. Que el
-sistema rechace evidencia no pertinente —PI.4—, mientras la condición con distractor no se rediseñe.
+sistema rechace evidencia no pertinente en general —PI.4—: el rediseño de la condición con
+distractor (P1, 13-10-2026, fuera de E19) da una respuesta acotada a tres casos construidos, sin
+estimar ninguna tasa.
 La validez externa de todo ello.</p>
 <p><strong>Cómo contribuye al TFM.</strong> Es la única medición sobre el conjunto de prueba y el cierre del
 capítulo de resultados. Su valor no está en la cifra sino en el procedimiento: unas reglas
@@ -10119,7 +10116,7 @@ catorce observaciones permiten.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c045">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c044">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10177,18 +10174,17 @@ catorce observaciones permiten.</p>
 </table>
 <p><strong>Qué se puede reproducir y qué no.</strong> Los recuentos de este notebook se recalculan desde la tabla
 congelada y se pueden verificar contra el registro JSON; eso está automatizado en
-<code>tests/test_notebooks.py</code>. <strong>E19 no se reejecuta</strong>: exigiría el corpus documental —que no se
-redistribuye—, los pesos del adaptador LoRA, una base PostgreSQL con pgvector y una nueva apertura
-del conjunto de prueba, que la regla congelada no autoriza por un resultado desfavorable ni por
-curiosidad.</p>
-<h2 id="18.-Referencias-y-trazabilidad">18. Referencias y trazabilidad<a class="anchor-link" href="#18.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> Este notebook sostiene el apartado «La evaluación final sobre el conjunto de prueba» del capítulo 5, con la <strong>Figura 5.16</strong> —las tres cifras con sus denominadores— y la <strong>Figura 5.17</strong> —la decisión de cada una de las 22 ejecuciones—. Lo que la evaluación cambia en los objetivos está en el capítulo 6, en OE3, OE5 y el objetivo general.</p>
+<code>tests/test_notebooks.py</code>. <strong>E19 no se reejecuta</strong>: exigiría lo que no se distribuye (apartado 14,
+punto 9), una base PostgreSQL con pgvector y una nueva apertura del conjunto de prueba, que la regla
+congelada no autoriza.</p>
+<h2 id="18.-Referencias-y-trazabilidad">18. Referencias y trazabilidad<a class="anchor-link" href="#18.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> Este notebook sostiene el apartado «La evaluación final sobre el conjunto de prueba» del capítulo 5, con la <strong>Figura 5.19</strong> —las tres cifras con sus denominadores— y la <strong>Figura 5.20</strong> —la decisión de cada una de las 22 ejecuciones—. Lo que la evaluación cambia en los objetivos está en el capítulo 6, en OE3, OE5 y el objetivo general.</p>
 <ul>
 <li><code>docs/experiments/E19_evaluacion_final.md</code> — informe completo de la fase</li>
 <li><code>docs/methodology/congelacion-anotacion-e19.md</code> — las reglas, congeladas antes de abrir</li>
 <li><code>configs/congelacion-e19.anchor.json</code> — el anclaje al commit de congelación</li>
 <li><code>configs/manifest_e19.json</code> — el estado congelado: modelos, corpus, umbrales, casos</li>
 <li><code>docs/methodology/declaracion-apertura-e19.md</code> — la declaración formal de apertura</li>
-<li><code>docs/methodology/registro-aperturas-test.md</code> — las tres aperturas del conjunto de prueba</li>
+<li><code>docs/methodology/registro-aperturas-test.md</code> — las cinco aperturas del conjunto de prueba</li>
 <li><code>docs/experiments/incidencia-e19-01.md</code> — los dos intentos interrumpidos</li>
 <li><code>experiments/E19_evaluacion_final_v3.json</code>, <code>E19_anotacion_v3.json</code></li>
 <li><code>artifacts/tables/E19_evaluacion_final_v3.csv</code></li>

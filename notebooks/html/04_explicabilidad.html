@@ -7838,13 +7838,30 @@ a.anchor-link {
 </tbody>
 </table>
 <hr/>
-<h2 id="Qu%C3%A9-investiga-este-notebook">Qué investiga este notebook<a class="anchor-link" href="#Qu%C3%A9-investiga-este-notebook">¶</a></h2><p>Si lo que el modelo mira para decidir coincide con lo que la ficha del fallo dice que debería
-mirarse. No es una pregunta estética: el recorrido completo convierte la atribución en las
-<strong>observaciones</strong> del informe, y cada observación tiene que anclarse después en un fragmento del
-manual. Si el modelo decidiera por una señal que la ficha no menciona, el sistema tendría que
-escribir una explicación sobre algo que el manual no documenta.</p>
-<p>Hay además un hallazgo que conviene anticipar porque es contraintuitivo: <strong>la deriva del
-caudalímetro no se detecta mirando el caudalímetro.</strong></p>
+<h2 id="En-un-minuto">En un minuto<a class="anchor-link" href="#En-un-minuto">¶</a></h2><ul>
+<li><strong>La pregunta.</strong> Si lo que el modelo mira para decidir coincide con lo que la ficha del fallo dice
+que debería mirarse; la atribución da después las <strong>observaciones</strong> del informe.</li>
+<li><strong>Qué se hace.</strong> Se leen las atribuciones de Shapley que E9 calculó sobre el bosque aleatorio.</li>
+<li><strong>Resultado principal.</strong> En las <strong>cinco</strong> condiciones de fallo la señal de mayor atribución está
+entre las declaradas. Y un hallazgo contraintuitivo: <strong>la deriva del caudalímetro no se detecta
+mirando el caudalímetro</strong>, sino en los ajustes de combustible.</li>
+<li><strong>Lo que lo acota.</strong> Sin atribución (ablación <code>A1</code>) las decisiones son las mismas, diecisiete de
+diecisiete, en validación y en prueba: la atribución <strong>explica sin decidir</strong>.</li>
+<li><strong>Límite principal.</strong> Atribución no causal, tres casos por condición y una sola ejecución, sobre
+datos sintéticos.</li>
+</ul>
+<h2 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h2><p><strong>Modalidad:</strong> visualización de evidencia histórica: lee los artefactos de E9 y E18 y no recalcula
+nada. <strong>Ejecución:</strong> CPU, sin red, menos de un minuto.</p>
+<ul>
+<li><strong>1–5.</strong> Introducción, objetivo e hipótesis, fundamento (qué es y qué no es un valor de Shapley),
+entorno, y el conjunto con lo que se explica exactamente.</li>
+<li><strong>6–8.</strong> Señal principal frente a las declaradas; el mapa de atribución y el hallazgo del
+caudalímetro; dispersión caso a caso y confianza sin calibrar.</li>
+<li><strong>9.</strong> De la atribución a la observación del informe.</li>
+<li><strong>10.</strong> La ablación <code>A1</code>: qué cambia al retirar la atribución.</li>
+<li><strong>11–15.</strong> Resultados negativos y limitaciones, discusión, conclusiones, reproducibilidad y
+referencias.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7885,8 +7902,10 @@ la confianza de la predicción.</p>
 <p><strong>Criterio.</strong> Para cada condición, la señal de mayor atribución debe estar entre las declaradas en
 <code>affected_signals</code>. El experimento registra esa comparación caso a caso, de modo que el criterio no
 se decide después.</p>
-<p><strong>Qué la cuestionaría.</strong> Que la señal principal no esté entre las declaradas. Ocurre en una de las
-seis, y es el resultado más interesante del experimento.</p>
+<p><strong>Qué la cuestionaría.</strong> Que la señal principal no esté entre las declaradas. No ocurre en ninguna
+de las cinco condiciones de fallo (en <code>F00_normal</code> la comparación no aplica, apartado 6). El
+resultado más interesante está en otro sitio: en la deriva del caudalímetro la señal principal está
+declarada, pero <strong>no es el caudalímetro</strong> (apartado 7).</p>
 </div>
 </div>
 </div>
@@ -7910,9 +7929,9 @@ de la estructura interna del modelo. El de permutación trata al clasificador co
 modo que la misma atribución serviría si mañana el bosque se sustituyera por otra cosa. La
 comparación entre recorridos es lo que el trabajo necesita.</p>
 <p><strong>Qué NO es un valor de Shapley.</strong> No es una relación causal. Dice cuánto cambia la <strong>predicción del
-modelo</strong> al cambiar un descriptor, no cuánto cambia la <strong>avería</strong> al cambiar la señal. Si dos señales
-están correlacionadas —y aquí varias lo están mucho— la atribución se reparte entre ellas de forma
-inestable, y eso es una propiedad del método, no del fallo.</p>
+modelo</strong> al cambiar un descriptor, no cuánto cambia la <strong>avería</strong> al cambiar la señal. Entre señales
+correlacionadas la atribución se reparte de forma inestable, y eso es una propiedad del método, no
+del fallo (apartado 11).</p>
 </div>
 </div>
 </div>
@@ -7935,28 +7954,16 @@ inestable, y eso es una propiedad del método, no del fallo.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Anclaje de la raíz del repositorio. No hay rutas absolutas en ningún notebook:</span>
-<span class="c1"># se busca hacia arriba el directorio que contiene `pyproject.toml` y</span>
-<span class="c1"># `src/mecanico_ia_exp`, de modo que da igual desde qué directorio se haya</span>
-<span class="c1"># abierto Jupyter y a qué profundidad esté el notebook.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Se busca hacia arriba la carpeta del paquete (la que contiene `src/mecanico_ia_exp`),</span>
+<span class="c1"># así el notebook funciona se abra Jupyter desde donde se abra, sin rutas absolutas.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_raiz_del_repositorio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">candidato</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">candidato</span> <span class="o">/</span> <span class="s2">"pyproject.toml"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="n">candidato</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">candidato</span>
-    <span class="c1"># Si no se encuentra, el paquete puede estar instalado en el entorno; se</span>
-    <span class="c1"># devuelve el directorio actual y el import de abajo dirá si funciona o no.</span>
-    <span class="c1"># Fallar aquí con un mensaje claro es mejor que fallar después sin él.</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
-
-
-<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">_raiz_del_repositorio</span><span class="p">()</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"mecanico_ia_exp"</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()),</span>
+    <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">))</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -7982,7 +7989,7 @@ inestable, y eso es una propiedad del método, no del fallo.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       778bd2f
+commit       1cdb8f6
 arbol        sucio
 </pre>
 </div>
@@ -8103,7 +8110,7 @@ de los que los tres primeros viajan al informe como observaciones
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="6.-%C2%BFMira-el-modelo-donde-la-ficha-del-fallo-dice?">6. ¿Mira el modelo donde la ficha del fallo dice?<a class="anchor-link" href="#6.-%C2%BFMira-el-modelo-donde-la-ficha-del-fallo-dice?">¶</a></h2><p><strong>Qué queremos investigar.</strong> Si la señal de mayor atribución de cada condición está entre las que su
 ficha declara afectadas.</p>
-<p><strong>Qué datos utilizamos.</strong> La tabla resumen de E9, que ya trae esa comparación hecha caso a caso.</p>
+<p><strong>Qué datos utilizamos.</strong> La tabla resumen de E9, con esa comparación hecha caso a caso.</p>
 <p><strong>Por qué esta tabla y no un gráfico.</strong> Es una comparación de conjuntos de nombres: una tabla se lee
 mejor que cualquier figura.</p>
 </div>
@@ -8230,8 +8237,8 @@ mejor que cualquier figura.</p>
 La excepción es <code>F00_normal</code>, que no tiene ficha: no es un fallo, de modo que la columna de señales
 declaradas está vacía y la comparación no aplica.</p>
 <p><strong>Qué podemos interpretar.</strong> El modelo no está explotando un atajo del generador: decide sobre las
-señales que la física aproximada del fallo predice. Eso es lo que permite que la observación se
-ancle después en un fragmento del manual que hable de esa misma señal.</p>
+señales que la física aproximada del fallo predice, y eso permite anclar después la observación en
+el manual.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que la coincidencia implique que el modelo «entiende» el fallo. El
 generador produjo los datos con esas mismas reglas, así que la coincidencia es, en parte, una
 comprobación de que el modelo aprendió lo que se le puso delante. En datos reales la firma podría
@@ -8373,12 +8380,12 @@ anticipado: un caudalímetro contaminado <strong>subestima</strong> el aire que 
 inyectando más combustible, y el desajuste aparece en los ajustes a corto y largo plazo. El valor
 absoluto del caudal sigue siendo plausible para el régimen y la carga; lo que no es plausible es la
 corrección que la centralita necesita.</p>
-<p><strong>La consecuencia práctica, que es lo que importa:</strong> un sistema de diagnóstico que buscara el fallo
+<p><strong>La consecuencia práctica:</strong> un sistema de diagnóstico que buscara el fallo
 del caudalímetro <strong>mirando el caudalímetro</strong> no lo encontraría. La firma de un fallo no está
 necesariamente en la señal del componente que falla.</p>
-<p><strong>Qué no podemos afirmar.</strong> Que la atribución sea causal: dice dónde mira el modelo, no qué causa
-qué. Y con <code>ltft_bank1</code> y <code>stft_bank1</code> fuertemente correlacionados, el reparto entre esos dos es
-inestable: otra semilla podría asignar más peso a uno u otro sin que cambie nada del fenómeno.</p>
+<p><strong>Qué no podemos afirmar.</strong> Que sea causal (apartado 3). Y con <code>ltft_bank1</code> y
+<code>stft_bank1</code> fuertemente correlacionados, el reparto entre esos dos es inestable: otra semilla
+podría asignar más peso a uno u otro sin que cambie nada del fenómeno.</p>
 </div>
 </div>
 </div>
@@ -8507,12 +8514,11 @@ deriva y el encendido entre 0,64 y 0,72.</p>
 <p><strong>Qué podemos interpretar.</strong> La atribución es razonablemente estable en las condiciones que el modelo
 diagnostica con confianza alta, y dispersa en las que no. Es consistente: cuando el modelo no está
 seguro, tampoco está seguro de qué lo llevó ahí.</p>
-<p><strong>Qué no podemos afirmar, y conviene ser estricto porque la tentación es evidente.</strong> Que estas
+<p><strong>Qué no podemos afirmar, y la tentación es evidente.</strong> Que estas
 cifras expliquen las abstenciones de E19. <strong>Son otra magnitud</strong>: <code>xai_runner</code> entrena un bosque
 <strong>sin calibrar</strong> y lo que aquí se dibuja es <code>predict_proba</code> en crudo, mientras el umbral de 0,79 de
-E19 se aplica a la probabilidad <strong>calibrada</strong>, que puede reordenar. Comparar las dos sería el mismo
-error que este trabajo señala en otros sitios: poner juntas dos cifras que miden cosas distintas
-porque están en la misma escala.</p>
+E19 se aplica a la probabilidad <strong>calibrada</strong>, que puede reordenar. Ponerlas juntas por compartir
+escala sería comparar dos cifras que miden cosas distintas.</p>
 <p>Lo que sí puede decirse, y es más débil de lo que parecía: las condiciones con menos confianza aquí
 son cuatro —sin fallo, fuga, caudalímetro y encendido—, no dos. Cualquier conexión con las
 abstenciones de E19 exigiría comparar las confianzas <strong>calibradas</strong> de las mismas ventanas, y esos
@@ -8530,9 +8536,7 @@ casos por condición y una sola ejecución. Ni que una atribución estable sea u
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="9.-De-la-atribuci%C3%B3n-a-la-observaci%C3%B3n-del-informe">9. De la atribución a la observación del informe<a class="anchor-link" href="#9.-De-la-atribuci%C3%B3n-a-la-observaci%C3%B3n-del-informe">¶</a></h2><p>Lo que hace que este experimento no sea un ejercicio decorativo: las tres atribuciones principales de
-cada caso se convierten en las <strong>observaciones</strong> del paquete de evidencia, con su señal, su
-estadístico, su valor y su dirección. Y cada observación tiene que anclarse después en un fragmento
-del manual que hable de esa señal.</p>
+cada caso se convierten en las <strong>observaciones</strong> del paquete de evidencia.</p>
 </div>
 </div>
 </div>
@@ -8588,8 +8592,8 @@ Diagnóstico: F00_normal (confianza 0.5213)
 importancia. Es exactamente lo que llega al verificador y lo que el redactor tiene que anclar.</p>
 <p><strong>Por qué esto importa para PI.2.</strong> Una afirmación del informe solo se admite si existe un fragmento
 documental que mencione <strong>esa</strong> señal. La atribución decide, por tanto, qué tiene que buscarse en el
-manual; si señalara una señal que el manual no documenta, el sistema se quedaría sin respaldo y
-tendría que abstenerse. En la práctica no ocurrió, y la ablación <code>A1</code> de E18 midió lo que eso vale.</p>
+manual; si señalara una señal que el manual no documenta, el sistema tendría que abstenerse
+(apartado 1). En la práctica no ocurrió, y la ablación <code>A1</code> de E18 midió lo que eso vale.</p>
 </div>
 </div>
 </div>
@@ -8702,14 +8706,13 @@ tipificada del descriptor frente a la clase sin fallo— manteniendo todo lo dem
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra.</strong> <code>A1</code> produce <strong>las mismas decisiones que la configuración canónica</strong>, en validación
 y en prueba. Diecisiete de diecisiete, las dos veces.</p>
-<p><strong>Qué podemos interpretar.</strong> La atribución de Shapley, <strong>tal como el recorrido la usa</strong>, no cambia
-ninguna decisión. Las observaciones que elige son distintas —la ablación selecciona otros
+<p><strong>Qué podemos interpretar.</strong> La atribución, <strong>tal como el recorrido la usa</strong>, no cambia ninguna
+decisión. Las observaciones que elige son distintas —la ablación selecciona otros
 descriptores— pero el conjunto de fragmentos documentales que llega al verificador es el mismo, y la
 decisión también.</p>
-<p>Es un resultado negativo sobre el valor de la atribución en este recorrido, y se publica como tal. No
-dice que la atribución no sirva: dice que <strong>para decidir</strong> no aporta sobre una alternativa mucho más
-barata. Para <strong>explicar</strong> sigue siendo lo que da contenido a las observaciones, y eso es PI.2, no
-PI.3.</p>
+<p>Es un resultado negativo sobre el valor de la atribución en este recorrido, y se publica como tal:
+<strong>para decidir</strong> no aporta sobre una alternativa mucho más barata. Lo que sí aporta —el contenido
+de las observaciones, que es PI.2 y no PI.3— se discute en el apartado 12.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que un criterio estadístico simple sea equivalente en general. Con
 diecisiete casos, cinco de ellos con evidencia completa, lo que se ha medido es que en esta muestra
 ninguna decisión cambió.</p>
@@ -8729,10 +8732,10 @@ ninguna decisión cambió.</p>
 <code>throttle_position</code> están correlacionadas por encima de 0,99 en este generador: cuál de las tres
 recibe el peso es en buena medida arbitrario.</li>
 <li><strong>Tres casos por condición.</strong> No hay base para hablar de estabilidad.</li>
-<li><strong>El fondo de referencia define el significado.</strong> Son 100 ventanas de la clase sin fallo de
-entrenamiento: toda la atribución mide separación respecto de un motor sano, no importancia
-absoluta. Con otro fondo, otros números.</li>
-<li><strong>La atribución no es causal</strong>, y este notebook no la presenta como tal en ningún punto.</li>
+<li><strong>El fondo de referencia define el significado</strong> (apartado 3): la atribución mide separación
+respecto de un motor sano, no importancia absoluta. Con otro fondo, otros números.</li>
+<li><strong>La atribución no es causal</strong> (apartado 3), y este notebook no la presenta como tal en ningún
+punto.</li>
 <li><strong>El registro de E9 no lleva cabecera de identificación</strong>: le faltan <code>commit</code> y <code>executed_at</code>,
 como a los de E6 y E7. Es anterior a la convención y no se regenera, porque regenerar cambiaría
 las cifras publicadas.</li>
@@ -8747,18 +8750,14 @@ las cifras publicadas.</li>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="12.-Discusi%C3%B3n">12. Discusión<a class="anchor-link" href="#12.-Discusi%C3%B3n">¶</a></h2><p>Lo que E9 aporta al trabajo es menos de lo que su nombre sugiere y más de lo que su ablación
-indicaría.</p>
+<h2 id="12.-Discusi%C3%B3n">12. Discusión<a class="anchor-link" href="#12.-Discusi%C3%B3n">¶</a></h2><p>E9 aporta menos de lo que su nombre sugiere y más de lo que su ablación indicaría.</p>
 <p><strong>Menos</strong>, porque la atribución no decide: <code>A1</code> lo midió y las diecisiete decisiones fueron las
 mismas. Si el objetivo fuera solo decidir bien, podría retirarse.</p>
 <p><strong>Más</strong>, porque es lo que convierte una predicción en algo <strong>contrastable</strong>. Sin observaciones no hay
-nada que anclar en el manual, y PI.2 —que toda afirmación se ancle en una observación o un fragmento
-identificable— dejaría de tener objeto. La atribución no mejora la decisión; hace posible la
+nada que anclar en el manual, y PI.2 dejaría de tener objeto. La atribución no mejora la decisión; hace posible la
 explicación.</p>
-<p>Y deja un hallazgo que sobrevive a todo lo anterior: <strong>la firma de un fallo no está necesariamente en
-la señal del componente que falla.</strong> El caudalímetro contaminado se detecta en los ajustes de
-combustible. Un sistema diseñado con la intuición contraria —vigilar cada sensor para detectar su
-propio fallo— no habría encontrado esta avería.</p>
+<p>Y deja un hallazgo que sobrevive a todo lo anterior, el del apartado 7: un sistema que vigilara cada
+sensor para detectar su propio fallo no habría encontrado la deriva del caudalímetro.</p>
 </div>
 </div>
 </div>
@@ -8827,11 +8826,10 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 </tr>
 </tbody>
 </table>
-<p><strong>Qué no se reproduce aquí.</strong> Las atribuciones: recalcularlas exige reentrenar el bosque y volver a
-ejecutar el explicador por permutación, que es lo caro del proceso. En modo FULL,
+<p><strong>Qué no se reproduce aquí.</strong> Las atribuciones (véase la modalidad en el apartado 4). En modo FULL,
 <code>mecanico-exp xai --dataset-id synthetic_v2 --etiqueta &lt;nombre&gt;</code>, que escribe con etiqueta propia y
 <strong>no sobrescribe</strong> los artefactos publicados.</p>
-<h2 id="15.-Referencias-y-trazabilidad">15. Referencias y trazabilidad<a class="anchor-link" href="#15.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> El mapa de atribución es la <strong>Figura 5.12</strong> del capítulo 5, en el apartado de PI.1, y el resumen por diagnóstico está en el anexo B, <strong>Tabla B.3</strong>. La lectura de la ablación <code>A1</code> que este notebook discute aparece junto a la <strong>Figura 5.15</strong>.</p>
+<h2 id="15.-Referencias-y-trazabilidad">15. Referencias y trazabilidad<a class="anchor-link" href="#15.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> El mapa de atribución es la <strong>Figura 5.15</strong> del capítulo 5, en el apartado de PI.1, y el resumen por diagnóstico está en el anexo B, <strong>Tabla B.3</strong>. La lectura de la ablación <code>A1</code> que este notebook discute aparece junto a la <strong>Figura 5.18</strong>.</p>
 <ul>
 <li><code>docs/experiments/E9_atribucion.md</code> — informe de la fase</li>
 <li><code>experiments/E9_xai_synthetic_v2.json</code> — registro, con el fondo y su huella</li>
