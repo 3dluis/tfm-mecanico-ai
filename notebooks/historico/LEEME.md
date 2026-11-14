@@ -5,7 +5,7 @@
 Son los cuadernos de trabajo que se usaron durante cada fase del laboratorio (E1 a E20). Se
 generaron con una plantilla común (`scripts/gen_notebooks.py`) y algunos se rellenaron después
 (`scripts/fill_notebooks.py`), pero varios conservan sin redactar el cierre de la plantilla
-(«Resultados», «Interpretación», «Limitaciones», «Conclusión experimental») y cuatro no pasaron de
+(Resultados, Interpretación, Limitaciones y Conclusión experimental) y cuatro no pasaron de
 la cabecera. Se conservan para que el recorrido se pueda seguir, no como resultado.
 
 Lo que sí se entrega son **los siete notebooks de `notebooks/`**, que recogen el contenido válido de

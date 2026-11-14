@@ -17,7 +17,7 @@ CELDAS = [
 | **Conjunto** | `synthetic_v2`, partición de validación · las 70 ventanas etiquetadas con un fallo |
 | **Protocolo** | comparación contrafactual por muestra, con el umbral declarado en `obd/expresion.py` |
 | **Estado** | la medición es del 12–13 de octubre de 2026; los experimentos que reinterpreta están cerrados |
-| **Pregunta de investigación** | PI.1 —qué puede diagnosticarse y qué no— y el alcance de lo que una matriz de confusión significa |
+| **Pregunta de investigación** | PI.1 (qué puede diagnosticarse y qué no) y el alcance de lo que una matriz de confusión significa |
 | **Evidencia original** | `experiments/E6_baseline_synthetic_v2.json`, `E7_temporal_synthetic_v2.json`, `docs/methodology/expresion-efectiva-del-fallo.md` |
 
 ---
@@ -31,7 +31,7 @@ CELDAS = [
 - **Resultado.** Las tres condiciones que el bosque acierta por completo son las tres mejor
   expresadas: todas sus ventanas plenas salvo una parcial del caudalímetro (13 de 14). Las dos que falla son las únicas con un problema de expresión: el termostato tiene
   **cinco ventanas sin ninguna señal** y el encendido **ninguna plenamente expresada**.
-- **Lectura.** Un «falso negativo» sobre una ventana cuya señal es idéntica a la de un motor sano no
+- **Lectura.** Un “falso negativo” sobre una ventana cuya señal es idéntica a la de un motor sano no
   mide un fallo del modelo; mide el límite de lo que el dato contiene.
 - **Límite principal.** No se sabe si las cinco ventanas que el bosque falla son las cinco vacías:
   los registros de E6 no guardan las predicciones por ventana.
@@ -72,7 +72,7 @@ Lo que `fault_active` **no** dice es si la función de fallo cambió algo. Y hay
 mismo catálogo de cinco fallos, en los que no cambia nada:
 
 1. **El termostato bloqueado abierto** limita la temperatura del refrigerante a 71 °C. Si el motor
-   todavía no había llegado ahí por sí mismo —arranque en frío—, la señal averiada es **idéntica** a
+   todavía no había llegado ahí por sí mismo (arranque en frío), la señal averiada es **idéntica** a
    la sana. No parecida: la misma.
 2. **El fallo de encendido** es **episódico**: episodios de 1 a 3 segundos con una tasa de aparición
    del 2 % por segundo. Entre episodios, el motor se comporta como uno sano.
@@ -103,7 +103,7 @@ tienen ventanas sin señal se acertaran por completo. Ninguna de las dos ocurre.
     md("""\
 ## 3. Fundamento: el contrafactual y por qué se puede calcular exactamente
 
-Comparar «con fallo» frente a «sin fallo» suele exigir simular dos veces y entonces la comparación
+Comparar *con fallo* frente a *sin fallo* suele exigir simular dos veces y entonces la comparación
 arrastra la diferencia de los dos recorridos de números aleatorios. Aquí no hace falta, por cómo está
 construido el motor:
 
@@ -114,7 +114,7 @@ De modo que **el valor que la función de fallo recibe es exactamente la trayect
 instante**. El contrafactual no se simula: se tiene.
 
 **El umbral.** Una desviación cuenta como observable si supera el 10 % de la desviación típica que el
-motor declara para esa señal —`RATIO_DECLARADO`, en `obd/expresion.py`—. La comparación se hace
+motor declara para esa señal (`RATIO_DECLARADO`, en `obd/expresion.py`). La comparación se hace
 **después** del recorte a rango físico, porque es el valor que llega al modelo.
 
 **Y hay un caso en el que el umbral no importa.** Para el termostato por debajo de su tope y para el
@@ -150,7 +150,7 @@ modalidad = soporte.declarar_modalidad(
 
 Primero lo que ya está medido y publicado. Los aciertos por clase no figuran como tal en los
 registros: se derivan de la exhaustividad por el soporte, que es la misma operación que el capítulo 5
-hace para citar «11 de 14 frente a 9 de 14»."""),
+hace para citar “11 de 14 frente a 9 de 14”."""),
     code("""\
 import pandas as pd
 
@@ -190,16 +190,16 @@ print(f"F1 macro · bosque {e6['metrics']['macro_f1']:.4f} · temporal {e7['metr
 repartidas en tres clases: tres en la condición sin fallo, dos en el caudalímetro y dos en el
 encendido. En agregado es peor: 0,8230 de F1 macro frente a 0,8788.
 
-**Qué podemos interpretar.** Que la frase «el modelo temporal acierta dos ventanas más en el
-termostato» es cierta y, por sí sola, **engañosa**: omite que pierde siete en otras clases. El capítulo
-5 la cita junto a la conclusión correcta —que el modelo temporal no supera al tabular—.
+**Qué podemos interpretar.** Que la frase “el modelo temporal acierta dos ventanas más en el
+termostato” es cierta y, por sí sola, **engañosa**: omite que pierde siete en otras clases. El capítulo
+5 la cita junto a la conclusión correcta: que el modelo temporal no supera al tabular.
 
 **Qué no podemos afirmar.** Nada sobre arquitecturas: son dos ejecuciones únicas con un
 procedimiento que no es simétrico (apartado 11.2)."""),
     md("""\
 ## 6. La medición nueva: cuánto de cada ventana etiquetada es observable
 
-Se reconstruyen las sesiones de validación desde su `SessionSpec` —el mismo plan, la misma semilla— con
+Se reconstruyen las sesiones de validación desde su `SessionSpec` (el mismo plan, la misma semilla) con
 las tres columnas de expresión activadas y se cuenta, ventana a ventana, cuántas de sus 120 muestras
 superan el umbral."""),
     code("""\
@@ -321,8 +321,8 @@ en 1,0 salvo una ventana parcial del caudalímetro; el termostato los tiene repa
 pegados al cero**, entre 0,017 y 0,13. A la derecha, las ventanas sin ninguna señal frente a las que
 el bosque falla.
 
-**Qué podemos interpretar.** Las tres condiciones que el bosque acierta **por completo** —fuga de
-vacío, caudalímetro y sonda lenta— son las tres expresadas en todas sus ventanas, plenamente salvo
+**Qué podemos interpretar.** Las tres condiciones que el bosque acierta **por completo** (fuga de
+vacío, caudalímetro y sonda lenta) son las tres expresadas en todas sus ventanas, plenamente salvo
 una del caudalímetro. Las dos que falla son
 las dos únicas con un problema de expresión. Los problemas son de clases distintas: el termostato tiene **cinco
 ventanas sin ninguna señal**, las cinco de la misma sesión de calentamiento y consecutivas; el
@@ -330,7 +330,7 @@ encendido **no tiene ninguna ventana plenamente expresada**. El rendimiento por 
 que la expresión.
 
 **Qué no podemos afirmar.** Que las cinco ventanas que el bosque falla sean **las mismas cinco** que
-no tienen señal. El número coincide —falla cinco, cinco están vacías— y los registros de E6 **no
+no tienen señal. El número coincide (falla cinco, cinco están vacías) y los registros de E6 **no
 guardan las predicciones por ventana**, de modo que no se sabe cuáles falló (apartado 13). Tampoco
 podemos afirmar que el modelo temporal gane sus dos ventanas del termostato donde no hay nada que
 ver: es la hipótesis que esto sugiere y exige la misma comprobación."""),
@@ -344,8 +344,8 @@ sesión. Un fallo que altera la trayectoria en todo momento deja firma en cualqu
 ventana; uno que la altera durante tres segundos de cada ciento veinte deja la mayoría de sus
 ventanas sin nada que aprender.
 
-**Objetivo del análisis.** Medir esa diferencia sin comparar sesiones distintas —que confundiría el
-efecto del fallo con el del perfil de conducción— y dejar el resultado en un artefacto con
+**Objetivo del análisis.** Medir esa diferencia sin comparar sesiones distintas (que confundiría el
+efecto del fallo con el del perfil de conducción) y dejar el resultado en un artefacto con
 procedencia y huella.
 
 **Procedencia de los datos.** El análisis contrafactual T2, que produce
@@ -358,7 +358,7 @@ comprobación falla, se detiene sin escribir.
 
 **Qué estatuto tiene el artefacto.** Derivado, solo para análisis visual: no entra en ninguna
 partición, no modifica ninguna métrica histórica ni ajusta ningún modelo, no es una evaluación nueva
-y no es un conjunto de datos —no tiene ventanado ni particiones—."""),
+y no es un conjunto de datos (no tiene ventanado ni particiones)."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import recuento_de_expresion
 
@@ -378,8 +378,8 @@ hasta una meseta; la fuga de vacío sube más deprisa hasta otra más baja; el t
 valor constante en el instante de entrada; la sonda lenta oscila en una banda ancha; y la desviación
 del fallo de encendido vuelve a **cero exacto** entre episodio y episodio.
 
-**Interpretación.** Las cinco condiciones tienen tres formas temporales distintas —progresiva
-(fuga y deriva), sostenida desde la entrada (termostato y sonda) y episódica (encendido)— y eso explica por qué no se detectan igual: en buena parte de las ventanas del fallo de
+**Interpretación.** Las cinco condiciones tienen tres formas temporales distintas: progresiva
+(fuga y deriva), sostenida desde la entrada (termostato y sonda) y episódica (encendido). Eso explica por qué no se detectan igual: en buena parte de las ventanas del fallo de
 encendido no hay nada que detectar. El recuento no depende del umbral declarado: exigiendo diez
 veces más, una desviación típica completa del ruido del generador en lugar de una décima, los
 recuentos pasan de 480, 479, 480, 480 y 16 a 480, 471, 480, 463 y 16.
@@ -412,7 +412,7 @@ señales afectadas y en la sesión dibujada **solo tres se alteran**: el régime
 generador solo lo perturba por debajo de 5 km/h y la sesión es de autopista. La firma declarada de
 una condición no se expresa entera en todos los regímenes.
 
-**Limitaciones.** Además de lo dicho en el apartado 3 —observable no es detectable—, la ausencia de
+**Limitaciones.** Además de lo dicho en el apartado 3 (observable no es detectable), la ausencia de
 desviación en un tramo **no demuestra que el diagnóstico sea imposible**: dice que en ese tramo,
 bajo el criterio declarado, no hay señal.
 
@@ -432,7 +432,7 @@ for sesion, grupo in termostato.groupby("sesion"):
     print(f"  {sesion:34} {grupo.regimen.iloc[0]:8} {cero} de {len(grupo)} ventanas sin señal")"""),
     md("""\
 **Qué muestra.** `__urban__08` tiene sus siete ventanas plenamente expresadas. `__warmup__03` tiene
-**cinco de siete sin ninguna señal** —de los 120 a los 479 segundos— y las dos últimas apenas: 9 y 69
+**cinco de siete sin ninguna señal** (de los 120 a los 479 segundos) y las dos últimas apenas: 9 y 69
 muestras de 120.
 
 **Qué podemos interpretar.** La causa es física y estaba descrita antes de medirla: en régimen urbano
@@ -446,7 +446,7 @@ mecanismo tal como la ficha del fallo lo declara y el generador lo implementa (l
     md("""\
 ## 9. Por qué no se corrigen las etiquetas
 
-La tentación es evidente: reetiquetar como «sin fallo» las ventanas sin señal y volver a medir. **No se
+La tentación es evidente: reetiquetar como *sin fallo* las ventanas sin señal y volver a medir. **No se
 hace**, por tres razones y en este orden:
 
 1. **Cambiaría todas las cifras publicadas.** E6, E7, E9, el ventanado de E5, el reparto, el conjunto
@@ -489,7 +489,7 @@ print("\\nmedición del 13-10-2026:")
 for clave, valor in v3["medicion_del_13_10_2026"].items():
     print(f"  {clave}: {valor}")"""),
     md("""\
-**Qué muestra.** Los dos declaran la misma semilla —20260901— y la misma versión de generador —1.0.0—.
+**Qué muestra.** Los dos declaran la misma semilla (20260901) y la misma versión de generador (1.0.0).
 **No son comparables**: `synthetic_v3` se generó el 1 de septiembre a las 14:58 locales y la
 calibración del generador contra el manual de taller es el commit de las 15:46 del **mismo día**.
 `synthetic_v2` se regeneró después. `GENERATOR_VERSION` no distingue a los dos porque es una constante
@@ -519,7 +519,7 @@ lo son**: se midieron sobre el conjunto que hay y su registro lo acredita. Lo qu
 | Qué | Qué pasó |
 |---|---|
 | **El fallo de encendido no se puede detectar bien y ahora se sabe por qué** | 0 de 45 ventanas plenamente expresadas en la medición de calentamiento, 0 de 14 en validación. El bosque acierta 7 de 14 y el modelo temporal, 5 |
-| **El hallazgo «el límite era el volumen de datos»** | `SUPERSEDED`: comparaba dos generadores distintos |
+| **El hallazgo “el límite era el volumen de datos”** | `SUPERSEDED`: comparaba dos generadores distintos |
 | **La corrección de E7 sobre el fallo de encendido** | `SUPERSEDED`, misma causa |
 | **Las cifras 54,3 °C y 70,7 °C del termostato** | citadas en la matriz de validación y **sin registro**. Marcadas como no utilizables: dependen de las predicciones por ventana, que no existen |
 | **`synthetic_v4`** | diseñado, pre-registrado y **no generado**. La curva de volumen queda sin medir |
@@ -528,8 +528,8 @@ lo son**: se midieron sobre el conjunto que hay y su registro lo acredita. Lo qu
 
 1. **El indicador depende de un umbral declarado**, el 10 % de la desviación típica de cada señal,
    en los casos intermedios; donde la desviación es exactamente cero, no (apartado 3).
-2. **La medición es sobre un conjunto sintético.** Dice cómo se comporta el generador —comprueba
-   el instrumento—, no un vehículo.
+2. **La medición es sobre un conjunto sintético.** Dice cómo se comporta el generador (comprueba
+   el instrumento), no un vehículo.
 3. **Las fichas de fallo del generador no tienen respaldo documental verificado** (`L-03`): el
    mecanismo que se mide es el que la ficha declara.
 4. **Dos sesiones por condición en validación.** Que el termostato tenga una sesión de calentamiento y
@@ -547,10 +547,10 @@ lo son**: se midieron sobre el conjunto que hay y su registro lo acredita. Lo qu
 **Una etiqueta de fallo y una manifestación observable del fallo no son la misma cosa**. En este
 conjunto de datos se separan lo bastante para cambiar la lectura de dos de las cinco condiciones. En
 las tres condiciones donde no se separan, el modelo de diagnóstico acierta todas las ventanas. En las
-dos donde sí —el termostato por el régimen de calentamiento, el encendido por ser episódico— es donde
+dos donde sí (el termostato por el régimen de calentamiento, el encendido por ser episódico) es donde
 están todos sus errores.
 
-Eso no mejora ninguna cifra: las deja donde estaban y cambia qué significan. Un «falso negativo» sobre
+Eso no mejora ninguna cifra: las deja donde estaban y cambia qué significan. Un “falso negativo” sobre
 una ventana cuya señal es idéntica a la de un motor sano no mide un fallo del modelo; mide el límite
 de lo que el dato contiene. Y distinguir las dos cosas es exactamente el tipo de cuidado que el resto
 del trabajo exige al sistema: no dar por evidencia lo que solo lo parece.

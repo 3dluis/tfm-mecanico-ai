@@ -47,7 +47,7 @@ try:
 except ModuleNotFoundError as error:  # pragma: no cover - solo fuera del repositorio
     raise SystemExit(
         f"No se encuentra el paquete del laboratorio desde {Path.cwd()}.\\n"
-        "Abra Jupyter dentro del repositorio clonado, o instálelo con «uv sync --extra nb»."
+        "Abra Jupyter dentro del repositorio clonado, o instálelo con uv sync --extra nb."
     ) from error
 
 soporte.imprimir_entorno()"""

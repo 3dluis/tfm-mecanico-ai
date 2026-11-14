@@ -17,7 +17,7 @@ CELDAS = [
 | **Protocolo** | `shap.explainers.Permutation` sobre `predict_proba` de la clase predicha |
 | **Estado** | cerrado y validado |
 | **Modalidad** | visualización de evidencia histórica |
-| **Pregunta de investigación** | PI.1 —qué sostiene el diagnóstico— y PI.2, porque la atribución es la **observación** que después hay que anclar en un documento |
+| **Pregunta de investigación** | PI.1 (qué sostiene el diagnóstico) y PI.2, porque la atribución es la **observación** que después hay que anclar en un documento |
 | **Evidencia original** | `experiments/E9_xai_synthetic_v2.json`, `artifacts/tables/E9_atribuciones_synthetic_v2.csv`, `E9_resumen_synthetic_v2.csv` |
 
 ---
@@ -161,10 +161,10 @@ La excepción es `F00_normal`, que no tiene ficha: no es un fallo, de modo que l
 declaradas está vacía y la comparación no aplica.
 
 **Qué podemos interpretar.** En las cinco condiciones la señal de mayor atribución es una de las
-que declara la ficha del generador, aunque en el fallo de encendido parte del peso —un 13 %— cae en
+que declara la ficha del generador, aunque en el fallo de encendido parte del peso (un 13 %) cae en
 señales no declaradas (apartado 7). Eso permite anclar después la observación en el manual.
 
-**Qué no podemos afirmar.** Que la coincidencia implique que el modelo «entiende» el fallo. El
+**Qué no podemos afirmar.** Que la coincidencia implique que el modelo *entiende* el fallo. El
 generador produjo los datos con esas mismas reglas, así que la coincidencia es, en parte, una
 comprobación de que el modelo aprendió lo que se le puso delante. En datos reales la firma podría
 estar en otro sitio."""),
@@ -176,8 +176,8 @@ atribución se aparta de lo esperable.
 
 **Qué datos utilizamos.** Las 180 atribuciones, agregadas por condición y señal.
 
-**Por qué un mapa de calor.** Seis condiciones por las señales que aparecen en la atribución —diez
-de las doce, más el descriptor compuesto `stft_bank1+ltft_bank1`— es una matriz; el mapa deja ver
+**Por qué un mapa de calor.** Seis condiciones por las señales que aparecen en la atribución (diez
+de las doce, más el descriptor compuesto `stft_bank1+ltft_bank1`) es una matriz; el mapa deja ver
 de un vistazo dónde se concentra el peso y dónde hay huecos.
 
 **Qué debemos observar.** La fila del caudalímetro."""),
@@ -240,7 +240,7 @@ fila = normalizada.loc["F02_maf_drift"].sort_values(ascending=False)
 print(fila[fila > 0.01].round(3).to_string())"""),
     md("""\
 **Qué muestra.** En cada condición, el peso se concentra en pocas señales y casi siempre sobre las
-que la ficha declara —los puntos—. En la fila de la **deriva del caudalímetro** el peso está en los
+que la ficha declara (los puntos). En la fila de la **deriva del caudalímetro** el peso está en los
 **ajustes de combustible**; la señal `maf`, que es el componente que falla y está declarada en la
 ficha, no figura entre los diez descriptores principales de ningún caso.
 
@@ -332,7 +332,7 @@ E19 se aplica a la probabilidad **calibrada**, que puede reordenar. Ponerlas jun
 escala sería comparar dos cifras que miden cosas distintas.
 
 Lo que sí puede decirse es más débil de lo que parecía: las condiciones con menos confianza aquí
-son cuatro —sin fallo, fuga, caudalímetro y encendido—, no dos. Cualquier conexión con las
+son cuatro (sin fallo, fuga, caudalímetro y encendido), no dos. Cualquier conexión con las
 abstenciones de E19 exigiría comparar las confianzas **calibradas** de las mismas ventanas. Esos
 valores están en el registro de E19, no en el de E9.
 
@@ -365,8 +365,8 @@ manual; si señalara una señal que el manual no documenta, el sistema tendría 
     md("""\
 ## 10. Lo que la ablación `A1` dice de todo esto
 
-E18 retiró la atribución de Shapley y la sustituyó por un criterio estadístico simple —la desviación
-tipificada del descriptor frente a la clase sin fallo— manteniendo todo lo demás."""),
+E18 retiró la atribución de Shapley y la sustituyó por un criterio estadístico simple (la desviación
+tipificada del descriptor frente a la clase sin fallo), manteniendo todo lo demás."""),
     code("""\
 import json
 
@@ -394,13 +394,13 @@ independiente: la decisión la fijan la condición de evidencia y la puerta de c
 al cambiar de partición.
 
 **Qué podemos interpretar.** La atribución, **tal como el recorrido la usa**, no cambia ninguna
-decisión. Las observaciones que elige son distintas —la ablación selecciona otros
-descriptores— pero el conjunto de fragmentos documentales que llega al verificador es el mismo y la
+decisión. Las observaciones que elige son distintas (la ablación selecciona otros
+descriptores), pero el conjunto de fragmentos documentales que llega al verificador es el mismo y la
 decisión también.
 
 Es un resultado negativo sobre el valor de la atribución en este recorrido y se publica como tal:
-**para decidir** no aporta sobre una alternativa mucho más barata. Lo que sí aporta —el contenido
-de las observaciones, que es PI.2 y no PI.3— se discute en el apartado 12.
+**para decidir** no aporta sobre una alternativa mucho más barata. Lo que sí aporta (el contenido
+de las observaciones, que es PI.2 y no PI.3) se discute en el apartado 12.
 
 **Qué no podemos afirmar.** Que un criterio estadístico simple sea equivalente en general. Con
 diecisiete casos, cinco de ellos con evidencia completa, lo que se ha medido es que en esta muestra
@@ -480,14 +480,14 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 
 **Dónde aparece esto en la memoria.** El mapa de atribución es la **Figura 5.15** del capítulo 5, en el apartado de PI.1. El resumen por diagnóstico está en el anexo B, **Tabla B.3**. La lectura de la ablación `A1` que este notebook discute aparece junto a la **Figura 5.18**.
 
-- `docs/experiments/E9_atribucion.md` — informe de la fase
-- `experiments/E9_xai_synthetic_v2.json` — registro, con el fondo y su huella
-- `artifacts/tables/E9_atribuciones_synthetic_v2.csv` — las 180 atribuciones
-- `artifacts/tables/E9_resumen_synthetic_v2.csv` — la comparación con las señales declaradas
-- `src/mecanico_ia_exp/xai/attribution.py` — el explicador y la selección de fondo
-- `src/mecanico_ia_exp/obd/faults.py` — las fichas con `affected_signals`
-- `docs/experiments/E18_ablaciones.md` y `E18_ablaciones_prueba.md` — la ablación `A1`
-- `docs/experiments/E4_eda_temporal.md` — donde apareció por primera vez la compensación del caudalímetro"""),
+- `docs/experiments/E9_atribucion.md`: informe de la fase
+- `experiments/E9_xai_synthetic_v2.json`: registro, con el fondo y su huella
+- `artifacts/tables/E9_atribuciones_synthetic_v2.csv`: las 180 atribuciones
+- `artifacts/tables/E9_resumen_synthetic_v2.csv`: la comparación con las señales declaradas
+- `src/mecanico_ia_exp/xai/attribution.py`: el explicador y la selección de fondo
+- `src/mecanico_ia_exp/obd/faults.py`: las fichas con `affected_signals`
+- `docs/experiments/E18_ablaciones.md` y `E18_ablaciones_prueba.md`: la ablación `A1`
+- `docs/experiments/E4_eda_temporal.md`: donde apareció por primera vez la compensación del caudalímetro"""),
 ]
 
 if __name__ == "__main__":

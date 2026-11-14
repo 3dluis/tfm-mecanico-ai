@@ -115,7 +115,7 @@ y entrega algo a la siguiente.
 **Qué queremos investigar con este diagrama:** que el recorrido se entienda sin leer el código.
 **Qué datos utiliza:** ninguno. Es un **diagrama conceptual** de la arquitectura implementada, sin
 ninguna medición: sus etiquetas son los experimentos que miden cada etapa (Tabla A.1 del anexo A).
-**Por qué esta visualización:** porque la alternativa —una lista de fases— no muestra que la decisión
+**Por qué esta visualización:** porque la alternativa (una lista de fases) no muestra que la decisión
 de abstenerse ocurre **después** de recuperar la evidencia y no antes, que es el punto del diseño."""),
     code("""\
 import matplotlib.pyplot as plt
@@ -178,8 +178,8 @@ plt.show()"""),
 dato crudo y sale por una decisión con dos valores posibles.
 
 **Qué podemos interpretar.** Que la decisión de abstenerse no es un filtro previo sobre la confianza
-del modelo: ocurre al final, después de recuperar la evidencia. Por eso puede distinguir «no estoy
-seguro» de «estoy seguro pero el manual no lo respalda». Las dos cosas terminan en abstención y por
+del modelo: ocurre al final, después de recuperar la evidencia. Por eso puede distinguir “no estoy
+seguro” de “estoy seguro pero el manual no lo respalda”. Las dos cosas terminan en abstención y por
 motivos distintos. El motivo queda registrado.
 
 **Qué no podemos afirmar.** Que el recorrido funcione así en un vehículo real: todo lo medido es
@@ -195,8 +195,8 @@ exactamente cuándo empieza un fallo, con qué intensidad y en qué señales, pa
 explicación del sistema se corresponde con lo que de verdad ocurrió. Con telemetría real sin
 etiquetar eso no se puede hacer.
 
-**El coste:** la validez externa queda sin establecer —la validación con telemetría real sigue
-siendo trabajo posterior— y así está declarado desde el primer día.
+**El coste:** la validez externa queda sin establecer. La validación con telemetría real sigue
+siendo trabajo posterior. Así está declarado desde el primer día.
 
 El generador produce doce señales a 1 Hz y cinco condiciones de fallo más la normal. Sus constantes
 están **calibradas contra el manual de taller** de un Mazda 3 BK con motor Z6. Cada una lleva su
@@ -223,7 +223,7 @@ print(datos.groupby("regime").session_id.nunique().to_string())"""),
 condición solo alcanza a los tres primeros. No es un descuido del muestreo, es una consecuencia
 aritmética, pero importa, porque el calentamiento es el régimen en que el fallo del termostato se
 comporta de forma distinta. Donde haga falta, los notebooks **generan** esas sesiones en el momento
-—el generador es determinista— y lo declaran como demostración ilustrativa."""),
+(el generador es determinista) y lo declaran como demostración ilustrativa."""),
     md("""\
 **Lo observado.** Dieciocho sesiones de 600 s, tres por cada una de las seis condiciones,
 repartidas entre tres regímenes de conducción (sin calentamiento, por lo dicho arriba). Reparto equilibrado a propósito: un desbalance en
@@ -252,8 +252,8 @@ pd.DataFrame(
 ## 6. Qué se midió y con cuánta firmeza
 
 La tabla siguiente es el estado de la evidencia. Sale de los registros, no de los informes: si un
-informe y su registro discreparan, manda el registro. Eso ocurrió de verdad una vez —con las cifras
-de E7— y se corrigió en octubre dejando constancia."""),
+informe y su registro discreparan, manda el registro. Eso ocurrió de verdad una vez (con las cifras
+de E7) y se corrigió en octubre dejando constancia."""),
     code("""\
 # Cada cifra se lee de su registro JSON. Ninguna está escrita a mano en este
 # notebook: si un registro cambiara, la tabla cambiaría con él.
@@ -338,7 +338,7 @@ plt.show()"""),
 **Qué podemos interpretar.** Que la cobertura es desigual y está declarada: unos objetivos tienen
 medición sobre el conjunto de prueba y otros solo sobre validación.
 
-**Qué no podemos afirmar.** Que «cumplido» signifique validado fuera de los datos sintéticos, ni
+**Qué no podemos afirmar.** Que *cumplido* signifique validado fuera de los datos sintéticos, ni
 que una capacidad implementada funcione: lo que no se ha evaluado no tiene evidencia a su favor ni
 en su contra.
 
@@ -348,8 +348,8 @@ investigación puede dar por respondido es lo que tiene evidencia, no lo que tie
 ## 8. El resultado de la evaluación final
 
 E19 es la única medición sobre el **conjunto de prueba**, que permaneció cerrado por excepción hasta
-el 12 de octubre de 2026. Llegó al final en el **tercer intento** —los dos anteriores se
-interrumpieron y están declarados en el apartado 9—, con las reglas congeladas y ancladas a un commit
+el 12 de octubre de 2026. Llegó al final en el **tercer intento** (los dos anteriores se
+interrumpieron y están declarados en el apartado 9), con las reglas congeladas y ancladas a un commit
 antes de abrirlo.
 
 Las tres cifras primarias, leídas de su registro con numerador y denominador. El campo `status`
@@ -408,7 +408,7 @@ funcionó y en varios casos es más informativo que lo que sí.
 | **El verificador regresionó al corregirlo** | la política v2 arregló seis casos y rompió uno que antes acertaba | `E15_suficiencia_verifier_v2.json`, campos `corrected_vs_v1` y `regression_vs_v1` |
 | **Cifras del texto generado que nadie produjo** (`L-26`) | nueve de las treinta y cinco salidas de E19 contienen un número que el verificador no produjo: la trazabilidad alcanza a los identificadores de la evidencia, no a las cifras | `docs/limitations.md`, `L-26` |
 | **Dos cifras publicadas sin registro** | las medias de temperatura del termostato se calcularon en el análisis y no se guardaron: hoy no se pueden verificar | marcadas **no utilizables** el 12-10-2026 |
-| **El conjunto de prueba se abrió cinco veces** | tres intentos de E19 —dos interrumpidos—, una para repetir las ablaciones y **una accidental**, al leer identificadores de sesión que ya estaban en otro sitio | `docs/methodology/registro-aperturas-test.md`, con qué se expuso en cada una |
+| **El conjunto de prueba se abrió cinco veces** | tres intentos de E19 (dos interrumpidos), una para repetir las ablaciones y **una accidental**, al leer identificadores de sesión que ya estaban en otro sitio | `docs/methodology/registro-aperturas-test.md`, con qué se expuso en cada una |
 | **Dos artefactos dañados por el propio trabajo** | una tabla de E5 sobrescrita y otra de E15 borrada por un patrón demasiado amplio; las detectó el censo | `incidencia-artefactos-e5.md` e `incidencia-artefactos-e15.md`; la segunda **no se declara restaurada** |
 
 Sobre el cuarto punto, que afecta a lo que PI.4 puede afirmar: hasta el rediseño del 13 de octubre
@@ -430,8 +430,8 @@ hasta septiembre de 2026 con una formulación más ambiciosa:
 > conocimiento reutilizable**?
 
 Una auditoría la examinó término a término y encontró que **de sus cinco componentes, uno tenía
-evidencia**. Los dos marcados en negrita —identificar patrones no representados e incorporar
-conocimiento reutilizable— **no tenían implementación ni fase** en el plan de veinte experimentos.
+evidencia**. Los dos marcados en negrita (identificar patrones no representados e incorporar
+conocimiento reutilizable) **no tenían implementación ni fase** en el plan de veinte experimentos.
 `ADR-004` fijó en consecuencia la formulación acotada como canónica.
 
 Lo que sí está construido de esa formulación amplia no se retira ni se esconde y sirve a la pregunta
@@ -496,15 +496,15 @@ Parecía respondida. No lo está, por dos confusores que se identificaron audita
    esa comparación mide es la diferencia entre **dos recorridos completos**.
 
 Hay una tentación concreta que conviene nombrar: la red gana en el termostato
-bloqueado —0,8148 frente a 0,7826— y es justo la condición cuya firma es temporal, «algo que debería
-subir y no sube». Encaja tan bien que parece confirmación. **No lo es.** Es una diferencia de 0,03
+bloqueado (0,8148 frente a 0,7826) y es justo la condición cuya firma es temporal: algo que debería
+subir y no sube. Encaja tan bien que parece confirmación. **No lo es.** Es una diferencia de 0,03
 en una clase de 14 ventanas, medida una sola vez, entre dos recorridos que difieren en todo. Y hay
 una explicación alternativa, medida en octubre: el fallo del termostato **no altera la trayectoria**
 mientras el refrigerante no supera su tope, de modo que en la sesión de calentamiento de validación
 **cinco de sus siete** ventanas etiquetadas con el fallo no contienen ninguna señal observable de él
 (`06_expresion_del_fallo`, apartado 8).
 
-El diseño para responder la pregunta —sin abrir una línea nueva— está en `docs/diseno-pi1/` y
+El diseño para responder la pregunta sin abrir una línea nueva está en `docs/diseno-pi1/` y
 **no se ha ejecutado**."""),
     md("""\
 ## 13. Reproducibilidad
@@ -520,12 +520,12 @@ El diseño para responder la pregunta —sin abrir una línea nueva— está en 
 | **Memoria** | por debajo de 1 GB |
 | **Artefactos que produce** | dos figuras en `notebooks/salida/00_introduccion/`, PNG y SVG: `FIG-NB00-01_recorrido` y `FIG-NB00-02_objetivos` |
 
-**Modalidad** (véase «Cómo leer»): no reproduce ningún cálculo. Si un registro estuviera mal, este
+**Modalidad** (véase *Cómo leer*): no reproduce ningún cálculo. Si un registro estuviera mal, este
 notebook lo mostraría igual de mal. Por eso la verificación de que las cifras del notebook
 coinciden con sus artefactos está automatizada en `tests/test_notebooks.py`.
 
 **Qué no se puede reproducir en una máquina cualquiera:** nada de lo que depende del corpus
-documental del manual —no se redistribuye, es propiedad del fabricante— ni de los pesos del
+documental del manual (no se redistribuye, es propiedad del fabricante) ni de los pesos del
 adaptador LoRA. Los notebooks que los necesitan están marcados como FULL en el índice."""),
     code("""\
 soporte.declarar_modalidad(
@@ -539,11 +539,11 @@ soporte.declarar_modalidad(
 **Dónde aparece esto en la memoria.** El esquema de este notebook es la **Figura A.1** del anexo A. Las ocho etapas que recorre se describen en el capítulo 4 y en la **Tabla A.1**.
 
 **Documentación del trabajo**
-- `docs/experiment-index.md` — índice de los diecinueve experimentos con su estado
-- `docs/matriz_validacion_pi.md` — respuesta a cada subpregunta con su criterio
-- `docs/limitations.md` — registro de limitaciones
-- `docs/notebook-traceability.md` — qué notebook corresponde a cada resultado
-- `docs/notebooks/auditoria-portabilidad.md` — qué se puede ejecutar sin el equipo del autor
+- `docs/experiment-index.md`: índice de los diecinueve experimentos con su estado
+- `docs/matriz_validacion_pi.md`: respuesta a cada subpregunta con su criterio
+- `docs/limitations.md`: registro de limitaciones
+- `docs/notebook-traceability.md`: qué notebook corresponde a cada resultado
+- `docs/notebooks/auditoria-portabilidad.md`: qué se puede ejecutar sin el equipo del autor
 
 **Registros citados en este notebook**
 - `experiments/E6_baseline_synthetic_v2.json`
@@ -552,11 +552,11 @@ soporte.declarar_modalidad(
 - `artifacts/tables/E19_evaluacion_final_v3.csv`
 
 **Decisiones metodológicas**
-- `configs/calibracion_mazda3_bk.yaml` — cada constante del generador con su cita del manual
-- `configs/manifest_e19.json` — el estado congelado de la evaluación final
-- `docs/methodology/congelacion-anotacion-e19.md` — las reglas, fijadas antes de abrir el test
-- `docs/methodology/registro-aperturas-test.md` — cada acceso al conjunto de prueba
-- `docs/methodology/expresion-efectiva-del-fallo.md` — cuándo un fallo altera de verdad la señal"""),
+- `configs/calibracion_mazda3_bk.yaml`: cada constante del generador con su cita del manual
+- `configs/manifest_e19.json`: el estado congelado de la evaluación final
+- `docs/methodology/congelacion-anotacion-e19.md`: las reglas, fijadas antes de abrir el test
+- `docs/methodology/registro-aperturas-test.md`: cada acceso al conjunto de prueba
+- `docs/methodology/expresion-efectiva-del-fallo.md`: cuándo un fallo altera de verdad la señal"""),
 ]
 
 if __name__ == "__main__":
