@@ -7,8 +7,7 @@ Este directorio **es** el trabajo práctico del Trabajo Fin de Máster en Inteli
 (UAX, Luis Daniel Díaz, 2026), empaquetado para que se pueda leer, ejecutar y verificar sin
 depender de ningún otro repositorio ni de la máquina en que se construyó.
 
-> **Estado: BORRADOR PARA REVISIÓN DEL TUTOR.** No es la entrega definitiva. Quedan decisiones
-> abiertas sobre la extensión, el título y los datos institucionales de la portada.
+> **Entrega final**, noviembre de 2026.
 
 ## Qué hay aquí
 
@@ -32,11 +31,11 @@ Metodología, decisiones, auditorías, pre-registros y el texto fuente de la mem
 
 Lo que sigue citando rutas de `docs/` (este README más abajo y los apartados de trazabilidad de
 los notebooks) nombra documentos que no están presentes aquí. Eso tiene **dos consecuencias
-concretas** que conviene decir: once de los treinta y nueve ficheros de prueba comprueban que esos documentos y
-los artefactos concuerdan; no viajan porque sin los documentos no pueden pasar. Además, el manifiesto
-de congelación de la evaluación final ancla por huella un documento de metodología, de modo que esa
-verificación concreta tampoco se puede ejecutar aquí. Los 28 ficheros de prueba restantes, **521
-pruebas**, sí se ejecutan.
+concretas**: las pruebas que comprueban que esos documentos y los artefactos concuerdan no viajan,
+porque sin los documentos no pueden pasar; además, el manifiesto de congelación de la evaluación
+final ancla por huella un documento de metodología, de modo que esa verificación concreta no se
+puede ejecutar aquí. Las 528 pruebas que sí viajan se ejecutan: 515 pasan, una se omite y doce
+necesitan PostgreSQL con pgvector.
 
 ## Por dónde empezar, según lo que se quiera hacer
 
@@ -100,42 +99,22 @@ uv run python -c "import json;print(json.load(open('MANIFEST.json'))['huellas_sh
 
 ---
 
-# Mecánico IA: repositorio experimental del TFM
+# Resumen del trabajo
 
-Artefacto experimental del Trabajo Fin de Máster en Inteligencia Artificial (UAX, Luis Daniel
-Díaz, 2026). Contiene el código, los registros de ejecución, las decisiones y las auditorías
-con los que se construyó la evidencia de la memoria. No es un producto: es el laboratorio, con
-su recorrido completo, incluidos los resultados que no salieron como se esperaba.
-
-## 1. Qué se investiga
+## Qué se investiga
 
 Cuando un sistema de diagnóstico de vehículos explica una avería a partir de telemetría OBD-II,
-la explicación suele evaluarse por si el diagnóstico final es correcto. Este trabajo estudia
-otra propiedad: si **cada afirmación de la explicación puede seguirse hasta la evidencia que la
-sostiene** (una observación de la telemetría o un fragmento identificable del manual de taller)
-y si el sistema es capaz de **abstenerse** cuando esa evidencia no basta, en lugar de producir
-una hipótesis sin fundamento.
-
-## 2. Pregunta de investigación
+la explicación suele evaluarse por si el diagnóstico final es correcto. Este trabajo estudia otra
+propiedad: si **cada afirmación de la explicación puede seguirse hasta la evidencia que la sostiene**
+(una observación de la telemetría o un fragmento identificable del manual de taller) y si el
+sistema **se abstiene** cuando esa evidencia no basta.
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
 > rastreando cada explicación hasta su evidencia de origen y reconocer cuándo la evidencia
 > disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis
 > sin fundamento?
 
-## 3. El vacío que se aborda
-
-Según la revisión del capítulo 3 y solo entre los
-trabajos revisados: los sistemas de diagnóstico sobre OBD-II clasifican, detectan y atribuyen,
-y ahí terminan; los sistemas de recuperación sobre documentación técnica anclan la respuesta
-en documentos, pero miden si la respuesta final es correcta, no si cada afirmación puede
-seguirse hasta el fragmento que la sostiene; y la abstención se trata como una disposición del
-modelo de lenguaje, no como una propiedad de la evidencia disponible. Este trabajo sitúa la
-decisión de explicar o abstenerse fuera del modelo de lenguaje, en un verificador determinista
-que examina la evidencia. La revisión no es un flujo PRISMA formal (L-08) y tres trabajos no se
-leyeron a texto completo (L-09): el vacío se afirma con ese alcance.
-
-## 4. Arquitectura experimental
+## Recorrido experimental
 
 ```
 telemetría OBD-II sintética, calibrada contra el manual del vehículo    (E2)
@@ -143,179 +122,75 @@ telemetría OBD-II sintética, calibrada contra el manual del vehículo    (E2)
   → modelo de diagnóstico con confianza calibrada                         (E6 bosque · E7 GRU)
   → atribución SHAP: evidencia observacional                              (E9)
   → recuperación sobre el manual de taller, filtrada por vehículo y motor (E11 · E12)
-  → verificador determinista de suficiencia → EXPLAIN / ABSTAIN           (E15 · E15b umbral)
-  → redactor SLM (Qwen2.5-3B + LoRA) con citas comprobadas contra el índice (E13)
+  → verificador determinista de suficiencia → EXPLAIN / ABSTAIN           (E15 · E18 · E19)
+  → redactor (Qwen2.5-3B con adaptador LoRA), citas comprobadas contra el índice (E13)
 ```
 
-El modelo de lenguaje no diagnostica ni decide: redacta la evidencia que los componentes
-anteriores produjeron; cada cita se comprueba contra el índice. El conjunto de prueba estuvo
-cerrado por excepción en el código hasta la evaluación final (E19, 12-10-2026); todas las demás
-cifras son de validación (L-17).
-Vehículo de referencia: Mazda 3 BK 2007, motor Z6.
+El modelo de lenguaje no diagnostica ni decide: redacta lo que los componentes anteriores
+produjeron. Vehículo de referencia: Mazda 3 BK 2007, motor Z6.
 
-## 5. Experimentos más importantes
+## Resultados principales
 
-| Exp. | Qué responde | Dónde está el registro |
-|---|---|---|
-| E6 | Línea base de diagnóstico y calibración de la confianza | `experiments/E6_baseline_synthetic_v2.json` |
-| E7 | Si un modelo temporal aporta algo sobre la línea base | `experiments/E7_temporal_synthetic_v{2,3}.json` |
-| E12 | Cuánto aporta filtrar la recuperación por vehículo, motor y autoridad | `experiments/E12_retrieval.json` |
-| E15 | Si el verificador decide EXPLAIN/ABSTAIN correctamente bajo cuatro condiciones de evidencia | `experiments/E15_suficiencia*.json` |
-| E15b | Qué umbral de confianza es estable | `experiments/E15b_barrido_umbral.json` |
-| E13 | Si el redactor produce explicaciones válidas, respeta el veredicto y no inventa citas | `experiments/E13_agente_*.json` |
-| RERUN-A | Si un defecto metodológico descubierto el 4-09 (`MIXED-EMBEDDING-SPACE`) alteraba los resultados de recuperación | `docs/experiments/resultado-rerun-a.md` |
+Las cifras salen de los registros de `experiments/` y de las tablas de `artifacts/tables/`; cada
+notebook las imprime desde ellos. Su lectura completa está en el capítulo 5 de la memoria.
 
-Índice completo con estado de cada experimento (VALIDATED, NEGATIVE, INCONCLUSIVE,
-SUPERSEDED, NON-CANONICAL, PLANNED): `docs/experiment-index.md`.
+- **Diagnóstico (PI.1, notebook 02).** El bosque aleatorio obtiene 0,879 de F1 macro en
+  validación y 0,836 en prueba, frente a 0,074 de la clase mayoritaria. La calibración reduce el
+  error de calibración de 0,144 a 0,085 en validación; en prueba apenas lo cambia (de 0,097 a
+  0,092). La red recurrente (0,823) no supera al bosque.
+- **Recuperación (PI.2, notebook 05).** La búsqueda semántica pura no encuentra el procedimiento
+  relevante en ninguno de los cinco casos puntuados; guiada por el diagnóstico lo encuentra en los
+  cinco.
+- **Evaluación final sobre el conjunto de prueba (PI.3, notebook 03).** Falsa confianza 0 de 14,
+  abstención innecesaria 2 de 8 y respuesta con evidencia completa en 6 de 10. Con 0 de 14 el
+  intervalo de Wilson al 95 % llega al 21,5 % por ejecución; es más ancho porque las catorce
+  ejecuciones proceden de siete sesiones. Una política que explicara siempre que el modelo confía
+  habría dado 14 de 14.
+- **Qué componente evita la falsa confianza (notebook 05).** Sin exigir que el fragmento sostenga
+  lo afirmado (ablación A3), la falsa confianza en validación pasa de 0 de 9 a 6 de 9; con la
+  confianza sola (A4), a 9 de 9.
+- **Evidencia que parece pertinente (PI.4, notebook 05).** En tres situaciones construidas (seis
+  ejecuciones) el sistema se abstiene siempre por cobertura de afirmaciones insuficiente. No se
+  estima ninguna tasa.
+- **Redacción.** Ninguna cita inventada. En la evaluación final, 9 de las 35 salidas del redactor
+  contienen al menos una cifra que el verificador no produjo; ninguna decisión cambia, porque las
+  toma el verificador.
 
-## 6. Qué se encontró
+## Límites
 
-Cifras de validación sobre datos sintéticos de un solo vehículo. Cada una procede del registro
-indicado; la lectura prudente es la del capítulo 5 de la memoria.
+La telemetría es sintética y la validación externa con datos reales queda fuera de este trabajo.
+El conjunto de prueba se abrió cinco veces (tres intentos de la evaluación final, una repetición
+de las ablaciones y una apertura accidental). Tres de los cuatro criterios de las subpreguntas se
+reformularon con parte de los resultados ya conocida. El soporte de cada afirmación lo juzga el
+propio verificador, sin anotación independiente. El adaptador del redactor se ajustó sobre
+ventanas de validación. Los objetivos OE2 y OE4 quedan parcialmente cumplidos (Tabla 6.1 de la
+memoria).
 
-- **Diagnóstico (PI.1).** El bosque aleatorio alcanza macro-F1 0,879 frente a 0,074 de la clase
-  mayoritaria, con una confianza mal calibrada (ECE 0,144; 0,085 tras calibración isotónica).
-  El modelo temporal GRU **no lo supera** en `synthetic_v2` (0,823) y lo supera por 0,0125 en
-  `synthetic_v3`, un margen que el propio informe declara inconcluso.
-- **Recuperación (PI.2).** La similitud semántica sin filtros no recupera el procedimiento
-  relevante en ningún caso (hit-rate 0,00); guiada por el diagnóstico y filtrada por motor y
-  autoridad lo recupera en los cinco casos puntuables (hit-rate 1,00, MRR 0,467). Seis casos
-  anotados; uno excluido de la métrica por no tener fichero relevante.
-- **Suficiencia y abstención (PI.3).** El verificador determinista v2.1 decide correctamente
-  15 de 17 casos; abstiene en los 3/3 con evidencia retirada y en los 3/3 con evidencia parcial;
-  falla en dos casos con evidencia completa. El resultado es idéntico sin canales de oráculo.
-  En un escenario adverso con seis ventanas mal clasificadas por el modelo, abstiene en las seis,
-  pero el análisis reveló una puerta de comprobación que se omitía en silencio.
-- **Distractores (PI.4).** Con el filtro de motor activo, la condición *distractor* resulta
-  redundante con la condición parcial en dos de los tres fallos: recupera los mismos fragmentos.
-  La subpregunta queda bajo diagnóstico y la novedad que se reclamaba sobre ella es más
-  estrecha (L-10).
-- **Redactor (E13).** Con el adaptador LoRA, 9 de 9 explicaciones válidas, 9 de 9 con el
-  veredicto respetado y 0 citas inventadas; el modelo base produce 7 de 9 válidas. El ajuste
-  corrigió el formato, no el diagnóstico.
-- **RERUN-A.** Tras corregir la mezcla de espacios de embeddings, los conjuntos recuperados
-  cambian en 10 de 17 casos y las decisiones no cambian en ninguno. Por el criterio fijado en el
-  pre-registro, esto se lee como “sin efecto detectable con este instrumento”, no como
-  validación del verificador.
+## Cómo reproducir desde este paquete
 
-## 7. Qué no se pudo demostrar
-
-- Nada sobre vehículos reales: la telemetría es sintética y la validación externa (E3) no se
-  ejecutó (L-01, crítica).
-- Que el modelo temporal aporte algo sobre la línea base (E7, negativo o inconcluso).
-- Que la condición de distractor manipule una variable observable en los tres fallos
-  (redundante en dos); por eso no hay inferencia confirmatoria sobre PI.4 y **ningún valor p**
-  se publica (pre-registro de RERUN-A, ENM-S01/S02).
-- Que el verificador sea correcto cuando el diagnóstico no lleva códigos de avería asociados:
-  la puerta de códigos se omitía (`EMPTY-DTC-GATE-BYPASS`), la corrección v2.2 está
-  implementada y **sin medir** (RERUN-B).
-- Que el adaptador LoRA sea canónico: se entrenó sobre un conjunto generado con recuperación
-  de procedencia indeterminada y no se ha reentrenado.
-- Ninguna ablación (E18), ninguna evaluación final sobre test (E19).
-
-Registro completo: `docs/limitations.md` y
-`research/limitations-register.md`. Hallazgos y correcciones documentadas:
-`docs/experiments/hallazgo-*.md`.
-
-## 8. Notebooks: leer la evidencia sin ejecutar nada
-
-Siete notebooks documentan los experimentos cerrados como documentos científicos ejecutables.
-Se pueden **leer sin instalar nada** (hay copia en HTML con sus figuras dentro) y ejecutar con un
-clon del repositorio, sin GPU, sin base de datos y sin descargas.
-
-| Notebook | Qué responde | Leer | Experimentos |
-|---|---|---|---|
-| `00_introduccion` | el recorrido completo y el estado de la evidencia | [HTML](notebooks/html/00_introduccion.html) | E1–E19 |
-| `01_exploracion_obd` | si las señales OBD-II contienen estructura diagnóstica | [HTML](notebooks/html/01_exploracion_obd.html) | E2, E4, E5 |
-| `02_comparacion_modelos` | si el modelo temporal supera a la línea base | [HTML](notebooks/html/02_comparacion_modelos.html) | E6, E7 |
-| `03_analisis_e19` | si el criterio de suficiencia evita la falsa confianza | [HTML](notebooks/html/03_analisis_e19.html) | E19 |
-| `04_explicabilidad` | qué señal sostiene cada diagnóstico | [HTML](notebooks/html/04_explicabilidad.html) | E9, E18 |
-| `05_suficiencia_y_abstencion` | cuándo el sistema se niega a explicar | [HTML](notebooks/html/05_suficiencia_y_abstencion.html) | E12, E15, E18, P1 |
-| `06_expresion_del_fallo` | si la etiqueta de fallo está de verdad en la señal | [HTML](notebooks/html/06_expresion_del_fallo.html) | E6, E7 |
-
-```
-uv sync --extra nb
-uv run jupyter lab notebooks/
+```bash
+bash scripts/instalar.sh                          # dependencias, una sola vez con red
+bash scripts/ejecutar_notebooks.sh                # los siete notebooks, en CPU y sin red
+uv run python scripts/verificar_entrega.py        # integridad del paquete
+uv run pytest -m "not db"                         # 515 pasan; 12 más necesitan PostgreSQL
+uv run python scripts/figuras_memoria.py          # las figuras de la memoria
+bash scripts/reconstruir_datos.sh                 # reconstruye synthetic_v2 y comprueba sus huellas
 ```
 
-Cada notebook declara su **modalidad** (reproducción, reanálisis, visualización de evidencia
-histórica o demostración ilustrativa), porque no todos hacen lo mismo con la evidencia y
-confundirlas sería grave. Índice y criterios: `docs/notebooks/indice.md`.
-Qué notebook corresponde a cada resultado:
-`docs/notebook-traceability.md`. Qué puede ejecutar de verdad quien
-no tenga el equipo del autor: `docs/notebooks/auditoria-portabilidad.md`.
+Lo que exige recursos que no viajan (el manual de taller, PostgreSQL con pgvector y, para el ajuste
+del redactor, una GPU) está detallado en el anexo C de la memoria.
 
-Ninguno escribe donde viven los artefactos históricos. En el repositorio del laboratorio lo
-verifican las pruebas de `tests/test_notebooks.py`, que no viajan en el paquete; aquí, los siete se
-ejecutan desde un kernel limpio con `bash scripts/ejecutar_notebooks.sh`.
-
-## 9. Cómo reproducir
-
-**Desde un clon limpio, en seis pasos**, comprobados clonando el repositorio y ejecutándolos:
-
-```
-uv sync --extra nb --extra ml
-bash scripts/reconstruir_datos.sh    # reconstruye lo que no se distribuye y COMPRUEBA sus huellas
-uv run pytest                        # 902 pasan sin reconstruir; 919 tras reconstruir
-uv run ruff check . && uv run mypy src
-uv run jupyter lab notebooks/
-```
-
-`data/raw/**` y `data/processed/**` están fuera del control de versiones: `synthetic_v2` son 43 200
-muestras. No hace falta distribuirlo porque el generador lo reconstruye **bit a bit**. El guion
-contrasta las cuatro huellas contra las que el manifiesto de E19 congeló antes de abrir el conjunto
-de prueba. De `synthetic_v2` salen la línea base de diagnóstico, el modelo temporal y la evaluación
-final. `synthetic_v3`, del que sale solo la comparación de volumen de E7, **no** se reconstruye y el
-guion se niega: es anterior a la calibración del generador. Sin reconstruir, doce pruebas se detienen diciendo la orden exacta en lugar de fallar.
-
-Detalle completo, con lo que **no** se puede reproducir y por qué:
-`docs/reproducir-desde-cero.md`.
-
-Entorno verificado: macOS sobre Apple Silicon, `uv`, PostgreSQL 14+ con `pgvector`. El bloque
-de telemetría (E2 → E9, E15b) se reproduce sin base de datos ni manual:
-
-```
-uv sync --all-extras
-uv run mecanico-exp doctor --no-db
-bash scripts/reproduce_baseline.sh          # E2 → E5 → E6 sobre synthetic_v2 y diff con el registro versionado
-```
-
-El bloque documental (E11 → E15, E13) requiere el manual de taller del vehículo, que **no se
-redistribuye** desde este repositorio (`data/README.md` explica qué falta y cómo obtenerlo), además de
-PostgreSQL con pgvector:
-
-```
-bash scripts/init_db.sh
-uv run python scripts/ingest_mazda.py multilingual
-bash scripts/reproduce_main_results.sh      # E12, E15 oracular y no oracular, E13 con LoRA v2
-```
-
-Versiones exactas, semillas, comandos y riesgos: `docs/reproducibility.md`.
-Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de calidad:
-`uv run ruff check . && uv run mypy src && uv run pytest`.
-
-## Estructura del repositorio
+## Estructura del paquete
 
 | Ruta | Contenido |
 |---|---|
-| `src/mecanico_ia_exp/` | Código científico: generador OBD-II, descriptores, modelos, XAI, RAG, verificador de suficiencia, agente SLM, un runner por experimento |
-| `experiments/` | Registros JSON de cada ejecución; `pre_mixed_embedding_fix/` conserva los anteriores a la corrección del 4-09 |
-| `artifacts/` | Figuras, tablas y métricas usadas en la memoria, con su procedencia (`artifacts/README.md`) |
-| `docs/experiments/` | Un informe por fase, los hallazgos (`hallazgo-*.md`) y el resultado de RERUN-A |
-| `docs/methodology/` | Políticas escritas antes de implementarse, criterios de umbral, pre-registros y enmiendas |
-| `docs/tfm/`, `docs/audits/` | Revisión integral, auditorías, plan de corrección e informes del tutor |
-| `research/` | Decisiones (ADR-001…004), matriz de trazabilidad, registro de limitaciones, referencias |
-| `configs/` | Calibración del generador, conjunto anotado, estado congelado de RERUN-A |
-| `data/` | Muestra redistribuible en `data/samples/`; el resto se regenera (`data/README.md`) |
-| `notebooks/` | Documentos científicos ejecutables; importan del paquete y no duplican lógica. Escritos desde `scripts/notebooks/` |
-| `notebooks/salida/` | Donde escriben los notebooks. **Nunca** en `experiments/`, `tables/`, `figures/` ni `data/` |
-| `notebooks/html/` | Copia en HTML de cada notebook, legible sin ejecutar nada |
-| `tests/` | 400 pruebas: políticas de suficiencia, aislamiento de embeddings, contrato de RERUN-A, cierre del test |
-
-## Trazabilidad
-
-Pregunta (`cap1`) → subpreguntas e hipótesis (`research/traceability-matrix.md`) → objetivos
-(`cap2`) → política escrita antes de medir (`docs/methodology/`) → ejecución con commit y
-semilla (`experiments/*.json`) → tabla o figura (`artifacts/`) → sección del capítulo 5 →
-conclusión (`cap6`). Matriz que lo recorre: `docs/tfm-traceability.md`.
-
+| `src/mecanico_ia_exp/` | código: generador OBD-II, descriptores, modelos, atribución, recuperación, verificador de suficiencia y redactor |
+| `experiments/` | registros JSON de cada ejecución, con commit, semilla y métricas |
+| `artifacts/` | figuras, tablas y métricas de la memoria, con su procedencia |
+| `research/` | decisiones de diseño (ADR-001 a ADR-004), registro de limitaciones y referencias |
+| `configs/` | calibración del generador, conjuntos anotados y estado congelado de la evaluación final |
+| `data/` | muestra redistribuible en `data/samples/`; el resto se regenera |
+| `notebooks/` | los siete notebooks, generados desde `scripts/notebooks/` |
+| `notebooks/historico/` | cuadernos de fase anteriores, conservados como registro |
+| `notebooks/html/` | copia ejecutada de cada notebook, legible sin instalar nada |
+| `tests/` | 29 ficheros, 528 pruebas |
