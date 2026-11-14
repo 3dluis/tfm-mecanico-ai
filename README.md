@@ -1,5 +1,8 @@
 # Trabajo práctico del TFM · paquete de entrega
 
+**Explicación verificable y abstención en el diagnóstico vehicular mediante inteligencia artificial y
+recuperación aumentada**
+
 Este directorio **es** el trabajo práctico del Trabajo Fin de Máster en Inteligencia Artificial
 (UAX, Luis Daniel Díaz, 2026), empaquetado para que se pueda leer, ejecutar y verificar sin
 depender de ningún otro repositorio ni de la máquina en que se construyó.
@@ -25,12 +28,12 @@ depender de ningún otro repositorio ni de la máquina en que se construyó.
 ### La documentación del laboratorio no viaja en el paquete
 
 Metodología, decisiones, auditorías, pre-registros y el texto fuente de la memoria estaban en
-`docs/`, y ese directorio **no forma parte del paquete**.
+`docs/` y ese directorio **no forma parte del paquete**.
 
-Lo que sigue citando rutas de `docs/` —este README más abajo, y los apartados de trazabilidad de
-los notebooks— nombra documentos que no están presentes aquí. **Dos consecuencias concretas**, y
-conviene decirlas: once de los treinta y nueve ficheros de prueba comprueban que esos documentos y
-los artefactos concuerdan, y no viajan porque sin los documentos no pueden pasar; y el manifiesto
+Lo que sigue citando rutas de `docs/` (este README más abajo y los apartados de trazabilidad de
+los notebooks) nombra documentos que no están presentes aquí. Eso tiene **dos consecuencias
+concretas** que conviene decir: once de los treinta y nueve ficheros de prueba comprueban que esos documentos y
+los artefactos concuerdan; no viajan porque sin los documentos no pueden pasar. Además, el manifiesto
 de congelación de la evaluación final ancla por huella un documento de metodología, de modo que esa
 verificación concreta tampoco se puede ejecutar aquí. Los 28 ficheros de prueba restantes, **521
 pruebas**, sí se ejecutan.
@@ -54,25 +57,25 @@ bash scripts/ejecutar_notebooks.sh  # a partir de aquí, sin red
 uv run python scripts/verificar_entrega.py
 ```
 
-Recorre nueve familias —ficheros, dependencias, notebooks, figuras, métricas, datos,
-documentación, huellas y Git— y termina con código distinto de cero si algo falta. Las huellas
+Recorre nueve familias de comprobaciones (ficheros, dependencias, notebooks, figuras, métricas,
+datos, documentación, huellas y Git) y termina con código distinto de cero si algo falta. Las huellas
 que compara están en `MANIFEST.json`, que se regenera con `scripts/generar_manifiesto.py`.
 
 ## Qué se puede reproducir y qué no
 
 **Se reproduce.** Todas las figuras del documento se regeneran desde los registros congelados
 con `uv run python scripts/figuras_memoria.py`. El conjunto canónico `synthetic_v2` se
-reconstruye **bit a bit** desde su plan y su semilla, y hay una medición que lo comprueba sesión
+reconstruye **bit a bit** desde su plan y su semilla. Una medición lo comprueba sesión
 a sesión. Los siete notebooks se ejecutan en CPU, sin red y sin servicios externos.
 
-**No se reproduce, y está dicho dónde.** Dos conjuntos, `synthetic_v1` y `synthetic_v3`, son
+**Qué no se reproduce y dónde está dicho.** Dos conjuntos, `synthetic_v1` y `synthetic_v3`, son
 anteriores a la calibración del generador contra el manual de taller: el generador publicado
 produce **otras señales**, de modo que no se pueden reconstruir y no se intenta. Dos figuras son
 artefactos históricos cuya rutina ya no existe o cuyos datos intermedios no se guardaron; viajan
 con su huella y con el motivo. El anexo C de la memoria lo detalla.
 
-**No viaja, y por qué.** El manual de taller del fabricante tiene una licencia que no permite
-redistribuirlo, y con él no viajan el índice documental ni los embeddings, que se construyen de
+**Qué no viaja y por qué.** El manual de taller del fabricante tiene una licencia que no permite
+redistribuirlo. Con él no viajan el índice documental ni los embeddings, que se construyen de
 él. Los adaptadores del modelo de lenguaje pesan 28 MB cada uno y derivan de un modelo base con
 licencia propia: viaja su configuración, que es lo que hace auditable el ajuste. `MANIFEST.json`
 enumera cada exclusión con su motivo.
@@ -116,21 +119,13 @@ una hipótesis sin fundamento.
 ## 2. Pregunta de investigación
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
-> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+> rastreando cada explicación hasta su evidencia de origen y reconocer cuándo la evidencia
 > disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis
 > sin fundamento?
 
-Enunciada en `docs/memoria/cap1_introduccion.md`; fijada como canónica por
-`research/decisions/ADR-004-pregunta-de-investigacion-canonica.md` tras dos revisiones
-documentadas (ADR-003 retiró el requisito de datos reales; ADR-004 descartó una formulación
-más amplia). Se descompone en cuatro subpreguntas (PI.1 diagnóstico y calibración, PI.2
-recuperación y trazabilidad, PI.3 abstención con evidencia insuficiente, PI.4 rechazo de
-evidencia parecida pero no aplicable), cada una con su hipótesis y su criterio de refutación
-en `docs/memoria/cap4_marco_metodologico.md` (Tabla 4.6).
-
 ## 3. El vacío que se aborda
 
-Según la revisión del capítulo 3 (`docs/memoria/cap3_marco_teorico.md`), y solo entre los
+Según la revisión del capítulo 3 y solo entre los
 trabajos revisados: los sistemas de diagnóstico sobre OBD-II clasifican, detectan y atribuyen,
 y ahí terminan; los sistemas de recuperación sobre documentación técnica anclan la respuesta
 en documentos, pero miden si la respuesta final es correcta, no si cada afirmación puede
@@ -153,10 +148,10 @@ telemetría OBD-II sintética, calibrada contra el manual del vehículo    (E2)
 ```
 
 El modelo de lenguaje no diagnostica ni decide: redacta la evidencia que los componentes
-anteriores produjeron, y cada cita se comprueba contra el índice. El conjunto de test está
-cerrado por excepción en el código y nunca se abrió: todas las cifras son de validación (L-17).
-Vehículo de referencia: Mazda 3 BK 2007, motor Z6 (`docs/memoria/cap4_marco_metodologico.md`,
-Tabla 4.1). Detalle de fases, políticas y pre-registros: `docs/methodology/`.
+anteriores produjeron; cada cita se comprueba contra el índice. El conjunto de prueba estuvo
+cerrado por excepción en el código hasta la evaluación final (E19, 12-10-2026); todas las demás
+cifras son de validación (L-17).
+Vehículo de referencia: Mazda 3 BK 2007, motor Z6.
 
 ## 5. Experimentos más importantes
 
@@ -191,16 +186,16 @@ indicado; la lectura prudente es la del capítulo 5 de la memoria.
   falla en dos casos con evidencia completa. El resultado es idéntico sin canales de oráculo.
   En un escenario adverso con seis ventanas mal clasificadas por el modelo, abstiene en las seis,
   pero el análisis reveló una puerta de comprobación que se omitía en silencio.
-- **Distractores (PI.4).** Con el filtro de motor activo, la condición «distractor» resulta
+- **Distractores (PI.4).** Con el filtro de motor activo, la condición *distractor* resulta
   redundante con la condición parcial en dos de los tres fallos: recupera los mismos fragmentos.
-  La subpregunta queda bajo diagnóstico, y la novedad que se reclamaba sobre ella es más
+  La subpregunta queda bajo diagnóstico y la novedad que se reclamaba sobre ella es más
   estrecha (L-10).
 - **Redactor (E13).** Con el adaptador LoRA, 9 de 9 explicaciones válidas, 9 de 9 con el
   veredicto respetado y 0 citas inventadas; el modelo base produce 7 de 9 válidas. El ajuste
   corrigió el formato, no el diagnóstico.
 - **RERUN-A.** Tras corregir la mezcla de espacios de embeddings, los conjuntos recuperados
   cambian en 10 de 17 casos y las decisiones no cambian en ninguno. Por el criterio fijado en el
-  pre-registro, esto se lee como «sin efecto detectable con este instrumento», no como
+  pre-registro, esto se lee como “sin efecto detectable con este instrumento”, no como
   validación del verificador.
 
 ## 7. Qué no se pudo demostrar
@@ -224,8 +219,8 @@ Registro completo: `docs/limitations.md` y
 
 ## 8. Notebooks: leer la evidencia sin ejecutar nada
 
-Cuatro notebooks documentan los experimentos cerrados como documentos científicos ejecutables.
-Se pueden **leer sin instalar nada** —hay copia en HTML con sus figuras dentro— y ejecutar con un
+Siete notebooks documentan los experimentos cerrados como documentos científicos ejecutables.
+Se pueden **leer sin instalar nada** (hay copia en HTML con sus figuras dentro) y ejecutar con un
 clon del repositorio, sin GPU, sin base de datos y sin descargas.
 
 | Notebook | Qué responde | Leer | Experimentos |
@@ -234,21 +229,25 @@ clon del repositorio, sin GPU, sin base de datos y sin descargas.
 | `01_exploracion_obd` | si las señales OBD-II contienen estructura diagnóstica | [HTML](notebooks/html/01_exploracion_obd.html) | E2, E4, E5 |
 | `02_comparacion_modelos` | si el modelo temporal supera a la línea base | [HTML](notebooks/html/02_comparacion_modelos.html) | E6, E7 |
 | `03_analisis_e19` | si el criterio de suficiencia evita la falsa confianza | [HTML](notebooks/html/03_analisis_e19.html) | E19 |
+| `04_explicabilidad` | qué señal sostiene cada diagnóstico | [HTML](notebooks/html/04_explicabilidad.html) | E9, E18 |
+| `05_suficiencia_y_abstencion` | cuándo el sistema se niega a explicar | [HTML](notebooks/html/05_suficiencia_y_abstencion.html) | E12, E15, E18, P1 |
+| `06_expresion_del_fallo` | si la etiqueta de fallo está de verdad en la señal | [HTML](notebooks/html/06_expresion_del_fallo.html) | E6, E7 |
 
 ```
 uv sync --extra nb
 uv run jupyter lab notebooks/
 ```
 
-Cada notebook declara su **modalidad** —reproducción, reanálisis, visualización de evidencia
-histórica o demostración ilustrativa—, porque no todos hacen lo mismo con la evidencia y
+Cada notebook declara su **modalidad** (reproducción, reanálisis, visualización de evidencia
+histórica o demostración ilustrativa), porque no todos hacen lo mismo con la evidencia y
 confundirlas sería grave. Índice y criterios: `docs/notebooks/indice.md`.
 Qué notebook corresponde a cada resultado:
 `docs/notebook-traceability.md`. Qué puede ejecutar de verdad quien
 no tenga el equipo del autor: `docs/notebooks/auditoria-portabilidad.md`.
 
-Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
-`tests/test_notebooks.py` lo verifican, incluida la ejecución de los cuatro desde un kernel limpio.
+Ninguno escribe donde viven los artefactos históricos. En el repositorio del laboratorio lo
+verifican las pruebas de `tests/test_notebooks.py`, que no viajan en el paquete; aquí, los siete se
+ejecutan desde un kernel limpio con `bash scripts/ejecutar_notebooks.sh`.
 
 ## 9. Cómo reproducir
 
@@ -256,14 +255,14 @@ Ninguno escribe donde viven los artefactos históricos, y 104 comprobaciones de
 
 ```
 uv sync --extra nb --extra ml
-bash scripts/reconstruir_datos.sh    # reconstruye lo que no se distribuye, y COMPRUEBA sus huellas
+bash scripts/reconstruir_datos.sh    # reconstruye lo que no se distribuye y COMPRUEBA sus huellas
 uv run pytest                        # 902 pasan sin reconstruir; 919 tras reconstruir
 uv run ruff check . && uv run mypy src
 uv run jupyter lab notebooks/
 ```
 
 `data/raw/**` y `data/processed/**` están fuera del control de versiones: `synthetic_v2` son 43 200
-muestras. No hace falta distribuirlo porque el generador lo reconstruye **bit a bit**, y el guion
+muestras. No hace falta distribuirlo porque el generador lo reconstruye **bit a bit**. El guion
 contrasta las cuatro huellas contra las que el manifiesto de E19 congeló antes de abrir el conjunto
 de prueba. De `synthetic_v2` salen la línea base de diagnóstico, el modelo temporal y la evaluación
 final. `synthetic_v3`, del que sale solo la comparación de volumen de E7, **no** se reconstruye y el
@@ -278,11 +277,11 @@ de telemetría (E2 → E9, E15b) se reproduce sin base de datos ni manual:
 ```
 uv sync --all-extras
 uv run mecanico-exp doctor --no-db
-bash scripts/reproduce_baseline.sh          # E2 → E5 → E6 sobre synthetic_v2, y diff con el registro versionado
+bash scripts/reproduce_baseline.sh          # E2 → E5 → E6 sobre synthetic_v2 y diff con el registro versionado
 ```
 
 El bloque documental (E11 → E15, E13) requiere el manual de taller del vehículo, que **no se
-redistribuye** desde este repositorio (`data/README.md` explica qué falta y cómo obtenerlo), y
+redistribuye** desde este repositorio (`data/README.md` explica qué falta y cómo obtenerlo), además de
 PostgreSQL con pgvector:
 
 ```
@@ -304,7 +303,6 @@ Secuencia completa de 17 comandos: `docs/EXPERIMENTO_PASO_A_PASO.md`. Gate de ca
 | `artifacts/` | Figuras, tablas y métricas usadas en la memoria, con su procedencia (`artifacts/README.md`) |
 | `docs/experiments/` | Un informe por fase, los hallazgos (`hallazgo-*.md`) y el resultado de RERUN-A |
 | `docs/methodology/` | Políticas escritas antes de implementarse, criterios de umbral, pre-registros y enmiendas |
-| `docs/memoria/` | Texto fuente de la memoria por capítulos |
 | `docs/tfm/`, `docs/audits/` | Revisión integral, auditorías, plan de corrección e informes del tutor |
 | `research/` | Decisiones (ADR-001…004), matriz de trazabilidad, registro de limitaciones, referencias |
 | `configs/` | Calibración del generador, conjunto anotado, estado congelado de RERUN-A |
@@ -321,9 +319,3 @@ Pregunta (`cap1`) → subpreguntas e hipótesis (`research/traceability-matrix.m
 semilla (`experiments/*.json`) → tabla o figura (`artifacts/`) → sección del capítulo 5 →
 conclusión (`cap6`). Matriz que lo recorre: `docs/tfm-traceability.md`.
 
-## Relación con la memoria del TFM
-
-Este repositorio es el artefacto experimental asociado a la memoria. Ninguna cifra llega a la
-memoria sin proceder de un registro de `experiments/`. Las discrepancias detectadas entre
-documentos y registros, y cómo se resolvieron, están en `docs/experiment-index.md`
-§Discrepancias.

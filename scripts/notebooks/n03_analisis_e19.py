@@ -145,7 +145,8 @@ soporte.declarar_modalidad(
 E19 en su **tercer intento**, el que llegó al final; los dos anteriores se interrumpieron y están
 declarados. El sufijo `_v3` del fichero es el número de intento y **no** una versión del conjunto de
 datos. Son 35 ejecuciones sobre la partición de **prueba** de `synthetic_v2`, repartidas en tres
-estratos y procedentes de diez ventanas. **No son 35 observaciones independientes:** repiten casos
+estratos y procedentes de once ventanas de diez sesiones (la sesión `F03_thermostat_stuck__warmup__11`
+aporta dos ventanas). **No son 35 observaciones independientes:** repiten casos
 entre estratos y las sesiones de un mismo caso salen del mismo generador y la misma
 parametrización.
 
