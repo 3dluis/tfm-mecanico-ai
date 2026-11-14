@@ -1,9 +1,9 @@
 {
   "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo y artefactos experimentales.",
   "estado": "ENTREGA FINAL",
-  "generado_el": "2026-11-14T13:57:00+00:00",
+  "generado_el": "2026-11-14T14:59:47+00:00",
   "git": {
-    "commit": "6cd3f6a62207a67092e4ab75f7c004f420323ac4",
+    "commit": "ac2f0b437f0264e83201b52d1726d71f32355fb5",
     "rama": "main",
     "fecha": "2026-11-14"
   },
@@ -74,8 +74,6 @@
     "modelos entrenados: se regeneran desde los registros y las semillas"
   ],
   "huellas_sha256": {
-    "memoria/memoria.docx": "d08dee6ad43f69e7b3801a476419cd61015eac2cd126a42f8faf9c7e8050d707",
-    "memoria/memoria.pdf": "a9bd914c6c334dad4e6e84e9ef1aa469b5da7ea0e45744b09c2f81fd04e8f984",
     "notebooks/00_introduccion.ipynb": "2d95175f218f9ba12c3e0888cf61c674d7054d31af6f94c335511063e4cd1820",
     "notebooks/01_exploracion_obd.ipynb": "8563809fdf8fabb92c6dec550af0379e1cbdb871f2a9ce6ed6382a564b1bfb0b",
     "notebooks/02_comparacion_modelos.ipynb": "6eb0df3fa8cef0f4872fa22283c2a601d01b9aed2fc9318defc93930c7d0608f",
@@ -213,8 +211,8 @@
     "data/processed/synthetic_v2_x.npy": "42e3031653498bf4f3e8761f76bdf854173d9a54e67e904b74c75809c25a8e18",
     "data/raw/synthetic/synthetic_v1.parquet": "610cfef691ab11c9ee0c344c2aac27b9401035d557eb5c959e66e4b61c7ff4d0",
     "data/raw/synthetic/synthetic_v2.parquet": "e3d36e6417fee3a5e2a6457d403ccf5c788ecebda948ddcd9050ff8c31817b37",
-    "pyproject.toml": "40d97da0696f29294b2b16668e3207a8f07be3b2c127bfbe1db00a9a993dc6e7",
-    "uv.lock": "91197797fdcaaa8584cab1036a94125d7d9225302d3b7730b6b86d5cd938d11c"
+    "pyproject.toml": "002941049bb8effccf548c253f60d7beb149b6b1d98033eebefc0e934033067e",
+    "uv.lock": "8de1241dfc8334112c4468aeff8bd1b85f10552b7c1521e31daccdfaa3adb760"
   },
-  "ficheros_censados": 142
+  "ficheros_censados": 139
 }
