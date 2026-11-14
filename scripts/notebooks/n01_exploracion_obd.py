@@ -17,7 +17,7 @@ CELDAS = [
 | **Conjunto** | `data/samples/synthetic_sample.parquet`, 18 sesiones · sesiones de calentamiento generadas en el notebook |
 | **Protocolo** | ventana 120 s, paso 60 s, reparto por sesión |
 | **Estado** | E2, E4 y E5 cerradas y validadas |
-| **Pregunta de investigación** | PI.1: el análisis contextual y longitudinal de datos OBD-II |
+| **Pregunta de investigación** | PI.1: que el diagnóstico a partir de OBD-II supere a la clase mayoritaria y que su confianza se pueda calibrar |
 | **Evidencia original** | `docs/experiments/E4_eda_temporal.md`, `E5_preprocesamiento.md`, `artifacts/tables/E4_*.csv` |
 
 ---
@@ -26,26 +26,28 @@ CELDAS = [
 
 - **Pregunta.** Si las señales OBD-II tienen estructura suficiente para distinguir una condición
   de otra y qué forma tiene.
-- **Resultado.** Las condiciones desplazan las señales declaradas sin que ninguna señal las separe
-  sola con un umbral, con **cinco firmas distintas** en su señal principal (tres formas temporales si
-  se miden como desviación, notebook 06). 120 s es la ventana que E5 eligió: desde 60 s las cinco
-  superan el suelo de ruido y a 120 s el margen del fallo de encendido es mayor, a cambio de menos
-  ventanas.
-- **Lo más útil.** Al menos dos condiciones tienen ventanas etiquetadas **sin señal observable del
-  fallo**: etiqueta y señal no van uno a uno.
+- **Qué se hace.** Se recalculan descriptivos sobre una muestra de 18 sesiones y se leen las cifras
+  publicadas de E4 y E5.
+- **Resultado.** Las condiciones desplazan las señales declaradas sin que ninguna las separe sola
+  con un umbral, con **cinco firmas distintas** en su señal principal (tres formas temporales medidas
+  como desviación, notebook 06). E5 eligió ventanas de 120 s: desde 60 s las cinco superan el suelo
+  de ruido y a 120 s el margen del fallo de encendido es mayor, a cambio de menos ventanas.
+- **Lectura.** Al menos dos condiciones tienen ventanas etiquetadas **sin señal observable del
+  fallo**. Etiqueta y señal no van uno a uno.
 - **Límite.** Datos sintéticos de un generador no calibrado contra datos reales.
 
 ## Cómo leer este notebook
 
-**Modalidad: REANÁLISIS** (apartado 4). Los descriptivos se recalculan sobre la muestra versionada
-y **no reproducen** E4: no deben citarse como las cifras publicadas. El apartado 8 es una **demostración ilustrativa** y el 10,
-**visualización de evidencia histórica**. Se ejecuta en CPU, sin red, en menos de dos minutos.
+**Modalidad:** reanálisis (apartado 4); el apartado 8 es una demostración ilustrativa y el 10,
+visualización de evidencia histórica. Los descriptivos recalculados **no reproducen** E4 y no deben
+citarse como las cifras publicadas. **Ejecución:** CPU, sin red, menos de dos minutos.
 
-1–3. Introducción, hipótesis y fundamento · 4. Entorno y modalidad ·
-5. Los conjuntos sintéticos · 6. Una sesión sana · 7. La firma de cada fallo · 8. El termostato ·
-9. Ninguna señal separa sola · 10. Separabilidad publicada de E4 · 11. Las dos mezclas pobres ·
-12. Correlaciones · 13. La ventana de 120 s · 14. De la señal al descriptor · 15. El reparto por
-sesión · 16–18. Limitaciones, discusión y conclusiones · 19–20. Reproducibilidad y referencias"""),
+- **1–4.** Introducción, hipótesis, fundamento y entorno.
+- **5–9.** Los conjuntos sintéticos; una sesión sana; la firma de cada fallo; el termostato;
+  ninguna señal separa sola.
+- **10–12.** Separabilidad publicada de E4; las dos mezclas pobres; correlaciones.
+- **13–15.** La ventana de 120 s; de la señal al descriptor; el reparto por sesión.
+- **16–20.** Limitaciones, discusión, conclusiones, reproducibilidad y referencias."""),
     md("""\
 ## 1. Introducción: por qué hace falta mirar antes de modelar
 
@@ -63,7 +65,7 @@ Lo que no sabemos antes de empezar:
 
 1. **Si las relaciones entre señales están presentes.** Un generador de variables independientes al
    azar no tendría estructura que aprender y la atribución no tendría nada que señalar.
-2. **Si alguna condición se separa trivialmente.** Sería un artefacto, no un resultado.
+2. **Si alguna condición se separa trivialmente.** Sería un artefacto del generador.
 3. **Cuánto dura la firma de cada fallo**, que es lo que determina el tamaño de ventana.
 4. **Si todas las condiciones se manifiestan igual en todos los regímenes.** No lo hacen: esa es
    la observación más consecuente de este notebook."""),
@@ -136,9 +138,9 @@ generador y de la misma semilla global que el conjunto oficial.
 | `synthetic_v2` | 72 | 14-09-2026 | post-calibración · **conjunto oficial** |
 | `synthetic_v3` | 216 | **01-09-2026** | **pre-calibración**: ralentí en 820 rpm, sin respaldo documental |
 
-La constante `GENERATOR_VERSION` valió `"1.0.0"` en los tres casos y no los distingue. Comparar `v2`
-con `v3` cambia el volumen **y** el fenómeno. Esa confusión invalidó una conclusión publicada. No
-se mezclan aquí."""),
+La constante `GENERATOR_VERSION` valió `"1.0.0"` en los tres y no los distingue (notebook 02,
+apartado 13). Comparar `v2` con `v3` cambia el volumen **y** el fenómeno; esa confusión invalidó una
+conclusión publicada. Aquí no se mezclan."""),
     code("""\
 datos = soporte.muestra_redistribuible()
 
@@ -156,7 +158,7 @@ rangos["rango físico"] = [
 rangos["unidad"] = [SIGNALS_BY_NAME[s].unit for s in rangos.index]
 rangos.round(2)"""),
     md("""\
-**Lo observado.** Ninguna señal sale de su rango físico y no hay valores ausentes. El recorte a
+**Qué muestra.** Ninguna señal sale de su rango físico y no hay valores ausentes. El recorte a
 rango no es decorativo: la inyección de un fallo puede empujar una señal fuera de lo posible (un
 ajuste de combustible del 140 %) y dejarla pasar regalaría al modelo una pista que en datos reales
 nunca existiría, porque un sensor real satura.
@@ -175,7 +177,7 @@ reparto = (
 reparto["total"] = reparto.sum(axis=1)
 reparto"""),
     md("""\
-**Lo observado.** Tres sesiones por condición, repartidas entre **tres** regímenes: urbano,
+**Qué muestra.** Tres sesiones por condición, repartidas entre **tres** regímenes: urbano,
 autopista y ralentí. **No hay sesiones de calentamiento.**
 
 **Qué podemos interpretar.** Es aritmética, no un sesgo del muestreo: el plan equilibrado recorre
@@ -183,7 +185,7 @@ cuatro regímenes en ciclo y con tres sesiones por condición solo alcanza a los
 conjunto oficial, con doce por condición, sí los cubre los cuatro.
 
 **Qué no podemos afirmar.** Nada sobre el comportamiento en calentamiento a partir de esta muestra.
-Y el calentamiento es justo el régimen donde una de las condiciones se comporta de forma distinta;
+Y el calentamiento es el régimen donde una de las condiciones se comporta de forma distinta;
 el apartado 8 lo ilustra con sesiones **generadas** en el notebook."""),
     md("""\
 ## 6. Exploración: las señales en el tiempo
@@ -193,14 +195,8 @@ generador declara construir (acelerador↔régimen, régimen↔caudal, carga↔p
 
 **Qué datos utilizamos.** Una sesión sana del régimen urbano, completa.
 
-**Qué variables se representan.** Seis de las doce señales, en el tiempo. Seis y no doce porque el
-objetivo es que se lean, no que estén todas.
-
-**Por qué esta visualización.** Un gráfico de líneas compartiendo el eje temporal es lo único que
-permite ver si dos señales se mueven juntas.
-
-**Qué debemos observar.** Que el régimen siga a la velocidad, que el caudal siga al régimen y que la
-temperatura de refrigerante suba y se estabilice."""),
+**Qué variables se representan.** Seis de las doce señales, en el tiempo y con el eje compartido.
+Seis y no doce para que se lean."""),
     code("""\
 import matplotlib.pyplot as plt
 
@@ -251,18 +247,14 @@ otros regímenes a partir de una sesión."""),
     md("""\
 ## 7. Normal frente a fallo: dónde se ve la firma
 
-**Qué queremos investigar.** Si la firma declarada de cada fallo aparece donde su ficha dice.
+**Qué queremos investigar.** Si la firma declarada de cada fallo aparece donde su ficha dice y qué
+forma tiene en el tiempo: no todas las firmas son un escalón.
 
 **Qué datos utilizamos.** Para cada condición, una sesión del mismo régimen que la sana, de modo que
 la única diferencia sea la condición.
 
-**Qué variables se representan.** La señal que la ficha del fallo declara como principal.
-
-**Por qué esta visualización.** Superponer la trayectoria sana y la averiada en el mismo eje es lo
-único que permite ver el desplazamiento sin que la escala engañe.
-
-**Qué debemos observar.** Un desplazamiento en la señal declarada y **su forma en el tiempo**: no
-todas las firmas son un escalón."""),
+**Qué variables se representan.** La señal que la ficha del fallo declara como principal, con la
+trayectoria sana y la averiada en el mismo eje para que la escala no engañe."""),
     code("""\
 from mecanico_ia_exp.obd.faults import FAULTS
 
@@ -285,7 +277,9 @@ for eje, (fid, (senal, titulo, unidad)) in zip(ejes, PRINCIPAL.items(), strict=F
     inicio = float(con_fallo.loc[con_fallo.fault_active, "timestamp"].min())
     eje.axvline(inicio, color="#898781", linestyle="--", linewidth=0.8)
     eje.set_ylabel(f"{titulo}\\n({unidad})", fontsize=7)
-    eje.legend(loc="upper left", fontsize=6.5, ncols=2)
+    # La leyenda va encima del panel y no dentro: dentro tapaba parte de las curvas.
+    eje.legend(loc="lower left", bbox_to_anchor=(0.0, 0.98), fontsize=6.5, ncols=2,
+               frameon=False, borderaxespad=0.0)
 ejes[-1].set_xlabel("tiempo desde el arranque (s)")
 fig.suptitle(
     "La firma de cada condición en la señal que su ficha declara principal",
@@ -312,8 +306,7 @@ plt.show()"""),
 
 **Qué podemos interpretar.** Cada firma se ve distinta en su señal. Medidas como desviación frente
 al contrafactual se agrupan en tres formas temporales: progresiva, sostenida desde la entrada y
-episódica (notebook 06, apartado 7.1). Eso tiene una
-consecuencia práctica directa: un descriptor de **nivel medio** captura bien la fuga de vacío y es
+episódica (notebook 06, apartado 7.1). Eso tiene una consecuencia práctica: un descriptor de **nivel medio** captura bien la fuga de vacío y es
 casi ciego al fallo de encendido, cuyos episodios se diluyen en la media de la ventana. La
 representación que se elija no es neutral respecto a qué fallos se pueden detectar.
 
@@ -419,22 +412,18 @@ condición: lo que establece es que **existe** un tramo sin señal, no cuántos 
 él. La identificación una a una exige cruzar las predicciones con la expresión ventana a ventana.
 Ese cruce está diseñado y **no ejecutado** (`docs/diseno-pi1/08-analisis-por-fallo.md`).
 
-Y hay algo que específicamente **no** debe concluirse de aquí: que el contexto temporal sea valioso
-porque esta condición lo requiera. Es una tentación razonable (la firma es temporal y el modelo
-recurrente obtiene en esta clase 0,8148 frente a 0,7826 del bosque), pero esa diferencia es de 0,03
-en una clase de 14 ventanas, medida una sola vez, entre dos modelos que difieren a la vez en
-representación y en estimador."""),
+Tampoco debe concluirse de aquí que el contexto temporal sea valioso porque esta condición lo
+requiera; por qué la ventaja del modelo recurrente en esta clase no lo demuestra se explica en el
+notebook 02, apartado 8."""),
     md("""\
 ## 9. ¿Separa alguna señal por sí sola?
 
 **Qué queremos investigar.** Si existe una señal delatora: un umbral único que clasifique
 perfectamente alguna condición. Sería un artefacto del generador y haría trivial el problema.
 
-**Qué datos utilizamos.** Las doce señales sobre las 18 sesiones, muestra a muestra.
-
-**Por qué esta comprobación y no un gráfico.** Un umbral que separe perfectamente existe si y solo si
-los rangos de las dos clases son **disjuntos**. Comprobarlo cuesta dos extremos por señal y
-condición; da un sí o un no, no una impresión visual."""),
+**Qué datos utilizamos.** Las doce señales sobre las 18 sesiones, muestra a muestra. Un umbral
+que separe perfectamente existe si y solo si los rangos de las dos clases son **disjuntos**, de modo
+que basta comparar dos extremos por señal y condición y la respuesta es un sí o un no."""),
     code("""\
 from mecanico_ia_exp.obd.auditoria import auditar
 
@@ -454,8 +443,8 @@ Agregadas por bloque es otra cosa: en E4, la media de `stft_bank1` por bloque se
 fuga de vacío y la deriva del caudalímetro del motor sano (delta de Cliff 1,00 en las dos,
 `E4_separabilidad.csv`). Las relaciones entre señales están
 presentes con el signo esperado. Y el ralentí sin fallo cae dentro del rango que el manual documenta
-para este motor, 640–740 rpm, que es exactamente la comprobación que habría detectado el problema de
-`synthetic_v3` el día que se generó.
+para este motor, 640–740 rpm. Esa comprobación habría detectado el problema de `synthetic_v3` el
+día que se generó.
 
 **Qué no podemos afirmar.** Que no exista una **combinación** de señales que separe trivialmente.
 La comprobación es de una señal y un umbral; una regla de dos señales no la detectaría. Tampoco que
@@ -497,7 +486,7 @@ necesariamente en la señal del componente que falla.
 **Qué no podemos afirmar.** Estas figuras salen de `synthetic_v1` (con 36 sesiones) y no de
 `synthetic_v2`. No deben leerse como si fueran del conjunto oficial.
 
-**Por qué se redibuja la segunda.** Es legible en pantalla y no en papel: se publicó a 9,6 pulgadas
+La segunda figura se redibuja porque es legible en pantalla y no en papel: se publicó a 9,6 pulgadas
 de ancho y el documento tiene 5,9, de modo que al entrar se escala al 61 % y una etiqueta de 7
 puntos se imprime a 4,3. Se redibuja **a la medida de la página**, con los mismos datos de E4 y sin
 recalcular ningún tamaño de efecto: para cada una de las doce señales y cada una de las cinco
@@ -512,13 +501,45 @@ from mecanico_ia_exp.visualization.memoria import (
 
 # Dos mapas y no dos paneles de uno: comparten las doce filas y las cinco
 # columnas; apilados solo el de arriba conservaba los nombres de las señales.
-fig = fig_separabilidad_nivel()
-soporte.exportar(fig, "FIG-NB01-04_separabilidad_nivel", subdirectorio="01_exploracion_obd")
-plt.show()
-
-fig = fig_separabilidad_dispersion()
-soporte.exportar(fig, "FIG-NB01-05_separabilidad_dispersion", subdirectorio="01_exploracion_obd")
-plt.show()"""),
+# Nombres en español de las doce señales, con su identificador entre paréntesis
+# para poder cruzarlas con las tablas. Solo cambian los rótulos, no los datos.
+NOMBRE_SENAL = {
+    "rpm": "régimen del motor",
+    "vehicle_speed": "velocidad",
+    "engine_load": "carga calculada",
+    "throttle_position": "posición de mariposa",
+    "coolant_temperature": "temperatura del refrigerante",
+    "intake_air_temperature": "temperatura del aire de admisión",
+    "maf": "caudal de aire (MAF)",
+    "map": "presión del colector (MAP)",
+    "stft_bank1": "ajuste a corto plazo (STFT)",
+    "ltft_bank1": "ajuste a largo plazo (LTFT)",
+    "oxygen_sensor": "sonda lambda",
+    "ignition_timing": "avance del encendido",
+}
+SEPARABILIDAD = [
+    (fig_separabilidad_nivel, "FIG-NB01-04_separabilidad_nivel",
+     "Separabilidad por el nivel: delta de Cliff de la media del bloque"),
+    (fig_separabilidad_dispersion, "FIG-NB01-05_separabilidad_dispersion",
+     "Separabilidad por la dispersión: delta de Cliff de la desviación típica del bloque"),
+]
+for funcion, nombre, titulo in SEPARABILIDAD:
+    fig = funcion()
+    mapa = fig.axes[0]
+    mapa.set_yticklabels([NOMBRE_SENAL.get(t.get_text(), t.get_text())
+                          for t in mapa.get_yticklabels()], fontsize=7.5)
+    mapa.set_xlabel("condición de fallo, comparada con la condición sin fallo")
+    fig.suptitle(titulo, fontsize=9.5, fontweight="bold", x=0.01, y=0.99,
+                 ha="left", va="bottom")
+    fig.text(
+        0.01, 0.0,
+        "E4 · synthetic_v1 · fuente: artifacts/tables/E4_separabilidad.csv · rojo: valores "
+        "mayores que sin fallo; azul: menores · se rotulan las celdas con |delta| ≥ 0,474 "
+        "(efecto grande)",
+        fontsize=6.5, ha="left", va="top",
+    )
+    soporte.exportar(fig, nombre, subdirectorio="01_exploracion_obd")
+    plt.show()"""),
     md("""\
 **Qué muestran.** Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos.
 Tres se separan por el **nivel** y con efecto máximo o casi: la fuga de vacío y la deriva del
@@ -532,27 +553,27 @@ dos condiciones indetectables por construcción. Es la justificación empírica 
 incluir dispersión, extremos y conteos de eventos en el vector de descriptores.
 
 **Qué no podemos afirmar.** El delta de Cliff ordena pero no explica: un efecto grande en una señal
-no implica que el modelo la use: el análisis de atribución muestra un caso en que no la usa. La
+no implica que el modelo la use. El análisis de atribución muestra un caso en que no la usa. La
 medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Y sale
 de `synthetic_v1`, que es **pre-calibración** y no se reconstruye con el generador publicado.
 
-**Relación con la hipótesis.** Delimitan por anticipado qué afirmaciones sobre una señal pueden
+**Relación con la pregunta de investigación.** Delimitan por anticipado qué afirmaciones sobre una señal pueden
 tener soporte observacional bajo PI.1 y cuáles no. En la memoria son las **Figuras 5.2 y 5.3**."""),
     md("""\
 ## 11. Qué distingue entre sí las dos averías de mezcla pobre
 
-**Introducción al problema.** Los dos apartados anteriores preguntan si una señal separa una
+Los dos apartados anteriores preguntan si una señal separa una
 condición de la condición sin fallo. Hay un caso en que esa pregunta se queda corta. La fuga de
 vacío y la deriva del caudalímetro empobrecen las dos la mezcla y la centralita responde a las dos
 subiendo las correcciones de combustible: las dos se separan de la condición sin fallo por lo mismo
 y con el efecto máximo. Eso dice que las dos se detectan; no dice cómo se distinguen **entre sí**,
 que es lo que decide la reparación.
 
-**Objetivo del análisis.** Medir, descriptor a descriptor, dos cosas separadas (si delata que algo
-va mal y si dice cuál de las dos averías es) y comprobar de paso qué hace el cociente informado por
-la física que el capítulo 4 construyó precisamente para delatar un caudalímetro que subestima.
+**Qué queremos investigar.** Descriptor a descriptor, dos cosas separadas (si delata que algo va
+mal y si dice cuál de las dos averías es) y, de paso, qué hace el cociente informado por la física
+que el capítulo 4 construyó para delatar un caudalímetro que subestima.
 
-**Procedencia de los datos.** `data/processed/synthetic_v2_features.npy` y su `meta.parquet`, de
+**Qué datos utilizamos.** `data/processed/synthetic_v2_features.npy` y su `meta.parquet`, de
 E5. **Solo la partición de entrenamiento**: 56 ventanas por condición de fallo y 112 sin fallo. Una
 figura descriptiva no justifica abrir el conjunto reservado. La medida es el delta de Cliff que
 `data/exploration.py` implementa, el mismo que usa E4."""),
@@ -571,22 +592,21 @@ from mecanico_ia_exp.visualization.memoria import fig_mezcla_pobre
 
 fig_mezcla_pobre()"""),
     md("""\
-**Descripción objetiva de lo que se ve.** Los cuatro primeros descriptores (niveles y máximos de las
+**Qué muestra.** Los cuatro primeros descriptores (niveles y máximos de las
 dos correcciones de combustible) delatan la avería con delta de Cliff entre 0,99 y 1,00;
 distinguen una de otra entre 0,40 y 0,52. Los cuatro siguientes invierten el patrón: el mínimo de la
 presión de colector delata 0,01 y distingue 0,80; el salto descendente del ajuste a largo plazo,
 0,50 y 0,69; su recuento de eventos, 0,02 y 0,64; el mínimo del caudal, 0,13 y 0,64. El cociente
 `maf_over_rpm_load` queda en 0,19 y 0,09.
 
-**Interpretación.** Lo que avisa y lo que distingue son conjuntos de descriptores distintos y casi
+**Qué podemos interpretar.** Lo que avisa y lo que distingue son conjuntos de descriptores distintos y casi
 disjuntos. La lectura mecánica es coherente con el generador: la fuga de vacío entra por el colector
 y eleva su presión, mientras la deriva del caudalímetro no toca esa señal; por eso la presión de
-colector no sirve de aviso y sí de discriminante. Y hay un resultado negativo que conviene no
-esconder: el cociente informado por la física no cumple en este conjunto lo que su diseño esperaba.
-Su comentario lo declaraba pendiente de comprobación sobre datos reales; sobre estos datos
-sintéticos, directamente no funciona.
+colector no sirve de aviso y sí de discriminante. Y hay un resultado negativo: el cociente
+informado por la física no cumple en este conjunto lo que su diseño esperaba. Su comentario lo
+declaraba pendiente de comprobación sobre datos reales; sobre estos datos sintéticos no funciona.
 
-**Limitaciones.** El delta de Cliff es un tamaño de efecto **descriptivo** y las ventanas de una
+**Qué no podemos afirmar.** Nada inferencial: el delta de Cliff es un tamaño de efecto **descriptivo** y las ventanas de una
 misma sesión no son independientes (cada condición aporta 56 ventanas de 8 sesiones), de modo que no
 se acompaña de contraste ni de intervalo. **Separabilidad descriptiva no es rendimiento de
 clasificación demostrado** (apartado 10). Y nada de esto se afirma de un vehículo real.
@@ -599,15 +619,10 @@ verificador no permiten formularla así. En la memoria es la **Figura 5.5** y la
 ## 12. Correlaciones: la estructura que un modelo puede explotar
 
 **Qué queremos investigar.** Qué señales se mueven juntas, porque eso determina cuánta información
-independiente hay realmente en las doce.
+independiente hay realmente en las doce. Un par con correlación cercana a 1 indicaría redundancia.
 
 **Qué datos utilizamos.** Las sesiones **sin fallo**, para que la estructura sea la del motor y no
-la de las inyecciones.
-
-**Por qué un mapa de calor.** Doce por doce son 66 pares; una tabla sería ilegible y un mapa de
-calor deja ver los bloques de un vistazo.
-
-**Qué debemos observar.** Si hay pares con correlación cercana a 1, que indicarían redundancia."""),
+la de las inyecciones."""),
     code("""\
 import numpy as np
 
@@ -618,8 +633,9 @@ correlacion = sanas[list(SIGNAL_NAMES)].corr()
 
 fig, eje = plt.subplots(figsize=(7.4, 6.2))
 imagen = eje.imshow(correlacion, cmap=DIVERGING, vmin=-1, vmax=1)
-eje.set_xticks(range(len(SIGNAL_NAMES)), SIGNAL_NAMES, rotation=55, ha="right", fontsize=7)
-eje.set_yticks(range(len(SIGNAL_NAMES)), SIGNAL_NAMES, fontsize=7)
+eje.set_xticks(range(len(SIGNAL_NAMES)), [NOMBRE_SENAL[s] for s in SIGNAL_NAMES],
+               rotation=55, ha="right", fontsize=7)
+eje.set_yticks(range(len(SIGNAL_NAMES)), [NOMBRE_SENAL[s] for s in SIGNAL_NAMES], fontsize=7)
 eje.grid(False)
 for i in range(len(SIGNAL_NAMES)):
     for j in range(len(SIGNAL_NAMES)):
@@ -657,7 +673,7 @@ plazo, la sonda lambda y la temperatura de refrigerante apenas correlacionan con
 
 **Qué podemos interpretar.** Las doce señales **no aportan doce dimensiones de información**:
 cinco de ellas se reducen, en la práctica, a dos. En el generador, la mariposa y la presión son
-funciones afines de la carga más ruido. Eso tiene una consecuencia metodológica concreta: buena parte de los
+funciones afines de la carga más ruido. Eso tiene una consecuencia metodológica: buena parte de los
 139 descriptores de ventana son redundantes entre sí. Una atribución que reparta importancia entre
 señales acopladas la reparte de forma inestable.
 
@@ -674,13 +690,15 @@ ventanas salen por sesión y cuánta separabilidad hay entre condiciones. La tab
 estudio = soporte.tabla("E5_estudio_ventana")
 estudio"""),
     code("""\
+from mecanico_ia_exp.visualization.memoria.base import CONDICION
+
 fig, (izq, der) = plt.subplots(1, 2, figsize=(9.6, 3.6))
 
 # Izquierda: el tamaño del efecto de cada condición frente a la duración.
 for color, (fid, grupo) in zip(CATEGORICAL, estudio.groupby("fault_id"), strict=False):
     orden = grupo.sort_values("length_s")
     izq.plot(orden.length_s, orden.best_delta, marker="o", markersize=3.5,
-             color=color, label=fid.split("_", 1)[0], linewidth=1.1)
+             color=color, label=f"{fid.split('_', 1)[0]} {CONDICION[fid]}", linewidth=1.1)
 suelo = float(estudio.noise_floor_p90.iloc[0])
 izq.axhline(suelo, color="#898781", linestyle=":", linewidth=0.9)
 izq.text(12, suelo + 0.02, f"suelo de ruido (p90) = {suelo:.2f}", fontsize=6.5, color="#52514e")
@@ -688,7 +706,8 @@ izq.axvline(120, color="#898781", linestyle="--", linewidth=0.9)
 izq.set_xlabel("duración de la ventana (s)")
 izq.set_ylabel("delta de Cliff del mejor descriptor\\n(adimensional, 0–1)")
 izq.set_title("Separabilidad por condición", fontsize=8.5)
-izq.legend(fontsize=6.5, ncols=2)
+izq.legend(fontsize=6, ncols=1, loc="center left", bbox_to_anchor=(0.0, 0.40),
+           frameon=True, framealpha=0.9, facecolor="white", edgecolor="none")
 
 # Derecha: cuántas ventanas quedan. Es la otra mitad del compromiso.
 ventanas = estudio.drop_duplicates("length_s").sort_values("length_s")
@@ -720,7 +739,7 @@ ventanas quedan, en escala logarítmica porque el recuento cae un orden de magni
 **Qué podemos interpretar.** Los dos paneles son las dos mitades de un compromiso. Cuatro de las
 cinco condiciones ya superan el suelo de ruido con ventanas de 10 s; la que decide es el fallo de
 encendido. A 60 s ya lo supera también, pero por poco: 0,4325 frente a un suelo de 0,4261. A 120 s
-el margen crece a 0,6426 frente a 0,5133, a cambio de bajar de 1.308 a 588 ventanas; cada ventana
+el margen crece a 0,6426 frente a 0,5133, a cambio de bajar de 1 308 a 588 ventanas; cada ventana
 perdida hace la evaluación más frágil. 120 s es la duración que E5 eligió con ese compromiso, no
 la primera en que las cinco superan el suelo.
 
@@ -734,36 +753,36 @@ hasta 0,51 a 120 s: las comparaciones con el suelo deben hacerse con la tabla, n
     md("""\
 ## 14. De la señal al descriptor: lo que el resumen conserva y lo que disuelve
 
-**Introducción al problema.** El apartado anterior fija la ventana en 120 segundos. El modelo, sin
+El apartado anterior fija la ventana en 120 segundos. El modelo, sin
 embargo, no ve la ventana: ve 139 números calculados sobre ella. Entre una cosa y otra hay una
 traducción que nadie ha mirado todavía y es donde se pierde la información de los fallos
 episódicos.
 
-**Objetivo del análisis.** Seguir una misma ventana de fallo de encendido desde la señal a un
+**Qué queremos investigar.** Seguir una misma ventana de fallo de encendido desde la señal a un
 hertzio hasta los descriptores que de ella salen y comparar esos descriptores con los de las
 ventanas sin fallo **del mismo régimen de conducción**. Compararlos con todas mediría el régimen y
 no el fallo.
 
-**Procedencia de los datos.** Los dos primeros paneles, del análisis contrafactual T2
-(`artifacts/contrafactual/`); el tercero, de `synthetic_v2_features.npy`, que es el fichero que el
+**Qué datos utilizamos.** Los dos primeros paneles, del análisis contrafactual T2
+(`artifacts/contrafactual/`, descrito en el notebook 06, apartado 7.1); el tercero, de `synthetic_v2_features.npy`, que es el fichero que el
 modelo consume. La ventana es de la partición de **entrenamiento**."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import fig_ventana_y_descriptor
 
 fig_ventana_y_descriptor()"""),
     md("""\
-**Descripción objetiva de lo que se ve.** En la señal, el fallo son tres muestras de un episodio
+**Qué muestra.** En la señal, el fallo son tres muestras de un episodio
 sobre ciento veinte. En el resumen, esa caída queda dentro de la banda de una desviación típica. En
 los descriptores, la media se aparta 1,9 escalas robustas de la mediana sin fallo del mismo régimen
 (687,9 frente a 690,3 min⁻¹), mientras el mínimo se aparta 9,6 (600,0 frente a 659,3), la desviación
 típica 6,2 y el salto descendente máximo 4,3; el recuento de eventos pasa de 0 a 2.
 
-**Interpretación.** El descriptor que un lector miraría primero, la media, es precisamente el que
+**Qué podemos interpretar.** El descriptor que un lector miraría primero, la media, es el que
 menos registra este fallo. La detección depende por completo de los descriptores que guardan el
 extremo y la variación, que es la justificación empírica de la decisión del capítulo 4 de no limitar
 el vector a momentos de primer orden.
 
-**Limitaciones.** Es **una ventana elegida como ilustración**, no una muestra. Procede de una sesión
+**Qué no podemos afirmar.** Nada general: es **una ventana elegida como ilustración**. Procede de una sesión
 en ralentí; ahí el efecto del fallo sobre el régimen queda **truncado por el límite físico
 inferior** que el generador impone: el mínimo de 600,0 es el suelo del instrumento y no la
 profundidad real de la caída. El apartamiento en escalas robustas dice cuán inusual es esta ventana,
@@ -776,8 +795,8 @@ memoria es la **Figura 5.11**."""),
     md("""\
 ## 15. El reparto sin fuga
 
-La unidad de reparto es la sesión (apartado 3). No es un detalle
-de implementación: es lo que separa una evaluación de un examen con las respuestas."""),
+La unidad de reparto es la sesión (apartado 3). Es lo que separa una evaluación de un examen con
+las respuestas."""),
     code("""\
 reparto_publicado = soporte.tabla("E5_reparto")
 reparto_publicado"""),
@@ -794,13 +813,17 @@ filtrado información de entrenamiento a evaluación de forma invisible para cua
 evaluación mide generalización **a sesiones nuevas
 del mismo generador**, no a vehículos nuevos.
 
-**Por qué además una figura.** La tabla da los recuentos; lo que la figura añade es la **proporción
-entre clases**, que es lo que fija la referencia mínima contra la que se compara cualquier modelo.
-Se dibuja apilada por partición para que se vea a la vez el tamaño de cada clase y cómo se reparte."""),
+La figura añade a los recuentos la **proporción entre clases**, que fija la referencia mínima
+contra la que se compara cualquier modelo. Va apilada por partición para que se vea a la vez el
+tamaño de cada clase y cómo se reparte."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import fig_particiones
 
 fig = fig_particiones()
+fig.suptitle(
+    "Ventanas de 120 s por condición y partición en synthetic_v2 (reparto por sesión)",
+    fontsize=9.5, fontweight="bold", x=0.01, y=1.0, ha="left", va="bottom",
+)
 soporte.exportar(fig, "FIG-NB01-08_particiones", subdirectorio="01_exploracion_obd")
 plt.show()"""),
     md("""\
@@ -810,13 +833,13 @@ las cinco condiciones.
 
 **Qué podemos interpretar.** El desequilibrio no es un defecto del muestreo: las sesiones averiadas
 aportan sus ventanas **anteriores a la entrada del fallo**; esas ventanas son ventanas sin fallo.
-De ahí que la clase mayoritaria alcance el 28,6 % de la validación, que es exactamente la exactitud
-de la referencia mínima con que se compara el modelo de diagnóstico.
+De ahí que la clase mayoritaria alcance el 28,6 % de la validación, la exactitud de la referencia
+mínima con que se compara el modelo de diagnóstico.
 
 **Qué no podemos afirmar.** Nada sobre la dificultad de cada clase: dos condiciones con el mismo
 número de ventanas pueden ser muy desiguales en lo que de ellas se puede aprender.
 
-**Relación con la hipótesis.** Fija la unidad de observación (la ventana, con la sesión como unidad
+**Relación con la pregunta de investigación.** Fija la unidad de observación (la ventana, con la sesión como unidad
 de reparto) sobre la que se cuentan después todas las decisiones del agente."""),
     md("""\
 ## 16. Resultados negativos y limitaciones
@@ -850,14 +873,14 @@ advertencia.
 **La respuesta parcial.** Hay estructura y ninguna condición se separa trivialmente: un modelo de
 diagnóstico tiene algo que aprender. Eso es la precondición de PI.1.
 
-**La advertencia, que es lo más útil.** La relación entre **etiqueta** y **señal** no es uno a uno.
+**La advertencia.** La relación entre **etiqueta** y **señal** no es uno a uno.
 Hay ventanas etiquetadas con un fallo que no contienen información del fallo. Un modelo que falle en
-ellas no está equivocándose: está respondiendo correctamente a lo que ve. Y una métrica agregada que
+ellas responde correctamente a lo que ve. Y una métrica agregada que
 las cuente como errores está midiendo, en parte, el límite de lo que el dato contiene y no la
 calidad del modelo. Es una propiedad del generador, no una afirmación sobre vehículos reales.
 
 La capacidad de **abstenerse** (PI.3) tiene
-aquí su justificación empírica: existen situaciones en que la evidencia es genuinamente insuficiente
+aquí su justificación empírica: existen situaciones en que la evidencia es insuficiente
 por cómo se manifiesta el fallo, no por un defecto del sistema. Un sistema que explicara con confianza en
 esas ventanas estaría inventando."""),
     md("""\
@@ -872,7 +895,8 @@ etiquetadas sin señal observable del fallo.
 ninguna señal las separe por sí sola con un umbral.
 
 **Qué no recibió apoyo.** Nada se refuta aquí, pero queda matizado que el desplazamiento sea
-observable **en toda la ventana de actividad del fallo**: en dos de las cinco condiciones, no lo es.
+observable **durante todo el tramo en que el fallo está activo**: en dos de las cinco condiciones,
+no lo es.
 
 **Qué permanece sin demostrar.** Si estas firmas aparecen igual en telemetría real. Si la forma
 temporal de la firma hace que una representación secuencial sea preferible: eso cambia dos cosas a

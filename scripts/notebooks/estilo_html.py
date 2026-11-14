@@ -32,6 +32,9 @@ NAVEGACION: tuple[tuple[str, str], ...] = (
 
 TITULO_TRABAJO = "Mecánico IA · trabajo práctico del TFM"
 
+#: Autor que figura en los metadatos de cada página.
+AUTOR = "Luis Daniel Diaz"
+
 CSS = """
 :root {
   --mi-tinta: #1f2328;
@@ -296,6 +299,7 @@ def _cabecera(actual: str) -> str:
 def decorar(cuerpo: str, nombre: str, *, commit: str, fecha: str) -> str:
     """Devuelve el HTML de `nbconvert` con cabecera, índice, estilo y pie."""
     titulo = dict(NAVEGACION).get(nombre, nombre)
+    cuerpo = re.sub(r"<html([^>]*)\blang=\"[^\"]*\"", r'<html\1lang="es"', cuerpo, count=1)
     cuerpo = re.sub(
         r"<title>.*?</title>",
         f"<title>{html.escape(titulo)} · Mecánico IA</title>",
@@ -303,7 +307,11 @@ def decorar(cuerpo: str, nombre: str, *, commit: str, fecha: str) -> str:
         count=1,
         flags=re.S,
     )
-    cuerpo = cuerpo.replace("</head>", f"<style>{CSS}</style>\n</head>", 1)
+    cuerpo = cuerpo.replace(
+        "</head>",
+        f'<meta name="author" content="{AUTOR}">\n<style>{CSS}</style>\n</head>',
+        1,
+    )
     cuerpo = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + _cabecera(nombre), cuerpo, count=1)
     pie = (
         '<footer class="mi-pie">'

@@ -24,30 +24,31 @@ CELDAS = [
 
 ## En un minuto
 
-- **La pregunta.** Si lo que el modelo mira para decidir coincide con lo que la ficha del fallo dice
+- **Pregunta.** Si lo que el modelo mira para decidir coincide con lo que la ficha del fallo dice
   que debería mirarse; la atribución da después las **observaciones** del informe.
 - **Qué se hace.** Se leen las atribuciones de Shapley que E9 calculó sobre el bosque aleatorio.
-- **Resultado principal.** En las **cinco** condiciones de fallo la señal de mayor atribución está
-  entre las declaradas. En la deriva del caudalímetro el modelo recupera la regla de compensación
-  que el generador implementa: la detecta en los ajustes de combustible, no en el caudal.
-- **Lo que lo acota.** Sin atribución (ablación `A1`) las diecisiete decisiones son las mismas en
-  validación; en prueba `A1` repite esas mismas decisiones, lo que no es una confirmación
-  independiente. La atribución **explica sin decidir**.
-- **Límite principal.** Atribución no causal, tres casos por condición y una sola ejecución, sobre
-  datos sintéticos.
+- **Resultado.** En las **cinco** condiciones de fallo la señal de mayor atribución está entre las
+  declaradas. En la deriva del caudalímetro el modelo recupera la regla de compensación que el
+  generador implementa y la detecta en los ajustes de combustible y no en el caudal.
+- **Lectura.** Sin atribución (ablación `A1` de E18, que la sustituye por un criterio estadístico)
+  las diecisiete decisiones son las mismas en validación; en prueba se repiten, sin valor de
+  confirmación independiente. La atribución **explica sin decidir**.
+- **Límite.** Atribución no causal, tres casos por condición y una sola ejecución, sobre datos
+  sintéticos.
 
 ## Cómo leer este notebook
 
-**Modalidad:** visualización de evidencia histórica: lee los artefactos de E9 y E18 y no recalcula
-nada. **Ejecución:** CPU, sin red, menos de un minuto.
+Modalidad: visualización de evidencia histórica; lee los artefactos de E9 y E18 sin recalcular
+nada. CPU, sin red, menos de un minuto.
 
-- **1–5.** Introducción, objetivo e hipótesis, fundamento (qué es y qué no es un valor de Shapley),
-  entorno y el conjunto con lo que se explica exactamente.
-- **6–8.** Señal principal frente a las declaradas; el mapa de atribución y la regla de
+- **1–5** Introducción, objetivo e hipótesis, fundamento (qué es y qué no es un valor de Shapley),
+  entorno y el conjunto con lo que se explica.
+- **6–8** Señal principal frente a las declaradas; el mapa de atribución y la regla de
   compensación del caudalímetro; dispersión caso a caso y confianza sin calibrar.
-- **9.** De la atribución a la observación del informe.
-- **10.** La ablación `A1`: qué cambia al retirar la atribución.
-- **11–15.** Resultados negativos y limitaciones, discusión, conclusiones, reproducibilidad y
+- **9** La importancia global del bosque por impureza y en qué se diferencia de Shapley.
+- **10** De la atribución a la observación del informe.
+- **11** La ablación `A1`: qué cambia al retirar la atribución.
+- **12–16** Resultados negativos y limitaciones, discusión, conclusiones, reproducibilidad y
   referencias."""),
     md("""\
 ## 1. Introducción: por qué una predicción no basta
@@ -104,7 +105,7 @@ comparación entre recorridos es lo que el trabajo necesita.
 **Qué NO es un valor de Shapley.** No es una relación causal. Dice cuánto cambia la **predicción del
 modelo** al cambiar un descriptor, no cuánto cambia la **avería** al cambiar la señal. Entre señales
 correlacionadas la atribución se reparte de forma inestable. Eso es una propiedad del método, no
-del fallo (apartado 11)."""),
+del fallo (apartado 12)."""),
     md("""\
 ## 4. Preparación del entorno"""),
     code(PREAMBULO),
@@ -112,7 +113,7 @@ del fallo (apartado 11)."""),
 soporte.declarar_modalidad(
     "VISUALIZACIÓN DE EVIDENCIA HISTÓRICA",
     "las atribuciones se leen de artifacts/tables/E9_*.csv y del registro; no se recalcula "
-    "ninguna. Recalcularlas exigiría reentrenar el bosque y volver a ejecutar el explicador, "
+    "ninguna. Recalcularlas exigiría reentrenar el bosque y volver a ejecutar el explicador "
     "y lo que este notebook enseña es lo que E9 midió",
 )"""),
     md("""\
@@ -122,8 +123,8 @@ Dieciocho casos: tres ventanas por cada una de las seis condiciones, tomadas de 
 **validación**. De cada uno se explican los **diez descriptores de mayor importancia**. Los **tres
 primeros** son los que después viajan al informe como observaciones.
 
-Conviene saber qué se explica exactamente: la función `predict_proba` **de la clase predicha**. No la
-probabilidad de la clase verdadera. Es deliberado: lo que hay que justificar es la hipótesis que el
+Lo que se explica es la función `predict_proba` **de la clase predicha** y no la probabilidad de la
+clase verdadera. Es deliberado: lo que hay que justificar es la hipótesis que el
 sistema va a sostener, también cuando se equivoca."""),
     code("""\
 import pandas as pd
@@ -148,15 +149,13 @@ print("de los que los tres primeros viajan al informe como observaciones")"""),
 **Qué queremos investigar.** Si la señal de mayor atribución de cada condición está entre las que su
 ficha declara afectadas.
 
-**Qué datos utilizamos.** La tabla resumen de E9, con esa comparación hecha caso a caso.
-
-**Por qué esta tabla y no un gráfico.** Es una comparación de conjuntos de nombres: una tabla se lee
-mejor que cualquier figura."""),
+**Qué datos utilizamos.** La tabla resumen de E9, con esa comparación hecha caso a caso. Al ser una
+comparación de conjuntos de nombres, se lee mejor en tabla que en una figura."""),
     code("""\
 resumen[["predicted_class", "n_cases", "mean_confidence", "top_signals",
          "declared_by_fault", "top_signal_declared"]]"""),
     md("""\
-**Lo observado.** En **cinco de las seis** condiciones la señal principal está entre las declaradas.
+**Qué muestra.** En **cinco de las seis** condiciones la señal principal está entre las declaradas.
 La excepción es `F00_normal`, que no tiene ficha: no es un fallo, de modo que la columna de señales
 declaradas está vacía y la comparación no aplica.
 
@@ -172,24 +171,44 @@ estar en otro sitio."""),
 ## 7. El mapa de atribución: la deriva del caudalímetro no se ve en el caudalímetro
 
 **Qué queremos investigar.** Qué señales sostienen cada diagnóstico (con su peso) y dónde la
-atribución se aparta de lo esperable.
+atribución se aparta de lo esperable, sobre todo en la fila del caudalímetro.
 
-**Qué datos utilizamos.** Las 180 atribuciones, agregadas por condición y señal.
-
-**Por qué un mapa de calor.** Seis condiciones por las señales que aparecen en la atribución (diez
-de las doce, más el descriptor compuesto `stft_bank1+ltft_bank1`) es una matriz; el mapa deja ver
-de un vistazo dónde se concentra el peso y dónde hay huecos.
-
-**Qué debemos observar.** La fila del caudalímetro."""),
+**Qué datos utilizamos.** Las 180 atribuciones, agregadas por condición y señal. Seis condiciones
+por las señales que aparecen en la atribución (diez de las doce, más el descriptor compuesto
+`stft_bank1+ltft_bank1`) forman una matriz; el mapa de calor deja ver dónde se concentra el peso y
+dónde hay huecos."""),
     code("""\
 import matplotlib.pyplot as plt
 import numpy as np
 
 from mecanico_ia_exp.obd.faults import FAULTS
 from mecanico_ia_exp.obd.signals import SIGNAL_NAMES
+from mecanico_ia_exp.visualization.memoria.base import CONDICION
 from mecanico_ia_exp.visualization.style import SEQUENTIAL, apply_style
 
 apply_style()
+
+# Nombres en español de las señales y de las condiciones. Solo cambian los rótulos.
+NOMBRE_SENAL = {
+    "rpm": "régimen del motor",
+    "vehicle_speed": "velocidad",
+    "engine_load": "carga calculada",
+    "throttle_position": "posición de mariposa",
+    "coolant_temperature": "temperatura del refrigerante",
+    "intake_air_temperature": "temperatura del aire de admisión",
+    "maf": "caudal de aire (MAF)",
+    "map": "presión del colector (MAP)",
+    "stft_bank1": "ajuste a corto plazo (STFT)",
+    "ltft_bank1": "ajuste a largo plazo (LTFT)",
+    "oxygen_sensor": "sonda lambda",
+    "ignition_timing": "avance del encendido",
+    "stft_bank1+ltft_bank1": "correlación STFT y LTFT",
+}
+
+
+def nombre_condicion(clase: str) -> str:
+    return f"{clase.split('_')[0]} {CONDICION.get(clase, clase)}"
+
 
 # Peso total de cada señal en cada condición, normalizado por condición para que
 # las seis sean comparables entre sí.
@@ -211,13 +230,16 @@ normalizada = matriz.div(matriz.sum(axis=1), axis=0)
 
 fig, eje = plt.subplots(figsize=(5.9, 4.4))
 imagen = eje.imshow(normalizada.to_numpy(), cmap=SEQUENTIAL, aspect="auto")
-eje.set_xticks(range(len(normalizada.columns)), normalizada.columns, rotation=55,
+eje.set_xticks(range(len(normalizada.columns)),
+               [NOMBRE_SENAL.get(c, c) for c in normalizada.columns], rotation=55,
                ha="right", fontsize=7)
 if compuestas:
     # Una línea separa las doce señales de los descriptores compuestos.
     eje.axvline(len(simples) - 0.5, color="#52514e", linewidth=1.0)
-    eje.text(len(simples) - 0.35, -0.75, "compuestas", fontsize=6.5, color="#52514e")
-eje.set_yticks(range(len(normalizada.index)), normalizada.index, fontsize=7.5)
+    eje.text(len(simples) - 0.35, -0.75, "descriptor compuesto", fontsize=6.5,
+             color="#52514e")
+eje.set_yticks(range(len(normalizada.index)),
+               [nombre_condicion(c) for c in normalizada.index], fontsize=7.5)
 eje.grid(False)
 
 # Se marca con un punto la señal que la ficha del fallo DECLARA afectada: así se
@@ -230,7 +252,29 @@ for i, condicion in enumerate(normalizada.index):
 
 barra = fig.colorbar(imagen, ax=eje, shrink=0.85)
 barra.set_label("fracción del peso explicativo total de la condición", fontsize=7)
+from matplotlib.lines import Line2D
+
+eje.legend(
+    handles=[Line2D([], [], marker="o", linestyle="none", markersize=4, color="#d94f2b",
+                    label="señal que la ficha del fallo declara afectada")],
+    loc="lower left", bbox_to_anchor=(0.0, 1.0), fontsize=7, frameon=False,
+    borderaxespad=0.2,
+)
+eje.set_xlabel("señal a la que pertenece el descriptor")
+eje.set_ylabel("condición predicha")
 fig.tight_layout()
+fig.suptitle(
+    "Atribución de Shapley del bosque (E9) por condición predicha y señal",
+    fontsize=9.5, fontweight="bold", x=0.01, y=1.0, ha="left", va="bottom",
+)
+fig.text(
+    0.01, -0.02,
+    "E9 · synthetic_v2, validación, 18 casos · suma del valor absoluto de las atribuciones de "
+    "cada señal, dividida por el total de la fila · F00 sin fallo no tiene ficha ni puntos\\n"
+    "Faltan dos de las doce señales, entre ellas el caudal (MAF), porque no figuran en "
+    "ninguna atribución",
+    fontsize=6.5, ha="left", va="top",
+)
 soporte.exportar(fig, "FIG-NB04-01_mapa_atribucion", subdirectorio="04_explicabilidad")
 plt.show()
 
@@ -258,13 +302,9 @@ podría asignar más peso a uno u otro sin que cambie nada del fenómeno."""),
 ## 8. La atribución caso a caso y su dispersión
 
 **Qué queremos investigar.** Si la atribución es estable entre los tres casos de cada condición o si
-cambia de un caso a otro.
-
-**Por qué importa.** Una atribución inestable produciría informes que señalan cosas distintas ante
-el mismo fallo. Un mecánico no podría fiarse de ella.
-
-**Por qué un gráfico de puntos y no barras.** Son tres observaciones por condición: dibujarlas una a
-una muestra la dispersión, que es justo lo que se quiere ver. Una barra de media la escondería."""),
+cambia de un caso a otro. Una atribución inestable produciría informes que señalan cosas distintas
+ante el mismo fallo y un mecánico no podría fiarse de ella. Por eso se dibujan los tres casos uno a
+uno: una barra de media escondería la dispersión."""),
     code("""\
 from mecanico_ia_exp.visualization.style import CATEGORICAL
 
@@ -283,7 +323,8 @@ for i, condicion in enumerate(condiciones):
     sub = atribuciones[(atribuciones["predicted_class"] == condicion) & (atribuciones["rank"] == 1)]
     izq.scatter(sub["importance"], [i] * len(sub), s=55, alpha=0.8,
                 color=CATEGORICAL[i % len(CATEGORICAL)])
-izq.set_yticks(range(len(condiciones)), condiciones, fontsize=7.5)
+izq.set_yticks(range(len(condiciones)), [nombre_condicion(c) for c in condiciones],
+               fontsize=7.5)
 izq.set_xlabel("importancia de Shapley del descriptor principal (adimensional)")
 izq.set_title("Dispersión entre los tres casos de cada condición", fontsize=9)
 
@@ -325,8 +366,7 @@ deriva y el encendido entre 0,64 y 0,72.
 diagnostica con confianza alta y dispersa en las que no. Es consistente: cuando el modelo no está
 seguro, tampoco está seguro de qué lo llevó ahí.
 
-**Qué no podemos afirmar (la tentación es evidente).** Que estas
-cifras expliquen las abstenciones de E19. **Son otra magnitud**: `xai_runner` entrena un bosque
+**Qué no podemos afirmar.** Que estas cifras expliquen las abstenciones de E19. **Son otra magnitud**: `xai_runner` entrena un bosque
 **sin calibrar** y lo que aquí se dibuja es `predict_proba` en crudo, mientras el umbral de 0,79 de
 E19 se aplica a la probabilidad **calibrada**, que puede reordenar. Ponerlas juntas por compartir
 escala sería comparar dos cifras que miden cosas distintas.
@@ -339,10 +379,126 @@ valores están en el registro de E19, no en el de E9.
 Tampoco se puede afirmar nada sobre la estabilidad frente a otra semilla o a otro reparto: son tres
 casos por condición y una sola ejecución. Ni que una atribución estable sea una atribución correcta."""),
     md("""\
-## 9. De la atribución a la observación del informe
+## 9. La importancia global del bosque y en qué se diferencia de Shapley
 
-Lo que hace que este experimento no sea un ejercicio decorativo: las tres atribuciones principales de
-cada caso se convierten en las **observaciones** del paquete de evidencia."""),
+**Qué queremos investigar.** Qué descriptores pesan más en el bosque **en conjunto**, sin mirar
+ningún caso concreto. También si esa lectura global coincide con la local de Shapley.
+
+**Qué datos utilizamos.** `artifacts/tables/E6_baseline_importancias_synthetic_v2.csv`, que E6
+escribió al entrenar el bosque: la importancia por **impureza** de los 139 descriptores (el atributo
+`feature_importances_` de scikit-learn). Para cada descriptor promedia, sobre los 400 árboles,
+cuánto reduce la impureza de Gini cada división que lo usa, ponderada por el peso de las ventanas de
+**entrenamiento** que llegan a ese nodo (con las clases equilibradas por `class_weight`). Las 139
+cifras suman 1.
+
+**En qué se diferencia de Shapley.**
+
+| | Importancia por impureza (E6) | Valores de Shapley (E9) |
+|---|---|---|
+| Alcance | **global**: una cifra por descriptor para todo el modelo | **local**: una cifra por descriptor y por caso |
+| Qué mide | cuánto ordena el descriptor las ventanas de entrenamiento al dividir | cuánto cambia la probabilidad de la clase predicha al sustituir el descriptor por el fondo sano |
+| Datos | entrenamiento, durante el ajuste | 18 ventanas de validación |
+| Signo | no tiene | sí: a favor o en contra de la clase |
+| Sesgo conocido | favorece a los descriptores con muchos valores distintos, porque ofrecen más cortes posibles | depende del fondo elegido |
+
+Ninguna de las dos es causal. Con descriptores correlacionados, las dos reparten el peso entre ellos
+de forma inestable."""),
+    code("""\
+importancias = soporte.tabla("E6_baseline_importancias_synthetic_v2")
+
+ESTADISTICO = {
+    "mean": "media", "std": "desviación típica", "min": "mínimo", "max": "máximo",
+    "range": "rango", "slope": "pendiente", "delta_min": "mayor bajada entre muestras",
+    "delta_max": "mayor subida entre muestras", "n_events": "saltos anómalos",
+    "autocorr1": "autocorrelación de retardo 1", "crossings": "cruces por la mediana",
+}
+
+
+def senal_y_estadistico(descriptor: str) -> tuple[str, str]:
+    # El nombre es señal_estadístico; se busca la señal más larga que encaje.
+    for senal in sorted(SIGNAL_NAMES, key=len, reverse=True):
+        if descriptor.startswith(senal + "_"):
+            return senal, descriptor[len(senal) + 1:]
+    # Correlaciones cruzadas y la razón entre señales no pertenecen a una sola señal.
+    return "entre señales", descriptor
+
+
+importancias[["señal", "estadístico"]] = [
+    senal_y_estadistico(d) for d in importancias["feature"]
+]
+importancias = importancias.sort_values("importance", ascending=False).reset_index(drop=True)
+importancias["acumulada"] = importancias["importance"].cumsum()
+top = importancias.head(15)
+
+print(f"descriptores: {len(importancias)} · suma de importancias: "
+      f"{importancias.importance.sum():.4f}")
+print(f"las 15 primeras reúnen {top.importance.sum():.3f} del total")
+print()
+print("Importancia por señal (suma de sus descriptores, los 139):")
+print(importancias.groupby("señal")["importance"].sum().sort_values(ascending=False)
+      .round(3).to_string())
+top[["feature", "señal", "estadístico", "importance", "acumulada"]].round(4)"""),
+    code("""\
+fig, eje = plt.subplots(figsize=(7.4, 4.6))
+etiquetas = [
+    f"{NOMBRE_SENAL.get(f.señal, f.feature)} · {ESTADISTICO.get(f.estadístico, f.estadístico)}"
+    for f in top.itertuples()
+]
+y = np.arange(len(top))
+eje.barh(y, top["importance"], color=CATEGORICAL[0], height=0.62)
+for yi, valor in zip(y, top["importance"], strict=True):
+    eje.text(valor + 0.0006, yi, f"{valor:.3f}".replace(".", ","), va="center", fontsize=6.8)
+eje.set_yticks(y, etiquetas, fontsize=7.2)
+eje.invert_yaxis()
+eje.set_xlabel("importancia por impureza (reducción media de Gini, fracción del total, 0–1)")
+eje.grid(axis="y", visible=False)
+fig.suptitle(
+    "Los 15 descriptores con mayor importancia global en el bosque aleatorio (E6)",
+    fontsize=10.5, fontweight="bold", x=0.0, ha="left",
+)
+fig.supxlabel(
+    "E6 · synthetic_v2, entrenamiento · fuente: artifacts/tables/"
+    "E6_baseline_importancias_synthetic_v2.csv · importancia global por impureza, no Shapley: "
+    "no tiene signo ni dice nada de un caso concreto",
+    fontsize=6.5, x=0.0, ha="left",
+)
+fig.tight_layout()
+soporte.exportar(fig, "FIG-NB04-03_importancia_impureza", subdirectorio="04_explicabilidad")
+plt.show()"""),
+    md("""\
+**Qué muestra.** Ningún descriptor domina: el primero, el máximo del ajuste a largo plazo, se queda
+en 0,046 y los quince primeros reúnen algo más de la mitad del peso total (0,509) entre 139. Los
+quince pertenecen a cinco señales: la sonda lambda (seis descriptores), la temperatura del
+refrigerante (cuatro), los dos ajustes de combustible (dos cada uno) y el régimen del motor (uno,
+su mínimo). El caudal de aire no aparece entre ellos. Sumando los descriptores de cada señal, la
+sonda reúne 0,218, el ajuste a largo plazo 0,187, el refrigerante 0,184 y el ajuste a corto plazo
+0,154; el caudal, 0,030.
+
+**Qué podemos interpretar.** La lectura global es coherente con la local del apartado 7: las
+señales que más pesan son señales que alguna ficha de fallo declara (ajustes de combustible para la
+fuga y la deriva, refrigerante para el termostato, sonda para su retardo, régimen para el fallo de
+encendido) y el caudal sigue sin aparecer, como en Shapley. Que muchos de los quince sean
+dinámica intraventana (subidas y bajadas entre muestras, autocorrelación, cruces) respalda que la
+representación tabular describe el tiempo dentro de la ventana, como se dijo en el notebook 02.
+
+**Qué no podemos afirmar.**
+
+1. **Que un descriptor importante cause el diagnóstico** ni que la señal cause el fallo. La
+   impureza dice qué cortes usó el bosque para separar las ventanas de entrenamiento, no qué
+   ocurre en el motor.
+2. **Que el orden entre descriptores próximos sea fiable.** Entre puestos consecutivos las cifras
+   se separan por unas milésimas; con descriptores correlacionados (los dos ajustes, las variantes de la
+   sonda) otra semilla podría reordenarlos. Es una sola ejecución.
+3. **Que la importancia por impureza mida lo mismo que Shapley.** Es global, sin signo y se
+   calcula sobre entrenamiento; Shapley es local, con signo y sobre validación. Además favorece a
+   los descriptores continuos con muchos valores distintos frente a recuentos como los cruces o los
+   saltos anómalos, que ofrecen menos cortes.
+4. **Nada sobre un caso concreto**: para eso están los apartados 7 y 8."""),
+    md("""\
+## 10. De la atribución a la observación del informe
+
+Las tres atribuciones principales de cada caso se convierten en las **observaciones** del paquete
+de evidencia."""),
     code("""\
 # Las tres primeras: son las que el paquete de evidencia lleva como observaciones.
 ejemplo = atribuciones[
@@ -355,15 +511,15 @@ for _, fila in ejemplo.sort_values("rank").iterrows():
     print(f"  OBS00{int(fila['rank'])}  {fila['signal']}.{fila['statistic']} = {fila['value']:.4f}"
           f"  ({fila['direction']}, importancia {fila['importance']:.4f})")"""),
     md("""\
-**Lo observado.** Tres observaciones, cada una con señal, estadístico, valor, dirección e
-importancia. Es exactamente lo que llega al verificador y lo que el redactor tiene que anclar.
+**Qué muestra.** Tres observaciones, cada una con señal, estadístico, valor, dirección e
+importancia. Es lo que llega al verificador y lo que el redactor tiene que anclar.
 
-**Por qué esto importa para PI.2.** Una afirmación del informe solo se admite si existe un fragmento
+**Relación con la pregunta de investigación.** En PI.2, una afirmación del informe solo se admite si existe un fragmento
 documental que mencione **esa** señal. La atribución decide, por tanto, qué tiene que buscarse en el
 manual; si señalara una señal que el manual no documenta, el sistema tendría que abstenerse
 (apartado 1). En la práctica no ocurrió; la ablación `A1` de E18 midió lo que eso vale."""),
     md("""\
-## 10. Lo que la ablación `A1` dice de todo esto
+## 11. Lo que la ablación `A1` dice de todo esto
 
 E18 retiró la atribución de Shapley y la sustituyó por un criterio estadístico simple (la desviación
 tipificada del descriptor frente a la clase sin fallo), manteniendo todo lo demás."""),
@@ -400,13 +556,13 @@ decisión también.
 
 Es un resultado negativo sobre el valor de la atribución en este recorrido y se publica como tal:
 **para decidir** no aporta sobre una alternativa mucho más barata. Lo que sí aporta (el contenido
-de las observaciones, que es PI.2 y no PI.3) se discute en el apartado 12.
+de las observaciones, que es PI.2 y no PI.3) se discute en el apartado 13.
 
 **Qué no podemos afirmar.** Que un criterio estadístico simple sea equivalente en general. Con
 diecisiete casos, cinco de ellos con evidencia completa, lo que se ha medido es que en esta muestra
 ninguna decisión cambió."""),
     md("""\
-## 11. Resultados negativos y limitaciones
+## 12. Resultados negativos y limitaciones
 
 1. **La atribución no cambia ninguna decisión** (`A1`, en validación; su repetición en prueba no es
    independiente).
@@ -423,7 +579,7 @@ ninguna decisión cambió."""),
    como a los de E6 y E7. Es anterior a la convención y no se regenera, porque regenerar cambiaría
    las cifras publicadas."""),
     md("""\
-## 12. Discusión
+## 13. Discusión
 
 E9 aporta menos de lo que su nombre sugiere y más de lo que su ablación indicaría.
 
@@ -438,7 +594,7 @@ Y deja una lectura que sobrevive a todo lo anterior, la del apartado 7: en este 
 sistema que vigilara cada sensor para detectar su propio fallo no habría encontrado la deriva del
 caudalímetro."""),
     md("""\
-## 13. Conclusiones
+## 14. Conclusiones
 
 **Qué aprendimos.** Que la señal principal de cada fallo es una de las que declara su ficha; que el
 modelo recupera la regla de compensación del generador y detecta la deriva del caudalímetro en los
@@ -458,7 +614,7 @@ significado.
 **Cómo contribuye al TFM.** Sostiene el capítulo de explicabilidad y es la pieza que une el
 diagnóstico con la evidencia documental: sin observaciones no hay nada que verificar.
 
-## 14. Reproducibilidad
+## 15. Reproducibilidad
 
 | | |
 |---|---|
@@ -470,13 +626,13 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 | **Commit** | el que imprime la celda del apartado 4 |
 | **Tiempo** | menos de un minuto |
 | **Recursos** | CPU |
-| **Artefactos que produce** | dos figuras en `notebooks/salida/04_explicabilidad/`, PNG y SVG |
+| **Artefactos que produce** | tres figuras en `notebooks/salida/04_explicabilidad/`, PNG y SVG |
 
 **Qué no se reproduce aquí.** Las atribuciones (véase la modalidad en el apartado 4). En modo FULL,
 `mecanico-exp xai --dataset-id synthetic_v2 --etiqueta <nombre>`, que escribe con etiqueta propia y
 **no sobrescribe** los artefactos publicados.
 
-## 15. Referencias y trazabilidad
+## 16. Referencias y trazabilidad
 
 **Dónde aparece esto en la memoria.** El mapa de atribución es la **Figura 5.15** del capítulo 5, en el apartado de PI.1. El resumen por diagnóstico está en el anexo B, **Tabla B.3**. La lectura de la ablación `A1` que este notebook discute aparece junto a la **Figura 5.18**.
 
@@ -484,6 +640,8 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 - `experiments/E9_xai_synthetic_v2.json`: registro, con el fondo y su huella
 - `artifacts/tables/E9_atribuciones_synthetic_v2.csv`: las 180 atribuciones
 - `artifacts/tables/E9_resumen_synthetic_v2.csv`: la comparación con las señales declaradas
+- `artifacts/tables/E6_baseline_importancias_synthetic_v2.csv`: la importancia por impureza de los 139 descriptores
+- `src/mecanico_ia_exp/experiments/baseline_runner.py`: dónde se escribe esa tabla, a partir de `feature_importances_`
 - `src/mecanico_ia_exp/xai/attribution.py`: el explicador y la selección de fondo
 - `src/mecanico_ia_exp/obd/faults.py`: las fichas con `affected_signals`
 - `docs/experiments/E18_ablaciones.md` y `E18_ablaciones_prueba.md`: la ablación `A1`

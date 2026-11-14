@@ -16,7 +16,7 @@ CELDAS = [
 | **Conjunto** | `synthetic_v2`, **partición de prueba**; el conjunto se abrió cinco veces (apartado 14.2); E19 es su única evaluación primaria |
 | **Modalidad** | reanálisis |
 | **Protocolo** | política de suficiencia v2.2, umbrales congelados antes de abrir el test |
-| **Estado** | **COMPLETED — WITH DOCUMENTED LIMITATIONS** |
+| **Estado** | **Completado con limitaciones documentadas** |
 | **Preguntas de investigación** | PI.1, PI.2 y sobre todo **PI.3**: el reconocimiento de insuficiencia |
 | **Evidencia original** | `experiments/E19_evaluacion_final_v3.json`, `E19_anotacion_v3.json`, `artifacts/tables/E19_evaluacion_final_v3.csv` |
 
@@ -24,26 +24,26 @@ CELDAS = [
 
 ## En un minuto
 
-- **La pregunta (PI.3):** si el criterio de suficiencia evita la falsa confianza sobre una
-  partición que no se usó para fijar el criterio y cuánto cuesta esa protección en capacidad de dar respuesta.
-- **Qué se hace:** se recalculan las tasas de E19 desde la tabla congelada y se comprueban contra
+- **Pregunta.** Si el criterio de suficiencia evita la falsa confianza (PI.3) sobre una partición
+  que no se usó para fijarlo y cuánto cuesta esa protección en capacidad de dar respuesta.
+- **Qué se hace.** Se recalculan las tasas de E19 desde la tabla congelada y se comprueban contra
   el registro.
-- **Resultado:** falsa confianza **0 de 14**, abstención innecesaria **2 de 8**, cobertura con
-  evidencia completa **6 de 10**: la falsa confianza de la política más conservadora sin renunciar
-  a responder en seis de diez casos.
-- **Límite principal:** con 0 de 14, el intervalo de Wilson al 95 % llega al **21,5 %** y el real es
-  más ancho, porque las catorce ejecuciones proceden de siete ventanas. Lo medido es que **en esta
-  muestra no ocurrió**, no que no pueda ocurrir.
+- **Resultado.** Falsa confianza **0 de 14**, abstención innecesaria **2 de 8**, respuesta con
+  evidencia completa **6 de 10**. El criterio iguala la falsa confianza de la política trivial más
+  conservadora (apartado 13) y aun así responde en seis de diez casos.
+- **Límite.** Con 0 de 14, el intervalo de Wilson al 95 % llega al **21,5 %** y el real es más
+  ancho, porque las catorce ejecuciones proceden de siete ventanas de siete sesiones. Lo medido es
+  que **en esta muestra no ocurrió**.
 
 ## Cómo leer este notebook
 
-**Modalidad: REANÁLISIS.** **Este notebook no reejecuta E19 y no puede hacerlo:** la regla
-congelada dice que un resultado desfavorable no es motivo para repetir. Ninguna celda escribe en
-`experiments/`, toca la anotación sellada ni recalcula una métrica histórica con otra configuración.
-Se ejecuta en CPU, sin red, en menos de un minuto.
+**Modalidad:** reanálisis. No reejecuta E19 ni puede hacerlo, porque la regla congelada dice que
+un resultado desfavorable no es motivo para repetir; ninguna celda escribe en `experiments/`, toca
+la anotación sellada ni recalcula una métrica histórica con otra configuración. **Ejecución:** CPU,
+sin red, en segundos.
 
 - **1–4** Introducción, objetivo e hipótesis, fundamento (criterio y estratos) y entorno.
-- **5** Artefactos congelados y qué datos entran. **6** Resultado primario, con intervalos.
+- **5–6** Artefactos congelados y qué datos entran; resultado primario, con intervalos.
 - **7–9** Decisiones caso a caso, las dos abstenciones innecesarias y las 35 ejecuciones frente al
   umbral.
 - **10–13** Diagnósticos incorrectos, estratos descriptivos, la coincidencia con validación y las
@@ -80,16 +80,15 @@ diagnósticas con confianza alta cuando la evidencia no las sostiene.
 
 **Las dos tasas, definidas antes de mirar nada:**
 
-- **Falsa confianza (`T_FC`):** numerador: ejecuciones que **explican** debiendo abstenerse.
+- **Falsa confianza (`T_FC`).** Numerador: ejecuciones que **explican** debiendo abstenerse.
   Denominador: ejecuciones cuya decisión esperada es abstenerse.
-- **Abstención innecesaria (`T_AI`):** numerador: ejecuciones que **se abstienen** debiendo
+- **Abstención innecesaria (`T_AI`).** Numerador: ejecuciones que **se abstienen** debiendo
   explicar. Denominador: ejecuciones cuya decisión esperada es explicar.
 
 **No se suman ni se promedian.** Miden cosas distintas sobre denominadores distintos; una tasa
 combinada escondería cuál de las dos se está pagando.
 
-**La decisión esperada se fijó sin circularidad**, que es el punto más delicado del diseño. Se
-determina con **exactamente tres entradas**: la etiqueta verdadera, la clase predicha por el bosque
+**La decisión esperada se fijó sin circularidad.** Se determina con **tres entradas**: la etiqueta verdadera, la clase predicha por el bosque
 **sin calibrar** y la variante de corpus del caso. **La salida del verificador no interviene.** Si la
 decisión esperada se derivase del mismo criterio de suficiencia que después se evalúa, el
 experimento mediría su propia consistencia y no su acierto.
@@ -103,7 +102,7 @@ resultado desfavorable no justifica repetir. Está en
 ## 3. Fundamento: qué es suficiencia de evidencia aquí
 
 El sistema no decide si explicar mirando solo su confianza. Aplica un **criterio compuesto** con
-cuatro condiciones: basta que una falle para que se abstenga:
+cuatro condiciones y basta que una falle para que se abstenga.
 
 | Condición | Umbral congelado | Qué protege |
 |---|---|---|
@@ -114,11 +113,11 @@ cuatro condiciones: basta que una falle para que se abstenga:
 
 **Por qué compuesto y no un umbral único.** Un umbral único sobre la confianza deja pasar el caso
 más peligroso: un modelo seguro de un diagnóstico que el manual no documenta. La ablación `A4` de
-E18 lo midió: con umbral único, la falsa confianza sube a 9 de 9.
+E18 (decidir solo con la confianza) lo midió: con umbral único, la falsa confianza sube a 9 de 9.
 
 **Qué es la cobertura de afirmaciones.** El redactor produce un informe con afirmaciones
-individuales; cada una se contrasta contra los fragmentos recuperados. La cobertura es la fracción
-de afirmaciones ancladas. Mide PI.2 y entra en el criterio de PI.3.
+individuales; cada una se contrasta contra los fragmentos recuperados. La cobertura de afirmaciones es la
+fracción de afirmaciones ancladas. Mide PI.2 y entra en el criterio de PI.3.
 
 **Los tres estratos de E19,** fijados antes de medir:
 
@@ -145,12 +144,12 @@ soporte.declarar_modalidad(
 E19 en su **tercer intento**, el que llegó al final; los dos anteriores se interrumpieron y están
 declarados. El sufijo `_v3` del fichero es el número de intento y **no** una versión del conjunto de
 datos. Son 35 ejecuciones sobre la partición de **prueba** de `synthetic_v2`, repartidas en tres
-estratos y procedentes de once ventanas de diez sesiones (la sesión `F03_thermostat_stuck__warmup__11`
-aporta dos ventanas). **No son 35 observaciones independientes:** repiten casos
+estratos y procedentes de once ventanas de diez sesiones (la sesión de calentamiento 11 del termostato
+bloqueado aporta dos ventanas). **No son 35 observaciones independientes:** repiten casos
 entre estratos y las sesiones de un mismo caso salen del mismo generador y la misma
 parametrización.
 
-Antes de leer una cifra, conviene comprobar que se está leyendo lo que se cree. La anotación se
+Antes de leer una cifra se comprueba que se está leyendo lo que se cree. La anotación se
 selló **antes de cualquier medición** y lleva su propia huella."""),
     code("""\
 import json
@@ -201,10 +200,9 @@ regla produjo depende de cuántos casos el modelo diagnostica bien, que es un he
 ## 6. Resultado primario
 
 **Qué queremos investigar.** Las dos tasas sobre el estrato operativo, con sus denominadores.
-**Qué datos utilizamos.** La tabla congelada, filtrada al estrato primario.
-**Por qué se calculan aquí en lugar de leerse del registro.** Porque recalcularlos desde la tabla de
-casos y comprobar que coinciden con el registro es una verificación: si no coincidieran, habría un
-error de agregación en alguna parte."""),
+**Qué datos utilizamos.** La tabla congelada, filtrada al estrato primario. Las tasas se
+recalculan desde la tabla de casos y se comprueban contra el registro: si no coincidieran, habría
+un error de agregación en alguna parte."""),
     code("""\
 operativo = casos[casos.stratum == "operativo"]
 
@@ -256,16 +254,22 @@ apply_style()
 
 fig, ejes = plt.subplots(1, 3, figsize=(5.9, 3.0))
 COLORES = [CATEGORICAL[2], CATEGORICAL[1], CATEGORICAL[0]]
+# Qué tasa es cada panel: la letra sola no lo decía.
+TITULOS = [
+    "falsa confianza\\nexplicó debiendo abstenerse",
+    "abstención innecesaria\\nse abstuvo debiendo explicar",
+    "cobertura\\nexplicó con evidencia completa",
+]
 
-for letra, (eje, (nombre, fila), color) in zip(
-    "abc", zip(ejes, primario.iterrows(), COLORES, strict=False), strict=False
+for letra, (eje, (nombre, fila), color, titulo) in zip(
+    "abc", zip(ejes, primario.iterrows(), COLORES, TITULOS, strict=False), strict=False
 ):
     numerador, denominador = int(fila.numerador), int(fila.denominador)
     eje.bar(["casos"], [denominador], color="#e1e0d9", width=0.5, label="denominador")
     eje.bar(["casos"], [numerador], color=color, width=0.5, label="numerador")
     eje.text(0, denominador + 0.35, f"{numerador}/{denominador}",
              ha="center", fontsize=13, fontweight="bold", color=color)
-    eje.set_title(f"({letra})", fontsize=8.5, fontweight="bold", loc="left", pad=6)
+    eje.set_title(f"({letra}) {titulo}", fontsize=7.5, fontweight="bold", loc="left", pad=6)
     eje.set_ylim(0, denominador * 1.42)
     eje.set_ylabel("ejecuciones (recuento)" if nombre.startswith("falsa") else "")
     eje.set_xticks([])
@@ -276,11 +280,21 @@ for letra, (eje, (nombre, fila), color) in zip(
     )
 
 fig.tight_layout()
+fig.suptitle(
+    "E19 sobre prueba: las tres tasas del criterio primario",
+    fontsize=9.5, fontweight="bold", x=0.01, y=1.0, ha="left", va="bottom",
+)
+fig.text(
+    0.01, -0.01,
+    "E19 · synthetic_v2, prueba · barra gris: ejecuciones evaluadas (denominador); "
+    "barra de color: las que cumplen la tasa (numerador)",
+    fontsize=6.5, ha="left", va="top",
+)
 soporte.exportar(fig, "FIG-NB03-01_primario", subdirectorio="03_analisis_e19")
 plt.show()"""),
     md("""\
-**Qué muestra.** Falsa confianza **0 de 14**, procedentes de 7 sesiones. Abstención innecesaria
-**2 de 8**. Cobertura con evidencia completa **6 de 10**.
+**Qué muestra.** Falsa confianza **0 de 14**, procedentes de siete ventanas de siete sesiones.
+Abstención innecesaria **2 de 8**. Respuesta con evidencia completa **6 de 10**.
 
 **Qué podemos interpretar.** De las catorce ejecuciones en que el sistema debía abstenerse, doce lo
 debían por construcción: la condición retiraba la evidencia (seis) o la dejaba parcial (seis); en dos
@@ -288,14 +302,15 @@ de ellas el diagnóstico era además erróneo. Las otras dos tenían la evidenci
 diagnóstico erróneo. Se abstuvo en las catorce. Es lo que PI.3 pedía, sobre una partición que no se
 usó para fijar el criterio.
 
-**Qué no podemos afirmar (es lo más importante de este notebook).** Que el riesgo de falsa
+**Qué no podemos afirmar.** Que el riesgo de falsa
 confianza sea cero. La celda siguiente calcula el intervalo en lugar de describirlo: con 0 de 14, el
 intervalo de Wilson al 95 % llega al **21,5 %** y el real es más ancho, porque las catorce
-ejecuciones proceden de siete ventanas. Lo medido es que **en
-esta muestra no ocurrió**, no que no pueda ocurrir. El experimento está marcado `COMPLETED — WITH DOCUMENTED LIMITATIONS` por esto; `VALIDATED` no se usa como sinónimo
-de hipótesis demostrada.
+ejecuciones proceden de siete ventanas de siete sesiones. Lo medido es que **en
+esta muestra no ocurrió**, no que no pueda ocurrir. Por eso el experimento consta como
+completado con limitaciones documentadas y no como validado, que no se usa como sinónimo de
+hipótesis demostrada.
 
-Tampoco se puede leer la cobertura 6/10 como “cuatro oportunidades perdidas”. De esas diez
+Tampoco se puede leer la respuesta con evidencia completa 6/10 como “cuatro oportunidades perdidas”. De esas diez
 ejecuciones con evidencia completa, **dos llevaban diagnóstico incorrecto**: en ellas, abstenerse
 era lo que debía hacer. La parte evitable del coste es la otra cifra: **2 de 8**."""),
     code('''\
@@ -326,17 +341,17 @@ for nombre, fila in primario.iterrows():
 pd.DataFrame(intervalos).set_index("tasa")'''),
     md("""\
 **Qué muestra.** Los tres intervalos. Son anchos. El de la falsa confianza de 0/14 va de **0 a
-0,215**; la abstención innecesaria de 2/8, con cualquiera entre
-**0,071 y 0,591**; la cobertura de 6/10, entre **0,313 y 0,832**.
+0,215**; el de la abstención innecesaria de 2/8, entre
+**0,071 y 0,591**; el de la respuesta con evidencia completa de 6/10, entre **0,313 y 0,832**.
 
 **Qué podemos interpretar.** Que el experimento acota poco. Decir “el intervalo de la falsa
 confianza llega al 21,5 %” es una afirmación más fuerte que no decir nada, porque
-delimita exactamente lo que no se ha demostrado. Y la amplitud del intervalo de la abstención
+delimita lo que no se ha demostrado. Y la amplitud del intervalo de la abstención
 innecesaria (0,519, casi 52 puntos porcentuales) explica por qué el informe de la fase se niega a
 llamarla estimación.
 
 **Qué no podemos afirmar.** Que el intervalo sea exacto. Supone observaciones independientes; las
-catorce proceden de siete sesiones (apartado 5), de modo que el intervalo real es **más ancho** que
+catorce proceden de siete ventanas de siete sesiones (apartado 5), de modo que el intervalo real es **más ancho** que
 el que sale aquí. Tampoco cubre
 la incertidumbre de que el conjunto sea sintético, que no es estadística."""),
     md("""\
@@ -344,11 +359,8 @@ la incertidumbre de que el conjunto sea sintético, que no es estadística."""),
 
 **Qué queremos investigar.** No las tasas, sino el detalle: qué decidió en cada ejecución y por qué.
 **Qué datos utilizamos.** Las 22 ejecuciones del estrato operativo, con su caso anotado, su
-condición de evidencia y la decisión que el sistema tomó.
-**Por qué un mapa de decisiones.** Veintidós ejecuciones caben en una cuadrícula; así se ve de un
-vistazo dónde están los aciertos, los errores y la estructura por condición de evidencia. Los dos
-puntos de una misma fila son **sesiones distintas** del mismo caso, no repeticiones de la misma
-medición."""),
+condición de evidencia y la decisión que el sistema tomó. Los dos puntos de una misma fila son
+**sesiones distintas** del mismo caso y no repeticiones de la misma medición."""),
     code("""\
 vista = operativo[[
     "case_id_gold", "fault_id", "corpus_variant", "predicted_class",
@@ -360,7 +372,9 @@ vista = vista.sort_values(["corpus_variant", "case_id_gold"])
 vista.reset_index(drop=True)"""),
     code("""\
 ORDEN_VARIANTE = ["FULL", "PARTIAL", "ABSENT"]
-fig, eje = plt.subplots(figsize=(5.9, 5.0))
+# Más ancho que la página: con 5,9 pulgadas la leyenda dejaba al eje tan estrecho
+# que los rótulos de las tres columnas se montaban.
+fig, eje = plt.subplots(figsize=(7.8, 5.0))
 
 marcadores = {("EXPLAIN", True): "o", ("ABSTAIN", True): "s",
               ("EXPLAIN", False): "X", ("ABSTAIN", False): "D"}
@@ -382,8 +396,8 @@ for _, fila in operativo.iterrows():
 
 eje.set_yticks(range(len(casos_ordenados)), casos_ordenados, fontsize=7.5)
 eje.set_xticks(range(len(ORDEN_VARIANTE)), [
-    "FULL\\nevidencia completa", "PARTIAL\\nevidencia parcial", "ABSENT\\nevidencia retirada",
-], fontsize=8)
+    "FULL\\ncompleta", "PARTIAL\\nparcial", "ABSENT\\nretirada",
+], fontsize=7.5)
 eje.set_xlim(-0.6, 2.6)
 eje.set_xlabel("condición de evidencia del caso anotado")
 eje.grid(axis="x", linestyle=":", linewidth=0.6)
@@ -402,6 +416,17 @@ eje.legend(handles=[
 ], fontsize=7, loc="center left", bbox_to_anchor=(1.01, 0.5))
 
 fig.tight_layout()
+fig.suptitle(
+    "E19 sobre prueba: la decisión de cada ejecución del estrato operativo, caso a caso",
+    fontsize=9.5, fontweight="bold", x=0.01, y=1.0, ha="left", va="bottom",
+)
+fig.text(
+    0.01, -0.01,
+    "Cada fila es un caso anotado con dos sesiones; cada marca se desplaza a un lado según su "
+    "sesión y dos marcas pueden superponerse (C01, C02, C04, C10 y C11). "
+    "Azul: decisión correcta; naranja: error.",
+    fontsize=6.5, ha="left", va="top",
+)
 soporte.exportar(fig, "FIG-NB03-02_decisiones", subdirectorio="03_analisis_e19")
 plt.show()"""),
     md("""\
@@ -414,8 +439,8 @@ abstiene en las columnas de evidencia parcial y retirada sin excepción; en la d
 completa explica en la mayoría de los casos. Los dos fallos son del tipo “conservador de más”, no
 del tipo “confiado de más”.
 
-**Qué no podemos afirmar.** Que el comportamiento sea estable. Cada fila tiene **dos** puntos; una
-sola ejecución distinta cambiaría la fila entera; las dos sesiones de una fila no son
+**Qué no podemos afirmar.** Que el comportamiento sea estable. Cada fila tiene **dos** puntos y una
+sola ejecución distinta cambiaría la fila entera. Las dos sesiones de una fila no son
 independientes (apartado 5)."""),
     md("""\
 ## 8. Las dos abstenciones innecesarias, en detalle
@@ -440,7 +465,7 @@ eje.axvline(UMBRAL_CONFIANZA, color="#898781", linestyle="--", linewidth=1.0)
 eje.axhline(UMBRAL_COBERTURA, color="#898781", linestyle="--", linewidth=1.0)
 eje.text(UMBRAL_CONFIANZA + 0.01, 0.02, f"umbral de confianza {UMBRAL_CONFIANZA}",
          fontsize=6.8, color="#52514e", rotation=90)
-eje.text(0.02, UMBRAL_COBERTURA + 0.015, f"umbral de cobertura {UMBRAL_COBERTURA}",
+eje.text(0.31, UMBRAL_COBERTURA + 0.015, f"umbral de cobertura {UMBRAL_COBERTURA}",
          fontsize=6.8, color="#52514e")
 
 for _, fila in deben_explicar.iterrows():
@@ -464,7 +489,7 @@ eje.legend(handles=[
            markersize=8, label="explicó (correcto)"),
     Line2D([], [], marker="D", color="w", markerfacecolor=CATEGORICAL[1],
            markersize=9, label="se abstuvo debiendo explicar"),
-], fontsize=7.5, loc="lower left")
+], fontsize=7.5, loc="center left")
 
 fig.suptitle(
     "Las ocho ejecuciones que debían explicar, frente a los dos umbrales",
@@ -472,7 +497,7 @@ fig.suptitle(
 )
 fig.supxlabel(
     "E19 · synthetic_v2, prueba · política v2.2, umbrales congelados antes de abrir el test · "
-    "zona sombreada: donde se cumplen los dos umbrales · "
+    "zona más oscura: donde se cumplen los dos umbrales; bandas claras: solo uno · "
     "el criterio exige además ≥2 fragmentos aplicables y ≥1 fuente",
     fontsize=6.5, x=0.0, ha="left",
 )
@@ -486,7 +511,7 @@ caen fuera **por motivos distintos**: una por confianza insuficiente con la evid
 completa; otra por las dos cosas a la vez.
 
 **Qué podemos interpretar.** Las dos abstenciones innecesarias no son fallos del criterio de
-suficiencia: el criterio hizo exactamente lo que dice hacer. Son consecuencia de que **el modelo de
+suficiencia: el criterio hizo lo que dice hacer. Son consecuencia de que **el modelo de
 diagnóstico no estaba suficientemente seguro** en esas dos ventanas. Mejorar esta cifra pasa por el
 diagnóstico, no por relajar el umbral. Relajarlo, además, subiría la falsa confianza, que es el error que
 se quiere evitar.
@@ -498,14 +523,13 @@ apartado 12."""),
     md("""\
 ## 9. Las 35 ejecuciones frente al umbral
 
-**Introducción al problema.** Falta situar **todas** las ejecuciones sobre el eje que las gobierna,
-la confianza calibrada frente al umbral: esa distancia distingue un acierto holgado de uno que
-estuvo cerca de no serlo.
+**Qué queremos investigar.** Dónde queda cada una de las 35 ejecuciones registradas (no solo las
+22 del estrato operativo) respecto del umbral de confianza de 0,79. Esa distancia distingue un
+acierto holgado de uno que estuvo cerca de no serlo. Cada ejecución lleva marcado si la decisión fue
+correcta, si el diagnóstico del modelo lo era, cuánta cobertura de afirmaciones alcanzó y cuántos
+documentos aplicables recibió.
 
-**Objetivo del análisis.** Situar las 35 ejecuciones registradas (no solo las 22 del estrato
-operativo) respecto del umbral de 0,79, marcando en cada una si la decisión fue correcta, si el
-diagnóstico del modelo lo era, cuánta cobertura alcanzó y cuántos documentos aplicables recibió.
-Los datos son los del apartado 5 (`artifacts/tables/E19_evaluacion_final_v3.csv`)."""),
+**Qué datos utilizamos.** Los del apartado 5 (`artifacts/tables/E19_evaluacion_final_v3.csv`)."""),
     code("""\
 from mecanico_ia_exp.visualization.memoria import decisiones_de_e19
 
@@ -523,26 +547,26 @@ from mecanico_ia_exp.visualization.memoria import fig_decisiones_y_umbral
 
 fig_decisiones_y_umbral()"""),
     md("""\
-**Descripción objetiva de lo que se ve.** Cuatro de las 35 ejecuciones quedan por debajo del umbral:
-son exactamente las cuatro de las dos abstenciones innecesarias: la deriva del caudalímetro a
+**Qué muestra.** Cuatro de las 35 ejecuciones quedan por debajo del umbral y son las cuatro de
+las dos abstenciones innecesarias: la deriva del caudalímetro a
 0,573 y el fallo de encendido a 0,491, cada una repetida en dos ejecuciones. Ninguna decisión
 correcta queda por debajo del umbral y ninguna abstención indebida por encima. Las seis ejecuciones
 con el diagnóstico del modelo incorrecto, cuatro del estrato operativo y las dos del adverso,
 terminan en abstención correcta.
 
-**Interpretación.** Confirma lo visto en el apartado 8: la puerta de confianza no está mal situada;
-el modelo estaba genuinamente poco seguro en esas dos ventanas. El otro lado del mismo mecanismo también se ve: donde el diagnóstico era
+**Qué podemos interpretar.** Confirma lo visto en el apartado 8: la puerta de confianza no está
+mal situada y el modelo estaba poco seguro en esas dos ventanas. El otro lado del mismo mecanismo también se ve: donde el diagnóstico era
 incorrecto pero la confianza alta, lo que evitó la explicación equivocada fue el criterio de
 suficiencia documental y no la confianza.
 
-**Un detalle, enunciado con cuidado.** El caso de la deriva aparece sobre dos sesiones: en autopista
+Hay además un detalle descriptivo. El caso de la deriva aparece sobre dos sesiones: en autopista
 da 0,573 y se abstiene cuando debía explicar; en calentamiento da 0,851 y explica bien. Las dos
 abstenciones innecesarias están las dos en sesiones de autopista, donde están también las dos
 confianzas más bajas; en ralentí y calentamiento ninguna baja de 0,85.
 
-**Limitaciones.** Es una **observación descriptiva sobre dos errores**. Con `n = 2` no hay contraste
-posible y **no se afirma que la conducción en autopista cause una reducción de la confianza**: la
-coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son
+**Qué no podemos afirmar.** Que la conducción en autopista cause una reducción de la
+confianza. Es una **observación descriptiva sobre dos errores**; con `n = 2` no hay contraste
+posible y la coincidencia podría deberse al caso, a la ventana o al azar. Las 35 ejecuciones no son
 independientes (apartado 5). Y el umbral
 **no se revisa** a la vista de esta figura: la política está congelada desde antes de abrir el
 conjunto de prueba; moverla ahora sería ajustar el criterio a los datos reservados.
@@ -581,19 +605,19 @@ evidencia documental completa (que son las que reducen el denominador de la abst
 ocho) y dos más en casos de evidencia parcial o retirada, donde el sistema debía abstenerse de todos
 modos.
 
-**Qué podemos interpretar.** El sistema **se abstuvo en todas ellas**. Es el caso que más importa:
-un diagnóstico equivocado del que además se explicara con confianza sería el peor resultado posible:
-es exactamente lo que el criterio existe para impedir. Que en las dos ejecuciones con evidencia
+**Qué podemos interpretar.** El sistema **se abstuvo en todas ellas**. Es el caso que más importa,
+porque explicar con confianza un diagnóstico equivocado sería el peor resultado posible y es lo que
+el criterio existe para impedir. Que en las dos ejecuciones con evidencia
 completa en que el modelo se equivocó el sistema callara es evidencia directa a favor de PI.3.
 
 **Qué no podemos afirmar.** Que el sistema detecte los diagnósticos incorrectos. No los detecta: no
 tiene forma de saber que son incorrectos. Y no fue la puerta de confianza la que los paró: la
 confianza **calibrada**, que es la que compara el verificador, era de 0,908 y 0,966, por encima del
 umbral de 0,79 (la columna `model_confidence` de la tabla es la probabilidad sin calibrar). El motivo
-registrado en los dos es `LOW_CLAIM_COVERAGE`: los fragmentos recuperados para el diagnóstico
+registrado en los dos es `LOW_CLAIM_COVERAGE` (cobertura de afirmaciones insuficiente): los fragmentos recuperados para el diagnóstico
 equivocado no sostenían ninguna afirmación. Un diagnóstico incorrecto con confianza alta **y**
 evidencia documental que sí cubriera lo afirmado no sería filtrado por este mecanismo. Ese escenario
-es justamente el que el estrato adverso intentó provocar."""),
+es el que el estrato adverso intentó provocar."""),
     md("""\
 ## 11. Los dos análisis descriptivos, separados del primario
 
@@ -629,7 +653,7 @@ favorables; el adverso, en la condición más desfavorable que el diseño supo c
 que el modelo clasifica mal **con más confianza**.
 
 **Qué no podemos afirmar.** Nada sobre tasas poblacionales a partir de ellos: elegir ventanas
-mirando las predicciones es exactamente lo que el estrato operativo evita. Mezclarlos con el
+mirando las predicciones es lo que el estrato operativo evita. Mezclarlos con el
 primario produciría una cifra sin significado. Y el adverso tiene **dos**
 ejecuciones: describe dos casos, no una tendencia."""),
     md("""\
@@ -680,7 +704,7 @@ if ensayo.is_file():
 else:
     print("el registro del ensayo sobre validación no está en este clon")"""),
     md("""\
-**Lo que la auditoría concluyó (conviene no simplificar).** Hay que separar:
+**Lo que la auditoría concluyó.** Hay que separar lo fijado de lo observado.
 
 **Fijado por el diseño, en cualquier partición.** Las **22 ejecuciones** (once condiciones de
 evidencia elegibles por dos sesiones) y, dentro de ellas, las **diez con evidencia completa**. Estas
@@ -694,14 +718,15 @@ independiente.
 
 **No fijado: observado.** Los denominadores **8 y 14**. Ninguno sale del diseño: ambos se derivan de
 un mismo hecho medido, que de las diez ejecuciones con evidencia completa el modelo diagnostica mal
-exactamente dos. El reparto 8/14 **no estaba pre-registrado** (así consta en las limitaciones) y
+dos. El reparto 8/14 **no estaba pre-registrado** (así consta en las limitaciones) y
 habría sido 9/13 o 7/15 con un error menos o uno más.
 
-Y lo que de verdad coincide: en **las dos** particiones el modelo falla exactamente dos de las diez
+Y lo que de verdad coincide: en **las dos** particiones el modelo falla dos de las diez
 ventanas; en las dos falla **en las mismas dos condiciones** (termostato en calentamiento y
 encendido en autopista), aunque en sesiones distintas. Las dos abstenciones innecesarias son también
-los mismos dos casos anotados, `C01` y `C04`, pero **no por la misma causa**: en validación `C04` se
-abstuvo con confianza alta por cobertura insuficiente; en prueba, por las dos cosas a la vez.
+los mismos dos casos anotados (`C01` y `C04`) **por las mismas causas** en las dos particiones:
+`C01` por confianza insuficiente y `C04` por confianza baja y cobertura nula a la vez (en validación,
+confianza 0,462; en prueba, 0,490).
 
 **Qué no se puede afirmar de esa coincidencia.** Que el sistema se comporte igual en prueba que en
 validación. Con `n = 2` en ambos recuentos, la repetición es compatible con que el modelo falle
@@ -753,14 +778,14 @@ E19: explicar siempre que la confianza calibrada alcance el umbral, sin mirar la
 
 **Qué podemos interpretar.** El criterio evaluado obtiene la falsa confianza de la política más
 conservadora (cero) reteniendo seis de las diez respuestas que la política conservadora perdería
-todas. Esa es la aportación: no es que evite la falsa confianza, que abstenerse siempre también lo
-hace; es que la evita **sin renunciar a responder**. La política de solo confianza retiene más
-respuestas, ocho de diez, pero explica en las catorce ejecuciones en que debía callar: lo que da el
-cero es la evidencia, no la confianza.
+todas. Esa es la aportación. Abstenerse siempre también evita la falsa confianza; lo propio del criterio
+es evitarla **sin renunciar a responder**. La política de solo confianza retiene más respuestas,
+ocho de diez, pero explica en las catorce ejecuciones en que debía callar. El cero lo da la
+evidencia y no la confianza.
 
 **Qué no podemos afirmar.** Que el criterio domine a las triviales en cualquier conjunto. Con estos
 denominadores, la comparación describe esta muestra. Y no se define aquí ningún criterio numérico de
-“cuánta cobertura justifica cuánta protección”: eso exigiría un modelo de coste que este trabajo no
+“cuántas respuestas justifican cuánta protección”: eso exigiría un modelo de coste que este trabajo no
 tiene."""),
     md("""\
 ## 14. Resultados negativos y limitaciones
@@ -771,7 +796,7 @@ tiene."""),
    que no permite estimarlo con precisión.
 2. **Dos diagnósticos incorrectos de diez** entre las ejecuciones con evidencia completa.
 3. **Nueve de las treinta y cinco salidas del redactor contienen una cifra que el verificador no
-   produjo** (`L-26`): cinco de las 26 abstenciones y cuatro de las 9 explicaciones, con 8 de sus 27
+   produjo** (`L-26`, la limitación declarada de cifras del texto sin verificar): cinco de las 26 abstenciones y cuatro de las 9 explicaciones, con 8 de sus 27
    afirmaciones afectadas (seis distintas sobre tres ventanas). Una primera auditoría dio siete
    porque agrupaba los números de cada caso; el guion distribuido `scripts/auditar_cifras_redactadas.py`
    agrupa por caso y reproduce el siete. Esa agrupación esconde dos abstenciones en las que el
@@ -789,7 +814,8 @@ tiene."""),
 5. **El reparto 8/14 no estaba pre-registrado.** La regla sí; el reparto que produjo, no.
 6. **La condición con distractor quedó fuera** de los casos elegibles, porque no medía lo que decía
    medir: dos de las tres tenían la misma configuración que la condición parcial. **Se rediseñó y se
-   ejecutó aparte el 13 de octubre de 2026**: seis abstenciones de seis, las seis por insuficiencia de
+   ejecutó aparte el 13 de octubre de 2026** (P1, el rediseño de la condición con distractor, con tres
+   situaciones construidas y seis ejecuciones): seis abstenciones de seis, las seis por insuficiencia de
    la evidencia y ninguna por confianza baja. Esa medición **no forma parte de E19**:
    `docs/experiments/P1_distractor_v2.md`.
 7. **El conjunto de prueba se abrió cinco veces**, no tres. Las tres de E19 (contando los dos intentos
@@ -799,7 +825,7 @@ tiene."""),
    lectura de identificadores, exposición de etiquetas, exposición de predicciones y utilización de
    resultados. En cuatro de las cinco hubo exposición de etiquetas y de predicciones. **No se afirma
    que el conjunto permanezca intacto.**
-8. **El adaptador del redactor se ajustó sobre ventanas de validación** (`L-23`). E19 mide sobre
+8. **El adaptador del redactor se ajustó sobre ventanas de validación** (limitación declarada `L-23`). E19 mide sobre
    prueba y su solape con los ejemplos de ajuste es **cero ventanas y cero sesiones**, de modo que sus
    cifras de redacción no están contaminadas por esa vía. Lo que sigue siendo cierto es que el
    adaptador no se ha reentrenado. El reentrenamiento está **detenido por memoria insuficiente**:
@@ -809,7 +835,7 @@ tiene."""),
    huellas se comprobaron desde un clon limpio contra las que el manifiesto congeló antes de abrirlo.
    Lo que no se distribuye son el corpus del manual, el índice documental y los pesos del adaptador;
    sin ellos, un tercero no puede repetir la medición. Aparte queda `synthetic_v3`, que **no** es
-   reconstruible (`L-25`) y del que no sale ninguna cifra de esta evaluación: de él salen la
+   reconstruible (limitación declarada `L-25`) y del que no sale ninguna cifra de esta evaluación: de él salen la
    comparación de volumen de E7 y el conjunto de evaluación independiente del redactor, sin ejecutar.
    Corregido el 13-10-2026: este punto decía que `synthetic_v3` era “el conjunto de esta evaluación”.
 10. **Todo es sintético.** La validez externa no está establecida.
@@ -825,7 +851,7 @@ Lo que E19 aporta a la pregunta de investigación es una respuesta acotada y ver
 criterio de suficiencia, sobre una partición que no se usó para fijar el criterio, no produjo ninguna explicación cuando
 debía callar (apartados 6 y 13).
 
-Dos cosas conviene subrayar sobre **cómo** se obtuvo, porque importan tanto como la cifra.
+Sobre **cómo** se obtuvo hay dos cosas que importan tanto como la cifra.
 
 **La primera es que las reglas se congelaron antes** de abrir el conjunto (apartado 2). La decisión
 esperada de cada caso se fijó con tres entradas que **no incluyen la salida del verificador**.
@@ -842,8 +868,9 @@ afirmar lo primero."""),
     md("""\
 ## 16. Conclusiones del experimento
 
-**Qué aprendimos.** Que el recorrido completo funciona de extremo a extremo sobre una partición que
-no se usó para fijar el criterio y que su criterio de suficiencia obtuvo la falsa confianza de la política más
+**Qué aprendimos.** Que el recorrido completo se ejecutó de extremo a extremo sobre una partición que
+no se usó para fijar el criterio (35 salidas con esquema válido y sin citas inventadas, nueve de
+ellas con alguna cifra ajena, `L-26`) y que su criterio de suficiencia obtuvo la falsa confianza de la política más
 conservadora sin renunciar a responder en seis de diez casos.
 
 **Qué hipótesis recibió apoyo.** La de PI.3, en los términos medidos y con el denominador declarado.
@@ -852,8 +879,8 @@ conservadora sin renunciar a responder en seis de diez casos.
 
 **Qué permanece sin demostrar.** Que la tasa de falsa confianza sea baja en población. Que el
 sistema rechace evidencia no pertinente en general (PI.4): el rediseño de la condición con
-distractor (P1, 13-10-2026, fuera de E19) da una respuesta acotada a tres casos construidos, sin
-estimar ninguna tasa.
+distractor (P1, 13-10-2026, fuera de E19) da una respuesta acotada a tres situaciones construidas y seis
+ejecuciones, sin estimar ninguna tasa.
 La validez externa de todo ello.
 
 **Cómo contribuye al TFM.** Es la única evaluación primaria sobre el conjunto de prueba y el cierre del

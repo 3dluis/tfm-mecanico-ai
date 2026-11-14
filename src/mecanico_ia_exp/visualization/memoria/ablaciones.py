@@ -78,6 +78,9 @@ def fig_ablaciones() -> Figure:
     estilo_para_impresion()
     fig, ejes = plt.subplots(2, 1, figsize=(ANCHO_DE_PAGINA, 5.6), sharex=True)
     y = np.arange(len(filas))
+    # Con el eje x compartido, el límite que fija el último panel recortaba las
+    # barras del primero (9 ejecuciones frente a 5): se fija uno común a los dos.
+    limite_x = max(max(f[2] for f in filas), max(f[4] for f in filas)) + 2.2
     # (a) falsa confianza · (b) abstención innecesaria. Qué es cada una lo dice
     # el pie de la figura, que es texto del documento.
     for letra, (eje, (indice_num, indice_den, color)) in zip(
@@ -93,7 +96,7 @@ def fig_ablaciones() -> Figure:
             eje.text(d + 0.2, i, f"{int(n)}/{int(d)}", va="center", fontsize=7.5)
         panel(eje, letra)
         eje.set_xlabel("ejecuciones (recuento)")
-        eje.set_xlim(0, max(denominadores) + 2.2)
+        eje.set_xlim(0, limite_x)
         eje.grid(visible=True, axis="x")
         eje.set_axisbelow(True)
     # Los dos paneles llevan sus etiquetas y se invierten los dos. Antes solo el

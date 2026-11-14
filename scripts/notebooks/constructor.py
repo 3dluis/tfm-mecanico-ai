@@ -24,6 +24,9 @@ from pathlib import Path
 from typing import Any
 
 RAIZ = Path(__file__).resolve().parents[2]
+
+#: Autor que figura en los metadatos de cada notebook.
+AUTOR = "Luis Daniel Diaz"
 DESTINO = RAIZ / "notebooks"
 
 #: Preámbulo común. Resuelve la raíz sin rutas absolutas y sin suponer desde
@@ -44,7 +47,7 @@ if str(RAIZ / "src") not in sys.path:
 
 try:
     from mecanico_ia_exp.notebooks import soporte
-except ModuleNotFoundError as error:  # pragma: no cover - solo fuera del repositorio
+except ModuleNotFoundError as error:
     raise SystemExit(
         f"No se encuentra el paquete del laboratorio desde {Path.cwd()}.\\n"
         "Abra Jupyter dentro del repositorio clonado, o instálelo con uv sync --extra nb."
@@ -93,6 +96,7 @@ def escribir(nombre: str, celdas: list[dict[str, Any]]) -> Path:
                 "name": "python3",
             },
             "language_info": {"name": "python", "version": "3.11"},
+            "authors": [{"name": AUTOR}],
         },
         "nbformat": 4,
         "nbformat_minor": 5,
