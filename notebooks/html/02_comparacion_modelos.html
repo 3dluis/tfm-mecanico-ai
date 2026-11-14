@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Notebook</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Modelos · Mecánico IA</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7793,8 +7793,180 @@ a.anchor-link {
     white-space: normal;
   }
 </style>
-<!-- End of mermaid configuration --></head>
-<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<!-- End of mermaid configuration --><style>
+:root {
+  --mi-tinta: #1f2328;
+  --mi-suave: #59636e;
+  --mi-fondo: #fbfaf7;
+  --mi-papel: #ffffff;
+  --mi-linea: #e3e0d8;
+  --mi-acento: #1f5f8b;
+  --mi-acento-claro: #e8f1f7;
+  --mi-aviso: #8a5a00;
+  --mi-aviso-claro: #fdf4e3;
+  --mi-ancho: 920px;
+  --mi-lateral: 270px;
+  --mi-cabecera: 56px;
+}
+html { scroll-padding-top: calc(var(--mi-cabecera) + 16px); }
+body.mi-doc {
+  background: var(--mi-fondo) !important;
+  color: var(--mi-tinta);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  margin: 0;
+}
+/* ---------------------------------------------------------------- cabecera */
+.mi-cabecera {
+  position: sticky; top: 0; z-index: 50;
+  height: var(--mi-cabecera);
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 24px;
+  background: #16324a; color: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .18);
+}
+.mi-marca { font-weight: 650; letter-spacing: .2px; white-space: nowrap; font-size: 15px; }
+.mi-nav { display: flex; gap: 4px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+.mi-nav a {
+  color: #cfe0ee; text-decoration: none; font-size: 13px; white-space: nowrap;
+  padding: 6px 10px; border-radius: 6px;
+}
+.mi-nav a:hover { background: rgba(255, 255, 255, .12); color: #fff; }
+.mi-nav a.mi-actual { background: #fff; color: #16324a; font-weight: 600; }
+.mi-boton {
+  border: 1px solid rgba(255, 255, 255, .45); background: transparent; color: #fff;
+  border-radius: 6px; padding: 6px 12px; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.mi-boton:hover { background: rgba(255, 255, 255, .12); }
+/* ------------------------------------------------------------------ índice */
+.mi-indice {
+  position: fixed; top: calc(var(--mi-cabecera) + 20px); left: 20px;
+  width: var(--mi-lateral); max-height: calc(100vh - var(--mi-cabecera) - 40px);
+  overflow-y: auto; font-size: 13px; line-height: 1.35;
+  padding: 14px 14px 14px 16px; background: var(--mi-papel);
+  border: 1px solid var(--mi-linea); border-radius: 10px;
+}
+.mi-indice h2 {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
+  color: var(--mi-suave); margin: 0 0 8px; border: 0; padding: 0;
+}
+.mi-indice a {
+  display: block; color: var(--mi-tinta); text-decoration: none;
+  padding: 4px 6px; border-radius: 5px; border-left: 2px solid transparent;
+}
+.mi-indice a.mi-n3 { padding-left: 18px; color: var(--mi-suave); font-size: 12px; }
+.mi-indice a:hover { background: var(--mi-acento-claro); }
+.mi-indice a.mi-activo {
+  border-left-color: var(--mi-acento); color: var(--mi-acento); font-weight: 600;
+  background: var(--mi-acento-claro);
+}
+/* ---------------------------------------------------------------- documento */
+body.mi-doc main, body.mi-doc .jp-Notebook {
+  max-width: var(--mi-ancho); margin: 28px auto 60px !important;
+  padding: 36px 48px !important; background: var(--mi-papel);
+  border: 1px solid var(--mi-linea); border-radius: 12px;
+  box-shadow: 0 2px 14px rgba(30, 30, 20, .05);
+}
+@media (min-width: 1300px) {
+  body.mi-doc main, body.mi-doc .jp-Notebook {
+    margin-left: calc(var(--mi-lateral) + 60px + max(0px, (100vw - var(--mi-lateral) - 60px
+      - var(--mi-ancho) - 40px) / 2)) !important;
+  }
+}
+@media (max-width: 1299px) { .mi-indice { display: none; } }
+.jp-Cell { padding: 2px 0 !important; }
+.jp-InputPrompt, .jp-OutputPrompt { display: none !important; }
+.jp-RenderedMarkdown {
+  font-size: 15.5px !important; line-height: 1.62 !important; color: var(--mi-tinta);
+}
+.jp-RenderedMarkdown h1 {
+  font-size: 30px !important; line-height: 1.2; margin: 6px 0 14px !important;
+  color: #16324a; letter-spacing: -.3px;
+}
+.jp-RenderedMarkdown h2 {
+  font-size: 21px !important; margin: 34px 0 10px !important; padding-bottom: 6px;
+  border-bottom: 2px solid var(--mi-linea); color: #16324a;
+}
+.jp-RenderedMarkdown h3 { font-size: 17px !important; margin: 22px 0 6px !important; }
+.jp-RenderedMarkdown a.anchor-link { display: none; }
+.jp-RenderedMarkdown p { margin: 0 0 12px !important; }
+.jp-RenderedMarkdown strong { color: #10202e; }
+.jp-RenderedMarkdown code {
+  background: #f1efe9; border-radius: 4px; padding: 1px 5px; font-size: .9em;
+}
+.jp-RenderedMarkdown blockquote {
+  margin: 14px 0; padding: 10px 16px; border-left: 4px solid var(--mi-aviso);
+  background: var(--mi-aviso-claro); border-radius: 0 8px 8px 0; color: var(--mi-tinta);
+}
+.jp-RenderedMarkdown hr { border: 0; border-top: 1px solid var(--mi-linea); margin: 26px 0; }
+/* tablas del texto y de las salidas */
+.jp-RenderedMarkdown table, .jp-RenderedHTMLCommon table {
+  border-collapse: collapse !important; width: auto; max-width: 100%;
+  font-size: 13.5px !important; margin: 10px 0 18px !important; display: block; overflow-x: auto;
+}
+.jp-RenderedMarkdown th, .jp-RenderedHTMLCommon th {
+  background: #eef2f5 !important; color: #16324a; font-weight: 600 !important;
+  text-align: left !important; padding: 7px 10px !important;
+  border-bottom: 2px solid #c9d3dc !important;
+}
+.jp-RenderedMarkdown td, .jp-RenderedHTMLCommon td {
+  padding: 6px 10px !important; border-bottom: 1px solid var(--mi-linea) !important;
+  text-align: left !important; vertical-align: top;
+}
+.jp-RenderedMarkdown tr:nth-child(even) td, .jp-RenderedHTMLCommon tr:nth-child(even) td {
+  background: #faf9f6 !important;
+}
+/* ficha del notebook: la primera tabla */
+.mi-ficha table td:first-child { white-space: nowrap; color: var(--mi-suave); width: 1%; }
+/* «En un minuto» y «Cómo leer este notebook» */
+.mi-caja { border-radius: 10px; padding: 2px 22px 8px; margin: 18px 0; }
+.mi-caja > h2, .mi-caja > h3 {
+  font-size: 13px !important; text-transform: uppercase; letter-spacing: .8px;
+  border: 0 !important; margin: 14px 0 6px !important; padding: 0 !important;
+}
+.mi-caja-minuto { background: var(--mi-acento-claro); border: 1px solid #c4dbea; }
+.mi-caja-minuto > h2, .mi-caja-minuto > h3 { color: var(--mi-acento) !important; }
+.mi-caja-minuto li { margin-bottom: 6px; }
+.mi-caja-leer { background: #f6f5f1; border: 1px solid var(--mi-linea); font-size: 14.5px; }
+.mi-caja-leer > h2, .mi-caja-leer > h3 { color: var(--mi-suave) !important; }
+/* código */
+.jp-CodeCell .jp-InputArea {
+  border: 1px solid var(--mi-linea); border-radius: 8px; overflow: hidden; margin: 6px 0;
+}
+.jp-CodeCell .jp-InputArea-editor, .jp-CodeCell .highlight {
+  background: #f6f5f1 !important; font-size: 12.5px !important;
+}
+.jp-OutputArea-output pre {
+  font-size: 12.5px !important; line-height: 1.45; background: #fcfcfb;
+  border-left: 3px solid #d5dde4; padding: 8px 12px !important; border-radius: 0 6px 6px 0;
+}
+.jp-OutputArea-output img {
+  display: block; margin: 10px auto; max-width: 100%; height: auto;
+  border: 1px solid var(--mi-linea); border-radius: 8px; background: #fff;
+}
+body.mi-sin-codigo .jp-CodeCell .jp-Cell-inputWrapper { display: none !important; }
+/* pie */
+.mi-pie {
+  max-width: var(--mi-ancho); margin: 0 auto 40px; color: var(--mi-suave); font-size: 12px;
+  text-align: center;
+}
+@media (min-width: 1300px) {
+  .mi-pie { margin-left: calc(var(--mi-lateral) + 60px + max(0px, (100vw - var(--mi-lateral)
+    - 60px - var(--mi-ancho) - 40px) / 2)); }
+}
+/* impresión */
+@media print {
+  .mi-cabecera, .mi-indice, .mi-boton { display: none !important; }
+  body.mi-doc { background: #fff !important; }
+  body.mi-doc main, body.mi-doc .jp-Notebook {
+    margin: 0 !important; padding: 0 !important; border: 0; box-shadow: none; max-width: none;
+  }
+  .jp-Cell { break-inside: avoid; }
+  .jp-RenderedMarkdown h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light"><header class="mi-cabecera"><span class="mi-marca">Mecánico IA · trabajo práctico del TFM</span><nav class="mi-nav" aria-label="Notebooks"><a href="00_introduccion.html">Introducción</a><a href="01_exploracion_obd.html">Datos OBD-II</a><a href="02_comparacion_modelos.html" class="mi-actual">Modelos</a><a href="03_analisis_e19.html">Evaluación final</a><a href="04_explicabilidad.html">Explicabilidad</a><a href="05_suficiencia_y_abstencion.html">Suficiencia</a><a href="06_expresion_del_fallo.html">Expresión del fallo</a></nav><button class="mi-boton" id="mi-boton-codigo" type="button">Ocultar código</button></header><aside class="mi-indice" aria-label="Índice"><h2>En este notebook</h2><div id="mi-indice-lista"></div></aside>
 <main>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c000">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7802,7 +7974,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Comparaci%C3%B3n-de-modelos:-bosque-aleatorio-frente-a-GRU-bidireccional">Comparación de modelos: bosque aleatorio frente a GRU bidireccional<a class="anchor-link" href="#Comparaci%C3%B3n-de-modelos:-bosque-aleatorio-frente-a-GRU-bidireccional">¶</a></h1><p><strong>Notebook</strong> <code>02_comparacion_modelos</code> · <strong>versión</strong> 1.0 · <strong>fecha</strong> 12 de octubre de 2026</p>
+<h1 id="Comparaci%C3%B3n-de-modelos:-bosque-aleatorio-frente-a-GRU-bidireccional">Comparación de modelos: bosque aleatorio frente a GRU bidireccional<a class="anchor-link" href="#Comparaci%C3%B3n-de-modelos:-bosque-aleatorio-frente-a-GRU-bidireccional">¶</a></h1><p><strong>Notebook</strong> <code>02_comparacion_modelos</code> · <strong>versión</strong> 1.1 · <strong>fecha</strong> 14 de noviembre de 2026</p>
 <table>
 <thead>
 <tr>
@@ -7814,6 +7986,10 @@ a.anchor-link {
 <tr>
 <td><strong>Experimentos</strong></td>
 <td>E6 (línea base tabular) y E7 (modelo temporal)</td>
+</tr>
+<tr>
+<td><strong>Modalidad</strong></td>
+<td>visualización de evidencia histórica</td>
 </tr>
 <tr>
 <td><strong>Conjunto</strong></td>
@@ -7829,7 +8005,7 @@ a.anchor-link {
 </tr>
 <tr>
 <td><strong>Pregunta de investigación</strong></td>
-<td>PI.1 — diagnóstico a partir del análisis contextual y longitudinal de OBD-II</td>
+<td>PI.1: diagnóstico a partir del análisis contextual y longitudinal de OBD-II</td>
 </tr>
 <tr>
 <td><strong>Evidencia original</strong></td>
@@ -7852,23 +8028,23 @@ del orden en <code>synthetic_v3</code> no se atribuye al volumen: ese conjunto s
 <h2 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h2><p><strong>Modalidad: visualización de evidencia histórica.</strong> Se leen registros y tablas versionados; no se
 reentrena nada. CPU, sin red, menos de un minuto.</p>
 <p><strong>La advertencia que gobierna todo el notebook.</strong> Se comparan <strong>dos recorridos completos, no dos
-arquitecturas</strong>: cambian a la vez la <strong>representación</strong> y el <strong>estimador</strong>, y ninguna diferencia
+arquitecturas</strong>: cambian a la vez la <strong>representación</strong> y el <strong>estimador</strong>. Ninguna diferencia
 puede atribuirse al contexto temporal (apartado 3). Es la razón por la que esa pregunta sigue
 abierta.</p>
 <ol>
 <li><strong>Introducción.</strong></li>
 <li><strong>Objetivo e hipótesis.</strong></li>
-<li><strong>Fundamento</strong> — representaciones y estimadores.</li>
+<li><strong>Fundamento:</strong> representaciones y estimadores.</li>
 <li><strong>Preparación del entorno.</strong></li>
 <li><strong>El conjunto y su partición.</strong></li>
-<li><strong>Metodología</strong> — asimetrías.</li>
+<li><strong>Metodología:</strong> asimetrías.</li>
 <li><strong>Resultados agregados.</strong></li>
 <li><strong>Resultados por condición.</strong></li>
-<li><strong>El termostato</strong> — un límite físico.</li>
-<li><strong>Matrices de confusión</strong> — hacia dónde van los errores.</li>
+<li><strong>El termostato:</strong> un límite del generador.</li>
+<li><strong>Matrices de confusión:</strong> hacia dónde van los errores.</li>
 <li><strong>Calibración.</strong></li>
 <li><strong>La forma de la calibración.</strong></li>
-<li><strong>Las cifras de <code>synthetic_v3</code></strong> — un confusor.</li>
+<li><strong>Las cifras de <code>synthetic_v3</code>:</strong> un confusor.</li>
 <li><strong>Resultados negativos y limitaciones.</strong></li>
 <li><strong>Discusión.</strong></li>
 <li><strong>Conclusiones.</strong></li>
@@ -7887,10 +8063,10 @@ abierta.</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="1.-Introducci%C3%B3n:-qu%C3%A9-motiva-esta-comparaci%C3%B3n">1. Introducción: qué motiva esta comparación<a class="anchor-link" href="#1.-Introducci%C3%B3n:-qu%C3%A9-motiva-esta-comparaci%C3%B3n">¶</a></h2><p>E6 estableció una línea base. Su informe dejó escrito un criterio <strong>antes</strong> de medir nada:</p>
 <blockquote>
-<p>«Si el modelo temporal no supera la línea base, su complejidad no está justificada.»</p>
+<p>“Si el modelo temporal no supera la línea base, su complejidad no está justificada.”</p>
 </blockquote>
-<p>Es un criterio pre-registrado y no retrospectivo, y es lo que da sentido a E7. La pregunta no era si
-una red recurrente funciona —funcionan—, sino si <strong>aporta algo</strong> sobre un bosque aleatorio
+<p>Es un criterio pre-registrado y no retrospectivo: es lo que da sentido a E7. La pregunta no era si
+una red recurrente funciona (funcionan), sino si <strong>aporta algo</strong> sobre un bosque aleatorio
 alimentado con descriptores de ventana, en este problema y con estos datos.</p>
 <p>Lo que no sabíamos antes de empezar:</p>
 <ol>
@@ -7910,12 +8086,12 @@ criterio de abstención.</li>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="2.-Objetivo-e-hip%C3%B3tesis">2. Objetivo e hipótesis<a class="anchor-link" href="#2.-Objetivo-e-hip%C3%B3tesis">¶</a></h2><p><strong>Objetivo.</strong> Medir si el recorrido secuencial supera al tabular en diagnóstico sobre ventanas de
-OBD-II, y caracterizar <strong>dónde</strong> difieren.</p>
+OBD-II y caracterizar <strong>dónde</strong> difieren.</p>
 <p><strong>Hipótesis pre-registrada (E6, antes de medir E7).</strong> El modelo temporal supera a la línea base en
 F1 macro sobre validación.</p>
 <p><strong>Variables observadas.</strong> F1 macro, exactitud, F1 por clase, matriz de confusión y error de
 calibración, todo sobre la misma partición de validación.</p>
-<p><strong>Criterio de evaluación.</strong> El de E6, citado arriba. No hay umbral de margen mínimo, y no se inventa uno ahora.</p>
+<p><strong>Criterio de evaluación.</strong> El de E6, citado arriba. No hay umbral de margen mínimo y no se inventa uno ahora.</p>
 <p><strong>Qué cuestionaría la hipótesis.</strong> Un F1 macro de la red igual o inferior al del bosque. Eso es lo
 que ocurrió.</p>
 </div>
@@ -7929,7 +8105,7 @@ que ocurrió.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="3.-Fundamento:-las-dos-representaciones-y-los-dos-estimadores">3. Fundamento: las dos representaciones y los dos estimadores<a class="anchor-link" href="#3.-Fundamento:-las-dos-representaciones-y-los-dos-estimadores">¶</a></h2><p>Esta sección permite leer el resto. Son cuatro cosas, no dos.</p>
-<h3 id="3.1-La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">3.1 La representación tabular: 139 descriptores de ventana<a class="anchor-link" href="#3.1-La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">¶</a></h3><p>Cada ventana de 120 segundos y 12 señales —1 440 valores— se resume en <strong>139 números</strong>:</p>
+<h3 id="3.1-La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">3.1 La representación tabular: 139 descriptores de ventana<a class="anchor-link" href="#3.1-La-representaci%C3%B3n-tabular:-139-descriptores-de-ventana">¶</a></h3><p>Cada ventana de 120 segundos y 12 señales (1 440 valores) se resume en <strong>139 números</strong>:</p>
 <table>
 <thead>
 <tr>
@@ -7967,17 +8143,17 @@ que ocurrió.</p>
 </tbody>
 </table>
 <p>Conviene fijarse en la tercera fila: <strong>la representación tabular no es estática</strong>. Setenta y dos de
-los 139 descriptores son dinámica dentro de la ventana —pendiente, autocorrelación, número de cruces,
-número de eventos—. Decir que el bosque «no ve el tiempo» sería inexacto: ve una descripción resumida
+los 139 descriptores son dinámica dentro de la ventana: pendiente, autocorrelación, número de cruces,
+número de eventos. Decir que el bosque “no ve el tiempo” sería inexacto: ve una descripción resumida
 de él. Lo que no ve es el <strong>orden</strong> de las muestras más allá de lo que esos resúmenes capturan.</p>
 <h3 id="3.2-La-representaci%C3%B3n-secuencial:-120-%C3%97-12-en-crudo">3.2 La representación secuencial: 120 × 12 en crudo<a class="anchor-link" href="#3.2-La-representaci%C3%B3n-secuencial:-120-%C3%97-12-en-crudo">¶</a></h3><p>La red recibe la matriz completa, normalizada señal a señal. No hay pérdida de información por
 resumen; el coste es que tiene que aprender qué mirar.</p>
 <h3 id="3.3-Bosque-aleatorio">3.3 Bosque aleatorio<a class="anchor-link" href="#3.3-Bosque-aleatorio">¶</a></h3><p>Cuatrocientos árboles, <code>class_weight="balanced"</code>, semilla 20260901. <em>Por qué este estimador como
-línea base:</em> tolera bien descriptores correlacionados —y aquí lo están mucho—, no necesita escalado,
+línea base:</em> tolera bien descriptores correlacionados (y aquí lo están mucho), no necesita escalado
 y con pocos cientos de ventanas es más estable que casi cualquier alternativa.</p>
 <h3 id="3.4-GRU-bidireccional">3.4 GRU bidireccional<a class="anchor-link" href="#3.4-GRU-bidireccional">¶</a></h3><p>19 014 parámetros. <em>Por qué bidireccional:</em> la ventana está completa cuando se clasifica, no llega en
 tiempo real, así que leerla en los dos sentidos es legítimo y permite que el estado final recoja
-información de todo el tramo. <em>Por qué GRU y no LSTM:</em> menos parámetros con desempeño comparable, y
+información de todo el tramo. <em>Por qué GRU y no LSTM:</em> menos parámetros con desempeño comparable;
 con ventanas de este tamaño la diferencia entre las dos arquitecturas no es lo que limita.</p>
 <h3 id="3.5-Por-qu%C3%A9-la-comparaci%C3%B3n-no-a%C3%ADsla-el-contexto-temporal">3.5 Por qué la comparación no aísla el contexto temporal<a class="anchor-link" href="#3.5-Por-qu%C3%A9-la-comparaci%C3%B3n-no-a%C3%ADsla-el-contexto-temporal">¶</a></h3><table>
 <thead>
@@ -8001,7 +8177,7 @@ con ventanas de este tamaño la diferencia entre las dos arquitecturas no es lo 
 </tbody>
 </table>
 <p>Las dos columnas cambian a la vez. Para atribuir una diferencia al contexto temporal haría falta
-mantener una fija y mover la otra —un diseño factorial— y eso <strong>no se hizo</strong> y no se propone hacer,
+mantener una fija y mover la otra (un diseño factorial) y eso <strong>no se hizo</strong> y no se propone hacer,
 porque ampliaría el alcance del trabajo. Lo que sí está diseñado, con el estimador fijo, es una
 escalera de ablación de la representación: <code>docs/diseno-pi1/07-ablacion-representacion.md</code>, <strong>no
 ejecutada</strong>.</p>
@@ -8044,7 +8220,7 @@ ejecutada</strong>.</p>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># pragma: no cover - solo fuera del repositorio</span>
     <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">"No se encuentra el paquete del laboratorio desde </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con «uv sync --extra nb»."</span>
+        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con uv sync --extra nb."</span>
     <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
 <span class="n">soporte</span><span class="o">.</span><span class="n">imprimir_entorno</span><span class="p">()</span>
@@ -8062,8 +8238,8 @@ ejecutada</strong>.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       1cdb8f6
-arbol        sucio
+commit       6c5324d
+arbol        limpio
 </pre>
 </div>
 </div>
@@ -8143,7 +8319,7 @@ mismo generador</strong>: sus cifras van <strong>marcadas</strong> en el apartad
 <span class="nb">print</span><span class="p">(</span><span class="n">resumen_particion</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"El conjunto de prueba permaneció CERRADO hasta E19, el 12 de octubre de 2026."</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"E6 y E7 se midieron sobre validación, y así se reportan."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"E6 y E7 se midieron sobre validación y así se reportan."</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8164,7 +8340,7 @@ train             48      392        66.7
 validation        12       98        16.7
 
 El conjunto de prueba permaneció CERRADO hasta E19, el 12 de octubre de 2026.
-E6 y E7 se midieron sobre validación, y así se reportan.
+E6 y E7 se midieron sobre validación y así se reportan.
 </pre>
 </div>
 </div>
@@ -8184,18 +8360,18 @@ E6 y E7 se midieron sobre validación, y así se reportan.
 <li>El reparto por sesión y el tamaño de ventana, fijados en E5 con su estudio.</li>
 <li>Las métricas que se publican.</li>
 </ul>
-<p><strong>Decisiones del procedimiento que hoy se reconocen como asimétricas</strong> —no eran decisiones
-exploratorias, pero condicionan la comparación y no estaban declaradas en su momento:</p>
+<p><strong>Decisiones del procedimiento que hoy se reconocen como asimétricas</strong> (no eran decisiones
+exploratorias, pero condicionan la comparación y no estaban declaradas en su momento):</p>
 <ol>
 <li><strong>La época de la red se elige mirando la misma validación sobre la que se reporta.</strong> El bosque no
 tiene paso de selección equivalente. La red llega a la medición habiendo elegido su mejor momento
-contra el conjunto que la mide; el bosque, no. La asimetría <strong>favorece a la red</strong>, y aun así la
+contra el conjunto que la mide; el bosque, no. La asimetría <strong>favorece a la red</strong>. Aun así, la
 red pierde, lo que hace el resultado más robusto de lo que sería al revés.</li>
 <li><strong>Ninguno de los dos calibra.</strong> Los dos reportan su error de calibración sobre <code>predict_proba</code> en
 crudo. La diferencia de ECE entre ellos no es, por tanto, una diferencia entre calibradores.</li>
 </ol>
 <p>Las dos se corrigen en el protocolo de PI.1, con tres particiones internas. Ese protocolo <strong>no se ha
-ejecutado</strong>, y cuando se ejecute escribirá con etiqueta propia sin sustituir estas cifras.</p>
+ejecutado</strong>; cuando se ejecute, escribirá con etiqueta propia sin sustituir estas cifras.</p>
 </div>
 </div>
 </div>
@@ -8416,8 +8592,9 @@ calibración la red sale algo mejor, 0,1317 frente a 0,1439.</p>
 <p><strong>Qué podemos interpretar.</strong> El criterio pre-registrado en E6 se resuelve en contra de la hipótesis:
 <strong>la complejidad añadida del modelo temporal no queda justificada en las condiciones evaluadas</strong>. Es
 un resultado negativo y se reporta como tal.</p>
-<p>Que los dos superen a la clase mayoritaria por un orden de magnitud sí responde a lo que PI.1 pide:
-el diagnóstico a partir de ventanas de OBD-II es posible con margen amplio.</p>
+<p>Que los dos superen a la clase mayoritaria por un orden de magnitud en F1 macro sí responde a lo
+que PI.1 pide. Ese suelo es artificialmente bajo, porque la mayoritaria solo acierta una clase; en
+exactitud la distancia es menor y sigue siendo amplia: 0,286 frente a 0,878 del bosque.</p>
 <p><strong>Qué no podemos afirmar.</strong></p>
 <ol>
 <li><strong>Que la red sea peor arquitectura.</strong> Lo medido es un recorrido completo contra otro (apartado 3).</li>
@@ -8599,11 +8776,11 @@ porque los nombres de las condiciones son largos y en vertical no se leen.
 <p><strong>Qué muestra.</strong> La red pierde en cinco de las seis condiciones y gana en una: el <strong>termostato
 bloqueado</strong>, 0,8148 frente a 0,7826, una diferencia de +0,032. Las pérdidas mayores están en el
 fallo de encendido (−0,167) y en la clase sin fallo (−0,054).</p>
-<p><strong>Qué podemos interpretar.</strong> Que la métrica agregada esconde comportamientos distintos, y que la
+<p><strong>Qué podemos interpretar.</strong> Que la métrica agregada esconde comportamientos distintos y que la
 condición donde la red gana es precisamente aquella cuya firma es temporal en un sentido fuerte:
-«algo que debería subir y no sube».</p>
-<p><strong>Qué no podemos afirmar, y aquí es donde hay que tener más cuidado que en ninguna otra parte del
-trabajo.</strong> La tentación es leer esa única victoria como evidencia de que el contexto temporal
+“algo que debería subir y no sube”.</p>
+<p><strong>Qué no podemos afirmar (aquí es donde hay que tener más cuidado que en ninguna otra parte del
+trabajo).</strong> La tentación es leer esa única victoria como evidencia de que el contexto temporal
 aporta. No lo es, por cuatro razones acumulativas:</p>
 <ol>
 <li>Es <strong>+0,032 sobre 14 ventanas</strong> de validación. Una sola ventana cambiada mueve la cifra mucho más
@@ -8611,16 +8788,16 @@ que eso.</li>
 <li>Es <strong>una sola ejecución</strong>, sin repeticiones ni intervalo.</li>
 <li>Los dos recorridos difieren en <strong>representación y estimador</strong> a la vez.</li>
 <li>Hay una <strong>explicación alternativa medida</strong>: el fallo del termostato no altera la trayectoria
-mientras el refrigerante no supera su tope, y en calentamiento eso deja 32 de 45 ventanas
-etiquetadas sin ninguna señal observable. Los errores de los dos modelos en esta clase podrían
-concentrarse ahí, y entonces la diferencia mediría cómo cada uno trata ventanas <strong>sin
+mientras el refrigerante no supera su tope; en la sesión de calentamiento de validación, eso
+deja cinco de sus siete ventanas sin ninguna señal (notebook 06, apartado 8). Los errores de los dos modelos en esta clase podrían
+concentrarse ahí; entonces, la diferencia mediría cómo cada uno trata ventanas <strong>sin
 información</strong>, que no es lo mismo que medir sensibilidad temporal.</li>
 </ol>
-<p>El cruce que distinguiría las dos explicaciones —predicción por ventana contra expresión por
-ventana— está diseñado y <strong>no ejecutado</strong>: <code>docs/diseno-pi1/08-analisis-por-fallo.md</code>.</p>
+<p>El cruce que distinguiría las dos explicaciones (predicción por ventana contra expresión por
+ventana) está diseñado y <strong>no ejecutado</strong>: <code>docs/diseno-pi1/08-analisis-por-fallo.md</code>.</p>
 <p>Y una observación de signo contrario: la red pierde estrepitosamente en
-el <strong>fallo de encendido</strong>, que es la otra condición con estructura temporal marcada —episodios
-breves—. Si la ventaja de la red viniera de su capacidad de modelar el tiempo, cabría esperar que
+el <strong>fallo de encendido</strong>, que es la otra condición con estructura temporal marcada (episodios
+breves). Si la ventaja de la red viniera de su capacidad de modelar el tiempo, cabría esperar que
 ganara también ahí. No lo hace.</p>
 </div>
 </div>
@@ -8632,10 +8809,10 @@ ganara también ahí. No lo hace.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-El-termostato:-un-l%C3%ADmite-f%C3%ADsico,-no-un-fallo-de-aprendizaje">9. El termostato: un límite físico, no un fallo de aprendizaje<a class="anchor-link" href="#9.-El-termostato:-un-l%C3%ADmite-f%C3%ADsico,-no-un-fallo-de-aprendizaje">¶</a></h2><p><strong>Objetivo de este análisis.</strong> Mirar de cerca <strong>por qué</strong> el bosque falla en el termostato, porque
+<h2 id="9.-El-termostato:-un-l%C3%ADmite-del-generador,-no-un-fallo-de-aprendizaje">9. El termostato: un límite del generador, no un fallo de aprendizaje<a class="anchor-link" href="#9.-El-termostato:-un-l%C3%ADmite-del-generador,-no-un-fallo-de-aprendizaje">¶</a></h2><p><strong>Objetivo de este análisis.</strong> Mirar de cerca <strong>por qué</strong> el bosque falla en el termostato, porque
 la respuesta no es la que se espera de un modelo que falla. La expresión del fallo en la
 señal, ventana a ventana, se mide en el notebook 06.</p>
-<p><strong>Qué es esta figura, y de cuándo.</strong> Es un <strong>artefacto histórico</strong>: se produjo durante la ejecución
+<p><strong>Qué es esta figura y de cuándo.</strong> Es un <strong>artefacto histórico</strong>: se produjo durante la ejecución
 de E6 y conserva la predicción <strong>ventana a ventana</strong>, que el registro guardado de E6 no almacena. No
 se puede regenerar hoy: reproducirla exigiría reejecutar el modelo conservando la predicción de cada
 ventana, lo que convertiría una figura en un experimento nuevo. Se muestra tal como se publicó.</p>
@@ -8681,17 +8858,16 @@ ventana, lo que convertiría una figura en un experimento nuevo. Se muestra tal 
 temperatura media del refrigerante y señalando cuáles acertó el modelo. Las <strong>cinco no detectadas</strong>
 están todas por debajo del techo de 71 °C que el fallo impone; las nueve detectadas se agrupan junto
 a él.</p>
-<p><strong>Qué podemos interpretar.</strong> Que esas cinco ventanas <strong>no contienen el fallo de forma observable</strong>:
-mientras el motor no habría superado por sí mismo la temperatura a la que la avería lo limita, la
-señal averiada es idéntica a la sana. No es que el modelo no sepa verlas; es que no hay nada que
-ver. La respuesta correcta del sistema en esas ventanas es abstenerse, y el caso no hubo que
-fabricarlo.</p>
+<p><strong>Qué podemos interpretar.</strong> Solo una coincidencia de recuentos: cinco ventanas falladas y cinco
+ventanas sin señal del fallo. Que la señal averiada sea idéntica a la sana mientras el motor no
+alcanza el tope es una propiedad del <strong>generador</strong>, tal como la ficha del fallo la declara; no de
+los termostatos reales. Su medición ventana a ventana está en el notebook 06, apartado 8.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que las cinco ventanas sin señal sean exactamente las cinco falladas.
 Como los registros de E6 no guardan la predicción por ventana, la coincidencia de los dos recuentos
 es <strong>aritmética y no una identidad medida</strong>.</p>
 <p><strong>Relación con la hipótesis.</strong> Separa dos cosas que una tasa de acierto confunde: la etiqueta de un
 caso y la evidencia disponible en él. Es la misma distinción que el verificador de suficiencia
-aplica después sobre la evidencia documental, y por eso importa para PI.1 y para PI.3.</p>
+aplica después sobre la evidencia documental; por eso importa para PI.1 y para PI.3.</p>
 </div>
 </div>
 </div>
@@ -8703,7 +8879,7 @@ aplica después sobre la evidencia documental, y por eso importa para PI.1 y par
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="10.-Matrices-de-confusi%C3%B3n:-qu%C3%A9-tipo-de-error-comete-cada-uno">10. Matrices de confusión: qué tipo de error comete cada uno<a class="anchor-link" href="#10.-Matrices-de-confusi%C3%B3n:-qu%C3%A9-tipo-de-error-comete-cada-uno">¶</a></h2><p><strong>Qué queremos investigar.</strong> No cuántos errores, sino <strong>hacia dónde</strong> van. En diagnóstico no es lo
-mismo decir «no hay fallo» cuando lo hay que confundir un fallo con otro: lo segundo manda al
+mismo decir “no hay fallo” cuando lo hay que confundir un fallo con otro: lo segundo manda al
 mecánico a desmontar la pieza equivocada.</p>
 <p><strong>Por qué un mapa de calor y no una tabla.</strong> Son dos matrices de 6 × 6; los bloques se ven de un
 vistazo y se comparan entre sí, que es lo que interesa.</p>
@@ -8776,7 +8952,7 @@ F05_misfire                    7                0              0                
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Dos preguntas concretas sobre la estructura del error, respondidas con las</span>
-<span class="c1"># matrices: ¿cuántos errores van hacia «sin fallo» y cuántos cruzan de un fallo</span>
+<span class="c1"># matrices: ¿cuántos errores van a la clase sin fallo y cuántos cruzan de un fallo</span>
 <span class="c1"># a otro? La segunda es la que importa en un taller.</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">estructura_del_error</span><span class="p">(</span><span class="n">matriz</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">nombre</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span>
     <span class="n">total</span> <span class="o">=</span> <span class="n">matriz</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -8877,14 +9053,14 @@ F05_misfire                    7                0              0                
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> El bosque concentra sus errores en la omisión: casi todos van a «sin fallo». La red
-reparte más, y genera algún diagnóstico cruzado que el bosque no genera.</p>
+<p><strong>Qué muestra.</strong> El bosque concentra sus errores en la omisión: casi todos van a <em>sin fallo</em>. La red
+reparte más y genera algún diagnóstico cruzado que el bosque no genera.</p>
 <p><strong>Qué podemos interpretar.</strong> Para el uso que este trabajo persigue, <strong>la estructura del error del
 bosque es preferible a la de la red</strong>, con independencia del F1. Un error por omisión deja el
 problema sin diagnosticar; un diagnóstico cruzado produce una hipótesis <strong>confiada y equivocada</strong>,
 que es el modo de fallo que todo el criterio de suficiencia existe para evitar. Que el bosque falle
-«hacia abajo» no es una virtud suya: es consecuencia de que las clases difíciles carecen de señal en
-parte de sus ventanas, y la clase sin fallo es la respuesta por defecto cuando no se ve nada.</p>
+“hacia abajo” no es una virtud suya: es consecuencia de que las clases difíciles carecen de señal en
+parte de sus ventanas y la clase sin fallo es la respuesta por defecto cuando no se ve nada.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que la estructura del error del bosque sea benigna <strong>en general</strong>: vale
 para este conjunto y esta partición, con 98 ventanas. Con otro reparto de clases, o
 con fallos que compartieran firma, la estructura podría ser otra. Tampoco se puede afirmar nada
@@ -8994,7 +9170,7 @@ fallen mucho, si fallan en direcciones opuestas.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Objetivo del análisis.</strong> Comprobar si la confianza que el modelo declara coincide con el acierto
-que obtiene, y <strong>en qué dirección</strong> se desvía si no coincide. La dirección decide qué habría pasado
+que obtiene y <strong>en qué dirección</strong> se desvía si no coincide. La dirección decide qué habría pasado
 de haber puesto el umbral del verificador sobre la probabilidad cruda.</p>
 <p><strong>Datos y metodología.</strong> Las 98 ventanas de validación de <code>synthetic_v2</code>, con la confianza declarada
 por el bosque antes y después de calibrar por regresión isotónica ajustada con validación cruzada
@@ -9048,26 +9224,28 @@ registradas.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <blockquote>
-<p><strong>Corrección del 13 de octubre de 2026.</strong> Esta figura se titulaba «Los dos prometen más de lo que
-cumplen» y el párrafo siguiente decía que los dos modelos caen por debajo de la diagonal. Es falso
-para el bosque, y lo contrario de lo que el registro guarda. El error se detectó al verificar la
-procedencia de las figuras candidatas a entrar en la memoria, y el capítulo 5 no lo heredó: su
+<p><strong>Corrección del 13 de octubre de 2026.</strong> Esta figura se titulaba “Los dos prometen más de lo que
+cumplen” y el párrafo siguiente decía que los dos modelos caen por debajo de la diagonal. Es falso
+para el bosque y lo contrario de lo que el registro guarda. El error se detectó al verificar la
+procedencia de las figuras candidatas a entrar en la memoria. El capítulo 5 no lo heredó: su
 redacción siempre dijo que el modelo estaba infraconfiado.</p>
 </blockquote>
-<p><strong>Qué muestra.</strong> El bosque queda <strong>por encima</strong> de la diagonal: acierta el 87,8 % de las ventanas
-declarando una confianza media de 0,738, de modo que <strong>promete menos de lo que cumple</strong>. Su sesgo,
-que es la confianza media menos el acierto, vale −0,1395. La red queda justo por debajo, con un
-sesgo de +0,0070: en agregado está prácticamente centrada. El error de calibración esperado, en
-cambio, es alto y parecido en los dos, 0,1439 y 0,1317.</p>
-<p><strong>Qué podemos interpretar.</strong> Que las dos cifras miden cosas distintas, como se definió arriba. Que
-la red tenga un sesgo casi nulo y a la vez un ECE de
-0,1317 significa que sus tramos fallan en direcciones opuestas y se cancelan al promediar. Ninguno
-de los dos, por tanto, puede usarse en crudo como criterio de abstención, que es la razón por la que
-el recorrido de diagnóstico <strong>calibra antes de decidir</strong>. Y en el caso del bosque la dirección
-importa además por sí misma: un umbral sobre la confianza cruda habría hecho que el sistema se
-abstuviera de más de la cuenta, y eso habría parecido prudencia cuando era mala medición.</p>
-<p><strong>Qué no podemos afirmar.</strong> Que la red esté mejor calibrada <strong>que el bosque calibrado</strong>. Tampoco que el bosque esté bien calibrado porque su sesgo
-sea negativo: un ECE de 0,1439 dice que los tramos fallan, y el signo solo dice hacia dónde fallan
+<p><strong>Qué muestra.</strong> Dos puntos, los dos del bosque (<code>E15_suficiencia.json</code>, campo <code>calibration</code>). Sin
+calibrar queda <strong>por encima</strong> de la diagonal: acierta el 87,8 % de las ventanas declarando una
+confianza media de 0,738, de modo que <strong>promete menos de lo que cumple</strong>; su sesgo, la confianza
+media menos el acierto, vale −0,1395, con un ECE de 0,1439. Calibrado, el acierto no cambia y la
+confianza media sube a 0,886: queda justo por debajo de la diagonal, con sesgo +0,0089 y ECE 0,0854.
+La red no está en la figura; sus cifras, sin calibrar, son las de la tabla anterior: sesgo +0,0070
+y ECE 0,1317.</p>
+<p><strong>Qué podemos interpretar.</strong> Que el sesgo y el ECE miden cosas distintas, como se definió arriba.
+Que la red tenga un sesgo casi nulo y a la vez un ECE de 0,1317 significa que sus tramos fallan en
+direcciones opuestas y se cancelan al promediar. Ninguno de los dos modelos en crudo puede usarse,
+por tanto, como criterio de abstención, que es la razón por la que el recorrido de diagnóstico
+<strong>calibra antes de decidir</strong>. Y en el caso del bosque la dirección importa además por sí misma: un
+umbral sobre la confianza cruda habría hecho que el sistema se abstuviera de más de la cuenta. Eso
+habría parecido prudencia cuando era mala medición.</p>
+<p><strong>Qué no podemos afirmar.</strong> Que la red esté mejor calibrada <strong>que el bosque calibrado</strong>: la red no
+se calibró. Tampoco que el bosque sin calibrar esté bien calibrado porque su sesgo sea negativo: un ECE de 0,1439 dice que los tramos fallan; el signo solo dice hacia dónde fallan
 en promedio. Tampoco que el ECE sea estable: con diez tramos y 98 ventanas, cada tramo contiene muy
 pocas predicciones y la cifra es frágil. Y un solo punto por modelo no muestra en qué
 tramos se concentra el error, que es lo que más importaría. Los registros de E6 y E7 <strong>no guardan la confianza por ventana</strong>, de modo que un
@@ -9348,19 +9526,24 @@ centésimas es suma de enteros y no pierde exactitud.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> Los cuatro tramos por encima de 0,80 reúnen <strong>81 de las 98 ventanas</strong> y quedan
-sobre la diagonal o por encima de ella: donde el modelo opera, el calibrado sigue prometiendo algo
-menos de lo que cumple. Por debajo de 0,80 hay siete tramos con cuatro ventanas o menos, cuya
-proporción salta entre 0 y 1 porque está calculada sobre una o dos observaciones.</p>
+<p><strong>Qué muestra.</strong> Los cuatro tramos por encima de 0,80 reúnen <strong>81 de las 98 ventanas</strong>. Los dos
+inferiores (0,80–0,90, 21 ventanas) aciertan todas y quedan por encima de la diagonal. Los dos
+superiores (0,90–1,00, <strong>60 ventanas</strong>) aciertan 0,864 y 0,947 y quedan <strong>ligeramente por debajo</strong>:
+donde se concentran las predicciones, el calibrado promete unos pocos puntos más de lo que cumple.
+Por debajo de 0,80 hay siete tramos con cuatro ventanas o menos, cuya proporción salta entre 0 y 1
+porque está calculada sobre una o dos observaciones.</p>
 <p><strong>Qué podemos interpretar.</strong> Que el umbral de suficiencia, 0,79, cae justo en la frontera entre la
 zona poblada y la zona vacía de la distribución de confianza. Eso es lo que hace defendible una
-abstención por confianza baja: por encima del umbral el instrumento está calibrado, y por debajo no
-hay observaciones suficientes para afirmar nada sobre él.</p>
+abstención por confianza baja: por encima del umbral el desvío es de pocos puntos y en el sentido
+de prometer algo más de lo que se cumple; por debajo, no hay observaciones suficientes para afirmar
+nada. Por eso la confianza alta no basta para explicar: en E19, los dos diagnósticos erróneos con
+evidencia completa tenían confianza 0,908 y 0,966 y los paró la cobertura, no la confianza
+(notebook <code>03_analisis_e19</code>, apartado 10).</p>
 <p><strong>Qué no podemos afirmar.</strong> Tres cosas. La reconstrucción <strong>no conserva la confianza media dentro
 de cada tramo</strong>: solo sus bordes, de modo que cada barra ocupa su tramo y no se sitúa en un punto.
 Solo existe para la confianza <strong>calibrada</strong>; la anterior a calibrar no se guardó por ventana y su
 diagrama no puede dibujarse. Y <strong>de aquí no sale un error de calibración esperado</strong>: agrupar de otro
-modo da otro número, y el que vale sigue siendo el del registro, calculado sobre diez tramos. Poner
+modo da otro número. El que vale sigue siendo el del registro, calculado sobre diez tramos. Poner
 los dos juntos invitaría a leer una corrección donde solo hay otro agrupamiento.</p>
 </div>
 </div>
@@ -9372,7 +9555,7 @@ los dos juntos invitaría a leer una corrección donde solo hay otro agrupamient
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="13.-Las-cifras-de-synthetic_v3,-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">13. Las cifras de <code>synthetic_v3</code>, y por qué no cierran la cuestión<a class="anchor-link" href="#13.-Las-cifras-de-synthetic_v3,-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">¶</a></h2><p>El informe de E7 publicó también resultados sobre <code>synthetic_v3</code>, con el triple de sesiones, y
+<h2 id="13.-Las-cifras-de-synthetic_v3-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">13. Las cifras de <code>synthetic_v3</code> y por qué no cierran la cuestión<a class="anchor-link" href="#13.-Las-cifras-de-synthetic_v3-y-por-qu%C3%A9-no-cierran-la-cuesti%C3%B3n">¶</a></h2><p>El informe de E7 publicó también resultados sobre <code>synthetic_v3</code> (con el triple de sesiones) y
 concluyó que el límite era el volumen de datos. <strong>Esa conclusión quedó retirada el 12 de octubre de
 2026.</strong> Las cifras se muestran porque forman parte del historial; la lectura que se hacía de ellas,
 no.</p>
@@ -9493,8 +9676,8 @@ no.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Objetivo del análisis.</strong> Situar juntas las cuatro cifras de F1 macro de validación —dos modelos
-por dos conjuntos, leídas tal como se guardaron— para que se vea por qué la comparación no decide
+<p><strong>Objetivo del análisis.</strong> Situar juntas las cuatro cifras de F1 macro de validación (dos modelos
+por dos conjuntos, leídas tal como se guardaron) para que se vea por qué la comparación no decide
 nada.</p>
 </div>
 </div>
@@ -9510,7 +9693,7 @@ nada.</p>
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.visualization.memoria</span><span class="w"> </span><span class="kn">import</span> <span class="n">fig_confusor_de_volumen</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">fig_confusor_de_volumen</span><span class="p">()</span>
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB02-05_confusor_volumen"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"02_comparacion_modelos"</span><span class="p">)</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB02-06_confusor_volumen"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"02_comparacion_modelos"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -9524,7 +9707,7 @@ nada.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/02_comparacion_modelos/FIG-NB02-05_confusor_volumen.png y FIG-NB02-05_confusor_volumen.svg
+<pre>exportada: notebooks/salida/02_comparacion_modelos/FIG-NB02-06_confusor_volumen.png y FIG-NB02-06_confusor_volumen.svg
 </pre>
 </div>
 </div>
@@ -9546,21 +9729,21 @@ nada.</p>
 <p><strong>Qué muestra.</strong> Con <code>synthetic_v3</code> el orden se invierte: la red pasa de perder por 0,056 a ganar
 por 0,012.</p>
 <p><strong>Qué podemos interpretar.</strong> Que algo cambia entre los dos conjuntos. Nada más que eso.</p>
-<p><strong>Qué no podemos afirmar, y es el punto entero de esta sección.</strong> Que ese algo sea el volumen.
+<p><strong>Qué no podemos afirmar (es el punto entero de esta sección).</strong> Que ese algo sea el volumen.
 <code>synthetic_v3</code> se generó el 1 de septiembre, <strong>antes</strong> de que las constantes del motor se calibraran
-contra el manual, y <code>synthetic_v2</code> el 14, después. Entre las dos columnas cambian el número de
-sesiones <strong>y el fenómeno simulado</strong>: el ralentí pasa de 820 rpm —un valor sin respaldo documental,
-que la calibración retiró— a 690, dentro del rango 640–740 que el manual documenta para este motor,
-y el avance de encendido cambia en la misma proporción. La constante <code>GENERATOR_VERSION</code> valió
+contra el manual; <code>synthetic_v2</code>, el 14, después. Entre las dos columnas cambian el número de
+sesiones <strong>y el fenómeno simulado</strong>: el ralentí pasa de 820 rpm (un valor sin respaldo documental,
+que la calibración retiró) a 690, dentro del rango 640–740 que el manual documenta para este motor;
+el avance de encendido cambia en la misma proporción. La constante <code>GENERATOR_VERSION</code> valió
 <code>"1.0.0"</code> en los dos casos y no los distingue, que es por lo que la diferencia pasó desapercibida
 durante semanas.</p>
 <p>Esto es un <strong>confusor</strong>, no un matiz. Con dos variables moviéndose a la vez y dos puntos de medida,
-el experimento no tiene grados de libertad para separarlas. La conclusión «el límite era el volumen
-de datos» quedó marcada <code>SUPERSEDED</code> en el informe de E7, con su texto conservado, y la pregunta
+el experimento no tiene grados de libertad para separarlas. La conclusión “el límite era el volumen
+de datos” quedó marcada <code>SUPERSEDED</code> en el informe de E7, con su texto conservado. La pregunta
 volvió a estar abierta.</p>
 <p>La forma de responderla sin ese confusor es medir la curva de volumen <strong>dentro de un solo conjunto</strong>,
 con subconjuntos anidados de entrenamiento y validación fija. Está diseñada en
-<code>docs/diseno-pi1/04-subconjuntos-anidados.md</code>, con cuatro puntos y cinco semillas, y <strong>no se ha
+<code>docs/diseno-pi1/04-subconjuntos-anidados.md</code>, con cuatro puntos y cinco semillas; <strong>no se ha
 ejecutado</strong>. Una advertencia que ese diseño ya incorpora: su punto más alto son 132 sesiones de
 entrenamiento, que son <strong>exactamente</strong> las de <code>synthetic_v3</code>. La curva <strong>no amplía</strong> el volumen ya
 explorado; lo reproduce con el generador calibrado.</p>
@@ -9582,19 +9765,19 @@ base: −0,0558 en F1 macro.</li>
 del generador.</li>
 <li><strong>La corrección sobre el fallo de encendido también quedó retirada</strong>, por la misma causa: se
 apoyaba en la misma comparación.</li>
-<li><strong>Las dos cifras de temperatura del termostato que circulaban —70,7 y 54,3 °C— no tienen
+<li><strong>Las dos cifras de temperatura del termostato que circulaban (70,7 y 54,3 °C) no tienen
 registro.</strong> Se calcularon durante el análisis y no se persistieron; están marcadas como no
 utilizables desde el 12 de octubre de 2026.</li>
 <li><strong>Ninguno de los dos modelos está bien calibrado</strong> sin calibrar: el error por tramos ronda
-0,13–0,14 en los dos, en sentidos distintos: el bosque <strong>promete menos de lo que cumple</strong> —sesgo
-−0,1395— y la red está casi centrada, +0,0070, con tramos que se cancelan.</li>
+0,13–0,14 en los dos, en sentidos distintos: el bosque <strong>promete menos de lo que cumple</strong> (sesgo
+−0,1395) y la red está casi centrada, +0,0070, con tramos que se cancelan.</li>
 <li><strong>La red genera diagnósticos cruzados que el bosque no genera</strong>, lo que para este trabajo es el
 modo de fallo más costoso.</li>
 </ol>
 <h3 id="14.2-Limitaciones">14.2 Limitaciones<a class="anchor-link" href="#14.2-Limitaciones">¶</a></h3><p>Además de comparar dos recorridos y no dos arquitecturas (apartado 3):</p>
 <ol>
 <li><strong>Una sola ejecución por celda.</strong> No hay repeticiones con semillas distintas, ni intervalos, ni
-contraste estadístico, y no se afirma significación en ningún punto. El diseño con cinco semillas
+contraste estadístico; no se afirma significación en ningún punto. El diseño con cinco semillas
 está en <code>docs/diseno-pi1/06-plan-replicas.md</code> y no se ha ejecutado.</li>
 <li><strong>Procedimiento asimétrico</strong>: época elegida sobre validación y ningún modelo calibrado
 (apartado 6).</li>
@@ -9609,27 +9792,28 @@ está en <code>docs/diseno-pi1/06-plan-replicas.md</code> y no se ha ejecutado.<
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="15.-Discusi%C3%B3n">15. Discusión<a class="anchor-link" href="#15.-Discusi%C3%B3n">¶</a></h2><p>El resultado de E7 se suele resumir como «la red no funcionó». Es un resumen pobre y conviene
+<h2 id="15.-Discusi%C3%B3n">15. Discusión<a class="anchor-link" href="#15.-Discusi%C3%B3n">¶</a></h2><p>El resultado de E7 se suele resumir como “la red no funcionó”. Es un resumen pobre y conviene
 desarmarlo, porque lo que el experimento enseña está en otro sitio.</p>
 <p><strong>Primero, el criterio funcionó.</strong> E6 dejó escrito, antes de medir, qué resultado haría injustificada
 la complejidad del modelo temporal. Cuando el resultado llegó, el criterio ya estaba fijado y no
 hubo que decidir si 0,056 era mucho o poco. Eso es lo que distingue un resultado negativo de una
 racionalización posterior.</p>
-<p><strong>Segundo, la explicación inicial era más débil que el resultado.</strong> El resultado —la red no supera al
-bosque— se sostiene. La explicación —faltaban datos— no, y tardó seis semanas en caer, hasta que
+<p><strong>Segundo, la explicación inicial era más débil que el resultado.</strong> El resultado, que la red no supera al
+bosque, se sostiene. La explicación, que faltaban datos, no. Tardó seis semanas en caer, hasta que
 alguien comparó las fechas de generación de los dos conjuntos. La diferencia entre las dos cosas es
 instructiva: un resultado negativo bien medido es robusto; una explicación cómoda de un resultado
-negativo es frágil, y precisamente porque es cómoda nadie la examina.</p>
+negativo es frágil: precisamente porque es cómoda, nadie la examina.</p>
 <p><strong>Tercero, lo que la comparación no puede decidir sigue sin decidirse.</strong> La pregunta que el tutor
-formuló —en qué tipos de fallo el contexto temporal aporta señal diagnóstica adicional y en cuáles
-no— no se responde con estos dos recorridos, por mucho que la victoria de la red en el termostato
+formuló (en qué tipos de fallo el contexto temporal aporta señal diagnóstica adicional y en cuáles
+no) no se responde con estos dos recorridos, por mucho que la victoria de la red en el termostato
 parezca sugerirla. Ese encaje aparente es justamente la clase de evidencia que conviene mirar dos
-veces: coincide con lo que se esperaba encontrar.</p>
+veces: coincide con lo que se esperaba encontrar. Y lo que limita al termostato es el generador, no
+la física de un motor real (apartado 9).</p>
 <p><strong>Cómo encaja con el resto del trabajo.</strong> El bosque quedó como modelo de diagnóstico del recorrido
 completo. Sobre el conjunto de prueba, en E19, dio 0,836 de F1 macro (0,8469 de exactitud),
-frente a los 0,8788 de validación. Que su error sea mayoritariamente por omisión, y no cruzado, es lo que hace viable el
-criterio de suficiencia: el sistema se enfrenta sobre todo a «no veo nada» y no a «veo otra cosa con
-confianza».</p>
+frente a los 0,8788 de validación. Que su error sea mayoritariamente por omisión y no cruzado es lo que hace viable el
+criterio de suficiencia: el sistema se enfrenta sobre todo a “no veo nada” y no a “veo otra cosa con
+confianza”.</p>
 </div>
 </div>
 </div>
@@ -9640,9 +9824,10 @@ confianza».</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="16.-Conclusiones">16. Conclusiones<a class="anchor-link" href="#16.-Conclusiones">¶</a></h2><p><strong>Qué aprendimos.</strong> Que un bosque aleatorio sobre 139 descriptores de ventana diagnostica mejor que
-una GRU bidireccional sobre la secuencia cruda, en este conjunto, con esta partición y en una sola
-ejecución; que la diferencia no es uniforme entre condiciones; y que la estructura de sus errores es
+<h2 id="16.-Conclusiones">16. Conclusiones<a class="anchor-link" href="#16.-Conclusiones">¶</a></h2><p><strong>Qué aprendimos.</strong> Que un bosque aleatorio sobre 139 descriptores de ventana obtuvo mayor F1 macro
+que una GRU bidireccional sobre la secuencia cruda (0,8788 frente a 0,8230), en este conjunto, con
+esta partición y en una sola ejecución, con un procedimiento asimétrico que impide atribuir la
+diferencia a la arquitectura; que la diferencia no es uniforme entre condiciones; y que la estructura de sus errores es
 distinta de un modo que importa para el uso previsto.</p>
 <p><strong>Qué hipótesis recibió apoyo.</strong> La de PI.1 en su parte medible aquí: el diagnóstico a partir de
 ventanas de OBD-II supera a la clase mayoritaria con margen amplio.</p>
@@ -9714,28 +9899,28 @@ uno positivo.</p>
 </tbody>
 </table>
 <p><strong>Qué se reproduce y qué no.</strong> Este notebook <strong>no reproduce</strong> E6 ni E7: los lee. Reentrenar el
-bosque daría las mismas cifras —es determinista con su semilla—; reentrenar la red <strong>no</strong>, por el
+bosque daría las mismas cifras (es determinista con su semilla); reentrenar la red <strong>no</strong>, por el
 no-determinismo de MPS que declara la celda de modalidad: la semilla acota la variación y no la
 elimina.</p>
-<p><strong>Reproducción completa, modo FULL.</strong> Exige regenerar <code>synthetic_v2</code> —<code>mecanico-exp generar --dataset-id synthetic_v2 --sessions-per-fault 12</code>—, preprocesarlo y ejecutar los dos entrenamientos.
+<p><strong>Reproducción completa, modo FULL.</strong> Exige regenerar <code>synthetic_v2</code> (<code>mecanico-exp generar --dataset-id synthetic_v2 --sessions-per-fault 12</code>), preprocesarlo y ejecutar los dos entrenamientos.
 Del orden de diez minutos en una máquina con acelerador. <strong>Las ejecuciones nuevas escriben con
 etiqueta propia</strong>: los ejecutores se niegan a sobrescribir los artefactos publicados.</p>
 <h2 id="18.-Referencias-y-trazabilidad">18. Referencias y trazabilidad<a class="anchor-link" href="#18.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> Las cifras agregadas son la <strong>Tabla 5.1</strong>; el detalle por
 condición, la <strong>Figura 5.7</strong>, con su <strong>Tabla B.2</strong> en el anexo B; adónde van los errores de cada
 modelo, la <strong>Figura 5.6</strong>; la comparación entre los dos conjuntos, la <strong>Figura 5.8</strong>; el termostato
-ventana a ventana, la <strong>Figura 5.9</strong>; la calibración, la <strong>Tabla 5.2</strong> y la <strong>Figura 5.12</strong>, y su
+ventana a ventana, la <strong>Figura 5.9</strong>; la calibración, la <strong>Tabla 5.2</strong> y la <strong>Figura 5.12</strong>; su
 forma por tramos, la <strong>Figura 5.13</strong>.</p>
 <ul>
-<li><code>docs/experiments/E6_baseline.md</code> — informe de la línea base, con el criterio pre-registrado</li>
-<li><code>docs/experiments/E7_modelo_temporal.md</code> — informe del modelo temporal, con sus marcas <code>SUPERSEDED</code></li>
+<li><code>docs/experiments/E6_baseline.md</code>: informe de la línea base, con el criterio pre-registrado</li>
+<li><code>docs/experiments/E7_modelo_temporal.md</code>: informe del modelo temporal, con sus marcas <code>SUPERSEDED</code></li>
 <li><code>experiments/E6_baseline_synthetic_v2.json</code>, <code>E6_baseline_synthetic_v3.json</code></li>
 <li><code>experiments/E7_temporal_synthetic_v2.json</code>, <code>E7_temporal_synthetic_v3.json</code></li>
 <li><code>artifacts/tables/E6_baseline_confusion_synthetic_v2.csv</code>, <code>E7_temporal_confusion_synthetic_v2.csv</code></li>
-<li><code>src/mecanico_ia_exp/features/temporal.py</code> — los 139 descriptores</li>
+<li><code>src/mecanico_ia_exp/features/temporal.py</code>: los 139 descriptores</li>
 <li><code>src/mecanico_ia_exp/models/baseline.py</code>, <code>models/temporal.py</code></li>
-<li><code>docs/diseno-pi1/04-subconjuntos-anidados.md</code> — la curva de volumen, diseñada y no ejecutada</li>
-<li><code>docs/diseno-pi1/05-protocolo-comparacion.md</code> — el protocolo simétrico</li>
-<li><code>docs/diseno-pi1/07-ablacion-representacion.md</code> — la escalera que sí aísla la representación</li>
+<li><code>docs/diseno-pi1/04-subconjuntos-anidados.md</code>: la curva de volumen, diseñada y no ejecutada</li>
+<li><code>docs/diseno-pi1/05-protocolo-comparacion.md</code>: el protocolo simétrico</li>
+<li><code>docs/diseno-pi1/07-ablacion-representacion.md</code>: la escalera que sí aísla la representación</li>
 </ul>
 <p><strong>Nota sobre los registros.</strong> Los de E6, E7 y E9 <strong>no llevan cabecera de identificación</strong>: les faltan
 <code>commit</code>, <code>executed_at</code> y <code>dataset_type</code>, porque son anteriores a que la convención existiera. No se
@@ -9746,5 +9931,73 @@ declarada en <code>research/reproducibility.md</code>.</p>
 </div>
 </div>
 </main>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/02_comparacion_modelos.ipynb</code> · commit <code>6c5324d</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+(function () {
+  var cuerpo = document.body;
+  cuerpo.classList.add('mi-doc');
+  // La ficha es la primera celda de texto.
+  var celdas = document.querySelectorAll('.jp-MarkdownCell');
+  if (celdas.length) { celdas[0].classList.add('mi-ficha'); }
+  // «En un minuto» y «Cómo leer»: el título y lo que le sigue hasta el próximo título
+  // del mismo nivel o superior se envuelven en un recuadro, estén en la celda que estén.
+  function enCaja(patron, clase) {
+    document.querySelectorAll('.jp-RenderedMarkdown h2, .jp-RenderedMarkdown h3').forEach(
+      function (h) {
+        if (!patron.test(h.textContent)) { return; }
+        var caja = document.createElement('div');
+        caja.className = 'mi-caja ' + clase;
+        h.parentNode.insertBefore(caja, h);
+        var nodo = h;
+        while (nodo) {
+          var siguiente = nodo.nextSibling;
+          caja.appendChild(nodo);
+          if (siguiente && /^(H1|H2|H3|HR)$/.test(siguiente.nodeName)) { break; }
+          nodo = siguiente;
+        }
+      });
+  }
+  enCaja(/^\s*En un minuto/i, 'mi-caja-minuto');
+  enCaja(/^\s*Cómo leer este notebook/i, 'mi-caja-leer');
+  // Índice lateral a partir de los títulos de nivel 2 y 3.
+  var indice = document.getElementById('mi-indice-lista');
+  var titulos = document.querySelectorAll('.jp-RenderedMarkdown h2, .jp-RenderedMarkdown h3');
+  var enlaces = [];
+  titulos.forEach(function (h, i) {
+    if (!h.id) { h.id = 'mi-seccion-' + i; }
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent.replace(/\u00b6\s*$/, '').trim();
+    var entrada = h.parentNode.classList.contains('mi-caja');
+    a.className = h.tagName === 'H3' && !entrada ? 'mi-n3' : 'mi-n2';
+    indice.appendChild(a);
+    enlaces.push([h, a]);
+  });
+  // Resalta en el índice la sección que se está leyendo.
+  function marcar() {
+    var actual = null;
+    for (var i = 0; i < enlaces.length; i++) {
+      if (enlaces[i][0].getBoundingClientRect().top < 120) { actual = enlaces[i][1]; }
+    }
+    enlaces.forEach(function (p) { p[1].classList.toggle('mi-activo', p[1] === actual); });
+  }
+  document.addEventListener('scroll', marcar, { passive: true });
+  marcar();
+  // Modo lectura: oculta el código, conserva salidas y figuras.
+  var boton = document.getElementById('mi-boton-codigo');
+  var clave = 'mecanico-ia-sin-codigo';
+  function aplicar(oculto) {
+    cuerpo.classList.toggle('mi-sin-codigo', oculto);
+    boton.textContent = oculto ? 'Mostrar código' : 'Ocultar código';
+  }
+  var guardado = false;
+  try { guardado = window.localStorage.getItem(clave) === '1'; } catch (e) {}
+  aplicar(guardado);
+  boton.addEventListener('click', function () {
+    var oculto = !cuerpo.classList.contains('mi-sin-codigo');
+    aplicar(oculto);
+    try { window.localStorage.setItem(clave, oculto ? '1' : '0'); } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>

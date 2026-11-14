@@ -1,9 +1,9 @@
 {
   "que_es": "Paquete academico autonomo del TFM: memoria, notebooks ejecutables, codigo y artefactos experimentales.",
   "estado": "BORRADOR PARA REVISION DEL TUTOR",
-  "generado_el": "2026-11-14T11:59:58+00:00",
+  "generado_el": "2026-11-14T12:24:16+00:00",
   "git": {
-    "commit": "1cdb8f61fc1450cec92bed7cdeb97860352dda02",
+    "commit": "6c5324d4e7708c179739d1a2ddb15890acf14ff8",
     "rama": "bloque/notebooks-entrega",
     "fecha": "2026-11-14"
   },
@@ -76,13 +76,13 @@
   "huellas_sha256": {
     "memoria/memoria.docx": "9f93e9dd240bddabbcce27d038e994b77dbb23d68a3b56ab02c66deec41a72c6",
     "memoria/memoria.pdf": "a303117794029ab32d708e05a147901384e88f0e7ba745c44fb258fdd88a68f9",
-    "notebooks/00_introduccion.ipynb": "073fd4493f97738021d9e9a5b91dd0889613dd35da90f891cff765f5b26f151d",
-    "notebooks/01_exploracion_obd.ipynb": "ea8511af34655129e45d48461fbccea4a3ffd3ce781b0e39dfc49076a8f170ff",
-    "notebooks/02_comparacion_modelos.ipynb": "751e0cc76460109d19eb17ac006ee4025968c5c687d6075da91416e517083322",
-    "notebooks/03_analisis_e19.ipynb": "c3b874d28144a7f0630fc2ca8503dc95536486565c1adf49323a0456c2fe65fd",
-    "notebooks/04_explicabilidad.ipynb": "3b01a02d94d1cab8229cff7c1e99ccd359fe21b15dca0605e0e2ae19e4d5f1ee",
-    "notebooks/05_suficiencia_y_abstencion.ipynb": "094abdc1487b7db4bc3a0e2bf8455078f6ae2e300d95803a89ee88be7d0b1208",
-    "notebooks/06_expresion_del_fallo.ipynb": "1b4946dca3107f21bac34011307e61cdca30f103450bdff76a2eab8e4bfc4ded",
+    "notebooks/00_introduccion.ipynb": "f6f8804406fa7e9ec73c4b9c5e98dd426969b21929e3e60dcb95d8b7420d7914",
+    "notebooks/01_exploracion_obd.ipynb": "7ad7b6bfcb069cc9822da23e2d1562e85b912adb657526644ad6a542aecee3d8",
+    "notebooks/02_comparacion_modelos.ipynb": "f27f1fd314e8e9e2237c48681247bc26ca8ec3c91dd8a612d8c6770b200634fb",
+    "notebooks/03_analisis_e19.ipynb": "6e7724f801562640059c617f7bf40c918d1614ff4aea30a68e620ac66cf306c7",
+    "notebooks/04_explicabilidad.ipynb": "0341bf2715597bc0a5a938097c2f73c74fff8538aa1013ed92b71a9d66887480",
+    "notebooks/05_suficiencia_y_abstencion.ipynb": "8d4975559f96fd4b24af4b16d55c4f9a822a9fdadccff398d96f856bdb7731fd",
+    "notebooks/06_expresion_del_fallo.ipynb": "d846435f97baa803ff8a25e480fe78a431dd5433c5bd4ea87fead796b2ea45ce",
     "artifacts/tables/E12_retrieval_por_caso.csv": "bdabb344639339b27fdaf78d8ce8fd2b8078a802e344c6f031dc18bab4fdb1c7",
     "artifacts/tables/E12_retrieval_por_estrategia.csv": "cde58fd2a37d420880bf451628bb23f1944b201ba90f1f7546656c6924282912",
     "artifacts/tables/E15_suficiencia.csv": "d038a2dd54de971d5d9c9437122c8123a1121c22cfa566b5ed34f50c10035f72",

@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Notebook</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Datos OBD-II · Mecánico IA</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7793,8 +7793,180 @@ a.anchor-link {
     white-space: normal;
   }
 </style>
-<!-- End of mermaid configuration --></head>
-<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<!-- End of mermaid configuration --><style>
+:root {
+  --mi-tinta: #1f2328;
+  --mi-suave: #59636e;
+  --mi-fondo: #fbfaf7;
+  --mi-papel: #ffffff;
+  --mi-linea: #e3e0d8;
+  --mi-acento: #1f5f8b;
+  --mi-acento-claro: #e8f1f7;
+  --mi-aviso: #8a5a00;
+  --mi-aviso-claro: #fdf4e3;
+  --mi-ancho: 920px;
+  --mi-lateral: 270px;
+  --mi-cabecera: 56px;
+}
+html { scroll-padding-top: calc(var(--mi-cabecera) + 16px); }
+body.mi-doc {
+  background: var(--mi-fondo) !important;
+  color: var(--mi-tinta);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  margin: 0;
+}
+/* ---------------------------------------------------------------- cabecera */
+.mi-cabecera {
+  position: sticky; top: 0; z-index: 50;
+  height: var(--mi-cabecera);
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 24px;
+  background: #16324a; color: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .18);
+}
+.mi-marca { font-weight: 650; letter-spacing: .2px; white-space: nowrap; font-size: 15px; }
+.mi-nav { display: flex; gap: 4px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+.mi-nav a {
+  color: #cfe0ee; text-decoration: none; font-size: 13px; white-space: nowrap;
+  padding: 6px 10px; border-radius: 6px;
+}
+.mi-nav a:hover { background: rgba(255, 255, 255, .12); color: #fff; }
+.mi-nav a.mi-actual { background: #fff; color: #16324a; font-weight: 600; }
+.mi-boton {
+  border: 1px solid rgba(255, 255, 255, .45); background: transparent; color: #fff;
+  border-radius: 6px; padding: 6px 12px; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.mi-boton:hover { background: rgba(255, 255, 255, .12); }
+/* ------------------------------------------------------------------ índice */
+.mi-indice {
+  position: fixed; top: calc(var(--mi-cabecera) + 20px); left: 20px;
+  width: var(--mi-lateral); max-height: calc(100vh - var(--mi-cabecera) - 40px);
+  overflow-y: auto; font-size: 13px; line-height: 1.35;
+  padding: 14px 14px 14px 16px; background: var(--mi-papel);
+  border: 1px solid var(--mi-linea); border-radius: 10px;
+}
+.mi-indice h2 {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
+  color: var(--mi-suave); margin: 0 0 8px; border: 0; padding: 0;
+}
+.mi-indice a {
+  display: block; color: var(--mi-tinta); text-decoration: none;
+  padding: 4px 6px; border-radius: 5px; border-left: 2px solid transparent;
+}
+.mi-indice a.mi-n3 { padding-left: 18px; color: var(--mi-suave); font-size: 12px; }
+.mi-indice a:hover { background: var(--mi-acento-claro); }
+.mi-indice a.mi-activo {
+  border-left-color: var(--mi-acento); color: var(--mi-acento); font-weight: 600;
+  background: var(--mi-acento-claro);
+}
+/* ---------------------------------------------------------------- documento */
+body.mi-doc main, body.mi-doc .jp-Notebook {
+  max-width: var(--mi-ancho); margin: 28px auto 60px !important;
+  padding: 36px 48px !important; background: var(--mi-papel);
+  border: 1px solid var(--mi-linea); border-radius: 12px;
+  box-shadow: 0 2px 14px rgba(30, 30, 20, .05);
+}
+@media (min-width: 1300px) {
+  body.mi-doc main, body.mi-doc .jp-Notebook {
+    margin-left: calc(var(--mi-lateral) + 60px + max(0px, (100vw - var(--mi-lateral) - 60px
+      - var(--mi-ancho) - 40px) / 2)) !important;
+  }
+}
+@media (max-width: 1299px) { .mi-indice { display: none; } }
+.jp-Cell { padding: 2px 0 !important; }
+.jp-InputPrompt, .jp-OutputPrompt { display: none !important; }
+.jp-RenderedMarkdown {
+  font-size: 15.5px !important; line-height: 1.62 !important; color: var(--mi-tinta);
+}
+.jp-RenderedMarkdown h1 {
+  font-size: 30px !important; line-height: 1.2; margin: 6px 0 14px !important;
+  color: #16324a; letter-spacing: -.3px;
+}
+.jp-RenderedMarkdown h2 {
+  font-size: 21px !important; margin: 34px 0 10px !important; padding-bottom: 6px;
+  border-bottom: 2px solid var(--mi-linea); color: #16324a;
+}
+.jp-RenderedMarkdown h3 { font-size: 17px !important; margin: 22px 0 6px !important; }
+.jp-RenderedMarkdown a.anchor-link { display: none; }
+.jp-RenderedMarkdown p { margin: 0 0 12px !important; }
+.jp-RenderedMarkdown strong { color: #10202e; }
+.jp-RenderedMarkdown code {
+  background: #f1efe9; border-radius: 4px; padding: 1px 5px; font-size: .9em;
+}
+.jp-RenderedMarkdown blockquote {
+  margin: 14px 0; padding: 10px 16px; border-left: 4px solid var(--mi-aviso);
+  background: var(--mi-aviso-claro); border-radius: 0 8px 8px 0; color: var(--mi-tinta);
+}
+.jp-RenderedMarkdown hr { border: 0; border-top: 1px solid var(--mi-linea); margin: 26px 0; }
+/* tablas del texto y de las salidas */
+.jp-RenderedMarkdown table, .jp-RenderedHTMLCommon table {
+  border-collapse: collapse !important; width: auto; max-width: 100%;
+  font-size: 13.5px !important; margin: 10px 0 18px !important; display: block; overflow-x: auto;
+}
+.jp-RenderedMarkdown th, .jp-RenderedHTMLCommon th {
+  background: #eef2f5 !important; color: #16324a; font-weight: 600 !important;
+  text-align: left !important; padding: 7px 10px !important;
+  border-bottom: 2px solid #c9d3dc !important;
+}
+.jp-RenderedMarkdown td, .jp-RenderedHTMLCommon td {
+  padding: 6px 10px !important; border-bottom: 1px solid var(--mi-linea) !important;
+  text-align: left !important; vertical-align: top;
+}
+.jp-RenderedMarkdown tr:nth-child(even) td, .jp-RenderedHTMLCommon tr:nth-child(even) td {
+  background: #faf9f6 !important;
+}
+/* ficha del notebook: la primera tabla */
+.mi-ficha table td:first-child { white-space: nowrap; color: var(--mi-suave); width: 1%; }
+/* «En un minuto» y «Cómo leer este notebook» */
+.mi-caja { border-radius: 10px; padding: 2px 22px 8px; margin: 18px 0; }
+.mi-caja > h2, .mi-caja > h3 {
+  font-size: 13px !important; text-transform: uppercase; letter-spacing: .8px;
+  border: 0 !important; margin: 14px 0 6px !important; padding: 0 !important;
+}
+.mi-caja-minuto { background: var(--mi-acento-claro); border: 1px solid #c4dbea; }
+.mi-caja-minuto > h2, .mi-caja-minuto > h3 { color: var(--mi-acento) !important; }
+.mi-caja-minuto li { margin-bottom: 6px; }
+.mi-caja-leer { background: #f6f5f1; border: 1px solid var(--mi-linea); font-size: 14.5px; }
+.mi-caja-leer > h2, .mi-caja-leer > h3 { color: var(--mi-suave) !important; }
+/* código */
+.jp-CodeCell .jp-InputArea {
+  border: 1px solid var(--mi-linea); border-radius: 8px; overflow: hidden; margin: 6px 0;
+}
+.jp-CodeCell .jp-InputArea-editor, .jp-CodeCell .highlight {
+  background: #f6f5f1 !important; font-size: 12.5px !important;
+}
+.jp-OutputArea-output pre {
+  font-size: 12.5px !important; line-height: 1.45; background: #fcfcfb;
+  border-left: 3px solid #d5dde4; padding: 8px 12px !important; border-radius: 0 6px 6px 0;
+}
+.jp-OutputArea-output img {
+  display: block; margin: 10px auto; max-width: 100%; height: auto;
+  border: 1px solid var(--mi-linea); border-radius: 8px; background: #fff;
+}
+body.mi-sin-codigo .jp-CodeCell .jp-Cell-inputWrapper { display: none !important; }
+/* pie */
+.mi-pie {
+  max-width: var(--mi-ancho); margin: 0 auto 40px; color: var(--mi-suave); font-size: 12px;
+  text-align: center;
+}
+@media (min-width: 1300px) {
+  .mi-pie { margin-left: calc(var(--mi-lateral) + 60px + max(0px, (100vw - var(--mi-lateral)
+    - 60px - var(--mi-ancho) - 40px) / 2)); }
+}
+/* impresión */
+@media print {
+  .mi-cabecera, .mi-indice, .mi-boton { display: none !important; }
+  body.mi-doc { background: #fff !important; }
+  body.mi-doc main, body.mi-doc .jp-Notebook {
+    margin: 0 !important; padding: 0 !important; border: 0; box-shadow: none; max-width: none;
+  }
+  .jp-Cell { break-inside: avoid; }
+  .jp-RenderedMarkdown h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light"><header class="mi-cabecera"><span class="mi-marca">Mecánico IA · trabajo práctico del TFM</span><nav class="mi-nav" aria-label="Notebooks"><a href="00_introduccion.html">Introducción</a><a href="01_exploracion_obd.html" class="mi-actual">Datos OBD-II</a><a href="02_comparacion_modelos.html">Modelos</a><a href="03_analisis_e19.html">Evaluación final</a><a href="04_explicabilidad.html">Explicabilidad</a><a href="05_suficiencia_y_abstencion.html">Suficiencia</a><a href="06_expresion_del_fallo.html">Expresión del fallo</a></nav><button class="mi-boton" id="mi-boton-codigo" type="button">Ocultar código</button></header><aside class="mi-indice" aria-label="Índice"><h2>En este notebook</h2><div id="mi-indice-lista"></div></aside>
 <main>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c000">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7802,7 +7974,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Exploraci%C3%B3n-de-datos-OBD-II-y-an%C3%A1lisis-temporal">Exploración de datos OBD-II y análisis temporal<a class="anchor-link" href="#Exploraci%C3%B3n-de-datos-OBD-II-y-an%C3%A1lisis-temporal">¶</a></h1><p><strong>Notebook</strong> <code>01_exploracion_obd</code> · <strong>versión</strong> 1.0 · <strong>fecha</strong> 12 de octubre de 2026</p>
+<h1 id="Exploraci%C3%B3n-de-datos-OBD-II-y-an%C3%A1lisis-temporal">Exploración de datos OBD-II y análisis temporal<a class="anchor-link" href="#Exploraci%C3%B3n-de-datos-OBD-II-y-an%C3%A1lisis-temporal">¶</a></h1><p><strong>Notebook</strong> <code>01_exploracion_obd</code> · <strong>versión</strong> 1.1 · <strong>fecha</strong> 14 de noviembre de 2026</p>
 <table>
 <thead>
 <tr>
@@ -7811,6 +7983,10 @@ a.anchor-link {
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><strong>Modalidad</strong></td>
+<td>REANÁLISIS</td>
+</tr>
 <tr>
 <td><strong>Experimentos</strong></td>
 <td>E2 (generación), E4 (exploratorio), E5 (ventanado y reparto)</td>
@@ -7829,7 +8005,7 @@ a.anchor-link {
 </tr>
 <tr>
 <td><strong>Pregunta de investigación</strong></td>
-<td>PI.1 — el análisis contextual y longitudinal de datos OBD-II</td>
+<td>PI.1: el análisis contextual y longitudinal de datos OBD-II</td>
 </tr>
 <tr>
 <td><strong>Evidencia original</strong></td>
@@ -7840,10 +8016,12 @@ a.anchor-link {
 <hr/>
 <h2 id="En-un-minuto">En un minuto<a class="anchor-link" href="#En-un-minuto">¶</a></h2><ul>
 <li><strong>Pregunta.</strong> Si las señales OBD-II tienen estructura suficiente para distinguir una condición
-de otra, y qué forma tiene.</li>
+de otra y qué forma tiene.</li>
 <li><strong>Resultado.</strong> Las condiciones desplazan las señales declaradas sin que ninguna señal las separe
-sola con un umbral, con <strong>cinco formas temporales distintas</strong>. 120 s es la ventana en que las cinco
-superan el suelo de ruido sin vaciar el conjunto.</li>
+sola con un umbral, con <strong>cinco firmas distintas</strong> en su señal principal (tres formas temporales si
+se miden como desviación, notebook 06). 120 s es la ventana que E5 eligió: desde 60 s las cinco
+superan el suelo de ruido y a 120 s el margen del fallo de encendido es mayor, a cambio de menos
+ventanas.</li>
 <li><strong>Lo más útil.</strong> Al menos dos condiciones tienen ventanas etiquetadas <strong>sin señal observable del
 fallo</strong>: etiqueta y señal no van uno a uno.</li>
 <li><strong>Límite.</strong> Datos sintéticos de un generador no calibrado contra datos reales.</li>
@@ -7869,7 +8047,7 @@ sesión · 16–18. Limitaciones, discusión y conclusiones · 19–20. Reproduc
 <h2 id="1.-Introducci%C3%B3n:-por-qu%C3%A9-hace-falta-mirar-antes-de-modelar">1. Introducción: por qué hace falta mirar antes de modelar<a class="anchor-link" href="#1.-Introducci%C3%B3n:-por-qu%C3%A9-hace-falta-mirar-antes-de-modelar">¶</a></h2><p>Es la pregunta previa a cualquier modelo: si las señales de un motor con fuga de vacío fueran
 indistinguibles de las de uno sano, no habría nada que aprender y el resto del trabajo carecería de
 objeto. La respuesta no es un sí o un no. Hay condiciones que se ven a simple vista y condiciones
-cuya firma es una <strong>ausencia</strong> —algo que debería ocurrir y no ocurre—, y esas son las interesantes.</p>
+cuya firma es una <strong>ausencia</strong>: algo que debería ocurrir y no ocurre. Esas son las interesantes.</p>
 <p>Un modelo entrenado sobre datos que nadie ha mirado puede obtener métricas altas por motivos
 que no tienen nada que ver con el problema. Si el generador dejara, por ejemplo, una señal que tomara
 un valor imposible solo durante un fallo, cualquier clasificador la encontraría y el resultado
@@ -7877,10 +8055,10 @@ mediría la calidad del generador, no la del diagnóstico.</p>
 <p>Lo que no sabemos antes de empezar:</p>
 <ol>
 <li><strong>Si las relaciones entre señales están presentes.</strong> Un generador de variables independientes al
-azar no tendría estructura que aprender, y la atribución no tendría nada que señalar.</li>
+azar no tendría estructura que aprender y la atribución no tendría nada que señalar.</li>
 <li><strong>Si alguna condición se separa trivialmente.</strong> Sería un artefacto, no un resultado.</li>
 <li><strong>Cuánto dura la firma de cada fallo</strong>, que es lo que determina el tamaño de ventana.</li>
-<li><strong>Si todas las condiciones se manifiestan igual en todos los regímenes.</strong> No lo hacen, y esa es
+<li><strong>Si todas las condiciones se manifiestan igual en todos los regímenes.</strong> No lo hacen: esa es
 la observación más consecuente de este notebook.</li>
 </ol>
 </div>
@@ -7893,15 +8071,15 @@ la observación más consecuente de este notebook.</li>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-Objetivo-e-hip%C3%B3tesis">2. Objetivo e hipótesis<a class="anchor-link" href="#2.-Objetivo-e-hip%C3%B3tesis">¶</a></h2><p><strong>Objetivo.</strong> Caracterizar las señales, sus relaciones y la forma temporal de cada condición, y
-fijar con evidencia el tamaño de ventana.</p>
+<h2 id="2.-Objetivo-e-hip%C3%B3tesis">2. Objetivo e hipótesis<a class="anchor-link" href="#2.-Objetivo-e-hip%C3%B3tesis">¶</a></h2><p><strong>Objetivo.</strong> Caracterizar las señales, sus relaciones y la forma temporal de cada condición.
+Fijar con evidencia el tamaño de ventana.</p>
 <p><strong>Hipótesis evaluada.</strong> Las condiciones de fallo producen desplazamientos observables en las señales
-que su ficha declara afectadas, y ese desplazamiento es suficiente para separarlas de la condición
+que su ficha declara afectadas y ese desplazamiento es suficiente para separarlas de la condición
 normal sin que ninguna señal lo haga por sí sola con un umbral.</p>
 <p><strong>Variables observadas.</strong> Las doce señales del catálogo, la condición, el régimen y el tiempo.</p>
 <p><strong>Criterios de evaluación.</strong> Un desplazamiento se considera observable si el tamaño del efecto
-—delta de Cliff— lo separa de la condición normal. La separación se considera <strong>trivial</strong>, y por
-tanto un defecto, si existe un umbral de una sola señal que clasifique perfectamente una condición.</p>
+(delta de Cliff) lo separa de la condición normal. La separación se considera <strong>trivial</strong> (y por
+tanto un defecto) si existe un umbral de una sola señal que clasifique perfectamente una condición.</p>
 <p><strong>Qué cuestionaría la hipótesis.</strong> Que ninguna señal se desplace en una condición, o que alguna la
 separe perfectamente. Las dos cosas se comprueban en este notebook.</p>
 </div>
@@ -7915,7 +8093,7 @@ separe perfectamente. Las dos cosas se comprueban en este notebook.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="3.-Fundamento:-lo-necesario-para-leer-lo-que-sigue">3. Fundamento: lo necesario para leer lo que sigue<a class="anchor-link" href="#3.-Fundamento:-lo-necesario-para-leer-lo-que-sigue">¶</a></h2><p><strong>OBD-II.</strong> Norma de diagnóstico a bordo obligatoria en los vehículos de pasajeros desde finales de
-los noventa. Expone un conjunto de parámetros —<em>PID</em>— que la centralita publica a petición: régimen,
+los noventa. Expone un conjunto de parámetros (<em>PID</em>) que la centralita publica a petición: régimen,
 velocidad, carga calculada, temperatura de refrigerante, caudal de aire, ajustes de combustible,
 tensión de la sonda lambda y avance de encendido, entre otros. Aquí se usan doce, con su
 correspondencia a los PID canónicos declarada en <code>obd/signals.py</code>.</p>
@@ -7923,11 +8101,11 @@ correspondencia a los PID canónicos declarada en <code>obd/signals.py</code>.</
 ventanas no mira la muestra suelta, sino un <strong>tramo</strong> de duración fija. La elección de esa duración
 no es libre: demasiado corta y la firma no cabe; demasiado larga y hay pocas ventanas por sesión.</p>
 <p><strong>Descriptores de ventana.</strong> Resumir un tramo de 120 × 12 valores en un vector de números: media,
-desviación, pendiente, autocorrelación, número de cruces. Es una <strong>representación</strong> del tramo, y
+desviación, pendiente, autocorrelación, número de cruces. Es una <strong>representación</strong> del tramo:
 cambiarla cambia lo que un modelo puede ver.</p>
 <p><strong>Delta de Cliff.</strong> Medida no paramétrica del tamaño de un efecto: la probabilidad de que un valor
 tomado de un grupo supere a uno del otro, menos la probabilidad contraria. Va de −1 a 1. <em>Por qué
-esta y no la diferencia de medias:</em> no supone normalidad ni igualdad de varianzas, y aquí las
+esta y no la diferencia de medias:</em> no supone normalidad ni igualdad de varianzas; aquí las
 distribuciones no son normales.</p>
 <p><strong>Fuga temporal.</strong> Repartir ventanas de una misma sesión entre entrenamiento y evaluación haría que
 el modelo viera en el examen tramos solapados con los que estudió: la evaluación mediría memoria, no
@@ -7971,7 +8149,7 @@ capacidad de generalizar.</p>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># pragma: no cover - solo fuera del repositorio</span>
     <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">"No se encuentra el paquete del laboratorio desde </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
-        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con «uv sync --extra nb»."</span>
+        <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con uv sync --extra nb."</span>
     <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
 <span class="n">soporte</span><span class="o">.</span><span class="n">imprimir_entorno</span><span class="p">()</span>
@@ -7989,8 +8167,8 @@ capacidad de generalizar.</p>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       1cdb8f6
-arbol        sucio
+commit       6c5324d
+arbol        limpio
 </pre>
 </div>
 </div>
@@ -8046,7 +8224,7 @@ arbol        sucio
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="5.-El-conjunto:-procedencia-y-estructura">5. El conjunto: procedencia y estructura<a class="anchor-link" href="#5.-El-conjunto:-procedencia-y-estructura">¶</a></h2><p>La muestra que viaja con el repositorio son 18 sesiones de 600 s, tres por condición. Sale del mismo
 generador y de la misma semilla global que el conjunto oficial.</p>
-<p><strong>Lo que hay que distinguir, y el trabajo tardó en distinguirlo:</strong> hay tres conjuntos sintéticos y
+<p><strong>Lo que hay que distinguir (y el trabajo tardó en distinguirlo):</strong> hay tres conjuntos sintéticos y
 <strong>no salen del mismo generador</strong>.</p>
 <table>
 <thead>
@@ -8079,7 +8257,7 @@ generador y de la misma semilla global que el conjunto oficial.</p>
 </tbody>
 </table>
 <p>La constante <code>GENERATOR_VERSION</code> valió <code>"1.0.0"</code> en los tres casos y no los distingue. Comparar <code>v2</code>
-con <code>v3</code> cambia el volumen <strong>y</strong> el fenómeno, y esa confusión invalidó una conclusión publicada. No
+con <code>v3</code> cambia el volumen <strong>y</strong> el fenómeno. Esa confusión invalidó una conclusión publicada. No
 se mezclan aquí.</p>
 </div>
 </div>
@@ -8278,8 +8456,8 @@ valores ausentes: 0
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Lo observado.</strong> Ninguna señal sale de su rango físico y no hay valores ausentes. El recorte a
-rango no es decorativo: la inyección de un fallo puede empujar una señal fuera de lo posible —un
-ajuste de combustible del 140 %— y dejarla pasar regalaría al modelo una pista que en datos reales
+rango no es decorativo: la inyección de un fallo puede empujar una señal fuera de lo posible (un
+ajuste de combustible del 140 %) y dejarla pasar regalaría al modelo una pista que en datos reales
 nunca existiría, porque un sensor real satura.</p>
 <p>A continuación, el reparto por condición y régimen, donde se ve el equilibrio buscado y una
 ausencia.</p>
@@ -8423,7 +8601,7 @@ el apartado 8 lo ilustra con sesiones <strong>generadas</strong> en el notebook.
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="6.-Exploraci%C3%B3n:-las-se%C3%B1ales-en-el-tiempo">6. Exploración: las señales en el tiempo<a class="anchor-link" href="#6.-Exploraci%C3%B3n:-las-se%C3%B1ales-en-el-tiempo">¶</a></h2><p><strong>Qué queremos investigar.</strong> Si la estructura de las señales es plausible y si las relaciones que el
-generador declara construir —acelerador↔régimen, régimen↔caudal, carga↔presión— se ven.</p>
+generador declara construir (acelerador↔régimen, régimen↔caudal, carga↔presión) se ven.</p>
 <p><strong>Qué datos utilizamos.</strong> Una sesión sana del régimen urbano, completa.</p>
 <p><strong>Qué variables se representan.</strong> Seis de las doce señales, en el tiempo. Seis y no doce porque el
 objetivo es que se lean, no que estén todas.</p>
@@ -8509,7 +8687,7 @@ temperatura de refrigerante suba y se estabilice.</p>
 <p><strong>Qué muestra.</strong> La velocidad alterna tramos de marcha y paradas, propio del régimen urbano. El
 régimen del motor la sigue con saltos en los cambios de relación y cae a un ralentí plano cuando el
 vehículo se detiene. La carga y el caudal acompañan al régimen. La temperatura de refrigerante parte
-alta —en este régimen el motor arranca caliente— y se mantiene. El ajuste de combustible a corto
+alta (en este régimen el motor arranca caliente) y se mantiene. El ajuste de combustible a corto
 plazo oscila en torno a cero sin desplazamiento.</p>
 <p><strong>Qué podemos interpretar.</strong> Las relaciones entre señales que el generador dice construir están
 presentes y son del signo esperado.</p>
@@ -8532,7 +8710,7 @@ la única diferencia sea la condición.</p>
 <p><strong>Qué variables se representan.</strong> La señal que la ficha del fallo declara como principal.</p>
 <p><strong>Por qué esta visualización.</strong> Superponer la trayectoria sana y la averiada en el mismo eje es lo
 único que permite ver el desplazamiento sin que la escala engañe.</p>
-<p><strong>Qué debemos observar.</strong> Un desplazamiento en la señal declarada, y <strong>su forma en el tiempo</strong>: no
+<p><strong>Qué debemos observar.</strong> Un desplazamiento en la señal declarada y <strong>su forma en el tiempo</strong>: no
 todas las firmas son un escalón.</p>
 </div>
 </div>
@@ -8611,7 +8789,7 @@ todas las firmas son un escalón.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> Cinco formas distintas de manifestarse:</p>
+<p><strong>Qué muestra.</strong> Cinco firmas distintas en la señal principal:</p>
 <ul>
 <li><strong>Fuga de vacío</strong>: el ajuste a corto plazo salta a positivo y se queda. Un escalón.</li>
 <li><strong>Deriva del caudalímetro</strong>: el ajuste a largo plazo sube en <strong>rampa</strong>, no de golpe. El integrador
@@ -8621,13 +8799,15 @@ aprende durante minutos.</li>
 <li><strong>Fallo de encendido</strong>: caídas <strong>breves y aisladas</strong> del régimen. La mayor parte del tiempo la
 señal es indistinguible de la sana.</li>
 </ul>
-<p><strong>Qué podemos interpretar.</strong> Cada firma tiene una forma temporal distinta, y eso tiene una
+<p><strong>Qué podemos interpretar.</strong> Cada firma se ve distinta en su señal. Medidas como desviación frente
+al contrafactual se agrupan en tres formas temporales: progresiva, sostenida desde la entrada y
+episódica (notebook 06, apartado 7.1). Eso tiene una
 consecuencia práctica directa: un descriptor de <strong>nivel medio</strong> captura bien la fuga de vacío y es
 casi ciego al fallo de encendido, cuyos episodios se diluyen en la media de la ventana. La
 representación que se elija no es neutral respecto a qué fallos se pueden detectar.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que estas cinco sesiones sean representativas de su condición: es una
-sesión por fallo. Tampoco que la firma sea igual en otros regímenes —el termostato, en particular,
-no lo es, y eso se ve a continuación—. Y los episodios del fallo de encendido caen donde los pone
+sesión por fallo. Tampoco que la firma sea igual en otros regímenes. El termostato, en particular,
+no lo es, como se ve a continuación. Y los episodios del fallo de encendido caen donde los pone
 esta semilla; otra los pondría en otros. La versión publicada de esta comparación, sobre <code>synthetic_v1</code>, se muestra en el
 apartado 10.</p>
 </div>
@@ -8683,7 +8863,7 @@ que ya existe. Modalidad de esta sección: <strong>demostración ilustrativa</st
 <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">arriba</span><span class="p">,</span> <span class="n">abajo</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">9.5</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                     <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">2.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="c1"># La sana va debajo y más gruesa: durante los primeros minutos las dos</span>
-<span class="c1"># trayectorias son la MISMA, y si se dibujaran igual de finas la de arriba</span>
+<span class="c1"># trayectorias son la MISMA; si se dibujaran igual de finas la de arriba</span>
 <span class="c1"># taparía a la de abajo y parecería que solo hay una línea.</span>
 <span class="n">arriba</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sana_w</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">sana_w</span><span class="o">.</span><span class="n">coolant_temperature</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">CATEGORICAL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">"sin fallo"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
@@ -8766,19 +8946,20 @@ muestras que alteran la señal:    123 (26%)
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra.</strong> Arriba, las dos trayectorias son <strong>la misma línea</strong> durante unos trescientos
-segundos tras la entrada del fallo, y se separan solo cuando la sana alcanza el techo. Abajo, la
+segundos tras la entrada del fallo y se separan solo cuando la sana alcanza el techo. Abajo, la
 alteración frente al contrafactual es <strong>exactamente cero</strong> en ese tramo.</p>
-<p><strong>Qué podemos interpretar.</strong> La firma de este fallo es una ausencia, y la ausencia solo es
-observable cuando hay algo que ausentarse. Durante el calentamiento la etiqueta dice «termostato
-bloqueado» y la señal no contiene ninguna información que lo distinga de un motor sano. Ningún
-clasificador puede separar dos señales idénticas, y eso ocurriría igual en un coche real.</p>
+<p><strong>Qué podemos interpretar.</strong> La firma de este fallo es una ausencia y la ausencia solo es
+observable cuando hay algo que ausentarse. Durante el calentamiento la etiqueta dice “termostato
+bloqueado” y la señal no contiene ninguna información que lo distinga de un motor sano. Ningún
+clasificador puede separar dos señales idénticas. Es una propiedad del mecanismo tal como el
+generador lo implementa (notebook 06, apartado 8), no de los termostatos reales.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que esto explique por sí solo los errores que los modelos cometen en esta
 condición: lo que establece es que <strong>existe</strong> un tramo sin señal, no cuántos de los errores caen en
-él. La identificación una a una exige cruzar las predicciones con la expresión ventana a ventana, y
-ese cruce está diseñado y <strong>no ejecutado</strong> (<code>docs/diseno-pi1/08-analisis-por-fallo.md</code>).</p>
+él. La identificación una a una exige cruzar las predicciones con la expresión ventana a ventana.
+Ese cruce está diseñado y <strong>no ejecutado</strong> (<code>docs/diseno-pi1/08-analisis-por-fallo.md</code>).</p>
 <p>Y hay algo que específicamente <strong>no</strong> debe concluirse de aquí: que el contexto temporal sea valioso
-porque esta condición lo requiera. Es una tentación razonable —la firma es temporal, y el modelo
-recurrente obtiene en esta clase 0,8148 frente a 0,7826 del bosque— pero esa diferencia es de 0,03
+porque esta condición lo requiera. Es una tentación razonable (la firma es temporal y el modelo
+recurrente obtiene en esta clase 0,8148 frente a 0,7826 del bosque), pero esa diferencia es de 0,03
 en una clase de 14 ventanas, medida una sola vez, entre dos modelos que difieren a la vez en
 representación y en estimador.</p>
 </div>
@@ -8796,7 +8977,7 @@ perfectamente alguna condición. Sería un artefacto del generador y haría triv
 <p><strong>Qué datos utilizamos.</strong> Las doce señales sobre las 18 sesiones, muestra a muestra.</p>
 <p><strong>Por qué esta comprobación y no un gráfico.</strong> Un umbral que separe perfectamente existe si y solo si
 los rangos de las dos clases son <strong>disjuntos</strong>. Comprobarlo cuesta dos extremos por señal y
-condición, y da un sí o un no, no una impresión visual.</p>
+condición; da un sí o un no, no una impresión visual.</p>
 </div>
 </div>
 </div>
@@ -8850,20 +9031,25 @@ condición, y da un sí o un no, no una impresión visual.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> Las doce comprobaciones con su estado. Tres salen <code>NO_VERIFICABLE</code> porque esta
-muestra no trae manifiesto de procedencia —se generó antes de que existiera— y dos son
-<code>INFORMATIVA</code> a propósito.</p>
+<p><strong>Qué muestra.</strong> Las doce comprobaciones con su estado: seis <code>PASS</code>, cinco <code>NO_VERIFICABLE</code> y una
+<code>INFORMATIVA</code>. Tres de las cinco no verificables (5, 11 y 12) lo son porque esta muestra no trae
+manifiesto de procedencia (se generó antes de que existiera); la 6, porque no tiene sesiones sanas
+de calentamiento; la 8, porque no trae las columnas de expresión del fallo.</p>
 <p><strong>Qué podemos interpretar.</strong> Ninguna de las doce señales separa por sí sola ninguna de las cinco
-condiciones con un solo umbral: el problema no es trivial. Las relaciones entre señales están
+condiciones con un solo umbral <strong>muestra a muestra</strong>: el problema no es trivial en ese sentido.
+Agregadas por bloque es otra cosa: en E4, la media de <code>stft_bank1</code> por bloque separa por completo la
+fuga de vacío y la deriva del caudalímetro del motor sano (delta de Cliff 1,00 en las dos,
+<code>E4_separabilidad.csv</code>). Las relaciones entre señales están
 presentes con el signo esperado. Y el ralentí sin fallo cae dentro del rango que el manual documenta
 para este motor, 640–740 rpm, que es exactamente la comprobación que habría detectado el problema de
 <code>synthetic_v3</code> el día que se generó.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que no exista una <strong>combinación</strong> de señales que separe trivialmente.
 La comprobación es de una señal y un umbral; una regla de dos señales no la detectaría. Tampoco que
 el conjunto oficial pase igual: se ha comprobado sobre esta muestra.</p>
-<p>Dos comprobaciones merecen comentario porque son informativas y no aprobatorias:</p>
+<p>Dos comprobaciones merecen comentario porque informan y no aprueban:</p>
 <ul>
-<li><strong>La expresión efectiva de los fallos</strong> se mide y se publica, no se aprueba. Una condición que se
+<li><strong>La expresión efectiva de los fallos</strong> (aquí no verificable) se mide y se publica, no se
+aprueba. Una condición que se
 exprese poco no es un defecto del conjunto: es el fenómeno. Lo que sería un defecto es tratar la
 etiqueta como prueba de que el fallo se manifestó.</li>
 <li><strong>La variabilidad entre sesiones</strong> se informa por el mismo motivo.</li>
@@ -8952,7 +9138,7 @@ condición.</p>
 <strong>no se ve en el caudalímetro</strong>. El efecto aparece en los ajustes de combustible, porque la
 centralita compensa la subestimación del aire inyectando más. La firma de un fallo no está
 necesariamente en la señal del componente que falla.</p>
-<p><strong>Qué no podemos afirmar.</strong> Estas figuras salen de <code>synthetic_v1</code>, con 36 sesiones, y no de
+<p><strong>Qué no podemos afirmar.</strong> Estas figuras salen de <code>synthetic_v1</code> (con 36 sesiones) y no de
 <code>synthetic_v2</code>. No deben leerse como si fueran del conjunto oficial.</p>
 <p><strong>Por qué se redibuja la segunda.</strong> Es legible en pantalla y no en papel: se publicó a 9,6 pulgadas
 de ancho y el documento tiene 5,9, de modo que al entrar se escala al 61 % y una etiqueta de 7
@@ -8978,13 +9164,13 @@ media del bloque y sobre su dispersión. Se etiquetan solo las celdas con efecto
 <span class="p">)</span>
 
 <span class="c1"># Dos mapas y no dos paneles de uno: comparten las doce filas y las cinco</span>
-<span class="c1"># columnas, y apilados solo el de arriba conservaba los nombres de las señales.</span>
+<span class="c1"># columnas; apilados solo el de arriba conservaba los nombres de las señales.</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">fig_separabilidad_nivel</span><span class="p">()</span>
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-05_separabilidad_nivel"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-04_separabilidad_nivel"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">fig_separabilidad_dispersion</span><span class="p">()</span>
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-06_separabilidad_dispersion"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-05_separabilidad_dispersion"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8998,7 +9184,7 @@ media del bloque y sobre su dispersión. Se etiquetan solo las celdas con efecto
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-05_separabilidad_nivel.png y FIG-NB01-05_separabilidad_nivel.svg
+<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-04_separabilidad_nivel.png y FIG-NB01-04_separabilidad_nivel.svg
 </pre>
 </div>
 </div>
@@ -9011,7 +9197,7 @@ media del bloque y sobre su dispersión. Se etiquetan solo las celdas con efecto
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-06_separabilidad_dispersion.png y FIG-NB01-06_separabilidad_dispersion.svg
+<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-05_separabilidad_dispersion.png y FIG-NB01-05_separabilidad_dispersion.svg
 </pre>
 </div>
 </div>
@@ -9032,7 +9218,7 @@ media del bloque y sobre su dispersión. Se etiquetan solo las celdas con efecto
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestran.</strong> Las cinco mejores celdas, una por condición, reparten los fallos en dos grupos.
 Tres se separan por el <strong>nivel</strong> y con efecto máximo o casi: la fuga de vacío y la deriva del
-caudalímetro en el ajuste de combustible a corto plazo, y el termostato en la temperatura del
+caudalímetro en el ajuste de combustible a corto plazo; el termostato, en la temperatura del
 refrigerante. La sonda lenta alcanza el efecto máximo <strong>solo por la dispersión</strong>, con un nivel de
 +0,29 que no distingue nada. El fallo de encendido tiene un único efecto grande, +0,58, el más débil
 de los cinco.</p>
@@ -9040,7 +9226,7 @@ de los cinco.</p>
 dos condiciones indetectables por construcción. Es la justificación empírica de la decisión de
 incluir dispersión, extremos y conteos de eventos en el vector de descriptores.</p>
 <p><strong>Qué no podemos afirmar.</strong> El delta de Cliff ordena pero no explica: un efecto grande en una señal
-no implica que el modelo la use, y el análisis de atribución muestra un caso en que no la usa. La
+no implica que el modelo la use: el análisis de atribución muestra un caso en que no la usa. La
 medición es sobre bloques de 60 segundos y no sobre las ventanas de 120 con que se entrena. Y sale
 de <code>synthetic_v1</code>, que es <strong>pre-calibración</strong> y no se reconstruye con el generador publicado.</p>
 <p><strong>Relación con la hipótesis.</strong> Delimitan por anticipado qué afirmaciones sobre una señal pueden
@@ -9057,12 +9243,12 @@ tener soporte observacional bajo PI.1 y cuáles no. En la memoria son las <stron
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="11.-Qu%C3%A9-distingue-entre-s%C3%AD-las-dos-aver%C3%ADas-de-mezcla-pobre">11. Qué distingue entre sí las dos averías de mezcla pobre<a class="anchor-link" href="#11.-Qu%C3%A9-distingue-entre-s%C3%AD-las-dos-aver%C3%ADas-de-mezcla-pobre">¶</a></h2><p><strong>Introducción al problema.</strong> Los dos apartados anteriores preguntan si una señal separa una
 condición de la condición sin fallo. Hay un caso en que esa pregunta se queda corta. La fuga de
-vacío y la deriva del caudalímetro empobrecen las dos la mezcla, y la centralita responde a las dos
+vacío y la deriva del caudalímetro empobrecen las dos la mezcla y la centralita responde a las dos
 subiendo las correcciones de combustible: las dos se separan de la condición sin fallo por lo mismo
-y con el efecto máximo. Eso dice que las dos se detectan, y no dice cómo se distinguen <strong>entre sí</strong>,
+y con el efecto máximo. Eso dice que las dos se detectan; no dice cómo se distinguen <strong>entre sí</strong>,
 que es lo que decide la reparación.</p>
-<p><strong>Objetivo del análisis.</strong> Medir, descriptor a descriptor, dos cosas separadas —si delata que algo
-va mal y si dice cuál de las dos averías es— y comprobar de paso qué hace el cociente informado por
+<p><strong>Objetivo del análisis.</strong> Medir, descriptor a descriptor, dos cosas separadas (si delata que algo
+va mal y si dice cuál de las dos averías es) y comprobar de paso qué hace el cociente informado por
 la física que el capítulo 4 construyó precisamente para delatar un caudalímetro que subestima.</p>
 <p><strong>Procedencia de los datos.</strong> <code>data/processed/synthetic_v2_features.npy</code> y su <code>meta.parquet</code>, de
 E5. <strong>Solo la partición de entrenamiento</strong>: 56 ventanas por condición de fallo y 112 sin fallo. Una
@@ -9158,13 +9344,13 @@ maf_over_rpm_load                       0.19                      0.09
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Descripción objetiva de lo que se ve.</strong> Los cuatro primeros descriptores —niveles y máximos de las
-dos correcciones de combustible— delatan la avería con delta de Cliff entre 0,99 y 1,00, y
+<p><strong>Descripción objetiva de lo que se ve.</strong> Los cuatro primeros descriptores (niveles y máximos de las
+dos correcciones de combustible) delatan la avería con delta de Cliff entre 0,99 y 1,00;
 distinguen una de otra entre 0,40 y 0,52. Los cuatro siguientes invierten el patrón: el mínimo de la
 presión de colector delata 0,01 y distingue 0,80; el salto descendente del ajuste a largo plazo,
 0,50 y 0,69; su recuento de eventos, 0,02 y 0,64; el mínimo del caudal, 0,13 y 0,64. El cociente
 <code>maf_over_rpm_load</code> queda en 0,19 y 0,09.</p>
-<p><strong>Interpretación.</strong> Lo que avisa y lo que distingue son conjuntos de descriptores distintos, y casi
+<p><strong>Interpretación.</strong> Lo que avisa y lo que distingue son conjuntos de descriptores distintos y casi
 disjuntos. La lectura mecánica es coherente con el generador: la fuga de vacío entra por el colector
 y eleva su presión, mientras la deriva del caudalímetro no toca esa señal; por eso la presión de
 colector no sirve de aviso y sí de discriminante. Y hay un resultado negativo que conviene no
@@ -9172,12 +9358,12 @@ esconder: el cociente informado por la física no cumple en este conjunto lo que
 Su comentario lo declaraba pendiente de comprobación sobre datos reales; sobre estos datos
 sintéticos, directamente no funciona.</p>
 <p><strong>Limitaciones.</strong> El delta de Cliff es un tamaño de efecto <strong>descriptivo</strong> y las ventanas de una
-misma sesión no son independientes —cada condición aporta 56 ventanas de 8 sesiones—, de modo que no
+misma sesión no son independientes (cada condición aporta 56 ventanas de 8 sesiones), de modo que no
 se acompaña de contraste ni de intervalo. <strong>Separabilidad descriptiva no es rendimiento de
 clasificación demostrado</strong> (apartado 10). Y nada de esto se afirma de un vehículo real.</p>
 <p><strong>Relación con la pregunta de investigación.</strong> Sostiene PI.1 por su lado restrictivo: una explicación
-que justificara la deriva del caudalímetro «porque los ajustes de combustible están altos» sería
-indistinguible de la que justificaría una fuga de vacío, y por eso las plantillas de afirmación del
+que justificara la deriva del caudalímetro “porque los ajustes de combustible están altos” sería
+indistinguible de la que justificaría una fuga de vacío. Por eso las plantillas de afirmación del
 verificador no permiten formularla así. En la memoria es la <strong>Figura 5.5</strong> y la <strong>Tabla B.5</strong>.</p>
 </div>
 </div>
@@ -9237,7 +9423,7 @@ calor deja ver los bloques de un vistazo.</p>
     <span class="n">fontsize</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"left"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-04_correlaciones"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-06_correlaciones"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="n">altas</span> <span class="o">=</span> <span class="p">(</span>
@@ -9259,7 +9445,7 @@ calor deja ver los bloques de un vistazo.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-04_correlaciones.png y FIG-NB01-04_correlaciones.svg
+<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-06_correlaciones.png y FIG-NB01-06_correlaciones.svg
 </pre>
 </div>
 </div>
@@ -9289,18 +9475,18 @@ rpm                vehicle_speed    0.963370
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Qué muestra.</strong> Un bloque de señales fuertemente acopladas —velocidad, régimen, carga, mariposa,
-caudal y presión de colector— y un grupo casi independiente: temperatura de refrigerante,
-temperatura de admisión, sonda lambda y los dos ajustes de combustible.</p>
-<p><strong>Qué podemos interpretar.</strong> Las doce señales <strong>no aportan doce dimensiones de información</strong>. La
-carga y la posición de la mariposa están correlacionadas por encima de 0,98, y la carga con la
-presión de colector por encima de 0,99: en el generador, la mariposa y la presión son funciones
-afines de la carga más ruido. Eso tiene una consecuencia metodológica concreta: buena parte de los
-139 descriptores de ventana son redundantes entre sí, y una atribución que reparta importancia entre
+<p><strong>Qué muestra.</strong> Dos grupos casi redundantes: carga, mariposa y presión de colector, con
+correlaciones entre 0,992 y 0,997; régimen con velocidad, con 0,963. El caudal acompaña a los dos
+grupos sin ser redundante con ninguno (0,85 con la carga, 0,75 con el régimen). El ajuste a corto
+plazo, la sonda lambda y la temperatura de refrigerante apenas correlacionan con nada.</p>
+<p><strong>Qué podemos interpretar.</strong> Las doce señales <strong>no aportan doce dimensiones de información</strong>:
+cinco de ellas se reducen, en la práctica, a dos. En el generador, la mariposa y la presión son
+funciones afines de la carga más ruido. Eso tiene una consecuencia metodológica concreta: buena parte de los
+139 descriptores de ventana son redundantes entre sí. Una atribución que reparta importancia entre
 señales acopladas la reparte de forma inestable.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que esta estructura de correlaciones sea la de un vehículo real. Es la
-que el generador construye, por diseño. Tampoco que la redundancia perjudique al bosque aleatorio
-—que la tolera bien— ni que la correlación implique que una señal cause la otra: aquí las dos
+que el generador construye, por diseño. Tampoco que la redundancia perjudique al bosque aleatorio,
+que la tolera bien, ni que la correlación implique que una señal cause la otra: aquí las dos
 dependen de la misma variable latente, la demanda del conductor.</p>
 </div>
 </div>
@@ -9660,7 +9846,7 @@ ventanas salen por sesión y cuánta separabilidad hay entre condiciones. La tab
     <span class="n">fontsize</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"left"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-05_estudio_ventana"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-07_estudio_ventana"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -9674,7 +9860,7 @@ ventanas salen por sesión y cuánta separabilidad hay entre condiciones. La tab
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-05_estudio_ventana.png y FIG-NB01-05_estudio_ventana.svg
+<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-07_estudio_ventana.png y FIG-NB01-07_estudio_ventana.svg
 </pre>
 </div>
 </div>
@@ -9695,16 +9881,20 @@ ventanas salen por sesión y cuánta separabilidad hay entre condiciones. La tab
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra.</strong> A la izquierda, el tamaño del efecto del mejor descriptor de cada condición frente
 a la duración de la ventana, con el suelo de ruido medido como referencia. A la derecha, cuántas
-ventanas quedan —en escala logarítmica, porque el recuento cae un orden de magnitud—.</p>
-<p><strong>Qué podemos interpretar.</strong> Los dos paneles son las dos mitades de un compromiso. Cuatro de las cinco condiciones ya superan el suelo de ruido con ventanas cortas;
-la que decide es la quinta. Alargar la ventana compra separabilidad y cuesta ventanas, y cada
-ventana perdida hace la evaluación más frágil. 120 s es el punto en que las cinco condiciones están
-por encima del suelo sin haber vaciado el conjunto.</p>
+ventanas quedan, en escala logarítmica porque el recuento cae un orden de magnitud.</p>
+<p><strong>Qué podemos interpretar.</strong> Los dos paneles son las dos mitades de un compromiso. Cuatro de las
+cinco condiciones ya superan el suelo de ruido con ventanas de 10 s; la que decide es el fallo de
+encendido. A 60 s ya lo supera también, pero por poco: 0,4325 frente a un suelo de 0,4261. A 120 s
+el margen crece a 0,6426 frente a 0,5133, a cambio de bajar de 1.308 a 588 ventanas; cada ventana
+perdida hace la evaluación más frágil. 120 s es la duración que E5 eligió con ese compromiso, no
+la primera en que las cinco superan el suelo.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que 120 s sea óptimo para todas. Para el fallo de encendido, que es
 episódico, una ventana larga <strong>diluye</strong> la firma: los pocos segundos alterados se promedian con los
 que no lo están. La elección es un compromiso global y perjudica a esa condición en concreto.
 Tampoco que el suelo de ruido sea un umbral de detectabilidad: es el percentil 90 del efecto medido
-entre pares de sesiones <strong>sanas</strong>, es decir cuánto separa el azar.</p>
+entre pares de sesiones <strong>sanas</strong>, es decir cuánto separa el azar. Y la figura dibuja un solo
+suelo, el de 10 s (0,33), para todas las duraciones, cuando la tabla da uno por duración que sube
+hasta 0,51 a 120 s: las comparaciones con el suelo deben hacerse con la tabla, no con la línea.</p>
 </div>
 </div>
 </div>
@@ -9717,12 +9907,12 @@ entre pares de sesiones <strong>sanas</strong>, es decir cuánto separa el azar.
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="14.-De-la-se%C3%B1al-al-descriptor:-lo-que-el-resumen-conserva-y-lo-que-disuelve">14. De la señal al descriptor: lo que el resumen conserva y lo que disuelve<a class="anchor-link" href="#14.-De-la-se%C3%B1al-al-descriptor:-lo-que-el-resumen-conserva-y-lo-que-disuelve">¶</a></h2><p><strong>Introducción al problema.</strong> El apartado anterior fija la ventana en 120 segundos. El modelo, sin
 embargo, no ve la ventana: ve 139 números calculados sobre ella. Entre una cosa y otra hay una
-traducción que nadie ha mirado todavía, y es donde se pierde la información de los fallos
+traducción que nadie ha mirado todavía y es donde se pierde la información de los fallos
 episódicos.</p>
 <p><strong>Objetivo del análisis.</strong> Seguir una misma ventana de fallo de encendido desde la señal a un
-hertzio hasta los descriptores que de ella salen, y comparar esos descriptores con los de las
-ventanas sin fallo <strong>del mismo régimen de conducción</strong> —compararlos con todas mediría el régimen y
-no el fallo—.</p>
+hertzio hasta los descriptores que de ella salen y comparar esos descriptores con los de las
+ventanas sin fallo <strong>del mismo régimen de conducción</strong>. Compararlos con todas mediría el régimen y
+no el fallo.</p>
 <p><strong>Procedencia de los datos.</strong> Los dos primeros paneles, del análisis contrafactual T2
 (<code>artifacts/contrafactual/</code>); el tercero, de <code>synthetic_v2_features.npy</code>, que es el fichero que el
 modelo consume. La ventana es de la partición de <strong>entrenamiento</strong>.</p>
@@ -9773,14 +9963,14 @@ modelo consume. La ventana es de la partición de <strong>entrenamiento</strong>
 <p><strong>Descripción objetiva de lo que se ve.</strong> En la señal, el fallo son tres muestras de un episodio
 sobre ciento veinte. En el resumen, esa caída queda dentro de la banda de una desviación típica. En
 los descriptores, la media se aparta 1,9 escalas robustas de la mediana sin fallo del mismo régimen
-—687,9 frente a 690,3 min⁻¹—, mientras el mínimo se aparta 9,6 —600,0 frente a 659,3—, la desviación
+(687,9 frente a 690,3 min⁻¹), mientras el mínimo se aparta 9,6 (600,0 frente a 659,3), la desviación
 típica 6,2 y el salto descendente máximo 4,3; el recuento de eventos pasa de 0 a 2.</p>
 <p><strong>Interpretación.</strong> El descriptor que un lector miraría primero, la media, es precisamente el que
 menos registra este fallo. La detección depende por completo de los descriptores que guardan el
 extremo y la variación, que es la justificación empírica de la decisión del capítulo 4 de no limitar
 el vector a momentos de primer orden.</p>
 <p><strong>Limitaciones.</strong> Es <strong>una ventana elegida como ilustración</strong>, no una muestra. Procede de una sesión
-en ralentí, y ahí el efecto del fallo sobre el régimen queda <strong>truncado por el límite físico
+en ralentí; ahí el efecto del fallo sobre el régimen queda <strong>truncado por el límite físico
 inferior</strong> que el generador impone: el mínimo de 600,0 es el suelo del instrumento y no la
 profundidad real de la caída. El apartamiento en escalas robustas dice cuán inusual es esta ventana,
 no una probabilidad ni un contraste.</p>
@@ -9992,9 +10182,9 @@ de implementación: es lo que separa una evaluación de un examen con las respue
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra la tabla.</strong> Cuántas sesiones y ventanas van a cada partición, por condición, en el
 conjunto oficial.</p>
-<p><strong>Qué podemos interpretar.</strong> Ninguna sesión aparece en dos particiones, y cada condición está
+<p><strong>Qué podemos interpretar.</strong> Ninguna sesión aparece en dos particiones y cada condición está
 presente en las tres. Dos ventanas consecutivas de una misma sesión comparten la mitad de sus
-muestras —el paso es de 60 s sobre ventanas de 120 s—, de modo que repartir por ventana habría
+muestras (el paso es de 60 s sobre ventanas de 120 s), de modo que repartir por ventana habría
 filtrado información de entrenamiento a evaluación de forma invisible para cualquier métrica.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que el reparto por sesión elimine toda dependencia (apartado 16). La
 evaluación mide generalización <strong>a sesiones nuevas
@@ -10016,7 +10206,7 @@ Se dibuja apilada por partición para que se vea a la vez el tamaño de cada cla
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.visualization.memoria</span><span class="w"> </span><span class="kn">import</span> <span class="n">fig_particiones</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">fig_particiones</span><span class="p">()</span>
-<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-04_particiones"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
+<span class="n">soporte</span><span class="o">.</span><span class="n">exportar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"FIG-NB01-08_particiones"</span><span class="p">,</span> <span class="n">subdirectorio</span><span class="o">=</span><span class="s2">"01_exploracion_obd"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -10030,7 +10220,7 @@ Se dibuja apilada por partición para que se vea a la vez el tamaño de cada cla
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-04_particiones.png y FIG-NB01-04_particiones.svg
+<pre>exportada: notebooks/salida/01_exploracion_obd/FIG-NB01-08_particiones.png y FIG-NB01-08_particiones.svg
 </pre>
 </div>
 </div>
@@ -10053,13 +10243,13 @@ Se dibuja apilada por partición para que se vea a la vez el tamaño de cada cla
 y 28 de prueba; cada condición de fallo, 56, 14 y 14. La clase mayoritaria <strong>dobla</strong> a cada una de
 las cinco condiciones.</p>
 <p><strong>Qué podemos interpretar.</strong> El desequilibrio no es un defecto del muestreo: las sesiones averiadas
-aportan sus ventanas <strong>anteriores a la entrada del fallo</strong>, y esas ventanas son ventanas sin fallo.
+aportan sus ventanas <strong>anteriores a la entrada del fallo</strong>; esas ventanas son ventanas sin fallo.
 De ahí que la clase mayoritaria alcance el 28,6 % de la validación, que es exactamente la exactitud
 de la referencia mínima con que se compara el modelo de diagnóstico.</p>
 <p><strong>Qué no podemos afirmar.</strong> Nada sobre la dificultad de cada clase: dos condiciones con el mismo
 número de ventanas pueden ser muy desiguales en lo que de ellas se puede aprender.</p>
-<p><strong>Relación con la hipótesis.</strong> Fija la unidad de observación —la ventana, con la sesión como unidad
-de reparto— sobre la que se cuentan después todas las decisiones del agente.</p>
+<p><strong>Relación con la hipótesis.</strong> Fija la unidad de observación (la ventana, con la sesión como unidad
+de reparto) sobre la que se cuentan después todas las decisiones del agente.</p>
 </div>
 </div>
 </div>
@@ -10075,8 +10265,9 @@ de reparto— sobre la que se cuentan después todas las decisiones del agente.<
 aparición del 2 % por segundo, una fracción muy pequeña de las muestras etiquetadas difiere de su
 contrafactual. La etiqueta cubre la sesión; el fenómeno, no.</li>
 <li><strong>El termostato no es observable en calentamiento</strong> hasta que el motor alcanza su techo.</li>
-<li><strong>Seis de las doce señales son casi redundantes entre sí.</strong> La dimensionalidad efectiva es menor
-que la nominal.</li>
+<li><strong>Cinco de las doce señales forman dos grupos casi redundantes</strong>: carga, mariposa y presión de
+colector (|r| ≥ 0,99) y régimen con velocidad (0,96). La dimensionalidad efectiva es menor que
+la nominal.</li>
 <li><strong>La muestra versionada no cubre el régimen de calentamiento</strong>; el apartado 8 lo ilustra.</li>
 <li><strong>Las cifras de este notebook no son las publicadas de E4</strong> (modalidad, apartado 4).</li>
 </ol>
@@ -10101,15 +10292,15 @@ estadístico.</li>
 <h2 id="17.-Discusi%C3%B3n">17. Discusión<a class="anchor-link" href="#17.-Discusi%C3%B3n">¶</a></h2><p>Lo que esta exploración aporta a la pregunta de investigación es una respuesta parcial y una
 advertencia.</p>
 <p><strong>La respuesta parcial.</strong> Hay estructura y ninguna condición se separa trivialmente: un modelo de
-diagnóstico tiene algo que aprender, y eso es la precondición de PI.1.</p>
+diagnóstico tiene algo que aprender. Eso es la precondición de PI.1.</p>
 <p><strong>La advertencia, que es lo más útil.</strong> La relación entre <strong>etiqueta</strong> y <strong>señal</strong> no es uno a uno.
 Hay ventanas etiquetadas con un fallo que no contienen información del fallo. Un modelo que falle en
 ellas no está equivocándose: está respondiendo correctamente a lo que ve. Y una métrica agregada que
-las cuente como errores está midiendo, en parte, el límite físico del fenómeno y no la calidad del
-modelo.</p>
-<p>La capacidad de <strong>abstenerse</strong> —PI.3— tiene
+las cuente como errores está midiendo, en parte, el límite de lo que el dato contiene y no la
+calidad del modelo. Es una propiedad del generador, no una afirmación sobre vehículos reales.</p>
+<p>La capacidad de <strong>abstenerse</strong> (PI.3) tiene
 aquí su justificación empírica: existen situaciones en que la evidencia es genuinamente insuficiente
-por la física del problema, no por un defecto del sistema. Un sistema que explicara con confianza en
+por cómo se manifiesta el fallo, no por un defecto del sistema. Un sistema que explicara con confianza en
 esas ventanas estaría inventando.</p>
 </div>
 </div>
@@ -10122,8 +10313,8 @@ esas ventanas estaría inventando.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="18.-Conclusiones-de-este-notebook">18. Conclusiones de este notebook<a class="anchor-link" href="#18.-Conclusiones-de-este-notebook">¶</a></h2><p><strong>Qué aprendimos.</strong> Que las doce señales tienen la estructura que el diseño del generador declara;
-que las cinco condiciones producen firmas de <strong>cinco formas temporales distintas</strong>, lo que hace que
-la elección de representación no sea neutral; y que al menos dos condiciones tienen ventanas
+que las cinco condiciones producen <strong>cinco firmas distintas</strong> en su señal principal (tres formas
+temporales medidas como desviación), lo que hace que la elección de representación no sea neutral; y que al menos dos condiciones tienen ventanas
 etiquetadas sin señal observable del fallo.</p>
 <p><strong>Qué hipótesis recibió apoyo.</strong> Que las condiciones desplazan las señales declaradas sin que
 ninguna señal las separe por sí sola con un umbral.</p>
@@ -10207,23 +10398,92 @@ tablas versionadas.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="20.-Referencias-y-trazabilidad">20. Referencias y trazabilidad<a class="anchor-link" href="#20.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> El reparto de la muestra es la <strong>Figura 5.1</strong> y la
-separabilidad por señal, las <strong>Figuras 5.2</strong> y <strong>5.3</strong> —una por vía, nivel y dispersión—, en el
-análisis descriptivo del capítulo 5. Las doce señales y las cinco condiciones están tabuladas en el
-anexo A, <strong>Tablas A.2</strong> y <strong>A.3</strong>, y la señal testigo de cada fallo es la <strong>Figura A.2</strong>.</p>
+<h2 id="20.-Referencias-y-trazabilidad">20. Referencias y trazabilidad<a class="anchor-link" href="#20.-Referencias-y-trazabilidad">¶</a></h2><p><strong>Dónde aparece esto en la memoria.</strong> El reparto del conjunto oficial, <code>synthetic_v2</code>, es la
+<strong>Figura 5.1</strong> y la separabilidad por señal, las <strong>Figuras 5.2</strong> y <strong>5.3</strong> (una por vía, nivel y
+dispersión), en el análisis descriptivo del capítulo 5. Las doce señales y las cinco condiciones
+están tabuladas en el anexo A, <strong>Tablas A.2</strong> y <strong>A.3</strong>. La <strong>Figura A.2</strong> es la versión publicada
+de E4 sobre <code>synthetic_v1</code>, la primera figura del apartado 10.</p>
 <ul>
 <li><code>docs/experiments/E2_datos_sinteticos.md</code>, <code>E4_eda_temporal.md</code>, <code>E5_preprocesamiento.md</code></li>
 <li><code>artifacts/tables/E4_descriptivos.csv</code>, <code>E4_separabilidad.csv</code>, <code>E5_estudio_ventana.csv</code>, <code>E5_reparto.csv</code></li>
 <li><code>artifacts/figures/FIG-E4-01_series_normal_vs_fallo.png</code>, <code>FIG-E4-02_separabilidad.png</code></li>
-<li><code>configs/calibracion_mazda3_bk.yaml</code> — cada constante del generador con su cita</li>
-<li><code>src/mecanico_ia_exp/obd/</code> — generador, catálogo de fallos, auditoría de doce comprobaciones</li>
-<li><code>docs/methodology/expresion-efectiva-del-fallo.md</code> — la definición de alteración observable</li>
-<li><code>docs/diseno-pi1/08-analisis-por-fallo.md</code> — el cruce pendiente entre errores y expresión</li>
+<li><code>configs/calibracion_mazda3_bk.yaml</code>: cada constante del generador con su cita</li>
+<li><code>src/mecanico_ia_exp/obd/</code>: generador, catálogo de fallos, auditoría de doce comprobaciones</li>
+<li><code>docs/methodology/expresion-efectiva-del-fallo.md</code>: la definición de alteración observable</li>
+<li><code>docs/diseno-pi1/08-analisis-por-fallo.md</code>: el cruce pendiente entre errores y expresión</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </main>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/01_exploracion_obd.ipynb</code> · commit <code>6c5324d</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+(function () {
+  var cuerpo = document.body;
+  cuerpo.classList.add('mi-doc');
+  // La ficha es la primera celda de texto.
+  var celdas = document.querySelectorAll('.jp-MarkdownCell');
+  if (celdas.length) { celdas[0].classList.add('mi-ficha'); }
+  // «En un minuto» y «Cómo leer»: el título y lo que le sigue hasta el próximo título
+  // del mismo nivel o superior se envuelven en un recuadro, estén en la celda que estén.
+  function enCaja(patron, clase) {
+    document.querySelectorAll('.jp-RenderedMarkdown h2, .jp-RenderedMarkdown h3').forEach(
+      function (h) {
+        if (!patron.test(h.textContent)) { return; }
+        var caja = document.createElement('div');
+        caja.className = 'mi-caja ' + clase;
+        h.parentNode.insertBefore(caja, h);
+        var nodo = h;
+        while (nodo) {
+          var siguiente = nodo.nextSibling;
+          caja.appendChild(nodo);
+          if (siguiente && /^(H1|H2|H3|HR)$/.test(siguiente.nodeName)) { break; }
+          nodo = siguiente;
+        }
+      });
+  }
+  enCaja(/^\s*En un minuto/i, 'mi-caja-minuto');
+  enCaja(/^\s*Cómo leer este notebook/i, 'mi-caja-leer');
+  // Índice lateral a partir de los títulos de nivel 2 y 3.
+  var indice = document.getElementById('mi-indice-lista');
+  var titulos = document.querySelectorAll('.jp-RenderedMarkdown h2, .jp-RenderedMarkdown h3');
+  var enlaces = [];
+  titulos.forEach(function (h, i) {
+    if (!h.id) { h.id = 'mi-seccion-' + i; }
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent.replace(/\u00b6\s*$/, '').trim();
+    var entrada = h.parentNode.classList.contains('mi-caja');
+    a.className = h.tagName === 'H3' && !entrada ? 'mi-n3' : 'mi-n2';
+    indice.appendChild(a);
+    enlaces.push([h, a]);
+  });
+  // Resalta en el índice la sección que se está leyendo.
+  function marcar() {
+    var actual = null;
+    for (var i = 0; i < enlaces.length; i++) {
+      if (enlaces[i][0].getBoundingClientRect().top < 120) { actual = enlaces[i][1]; }
+    }
+    enlaces.forEach(function (p) { p[1].classList.toggle('mi-activo', p[1] === actual); });
+  }
+  document.addEventListener('scroll', marcar, { passive: true });
+  marcar();
+  // Modo lectura: oculta el código, conserva salidas y figuras.
+  var boton = document.getElementById('mi-boton-codigo');
+  var clave = 'mecanico-ia-sin-codigo';
+  function aplicar(oculto) {
+    cuerpo.classList.toggle('mi-sin-codigo', oculto);
+    boton.textContent = oculto ? 'Mostrar código' : 'Ocultar código';
+  }
+  var guardado = false;
+  try { guardado = window.localStorage.getItem(clave) === '1'; } catch (e) {}
+  aplicar(guardado);
+  boton.addEventListener('click', function () {
+    var oculto = !cuerpo.classList.contains('mi-sin-codigo');
+    aplicar(oculto);
+    try { window.localStorage.setItem(clave, oculto ? '1' : '0'); } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>
