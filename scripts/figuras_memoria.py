@@ -265,7 +265,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E15b, barrido del umbral de confianza",
         conjunto="synthetic_v2",
         particion="validación, 98 ventanas de 12 sesiones",
-        notebook="05_suficiencia",
+        notebook="05_suficiencia_y_abstencion",
         ubicacion="cap. 5 · PI.1 · Diagnóstico, calibración y atribución",
         limitaciones=(
             "mueve solo la mitad de confianza del criterio compuesto; la elección del umbral no "
@@ -291,7 +291,9 @@ FIGURAS: tuple[Figura, ...] = (
     Figura(
         "5.10",
         "FIG-5-10_expresion_del_fallo",
-        copia_de=SALIDA_NOTEBOOKS / "06_expresion" / "FIG-N06-01_expresion_y_aciertos.png",
+        copia_de=SALIDA_NOTEBOOKS
+        / "06_expresion_del_fallo"
+        / "FIG-NB06-01_expresion_y_aciertos.png",
         motivo_de_la_copia="la produce el notebook 06; duplicar su código daría dos fuentes de verdad",
         extras=("svg",),
         experimento="E6, fase G del diseño de PI.1",
@@ -344,20 +346,22 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E12, reejecución canónica",
         conjunto="corpus del vehículo",
         particion="6 casos, 5 puntuados",
-        notebook="05_suficiencia",
+        notebook="05_suficiencia_y_abstencion",
         ubicacion="cap. 5 · PI.2 · Recuperación y trazabilidad",
         limitaciones="n = 5 casos puntuados: recuentos, no tasas",
     ),
     Figura(
         "5.17",
         "FIG-5-17_aplicables_vs_cobertura",
-        copia_de=SALIDA_NOTEBOOKS / "05_suficiencia" / "FIG-N05-01_aplicables_vs_cobertura.png",
+        copia_de=SALIDA_NOTEBOOKS
+        / "05_suficiencia_y_abstencion"
+        / "FIG-NB05-02_aplicables_vs_cobertura.png",
         motivo_de_la_copia="la produce el notebook 05, corregido el 13-10-2026 para dibujar las cinco condiciones",
         extras=("svg",),
         experimento="E15, verificador v2.1",
         conjunto="synthetic_v2",
         particion="17 casos sobre 5 ventanas",
-        notebook="05_suficiencia",
+        notebook="05_suficiencia_y_abstencion",
         ubicacion="cap. 5 · PI.3 y PI.4",
         limitaciones="17 casos de 5 ventanas: no son observaciones independientes",
     ),
@@ -368,7 +372,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E18, cuatro ablaciones",
         conjunto="synthetic_v2",
         particion="los mismos 17 casos",
-        notebook="05_suficiencia",
+        notebook="05_suficiencia_y_abstencion",
         ubicacion="cap. 5 · Contribución de cada componente",
         limitaciones="A2 quedó INCONCLUSA; denominadores de 9 y de 5 ejecuciones",
     ),
@@ -428,7 +432,7 @@ FIGURAS: tuple[Figura, ...] = (
         experimento="E15",
         conjunto="synthetic_v2",
         particion="validación",
-        notebook="05_suficiencia",
+        notebook="05_suficiencia_y_abstencion",
         ubicacion="cap. 6 · Limitaciones",
         limitaciones="el compromiso se dibuja sobre 17 casos",
     ),

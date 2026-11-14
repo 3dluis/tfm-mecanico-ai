@@ -8,7 +8,7 @@ CELDAS = [
     md("""\
 # Explicabilidad: qué señal sostiene cada diagnóstico
 
-**Notebook** `04_explicabilidad` · **versión** 1.0 · **fecha** 13 de octubre de 2026
+**Notebook** `04_explicabilidad` · **versión** 1.1 · **fecha** 14 de noviembre de 2026
 
 | | |
 |---|---|
@@ -16,6 +16,7 @@ CELDAS = [
 | **Conjunto** | `synthetic_v2`, partición de validación · 18 casos, tres por condición |
 | **Protocolo** | `shap.explainers.Permutation` sobre `predict_proba` de la clase predicha |
 | **Estado** | cerrado y validado |
+| **Modalidad** | visualización de evidencia histórica |
 | **Pregunta de investigación** | PI.1 —qué sostiene el diagnóstico— y PI.2, porque la atribución es la **observación** que después hay que anclar en un documento |
 | **Evidencia original** | `experiments/E9_xai_synthetic_v2.json`, `artifacts/tables/E9_atribuciones_synthetic_v2.csv`, `E9_resumen_synthetic_v2.csv` |
 
@@ -27,10 +28,11 @@ CELDAS = [
   que debería mirarse; la atribución da después las **observaciones** del informe.
 - **Qué se hace.** Se leen las atribuciones de Shapley que E9 calculó sobre el bosque aleatorio.
 - **Resultado principal.** En las **cinco** condiciones de fallo la señal de mayor atribución está
-  entre las declaradas. Y un hallazgo contraintuitivo: **la deriva del caudalímetro no se detecta
-  mirando el caudalímetro**, sino en los ajustes de combustible.
-- **Lo que lo acota.** Sin atribución (ablación `A1`) las decisiones son las mismas, diecisiete de
-  diecisiete, en validación y en prueba: la atribución **explica sin decidir**.
+  entre las declaradas. En la deriva del caudalímetro el modelo recupera la regla de compensación
+  que el generador implementa: la detecta en los ajustes de combustible, no en el caudal.
+- **Lo que lo acota.** Sin atribución (ablación `A1`) las diecisiete decisiones son las mismas en
+  validación; en prueba `A1` repite esas mismas decisiones, lo que no es una confirmación
+  independiente. La atribución **explica sin decidir**.
 - **Límite principal.** Atribución no causal, tres casos por condición y una sola ejecución, sobre
   datos sintéticos.
 
@@ -40,9 +42,9 @@ CELDAS = [
 nada. **Ejecución:** CPU, sin red, menos de un minuto.
 
 - **1–5.** Introducción, objetivo e hipótesis, fundamento (qué es y qué no es un valor de Shapley),
-  entorno, y el conjunto con lo que se explica exactamente.
-- **6–8.** Señal principal frente a las declaradas; el mapa de atribución y el hallazgo del
-  caudalímetro; dispersión caso a caso y confianza sin calibrar.
+  entorno y el conjunto con lo que se explica exactamente.
+- **6–8.** Señal principal frente a las declaradas; el mapa de atribución y la regla de
+  compensación del caudalímetro; dispersión caso a caso y confianza sin calibrar.
 - **9.** De la atribución a la observación del informe.
 - **10.** La ablación `A1`: qué cambia al retirar la atribución.
 - **11–15.** Resultados negativos y limitaciones, discusión, conclusiones, reproducibilidad y
@@ -60,7 +62,7 @@ Lo que no sabemos antes de empezar:
    correlación espuria del generador.
 2. **Si la atribución es estable** entre casos de la misma condición.
 3. **Si las señales que elige tienen respaldo documental.** Una observación sobre una señal que el
-   manual no menciona no puede anclarse, y el sistema tendría que abstenerse."""),
+   manual no menciona no puede anclarse: el sistema tendría que abstenerse."""),
     md("""\
 ## 2. Objetivo e hipótesis
 
@@ -78,11 +80,11 @@ la confianza de la predicción.
 se decide después.
 
 **Qué la cuestionaría.** Que la señal principal no esté entre las declaradas. No ocurre en ninguna
-de las cinco condiciones de fallo (en `F00_normal` la comparación no aplica, apartado 6). El
-resultado más interesante está en otro sitio: en la deriva del caudalímetro la señal principal está
-declarada, pero **no es el caudalímetro** (apartado 7)."""),
+de las cinco condiciones de fallo (en `F00_normal` la comparación no aplica, apartado 6). En la
+deriva del caudalímetro la señal principal está declarada, pero **no es el caudalímetro**
+(apartado 7)."""),
     md("""\
-## 3. Fundamento: valores de Shapley, y qué no son
+## 3. Fundamento: valores de Shapley y qué no son
 
 **De dónde vienen.** Son un reparto de la teoría de juegos cooperativos: dado un resultado producido
 por varios jugadores, ¿cuánto aportó cada uno? Trasladado a un clasificador, los jugadores son los
@@ -101,7 +103,7 @@ comparación entre recorridos es lo que el trabajo necesita.
 
 **Qué NO es un valor de Shapley.** No es una relación causal. Dice cuánto cambia la **predicción del
 modelo** al cambiar un descriptor, no cuánto cambia la **avería** al cambiar la señal. Entre señales
-correlacionadas la atribución se reparte de forma inestable, y eso es una propiedad del método, no
+correlacionadas la atribución se reparte de forma inestable. Eso es una propiedad del método, no
 del fallo (apartado 11)."""),
     md("""\
 ## 4. Preparación del entorno"""),
@@ -117,7 +119,7 @@ soporte.declarar_modalidad(
 ## 5. El conjunto y el procedimiento
 
 Dieciocho casos: tres ventanas por cada una de las seis condiciones, tomadas de la partición de
-**validación**. De cada uno se explican los **diez descriptores de mayor importancia**, y los **tres
+**validación**. De cada uno se explican los **diez descriptores de mayor importancia**. Los **tres
 primeros** son los que después viajan al informe como observaciones.
 
 Conviene saber qué se explica exactamente: la función `predict_proba` **de la clase predicha**. No la
@@ -158,24 +160,25 @@ resumen[["predicted_class", "n_cases", "mean_confidence", "top_signals",
 La excepción es `F00_normal`, que no tiene ficha: no es un fallo, de modo que la columna de señales
 declaradas está vacía y la comparación no aplica.
 
-**Qué podemos interpretar.** El modelo no está explotando un atajo del generador: decide sobre las
-señales que la física aproximada del fallo predice, y eso permite anclar después la observación en
-el manual.
+**Qué podemos interpretar.** En las cinco condiciones la señal de mayor atribución es una de las
+que declara la ficha del generador, aunque en el fallo de encendido parte del peso —un 13 %— cae en
+señales no declaradas (apartado 7). Eso permite anclar después la observación en el manual.
 
 **Qué no podemos afirmar.** Que la coincidencia implique que el modelo «entiende» el fallo. El
 generador produjo los datos con esas mismas reglas, así que la coincidencia es, en parte, una
 comprobación de que el modelo aprendió lo que se le puso delante. En datos reales la firma podría
 estar en otro sitio."""),
     md("""\
-## 7. El hallazgo: la deriva del caudalímetro no se ve en el caudalímetro
+## 7. El mapa de atribución: la deriva del caudalímetro no se ve en el caudalímetro
 
-**Qué queremos investigar.** Qué señales sostienen cada diagnóstico, con su peso, y dónde la
+**Qué queremos investigar.** Qué señales sostienen cada diagnóstico (con su peso) y dónde la
 atribución se aparta de lo esperable.
 
 **Qué datos utilizamos.** Las 180 atribuciones, agregadas por condición y señal.
 
-**Por qué un mapa de calor.** Seis condiciones por doce señales es una matriz; el mapa deja ver de
-un vistazo dónde se concentra el peso y dónde hay huecos.
+**Por qué un mapa de calor.** Seis condiciones por las señales que aparecen en la atribución —diez
+de las doce, más el descriptor compuesto `stft_bank1+ltft_bank1`— es una matriz; el mapa deja ver
+de un vistazo dónde se concentra el peso y dónde hay huecos.
 
 **Qué debemos observar.** La fila del caudalímetro."""),
     code("""\
@@ -236,32 +239,29 @@ print("\\nDeriva del caudalímetro · peso de cada señal:")
 fila = normalizada.loc["F02_maf_drift"].sort_values(ascending=False)
 print(fila[fila > 0.01].round(3).to_string())"""),
     md("""\
-**Qué muestra.** El peso se concentra, en cada condición, en pocas señales, y casi siempre sobre las
-que la ficha declara —los puntos—. La fila de la **deriva del caudalímetro** es la excepción
-llamativa: el peso está en los **ajustes de combustible**, y la señal `maf`, que es el componente que
-falla y está declarada en la ficha, **recibe una fracción mínima**.
+**Qué muestra.** En cada condición, el peso se concentra en pocas señales y casi siempre sobre las
+que la ficha declara —los puntos—. En la fila de la **deriva del caudalímetro** el peso está en los
+**ajustes de combustible**; la señal `maf`, que es el componente que falla y está declarada en la
+ficha, no figura entre los diez descriptores principales de ningún caso.
 
-**Qué podemos interpretar.** Es coherente con el mecanismo físico y es el hallazgo que E4 ya había
-anticipado: un caudalímetro contaminado **subestima** el aire que entra, la centralita compensa
-inyectando más combustible, y el desajuste aparece en los ajustes a corto y largo plazo. El valor
-absoluto del caudal sigue siendo plausible para el régimen y la carga; lo que no es plausible es la
-corrección que la centralita necesita.
+**Qué podemos interpretar.** Que el modelo recupera la regla de compensación que el generador
+implementa, la misma que E4 ya había visto: el caudalímetro contaminado **subestima** el aire que
+entra, la centralita compensa inyectando más combustible y el desajuste aparece en los ajustes a
+corto y largo plazo, mientras el caudal sigue siendo plausible para el régimen y la carga. La firma
+de un fallo no está necesariamente en la señal del componente que falla.
 
-**La consecuencia práctica:** un sistema de diagnóstico que buscara el fallo
-del caudalímetro **mirando el caudalímetro** no lo encontraría. La firma de un fallo no está
-necesariamente en la señal del componente que falla.
-
-**Qué no podemos afirmar.** Que sea causal (apartado 3). Y con `ltft_bank1` y
+**Qué no podemos afirmar.** Que sea causal (apartado 3), ni que un caudalímetro real se comporte
+así: es la regla del generador. Y con `ltft_bank1` y
 `stft_bank1` fuertemente correlacionados, el reparto entre esos dos es inestable: otra semilla
 podría asignar más peso a uno u otro sin que cambie nada del fenómeno."""),
     md("""\
-## 8. La atribución caso a caso, y su dispersión
+## 8. La atribución caso a caso y su dispersión
 
 **Qué queremos investigar.** Si la atribución es estable entre los tres casos de cada condición o si
 cambia de un caso a otro.
 
 **Por qué importa.** Una atribución inestable produciría informes que señalan cosas distintas ante
-el mismo fallo, y un mecánico no podría fiarse de ella.
+el mismo fallo. Un mecánico no podría fiarse de ella.
 
 **Por qué un gráfico de puntos y no barras.** Son tres observaciones por condición: dibujarlas una a
 una muestra la dispersión, que es justo lo que se quiere ver. Una barra de media la escondería."""),
@@ -301,7 +301,7 @@ der.set_title("Confianza sin calibrar: mínimo, media y máximo", fontsize=9)
 der.set_xlim(0.3, 1.05)
 
 fig.suptitle(
-    "Qué tan estable es la atribución, y con cuánta confianza decide el modelo",
+    "Qué tan estable es la atribución y con cuánta confianza decide el modelo",
     fontsize=10.5, fontweight="bold", x=0.0, ha="left",
 )
 fig.supxlabel(
@@ -322,18 +322,18 @@ derecha, la confianza sin calibrar: el termostato y la sonda por encima de 0,91 
 deriva y el encendido entre 0,64 y 0,72.
 
 **Qué podemos interpretar.** La atribución es razonablemente estable en las condiciones que el modelo
-diagnostica con confianza alta, y dispersa en las que no. Es consistente: cuando el modelo no está
+diagnostica con confianza alta y dispersa en las que no. Es consistente: cuando el modelo no está
 seguro, tampoco está seguro de qué lo llevó ahí.
 
-**Qué no podemos afirmar, y la tentación es evidente.** Que estas
+**Qué no podemos afirmar (la tentación es evidente).** Que estas
 cifras expliquen las abstenciones de E19. **Son otra magnitud**: `xai_runner` entrena un bosque
 **sin calibrar** y lo que aquí se dibuja es `predict_proba` en crudo, mientras el umbral de 0,79 de
 E19 se aplica a la probabilidad **calibrada**, que puede reordenar. Ponerlas juntas por compartir
 escala sería comparar dos cifras que miden cosas distintas.
 
-Lo que sí puede decirse, y es más débil de lo que parecía: las condiciones con menos confianza aquí
+Lo que sí puede decirse es más débil de lo que parecía: las condiciones con menos confianza aquí
 son cuatro —sin fallo, fuga, caudalímetro y encendido—, no dos. Cualquier conexión con las
-abstenciones de E19 exigiría comparar las confianzas **calibradas** de las mismas ventanas, y esos
+abstenciones de E19 exigiría comparar las confianzas **calibradas** de las mismas ventanas. Esos
 valores están en el registro de E19, no en el de E9.
 
 Tampoco se puede afirmar nada sobre la estabilidad frente a otra semilla o a otro reparto: son tres
@@ -361,7 +361,7 @@ importancia. Es exactamente lo que llega al verificador y lo que el redactor tie
 **Por qué esto importa para PI.2.** Una afirmación del informe solo se admite si existe un fragmento
 documental que mencione **esa** señal. La atribución decide, por tanto, qué tiene que buscarse en el
 manual; si señalara una señal que el manual no documenta, el sistema tendría que abstenerse
-(apartado 1). En la práctica no ocurrió, y la ablación `A1` de E18 midió lo que eso vale."""),
+(apartado 1). En la práctica no ocurrió; la ablación `A1` de E18 midió lo que eso vale."""),
     md("""\
 ## 10. Lo que la ablación `A1` dice de todo esto
 
@@ -388,15 +388,17 @@ for suf, particion in (("", "validación"), ("_prueba", "prueba")):
     })
 pd.DataFrame(filas).set_index("partición")"""),
     md("""\
-**Qué muestra.** `A1` produce **las mismas decisiones que la configuración canónica**, en validación
-y en prueba. Diecisiete de diecisiete, las dos veces.
+**Qué muestra.** `A1` produce **las mismas decisiones que la configuración canónica** en validación,
+diecisiete de diecisiete. En prueba repite esas mismas decisiones, lo que no es una confirmación
+independiente: la decisión la fijan la condición de evidencia y la puerta de códigos, que no cambian
+al cambiar de partición.
 
 **Qué podemos interpretar.** La atribución, **tal como el recorrido la usa**, no cambia ninguna
 decisión. Las observaciones que elige son distintas —la ablación selecciona otros
-descriptores— pero el conjunto de fragmentos documentales que llega al verificador es el mismo, y la
+descriptores— pero el conjunto de fragmentos documentales que llega al verificador es el mismo y la
 decisión también.
 
-Es un resultado negativo sobre el valor de la atribución en este recorrido, y se publica como tal:
+Es un resultado negativo sobre el valor de la atribución en este recorrido y se publica como tal:
 **para decidir** no aporta sobre una alternativa mucho más barata. Lo que sí aporta —el contenido
 de las observaciones, que es PI.2 y no PI.3— se discute en el apartado 12.
 
@@ -406,14 +408,16 @@ ninguna decisión cambió."""),
     md("""\
 ## 11. Resultados negativos y limitaciones
 
-1. **La atribución no cambia ninguna decisión** (`A1`, en validación y en prueba).
+1. **La atribución no cambia ninguna decisión** (`A1`, en validación; su repetición en prueba no es
+   independiente).
 2. **Las señales correlacionadas reparten su atribución de forma inestable.** `engine_load`, `map` y
-   `throttle_position` están correlacionadas por encima de 0,99 en este generador: cuál de las tres
-   recibe el peso es en buena medida arbitrario.
+   `throttle_position` están correlacionadas por encima de 0,99 en este generador (Pearson sobre
+   las sesiones sin fallo de la muestra, el mapa de correlación de `01_exploracion_obd`): cuál de
+   las tres recibe el peso es en buena medida arbitrario.
 3. **Tres casos por condición.** No hay base para hablar de estabilidad.
 4. **El fondo de referencia define el significado** (apartado 3): la atribución mide separación
    respecto de un motor sano, no importancia absoluta. Con otro fondo, otros números.
-5. **La atribución no es causal** (apartado 3), y este notebook no la presenta como tal en ningún
+5. **La atribución no es causal** (apartado 3) y este notebook no la presenta como tal en ningún
    punto.
 6. **El registro de E9 no lleva cabecera de identificación**: le faltan `commit` y `executed_at`,
    como a los de E6 y E7. Es anterior a la convención y no se regenera, porque regenerar cambiaría
@@ -427,16 +431,18 @@ E9 aporta menos de lo que su nombre sugiere y más de lo que su ablación indica
 mismas. Si el objetivo fuera solo decidir bien, podría retirarse.
 
 **Más**, porque es lo que convierte una predicción en algo **contrastable**. Sin observaciones no hay
-nada que anclar en el manual, y PI.2 dejaría de tener objeto. La atribución no mejora la decisión; hace posible la
+nada que anclar en el manual; PI.2 dejaría de tener objeto. La atribución no mejora la decisión; hace posible la
 explicación.
 
-Y deja un hallazgo que sobrevive a todo lo anterior, el del apartado 7: un sistema que vigilara cada
-sensor para detectar su propio fallo no habría encontrado la deriva del caudalímetro."""),
+Y deja una lectura que sobrevive a todo lo anterior, la del apartado 7: en este generador, un
+sistema que vigilara cada sensor para detectar su propio fallo no habría encontrado la deriva del
+caudalímetro."""),
     md("""\
 ## 13. Conclusiones
 
-**Qué aprendimos.** Que el modelo decide sobre las señales que la física aproximada del fallo
-predice; que la deriva del caudalímetro se detecta en los ajustes de combustible y no en el caudal;
+**Qué aprendimos.** Que la señal principal de cada fallo es una de las que declara su ficha; que el
+modelo recupera la regla de compensación del generador y detecta la deriva del caudalímetro en los
+ajustes de combustible y no en el caudal;
 y que la atribución, en este recorrido, explica sin decidir.
 
 **Qué hipótesis recibió apoyo.** Que las señales de mayor atribución coinciden con las declaradas, en
@@ -472,7 +478,7 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 
 ## 15. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** El mapa de atribución es la **Figura 5.15** del capítulo 5, en el apartado de PI.1, y el resumen por diagnóstico está en el anexo B, **Tabla B.3**. La lectura de la ablación `A1` que este notebook discute aparece junto a la **Figura 5.18**.
+**Dónde aparece esto en la memoria.** El mapa de atribución es la **Figura 5.15** del capítulo 5, en el apartado de PI.1. El resumen por diagnóstico está en el anexo B, **Tabla B.3**. La lectura de la ablación `A1` que este notebook discute aparece junto a la **Figura 5.18**.
 
 - `docs/experiments/E9_atribucion.md` — informe de la fase
 - `experiments/E9_xai_synthetic_v2.json` — registro, con el fondo y su huella
@@ -481,7 +487,7 @@ diagnóstico con la evidencia documental: sin observaciones no hay nada que veri
 - `src/mecanico_ia_exp/xai/attribution.py` — el explicador y la selección de fondo
 - `src/mecanico_ia_exp/obd/faults.py` — las fichas con `affected_signals`
 - `docs/experiments/E18_ablaciones.md` y `E18_ablaciones_prueba.md` — la ablación `A1`
-- `docs/experiments/E4_eda_temporal.md` — donde apareció por primera vez lo del caudalímetro"""),
+- `docs/experiments/E4_eda_temporal.md` — donde apareció por primera vez la compensación del caudalímetro"""),
 ]
 
 if __name__ == "__main__":

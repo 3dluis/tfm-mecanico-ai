@@ -8,7 +8,7 @@ CELDAS = [
     md("""\
 # Introducción y recorrido experimental
 
-**Notebook** `00_introduccion` · **versión** 1.0 · **fecha** 12 de octubre de 2026
+**Notebook** `00_introduccion` · **versión** 1.1 · **fecha** 14 de noviembre de 2026
 
 | | |
 |---|---|
@@ -16,7 +16,8 @@ CELDAS = [
 | **Conjunto** | `data/samples/synthetic_sample.parquet` (18 sesiones) y los registros de `experiments/` |
 | **Protocolo** | ninguno propio: este notebook no mide nada |
 | **Estado** | vigente |
-| **Pregunta de investigación** | la principal, y el mapa de cómo las cuatro subpreguntas la componen |
+| **Modalidad** | visualización de evidencia histórica |
+| **Pregunta de investigación** | la principal y el mapa de cómo las cuatro subpreguntas la componen |
 | **Evidencia original** | `docs/experiment-index.md`, `docs/matriz_validacion_pi.md`, `experiments/*.json` |
 
 ---
@@ -25,15 +26,20 @@ CELDAS = [
 
 - **La pregunta.** ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos
   OBD-II, rastrear cada explicación hasta su evidencia y reconocer cuándo esa evidencia no basta?
-- **Qué se hizo.** Diecinueve experimentos sobre datos **sintéticos**, del diagnóstico a la decisión
-  de explicar o abstenerse.
-- **Qué quedó sostenido.** PI.1, PI.2 y PI.3. En la evaluación final sobre el conjunto de prueba
-  (E19): **falsa confianza 0 de 14**, abstención innecesaria 2 de 8, cobertura 6 de 10.
+- **Qué se hizo.** Quince experimentos ejecutados sobre datos **sintéticos**, del diagnóstico a la
+  decisión de explicar o abstenerse; de los diecinueve planificados, E3, E14 y E16 no llegaron a
+  ejecutarse como fase propia y E8 lo sustituyó E19.
+- **Qué quedó sostenido.** PI.1 a PI.4 cumplen su criterio vigente, con validez desigual: tres de
+  los cuatro criterios se reformularon con parte de los resultados ya conocida. PI.2 alcanza a los
+  identificadores de la evidencia, no a las cifras del texto (`L-26`); PI.4 se acota a tres casos
+  construidos (P1). En E19, sobre el conjunto de prueba: **falsa confianza 0 de 14**, abstención
+  innecesaria 2 de 8, cobertura 6 de 10.
 - **Qué no.** El modelo temporal no superó a la línea base; si el contexto temporal aporta señal
-  sigue sin saberse; PI.4 permanece sin demostrar mientras la condición con distractor no se
-  rediseñe.
-- **Límite principal.** El denominador de 14, de siete sesiones: un cero así es compatible con una
-  tasa real de varios puntos. Y la validez externa exigiría telemetría real.
+  sigue sin saberse. La pregunta queda sostenida en las condiciones evaluadas, no confirmada frente
+  al protocolo inicial.
+- **Límite principal.** Con 0 de 14, el intervalo de Wilson al 95 % llega al 21,5 %; el real es
+  más ancho porque las catorce ejecuciones proceden de siete ventanas. La validez externa exigiría
+  telemetría real.
 
 ## Cómo leer este notebook
 
@@ -56,7 +62,7 @@ se ve en la señal)."""),
 ## 1. La pregunta de investigación
 
 > ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos OBD-II,
-> rastreando cada explicación hasta su evidencia de origen, y reconocer cuándo la evidencia
+> rastreando cada explicación hasta su evidencia de origen y reconocer cuándo la evidencia
 > disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin
 > fundamento?
 
@@ -72,7 +78,7 @@ evidencia que no viene al caso, o anclarlo impecablemente en un documento que no
 | **PI.1** | que el diagnóstico a partir de OBD-II supere a la clase mayoritaria con margen amplio y que su confianza se pueda calibrar | E5, E6, E7, E19 |
 | **PI.2** | que toda afirmación se ancle en una observación o un fragmento identificable | E14, E15, E19 |
 | **PI.3** | que el sistema **reconozca cuándo no sabe**: al retirar la evidencia, pasa de explicar a abstenerse | E15, E16, E18, E19 |
-| **PI.4** | que rechace evidencia no pertinente | E17, y **una condición invalidada**, ver más abajo |
+| **PI.4** | que rechace evidencia no pertinente | E17, con **una condición invalidada** (apartado 9) y su rediseño P1 |
 
 La tercera es la que vertebra el trabajo. Un sistema de diagnóstico que acierta el 90 % de las veces
 y afirma con confianza en el 10 % restante es peor, en un taller, que uno que acierta el 70 % y
@@ -80,10 +86,10 @@ calla en el resto."""),
     md("""\
 ## 2. Qué desconocíamos antes de empezar
 
-Tres cosas, y las tres se han movido durante el trabajo:
+Tres cosas. Las tres se han movido durante el trabajo:
 
 1. **Si un modelo puede diagnosticar a partir de ventanas de OBD-II con verdad de referencia
-   conocida.** Respuesta: sí, con margen amplio sobre la clase mayoritaria, y así se sostiene sobre
+   conocida.** Respuesta: sí, con margen amplio sobre la clase mayoritaria. Así se sostiene sobre
    el conjunto de prueba.
 2. **Si el criterio de suficiencia de evidencia evita la falsa confianza.** Respuesta: en la
    medición final no hubo ninguna falsa confianza, con un denominador pequeño que se declara.
@@ -98,7 +104,7 @@ datos."""),
 
 La celda siguiente ancla la raíz del repositorio y deja en la salida la versión de Python, la
 plataforma y el commit exacto. Eso último importa: dos ejecuciones de este notebook en commits
-distintos no son comparables, y la única forma de saberlo es que el commit quede impreso."""),
+distintos no son comparables. La única forma de saberlo es que el commit quede impreso."""),
     code(PREAMBULO),
     md("""\
 ## 4. El recorrido, en un diagrama
@@ -172,9 +178,9 @@ plt.show()"""),
 dato crudo y sale por una decisión con dos valores posibles.
 
 **Qué podemos interpretar.** Que la decisión de abstenerse no es un filtro previo sobre la confianza
-del modelo: ocurre al final, después de recuperar la evidencia, y por eso puede distinguir «no estoy
+del modelo: ocurre al final, después de recuperar la evidencia. Por eso puede distinguir «no estoy
 seguro» de «estoy seguro pero el manual no lo respalda». Las dos cosas terminan en abstención y por
-motivos distintos, y el motivo queda registrado.
+motivos distintos. El motivo queda registrado.
 
 **Qué no podemos afirmar.** Que el recorrido funcione así en un vehículo real: todo lo medido es
 sintético (apartado 5). El diagrama describe el diseño, no su validez externa."""),
@@ -190,10 +196,10 @@ explicación del sistema se corresponde con lo que de verdad ocurrió. Con telem
 etiquetar eso no se puede hacer.
 
 **El coste:** la validez externa queda sin establecer —la validación con telemetría real sigue
-siendo trabajo posterior—, y así está declarado desde el primer día.
+siendo trabajo posterior— y así está declarado desde el primer día.
 
 El generador produce doce señales a 1 Hz y cinco condiciones de fallo más la normal. Sus constantes
-están **calibradas contra el manual de taller** de un Mazda 3 BK con motor Z6, y cada una lleva su
+están **calibradas contra el manual de taller** de un Mazda 3 BK con motor Z6. Cada una lleva su
 cita: `configs/calibracion_mazda3_bk.yaml`. Calibrar contra el manual de un vehículo real **no
 convierte los datos en reales**; lo que cambia es que los parámetros dejan de ser arbitrarios."""),
     code("""\
@@ -243,11 +249,11 @@ pd.DataFrame(
     ]
 )"""),
     md("""\
-## 6. Qué se midió, y con cuánta firmeza
+## 6. Qué se midió y con cuánta firmeza
 
 La tabla siguiente es el estado de la evidencia. Sale de los registros, no de los informes: si un
-informe y su registro discreparan, manda el registro. Eso ocurrió de verdad una vez, con las cifras
-de E7, y se corrigió en octubre dejando constancia."""),
+informe y su registro discreparan, manda el registro. Eso ocurrió de verdad una vez —con las cifras
+de E7— y se corrigió en octubre dejando constancia."""),
     code("""\
 # Cada cifra se lee de su registro JSON. Ninguna está escrita a mano en este
 # notebook: si un registro cambiara, la tabla cambiaría con él.
@@ -293,8 +299,8 @@ resumen"""),
 **F1 macro.** Media no ponderada del F1 de cada clase, siendo el F1 la media armónica de precisión y
 exhaustividad. *Por qué esta y no la exactitud:* la media **no ponderada** da el mismo peso a una
 clase con 14 ventanas que a una con 28, de modo que fallar sistemáticamente la clase difícil se
-nota. La exactitud no lo notaría. *Su límite:* resume en un número seis comportamientos distintos, y
-por eso el trabajo publica siempre las métricas por clase al lado.
+nota. La exactitud no lo notaría. *Su límite:* resume en un número seis comportamientos distintos. Por
+eso el trabajo publica siempre las métricas por clase al lado.
 
 **Exactitud.** Fracción de ventanas clasificadas correctamente. *Su límite:* con seis clases
 equilibradas el azar da 0,17, así que 0,88 dice poco por sí solo; la referencia útil es la clase
@@ -313,9 +319,9 @@ diez tramos y pocas ventanas, cada tramo tiene pocas predicciones y la cifra es 
     md("""\
 ## 7. Qué sostiene cada objetivo, visto de una vez
 
-**Objetivo de este análisis.** Ver juntos qué objetivos tienen evidencia experimental, cuáles la
-tienen parcial y cuáles cuentan con una capacidad implementada que **no** se ha evaluado. Es el mapa que evita el error más común al
-leer un trabajo de este tipo, que es tomar lo implementado por demostrado.
+**Objetivo de este análisis.** Ver juntos qué objetivos se cumplen en su alcance y cuáles solo en
+parte. Es el mapa que evita el error más común al leer un trabajo de este tipo, que es tomar lo
+implementado por demostrado.
 
 **Qué es esta figura.** Un **diagrama documental**, no una medición: cada fila sale del registro de
 experimentos y del estado declarado de cada objetivo, no de un cálculo sobre datos."""),
@@ -326,14 +332,15 @@ fig = fig_objetivos()
 soporte.exportar(fig, "FIG-NB00-02_objetivos", subdirectorio="00_introduccion")
 plt.show()"""),
     md("""\
-**Qué muestra.** Cada objetivo con el experimento que lo mide y el estatuto de su evidencia.
+**Qué muestra.** Cada objetivo con los experimentos que lo miden y su estado: OE1, OE3 y OE5
+**cumplidos** en su alcance; OE2 y OE4 **parciales**. Es lo que fija la Tabla 6.1 de la memoria.
 
-**Qué podemos interpretar.** Que la cobertura es desigual a propósito y está declarada: hay
-objetivos con medición sobre el conjunto de prueba, otros con medición solo sobre validación, y
-capacidades que están implementadas y cuya evaluación exigiría un protocolo que no se ejecutó.
+**Qué podemos interpretar.** Que la cobertura es desigual y está declarada: unos objetivos tienen
+medición sobre el conjunto de prueba y otros solo sobre validación.
 
-**Qué no podemos afirmar.** Que una capacidad implementada funcione: un componente marcado como implementado y no evaluado no
-tiene evidencia a su favor ni en su contra.
+**Qué no podemos afirmar.** Que «cumplido» signifique validado fuera de los datos sintéticos, ni
+que una capacidad implementada funcione: lo que no se ha evaluado no tiene evidencia a su favor ni
+en su contra.
 
 **Relación con la hipótesis.** Acota el alcance de las conclusiones: lo que la pregunta de
 investigación puede dar por respondido es lo que tiene evidencia, no lo que tiene código."""),
@@ -345,10 +352,12 @@ el 12 de octubre de 2026. Llegó al final en el **tercer intento** —los dos an
 interrumpieron y están declarados en el apartado 9—, con las reglas congeladas y ancladas a un commit
 antes de abrirlo.
 
-Las tres cifras primarias, leídas de su registro con numerador y denominador."""),
+Las tres cifras primarias, leídas de su registro con numerador y denominador. El campo `status`
+del registro dice `EVALUACION_FINAL`; la etiqueta `COMPLETED — WITH DOCUMENTED LIMITATIONS` es la
+que le da el índice de experimentos."""),
     code("""\
 print("Registro:", "experiments/E19_evaluacion_final_v3.json")
-print("Estado:  COMPLETED — WITH DOCUMENTED LIMITATIONS")
+print("Estado: ", e19["status"])
 print()
 
 tabla_e19 = soporte.tabla("E19_evaluacion_final_v3")
@@ -374,12 +383,12 @@ print(f"cobertura con evidencia: {len(explicadas)}/{len(con_evidencia)}")"""),
 **Qué podemos interpretar.** En las catorce ejecuciones en que debía abstenerse, el sistema se
 abstuvo en todas: el resultado que PI.3 pedía.
 
-**Qué no podemos afirmar, y conviene decirlo aquí y no en una nota al pie.** Que el riesgo de falsa
-confianza sea cero. El denominador es **14**, procedentes de **siete sesiones**: con catorce
-observaciones, un cero es compatible con una tasa real de varios puntos porcentuales. Lo que se ha
-medido es que en esta muestra no ocurrió, no que no pueda ocurrir. El experimento está marcado como
-`COMPLETED — WITH DOCUMENTED LIMITATIONS` precisamente por esto, y `VALIDATED` **no** se usa como
-sinónimo de hipótesis demostrada.
+**Qué no podemos afirmar (conviene decirlo aquí y no en una nota al pie).** Que el riesgo de falsa
+confianza sea cero. El denominador es **14**, procedentes de **siete ventanas**: con 0 de 14, el
+intervalo de Wilson al 95 % llega al 21,5 %; el real es más ancho porque las catorce ejecuciones
+no son independientes. Lo que se ha medido es que en esta muestra no ocurrió, no que no pueda
+ocurrir. El índice marca el experimento como `COMPLETED — WITH DOCUMENTED LIMITATIONS` precisamente
+por esto; `VALIDATED` **no** se usa como sinónimo de hipótesis demostrada.
 
 El análisis completo, con los diagnósticos incorrectos y los dos análisis descriptivos, está en
 `03_analisis_e19.ipynb`."""),
@@ -387,27 +396,30 @@ El análisis completo, con los diagnósticos incorrectos y los dos análisis des
 ## 9. Resultados negativos y limitaciones: lo que no salió
 
 Un recorrido que solo enseñara lo que funcionó no serviría como evidencia. Esto es lo que no
-funcionó, y en varios casos es más informativo que lo que sí.
+funcionó y en varios casos es más informativo que lo que sí.
 
 | Qué | Qué pasó | Dónde está |
 |---|---|---|
 | **El modelo temporal no superó a la línea base** | GRU 0,8230 frente a 0,8788 del bosque, en validación | `E7_temporal_synthetic_v2.json` |
 | **Y la explicación que se dio era inválida** | se atribuyó la desventaja al volumen de datos comparando dos conjuntos que además se generaron con el motor **sin calibrar** y **con** calibrar. La comparación cambia dos cosas a la vez | `SUPERSEDED 2026-10-12` en `docs/experiments/E7_modelo_temporal.md` |
 | **La recuperación semántica pura no funcionó** | Hit-rate 0,00, con un distractor por encima del fragmento relevante | `E12_retrieval.json` |
-| **La condición con distractor no medía lo que decía** | con el filtro de motor activo recuperaba **exactamente los mismos** fragmentos que la condición parcial: era la condición parcial contada dos veces | `politica-condicion-distractor.md` |
+| **La condición con distractor no medía lo que decía** | en dos de los tres fallos tenía **exactamente la misma configuración** que la condición parcial; solo en la fuga de vacío llegaban dos fragmentos del distractor (corregido el 13-10-2026) | `politica-condicion-distractor.md` |
 | **Un espacio de embeddings mezclado** | las búsquedas no declaraban qué modelo las había producido; se corrigió y se reejecutó con pre-registro | `resultado-rerun-a.md` |
-| **El verificador regresionó al corregirlo** | la política v2 arregló cinco casos y rompió uno que antes acertaba | `E15_suficiencia_verifier_v2.json` |
+| **El verificador regresionó al corregirlo** | la política v2 arregló seis casos y rompió uno que antes acertaba | `E15_suficiencia_verifier_v2.json`, campos `corrected_vs_v1` y `regression_vs_v1` |
+| **Cifras del texto generado que nadie produjo** (`L-26`) | nueve de las treinta y cinco salidas de E19 contienen un número que el verificador no produjo: la trazabilidad alcanza a los identificadores de la evidencia, no a las cifras | `docs/limitations.md`, `L-26` |
 | **Dos cifras publicadas sin registro** | las medias de temperatura del termostato se calcularon en el análisis y no se guardaron: hoy no se pueden verificar | marcadas **no utilizables** el 12-10-2026 |
 | **El conjunto de prueba se abrió cinco veces** | tres intentos de E19 —dos interrumpidos—, una para repetir las ablaciones y **una accidental**, al leer identificadores de sesión que ya estaban en otro sitio | `docs/methodology/registro-aperturas-test.md`, con qué se expuso en cada una |
 | **Dos artefactos dañados por el propio trabajo** | una tabla de E5 sobrescrita y otra de E15 borrada por un patrón demasiado amplio; las detectó el censo | `incidencia-artefactos-e5.md` e `incidencia-artefactos-e15.md`; la segunda **no se declara restaurada** |
 
-Sobre el cuarto punto, que afecta a lo que PI.4 puede afirmar: mientras el rediseño no exista, las condiciones realmente independientes son **cuatro y no cinco**.
+Sobre el cuarto punto, que afecta a lo que PI.4 puede afirmar: hasta el rediseño del 13 de octubre
+(P1) las condiciones realmente independientes eran **cuatro y no cinco**; P1 añade la quinta sobre
+tres casos construidos.
 
 Y sobre el conjunto de prueba, con la misma franqueza: **cinco aperturas no son tres**. La cuarta
 repite unas ablaciones definidas antes de la primera; la quinta **no debió ocurrir** y está
 registrada como lo que fue, un descuido corregido en el acto. Ninguna cambió una decisión de diseño."""),
     md("""\
-## 10. Discusión: la formulación amplia, y por qué no es la pregunta de este trabajo
+## 10. Discusión: la formulación amplia y por qué no es la pregunta de este trabajo
 
 Conviene decirlo aquí porque el lector puede encontrarla en material anterior. El trabajo circuló
 hasta septiembre de 2026 con una formulación más ambiciosa:
@@ -422,7 +434,7 @@ evidencia**. Los dos marcados en negrita —identificar patrones no representado
 conocimiento reutilizable— **no tenían implementación ni fase** en el plan de veinte experimentos.
 `ADR-004` fijó en consecuencia la formulación acotada como canónica.
 
-Lo que sí está construido de esa formulación amplia no se retira ni se esconde, y sirve a la pregunta
+Lo que sí está construido de esa formulación amplia no se retira ni se esconde y sirve a la pregunta
 acotada:
 
 | Componente | Qué hay | Estado |
@@ -433,31 +445,39 @@ acotada:
 | Identificar patrones no representados | nada | **línea futura**, sin evidencia |
 | Memoria evolutiva de conocimiento | nada | **línea futura**, sin evidencia |
 
-Los dos últimos son trabajo posterior, y proponerlos formalmente exigiría resultados verificables que
+Los dos últimos son trabajo posterior: proponerlos formalmente exigiría resultados verificables que
 hoy no existen. Presentarlos como logrados sería exactamente el tipo de afirmación sin evidencia que
 este trabajo se propone detectar."""),
     md("""\
 ## 11. Conclusiones de este recorrido
 
-**Qué quedó sostenido.** Que el diagnóstico a partir de ventanas de OBD-II supera a la clase
-mayoritaria con margen amplio y que su confianza se puede calibrar (PI.1, en validación y en
-prueba). Que toda afirmación admitida se ancla en observación y documento verificados (PI.2). Que el
-sistema cambia de explicar a abstenerse al retirarle la evidencia, con los datos, el modelo y la
-confianza idénticos (PI.3).
+**Qué quedó sostenido.** PI.1 a PI.4 cumplen su criterio vigente, con validez desigual y con una
+salvedad que hay que decir primero: tres de los cuatro criterios se reformularon con parte de los
+resultados ya conocida. La pregunta queda sostenida en las condiciones evaluadas, no confirmada
+frente al protocolo inicial. Que el diagnóstico a partir de ventanas de OBD-II supera a la clase
+mayoritaria con margen amplio y que su confianza se puede calibrar (PI.1): en validación el error
+baja de 0,144 a 0,085; en prueba apenas cambia, de 0,097 a 0,092. Que cada afirmación admitida
+cita observaciones y fragmentos identificables (PI.2); que el fragmento sostenga lo afirmado lo
+establece el propio verificador, sin anotación independiente. La trazabilidad tampoco alcanza a las
+cifras del texto: nueve de las treinta y cinco salidas de E19 contienen un número que el verificador
+no produjo (`L-26`). Que el sistema cambia de explicar a abstenerse al retirarle la evidencia, con
+los datos, el modelo y la confianza idénticos (PI.3).
 
 **Qué no recibió apoyo.** Que el modelo temporal supere a la línea base. Y la explicación que se dio
 de esa desventaja quedó retirada, no confirmada.
 
-**Qué permanece sin demostrar.** Si el contexto temporal aporta señal diagnóstica, y en qué fallos
-(apartado 12). Si el sistema rechaza evidencia no pertinente en general —PI.4—: el rediseño de la
-condición con distractor (P1, 13-10-2026) da una respuesta acotada a tres casos construidos, sin
+**Qué permanece sin demostrar.** Si el contexto temporal aporta señal diagnóstica y en qué fallos
+(apartado 12). Si el sistema rechaza evidencia no pertinente en general: PI.4 se responde con el
+rediseño de la condición con distractor (P1, 13-10-2026), acotado a tres casos construidos y sin
 estimar ninguna tasa. Y la validez externa de todo lo anterior, que exigiría telemetría real.
 
 **Cómo contribuye al TFM.** Este notebook es el mapa: dice dónde está cada pieza de evidencia y con
-cuánta firmeza se sostiene. La matriz completa que une pregunta → objetivo → experimento → notebook →
-resultado → figura → sección está en `docs/notebook-traceability.md`."""),
+cuánta firmeza se sostiene. Dentro de la entrega, la correspondencia entre notebooks y resultados
+está en la **Tabla C.2** del anexo C de la memoria y la de cada figura y tabla con su artefacto en
+la **Tabla C.5**; la matriz completa pregunta → objetivo → experimento → notebook → figura está en
+`docs/notebook-traceability.md`, en el repositorio del laboratorio."""),
     md("""\
-## 12. Qué queda abierto: el contexto temporal, y por qué
+## 12. Qué queda abierto: el contexto temporal y por qué
 
 **¿En qué tipos de fallo el contexto temporal aporta señal diagnóstica adicional y en cuáles no?**
 
@@ -480,8 +500,9 @@ bloqueado —0,8148 frente a 0,7826— y es justo la condición cuya firma es te
 subir y no sube». Encaja tan bien que parece confirmación. **No lo es.** Es una diferencia de 0,03
 en una clase de 14 ventanas, medida una sola vez, entre dos recorridos que difieren en todo. Y hay
 una explicación alternativa, medida en octubre: el fallo del termostato **no altera la trayectoria**
-mientras el refrigerante no supera su tope, de modo que en una sesión de calentamiento **32 de 45**
-ventanas etiquetadas con el fallo no contienen ninguna señal observable de él.
+mientras el refrigerante no supera su tope, de modo que en la sesión de calentamiento de validación
+**cinco de sus siete** ventanas etiquetadas con el fallo no contienen ninguna señal observable de él
+(`06_expresion_del_fallo`, apartado 8).
 
 El diseño para responder la pregunta —sin abrir una línea nueva— está en `docs/diseno-pi1/` y
 **no se ha ejecutado**."""),
@@ -497,10 +518,10 @@ El diseño para responder la pregunta —sin abrir una línea nueva— está en 
 | **Commit** | el que imprime la celda del apartado 3 |
 | **Tiempo** | menos de un minuto |
 | **Memoria** | por debajo de 1 GB |
-| **Artefactos que produce** | `notebooks/salida/00_introduccion/FIG-NB00-01_recorrido.{png,svg}` |
+| **Artefactos que produce** | dos figuras en `notebooks/salida/00_introduccion/`, PNG y SVG: `FIG-NB00-01_recorrido` y `FIG-NB00-02_objetivos` |
 
 **Modalidad** (véase «Cómo leer»): no reproduce ningún cálculo. Si un registro estuviera mal, este
-notebook lo mostraría igual de mal, y por eso la verificación de que las cifras del notebook
+notebook lo mostraría igual de mal. Por eso la verificación de que las cifras del notebook
 coinciden con sus artefactos está automatizada en `tests/test_notebooks.py`.
 
 **Qué no se puede reproducir en una máquina cualquiera:** nada de lo que depende del corpus
@@ -515,7 +536,7 @@ soporte.declarar_modalidad(
     md("""\
 ## 14. Referencias y trazabilidad
 
-**Dónde aparece esto en la memoria.** El esquema de este notebook es la **Figura A.1** del anexo A, y las ocho etapas que recorre se describen en el capítulo 4 y en la **Tabla A.1**.
+**Dónde aparece esto en la memoria.** El esquema de este notebook es la **Figura A.1** del anexo A. Las ocho etapas que recorre se describen en el capítulo 4 y en la **Tabla A.1**.
 
 **Documentación del trabajo**
 - `docs/experiment-index.md` — índice de los diecinueve experimentos con su estado

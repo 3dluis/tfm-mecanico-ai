@@ -1,6 +1,6 @@
 # Notebooks históricos de fase
 
-**No forman parte de la evidencia del trabajo, y no hace falta abrirlos.**
+**No forman parte de la evidencia del trabajo y no hace falta abrirlos.**
 
 Son los cuadernos de trabajo que se usaron durante cada fase del laboratorio (E1 a E20). Se
 generaron con una plantilla común (`scripts/gen_notebooks.py`) y algunos se rellenaron después
@@ -9,7 +9,7 @@ generaron con una plantilla común (`scripts/gen_notebooks.py`) y algunos se rel
 la cabecera. Se conservan para que el recorrido se pueda seguir, no como resultado.
 
 Lo que sí se entrega son **los siete notebooks de `notebooks/`**, que recogen el contenido válido de
-estos cuadernos con su análisis, sus limitaciones y sus conclusiones redactados, y que se ejecutan
+estos cuadernos con su análisis, sus limitaciones y sus conclusiones redactados. Se ejecutan
 con `bash scripts/ejecutar_notebooks.sh`.
 
 Estos cuadernos **no se ejecutan desde esta carpeta**: su preámbulo busca `src/` un nivel por

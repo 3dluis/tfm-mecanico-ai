@@ -17,8 +17,12 @@ históricos, y su exportación tampoco.
 
 from __future__ import annotations
 
+import subprocess
 import sys
+from datetime import date
 from pathlib import Path
+
+from estilo_html import decorar
 
 RAIZ = Path(__file__).resolve().parents[2]
 NOTEBOOKS = RAIZ / "notebooks"
@@ -33,6 +37,17 @@ ENTREGADOS = (
     "05_suficiencia_y_abstencion.ipynb",
     "06_expresion_del_fallo.ipynb",
 )
+
+
+def _commit() -> str:
+    """Commit corto del paquete, o «desconocido» fuera de Git."""
+    salida = subprocess.run(
+        ["git", "-C", str(RAIZ), "rev-parse", "--short", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return salida.stdout.strip() or "desconocido"
 
 
 def exportar(nombre: str) -> Path:
@@ -54,6 +69,9 @@ def exportar(nombre: str) -> Path:
     # red y sin ficheros al lado, porque va a viajar suelto.
     exportador.template_name = "lab"
     cuerpo, _ = exportador.from_notebook_node(cuaderno)
+    cuerpo = decorar(
+        cuerpo, Path(nombre).stem, commit=_commit(), fecha=date.today().strftime("%d-%m-%Y")
+    )
 
     DESTINO.mkdir(parents=True, exist_ok=True)
     salida = DESTINO / f"{Path(nombre).stem}.html"
