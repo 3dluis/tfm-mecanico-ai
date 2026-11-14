@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="es">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Introducción · Mecánico IA</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
@@ -7793,7 +7793,8 @@ a.anchor-link {
     white-space: normal;
   }
 </style>
-<!-- End of mermaid configuration --><style>
+<!-- End of mermaid configuration --><meta name="author" content="Luis Daniel Diaz">
+<style>
 :root {
   --mi-tinta: #1f2328;
   --mi-suave: #59636e;
@@ -8015,38 +8016,88 @@ body.mi-sin-codigo .jp-CodeCell .jp-Cell-inputWrapper { display: none !important
 </table>
 <hr/>
 <h2 id="En-un-minuto">En un minuto<a class="anchor-link" href="#En-un-minuto">¶</a></h2><ul>
-<li><strong>La pregunta.</strong> ¿Puede un agente con RAG explicar el diagnóstico de un vehículo a partir de datos
-OBD-II, rastrear cada explicación hasta su evidencia y reconocer cuándo esa evidencia no basta?</li>
-<li><strong>Qué se hizo.</strong> Quince experimentos ejecutados sobre datos <strong>sintéticos</strong>, del diagnóstico a la
-decisión de explicar o abstenerse; de los diecinueve planificados, E3, E14 y E16 no llegaron a
-ejecutarse como fase propia y E8 lo sustituyó E19.</li>
-<li><strong>Qué quedó sostenido.</strong> PI.1 a PI.4 cumplen su criterio vigente, con validez desigual: tres de
-los cuatro criterios se reformularon con parte de los resultados ya conocida. PI.2 alcanza a los
-identificadores de la evidencia, no a las cifras del texto (<code>L-26</code>); PI.4 se acota a tres casos
-construidos (P1). En E19, sobre el conjunto de prueba: <strong>falsa confianza 0 de 14</strong>, abstención
-innecesaria 2 de 8, cobertura 6 de 10.</li>
-<li><strong>Qué no.</strong> El modelo temporal no superó a la línea base; si el contexto temporal aporta señal
-sigue sin saberse. La pregunta queda sostenida en las condiciones evaluadas, no confirmada frente
-al protocolo inicial.</li>
-<li><strong>Límite principal.</strong> Con 0 de 14, el intervalo de Wilson al 95 % llega al 21,5 %; el real es
-más ancho porque las catorce ejecuciones proceden de siete ventanas. La validez externa exigiría
-telemetría real.</li>
+<li><strong>Pregunta.</strong> ¿Puede un agente con RAG explicar un diagnóstico a partir de datos OBD-II, rastrear
+cada explicación hasta su evidencia y reconocer cuándo no basta?</li>
+<li><strong>Qué se hace.</strong> Quince experimentos sobre datos <strong>sintéticos</strong>, del diagnóstico a la decisión
+de explicar o abstenerse.</li>
+<li><strong>Resultado.</strong> En la evaluación final (E19, conjunto de prueba): <strong>falsa confianza 0 de 14</strong>,
+abstención innecesaria 2 de 8 y respuesta con evidencia completa 6 de 10.</li>
+<li><strong>Lectura.</strong> El modelo temporal no superó a la línea base; el valor del contexto temporal sigue
+abierto.</li>
+<li><strong>Límite.</strong> Con 0 de 14, el intervalo de Wilson al 95 % llega al 21,5 % y el real es más ancho:
+las catorce ejecuciones salen de siete ventanas de siete sesiones. Tres de los cuatro criterios
+se reformularon conociendo parte de los resultados. La trazabilidad alcanza a los identificadores
+de la evidencia, no a las cifras del texto (limitación L-26: 9 de 35 salidas).</li>
 </ul>
-<h2 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h2><p>Es el punto de entrada. Modalidad: <strong>visualización de evidencia histórica</strong> con
-una demostración ilustrativa (el diagrama); las cifras de sus celdas se leen de los registros, que
-están en el repositorio. <strong>Ejecución:</strong> CPU, sin red, menos de un minuto.</p>
+<h2 id="C%C3%B3mo-leer-este-notebook">Cómo leer este notebook<a class="anchor-link" href="#C%C3%B3mo-leer-este-notebook">¶</a></h2><p>Es el punto de entrada. Modalidad: visualización de evidencia histórica, con una demostración
+ilustrativa (el diagrama). CPU, sin red, menos de un minuto.</p>
 <ul>
-<li><strong>1–3.</strong> La pregunta y sus subpreguntas; qué se desconocía al empezar; preparación del entorno.</li>
-<li><strong>4–5.</strong> El recorrido en un diagrama; los datos, qué son y qué no son.</li>
-<li><strong>6–8.</strong> Qué se midió y qué significan las métricas; qué sostiene cada objetivo; la evaluación
+<li><strong>1–3</strong> La pregunta y sus subpreguntas; qué se desconocía al empezar; preparación del entorno.</li>
+<li><strong>4–5</strong> El recorrido en un diagrama; los datos, qué son y qué no son.</li>
+<li><strong>6–8</strong> Qué se midió y qué significan las métricas; qué sostiene cada objetivo; la evaluación
 final, E19.</li>
-<li><strong>9–10.</strong> Resultados negativos y limitaciones; discusión de la formulación amplia de la pregunta.</li>
-<li><strong>11–14.</strong> Conclusiones; qué queda abierto (el contexto temporal); reproducibilidad; referencias.</li>
+<li><strong>9–10</strong> Resultados negativos y limitaciones; discusión de la formulación amplia de la pregunta.</li>
+<li><strong>11–14</strong> Conclusiones; qué queda abierto (el contexto temporal); reproducibilidad; referencias.</li>
 </ul>
 <p><strong>El resto del paquete:</strong> <code>01_exploracion_obd</code> (datos y ventanas: E2, E4, E5) ·
 <code>02_comparacion_modelos</code> (E6, E7) · <code>03_analisis_e19</code> (evaluación final) · <code>04_explicabilidad</code> (E9)
 · <code>05_suficiencia_y_abstencion</code> (E15, E18, P1) · <code>06_expresion_del_fallo</code> (si el fallo etiquetado
 se ve en la señal).</p>
+<p><strong>Códigos que aparecen en los notebooks</strong></p>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Qué designa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PI.1–PI.4</td>
+<td>las cuatro subpreguntas de la pregunta de investigación (apartado 1)</td>
+</tr>
+<tr>
+<td>OE1–OE5</td>
+<td>los objetivos específicos de la memoria: estado del conocimiento, entorno experimental, diagnóstico y su confianza, agente que contrasta hipótesis con evidencia y comportamiento integrado bajo las condiciones de evidencia</td>
+</tr>
+<tr>
+<td>E1–E19</td>
+<td>los experimentos del plan (<code>docs/experiment-index.md</code>); E19 es la evaluación final sobre el conjunto de prueba</td>
+</tr>
+<tr>
+<td>A1–A4</td>
+<td>las ablaciones de E18: sin atribución (A1), sin recuperación semántica (A2), sin criterio de suficiencia (A3) y con la confianza calibrada como único criterio (A4)</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>el rediseño de la condición con distractor: tres situaciones construidas, seis ejecuciones</td>
+</tr>
+<tr>
+<td>L-23</td>
+<td>limitación declarada: el adaptador del redactor se ajustó sobre ventanas de validación en las que después se le mide</td>
+</tr>
+<tr>
+<td>L-25</td>
+<td>limitación declarada: <code>synthetic_v3</code> no se puede reconstruir</td>
+</tr>
+<tr>
+<td>L-26</td>
+<td>limitación declarada: el texto redactado contiene cifras que el verificador no produjo</td>
+</tr>
+<tr>
+<td>ADR-004</td>
+<td>la decisión de arquitectura que fija la formulación acotada de la pregunta</td>
+</tr>
+<tr>
+<td>SUPERSEDED</td>
+<td>marca de un informe o una explicación retirados y sustituidos</td>
+</tr>
+<tr>
+<td>RERUN-A</td>
+<td>la reejecución con pre-registro tras corregir el espacio de embeddings mezclado</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -8063,11 +8114,11 @@ rastreando cada explicación hasta su evidencia de origen y reconocer cuándo la
 disponible no es suficiente para sostener una explicación en lugar de generar una hipótesis sin
 fundamento?</p>
 </blockquote>
-<p>Es la formulación <strong>acotada</strong>, fijada por <code>ADR-004</code> el 12 de septiembre de 2026; por qué no la más
+<p>Es la formulación <strong>acotada</strong>, fijada por la decisión de arquitectura <code>ADR-004</code> el 12 de septiembre de 2026; por qué no la más
 amplia que circuló antes se explica en el apartado 10.</p>
 <p>La pregunta tiene tres verbos y ninguno es decorativo: <strong>explicar</strong>, <strong>rastrear</strong> y <strong>reconocer</strong>.
 Cada uno se evalúa por separado, porque un sistema puede acertar el diagnóstico y sostenerlo con
-evidencia que no viene al caso, o anclarlo impecablemente en un documento que no aplica a ese motor.</p>
+evidencia que no viene al caso, o anclarlo en un documento que no aplica a ese motor.</p>
 <table>
 <thead>
 <tr>
@@ -8112,7 +8163,7 @@ calla en el resto.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-Qu%C3%A9-desconoc%C3%ADamos-antes-de-empezar">2. Qué desconocíamos antes de empezar<a class="anchor-link" href="#2.-Qu%C3%A9-desconoc%C3%ADamos-antes-de-empezar">¶</a></h2><p>Tres cosas. Las tres se han movido durante el trabajo:</p>
+<h2 id="2.-Qu%C3%A9-desconoc%C3%ADamos-antes-de-empezar">2. Qué desconocíamos antes de empezar<a class="anchor-link" href="#2.-Qu%C3%A9-desconoc%C3%ADamos-antes-de-empezar">¶</a></h2><p>Tres cuestiones que se movieron durante el trabajo:</p>
 <ol>
 <li><strong>Si un modelo puede diagnosticar a partir de ventanas de OBD-II con verdad de referencia
 conocida.</strong> Respuesta: sí, con margen amplio sobre la clase mayoritaria. Así se sostiene sobre
@@ -8136,7 +8187,7 @@ datos.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="3.-Preparaci%C3%B3n-del-entorno">3. Preparación del entorno<a class="anchor-link" href="#3.-Preparaci%C3%B3n-del-entorno">¶</a></h2><p>La celda siguiente ancla la raíz del repositorio y deja en la salida la versión de Python, la
-plataforma y el commit exacto. Eso último importa: dos ejecuciones de este notebook en commits
+plataforma y el commit. Eso último importa: dos ejecuciones de este notebook en commits
 distintos no son comparables. La única forma de saberlo es que el commit quede impreso.</p>
 </div>
 </div>
@@ -8163,7 +8214,7 @@ distintos no son comparables. La única forma de saberlo es que el commit quede 
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">mecanico_ia_exp.notebooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">soporte</span>
-<span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># pragma: no cover - solo fuera del repositorio</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">"No se encuentra el paquete del laboratorio desde </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
         <span class="s2">"Abra Jupyter dentro del repositorio clonado, o instálelo con uv sync --extra nb."</span>
@@ -8184,7 +8235,7 @@ distintos no son comparables. La única forma de saberlo es que el commit quede 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>python       3.11.14
 plataforma   Darwin arm64
-commit       71589c3
+commit       53267be
 arbol        limpio
 </pre>
 </div>
@@ -8200,11 +8251,12 @@ arbol        limpio
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="4.-El-recorrido,-en-un-diagrama">4. El recorrido, en un diagrama<a class="anchor-link" href="#4.-El-recorrido,-en-un-diagrama">¶</a></h2><p>Antes de los números, el camino: la cadena completa, en la que cada etapa recibe algo, hace una cosa
 y entrega algo a la siguiente.</p>
-<p><strong>Qué queremos investigar con este diagrama:</strong> que el recorrido se entienda sin leer el código.
-<strong>Qué datos utiliza:</strong> ninguno. Es un <strong>diagrama conceptual</strong> de la arquitectura implementada, sin
-ninguna medición: sus etiquetas son los experimentos que miden cada etapa (Tabla A.1 del anexo A).
-<strong>Por qué esta visualización:</strong> porque la alternativa (una lista de fases) no muestra que la decisión
-de abstenerse ocurre <strong>después</strong> de recuperar la evidencia y no antes, que es el punto del diseño.</p>
+<p><strong>Qué queremos investigar.</strong> Que el recorrido se entienda sin leer el código. Una lista de fases no
+mostraría que la decisión de abstenerse ocurre <strong>después</strong> de recuperar la evidencia, que es el
+punto del diseño.</p>
+<p><strong>Qué datos utilizamos.</strong> Ninguno. Es un <strong>diagrama conceptual</strong> de la arquitectura implementada,
+sin ninguna medición; sus etiquetas son los experimentos que miden cada etapa (Tabla A.1 del
+anexo A).</p>
 </div>
 </div>
 </div>
@@ -8320,10 +8372,9 @@ sintético (apartado 5). El diagrama describe el diseño, no su validez externa.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-Los-datos:-qu%C3%A9-son-y-qu%C3%A9-no-son">5. Los datos: qué son y qué no son<a class="anchor-link" href="#5.-Los-datos:-qu%C3%A9-son-y-qu%C3%A9-no-son">¶</a></h2><p>El conjunto es <strong>sintético</strong>. No es una limitación oculta: es una decisión de diseño con una razón y
-un coste.</p>
+<h2 id="5.-Los-datos:-qu%C3%A9-son-y-qu%C3%A9-no-son">5. Los datos: qué son y qué no son<a class="anchor-link" href="#5.-Los-datos:-qu%C3%A9-son-y-qu%C3%A9-no-son">¶</a></h2><p>El conjunto es <strong>sintético</strong> por decisión de diseño, con una razón y un coste.</p>
 <p><strong>La razón:</strong> la pregunta exige conocer la verdad de referencia y poder manipularla. Hace falta saber
-exactamente cuándo empieza un fallo, con qué intensidad y en qué señales, para poder comprobar si la
+cuándo empieza un fallo, con qué intensidad y en qué señales, para poder comprobar si la
 explicación del sistema se corresponde con lo que de verdad ocurrió. Con telemetría real sin
 etiquetar eso no se puede hacer.</p>
 <p><strong>El coste:</strong> la validez externa queda sin establecer. La validación con telemetría real sigue
@@ -8401,8 +8452,8 @@ urban      6
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Una ausencia que hay que señalar.</strong> La muestra versionada no contiene sesiones del régimen de
 <strong>calentamiento</strong>: el plan equilibrado recorre los cuatro regímenes en ciclo y con tres sesiones por
-condición solo alcanza a los tres primeros. No es un descuido del muestreo, es una consecuencia
-aritmética, pero importa, porque el calentamiento es el régimen en que el fallo del termostato se
+condición solo alcanza a los tres primeros. Es una consecuencia aritmética del muestreo. Importa
+porque el calentamiento es el régimen en que el fallo del termostato se
 comporta de forma distinta. Donde haga falta, los notebooks <strong>generan</strong> esas sesiones en el momento
 (el generador es determinista) y lo declaran como demostración ilustrativa.</p>
 </div>
@@ -8415,9 +8466,10 @@ comporta de forma distinta. Donde haga falta, los notebooks <strong>generan</str
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Lo observado.</strong> Dieciocho sesiones de 600 s, tres por cada una de las seis condiciones,
-repartidas entre tres regímenes de conducción (sin calentamiento, por lo dicho arriba). Reparto equilibrado a propósito: un desbalance en
-datos sintéticos sería un artefacto elegido por quien genera, no una propiedad del problema.</p>
+<p><strong>Qué muestra.</strong> Dieciocho sesiones de 600 s, tres por cada una de las seis condiciones,
+repartidas entre tres regímenes de conducción (sin calentamiento, por lo dicho arriba). El reparto
+es equilibrado a propósito: en datos sintéticos, un desbalance sería un artefacto elegido por quien
+genera y no una propiedad del problema.</p>
 <p>Las doce señales y por qué están, en una tabla; la columna de rango físico es la que el validador
 usa para rechazar valores imposibles.</p>
 </div>
@@ -8596,7 +8648,7 @@ usa para rechazar valores imposibles.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="6.-Qu%C3%A9-se-midi%C3%B3-y-con-cu%C3%A1nta-firmeza">6. Qué se midió y con cuánta firmeza<a class="anchor-link" href="#6.-Qu%C3%A9-se-midi%C3%B3-y-con-cu%C3%A1nta-firmeza">¶</a></h2><p>La tabla siguiente es el estado de la evidencia. Sale de los registros, no de los informes: si un
-informe y su registro discreparan, manda el registro. Eso ocurrió de verdad una vez (con las cifras
+informe y su registro discreparan, manda el registro. Ocurrió una vez (con las cifras
 de E7) y se corrigió en octubre dejando constancia.</p>
 </div>
 </div>
@@ -8740,7 +8792,7 @@ eso el trabajo publica siempre las métricas por clase al lado.</p>
 equilibradas el azar da 0,17, así que 0,88 dice poco por sí solo; la referencia útil es la clase
 mayoritaria, que está en la tabla anterior.</p>
 <p><strong>Clase mayoritaria.</strong> Predecir siempre la clase más frecuente del entrenamiento. Es el suelo: un
-modelo que no lo supere no ha aprendido nada. Su F1 macro de 0,0741 es bajo precisamente porque la
+modelo que no lo supere no ha aprendido nada. Su F1 macro de 0,0741 es bajo porque la
 media no ponderada castiga acertar una sola clase.</p>
 <p><strong>ECE (<em>expected calibration error</em>).</strong> Se agrupan las predicciones en diez tramos según su
 confianza y se mide, en cada tramo, la diferencia entre la confianza media y el acierto real; el ECE
@@ -8758,11 +8810,11 @@ diez tramos y pocas ventanas, cada tramo tiene pocas predicciones y la cifra es 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-Qu%C3%A9-sostiene-cada-objetivo,-visto-de-una-vez">7. Qué sostiene cada objetivo, visto de una vez<a class="anchor-link" href="#7.-Qu%C3%A9-sostiene-cada-objetivo,-visto-de-una-vez">¶</a></h2><p><strong>Objetivo de este análisis.</strong> Ver juntos qué objetivos se cumplen en su alcance y cuáles solo en
-parte. Es el mapa que evita el error más común al leer un trabajo de este tipo, que es tomar lo
-implementado por demostrado.</p>
-<p><strong>Qué es esta figura.</strong> Un <strong>diagrama documental</strong>, no una medición: cada fila sale del registro de
-experimentos y del estado declarado de cada objetivo, no de un cálculo sobre datos.</p>
+<h2 id="7.-Qu%C3%A9-sostiene-cada-objetivo,-visto-de-una-vez">7. Qué sostiene cada objetivo, visto de una vez<a class="anchor-link" href="#7.-Qu%C3%A9-sostiene-cada-objetivo,-visto-de-una-vez">¶</a></h2><p><strong>Qué queremos investigar.</strong> Qué objetivos se cumplen en su alcance y cuáles solo en parte. Es el
+mapa que evita el error más común al leer un trabajo de este tipo, que es tomar lo implementado por
+demostrado.</p>
+<p><strong>Qué datos utilizamos.</strong> Ninguna medición: es un <strong>diagrama documental</strong> y cada fila sale del
+registro de experimentos y del estado declarado de cada objetivo.</p>
 </div>
 </div>
 </div>
@@ -8812,12 +8864,12 @@ experimentos y del estado declarado de cada objetivo, no de un cálculo sobre da
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Qué muestra.</strong> Cada objetivo con los experimentos que lo miden y su estado: OE1, OE3 y OE5
 <strong>cumplidos</strong> en su alcance; OE2 y OE4 <strong>parciales</strong>. Es lo que fija la Tabla 6.1 de la memoria.</p>
-<p><strong>Qué podemos interpretar.</strong> Que la cobertura es desigual y está declarada: unos objetivos tienen
+<p><strong>Qué podemos interpretar.</strong> Que el respaldo es desigual y está declarado: unos objetivos tienen
 medición sobre el conjunto de prueba y otros solo sobre validación.</p>
 <p><strong>Qué no podemos afirmar.</strong> Que <em>cumplido</em> signifique validado fuera de los datos sintéticos, ni
 que una capacidad implementada funcione: lo que no se ha evaluado no tiene evidencia a su favor ni
 en su contra.</p>
-<p><strong>Relación con la hipótesis.</strong> Acota el alcance de las conclusiones: lo que la pregunta de
+<p><strong>Relación con la pregunta de investigación.</strong> Acota el alcance de las conclusiones: lo que la pregunta de
 investigación puede dar por respondido es lo que tiene evidencia, no lo que tiene código.</p>
 </div>
 </div>
@@ -8834,8 +8886,8 @@ el 12 de octubre de 2026. Llegó al final en el <strong>tercer intento</strong> 
 interrumpieron y están declarados en el apartado 9), con las reglas congeladas y ancladas a un commit
 antes de abrirlo.</p>
 <p>Las tres cifras primarias, leídas de su registro con numerador y denominador. El campo <code>status</code>
-del registro dice <code>EVALUACION_FINAL</code>; la etiqueta <code>COMPLETED — WITH DOCUMENTED LIMITATIONS</code> es la
-que le da el índice de experimentos.</p>
+del registro dice <code>EVALUACION_FINAL</code>; el índice de experimentos lo da por
+completado con limitaciones documentadas.</p>
 </div>
 </div>
 </div>
@@ -8865,9 +8917,9 @@ que le da el índice de experimentos.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ventanas independientes:            </span><span class="si">{</span><span class="n">operativo</span><span class="o">.</span><span class="n">window_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"sesiones distintas:                 </span><span class="si">{</span><span class="n">operativo</span><span class="o">.</span><span class="n">session_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"falsa confianza:         </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">falsa_confianza</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deben_abstenerse</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"abstención innecesaria:  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">abstencion_innecesaria</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deben_explicar</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"cobertura con evidencia: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">explicadas</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">con_evidencia</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"falsa confianza:                   </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">falsa_confianza</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deben_abstenerse</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"abstención innecesaria:            </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">abstencion_innecesaria</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deben_explicar</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"respuesta con evidencia completa:  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">explicadas</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">con_evidencia</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8887,9 +8939,9 @@ ejecuciones del estrato operativo:  22
 ventanas independientes:            10
 sesiones distintas:                 10
 
-falsa confianza:         0/14
-abstención innecesaria:  2/8
-cobertura con evidencia: 6/10
+falsa confianza:                   0/14
+abstención innecesaria:            2/8
+respuesta con evidencia completa:  6/10
 </pre>
 </div>
 </div>
@@ -8902,15 +8954,16 @@ cobertura con evidencia: 6/10
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Lo observado.</strong> Falsa confianza 0 de 14. Abstención innecesaria 2 de 8. Cobertura 6 de 10.</p>
+<p><strong>Qué muestra.</strong> Falsa confianza 0 de 14. Abstención innecesaria 2 de 8. Respuesta con evidencia
+completa 6 de 10.</p>
 <p><strong>Qué podemos interpretar.</strong> En las catorce ejecuciones en que debía abstenerse, el sistema se
 abstuvo en todas: el resultado que PI.3 pedía.</p>
-<p><strong>Qué no podemos afirmar (conviene decirlo aquí y no en una nota al pie).</strong> Que el riesgo de falsa
-confianza sea cero. El denominador es <strong>14</strong>, procedentes de <strong>siete ventanas</strong>: con 0 de 14, el
-intervalo de Wilson al 95 % llega al 21,5 %; el real es más ancho porque las catorce ejecuciones
-no son independientes. Lo que se ha medido es que en esta muestra no ocurrió, no que no pueda
-ocurrir. El índice marca el experimento como <code>COMPLETED — WITH DOCUMENTED LIMITATIONS</code> precisamente
-por esto; <code>VALIDATED</code> <strong>no</strong> se usa como sinónimo de hipótesis demostrada.</p>
+<p><strong>Qué no podemos afirmar.</strong> Que el riesgo de falsa confianza sea cero. El denominador es <strong>14</strong>,
+procedentes de <strong>siete ventanas de siete sesiones</strong>. Con 0 de 14, el intervalo de Wilson al 95 %
+llega al 21,5 %; el real es más ancho porque las catorce ejecuciones no son independientes. Lo que
+se ha medido es que en esta muestra no ocurrió. Por eso el índice lo da por
+completado con limitaciones documentadas y no por validado, que no se usa como sinónimo de
+hipótesis demostrada.</p>
 <p>El análisis completo, con los diagnósticos incorrectos y los dos análisis descriptivos, está en
 <code>03_analisis_e19.ipynb</code>.</p>
 </div>
@@ -8942,7 +8995,7 @@ funcionó y en varios casos es más informativo que lo que sí.</p>
 <tr>
 <td><strong>Y la explicación que se dio era inválida</strong></td>
 <td>se atribuyó la desventaja al volumen de datos comparando dos conjuntos que además se generaron con el motor <strong>sin calibrar</strong> y <strong>con</strong> calibrar. La comparación cambia dos cosas a la vez</td>
-<td><code>SUPERSEDED 2026-10-12</code> en <code>docs/experiments/E7_modelo_temporal.md</code></td>
+<td>retirada, marcada <code>SUPERSEDED 2026-10-12</code> en <code>docs/experiments/E7_modelo_temporal.md</code></td>
 </tr>
 <tr>
 <td><strong>La recuperación semántica pura no funcionó</strong></td>
@@ -8951,12 +9004,12 @@ funcionó y en varios casos es más informativo que lo que sí.</p>
 </tr>
 <tr>
 <td><strong>La condición con distractor no medía lo que decía</strong></td>
-<td>en dos de los tres fallos tenía <strong>exactamente la misma configuración</strong> que la condición parcial; solo en la fuga de vacío llegaban dos fragmentos del distractor (corregido el 13-10-2026)</td>
+<td>en dos de los tres fallos tenía <strong>la misma configuración</strong> que la condición parcial; solo en la fuga de vacío llegaban dos fragmentos del distractor (corregido el 13-10-2026)</td>
 <td><code>politica-condicion-distractor.md</code></td>
 </tr>
 <tr>
 <td><strong>Un espacio de embeddings mezclado</strong></td>
-<td>las búsquedas no declaraban qué modelo las había producido; se corrigió y se reejecutó con pre-registro</td>
+<td>las búsquedas no declaraban qué modelo las había producido; se corrigió y se reejecutó con pre-registro (RERUN-A)</td>
 <td><code>resultado-rerun-a.md</code></td>
 </tr>
 <tr>
@@ -8987,9 +9040,9 @@ funcionó y en varios casos es más informativo que lo que sí.</p>
 </tbody>
 </table>
 <p>Sobre el cuarto punto, que afecta a lo que PI.4 puede afirmar: hasta el rediseño del 13 de octubre
-(P1) las condiciones realmente independientes eran <strong>cuatro y no cinco</strong>; P1 añade la quinta sobre
-tres casos construidos.</p>
-<p>Y sobre el conjunto de prueba, con la misma franqueza: <strong>cinco aperturas no son tres</strong>. La cuarta
+(P1) las condiciones realmente independientes eran <strong>cuatro y no cinco</strong>; P1 añade la quinta con
+tres situaciones construidas y seis ejecuciones.</p>
+<p>Sobre el conjunto de prueba: <strong>cinco aperturas no son tres</strong>. La cuarta
 repite unas ablaciones definidas antes de la primera; la quinta <strong>no debió ocurrir</strong> y está
 registrada como lo que fue, un descuido corregido en el acto. Ninguna cambió una decisión de diseño.</p>
 </div>
@@ -9002,7 +9055,7 @@ registrada como lo que fue, un descuido corregido en el acto. Ninguna cambió un
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="10.-Discusi%C3%B3n:-la-formulaci%C3%B3n-amplia-y-por-qu%C3%A9-no-es-la-pregunta-de-este-trabajo">10. Discusión: la formulación amplia y por qué no es la pregunta de este trabajo<a class="anchor-link" href="#10.-Discusi%C3%B3n:-la-formulaci%C3%B3n-amplia-y-por-qu%C3%A9-no-es-la-pregunta-de-este-trabajo">¶</a></h2><p>Conviene decirlo aquí porque el lector puede encontrarla en material anterior. El trabajo circuló
+<h2 id="10.-Discusi%C3%B3n:-la-formulaci%C3%B3n-amplia-y-por-qu%C3%A9-no-es-la-pregunta-de-este-trabajo">10. Discusión: la formulación amplia y por qué no es la pregunta de este trabajo<a class="anchor-link" href="#10.-Discusi%C3%B3n:-la-formulaci%C3%B3n-amplia-y-por-qu%C3%A9-no-es-la-pregunta-de-este-trabajo">¶</a></h2><p>Se discute aquí porque el lector puede encontrarla en material anterior. El trabajo circuló
 hasta septiembre de 2026 con una formulación más ambiciosa:</p>
 <blockquote>
 <p>¿Puede un sistema inteligente híbrido <strong>identificar patrones de fallo no representados en su
@@ -9053,7 +9106,7 @@ acotada:</p>
 </tbody>
 </table>
 <p>Los dos últimos son trabajo posterior: proponerlos formalmente exigiría resultados verificables que
-hoy no existen. Presentarlos como logrados sería exactamente el tipo de afirmación sin evidencia que
+hoy no existen. Presentarlos como logrados sería el tipo de afirmación sin evidencia que
 este trabajo se propone detectar.</p>
 </div>
 </div>
@@ -9080,8 +9133,8 @@ los datos, el modelo y la confianza idénticos (PI.3).</p>
 de esa desventaja quedó retirada, no confirmada.</p>
 <p><strong>Qué permanece sin demostrar.</strong> Si el contexto temporal aporta señal diagnóstica y en qué fallos
 (apartado 12). Si el sistema rechaza evidencia no pertinente en general: PI.4 se responde con el
-rediseño de la condición con distractor (P1, 13-10-2026), acotado a tres casos construidos y sin
-estimar ninguna tasa. Y la validez externa de todo lo anterior, que exigiría telemetría real.</p>
+rediseño de la condición con distractor (P1, 13-10-2026), acotado a tres situaciones construidas y
+seis ejecuciones, sin estimar ninguna tasa. Y la validez externa de todo lo anterior, que exigiría telemetría real.</p>
 <p><strong>Cómo contribuye al TFM.</strong> Este notebook es el mapa: dice dónde está cada pieza de evidencia y con
 cuánta firmeza se sostiene. Dentro de la entrega, la correspondencia entre notebooks y resultados
 está en la <strong>Tabla C.2</strong> del anexo C de la memoria y la de cada figura y tabla con su artefacto en
@@ -9103,9 +9156,9 @@ la <strong>Tabla C.5</strong>; la matriz completa pregunta → objetivo → expe
 <li><p><strong>Volumen y calibración del generador cambian juntos.</strong> La comparación <code>synthetic_v2</code> frente a
 <code>synthetic_v3</code> tenía el triple de sesiones <em>y</em> un fenómeno distinto: <code>v3</code> se generó el 1 de
 septiembre, <strong>antes</strong> de que las constantes del motor se calibraran contra el manual. Su ralentí
-está en 820 rpm, un valor sin ningún respaldo documental. La constante <code>GENERATOR_VERSION</code> valió
-<code>"1.0.0"</code> en los dos casos y no los distingue, que es por lo que la diferencia pasó
-desapercibida durante semanas.</p>
+está en 820 rpm, un valor sin ningún respaldo documental. Por qué la constante
+<code>GENERATOR_VERSION</code> no distingue los dos conjuntos se explica en <code>02_comparacion_modelos</code>,
+apartado 13.</p>
 </li>
 <li><p><strong>Representación y estimador cambian juntos.</strong> El bosque recibe 139 descriptores de ventana; la
 red, la secuencia de 120 × 12 en crudo. Ninguna diferencia entre los dos puede atribuirse al
@@ -9113,11 +9166,9 @@ contexto temporal: podría venir de la representación, del estimador o de su in
 esa comparación mide es la diferencia entre <strong>dos recorridos completos</strong>.</p>
 </li>
 </ol>
-<p>Hay una tentación concreta que conviene nombrar: la red gana en el termostato
-bloqueado (0,8148 frente a 0,7826) y es justo la condición cuya firma es temporal: algo que debería
-subir y no sube. Encaja tan bien que parece confirmación. <strong>No lo es.</strong> Es una diferencia de 0,03
-en una clase de 14 ventanas, medida una sola vez, entre dos recorridos que difieren en todo. Y hay
-una explicación alternativa, medida en octubre: el fallo del termostato <strong>no altera la trayectoria</strong>
+<p>Que la red gane en el termostato bloqueado (0,8148 frente a 0,7826), la condición cuya firma es
+temporal, no confirma nada; el porqué está en <code>02_comparacion_modelos</code>, apartado 8. Hay además una
+explicación alternativa, medida en octubre: el fallo del termostato <strong>no altera la trayectoria</strong>
 mientras el refrigerante no supera su tope, de modo que en la sesión de calentamiento de validación
 <strong>cinco de sus siete</strong> ventanas etiquetadas con el fallo no contienen ninguna señal observable de él
 (<code>06_expresion_del_fallo</code>, apartado 8).</p>
@@ -9259,7 +9310,7 @@ adaptador LoRA. Los notebooks que los necesitan están marcados como FULL en el 
 </div>
 </div>
 </main>
-<footer class="mi-pie">Copia ejecutada de <code>notebooks/00_introduccion.ipynb</code> · commit <code>71589c3</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
+<footer class="mi-pie">Copia ejecutada de <code>notebooks/00_introduccion.ipynb</code> · commit <code>53267be</code> · exportada el 14-11-2026. El contenido es el del notebook; esta página solo cambia su presentación.</footer><script>
 (function () {
   var cuerpo = document.body;
   cuerpo.classList.add('mi-doc');
